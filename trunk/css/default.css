@@ -1,0 +1,470 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Links */
+
+a:link
+{
+color: #990000;
+text-decoration: none;
+}
+
+
+a:visited
+{
+color: #990000;
+text-decoration: none;
+}
+
+
+a:hover,
+a:focus
+{
+color: #0000CC;
+text-decoration: underline;
+}
+
+
+a:active
+{
+color: #0000CC;
+text-decoration: underline;}
+
+
+/** body **/
+html, body
+{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 11px;
+margin: 0;
+padding: 0;
+height: 100%;
+background-color: #eeeeee;
+}
+
+
+/** HTML elements **/ 
+
+h1 {
+
+}
+
+h2 {
+padding: 0 0 1.5em 0;
+font-size: 1.5em;
+font-weight: bold;
+color: #37517B;
+}
+
+h3 {
+padding: 1em 0 .5em 0;
+font-size: 1.2em;
+font-weight: bold;
+color: #37517B;
+}
+
+input, textarea, submit, select {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: .9em;
+}
+
+ul
+{
+margin: 0 0 1em 2em;
+list-style-type: circle;
+}
+
+ol
+{
+margin: 0 0 1em 2.3em;
+}
+
+ul li
+{
+padding: 0 0 .5em .7em;
+}
+
+ol li
+{
+padding: 0 0 .5em .4em;
+}
+
+p 
+{
+margin: 0 0 1.25em 0;
+}
+
+table 
+{
+border-collapse: collapse;
+font-size: inherit;
+}
+
+td
+{
+vertical-align: top;
+}
+
+#container {
+position:relative;
+min-height: 95%;
+background-color: #ffffff;
+}
+
+
+/** header **/
+#navigation 
+{ 
+width: 100%;
+position: absolute;
+margin-bottom: 10px;
+min-height: 40px;
+}
+
+#navigation-inner
+{
+background-color: #eeeeee;
+border-bottom: 1px solid #000000;
+padding: 0 1em 0 1em;
+}
+
+#header
+{
+width: auto;
+height: auto;
+}
+
+#header-inner
+{
+margin: 2em 0 2em 0;
+}
+
+#header-inner h1
+{
+font-size: 1.6em;
+padding: 0 0 .25em 0;
+font-weight: bold;
+color: #37517B;
+border-bottom: 1px dashed #37517B;
+}
+
+/** Footer **/
+#footer
+{
+bottom: 15px;
+width: 100%;  /* Height of the footer */
+}
+
+#footer-inner {
+background-color: #eeeeee;
+border-top: 1px solid #000000;
+padding: 1em;
+font-size: .8em;
+color: #666666;
+}
+
+
+/** content **/
+#content
+{
+}
+
+
+#content-inner
+{
+padding: 40px 1em;
+}
+
+#content-inner-no-nav
+{
+padding: 1em;
+}
+
+#content-inner h2
+{
+font-size: 1.25em;
+font-weight: bold;
+color: #37517B;
+padding: 1em 0 .5em 0;
+}
+
+#content-inner-no-nav h2 {
+padding: 1.5em 0 .25em 0;
+font-size: 1.25em;
+font-weight: bold;
+color: #37517B;
+border-bottom: 1px solid #37517B;
+}
+
+/** Nav **/
+
+#nav {
+margin: 0 0 0 0;
+padding: 1em 0 1em 0;
+font-size: .9em;
+}
+
+#nav li
+{
+display: inline;
+list-style-type: none;
+padding: 0 8px 0 0;
+margin: 0;
+}
+
+#break {
+display: block;
+margin: .5em 0 0 0;
+}
+
+/** Special Classes **/
+
+.colorTable {
+width: 30px;
+text-align: center;
+vertical-align:middle;
+height: 1.4em;
+border: 1px solid #000000;
+}
+
+.colorTable td { 
+vertical-align: middle;
+}
+
+.error 
+{
+color: #FF0000;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0 0 1em 0;
+padding: .5em .5em .5em 1.5em;
+background-image: url(../images/error.png);
+background-position: center left;
+background-repeat: no-repeat;
+}
+
+.required {
+color: #FF0000;
+font-weight: bold;
+padding: .25em .5em .25em 1.7em;
+background-image: url(../images/exclamation.png);
+background-position: center left;
+background-repeat: no-repeat;
+}
+
+.setupTitle {
+padding: 5px 0 0 0;
+font-size: 1.2em;
+font-weight: bold;
+}
+
+.dataTable { 
+width: 100%;
+}
+
+.dataHeading 
+{
+font-weight: bold;
+padding: .5em 0 .5em .5em;
+white-space: nowrap;
+}
+
+.dataList
+{
+padding: .5em 2em .5em .5em;
+}
+
+.dataLabel
+{
+font-weight: bold;
+padding: .5em .5em .5em 0;
+white-space: nowrap;
+}
+
+.data
+{
+padding: .5em 1em .5em .5em;
+}
+
+.data-left
+{
+padding: .5em 1em .5em 0;
+}
+
+.icon
+{
+padding: 0 .5em 0 0;
+}
+
+.bdr1T {
+border-top: 1px solid #000000;
+}
+
+.bdr1B {
+border-bottom: 1px solid #000000;
+}
+
+.admin {
+background-color:#FFFFCC;
+}
+
+/** Calendar Widget Styles  **/
+
+#CalendarControlIFrame {
+  display: none;
+  left: 0px;
+  position: absolute;
+  top: 5px;
+  height: 250px;
+  width: 250px;
+  z-index: 99;
+}
+
+#CalendarControl {
+  position:absolute;
+  background-color:#efefef;
+  margin: 5px 0 0 10px;
+  padding:0;
+  display:none;
+  z-index: 100;
+}
+
+#CalendarControl table {
+  font-family: inherit;
+  font-size: .8em;
+  border: 1px solid #000000;
+}
+
+#CalendarControl th {
+  font-weight: normal;
+}
+
+#CalendarControl th a {
+  font-weight: normal;
+  text-decoration: none;
+  color: #000000;
+  padding: 1px;
+}
+
+#CalendarControl td {
+  text-align: center;
+}
+
+#CalendarControl .header {
+  background-color: #cccccc;
+}
+
+#CalendarControl .weekday {
+  background-color: #dddddd;
+  color: #000000;
+}
+
+#CalendarControl .weekend {
+  background-color: #bbbbbb;
+  color: #0000000;
+}
+
+#CalendarControl .current {
+  background-color: #eeeeee;
+  color: #000000;
+}
+
+#CalendarControl .weekday,
+#CalendarControl .weekend,
+#CalendarControl .current {
+  display: block;
+  text-decoration: none;
+  width: 2.5em;
+}
+
+#CalendarControl .weekday:hover,
+#CalendarControl .weekend:hover,
+#CalendarControl .current:hover {
+  color:#003399;
+  background-color: #eeeeee;
+}
+
+#CalendarControl .previous {
+  text-align: left;
+}
+
+#CalendarControl .next {
+  text-align: right;
+}
+
+#CalendarControl .previous,
+#CalendarControl .next {
+  padding: 1px 3px 1px 3px;
+}
+
+#CalendarControl .previous a,
+#CalendarControl .next a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#CalendarControl .title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #000000;
+}
+
+#CalendarControl .empty {
+  background-color: #aaaaaa;
+}
+
+
+/* New in Version 1.1 */
+
+.looper {
+width: 120px;
+text-align: center;
+padding: 1em .5em 1em .5em;
+}
+
+.looper_large {
+width: 25%;
+min-height: 150px;
+text-align: center;
+padding: 1em .5em 1em .5em;
+}
+
+#sponsor {
+margin: 0 0 0 1em;
+padding: 0;
+list-style: none;
+}
+
+#sponsor li
+{
+padding: 0 0 1em 1.75em;
+background-image: url(../images/bullet_star.png);
+background-repeat: no-repeat;
+background-position: top left;
+}
+
+.bos 
+{
+color: #990000;
+font-size: 1.2em;
+font-weight: bold;
+margin: 1em 0 1em 0;
+padding: .5em .5em .5em 1.5em;
+background-image: url(../images/rosette.png);
+background-position: center left;
+background-repeat: no-repeat;
+}
+
+#closed 
+{
+color: #990000;
+font-size: 1.2em;
+font-weight: bold;
+margin: 1.3em 0 1em 0;
+padding: .5em;
+background-color: #FFFF99;
+border: 1px solid #FFCC33;
+display: block;
+}
