@@ -32,6 +32,7 @@
 <table class="dataTable">
  <tr>
   <td class="dataHeading bdr1B">Ent. #</td>
+  <td class="dataHeading bdr1B">Name</td>
   <td class="dataHeading bdr1B">Category</td>
   <td class="dataHeading bdr1B">Brewer</td>
   <td class="dataHeading bdr1B">Rec'd?</td>
@@ -59,6 +60,7 @@
  <tr <?php echo " style=\"background-color:$color\"";?>>
    <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['id']; ?></td>
+  <td <?php if ($action != "print") { ?>width="15%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td <?php if ($action != "print") { ?>width="10%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($filter == "default") { ?><a href="index.php?section=admin&go=entries&filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if ($action != "print") echo $row_log['brewCategory'].$row_log['brewSubCategory']; else echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$styleConvert; if ($filter == "default") { ?></a><?php } ?></td>
   <td width="15%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo  $row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName']; ?></td>
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action != "print") { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "Y") echo "X"; } ?></td>
@@ -110,8 +112,7 @@
       <option value="E" <?php if ($row_log['brewWinnerSubCat'] == "E") echo "SELECTED"; ?>>E</option>
       <option value="F" <?php if ($row_log['brewWinnerSubCat'] == "F") echo "SELECTED"; ?>>F</option>
       <option value="G" <?php if ($row_log['brewWinnerSubCat'] == "G") echo "SELECTED"; ?>>G</option>
-      </select>
-      </td>
+      </select>      </td>
     </tr>
     </table>
     <?php } else echo $row_log['brewWinnerCat'].$row_log['brewWinnerSubCat']; ?>  </td>
@@ -146,10 +147,10 @@
   <?php } } while($row_log = mysql_fetch_assoc($log)) ?>
  <?php if ($action != "print") { ?>
  <tr>
- 	<td colspan="11" class="bdr1T">&nbsp;</td>
+ 	<td colspan="12" class="bdr1T">&nbsp;</td>
  </tr>
  <tr>
- 	<td colspan="10">&nbsp;</td>
+ 	<td colspan="11">&nbsp;</td>
     <td colspan="2" align="left"><input type="submit" name="Submit" value="Update Entries" /></td>
  </tr>
 <?php } ?>

@@ -10,11 +10,26 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <p><img src="images/page_code.png" align="absmiddle" /><span class="data">You can also <a  href="index.php?section=beerxml">import your entry's BeerXML document</a>.</span></p>
 <?php } ?>
 <form action="includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&action=<?php echo $action; ?>&go=<?php echo $go;?>&dbTable=brewing&filter=<?php echo $filter; if ($id != "default") echo "&id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<input type="hidden" name="brewBrewerID" value="<?php if ($row_user['userLevel'] == 1) echo $row_log['brewBrewerID']; else echo $row_user['id']; ?>">
+<?php if ($row_user['userLevel'] != 1) { ?>
+<input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>">
+<?php } ?>
 <h2>Entry Information</h2>
 <table>
+<?php if ($row_user['userLevel'] == 1) { ?>
+<tr>
+   <td class="dataLabel">Brewer:</td>
+   <td class="data">
+   <select name="brewBrewerID">
+    <?php do {  ?>
+   	<option value="<?php echo $row_brewers['id']."-".$row_brewers['brewerLastName']."-".$row_brewers['brewerFirstName']; ?>" <?php if (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['id'])) echo "SELECTED";  if (($action == "add") && ($_SESSION['loginUserName'] == $row_brewers['user_name'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
+    <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
+   </select>
+   </td>
+   <td class="data"><span class="required">Required</span></td>
+</tr>
+<?php } ?>
 <tr>
    <td class="dataLabel">Name:</td>
    <td class="data"><input type="text"  name="brewName" value="<?php if ($action == "edit") echo $row_log['brewName']; ?>" size="30"></td>
