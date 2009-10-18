@@ -70,6 +70,7 @@ ADD `contestBOSAward` TEXT NULL;
 
 
 
--- Added after beta release
+-- Added after beta 1 release
 
 ALTER TABLE `brewing` ADD `brewReceived` CHAR ( 1 ) NULL;
+

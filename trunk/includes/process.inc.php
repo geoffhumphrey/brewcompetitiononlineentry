@@ -87,6 +87,25 @@ if ($action == "delete") {
 // --------------------------- If Adding an Entry ------------------------------- //
 
 if (($action == "add") && ($dbTable == "brewing")) { 
+
+$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
+$user = mysql_query($query_user, $brewing) or die(mysql_error());
+$row_user = mysql_fetch_assoc($user);
+$totalRows_user = mysql_num_rows($user);
+
+if ($row_user['userLevel'] == 1) { 
+$nameBreak = $_POST['brewBrewerID'];
+$name = explode('-', $nameBreak);
+$brewBrewerID = $name[0];
+$brewBrewerLastName = $name[1];
+$brewBrewerFirstName = $name[2];
+}
+else {
+$brewBrewerID = $_POST['brewBrewerID'];
+$brewBrewerLastName = $_POST['brewBrewerLastName']; 
+$brewBrewerFirstName = $_POST['brewBrewerFirstName'];
+}
+
 $styleBreak = $_POST['brewStyle'];
 $style = explode('-', $styleBreak);
 $styleTrim = ltrim($style[0], "0"); 
@@ -253,14 +272,14 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
                        GetSQLValueString($_POST['brewMashStep5Time'], "text"),
                        GetSQLValueString($_POST['brewFinings'], "text"),
                        GetSQLValueString($_POST['brewWaterNotes'], "text"),
-                       GetSQLValueString($_POST['brewBrewerID'], "text"),
+                       GetSQLValueString($brewBrewerID, "text"),
 					   GetSQLValueString($_POST['brewCarbonationMethod'], "text"),
 					   GetSQLValueString($_POST['brewCarbonationVol'], "text"),
 					   GetSQLValueString($_POST['brewCarbonationNotes'], "text"),
 					   GetSQLValueString($_POST['brewBoilHours'], "text"),
 					   GetSQLValueString($_POST['brewBoilMins'], "text"),
-					   GetSQLValueString($_POST['brewBrewerFirstName'], "text"),
-					   GetSQLValueString($_POST['brewBrewerLastName'], "text"),
+					   GetSQLValueString($brewBrewerFirstName, "text"),
+					   GetSQLValueString($brewBrewerLastName, "text"),
 					   GetSQLValueString($_POST['brewExtract1Use'], "text"), 
 					   GetSQLValueString($_POST['brewExtract2Use'], "text"), 
 					   GetSQLValueString($_POST['brewExtract3Use'], "text"), 
@@ -296,6 +315,25 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
 // --------------------------- If Editing an Entry ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewing")) {
+
+$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
+$user = mysql_query($query_user, $brewing) or die(mysql_error());
+$row_user = mysql_fetch_assoc($user);
+$totalRows_user = mysql_num_rows($user);
+
+if ($row_user['userLevel'] == 1) { 
+$nameBreak = $_POST['brewBrewerID'];
+$name = explode('-', $nameBreak);
+$brewBrewerID = $name[0];
+$brewBrewerLastName = $name[1];
+$brewBrewerFirstName = $name[2];
+}
+else {
+$brewBrewerID = $_POST['brewBrewerID'];
+$brewBrewerLastName = $_POST['brewBrewerLastName']; 
+$brewBrewerFirstName = $_POST['brewBrewerFirstName'];
+}
+
 $styleBreak = $_POST['brewStyle'];
 $style = explode('-', $styleBreak);
 $styleTrim = ltrim($style[0], "0"); 
@@ -462,14 +500,14 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
                        GetSQLValueString($_POST['brewMashStep5Time'], "text"),
                        GetSQLValueString($_POST['brewFinings'], "text"),
                        GetSQLValueString($_POST['brewWaterNotes'], "text"),
-                       GetSQLValueString($_POST['brewBrewerID'], "text"),
+					   GetSQLValueString($brewBrewerID, "text"),
 					   GetSQLValueString($_POST['brewCarbonationMethod'], "text"),
 					   GetSQLValueString($_POST['brewCarbonationVol'], "text"),
 					   GetSQLValueString($_POST['brewCarbonationNotes'], "text"),
 					   GetSQLValueString($_POST['brewBoilHours'], "text"),
-					   GetSQLValueString($_POST['brewBoilMins'], "text"), 
-					   GetSQLValueString($_POST['brewBrewerFirstName'], "text"),
-					   GetSQLValueString($_POST['brewBrewerLastName'], "text"),
+					   GetSQLValueString($_POST['brewBoilMins'], "text"),
+					   GetSQLValueString($brewBrewerFirstName, "text"),
+					   GetSQLValueString($brewBrewerLastName, "text"),
 					   GetSQLValueString($_POST['brewExtract1Use'], "text"), 
 					   GetSQLValueString($_POST['brewExtract2Use'], "text"), 
 					   GetSQLValueString($_POST['brewExtract3Use'], "text"), 
@@ -494,7 +532,7 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
 					   GetSQLValueString($_POST['brewAddition8Use'], "text"), 
 					   GetSQLValueString($_POST['brewAddition9Use'], "text"),
                        GetSQLValueString($id, "int"));
-
+  
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
