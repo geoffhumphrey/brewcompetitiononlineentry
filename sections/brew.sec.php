@@ -22,8 +22,12 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="dataLabel">Brewer:</td>
    <td class="data">
    <select name="brewBrewerID">
-    <?php do {  ?>
-   	<option value="<?php echo $row_brewers['id']."-".$row_brewers['brewerLastName']."-".$row_brewers['brewerFirstName']; ?>" <?php if (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['id'])) echo "SELECTED";  if (($action == "add") && ($_SESSION['loginUserName'] == $row_brewers['user_name'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
+    <?php do { 
+    $query_user1 = sprintf("SELECT id FROM users WHERE user_name = '%s'", $row_brewers['brewerEmail']);
+	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
+	$row_user1 = mysql_fetch_assoc($user1);
+     ?>
+   	<option value="<?php echo $row_user1['id']."-".$row_brewers['brewerLastName']."-".$row_brewers['brewerFirstName']; ?>" <?php if (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['id'])) echo "SELECTED";  if (($action == "add") && ($_SESSION['loginUserName'] == $row_brewers['user_name'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
     <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
    </select>
    </td>
