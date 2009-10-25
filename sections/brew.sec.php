@@ -14,7 +14,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>">
-<?php } ?>
+<?php } ?> 
 <h2>Entry Information</h2>
 <table>
 <?php if ($row_user['userLevel'] == 1) { ?>
