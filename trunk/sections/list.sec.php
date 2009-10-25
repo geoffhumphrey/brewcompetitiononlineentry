@@ -111,6 +111,7 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
     <td class="dataLabel">Steward?</td>
     <td class="data"><?php if ($row_brewer['brewerSteward'] != "") echo $row_brewer['brewerSteward']; else echo "None entered"; ?></td>
   </tr>
+  <?php if ($row_brewer['brewerJudge'] == "Y") { ?>
   <tr>
     <td class="dataLabel">BJCP Judge ID:</td>
     <td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "") echo $row_brewer['brewerJudgeID']; else echo "None entered"; ?></td>
@@ -127,5 +128,6 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
     <td class="dataLabel">Catagories Not Preferred:</td>
     <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo $row_brewer['brewerJudgeDislikes']; else echo "None entered"; ?></td>
   </tr>
+  <?php } ?>
 </table>
 <?php } ?>

@@ -10,12 +10,10 @@ INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username_brewblog = "fred".
 */
 $username = "";
-
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password_brewblog = "flintsone".
 */
-//$password = "";
 $password = "";
 
 /*
@@ -49,10 +47,15 @@ CORRECT example if installation is in the web root folder:
 $images_dir = "/home/public_html";
 
 CORRECT example installation is in a sub-folder on your site:
-$images_dir = "/home/public_html/[folder]";
+$images_dir = "/home/public_html/brewblogger";
 
 ******************************************************************************
 
+INCORRECT examples in config.php:
+$images_dir = "/home/public_html/label_images";
+$images_dir = "/home/public_html/brewblogger/label_images";
+
+******************************************************************************
 
 */
 $images_dir = "";
