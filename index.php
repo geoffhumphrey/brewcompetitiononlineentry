@@ -48,7 +48,9 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
     <?php 
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
-	if ($section != "admin") { ?><div id="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div><?php }  
+	if ($section != "admin") { ?>
+    <div id="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div>
+	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
 	if ($section == "rules") 	include ('sections/rules.sec.php');
@@ -58,7 +60,8 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 		if ($section == "admin")	include ('admin/default.admin.php');
 		if ($section == "list") 	include ('sections/list.sec.php');
 		}
-	} else {
+	} else 
+	{
 	if ($section == "register") include ('sections/register.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
 	if ($section == "rules") 	include ('sections/rules.sec.php');
@@ -74,19 +77,17 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 		if ($section == "judge") 	include ('sections/judge.sec.php');
 		if ($section == "user") 	include ('sections/user.sec.php');
 		if ($section == "beerxml")	include ('sections/beerxml.sec.php');
-		
+	}
 	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML")))  
 	echo "<div id=\"header\"><div id=\"header-inner\"><h1>Restricted Area</h1></div></div>
 	<div class=\"error\">Please register or log in to access this area.</div>";
-	}
 	} // End registration date check.
 	?>
 	</div>
 </div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><a href="http://competition.brewblogger.net" target="_blank">Brew Competition Online Entry</a> (BCOE) 
-  <?php include ('includes/version.inc.php'); ?> &copy;<?php if (date ('Y') == "2009") echo date('Y'); else echo "2009-".date('Y'); ?> Geoff Humphrey for <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
+	<div id="footer-inner"><a href="http://competition.brewblogger.net" target="_blank">Brew Competition Online Entry</a> (BCOE) <?php include ('includes/version.inc.php'); ?> &copy;<?php if (date ('Y') == "2009") echo date('Y'); else echo "2009-".date('Y'); ?> Geoff Humphrey for <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
 </div>
 </body>
 </html>
