@@ -33,10 +33,11 @@ if($numberFields) { // Check if we need to output anything
 		foreach($head as $fieldName) { // Loop through the array of headers as we fetch the data
 			$row[] =  parseCSVComments($info->$fieldName);
 		} // End loop
+		if ($row[10] == "0") $row[10] = null;
 		$data .= join($separator, $row)."\n"; // Create a new row of data and append it to the last row
 		$row = ''; // Clear the contents of the $row variable to start a new row
 	}
-	// Start our output of the CSV
+	// Start our output
 	header("Content-type: application/x-msdownload");
 	header("Content-Disposition: attachment; filename=".$contest."_participants".$extension);
 	header("Pragma: no-cache");
