@@ -107,21 +107,24 @@ httpxml.send(null);
       <td colspan="2" nowrap class="data">Is this user willing and qualified to judge in this competition?<span class="data">
       <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" /> Yes&nbsp;&nbsp;<input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if ($judge == "N") echo "CHECKED"; if ($go == "default") echo "CHECKED"; ?>/> No</span></td>
 </tr>
-      <tr><td width="5%" nowrap class="dataLabel">BJCP ID:</td>
-      <td colspan="2" nowrap class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="" /></td>
-    </tr>
 <tr>
-      <td width="5%" nowrap class="dataLabel">BJCP Rank:</td>
-      <td colspan="2" nowrap class="data"><select name="brewerJudgeRank">
-        <option value ""></option>
-        <option value="Experienced">Experienced</option>
-        <option value="Recognized">Recognized</option>
-        <option value="Certified">Certified</option>
-        <option value="National">National</option>
-        <option value="Master">Master</option>
-        <option value="Grand Master">Grand Master</option>
-        <option value="Honorary Master">Honorary Master</option>
-        <option value="Honorary Grand Master">Honorary Grand Master</option>
+      <td width="10%" class="dataLabel">BJCP ID:</td>
+      <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /><br />If you are not a BJCP recognized judge, please enter a zero (0).</td>
+</tr>
+<tr> 
+      <td width="10%" class="dataLabel">Judge Rank:</td>
+      <td colspan="2" class="data"><select name="brewerJudgeRank">
+        <option value=""></option>
+        <option value="None" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "None")) echo "SELECTED"; ?>>None</option>
+        <option value="Experienced" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Experienced")) echo "SELECTED"; ?>>Experienced</option>
+        <option value="Professional Brewer" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Professional Brewer")) echo "SELECTED"; ?>>Professional Brewer</option>
+        <option value="Recognized" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Recognized")) echo "SELECTED"; ?>>BJCP - Recognized</option>
+        <option value="Certified" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified")) echo "SELECTED"; ?>>BJCP - Certified</option>
+        <option value="National" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "National")) echo "SELECTED"; ?>>BJCP - National</option>
+        <option value="Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Master")) echo "SELECTED"; ?>>BJCP - Master</option>
+        <option value="Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Grand Master")) echo "SELECTED"; ?>>BJCP - Grand Master</option>
+        <option value="Honorary Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Master")) echo "SELECTED"; ?>>BJCP - Honorary Master</option>
+        <option value="Honorary Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Grand Master")) echo "SELECTED"; ?>>BJCP - Honorary Grand Master</option>
       </select>
       </td>
 </tr>

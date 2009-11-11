@@ -3,6 +3,7 @@
 </div>
 <form action="includes/process.inc.php?action=edit&dbTable=brewer&go=<?php echo $go; ?>&id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
+<tr>
       <td width="10%" class="dataLabel">BJCP ID:</td>
       <td class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /><br />If you are not a BJCP recognized judge, please enter a zero (0).</td>
 </tr>
