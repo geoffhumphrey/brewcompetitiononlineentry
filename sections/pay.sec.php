@@ -2,7 +2,7 @@
 	<div id="header-inner"><h1>Pay Entry Fees</h1></div>
 </div>
 <?php 
-if ($msg == "1") echo "<div class=\"error\">Your payment has been received. Thanks and best of luck in the contest.</div>"; 
+if ($msg == "1") echo "<div class=\"error\">Your payment has been received. Thanks and best of luck in the competition.</div>"; 
 if ($msg == "2") echo "<div class=\"error\">Your payment has been cancelled.</div>"; 
 $fee = (($totalRows_log * $row_contest_info['contestEntryFee']) * .029);
 ?>
