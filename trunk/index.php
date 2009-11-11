@@ -49,7 +49,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
 	if ($section != "admin") { ?>
-    <div id="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div>
+    <div id="closed">Registration for has closed. Thanks to everyone who participated.</div>
 	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');

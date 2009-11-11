@@ -10,10 +10,10 @@
 	<?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 	<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" />
 	<?php } ?>
-<h2>Thanks To All Who Entered!</h2>
-<p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers in the competition.</p>
+<h2>Thanks To All Who Participated in the <?php echo $row_contest_info['contestName']; ?>!</h2>
+<p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
 	<?php if (greaterDate($today,$row_contest_info['contestDate'])) { ?>
-	<p>Judging has already taken place for the <?php echo $row_contest_info['contestName']; ?>.</p>
+	<p>Judging has already taken place.</p>
 	<?php include ('closed.sec.php'); }
 } 
 else 
