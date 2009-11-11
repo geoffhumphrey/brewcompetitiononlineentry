@@ -1,1 +1,1 @@
-Version 1.1 TEST
+Version 1.1
