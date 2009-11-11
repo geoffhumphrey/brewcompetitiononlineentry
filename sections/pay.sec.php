@@ -33,8 +33,8 @@ else   $currency_code = "USD";
 <input type="hidden" name="no_shipping" value="1">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="rm" value="1">
-<input type="hidden" name="return" value="<?php echo "http://".$_SERVER['SERVER_NAME']."/index.php?section=pay&msg=1"; ?>">
-<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME']."/index.php?section=pay&msg=2"; ?>">
+<input type="hidden" name="return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=pay&msg=1"; ?>">
+<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=pay&msg=2"; ?>">
 <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted">
 </form>
 <br /><br /><br />

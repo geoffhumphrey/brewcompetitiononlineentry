@@ -114,19 +114,19 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
   <?php if ($row_brewer['brewerJudge'] == "Y") { ?>
   <tr>
     <td class="dataLabel">BJCP Judge ID:</td>
-    <td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "") echo $row_brewer['brewerJudgeID']; else echo "None entered"; ?></td>
+    <td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">BJCP Rank:</td>
-    <td class="data"><?php  if ($row_brewer['brewerJudgeRank'] != "") echo  $row_brewer['brewerJudgeRank']; else echo "None entered"; ?></td>
+    <td class="data"><?php  if ($row_brewer['brewerJudgeRank'] != "") echo  $row_brewer['brewerJudgeRank']; else echo "N/A"; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">Categories Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo $row_brewer['brewerJudgeLikes']; else echo "None entered"; ?></td>
+    <td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo $row_brewer['brewerJudgeLikes']; else echo "N/A"; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">Catagories Not Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo $row_brewer['brewerJudgeDislikes']; else echo "None entered"; ?></td>
+    <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo $row_brewer['brewerJudgeDislikes']; else echo "N/A"; ?></td>
   </tr>
   <?php } ?>
 </table>
