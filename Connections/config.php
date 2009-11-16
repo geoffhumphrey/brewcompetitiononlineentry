@@ -47,13 +47,7 @@ CORRECT example if installation is in the web root folder:
 $images_dir = "/home/public_html";
 
 CORRECT example installation is in a sub-folder on your site:
-$images_dir = "/home/public_html/brewblogger";
-
-******************************************************************************
-
-INCORRECT examples in config.php:
-$images_dir = "/home/public_html/label_images";
-$images_dir = "/home/public_html/brewblogger/label_images";
+$images_dir = "/home/public_html/bcoe";
 
 ******************************************************************************
 
