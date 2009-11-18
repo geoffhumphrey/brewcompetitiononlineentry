@@ -507,7 +507,6 @@ div.menuBar a.menuButtonActive:hover {
 div.menu {
   background-color: #eeeeee;
   border: 1px solid #d0d0d0;
-  padding: 0px 1px 1px 0px;
   position: absolute;
   visibility: hidden;
   z-index: 101;
