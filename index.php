@@ -32,7 +32,6 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 <script type="text/javascript" src="js_includes/delete.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
-<script type="text/javascript" src="js_includes/nested_menu.js"></script>
 <?php if ($section == "admin") { ?>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
