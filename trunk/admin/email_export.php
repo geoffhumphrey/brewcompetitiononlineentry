@@ -9,14 +9,15 @@ $extension = ".csv";
 if ($filter == "judges") $type = "judge";
 elseif ($filter == "stewards") $type = "steward";
 else $type = "all_participant";
+$date = date("m-d-Y");
 
+$contest = str_replace(' ', '_', $row_contest_info['contestName']);
 
-$contest = str_replace(' ', '', $row_contest_info['contestName']);
-
-function  parseCSVComments($comments) {
-  $comments = str_replace('"', '""', $comments); // First off escape all " and make them ""
-  if(eregi(",", $comments) or eregi("\n", $comments)) { // Check if I have any commas or new lines
-    return '"'.$comments.'"'; // If I have new lines or commas escape them
+function parseCSVComments($comments) {
+  $comments = str_replace('"', '""', $comments); // First off, escape all " and make them ""
+  $comments = preg_replace("/[\n\r]/","",$comments); 
+  if(eregi(",", $comments) or eregi("\n", $comments) or eregi("\t", $comments) or eregi("\r", $comments) or eregi("\v", $comments)) { // Check if any commas or new lines
+    return '"'.$comments.'"'; // If new lines or commas and escape them
   } else {
     return $comments; // If no new lines or commas just return the value
   }
@@ -44,7 +45,7 @@ if($numberFields) { // Check if we need to output anything
 	}
 	// Start our output of the CSV
 	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment; filename=".$contest."_".$type."_emails".$extension);
+	header("Content-Disposition: attachment; filename=".$contest."_".$type."_emails_".$date.$extension);
 	header("Pragma: no-cache");
 	header("Expires: 0");
 	echo $headers;

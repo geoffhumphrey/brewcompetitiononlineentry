@@ -620,10 +620,10 @@ function getPageOffsetTop(el) {
 
 <div id="adminMenu2" class="menu" onmouseover="menuMouseover(event)">
 <a class="menuItem" href="index.php?section=admin&go=participants">Participants</a>
-<a class="menuItem" href="index.php?section=admin&go=participants&filter=judges">Available Judges</a>
-<a class="menuItem" href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a>
 <a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
 <a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="index.php?section=admin&go=participants&filter=judges">Available Judges</a>
+<a class="menuItem" href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a>
 </div>
 
 <div id="adminMenu3" class="menu" onmouseover="menuMouseover(event)">
@@ -657,7 +657,7 @@ function getPageOffsetTop(el) {
 <div id="adminMenu3_2" class="menu">
 <a class="menuItem" href="admin/email_export.php">All Participants</a>
 <a class="menuItem" href="admin/email_export.php?filter=judges">Judges</a>
-<a class="menuItem" href="admin/email_export.php?filter=judges">Stewards</a>
+<a class="menuItem" href="admin/email_export.php?filter=stewards">Stewards</a>
 <a class="menuItem" href="admin/entries_export.php?go=csv&filter=paid&action=email">Paid &amp; Received Entries</a>
 <a class="menuItem" href="admin/entries_export.php?go=csv&filter=nopay&action=email">Non-Paid &amp; Received Entries</a>
 </div>
@@ -665,7 +665,6 @@ function getPageOffsetTop(el) {
 <div id="adminMenu3_3" class="menu">
 <a class="menuItem" href="admin/participants_export.php?go=tab">All Participants</a>
 <a class="menuItem" href="admin/entries_export.php?go=tab&filter=paid&action=hccp">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=tab&filter=nopay&action=hccp">Non-Paid &amp; Received Entries</a>
 <a class="menuItem" href="admin/entries_export.php?go=tab">All Entries</a>
 </div>
 
