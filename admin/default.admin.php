@@ -38,30 +38,31 @@ if ($row_user['userLevel'] == "1") {
     <td colspan="4" width="15%" nowrap="nowrap" class="data"><a href="admin/promo_export.admin.php?action=word">Word</a></td>
   </tr>
   <tr bgcolor="<?php echo $color;?>">
-    <td width="5%" class="dataLabel"><span class="icon"><img src="images/cog.png" align="absmiddle"></span>Maintenance:</td>
-    <td nowrap="nowrap" class="data" colspan="3"><a href="index.php?section=admin&go=archive">Archives</a></td>
-    <td colspan="2" class="data">View and create archived information from previous competitions.</td>
-  </tr>
-  <tr bgcolor="<?php echo $color1;?>">
     <td class="dataLabel"><span class="icon"><img src="images/email_go.png" align="absmiddle"></span>Export Email Addresses (CSV):</td>
     <td width="15%" nowrap="nowrap" class="data"><a href="admin/email_export.php">All Participants</a></td>
-    <td width="15%" nowrap="nowrap" class="data"><a href="admin/email_export.php?filter=judges">Judges</a></td>
-    <td width="15%" nowrap="nowrap" class="data"><a href="admin/email_export.php?filter=stewards">Stewards</a></td>
-    <td colspan="2" class="data">For importing into an email or contact management program.</td>
+    <td width="15%" nowrap="nowrap" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a><a href="admin/email_export.php?filter=judges"></a></td>
+    <td width="15%" nowrap="nowrap" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a><a href="admin/email_export.php?filter=stewards"></a></td>
+    <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email"></a> <a href="admin/email_export.php?filter=judges">Judges</a></td>
+    <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email"></a><a href="admin/email_export.php?filter=stewards">Stewards</a></td>
   </tr>
-  <tr bgcolor="<?php echo $color;?>">
-    <td width="5%" class="dataLabel"><span class="icon"><img src="images/page_go.png" align="absmiddle"></span>Export Tab Delimited File:</td>
-    <td width="15%" nowrap="nowrap" class="data"><a href="admin/participants_export.php?go=tab">Participants</a></td>
+  <tr bgcolor="<?php echo $color1;?>">
+    <td width="5%" class="dataLabel"><span class="icon"><img src="images/page_go.png" align="absmiddle"></span>Export Tab Delimited Files:</td>
+    <td width="15%" nowrap="nowrap" class="data"><a href="admin/participants_export.php?go=tab">All Participants</a></td>
     <td width="15%" class="data"><a href="admin/entries_export.php?go=tab&amp;filter=paid">Paid &amp; Received Entries</a></td>
     <td width="15%" nowrap="nowrap" class="data"><a href="admin/entries_export.php?go=tab">All Entries</a></td>
     <td colspan="2" class="data">For importing into the Homebrew Competition Coordination Program (HCCP).</td>
   </tr>
+  <tr bgcolor="<?php echo $color;?>">
+    <td width="5%" class="dataLabel"><span class="icon"><img src="images/page_excel_go.png" align="absmiddle"></span>Export CSV Files:</td>
+    <td width="15%" nowrap="nowrap" class="data"><a href="admin/participants_export.php?go=csv">All Participants</a></td>
+    <td width="15%" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid &amp; Received Entries</a></td>
+    <td width="15%" nowrap="nowrap" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
+    <td colspan="2" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv">All Entries</a></td>
+  </tr>
   <tr bgcolor="<?php echo $color1;?>">
-    <td width="5%" class="dataLabel bdr1B"><span class="icon"><img src="images/page_excel_go.png" align="absmiddle"></span>Export CSV File:</td>
-    <td width="15%" nowrap="nowrap" class="data bdr1B"><a href="admin/participants_export.php?go=csv">Participants</a></td>
-    <td width="15%" class="data bdr1B"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid &amp; Received Entries</a></td>
-    <td width="15%" nowrap="nowrap" class="data bdr1B"><a href="admin/entries_export.php?go=csv">All Entries</a></td>
-    <td colspan="2" class="data bdr1B">For importing into a spreadsheet program such as Microsoft Excel.</td>
+    <td class="dataLabel bdr1B"><span class="icon"><img src="images/cog.png" align="absmiddle" /></span>Maintenance:</td>
+    <td nowrap="nowrap" class="data bdr1B" colspan="3"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
+    <td colspan="2" class="data bdr1B">View and create archived information from previous competitions.</td>
   </tr>
 </table>
 <?php 	} 
