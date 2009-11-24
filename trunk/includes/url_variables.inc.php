@@ -40,4 +40,19 @@ if (isset($_GET['filter'])) {
   $filter = (get_magic_quotes_gpc()) ? $_GET['filter'] : addslashes($_GET['filter']);
 }
 
+$sort = "brewCategorySort, brewSubCategory, brewBrewerLastName";
+if (isset($_GET['sort'])) {
+  $sort = (get_magic_quotes_gpc()) ? $_GET['sort'] : addslashes($_GET['sort']);
+}
+
+$dir = "ASC";
+if (isset($_GET['dir'])) {
+  $dir = (get_magic_quotes_gpc()) ? $_GET['dir'] : addslashes($_GET['dir']);
+}
+
+$bid = "default";
+if (isset($_GET['bid'])) {
+  $bid = (get_magic_quotes_gpc()) ? $_GET['bid'] : addslashes($_GET['bid']);
+}
+
 ?>
