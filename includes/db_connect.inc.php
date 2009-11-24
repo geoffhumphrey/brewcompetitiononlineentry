@@ -65,13 +65,14 @@ $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 $totalRows_name = mysql_num_rows($name);
 
-if (($section == "list") || ($section == "pay")) { $query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName ASC", $row_user['id']); $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
+if (($section == "list") || ($section == "pay")) { $query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
 elseif (($section == "brew") && ($action == "edit")) { $query_log = "SELECT * FROM brewing WHERE id = '$id'"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default")) { $query_log = "SELECT * FROM brewing ORDER BY brewCategorySort, brewSubCategory, brewName ASC"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default")) { $query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY brewSubCategory, brewName ASC"; $query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default")) { $query_log = "SELECT * FROM $dbTable ORDER BY brewCategorySort, brewSubCategory, brewName ASC"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default")) { $query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY brewSubCategory, brewName ASC"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
-else { $query_log = "SELECT * FROM brewing ORDER BY brewSubCategory, brewName, brewBrewerLastName ASC"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { $query_log = "SELECT * FROM brewing ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
+elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default")) { $query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default")) { $query_log = "SELECT * FROM $dbTable ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; }
+elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default")) { $query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default")) { $query_log = "SELECT * FROM brewing WHERE brewBrewerID='$bid' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; }
+else { $query_log = "SELECT * FROM brewing ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log);
