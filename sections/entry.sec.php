@@ -1,6 +1,6 @@
 <?php require_once('../Connections/config.php'); 
 session_start();
-include ('../includes/db_connect.inc.php');
+//include ('../includes/db_connect.inc.php');
 include ('../includes/plug-ins.inc.php');
 include ('../includes/url_variables.inc.php');
 

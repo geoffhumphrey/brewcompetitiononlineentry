@@ -22,8 +22,10 @@ mysql_select_db($database, $brewing);
 $query_sql = "SELECT brewBrewerFirstName, brewBrewerLastName,";
 if (($action == "default") || ($action == "hccp")) $query_sql .= " brewCategory, brewSubCategory, id, brewName, brewInfo, brewMead2, brewMead1 FROM brewing";
 if ($action == "email") $query_sql .= " brewBrewerID FROM brewing";
-if ($filter == "paid") $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
-if ($filter == "nopay") $query_sql .= " WHERE brewPaid = 'N' OR brewPaid='' AND brewReceived = 'Y'"; 
+if (($filter == "paid") && ($bid == "default")) 	$query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
+if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = 'N' OR brewPaid = '' AND brewReceived = 'Y'"; 
+//echo $query_sql;
+
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $numberFields = mysql_num_fields($sql); // Find out how many fields we are fetching
 

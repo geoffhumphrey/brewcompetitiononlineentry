@@ -605,6 +605,7 @@ function getPageOffsetTop(el) {
 
 <!-- 1st Tier Sub Menus Use <div class="menuItemSep"></div> for separator. -->
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu0');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu1');"><span class="menuItemText">Edit</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu2');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu3');"><span class="menuItemText">Export</span><span class="menuItemArrow">&#9654;</span></a>
@@ -613,6 +614,11 @@ function getPageOffsetTop(el) {
 </div>
 
 <!-- 2nd Tier sub menus  -->
+<div id="adminMenu0" class="menu">
+<a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
+<a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
+</div>
+
 <div id="adminMenu1" class="menu">
 <a class="menuItem" href="index.php?section=admin&go=contest_info">Contest Info</a>
 <a class="menuItem" href="index.php?section=admin&go=preferences">Preferences</a>

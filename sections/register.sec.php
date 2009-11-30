@@ -43,10 +43,11 @@ httpxml.open("GET",url,true);
 httpxml.send(null);
 }
 </script>
+<?php if ($action != "add") { ?>
 <div id="header">
-	<div id="header-inner"><h1>Step 1: Registration</h1></div>
+	<div id="header-inner"><h1>Step 2: Registration</h1></div>
 </div>
-<?php if ($msg == "1") { ?>
+<?php } if ($msg == "1") { ?>
 <div class="error">Sorry, there was a problem with your last login attempt.</div>
 p>Have you <a href="index.php?section=register">registered your account</a> yet?</p>
 <?php } ?>
@@ -86,14 +87,15 @@ if ($msg == "3") { ?>
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
-    	<td class="data"><input name="user_name" type="text" class="submit" size="40" onchange="AjaxFunction(this.value);"><div id="msg">Email Format:</div></td>
+    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onchange="AjaxFunction(this.value);"><div id="msg">Email Format:</div></td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
   	</tr>
   	<tr>
     	<td class="dataLabel">Password:</td>
-    	<td class="data"><input name="password" type="password" class="submit" size="25"></td>
+    	<td class="data"><input name="password" id="password" type="password" class="submit" size="25"></td>
         <td class="data"><span class="required">Required</span></td>
   	</tr>
+<?php if ($section != "admin") { ?>
     <tr>
     	<td class="dataLabel">Security Question:</td>
     	<td class="data" nowrap="nowrap">
@@ -109,6 +111,7 @@ if ($msg == "3") { ?>
     	<td class="data"><input name="userQuestionAnswer" type="text" class="submit" size="30"></td>
         <td class="data"><span class="required">Required</span></td>
   	</tr>
+<?php } ?>
   	<tr>
     	<td class="dataLabel">&nbsp;</td>
     	<td class="data"><input type="submit" value="Register"></td>
