@@ -312,7 +312,8 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-  $insertGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&msg=1";
+  if ($section == "admin") $insertGoTo = "../index.php?section=admin&go=entries";
+  else $insertGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&action=".$action."&msg=1";
   header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -551,8 +552,9 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
   
 }
 
+// --------------------------- If Adding a Participant ------------------------------- //
 
-if (($action == "add") && ($dbTable == "users") && ($section == "register")) {
+if (($action == "add") && ($dbTable == "users") && (($section == "register") || ($section == "admin"))) {
 // Check to see if email address is already in the system. If so, redirect.
 $username = $_POST['user_name'];
 
@@ -564,7 +566,8 @@ $row_userCheck = mysql_fetch_assoc($userCheck);
 $totalRows_userCheck = mysql_num_rows($userCheck);
 
 if ($totalRows_userCheck > 0) {
-  header("Location: ../index.php?section=register&msg=2");
+  if ($section == "admin") $msg = "10"; else $msg = "2";
+  header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg);
   }
   else 
   {
@@ -575,10 +578,10 @@ if ($totalRows_userCheck > 0) {
                        GetSQLValueString($password, "text"),
 					   GetSQLValueString($_POST['userQuestion'], "text"),
 					   GetSQLValueString($_POST['userQuestionAnswer'], "text"));
-					   
-
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	
+	if ($section != "admin") {
 
 	mysql_select_db($database, $brewing);
 	$query_login = "SELECT password FROM users WHERE user_name = '$username' AND password = '$password'";
@@ -604,7 +607,13 @@ if ($totalRows_userCheck > 0) {
   			session_destroy();
   			exit;
 			}
-
+	}
+	
+	if ($section == "admin") {
+	header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".$username);
+	
+	}
+	
 /*
   $insertGoTo = "../index.php?section=login&username=".$username;
   header(sprintf("Location: %s", $insertGoTo));
@@ -613,7 +622,7 @@ if ($totalRows_userCheck > 0) {
  }
  else 
  {
- header("Location: ../index.php?section=register&go=".$go."&msg=3");
+ header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=3");
  }
 }
 
@@ -812,15 +821,10 @@ if (($action == "add") && ($dbTable == "brewer") && ($section != "setup")) {
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
 	
-	if ($_POST['brewerJudge'] == "Y") { // if "yes" to judging
-	$insertGoTo = "../index.php?section=judge&go=judge";
-    header(sprintf("Location: %s", $insertGoTo));
-	} 
-	else 
-	{
-	$insertGoTo = "../index.php?section=list&msg=1";
-    header(sprintf("Location: %s", $insertGoTo));	
-	}			   
+	if ($_POST['brewerJudge'] == "Y") $insertGoTo = "../index.php?section=judge&go=judge";
+	elseif ($section == "admin") $insertGoTo = "../index.php?section=admin&go=participants&msg=1&username=".$username;
+	else $insertGoTo = "../index.php?section=list&msg=1"; 
+    header(sprintf("Location: %s", $insertGoTo));			   
 					   
 }
 

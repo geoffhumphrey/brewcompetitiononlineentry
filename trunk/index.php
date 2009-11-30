@@ -24,7 +24,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
+<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']; ?></title>
 <link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/jquery-1.3.2.min.js"></script>
@@ -49,7 +49,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
 	if ($section != "admin") { ?>
-    <div id="closed">Registration for has closed. Thanks to everyone who participated.</div>
+    <div id="closed">Registration has closed. Thanks to everyone who participated.</div>
 	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
@@ -57,8 +57,16 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "admin")	include ('admin/default.admin.php');
 		if ($section == "list") 	include ('sections/list.sec.php');
+		if ($section == "pay") 		include ('sections/pay.sec.php');
+		if ($row_user['userLevel'] == "1") {
+			if ($section == "admin")	include ('admin/default.admin.php');
+			if ($section == "brewer") 	include ('sections/brewer.sec.php');
+			if ($section == "brew") 	include ('sections/brew.sec.php');
+			if ($section == "judge") 	include ('sections/judge.sec.php');
+			if ($section == "user") 	include ('sections/user.sec.php');
+			if ($section == "beerxml")	include ('sections/beerxml.sec.php');
+			}
 		}
 	} else 
 	{
@@ -69,7 +77,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "admin")	include ('admin/default.admin.php');
+		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include ('admin/default.admin.php'); }
 		if ($section == "brewer") 	include ('sections/brewer.sec.php');
 		if ($section == "brew") 	include ('sections/brew.sec.php');
 		if ($section == "pay") 		include ('sections/pay.sec.php');

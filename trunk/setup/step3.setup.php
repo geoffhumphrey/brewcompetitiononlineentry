@@ -56,12 +56,12 @@ httpxml.send(null);
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
-    	<td class="data"><input name="user_name" type="text" class="submit" size="40" onchange="AjaxFunction(this.value);"><div id="msg">Email Format:</div></td>
+    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onchange="AjaxFunction(this.value);"><div id="msg">Email Format:</div></td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
   	</tr>
   	<tr>
     	<td class="dataLabel">Password:</td>
-    	<td class="data"><input name="password" type="password" class="submit" size="25"></td>
+    	<td class="data"><input name="password" id="password" type="password" class="submit" size="25"></td>
         <td class="data"><span class="required">Required</span></td>
   	</tr>
     <tr>
