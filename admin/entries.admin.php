@@ -1,6 +1,6 @@
 <h2>Entries</h2>
 <?php if ($action != "print") { ?>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&dbTable=brewing&filter=<?php echo $filter; ?>"> 
+<form name="form1" method="post" action="includes/process.inc.php?action=update&dbTable=brewing&filter=<?php echo $filter; ?>&bid=<?php echo $bid; ?>&sort=<?php echo $sort; ?>&dir=<?php echo $dir; ?>">
 <table class="dataTable">
 <tr>
   <td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin">&laquo; Back to Admin</a></td>
@@ -56,7 +56,8 @@
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
-	$totalRows_style = mysql_num_rows($style);
+	
+	
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
    <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
@@ -139,8 +140,8 @@
       </select>
       <?php } else echo $row_log['brewBOSPlace']; ?>  </td>
   <?php if ($action != "print") { ?>
-  <td class="dataList">
-  <span class="icon"><a href="index.php?section=brew&go=<?php echo $go; ?>&filter=<?php echo $row_log['brewBrewerID']; ?>&action=edit&id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=brew&go=<?php echo $go; ?>&filter=<?php echo $filter; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span>  </td>
+  <td class="dataList" nowrap="nowrap">
+  <span class="icon"><a href="index.php?section=brew&go=<?php echo $go; ?>&filter=<?php echo $row_log['brewBrewerID']; ?>&action=edit&id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=brew&go=<?php echo $go; ?>&filter=<?php echo $filter; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=425&width=700" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png" align="absmiddle" border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span></td>
   <?php } ?>
   </tr>
 
