@@ -1082,7 +1082,7 @@ foreach($_POST['id'] as $id)
 	} 
 
 if($result1){ 
-	header("location:../index.php?section=admin&go=entries&filter=".$filter."&msg=9");  
+	header("location:../index.php?section=admin&go=entries&action=default&filter=".$filter."&bid=".$bid."&sort=".$sort."&dir=".$dir."&msg=9");  
 	}
 }
 

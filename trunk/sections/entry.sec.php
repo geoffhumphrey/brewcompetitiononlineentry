@@ -10,6 +10,11 @@ $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log);
 
+$query_user = sprintf("SELECT * FROM users WHERE id = '%s'", $bid);
+$user = mysql_query($query_user, $brewing) or die(mysql_error());
+$row_user = mysql_fetch_assoc($user);
+$totalRows_user = mysql_num_rows($user);
+
 mysql_select_db($database, $brewing);
 $query_style1 = sprintf("SELECT * FROM styles WHERE brewStyle = '%s'", $style);
 $style1 = mysql_query($query_style1, $brewing) or die(mysql_error());
@@ -29,7 +34,7 @@ $row_club = mysql_fetch_assoc($club);
 $totalRows_club = mysql_num_rows($club);
 
 mysql_select_db($database, $brewing);
-$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $_SESSION['loginUsername']);
+$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $row_user['user_name']);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);
@@ -80,7 +85,7 @@ table.bottleLabel-inner	td { padding: 5px; }
   <tr>
     <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
     <td width="5%" align="right" nowrap="nowrap"><img src = "../images/eye.png" align="absmiddle" />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>">Print</a></td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>&bid=<?php echo $bid; ?>">Print</a></td>
   </tr>
 </table>
 <?php } ?>
@@ -887,7 +892,7 @@ table.bottleLabel-inner	td { padding: 5px; }
     </td>
   </tr>
 </table>
-<?php if ($action != "print") { ?><p align="right"><img src = "../images/arrow_up.png" align="absmiddle" /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;<img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>">Print</a></p><?php } ?>
+<?php if ($action != "print") { ?><p align="right"><img src = "../images/arrow_up.png" align="absmiddle" /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;<img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>&bid=<?php echo $bid; ?>">Print</a></p><?php } ?>
 
 </div>
 </body>
