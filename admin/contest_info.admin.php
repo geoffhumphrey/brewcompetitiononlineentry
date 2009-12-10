@@ -128,6 +128,11 @@
     <td class="data">Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</td>
   </tr>
   <tr>
+    <td class="dataLabel">Complete Winners List:</td>
+    <td class="data"><textarea name="contestWinnersComplete" cols="90" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea></td>
+    <td class="data">Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in HTML format and pasted here.</td>
+  </tr>
+  <tr>
   	<td>&nbsp;</td>
   	<td colspan="2" class="data"><input name="submit" type="submit" value="Submit"></td>
   </tr>

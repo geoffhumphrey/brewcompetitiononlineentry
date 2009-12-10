@@ -106,6 +106,16 @@ font-size: inherit;
 td
 {
 vertical-align: top;
+padding: .5em 2em .5em .5em;
+}
+
+th
+{
+vertical-align: top;
+padding: 1em .5em 1em .5em;
+background-color: #dddddd;
+text-align: left;
+font-size: 1.1em;
 }
 
 #container {
