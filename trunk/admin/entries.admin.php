@@ -70,9 +70,6 @@
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action != "print") { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewWinner'] == "Y") echo "X"; } ?></td>
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if ($action != "print") { ?>
-  	<table>
-    <tr>
-      <td>
   	  <select name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat">
   	  <option value="">&nbsp;&nbsp;&nbsp;</option>
       <option value="01" <?php if ($row_log['brewWinnerCat'] == "01") echo "SELECTED"; ?>>1</option>
@@ -103,9 +100,9 @@
       <option value="26" <?php if ($row_log['brewWinnerCat'] == "26") echo "SELECTED"; ?>>26</option>
       <option value="27" <?php if ($row_log['brewWinnerCat'] == "27") echo "SELECTED"; ?>>27</option>
       <option value="28" <?php if ($row_log['brewWinnerCat'] == "28") echo "SELECTED"; ?>>28</option>
-    </select>      </td>
-      <td style="padding: 0 0 0 3px;">
-      <select name="brewWinnerSubCat<?php echo $row_log['id']; ?>" id="brewWinnerSubCat">
+    </select>
+    &nbsp;      
+    <select name="brewWinnerSubCat<?php echo $row_log['id']; ?>" id="brewWinnerSubCat">
   	  <option value="">&nbsp;&nbsp;&nbsp;</option>
       <option value="A" <?php if ($row_log['brewWinnerSubCat'] == "A") echo "SELECTED"; ?>>A</option>
       <option value="B" <?php if ($row_log['brewWinnerSubCat'] == "B") echo "SELECTED"; ?>>B</option>
@@ -114,10 +111,9 @@
       <option value="E" <?php if ($row_log['brewWinnerSubCat'] == "E") echo "SELECTED"; ?>>E</option>
       <option value="F" <?php if ($row_log['brewWinnerSubCat'] == "F") echo "SELECTED"; ?>>F</option>
       <option value="G" <?php if ($row_log['brewWinnerSubCat'] == "G") echo "SELECTED"; ?>>G</option>
-      </select>      </td>
-    </tr>
-    </table>
-    <?php } else echo $row_log['brewWinnerCat'].$row_log['brewWinnerSubCat']; ?>  </td>
+    </select>
+    <?php } else echo $row_log['brewWinnerCat'].$row_log['brewWinnerSubCat']; ?>
+    </td>
   <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
       <?php if ($action != "print") { ?>
       <select name="brewWinnerPlace<?php echo $row_log['id']; ?>" id="brewWinnerPlace">
