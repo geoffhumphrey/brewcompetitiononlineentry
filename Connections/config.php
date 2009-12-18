@@ -18,7 +18,7 @@ $password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
-If you haven't set up the database yet, please refer to http://www.brewblogger.net/ for setup instructions. 
+If you haven't set up the database yet, please refer to http://competition.brewblogger.net/index.php?page=install for setup instructions. 
 */
 $database = "";
 
