@@ -26,6 +26,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "rules") 	include ('sections/rules.sec.php');
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "past_winners") include ('sections/past_winners.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "admin")	include ('admin/default.admin.php');
 		if ($section == "list") 	include ('sections/list.sec.php');
@@ -35,6 +36,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "past_winners") include ('sections/past_winners.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "admin")	include ('admin/default.admin.php');
 		if ($section == "brew") 	include ('sections/brew.sec.php');

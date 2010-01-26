@@ -5,6 +5,10 @@
 	<div id="header-inner"><h1>Your List of Entries and Info</h1></div>
 </div>
 <?php 
+$entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+if (($row_contest_info['contestEntryCap'] != "") && ($entry_total > $row_contest_info['contestEntryCap'])) { $fee = ($row_contest_info['contestEntryCap'] * .029); $entry_total_final = $row_contest_info['contestEntryCap']; } else { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
+if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
+
 if ($msg == "1") echo "<div class=\"error\">Information added successfully.</div>"; 
 if ($msg == "2") echo "<div class=\"error\">Information edited successfully.</div>"; 
 if ($msg == "3") echo "<div class=\"error\">Your email address has been updated.</div>"; 
@@ -62,7 +66,7 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
  <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo ($totalRows_log * $row_contest_info['contestEntryFee']); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if ($row_contest_info['contestEntryFee'] > 0) { ?><span class="data"><a href="index.php?section=pay">Pay Entry Fees</a></span><?php } } ?>
+  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final; ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if ($row_contest_info['contestEntryFee'] > 0) { ?><span class="data"><a href="index.php?section=pay">Pay Entry Fees</a></span><?php } } ?>
   </td>
  </tr>
 </table>

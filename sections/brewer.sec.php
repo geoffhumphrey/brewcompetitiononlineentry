@@ -1,16 +1,30 @@
 <?php
+if ($section != "step4") {
 mysql_select_db($database, $brewing);
 $query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $filter); 
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 $totalRows_brewerID = mysql_num_rows($brewerID);
-?>
+}
+if ($section == "step4") { ?>
+<?php } else { ?>
+<div id="header">	
+	<div id="header-inner"><h1>Set Up Step 4: Enter the Admin User's Info</h1></div>
+</div>
+<p>The information here is strictly for record-keeping purposes. It will not be made public.</p>
 <div id="header">
 	<div id="header-inner"><h1><?php if ($action == "add") echo "Step 2: Registrant Information"; else echo "Edit Registrant Information"; ?></h1></div>
 </div>
-<?php if ($msg != "default") echo "<div class=\"error\">Your account has been created.</div>"; 
-if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+<?php } 
+if ($msg != "default") echo "<div class=\"error\">Your account has been created.</div>"; 
+if (($section == "step4") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+<?php if ($section == "step4") { ?>
+<form action="includes/process.inc.php?section=setup&action=add&dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<input name="brewerSteward" type="hidden" value="N" />
+<input name="brewerEmail" type="hidden" value="<?php echo $go; ?>" />
+<?php } else { ?>
 <form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&go=".$go."&filter=".$filter; ?>&action=<?php echo $action; ?>&dbTable=brewer&id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<?php } ?>
 <table class="dataTable">
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
@@ -57,7 +71,7 @@ if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] =
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td class="data">&nbsp;</td>
 </tr>
-<?php if ($go != "entrant") { ?>
+<?php if (($go != "entrant") && ($section != "step4")) { ?>
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
@@ -104,10 +118,12 @@ if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] =
       <td colspan="2" class="data"><input name="submit" type="submit" value="Submit Brewer Information" /></td>
     </tr>
 </table>
-<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
-<?php if ($go == "entrant") { ?>
-<input name="brewerJudge" type="hidden" value="N" />
-<input name="brewerSteward" type="hidden" value="N" />
+<?php if ($section != "step4") { ?>
+	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
+	<?php if ($go == "entrant") { ?>
+	<input name="brewerJudge" type="hidden" value="N" />
+	<input name="brewerSteward" type="hidden" value="N" />
+	<?php } ?>
 <?php } ?>
 </form>
 <?php }

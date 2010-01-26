@@ -588,7 +588,9 @@ function getPageOffsetTop(el) {
 
 //]]>
 </script>
-
+<?php if (strstr($section,"step")) { ?>
+<p class="setupTitle">Set Up Your Brew Competition Online Signup Site</p>
+<?php } else { ?>
 <ul id="nav">
   <li><?php if ($section != "default") { ?><a href="index.php"><?php echo $row_contest_info['contestName']; ?> Home</a><?php } else { echo $row_contest_info['contestName']; ?> Home<?php } ?></li>
   <li><?php if ($section != "rules") { ?><a href="index.php?section=rules">Rules</a><?php } else { ?>Rules<?php } ?></li>
@@ -602,7 +604,7 @@ function getPageOffsetTop(el) {
 </div><?php } ?>
   <li><?php sessionAuthenticateNav(); ?></li>
 </ul>
-
+<?php } ?>
 <!-- 1st Tier Sub Menus Use <div class="menuItemSep"></div> for separator. -->
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu0');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>

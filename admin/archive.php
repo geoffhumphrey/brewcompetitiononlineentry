@@ -62,6 +62,10 @@ $sql3 = "RENAME TABLE ".$database.".brewing  TO ".$database.".brewing_".$suffix.
 mysql_select_db($database, $brewing);
 $Result3 = mysql_query($sql3, $brewing) or die(mysql_error());
 
+$sql3_a = "RENAME TABLE ".$database.".sponsors  TO ".$database.".sponsors_".$suffix.";";
+mysql_select_db($database, $brewing);
+$Result3_a = mysql_query($sql3_a, $brewing) or die(mysql_error());
+
 // Third, insert a clean "users", "brewers", and "brewing" tables
 
 $sql4 = "
@@ -307,6 +311,20 @@ CREATE TABLE IF NOT EXISTS `brewing` (
 
 mysql_select_db($database, $brewing);
 $Result6 = mysql_query($sql6, $brewing) or die(mysql_error());
+
+$sql6_a = "
+CREATE TABLE IF NOT EXISTS `sponsors` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `sponsorName` varchar(255) DEFAULT NULL,
+  `sponsorURL` varchar(255) DEFAULT NULL,
+  `sponsorImage` varchar(255) DEFAULT NULL,
+  `sponsorText` text,
+  `sponsorLocation` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+";
+mysql_select_db($database, $brewing);
+$Result6_a = mysql_query($sql6_a, $brewing) or die(mysql_error());
 
 // Fourth, insert current user's info into new "users" and "brewers" table
 
