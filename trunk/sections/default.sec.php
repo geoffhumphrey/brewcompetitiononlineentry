@@ -4,7 +4,7 @@
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
 <?php } ?>
-<?php include ('past_winners.sec.php'); ?>
+<?php if ($totalRows_archive > 0) include ('past_winners.sec.php'); ?>
 <?php if (greaterDate($today,$deadline)) 
 { 
 ?>
