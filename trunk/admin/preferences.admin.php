@@ -1,9 +1,9 @@
-<form method="post" action="includes/process.inc.php?action=edit&dbTable=preferences&id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step1") echo "add"; else echo "edit"; ?>&dbTable=preferences&id=1" name="form1">
+<?php if ($section != "step1") { ?>
 <h2>Preferences</h2>
+<p><a href="index.php?section=admin">&laquo; Back to Admin</a></p>
+<?php } ?>
 <table>
-  <tr>
-  	<td colspan="3"><a href="index.php?section=admin">&laquo; Back to Admin</a></td>
-  </tr>
   <tr>
   	<td colspan="3"><h3>General</h3></td>
   </tr>
@@ -25,7 +25,7 @@
   <tr>
     <td class="dataLabel">Winner Display:</td>
     <td class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate whether you would like to display the winners of the contest for each category and Best of Show.</td>
+  	<td class="data">Indicate whether you would like to display the winners of the competition for each category and Best of Show.</td>
   </tr>
   <tr>
   	<td colspan="3"><h3>Measurements</h3></td>
@@ -151,7 +151,7 @@
   </tr>
   <tr>
   	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" value="Update Preferences"></td>
+  	<td colspan="2" class="data"><input name="submit" type="submit" value="Set Preferences"></td>
   </tr>
 </table>
 </form>

@@ -1,5 +1,5 @@
 <?php if ($totalRows_log_winners > 0) { ?>
-<h2>Winning Entries</h2>
+<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <table class="dataTable"> 
  <tr>
   <td class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</td>

@@ -38,21 +38,24 @@ $archive = mysql_query($query_archive, $brewing) or die(mysql_error());
 $row_archive = mysql_fetch_assoc($archive);
 $totalRows_archive = mysql_num_rows($archive);
 
-$query_log_winners = "SELECT * FROM brewing WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
+if (($section == "default") || ($section == "past_winners")) { 
+if ($section == "past_winners") $dbTable = $dbTable; else $dbTable = "brewing";
+
+$query_log_winners = "SELECT * FROM $dbTable WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
 $log_winners = mysql_query($query_log_winners, $brewing) or die(mysql_error());
 $row_log_winners = mysql_fetch_assoc($log_winners);
 $totalRows_log_winners = mysql_num_rows($log_winners);
 
-$query_bos = "SELECT * FROM brewing WHERE brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
+$query_bos = "SELECT * FROM $dbTable WHERE brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
 $bos = mysql_query($query_bos, $brewing) or die(mysql_error());
 $row_bos = mysql_fetch_assoc($bos);
 $totalRows_bos = mysql_num_rows($bos);
 
-$query_bos_winner = "SELECT * FROM brewing WHERE brewBOSRound='Y' AND brewBOSPlace='1'";
+$query_bos_winner = "SELECT * FROM $dbTable WHERE brewBOSRound='Y' AND brewBOSPlace='1'";
 $bos_winner = mysql_query($query_bos_winner, $brewing) or die(mysql_error());
 $row_bos_winner = mysql_fetch_assoc($bos_winner);
 $totalRows_bos_winner = mysql_num_rows($bos_winner);
-
+}
 // Session specific queries
 if (isset($_SESSION["loginUsername"]))  {
 $query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);

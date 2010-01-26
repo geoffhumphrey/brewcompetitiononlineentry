@@ -1,10 +1,19 @@
 <?php
 require ('Connections/config.php'); 
+
+// Check to see if initial setup has taken place 
+mysql_select_db($database, $brewing);
+$query_setup = "SELECT * FROM contest_info";
+$setup = mysql_query($query_setup, $brewing);
+$totalRows_setup = mysql_num_rows($setup);
+
+if ($totalRows_setup > 0) header ('Location: index.php'); else
+
+{
 require ('includes/url_variables.inc.php');
 require ('includes/db_connect.inc.php');
 include ('includes/plug-ins.inc.php');
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -19,9 +28,7 @@ include ('includes/plug-ins.inc.php');
 <body>
 <div id="container">
 <div id="navigation">
-	<div id="navigation-inner">
-	  <p class="setupTitle">Set Up Your Brew Competition Online Signup Site</p>
-	</div>
+	<div id="navigation-inner"><?php include ('sections/nav.sec.php'); ?></div>
 </div>
 	<div id="content">
 		<div id="content-inner">
@@ -34,5 +41,9 @@ include ('includes/plug-ins.inc.php');
     	</div>
 	</div>
 </div>
+<div id="footer">
+	<div id="footer-inner"><?php include ('sections/footer.sec.php'); ?></div>
+</div>
 </body>
 </html>
+<?php } ?>

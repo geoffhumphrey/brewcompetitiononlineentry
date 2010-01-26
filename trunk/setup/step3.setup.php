@@ -70,7 +70,7 @@ httpxml.send(null);
     	    <input type="radio" name="userQuestion" value="What is your favorite all-time beer to drink?" id="userQuestion_0" checked="checked" />What is your favorite all-time beer to drink?<br />
     	    <input type="radio" name="userQuestion" value="What is your mother's maiden name?" id="userQuestion_1" />What is your mother's maiden name?<br />
 			<input type="radio" name="userQuestion" value="What was the name of the street you grew up on?" id="userQuestion_2" />What was the name of the street you grew up on?<br />
-    	    <input type="radio" name="userQuestion" value="What was your high school&#8217;s mascot?" id="userQuestion_3" />
+    	    <input type="radio" name="userQuestion" value="What was your high school's mascot?" id="userQuestion_3" />
     	    What was your high school&#8217;s mascot?<br />
         </td>
         <td class="data">Choose one. This question will be used to verify your identity should you forget your password.</td>

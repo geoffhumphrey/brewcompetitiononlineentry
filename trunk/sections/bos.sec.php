@@ -1,5 +1,5 @@
 <?php if ($totalRows_bos > 0) { ?>
-<h2>Best of Show Winners</h2>
+<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <div class="bos">Congratulations to Best of Show Winner <?php echo $row_bos_winner['brewBrewerFirstName']." ".$row_bos_winner['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner['brewName']; ?></em>, garnered the top prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestBOSAward']; ?>
 <table class="dataTable">

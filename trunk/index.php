@@ -56,6 +56,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "rules") 	include ('sections/rules.sec.php');
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "past_winners") include ('sections/past_winners.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include ('sections/list.sec.php');
 		if ($section == "pay") 		include ('sections/pay.sec.php');
@@ -76,6 +77,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "past_winners") include ('sections/past_winners.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include ('admin/default.admin.php'); }
 		if ($section == "brewer") 	include ('sections/brewer.sec.php');
@@ -95,7 +97,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 </div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><a href="http://competition.brewblogger.net" target="_blank">Brew Competition Online Entry</a> (BCOE) <?php include ('includes/version.inc.php'); ?> &copy;<?php if (date ('Y') == "2009") echo date('Y'); else echo "2009-".date('Y'); ?> Geoff Humphrey for <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
+	<div id="footer-inner"><?php include ('sections/footer.sec.php'); ?></div>
 </div>
 </body>
 </html>

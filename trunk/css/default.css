@@ -263,8 +263,8 @@ background-repeat: no-repeat;
 }
 
 .setupTitle {
-padding: 5px 0 0 0;
-font-size: 1.2em;
+padding: .5em 0 0 0;
+font-size: 1.5em;
 font-weight: bold;
 }
 
@@ -287,7 +287,7 @@ padding: .5em 2em .5em .5em;
 .dataLabel
 {
 font-weight: bold;
-padding: .5em .5em .5em 0;
+padding: .5em .5em .5em 0em;
 white-space: nowrap;
 }
 

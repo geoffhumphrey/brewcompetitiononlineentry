@@ -1,6 +1,8 @@
-<form method="post" action="includes/process.inc.php?action=edit&dbTable=contest_info&id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&dbTable=contest_info&id=1" name="form1">
+<?php if ($section != "step2") { ?>
 <h2>Competition Info</h2>
 <p><a href="index.php?section=admin">&laquo; Back to Admin</a></p>
+<?php } ?>
 <table>
   <tr>
   	<td colspan="3"><h3>Contact</h3></td>
@@ -93,6 +95,11 @@
     <td class="dataLabel">Entry Fee:</td>
     <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee']; ?>"></td>
     <td class="data">Fee for a single entry (<?php echo $row_prefs['prefsCurrency']; ?>) - please enter a zero (0) for a free entry fee.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Entry Fee Cap:</td>
+    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
+    <td class="data">Useful for competitions with "unlimited" entries for a single fee (e.g., $5 for the first entry, $10 for unlimited, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</td>
   </tr>
   <tr>
     <td class="dataLabel">Categories Accepted:</td>

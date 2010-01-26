@@ -908,6 +908,8 @@ contestDropOff,
 contestAwards,
 contestWinnersComplete,
 
+contestEntryCap,
+
 id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
@@ -930,6 +932,7 @@ id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                        GetSQLValueString($_POST['contestDropOff'], "text"),
                        GetSQLValueString($_POST['contestAwards'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
+					   GetSQLValueString($_POST['contestEntryCap'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -967,7 +970,8 @@ contestDropOff=%s,
 contestAwards=%s, 
 contestLogo=%s, 
 contestBOSAward=%s,
-contestWinnersComplete=%s
+contestWinnersComplete=%s,
+contestEntryCap=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
@@ -992,6 +996,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['contestLogo'], "text"),
 					   GetSQLValueString($_POST['contestBOSAward'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
+					   GetSQLValueString($_POST['contestEntryCap'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);

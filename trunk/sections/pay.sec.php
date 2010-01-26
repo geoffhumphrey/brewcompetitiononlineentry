@@ -2,18 +2,20 @@
 	<div id="header-inner"><h1>Pay Entry Fees</h1></div>
 </div>
 <?php 
+$entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+if (($row_contest_info['contestEntryCap'] != "") && ($entry_total > $row_contest_info['contestEntryCap'])) { $fee = ($row_contest_info['contestEntryCap'] * .029); $entry_total_final = $row_contest_info['contestEntryCap']; } else { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
+if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
 if ($msg == "1") echo "<div class=\"error\">Your payment has been received. Thanks and best of luck in the competition.</div>"; 
 if ($msg == "2") echo "<div class=\"error\">Your payment has been cancelled.</div>"; 
-$fee = (($totalRows_log * $row_contest_info['contestEntryFee']) * .029);
 ?>
-<p>You currently have logged <a href="index.php?section=list"><?php echo $totalRows_log; ?> entries</a> in the <?php echo $row_contest_info['contestName']; ?> contest.  Your total entry fees are <?php echo $row_prefs['prefsCurrency']; echo ($totalRows_log * $row_contest_info['contestEntryFee']).".00" ; ?>.</p>
+<p>You currently have logged <a href="index.php?section=list"><?php echo $totalRows_log; ?> entries</a> in the <?php echo $row_contest_info['contestName']; ?> contest.  Your total entry fees are <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00" ; ?>.</p>
 <?php if ($row_prefs['prefsCash'] == "Y") { ?>
 <h2>Cash</h2>
-<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo ($totalRows_log * $row_contest_info['contestEntryFee']).".00"; ?>) in a <em>sealed envelope</em> to one of  your bottles.</p>
+<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00"; ?>) in a <em>sealed envelope</em> to one of  your bottles.</p>
 <?php } ?>
 <?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 <h2>Checks</h2>
-<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo ($totalRows_log * $row_contest_info['contestEntryFee']).".00"; ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
+<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00"; ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
 <?php } ?>
 <?php if  ($row_prefs['prefsPaypal'] == "Y") { 
 if     ($row_prefs['prefsCurrency'] == "&pound;") $currency_code = "GBP";
@@ -28,7 +30,7 @@ else   $currency_code = "USD";
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
 <input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Contest Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$totalRows_log." Entries)"; ?>">
-<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo (($totalRows_log * $row_contest_info['contestEntryFee']) + number_format($fee, 2, '.', '')); else echo ($totalRows_log * $row_contest_info['contestEntryFee']).".00"; ?>">
+<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo ($entry_total_final + number_format($fee, 2, '.', '')); else echo $entry_total_final.".00"; ?>">
 <input type="hidden" name="cn" value="Message to the organizers:">
 <input type="hidden" name="no_shipping" value="1">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
