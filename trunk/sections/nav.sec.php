@@ -622,7 +622,7 @@ function getPageOffsetTop(el) {
 </div>
 
 <div id="adminMenu1" class="menu">
-<a class="menuItem" href="index.php?section=admin&go=contest_info">Contest Info</a>
+<a class="menuItem" href="index.php?section=admin&go=contest_info">Competition Info</a>
 <a class="menuItem" href="index.php?section=admin&go=preferences">Preferences</a>
 </div>
 

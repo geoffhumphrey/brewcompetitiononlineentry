@@ -30,4 +30,9 @@ $html_remove = array(
 "&deg;" => ""
 );
 
+$space_remove = array( 
+" " => "",
+"&nbsp;" => ""
+);
+
 ?>

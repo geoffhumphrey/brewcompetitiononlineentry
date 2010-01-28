@@ -21,7 +21,7 @@
 <p><?php echo $row_contest_info['contestAwardsLocation']; ?></p>
 <?php } ?>
 <h2>Entry Fee</h2>
-<p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry</p>
+<p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry<?php if ($row_contest_info['contestEntryCap'] != "") echo " and ".$row_prefs['prefsCurrency'].$row_contest_info['contestEntryCap']." for unlimited entries"; ?></p>
 <?php if ($row_contest_info['contestCategories']  != "") { ?>
 <h2>Payment</h2>
 <p><p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
