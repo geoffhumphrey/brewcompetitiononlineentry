@@ -31,6 +31,13 @@ $html_remove = array(
 );
 
 $space_remove = array( 
+"&amp;" => "",
+"&lt;" => "", 
+"&gt;" => "", 
+"&quot;" => "", 
+"&rsquo;" => "",
+"&#39;" => "",
+"&deg;" => "",
 " " => "",
 "&nbsp;" => ""
 );
