@@ -68,8 +68,8 @@ if ($row_user['userLevel'] == "1") {
   </tr>
   <tr bgcolor="<?php echo $color;?>">
     <td class="dataLabel bdr1B"><span class="icon"><img src="images/cog.png" align="absmiddle" /></span>Maintenance:</td>
-    <td nowrap="nowrap" class="data bdr1B" colspan="3"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
-    <td colspan="2" class="data bdr1B">View and create archived information from previous competitions.</td>
+    <td nowrap="nowrap" class="data bdr1B"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
+    <td colspan="4" nowrap="nowrap" class="data bdr1B">View and create archived information from previous competitions.</td>
   </tr>
 </table>
 <?php 	} 

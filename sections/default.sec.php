@@ -39,7 +39,7 @@ else
 <p>If you <em>have not</em> registered and are willing to be a judge, <a href="index.php?section=register&go=judge">please register</a>.</p>
 <p>If you <em>have</em> registered, <a href="index.php?section=login">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
 <?php } ?>
-<h2>Contest Date</h2>
+<h2>Competition Date</h2>
 <p>Judging for the <?php echo $row_contest_info['contestName']; ?> will take place 
 <?php $date = $row_contest_info['contestDate']; echo dateconvert($date, 2); 
 if ($row_contest_info['contestDate2'] != "") { 

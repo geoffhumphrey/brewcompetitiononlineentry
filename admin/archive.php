@@ -1,8 +1,9 @@
 <?php 
 require ('../Connections/config.php');
+require ('../includes/scrubber.inc.php');
 session_start();
 
-$suffix = $_POST['archiveSuffix'];
+$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 mysql_select_db($database, $brewing);
 $query_suffixCheck = sprintf("SELECT archiveSuffix FROM archive WHERE archiveSuffix = '%s'", $_POST['archiveSuffix']);
 $suffixCheck = mysql_query($query_suffixCheck, $brewing) or die(mysql_error());
@@ -305,6 +306,7 @@ CREATE TABLE IF NOT EXISTS `brewing` (
   `brewWinnerPlace` VARCHAR( 3 ) NULL ,
   `brewBOSRound` CHAR( 1 ) NULL ,
   `brewBOSPlace` VARCHAR( 3 ) NULL ,
+  `brewReceived` CHAR( 1 ) NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";

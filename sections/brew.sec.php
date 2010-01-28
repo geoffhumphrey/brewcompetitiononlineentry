@@ -23,7 +23,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <table>
 <?php if ($row_user['userLevel'] == 1) { ?>
 <tr>
-    <td colspan="3"><input type="submit" value="Submit Brew" alt="Submit Brew" /></td>
+    <td colspan="3" class="dataLabel"><input type="submit" value="Submit Brew" alt="Submit Brew" /></td>
 </tr>
 <tr>
    <td class="dataLabel">Brewer:</td>
@@ -894,7 +894,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
   </tr>
   <tr>
-    <td class="data"><input type="submit" value="Submit Brew" alt="Submit Brew" />
+    <td class="dataLabel"><input type="submit" value="Submit Brew" alt="Submit Brew" />
   </td>
   </tr>
 </table>
