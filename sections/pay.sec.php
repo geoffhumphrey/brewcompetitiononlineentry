@@ -8,7 +8,7 @@ if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); 
 if ($msg == "1") echo "<div class=\"error\">Your payment has been received. Thanks and best of luck in the competition.</div>"; 
 if ($msg == "2") echo "<div class=\"error\">Your payment has been cancelled.</div>"; 
 ?>
-<p>You currently have logged <a href="index.php?section=list"><?php echo $totalRows_log; ?> entries</a> in the <?php echo $row_contest_info['contestName']; ?> contest.  Your total entry fees are <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00" ; ?>.</p>
+<p>You currently have logged <a href="index.php?section=list"><?php echo $totalRows_log; ?> entries</a> in the <?php echo $row_contest_info['contestName']; ?> competition.  Your total entry fees are <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00" ; ?>.</p>
 <?php if ($row_prefs['prefsCash'] == "Y") { ?>
 <h2>Cash</h2>
 <p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final.".00"; ?>) in a <em>sealed envelope</em> to one of  your bottles.</p>

@@ -1,5 +1,5 @@
 -- Brew Contest Online Signup
--- Release 1.0 April 2009
+-- Release 1.1.1 BETA December 2009
 -- This software is free, open source and is covered under the 
 -- General Public License (GPL) from the Open Source Initiative.
 -- As such, you are permitted to download the full source code of 
@@ -14,7 +14,7 @@
 --
 
 CREATE TABLE IF NOT EXISTS `styles` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` int(8) NOT NULL auto_increment,
   `brewStyleNum` char(3) character set latin1 default NULL,
   `brewStyle` varchar(250) character set latin1 default NULL,
   `brewStyleOG` varchar(20) character set latin1 default NULL,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `styles` (
   `brewStyleLink` varchar(200) character set latin1 default NULL,
   `brewStyleGroup` char(2) character set latin1 default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=99 ;
+) ENGINE=MyISAM;
 
 -- 2008 BJCP Styles
 
@@ -144,7 +144,7 @@ INSERT INTO `styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleOG`, `brewSty
 --
 
 CREATE TABLE IF NOT EXISTS `brewer` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` int(8) NOT NULL auto_increment,
   `brewerFirstName` varchar(200) collate utf8_unicode_ci default NULL,
   `brewerLastName` varchar(200) collate utf8_unicode_ci default NULL,
   `brewerAddress` varchar(255) collate utf8_unicode_ci default NULL,
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `brewer` (
   `brewerJudgeLikes` text collate utf8_unicode_ci,
   `brewerJudgeDislikes` text collate utf8_unicode_ci,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `brewer` (
 --
 
 CREATE TABLE IF NOT EXISTS `brewing` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` int(8) NOT NULL auto_increment,
   `brewName` varchar(250) collate utf8_unicode_ci default NULL,
   `brewStyle` varchar(250) collate utf8_unicode_ci default NULL,
   `brewCategory` char(2) collate utf8_unicode_ci default NULL,
@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `brewing` (
   `brewBrewerFirstName` varchar(255) collate utf8_unicode_ci default NULL,
   `brewBrewerLastName` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
  
 
@@ -369,7 +369,7 @@ CREATE TABLE IF NOT EXISTS `contest_info` (
   `contestDropOff` text collate utf8_unicode_ci,
   `contestAwards` text collate utf8_unicode_ci,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `contest_info` (
 --
 
 CREATE TABLE IF NOT EXISTS `preferences` (
-  `id` int(5) NOT NULL auto_increment,
+  `id` int(8) NOT NULL auto_increment,
   `prefsTemp` varchar(255) collate utf8_unicode_ci default NULL,
   `prefsWeight1` varchar(20) collate utf8_unicode_ci default NULL,
   `prefsWeight2` varchar(20) collate utf8_unicode_ci default NULL,
@@ -389,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `preferences` (
   `prefsPaypalAccount` varchar(255) collate utf8_unicode_ci default NULL,
   `prefsCurrency` varchar(20) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -406,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userQuestion` varchar(255) collate utf8_unicode_ci default NULL,
   `userQuestionAnswer` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -416,13 +416,13 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 CREATE TABLE IF NOT EXISTS `archive` (
-  `id` int(5) NOT NULL auto_increment,
+  `id` int(8) NOT NULL auto_increment,
   `archiveUserTableName` varchar(255) collate utf8_unicode_ci default NULL,
   `archiveBrewerTableName` varchar(255) collate utf8_unicode_ci default NULL,
   `archiveBrewingTableName` varchar(255) collate utf8_unicode_ci default NULL,
   `archiveSuffix` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=MyISAM;
 
 
 
@@ -494,11 +494,28 @@ ADD `contestLogo` VARCHAR( 255 ) NULL,
 ADD `contestBOSAward` TEXT NULL;
 
  CREATE TABLE `sponsors` (
-`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id` INT(8) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `sponsorName` VARCHAR( 255 ) NULL ,
 `sponsorURL` VARCHAR( 255 ) NULL ,
 `sponsorImage` VARCHAR( 255 ) NULL,
 `sponsorText` TEXT NULL,
 `sponsorLocation` TEXT NULL
 ) ENGINE = MYISAM;
+
+-- ********************************************************************************
+--
+-- Version 1.1.1 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` ADD `contestWinnersComplete` TEXT NULL ;
+
+
+-- ********************************************************************************
+--
+-- Version 1.1.2 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` ADD `contestEntryCap` INT( 8 ) NULL 
 
