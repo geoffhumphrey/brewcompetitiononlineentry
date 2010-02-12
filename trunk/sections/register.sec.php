@@ -58,7 +58,7 @@ p>Have you <a href="index.php?section=register">registered your account</a> yet?
 if ($msg == "3") { ?>
 <div class="error">The user name provided is not a valid email address. Please enter a valid email address.</div>
 <?php } ?>
-<p>Our contest entry system is completely electronic.<ul>
+<p>Our competition entry system is completely electronic.<ul>
    	  <li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>
     	<li>Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct. </li>

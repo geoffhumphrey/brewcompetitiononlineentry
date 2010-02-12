@@ -68,9 +68,5 @@ ADD `contestBOSAward` TEXT NULL;
 `sponsorLocation` TEXT NULL
 ) ENGINE = MYISAM;
 
-
-
--- Added after beta 1 release
-
 ALTER TABLE `brewing` ADD `brewReceived` CHAR ( 1 ) NULL;
 

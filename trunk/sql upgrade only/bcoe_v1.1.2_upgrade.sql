@@ -1,0 +1,1 @@
+ALTER TABLE `contest_info` ADD `contestEntryCap` INT( 8 ) NULL;
