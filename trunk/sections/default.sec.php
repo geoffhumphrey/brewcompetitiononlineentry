@@ -4,6 +4,7 @@
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
 <?php } ?>
+<?php if ($msg == "success") echo "<div class=\"error\">Setup was successful.</div>"; ?>
 <?php if ($totalRows_archive > 0) include ('past_winners.sec.php'); ?>
 <?php if (greaterDate($today,$deadline)) 
 { 
@@ -39,18 +40,18 @@ else
 <p>If you <em>have not</em> registered and are willing to be a judge, <a href="index.php?section=register&go=judge">please register</a>.</p>
 <p>If you <em>have</em> registered, <a href="index.php?section=login">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
 <?php } ?>
-<h2>Competition Date</h2>
-<p>Judging for the <?php echo $row_contest_info['contestName']; ?> will take place 
-<?php $date = $row_contest_info['contestDate']; echo dateconvert($date, 2); 
-if ($row_contest_info['contestDate2'] != "") { 
-	if ($row_contest_info['contestDate3'] != "") { echo ", "; echo dateconvert($row_contest_info['contestDate2'], 2); }
-	else { echo " and "; echo dateconvert($row_contest_info['contestDate2'], 2); }
-	} 
-if ($row_contest_info['contestDate3'] != "") { 
-	if ($row_contest_info['contestDate2'] != "") { echo ", and "; echo dateconvert($row_contest_info['contestDate3'], 2); }
-    else { echo " and "; echo dateconvert($row_contest_info['contestDate3'], 2); }
-	} 
-	?>.</p>
+<h2>Competition Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
+<p>Judging for the <?php echo $row_contest_info['contestName']; ?> will take place:</p>
+<ul>
+<?php do { ?>
+<li>
+<?php 
+	if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
+	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span><?php } ?>
+</li>
+<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+</ul>
 <h2>Registration Deadline</h2>
 <p>Registration will close on <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>.</p>
 <h2>Entry Deadline</h2>

@@ -7,7 +7,15 @@ $query_setup = "SELECT * FROM users";
 $setup = mysql_query($query_setup, $brewing);
 $totalRows_setup = mysql_num_rows($setup);
 
-if ($totalRows_setup == 0) { 
+$query_setup1 = "SELECT * FROM contest_info";
+$setup1 = mysql_query($query_setup1, $brewing);
+$totalRows_setup1 = mysql_num_rows($setup1);
+
+$query_setup2 = "SELECT * FROM preferences";
+$setup2 = mysql_query($query_setup2, $brewing);
+$totalRows_setup2 = mysql_num_rows($setup2);
+
+if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup1 == 0)) { 
 header ("Location: setup.php?section=step1");
 } 
 else 
@@ -32,11 +40,12 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 <script type="text/javascript" src="js_includes/delete.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
+<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?><script type="text/javascript" src="js_includes/menu.js"></script><?php } ?>
 <?php if ($section == "admin") { ?>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
 <?php } ?>
-<?php include ('includes/form_check.inc.php'); ?>
+<?php if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register")) include ('includes/form_check.inc.php'); ?>
 </head>
 <body>
 <div id="container">

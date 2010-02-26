@@ -3,13 +3,11 @@
 <h2>Preferences</h2>
 <p><a href="index.php?section=admin">&laquo; Back to Admin</a></p>
 <?php } ?>
+<h3>General</h3>
 <table>
   <tr>
-  	<td colspan="3"><h3>General</h3></td>
-  </tr>
-  <tr>
   	<td class="dataLabel">Competition Logo Size:</td>
-    <td class="data">
+    <td nowrap="nowrap" class="data">
     <select name="prefsCompLogoSize">
     <option value="100" <?php if ($row_prefs['prefsCompLogoSize'] == "100") echo "SELECTED"; ?>>100</option>
     <option value="150" <?php if ($row_prefs['prefsCompLogoSize'] == "150") echo "SELECTED"; ?>>150</option>
@@ -18,18 +16,18 @@
     <option value="300" <?php if ($row_prefs['prefsCompLogoSize'] == "300") echo "SELECTED"; ?>>300</option>
     <option value="350" <?php if ($row_prefs['prefsCompLogoSize'] == "350") echo "SELECTED"; ?>>350</option>
     <option value="400" <?php if ($row_prefs['prefsCompLogoSize'] == "400") echo "SELECTED"; ?>>400</option>
-    </select>
+    </select> pixels
     </td>
     <td class="data">If you upload and display your competition's logo, this is the width, in pixels, that you wish to display it.</td>
   </tr>
   <tr>
     <td class="dataLabel">Winner Display:</td>
-    <td class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate whether you would like to display the winners of the competition for each category and Best of Show.</td>
   </tr>
-  <tr>
-  	<td colspan="3"><h3>Measurements</h3></td>
-  </tr>
+</table>
+<h3>Measurements</h3>
+<table>
   <tr>
   	<td class="dataLabel">Temperature:</td>
     <td class="data">
@@ -37,18 +35,14 @@
     <option value="Fahrenheit" <?php if ($row_prefs['prefsTemp'] == "Fahrenheit") echo "SELECTED"; ?>>Fahrenheit</option>
     <option value="Celsius" <?php if ($row_prefs['prefsTemp'] == "Celsius") echo "SELECTED"; ?>>Celsius</option>
     </select>    </td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-  <tr>
+    </tr><tr>
     <td class="dataLabel">Weight (Small):</td>
     <td class="data">
     <select name="prefsWeight1">
     <option value="ounces" <?php if ($row_prefs['prefsWeight1'] == "ounces") echo "SELECTED"; ?>>ounces</option>
     <option value="grams" <?php if ($row_prefs['prefsWeight1'] == "grams") echo "SELECTED"; ?>>grams</option>
     </select>    </td>
-    <td class="data">&nbsp;</td>
-  </tr>
+    </tr>
   <tr>
     <td class="dataLabel">Weight (Large):</td>
     <td class="data">
@@ -56,17 +50,14 @@
     <option value="pounds" <?php if ($row_prefs['prefsWeight2'] == "ounces") echo "SELECTED"; ?>>pounds</option>
     <option value="kilograms" <?php if ($row_prefs['prefsWeight2'] == "kilograms") echo "SELECTED"; ?>>kilograms</option>
     </select>    </td>
-    <td class="data">&nbsp;</td>
-  </tr>
+    </tr>
   <tr>
     <td class="dataLabel">Liquid (Small):</td>
     <td class="data">
     <select name="prefsLiquid1">
     <option value="ounces" <?php if ($row_prefs['prefsLiquid1'] == "ounces") echo "SELECTED"; ?>>ounces</option>
     <option value="millilitres" <?php if ($row_prefs['prefsLiquid1'] == "millilitres") echo "SELECTED"; ?>>millilitres</option>
-    </select>
-    <td class="data">&nbsp;</td>
-  </tr>
+    </select>    </tr>
   <tr>
     <td class="dataLabel">Liquid (Large):</td>
     <td class="data">
@@ -74,11 +65,10 @@
     <option value="gallons" <?php if ($row_prefs['prefsLiquid1'] == "gallons") echo "SELECTED"; ?>>gallons</option>
     <option value="litres" <?php if ($row_prefs['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>litres</option>
     </select>    </td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-  	<td colspan="3"><h3>Currency and Payment</h3></td>
-  </tr>
+    </tr>
+</table>
+<h3>Currency and Payment</h3>
+<table>
   	<td class="dataLabel">Currency</td>
     <td class="data">
     <select name="prefsCurrency">
@@ -124,34 +114,34 @@
    	<td class="data"><input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want participants paying via PayPal to also pay the transaction fees?<br />PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</td>
   </tr>
-  <tr>
-  	<td colspan="3"><h3>Sponsors</h3></td>
-  </tr>
+</table>
+<h3>Sponsors</h3>
+<table>
   <tr>
   	<td class="dataLabel">Sponsor Display:</td>
-   	<td class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefsSponsors_0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefsSponsors_1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefsSponsors_0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefsSponsors_1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to display the competition sponsors?</td>
   </tr>
   <tr>
   	<td class="dataLabel">Sponsor Logos:</td>
-   	<td class="data"><input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($row_prefs['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($row_prefs['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to display the competition sponsors' individual logos (you will need to collect and upload all logos to your installation of BCOE via the <a href="index.php?section=admin&amp;go=sponsors">sponsor administration page</a>)?</td>
   </tr>
   <tr>
   	<td class="dataLabel">Sponsor Logo Size:</td>
-    <td class="data">
+    <td nowrap="nowrap" class="data">
     <select name="prefsSponsorLogoSize">
     <option value="100" <?php if ($row_prefs['prefsSponsorLogoSize'] == "100") echo "SELECTED"; ?>>100</option>
     <option value="150" <?php if ($row_prefs['prefsSponsorLogoSize'] == "150") echo "SELECTED"; ?>>150</option>
     <option value="200" <?php if ($row_prefs['prefsSponsorLogoSize'] == "200") echo "SELECTED"; ?>>200</option>
     <option value="250" <?php if ($row_prefs['prefsSponsorLogoSize'] == "250") echo "SELECTED"; ?>>250</option>
-    </select>
+    </select> pixels
     </td>
     <td class="data">This is the default size, in pixels, that will each sponsor's logo will display on the <em>sponsors</em> page. Generally, the default setting of 150 is sufficient.</td>
   </tr>
   <tr>
   	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" value="Set Preferences"></td>
+  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Set Preferences"></td>
   </tr>
 </table>
 </form>

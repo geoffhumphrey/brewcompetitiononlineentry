@@ -84,6 +84,7 @@ class InputBeerXML {
     //{{{ insertRecipe
     function insertRecipe($recipe){  // inserts into `recipes` DB table 
 	include ('includes/scrubber.inc.php');
+	
         $brewing = $connection;
         $sqlQuery = "INSERT INTO brewing ";
         $fields = "(brewName";
@@ -222,8 +223,14 @@ class InputBeerXML {
         //if ($recipe->ageTemp != "") { $vf["brewAgeTemp"] = $this->convertUnit($recipe->ageTemp,"temperature"); }
 		//if ($recipe->ibu != "") { $vf["brewBitterness"] = $recipe->ibu; }
         //if ($recipe->estimatedColor != "") { $vf["brewLovibond"] = 0 . rtrim($recipe->estimatedColor," SRM"); }
-         $vf["brewBrewerID"] = $_POST["brewBrewerID"];															// changed_GH to accomodate club edition
-		
+         $vf["brewBrewerID"] = $_POST["brewBrewerID"];	
+		 require ('Connections/config.php');
+		 mysql_select_db($database, $brewing);
+		 $query_style_name = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
+		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
+		 $row_style_name = mysql_fetch_assoc($style_name);														// changed_GH to accomodate club edition
+		 $vf["brewJudgingLocation"] = $row_style_name['brewStyleJudgingLoc'];
+		 	
         foreach($vf as $field=>$value){
             $fields .= "," . $field;
             $values .= ",'" . $value . "'";
@@ -232,7 +239,6 @@ class InputBeerXML {
         $fields .= ")";
         $values .= ")";
         $sqlQuery .= $fields . $values;
-        // echo $sqlQuery . "<br />";Unknown column 'brewNotes' in 'field list'
 		require ('Connections/config.php');
         mysql_select_db($database, $brewing) or die(mysql_error());
         $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());

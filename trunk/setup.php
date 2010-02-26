@@ -3,7 +3,7 @@ require ('Connections/config.php');
 
 // Check to see if initial setup has taken place 
 mysql_select_db($database, $brewing);
-$query_setup = "SELECT * FROM users";
+$query_setup = "SELECT * FROM brewer";
 $setup = mysql_query($query_setup, $brewing);
 $totalRows_setup = mysql_num_rows($setup);
 
@@ -20,6 +20,7 @@ include ('includes/plug-ins.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Signup Site</title>
 <link href="css/default.css" rel="stylesheet" type="text/css" />
+<link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
@@ -37,6 +38,7 @@ include ('includes/plug-ins.inc.php');
 		if ($section == "step2") 	include ('setup/step2.setup.php');
 		if ($section == "step3") 	include ('setup/step3.setup.php');
 		if ($section == "step4") 	include ('setup/step4.setup.php');
+		if ($section == "step5") 	include ('setup/step5.setup.php');
 		?>
     	</div>
 	</div>

@@ -1,5 +1,5 @@
 <div id="header">
-	<div id="header-inner"><h1><?php if ($go == "judge") echo "Step 3:"; ?> Judge Information</h1></div>
+	<div id="header-inner"><h1>Judge Information</h1></div>
 </div>
 <form action="includes/process.inc.php?action=edit&dbTable=brewer&go=<?php echo $go; ?>&id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
@@ -34,7 +34,7 @@
 </tr>
 <tr>
 	  <td width="10%">&nbsp;</td>
-      <td class="data"><input name="submit" type="submit" value="Submit Judge Information" /></td>
+      <td class="data"><input name="submit" type="submit" class="button" value="Submit Judge Information" /></td>
 </tr>
 </table>
 <input type="hidden" name="brewerEmail" value="<?php echo $_SESSION["loginUsername"]; ?>" />
@@ -49,4 +49,6 @@
 <input type="hidden" name="brewerClubs" value="<?php echo $row_brewer['brewerClubs']; ?>">
 <input type="hidden" name="brewerJudge"  value="<?php echo $row_brewer['brewerJudge']; ?>" />
 <input type="hidden" name="brewerSteward"  value="<?php echo $row_brewer['brewerSteward']; ?>" />
+<input type="hidden" name="brewerJudgeLocation"  value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
+<input type="hidden" name="brewerStewardLocation"  value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
 </form>

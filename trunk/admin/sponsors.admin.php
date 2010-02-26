@@ -80,7 +80,7 @@
   </tr>
   <tr>
   	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" value="Submit"></td>
+  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Add Sponsor"></td>
   </tr>
 </table>
 </form>

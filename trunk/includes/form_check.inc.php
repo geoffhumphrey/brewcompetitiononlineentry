@@ -3,7 +3,7 @@
 
 <!-- Javascript code copyright 2003 Bontrager Connection, LLC // Code obtained from http://WillMaster.com/
 
-<?php if ($section == "step1") { ?>
+<?php if (($section == "step1") || (($section == "admin") && ($go == "preferences"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -17,33 +17,31 @@ if(WithoutContent(document.form1.prefsLiquid2.value))
 	{ errormessage += "\nLarge liquid measurement"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up your contest information:\n' + errormessage);
+	alert('The following information is required to set up your competition information:\n' + errormessage);
 	return false;
 	}
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
 
-<?php if ($section == "step2") { ?>
+<?php if (($section == "step2") || (($section == "admin") && ($go == "contest_info"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.contestContactName.value))
-	{ errormessage += "\nThe contest contact name"; }
+	{ errormessage += "\nThe competition contact name"; }
 if(WithoutContent(document.form1.contestContactEmail.value))
-	{ errormessage += "\nThe contest contact email"; }
+	{ errormessage += "\nThe competition contact email"; }
 if(WithoutContent(document.form1.contestName.value))
-	{ errormessage += "\nThe contest name"; }
+	{ errormessage += "\nThe competition name"; }
 if(WithoutContent(document.form1.contestHost.value))
-	{ errormessage += "\nThe contest host"; }
+	{ errormessage += "\nThe competition host"; }
 if(WithoutContent(document.form1.contestEntryDeadline.value))
-	{ errormessage += "\nThe contest entry deadline"; }
+	{ errormessage += "\nThe competition entry deadline"; }
 if(WithoutContent(document.form1.contestRegistrationDeadline.value))
-	{ errormessage += "\nThe contest registration deadline"; }
-if(WithoutContent(document.form1.contestHost.value))
-	{ errormessage += "\nThe contest host"; }
+	{ errormessage += "\nThe competition registration deadline"; }
 if(WithoutContent(document.form1.contestDate.value))
-	{ errormessage += "\nThe date of judging"; }
+	{ errormessage += "\nAt least one date of judging"; }
 if(WithoutContent(document.form1.contestEntryFee.value))
 	{ errormessage += "\nThe entry fee - enter a zero for a free entry fee"; }
 if(WithoutContent(document.form1.contestShippingAddress.value))
@@ -57,7 +55,28 @@ return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
 
-<?php if (($section == "step3") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
+<?php if (($section == "step3") || (($section == "admin") && ($go == "judging"))) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.judgingDate.value))
+	{ errormessage += "\nThe date of judging for this location"; }
+if(WithoutContent(document.form1.judgingLocName.value))
+	{ errormessage += "\nThe name of this judging location"; }
+if(WithoutContent(document.form1.judgingTime.value))
+	{ errormessage += "\nThe time judging begins at this location"; }
+if(WithoutContent(document.form1.judgingLocation.value))
+	{ errormessage += "\nThe judging location's address"; }
+// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required to set up your site preferences:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
+
+<?php if (($section == "step4") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -65,7 +84,7 @@ if(WithoutContent(document.form1.user_name.value))
 	{ errormessage += "\nAn email as a user name"; }
 if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nA password"; }
-<?php if ($section == "step3") { ?>
+<?php if ($section == "step4") { ?>
 if(WithoutContent(document.form1.userQuestionAnswer.value))
 	{ errormessage += "\nAn answer to your security question"; }
 <?php } ?>
@@ -79,7 +98,7 @@ return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
 
-<?php if ($section == "step4") { ?>
+<?php if ($section == "step5") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -145,10 +164,6 @@ if(WithoutContent(document.form1.brewOG.value))
 	{ errormessage += "\nOriginal gravity"; }
 if(WithoutContent(document.form1.brewFG.value))
 	{ errormessage += "\nFinal Gravity"; }
-if(WithoutContent(document.form1.brewDate.value))
-	{ errormessage += "\nBrewing date"; }
-if(WithoutContent(document.form1.brewBottleDate.value))
-	{ errormessage += "\nBottling date"; }
 <?php } ?>
 // Put field checks above this point.
 if(errormessage.length > 2) {

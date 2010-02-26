@@ -25,7 +25,7 @@ if ($msg == "3") { ?>
   	</tr>
   	<tr>
     	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" value="Login"></td>
+    	<td class="data"><input type="submit" class="button" value="Login"></td>
   	</tr>
 </table>
 </form>
@@ -51,7 +51,7 @@ if ($msg == "3") { ?>
     	<td class="data"><input name="loginUsername" type="text" class="submit" size="40" <?php if ($username != "default") echo "value=\"".$username."\""; ?>></td>
   	</tr>
     	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" value="Submit"></td>
+    	<td class="data"><input type="submit" class="button" value="Submit"></td>
   	</tr>
 </table>
 </form>
@@ -81,7 +81,7 @@ if ($msg == "2") { ?>
     </tr>
     <tr>
     	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" value="Reset Password"></td>
+    	<td class="data"><input type="submit" class="button" value="Reset Password"></td>
   	</tr>
 </table>
 <input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">

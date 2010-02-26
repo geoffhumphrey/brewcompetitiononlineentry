@@ -4,10 +4,18 @@ require ('../Connections/config.php');
 include ('../includes/db_connect.inc.php');
 include ('../includes/url_variables.inc.php'); 
 
+if ($bid != "") {
+$query_judging = "SELECT judgingLocName FROM judging WHERE id='$bid'";
+$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
+$row_judging = mysql_fetch_assoc($judging);
+}
+
 if ($go == "csv") { $separator = ","; $extension = ".csv"; }
 if ($go == "tab") { $separator = "\t"; $extension = ".tab"; }
-$date = date("m-d-Y");
 $contest = str_replace(' ', '_', $row_contest_info['contestName']);
+if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
+else $loc = "";
+$date = date("m-d-Y");
 
 function parseCSVComments($comments) {
   $comments = str_replace('"', '""', $comments); // First off, escape all " and make them ""
@@ -22,7 +30,8 @@ mysql_select_db($database, $brewing);
 $query_sql = "SELECT brewBrewerFirstName, brewBrewerLastName,";
 if (($action == "default") || ($action == "hccp")) $query_sql .= " brewCategory, brewSubCategory, id, brewName, brewInfo, brewMead2, brewMead1 FROM brewing";
 if ($action == "email") $query_sql .= " brewBrewerID FROM brewing";
-if (($filter == "paid") && ($bid == "default")) 	$query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
+if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
+if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y' AND brewJudgingLocation = '$bid'"; 
 if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = 'N' OR brewPaid = '' AND brewReceived = 'Y'"; 
 //echo $query_sql;
 
@@ -51,7 +60,7 @@ if($numberFields) { // Check if we need to output anything
 	// Start our output of the CSV
 
 	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment; filename=".$contest."_entries_".$date."_".$filter.$extension);
+	header("Content-Disposition: attachment; filename=".$contest."_".$type."_emails_".$date.$loc.$extension);
 	header("Pragma: no-cache");
 	header("Expires: 0");
 	if ($go == "csv") echo $headers;

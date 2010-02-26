@@ -18,5 +18,6 @@
 	paste_auto_cleanup_on_paste: "true",
 	paste_convert_headers_to_strong:"true",
 	paste_remove_spans:"true",
-	paste_remove_styles:"true"    
+	paste_remove_styles:"true",
+	editor_deselector : "mceNoEditor"
 	});
