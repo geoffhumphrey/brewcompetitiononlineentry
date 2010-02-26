@@ -1,51 +1,7 @@
-<script type="text/javascript">
-function AjaxFunction(email)
-{
-	var httpxml;
-		try
-		{
-		// Firefox, Opera 8.0+, Safari
-		httpxml=new XMLHttpRequest();
-		}
-	catch (e)
-		{
-		// Internet Explorer
-		try
-		{
-		httpxml=new ActiveXObject("Msxml2.XMLHTTP");
-		}
-	catch (e)
-		{
-		try
-		{
-		httpxml=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		catch (e)
-		{
-		//alert("Your browser does not support AJAX!");
-	return false;
-	}
-	}
-}
-function stateck()
-{
-if(httpxml.readyState==4)
-{
-document.getElementById("msg").innerHTML=httpxml.responseText;
-
-}
-}
-var url="includes/email.inc.php";
-url=url+"?email="+email;
-url=url+"&sid="+Math.random();
-httpxml.onreadystatechange=stateck;
-httpxml.open("GET",url,true);
-httpxml.send(null);
-}
-</script>
+<script type="text/javascript" src="js_includes/email_check.js"></script>
 <?php if ($action != "add") { ?>
 <div id="header">
-	<div id="header-inner"><h1>Step 2: Registration</h1></div>
+	<div id="header-inner"><h1>Register</h1></div>
 </div>
 <?php } if ($msg == "1") { ?>
 <div class="error">Sorry, there was a problem with your last login attempt.</div>
@@ -65,7 +21,6 @@ if ($msg == "3") { ?>
     	<li>Once you have registered, you'll be stepped through our entry process. </li>
   	    <li>Each brew you enter will automatically be assigned a number  by the system.</li>
 	</ul>
-    
 <?php if ($go == "default") { ?>
 <form name="judgeChoice" id="judgeChoice">
 <table>
@@ -114,7 +69,7 @@ if ($msg == "3") { ?>
 <?php } ?>
   	<tr>
     	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" value="Register"></td>
+    	<td class="data"><input type="submit" class="button" value="Register"></td>
         <td class="data">&nbsp;</td>
   	</tr>
 </table>

@@ -149,7 +149,7 @@
  </tr>
  <tr>
  	<td colspan="11">&nbsp;</td>
-    <td colspan="2" align="left"><input type="submit" name="Submit" value="Update Entries" /></td>
+    <td colspan="2" align="left"><input type="submit" name="Submit" class="button" value="Update Entries" /></td>
  </tr>
 <?php } ?>
 </table>

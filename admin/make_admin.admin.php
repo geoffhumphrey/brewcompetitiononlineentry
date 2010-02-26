@@ -19,7 +19,7 @@
   </td>
 <tr>
   <td>&nbsp;</td>
-  <td class="data"><input name="Submit" type="submit" value="Submit"></td>
+  <td class="data"><input name="Submit" type="submit" class="button" value="Submit"></td>
 </table>
 <input type="hidden" name="user_name" value="<?php echo $username; ?>">
 </form>

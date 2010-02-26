@@ -2,7 +2,8 @@
 	<div id="header-inner"><h1>Pay Entry Fees</h1></div>
 </div>
 <?php 
-$entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+if ($row_contest_info['contestEntryFeeDiscount'] == "Y") $entry_total = ((($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2']) + ($row_contest_info['contestEntryFeeDiscountNum'] * $row_contest_info['contestEntryFee']));
 if (($row_contest_info['contestEntryCap'] != "") && ($entry_total > $row_contest_info['contestEntryCap'])) { $fee = ($row_contest_info['contestEntryCap'] * .029); $entry_total_final = $row_contest_info['contestEntryCap']; } else { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
 if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
 if ($msg == "1") echo "<div class=\"error\">Your payment has been received. Thanks and best of luck in the competition.</div>"; 
@@ -26,7 +27,8 @@ else   $currency_code = "USD";
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <h2>Pay Online</h2>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?></p>
-<br /><input align="left" type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="Pay your contest entry fees with PayPal" title="Pay your contest entry fees with PayPal"></p>
+<br />
+<input align="left" type="submit" border="0" name="submit" value="" class="paypal" alt="Pay your contest entry fees with PayPal" title="Pay your contest entry fees with PayPal"></p>
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
 <input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Contest Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$totalRows_log." Entries)"; ?>">

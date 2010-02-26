@@ -81,7 +81,7 @@ else
 </tr>
 <tr>
 	<td>&nbsp;</td>
-    <td class="data"><input name="upload" type="submit" value="Upload" /></td>
+    <td class="data"><input name="upload" type="submit" class="button" value="Upload" /></td>
 </table>
 <input type="hidden" name="insert_type" value="recipes" />
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>" />

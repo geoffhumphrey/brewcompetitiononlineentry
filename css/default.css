@@ -63,9 +63,36 @@ font-weight: bold;
 color: #37517B;
 }
 
-input, textarea, submit, select {
+input, textarea, select, submit {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: .9em;
+border: 1px solid #c0c0c0;
+background-color: #eeeeee;
+}
+
+.button { 
+border: 1px solid #aaaaaa;
+background-color: #cccccc;
+font-weight: bold;
+padding: 3px;
+} 
+
+.button:hover {
+border: 1px solid #aaaaaa;
+background-color: #999999;
+cursor: pointer;
+}
+
+.paypal {
+background-color: #ffffff;
+background-image: url(https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif);
+background-repeat: no-repeat;
+border: 0;
+height: 47px;
+width: 144px;
+cursor: pointer;
+padding: 0;
+margin: 0;
 }
 
 ul
@@ -230,15 +257,15 @@ margin: .5em 0 0 0;
 /** Special Classes **/
 
 .colorTable {
-width: 30px;
-text-align: center;
-vertical-align:middle;
-height: 1.4em;
-border: 1px solid #000000;
+border-collapse: collapse;
+width: 200px;
 }
 
-.colorTable td { 
+.colorTabletd { 
+text-align: center;
 vertical-align: middle;
+white-space: nowrap;
+padding: 2px;
 }
 
 .error 
@@ -247,10 +274,26 @@ color: #FF0000;
 font-size: 1.2em;
 font-weight: bold;
 margin: 0 0 1em 0;
-padding: .5em .5em .5em 1.5em;
+padding: .5em .5em .5em 2.2em;
 background-image: url(../images/error.png);
-background-position: center left;
+background-position:.5em;
 background-repeat: no-repeat;
+background-color: #FFFFCC;
+border: 1px solid #FF0000;
+}
+
+.info
+{
+color: #000099;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0 0 1em 0;
+padding: .5em .5em .5em 2.2em;
+background-image: url(../images/information.png);
+background-position: .5em;
+background-repeat: no-repeat;
+background-color: #B7D9FF;
+border: 1px solid #000099;
 }
 
 .required {
@@ -307,11 +350,19 @@ padding: 0 .5em 0 0;
 }
 
 .bdr1T {
-border-top: 1px solid #000000;
+border-top: 1px solid #999999;
 }
 
 .bdr1B {
-border-bottom: 1px solid #000000;
+border-bottom: 1px solid #999999;
+}
+
+.bdr1B_dashed {
+border-bottom: 1px dotted #cccccc;
+}
+
+.bdr1T_dashed {
+border-top: 1px dotted #cccccc;
 }
 
 .admin {

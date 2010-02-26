@@ -1,1 +1,1 @@
-Version 1.1.2 (Beta)
+Version 1.1.3

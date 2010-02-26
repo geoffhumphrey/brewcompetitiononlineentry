@@ -14,6 +14,8 @@ $row_sponsors = mysql_fetch_assoc($sponsors);
 $totalRows_sponsors = mysql_num_rows($sponsors);
 
 $query_styles = "SELECT * FROM styles";
+if ((($section == "entry") || ($section == "brew")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ";
+$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum";
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
@@ -56,6 +58,7 @@ $bos_winner = mysql_query($query_bos_winner, $brewing) or die(mysql_error());
 $row_bos_winner = mysql_fetch_assoc($bos_winner);
 $totalRows_bos_winner = mysql_num_rows($bos_winner);
 }
+
 // Session specific queries
 if (isset($_SESSION["loginUsername"]))  {
 $query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
@@ -89,6 +92,10 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "default
 elseif (($section == "admin") && ($go == "participants") && ($filter == "judges")   && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
 elseif (($section == "admin") && ($go == "participants") && ($filter == "stewards") && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
 elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) $query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
+elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "assign")) $query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
+elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "assign")) $query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
 elseif (($section == "admin") && ($go == "make_admin")) $query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
 else $query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $_SESSION["loginUsername"]);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
@@ -103,5 +110,38 @@ $totalRows_user_level = mysql_num_rows($user_level);
 }
 
 }
+
+
+if ((($section == "admin") && ($action == "edit")) || ($section == "loc")) $query_judging = "SELECT * FROM judging WHERE id='$id'"; 
+elseif ((($section == "admin") && ($filter == "judging")) && ($bid != "default")) $query_judging = "SELECT * FROM judging WHERE id='$bid'";
+elseif ((($section == "brewer") && ($action == "default")) || ($section == "list")) $query_judging = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerJudgeLocation']);
+elseif (($go == "csv") || ($go == "tab")) $query_judging = "SELECT * FROM judging WHERE id='$bid'";
+else $query_judging = "SELECT * FROM judging ORDER BY judgingDate,judgingLocName";
+$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
+$row_judging = mysql_fetch_assoc($judging);
+$totalRows_judging = mysql_num_rows($judging);
+
+$query_stewarding = "SELECT * FROM judging";
+if ($section == "list") $query_stewarding .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation']);
+if ($section == "brewer") $query_stewarding .= " ORDER BY judgingDate,judgingLocName";
+$stewarding = mysql_query($query_stewarding, $brewing) or die(mysql_error());
+$row_stewarding = mysql_fetch_assoc($stewarding);
+$totalRows_stewarding = mysql_num_rows($stewarding);
+
+$query_judging2 = "SELECT * FROM judging";
+if ($section == "list") $query_judging2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerJudgeLocation2']);
+if ($section == "brewer") $query_judging2 .= " ORDER BY judgingDate,judgingLocName";
+$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
+$row_judging2 = mysql_fetch_assoc($judging2);
+$totalRows_judging2 = mysql_num_rows($judging2);
+
+$query_stewarding2 = "SELECT * FROM judging";
+if ($section == "list") $query_stewarding2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation2']);
+if ($section == "brewer") $query_stewarding2 .= " ORDER BY judgingDate,judgingLocName";
+$stewarding2 = mysql_query($query_stewarding2, $brewing) or die(mysql_error());
+$row_stewarding2 = mysql_fetch_assoc($stewarding2);
+$totalRows_stewarding2 = mysql_num_rows($stewarding2);
+
+
 
 ?>

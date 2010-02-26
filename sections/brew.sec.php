@@ -23,7 +23,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <table>
 <?php if ($row_user['userLevel'] == 1) { ?>
 <tr>
-    <td colspan="3" class="dataLabel"><input type="submit" value="Submit Brew" alt="Submit Brew" /></td>
+    <td colspan="3" class="dataLabel"><input type="submit" class="button" value="Submit Brew" alt="Submit Brew" /></td>
 </tr>
 <tr>
    <td class="dataLabel">Brewer:</td>
@@ -64,10 +64,11 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </table>
 <table>
 <tr>
-   <td><span class="dataLabel">Special Ingredients/Classic Style</span> (required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 27E, 28B-D)</td>
+   <td class="dataLabel">Special Ingredients/Classic Style</td>
+   <td>(required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 27E, 28B-D)</td>
 </tr>
 <tr>
-   <td class="dataLabel"><textarea name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
+   <td class="dataLabel" colspan="2"><textarea name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
 </tr>
 </table>
 <table>
@@ -86,12 +87,10 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <tr>
   <td class="dataLabel">Brewing Date:</td>
   <td class="data"><input type="text" onfocus="showCalendarControl(this);" name="brewDate" value="<?php if ($action == "edit") echo $row_log['brewDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
-  <td class="data"><?php if (greaterDate($deadline,$today)) { ?><span class="required">Required</span><?php } ?></td>
 </tr>
 <tr>
   <td class="dataLabel">Bottling Date:</td>
   <td class="data"><input type="text" onfocus="showCalendarControl(this);" name="brewBottleDate" value="<?php if ($action == "edit") echo $row_log['brewBottleDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
-  <td class="data"><?php if (greaterDate($deadline,$today)) { ?><span class="required">Required</span><?php } ?></td>
 </tr>
 </table>
 <h2>Specific Gravities</h2>
@@ -99,12 +98,10 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <tr>
    <td  class="dataLabel">Original:</td>
    <td class="data"><input name="brewOG" type="text" size="10" tooltipText="<?php echo $toolTip_gravity; ?>" value="<?php if ($action == "edit") echo $row_log['brewOG']; ?>"></td>
-   <td class="data"><?php if (greaterDate($deadline,$today)) { ?><span class="required">Required</span><?php } ?></td>
 </tr>
 <tr>
    <td class="dataLabel">Final:</td>
    <td class="data"><input name="brewFG" type="text" size="10" tooltipText="<?php echo $toolTip_gravity; ?>" value="<?php if ($action == "edit") echo $row_log['brewFG']; if ($action == "importCalc") echo round ($brewFG, 3); ?>"></td>
-   <td class="data"><?php if (greaterDate($deadline,$today)) { ?><span class="required">Required</span><?php } ?></td>
 </tr>
 </table>
 <h2>Fermentables: Malt Extracts</h2>
@@ -894,7 +891,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
   </tr>
   <tr>
-    <td class="dataLabel"><input type="submit" value="Submit Brew" alt="Submit Brew" />
+    <td class="dataLabel"><input type="submit" class="button" value="Submit Brew" alt="Submit Brew" />
   </td>
   </tr>
 </table>

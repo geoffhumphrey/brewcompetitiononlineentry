@@ -132,7 +132,7 @@ function do_upload($upload_dir, $upload_url) {
 	<tr>
 		<td class="dataLabel" width="5%">Image File:</td>
 		<td class="data" width="10%"><input name="userfile" type="file" class="submit" id="userfile" size="60"></td>
-    	<td class="data"><input type="submit" value="Upload"></td>
+    	<td class="data"><input type="submit" class="button" value="Upload"></td>
 	</tr>
     <?php if ($message != "") { ?>
 	<tr>	
