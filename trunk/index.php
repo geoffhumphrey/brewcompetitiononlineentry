@@ -18,21 +18,22 @@ $totalRows_setup2 = mysql_num_rows($setup2);
 if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup1 == 0)) { 
 header ("Location: setup.php?section=step1");
 } 
+// If all setup has taken place, run normally
 else 
 {
 require ('includes/authentication_nav.inc.php');  session_start(); 
 require ('includes/url_variables.inc.php');
 require ('includes/db_connect.inc.php');
 include ('includes/plug-ins.inc.php');
-$today = date('Y-m-d');
-$deadline = $row_contest_info['contestRegistrationDeadline'];
+include ('includes/version.inc.php');
+include ('includes/headers.inc.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']; ?></title>
+<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." | ".$header_output; ?></title>
 <link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/jquery-1.3.2.min.js"></script>
@@ -40,24 +41,32 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 <script type="text/javascript" src="js_includes/delete.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
-<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?><script type="text/javascript" src="js_includes/menu.js"></script><?php } ?>
-<?php if ($section == "admin") { ?>
+<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
+<script type="text/javascript" src="js_includes/menu.js"></script>
+<?php } 
+if ($section == "admin") { ?>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
-<?php } ?>
-<?php if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register")) include ('includes/form_check.inc.php'); ?>
+<?php } 
+if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register")) include ('includes/form_check.inc.php'); ?>
 </head>
 <body>
+
 <div id="container">
 <div id="navigation">
 	<div id="navigation-inner"><?php include ('sections/nav.sec.php'); ?></div>
 </div>
 <div id="content">
-	<div id="content-inner">   
+	<div id="content-inner">
+    <?php if ($section != "admin") { ?>
+    <div id="header">	
+		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+	</div>
     <?php 
+	}
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
-	if ($section != "admin") { ?>
+	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
     <div id="closed">Registration has closed. Thanks to everyone who participated.</div>
 	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
@@ -78,7 +87,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 			if ($section == "beerxml")	include ('sections/beerxml.sec.php');
 			}
 		}
-	} else 
+	} else // If registration is not closed
 	{
 	if ($section == "register") include ('sections/register.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
@@ -104,6 +113,7 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 	?>
 	</div>
 </div>
+
 </div>
 <div id="footer">
 	<div id="footer-inner"><?php include ('sections/footer.sec.php'); ?></div>

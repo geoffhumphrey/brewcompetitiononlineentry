@@ -76,7 +76,27 @@ return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
 
-<?php if (($section == "step4") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
+<?php if (($section == "step4") || (($action == "add") && ($go == "dropoff") && ($filter == "default"))) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.dropLocation.value))
+	{ errormessage += "\nThe name of the drop-off location"; }
+if(WithoutContent(document.form1.dropLocationPhone.value))
+	{ errormessage += "\nThe drop-off location's phone number"; }
+if(WithoutContent(document.form1.dropLocation.value))
+	{ errormessage += "\nThe drop-off location's full address"; }
+	
+// Put field checks above this point.// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required to set up a drop-off location:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
+
+<?php if (($section == "step6") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -84,7 +104,7 @@ if(WithoutContent(document.form1.user_name.value))
 	{ errormessage += "\nAn email as a user name"; }
 if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nA password"; }
-<?php if ($section == "step4") { ?>
+<?php if ($section == "step6") { ?>
 if(WithoutContent(document.form1.userQuestionAnswer.value))
 	{ errormessage += "\nAn answer to your security question"; }
 <?php } ?>
@@ -98,7 +118,7 @@ return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
 
-<?php if ($section == "step5") { ?>
+<?php if ($section == "step7") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.

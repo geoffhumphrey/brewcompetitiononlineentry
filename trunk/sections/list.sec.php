@@ -1,24 +1,25 @@
 <?php if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
 <p>Please <a href="index.php?section=login">log in</a> or <a href="index.php?section=register">register</a> to view your list of brews entered into the <?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?>, <?php echo $row_contest_info['contestHostLocation']; ?>.</p> 
-<?php } else { ?>
-<div id="header">
-	<div id="header-inner"><h1>Your List of Entries and Info</h1></div>
-</div>
-<?php 
-
+<?php } 
+else 
+{ 
 if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
-if ($row_contest_info['contestEntryFeeDiscount'] == "Y") $entry_total = ((($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2']) + ($row_contest_info['contestEntryFeeDiscountNum'] * $row_contest_info['contestEntryFee']));
+if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) {
+	$discFee = ($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2'];
+	$regFee = $row_contest_info['contestEntryFeeDiscountNum'] * $row_contest_info['contestEntryFee'];
+	$entry_total = $discFee + $regFee;
+	}
+
+if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log <= $row_contest_info['contestEntryFeeDiscountNum'])) {
+	if ($totalRows_log > 0) $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+	else $entry_total = "0"; 
+} 
+ 
 if (($row_contest_info['contestEntryCap'] != "") && ($entry_total > $row_contest_info['contestEntryCap'])) { $fee = ($row_contest_info['contestEntryCap'] * .029); $entry_total_final = $row_contest_info['contestEntryCap']; } else { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
 if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
-// echo $entry_total;
 
-if ($msg == "1") echo "<div class=\"error\">Information added successfully.</div>"; 
-if ($msg == "2") echo "<div class=\"error\">Information edited successfully.</div>"; 
-if ($msg == "3") echo "<div class=\"error\">Your email address has been updated.</div>"; 
-if ($msg == "4") echo "<div class=\"error\">Your password has been updated.</div>"; 
-if ($msg == "5") echo "<div class=\"error\">Information deleted successfully.</div>"; 
-if ($msg == "6") echo "<div class=\"error\">You should verify all your entries imported using BeerXML.</div>"; 
-if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or steward. Thank you!</div>"; 
+// echo $entry_total;
+if ($msg != "default") echo $msg_output;
 ?>
 <?php if ($action != "print") { ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
@@ -27,14 +28,14 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
 <h2>Entries</h2>
 <?php if ($action != "print") { ?>
 <?php if ($totalRows_log > 0) { ?>
-<p>Below is a list of your entires. Be sure to print recipe sheets and bottle labels for each.</p>
+<p>Below is a list of your entires. Be sure to print entry forms and bottle labels for each.</p>
 <?php } ?>
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
 <table class="dataTable">
  <tr>
    <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=brew&action=add">Add an Entry</a></td>
    <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png" align="absmiddle" /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
-   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=list&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print List of Entries/Info</a></td>
+   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=list&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print Your List of Entries and Info</a></td>
  </tr>
 </table>
 <?php } ?>
@@ -63,13 +64,13 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
   <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
   <?php } ?>
-  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=425&width=700" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>">Print</a></td>
+  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=425&width=700" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
   <?php } ?>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
  <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo $entry_total_final; ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if ($row_contest_info['contestEntryFee'] > 0) { ?><span class="data"><a href="index.php?section=pay">Pay Entry Fees</a></span><?php } } ?>
+  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if ($row_contest_info['contestEntryFee'] > 0) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } } ?>
   </td>
  </tr>
 </table>
@@ -108,11 +109,12 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
     <td class="dataLabel">Club:</td>
     <td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
   </tr>
+  <?php if ($row_brewer['brewerAssignment'] == "") { ?>
   <tr>
     <td class="dataLabel">Judge?</td>
     <td class="data"><?php if ($row_brewer['brewerJudge'] != "") echo  $row_brewer['brewerJudge']; else echo "None entered"; ?></td>
   </tr>
-  <?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging > 1)) { ?>
+  <?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
     <td class="dataLabel">1st Location Preference:</td>
     <td class="data"><?php if ($row_brewer['brewerJudgeLocation'] < "99999998") { 
@@ -142,7 +144,27 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
     </td>
   </tr>
   <?php } ?>
-  <?php if ($row_brewer['brewerJudge'] == "Y") { ?>
+  <?php } else { ?>
+  <tr>
+    <td class="dataLabel">Assigned As:</td>
+    <td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?></td>
+  </tr>
+  <?php if ($totalRows_judging3 > 1) { ?>
+  <tr>
+    <td class="dataLabel">Location:</td>
+    <td class="data">
+    <?php if (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")) {
+	if ($row_judging4['judgingDate'] != "") echo dateconvert($row_judging4['judgingDate'], 2)." at "; echo $row_judging4['judgingLocName']; 
+	if ($row_judging4['judgingTime'] != "") echo ", ".$row_judging4['judgingTime']; if (($row_judging2['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging4['judgingLocName']; ?>" title="Map <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
+	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
+	<?php } 
+	} else echo "Contact the competition coordinator for your assignment."; 
+	?>
+    </td>
+  </tr>
+  <?php } ?>
+  <?php } ?>
+  <?php if ((($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "") || ($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "J"))) { ?>
   <tr>
     <td class="dataLabel">BJCP Judge ID:</td>
     <td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
@@ -160,11 +182,12 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
     <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo $row_brewer['brewerJudgeDislikes']; else echo "N/A"; ?></td>
   </tr>
   <?php } ?>
+  <?php if ($row_brewer['brewerAssignment'] == "") { ?>
   <tr>
     <td class="dataLabel">Steward?</td>
     <td class="data"><?php if ($row_brewer['brewerSteward'] != "") echo $row_brewer['brewerSteward']; else echo "None entered"; ?></td>
   </tr>
-  <?php if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging > 1)) { ?>
+  <?php if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
     <td class="dataLabel">1st Location Preference:</td>
     <td class="data"><?php if ($row_brewer['brewerStewardLocation']  < "99999998") { 
@@ -193,6 +216,7 @@ if ($msg == "7") echo "<div class=\"error\">You have registered as a judge or st
 	?>
 	</td>
   </tr>
-  <?php } ?>
+  <?php } 
+   } ?>
 </table>
 <?php } ?>

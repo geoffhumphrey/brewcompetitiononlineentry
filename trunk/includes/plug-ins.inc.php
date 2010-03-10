@@ -1,5 +1,15 @@
 <?php
 $phpVersion = phpversion();
+$today = date('Y-m-d');
+$deadline = $row_contest_info['contestRegistrationDeadline'];
+$query_check = "SELECT * FROM judging";
+$check = mysql_query($query_check, $brewing) or die(mysql_error());
+$row_check = mysql_fetch_assoc($check);
+do {
+ 	if ($row_check['judgingDate'] < $today) $newDate[] = 1; 
+ 	else $newDate[] = 0;
+	} while ($row_check = mysql_fetch_assoc($check));
+	if (in_array(1, $newDate)) $judgingDateReturn = "true"; else $judgingDateReturn = "false";
 
 function greaterDate($start_date,$end_date)
 {

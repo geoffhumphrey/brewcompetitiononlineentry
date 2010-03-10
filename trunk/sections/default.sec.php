@@ -1,20 +1,21 @@
-<div id="header">	
-	<div id="header-inner"><h1><?php echo $row_contest_info['contestName']; ?></h1></div>
-</div>
-<?php if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
-<?php } ?>
-<?php if ($msg == "success") echo "<div class=\"error\">Setup was successful.</div>"; ?>
-<?php if ($totalRows_archive > 0) include ('past_winners.sec.php'); ?>
-<?php if (greaterDate($today,$deadline)) 
-{ 
+<?php if ($action != "print") { ?><p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p><?php } 
+if ($msg != "default") echo $msg_output;
+if ($version >= "1.1.3") { 
+		if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($totalRows_dropoff == 0)) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&action=add&go=dropoff\">Add a drop-off location</a>?</div>";
+		if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($totalRows_judging == 0)) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&action=add&go=judging\">Add a judging location</a>?</div>";
+	}
+if ($totalRows_archive > 0) include ('past_winners.sec.php'); 
+if (greaterDate($today,$deadline)) { 
 ?>
 	<?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 	<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" />
 	<?php } ?>
 <h2>Thanks To All Who Participated in the <?php echo $row_contest_info['contestName']; ?>!</h2>
 <p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
-	<?php if (greaterDate($today,$row_contest_info['contestDate'])) { ?>
+	<?php 
+	if ($judgingDateReturn == "true")
+	 {
+	 ?>
 	<p>Judging has already taken place.</p>
 	<?php include ('closed.sec.php'); }
 } 
@@ -41,6 +42,7 @@ else
 <p>If you <em>have</em> registered, <a href="index.php?section=login">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
 <?php } ?>
 <h2>Competition Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
+<?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { ?>
 <p>Judging for the <?php echo $row_contest_info['contestName']; ?> will take place:</p>
 <ul>
 <?php do { ?>
@@ -49,13 +51,15 @@ else
 	if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
 	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
 	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span><?php } ?>
+    <?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
 </li>
 <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
 </ul>
+<?php } ?>
 <h2>Registration Deadline</h2>
 <p>Registration will close on <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>.</p>
 <h2>Entry Deadline</h2>
-<p>All entries must be received by our shipping location or at a drop-off location by <?php $date = $row_contest_info['contestEntryDeadline']; echo dateconvert($date, 2); ?>. Entries will not be accepted beyond this date.</p> 
+<p>All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php $date = $row_contest_info['contestEntryDeadline']; echo dateconvert($date, 2); ?>. Entries will not be accepted beyond this date.</p> 
 <?php } 
 if ($row_prefs['prefsSponsors'] == "Y") {
 if ($totalRows_sponsors > 0) {

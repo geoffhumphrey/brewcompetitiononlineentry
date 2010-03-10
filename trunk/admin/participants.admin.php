@@ -1,41 +1,52 @@
-<h2><?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($action == "add") echo "Add Participant"; else echo "Participants"; if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
+<h2><?php 
+if ($filter == "judges") echo "Available Judges"; 
+elseif ($filter == "stewards") echo "Available Stewards";
+elseif ($filter == "assignJudges") echo "Assigned Judges"; 
+elseif ($filter == "assignStewards") echo "Assigned Stewards"; 
+elseif ($action == "add") echo "Add Participant"; 
+else echo "Participants"; 
+if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
 <?php if ($action != "print") { ?>
 <table class="dataTable">
 <tr>
   <td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin">&laquo; Back to Admin</a></td>
-  <?php if ($action != "add") { ?>
-  	<?php if ($dbTable != "default") { ?>
-  <td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&go=archive">&laquo; Back to Archives</a></td>
-  	<?php } ?>
-  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=participants&action=add">Add Participant</a></td>
-  	<?php if ($dbTable == "default") { ?>
-  		<?php if ($filter != "default") echo "<td class=\"dataList\" width=\"5%\" nowrap=\"nowrap\"><a href=\"index.php?section=admin&go=participants\">View All Participants</a></td>"; ?>
-  		<?php if (($filter == "default") || ($filter == "judges")) { ?>
-  		<td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&go=participants&filter=stewards">View Available Stewards</a></td><?php } if (($filter == "default") || ($filter == "stewards")) { ?>
-  		<td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&go=participants&filter=judges">View Available Judges</a></td>
-  	<?php }  
-  	}
-  }
-  ?>
+  <?php if ($action != "add") { // 1?>
+  		<?php if ($dbTable != "default") { // 1.1 ?>
+ 	 	<td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&go=archive">&laquo; Back to Archives</a></td>
+  		<?php } // end 1.1 ?>
+  		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=participants&action=add">Add Participant</a></td>
+  		<?php if ($dbTable == "default") { // 1.2 ?>
+        <td class="dataList" width="5%" nowrap="nowrap">
+        	<span class="icon">View:</span>
+                    <select name="view_participants" id="view_participants" onchange="jumpMenu('self',this,0)">
+                    <option value="index.php?section=admin&go=participants"<?php if ($filter == "default") echo " SELECTED"; ?>>All Participants</option>
+                    <option value="index.php?section=admin&go=participants&filter=judges"<?php if ($filter == "judges") echo " SELECTED"; ?>>Available Judges</option>
+                    <option value="index.php?section=admin&go=participants&filter=stewards"<?php if ($filter == "stewards") echo " SELECTED"; ?>>Available Stewards</option>
+                    <option value="index.php?section=admin&go=participants&filter=assignJudges"<?php if ($filter == "assignJudges") echo " SELECTED"; ?>>Assigned Judges</option>
+                    <option value="index.php?section=admin&go=participants&filter=assignStewards"<?php if ($filter == "assignStewards") echo " SELECTED"; ?>>Assigned Stewards</option>
+                    </select>   
+   		<?php } // end 1.2 ?>
  <td class="dataList">&nbsp;</td>
  </tr>
-<?php if (($action != "add") && ($dbTable == "default")) { ?>
+ <?php if (($action != "add") && ($dbTable == "default")) { // 2  ?>
  <tr>
- <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=judges">Assign Judges</a></td>
- <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=stewards">Assign Stewards</a></td>
- <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=judges">Assign Judges to a Location</a></td>
- <td class="dataList" width="5%" nowrap="nowrap" colspan="2"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=stewards">Assign Stewards to a Location</a></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=judges">Assign Judges</a></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=stewards">Assign Stewards</a></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=judges">Assign Judges to a Location</a><?php } else echo "&nbsp;"; ?></td>
+ 	<td class="dataList" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=stewards">Assign Stewards to a Location</a><?php } else echo "&nbsp;"; ?></td>
  </tr>
  <tr>
- <td class="dataList" colspan="5"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&action=print&filter=<?php echo $filter; ?>','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; else echo "Participants"; ?></a></td>
+ 	<td class="dataList" colspan="4"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&action=print&filter=<?php echo $filter; ?>','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
+elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?></a></td>
  </tr>
  <tr>
- <td class="dataList" colspan="5">Total Participants: <?php echo $totalRows_brewer; ?></td>
+ 	<td class="dataList" colspan="4">Total: <?php echo $totalRows_brewer; ?></td>
  </tr>
-</table>
-<?php }
+ </table>
+ <?php } // end 2
 } 
-if ($action == "default") { 
+}
+if (($action == "default") || ($action == "print")) { 
 if ($totalRows_brewer > 0) { ?>
 <table class="dataTable">
   <tr>
@@ -47,10 +58,9 @@ if ($totalRows_brewer > 0) { ?>
     <td class="dataHeading bdr1B">Steward?</td>
     <td class="dataHeading bdr1B">Judge?</td>
     <td class="dataHeading bdr1B">Assigned As</td>
-    <?php  
+  <?php } 
 	if ($totalRows_judging > 1) { ?>
-    <td class="dataHeading bdr1B">Assigned Location</td>
-    <?php } ?>
+    <td class="dataHeading bdr1B">Assigned To</td>
   <?php } if ($filter != "default") { ?>
     <?php if ($filter == "judges") { ?>
     <td class="dataHeading bdr1B">ID</td>
@@ -67,6 +77,10 @@ if ($totalRows_brewer > 0) { ?>
 	if ($row_brewer['brewerAssignment'] == "S") $query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
 	$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 	$row_judging2 = mysql_fetch_assoc($judging2);
+	
+	$query_user1 = sprintf("SELECT id FROM users WHERE user_name = '%s'", $row_brewer['brewerEmail']);
+	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
+	$row_user1 = mysql_fetch_assoc($user1);
 ?>
   <tr <?php echo " style=\"background-color:$color\"";?>>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerLastName']; ?></td>
@@ -74,13 +88,12 @@ if ($totalRows_brewer > 0) { ?>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="12%"><?php echo $row_brewer['brewerAddress']; ?><br><?php echo $row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']; ?><br /><a href="mailto:<?php echo $row_brewer['brewerEmail']; ?>?Subject=<?php if ($filter == "judges") echo "Judging at ".$row_contest_info['contestName']; elseif ($filter == "stewards") echo "Stewarding at ".$row_contest_info['contestName']; else echo $row_contest_info['contestName'];  ?>"><?php echo $row_brewer['brewerEmail']; ?></a><br /><?php if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (H)<br>";  if ($row_brewer['brewerPhone2'] != "") echo $row_brewer['brewerPhone2']." (W)"; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="12%"><?php echo $row_brewer['brewerClubs']; ?></td>
   	<?php if ($filter == "default") { ?>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerSteward'] == "Y") echo "<img src='images/tick.png'>"; ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerJudge'] == "Y") echo "<img src='images/tick.png'>"; ; ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "";?></td>
-    		<?php if ($totalRows_judging > 1) { ?>
-    		<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php if ((($row_brewer['brewerAssignment'] == "J") && ($row_brewer['brewerJudgeAssignedLocation'] != "")) || (($row_brewer['brewerAssignment'] == "S") && ($row_brewer['brewerStewardAssignedLocation'] != ""))) { echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "Not Set"; ?></td>
-    		<?php } ?>
-  	<?php } if ($filter != "default") { ?>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerSteward'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>"?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerJudge'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>" ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
+  	<?php } if ($totalRows_judging > 1) { ?>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php if ((($row_brewer['brewerAssignment'] == "J") && ($row_brewer['brewerJudgeAssignedLocation'] != "")) || (($row_brewer['brewerAssignment'] == "S") && ($row_brewer['brewerStewardAssignedLocation'] != ""))) { echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "Not Set"; ?></td>
+	<?php } if ($filter != "default") { ?>
     	<?php if ($filter == "judges") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeID']; ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeRank']; ?></td>
@@ -88,7 +101,12 @@ if ($totalRows_brewer > 0) { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeDislikes']; ?></td>
 	  	<?php } ?>
   <?php } if ($action != "print") { ?>
-    <td class="dataList" nowrap="nowrap"><span class="icon"><a href="index.php?section=brewer&go=<?php echo $go; ?>&filter=<?php echo $row_brewer['id']; ?>&action=edit&id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span><span class="icon"><a href="index.php?section=admin&go=make_admin&username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png" align="absmiddle" border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span><span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&dbTable=brewer&action=delete&username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>    </td> 
+    <td class="dataList" nowrap="nowrap">
+    <span class="icon"><a href="index.php?section=brew&go=entries&filter=<?php echo $row_user1['id']; ?>&action=add"><img src="images/book_add.png" align="absmiddle" border="0" alt="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span> 
+    <span class="icon"><a href="index.php?section=brewer&go=<?php echo $go; ?>&filter=<?php echo $row_brewer['id']; ?>&action=edit&id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span>
+    <span class="icon"><a href="index.php?section=admin&go=make_admin&username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png" align="absmiddle" border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span>
+    <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&dbTable=brewer&action=delete&username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
+    </td> 
   <?php } ?> 
   </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
@@ -103,58 +121,14 @@ if ($totalRows_brewer > 0) { ?>
 <div class="error">
 <?php 
 if ($filter == "default") echo "There are no participants yet."; 
-if ($filter == "judges") echo "There are no judges available yet."; 
-if ($filter == "stewards") echo "There are no stewards available yet."; 
+if (($filter == "judges") || ($filter == "assignJudges")) echo "There are no judges available yet."; 
+if (($filter == "stewards") || ($filter == "assignStewards"))  echo "There are no stewards available yet."; 
 }
 } // end if ($action == "default")
 
 if ($action == "add")  { 
 	if ($filter == "default") { ?>
-<script type="text/javascript">
-function AjaxFunction(email)
-{
-	var httpxml;
-		try
-		{
-		// Firefox, Opera 8.0+, Safari
-		httpxml=new XMLHttpRequest();
-		}
-	catch (e)
-		{
-		// Internet Explorer
-		try
-		{
-		httpxml=new ActiveXObject("Msxml2.XMLHTTP");
-		}
-	catch (e)
-		{
-		try
-		{
-		httpxml=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		catch (e)
-		{
-		//alert("Your browser does not support AJAX!");
-	return false;
-	}
-	}
-}
-function stateck()
-{
-if(httpxml.readyState==4)
-{
-document.getElementById("msg").innerHTML=httpxml.responseText;
-
-}
-}
-var url="includes/email.inc.php";
-url=url+"?email="+email;
-url=url+"&sid="+Math.random();
-httpxml.onreadystatechange=stateck;
-httpxml.open("GET",url,true);
-httpxml.send(null);
-}
-</script>
+<script type="text/javascript" src="js_includes/email_check.js"></script>
 <form action="includes/process.inc.php?action=add&dbTable=users&section=<?php echo $section; ?>&go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
@@ -240,8 +214,9 @@ if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] =
 <input name="brewerJudge" type="hidden" value="N" />
 <input name="brewerSteward" type="hidden" value="N" />
 </form>
-<?php } ?>
 <?php 
-  }
-} ?>
+	  }  
+   }
+} 
+?>
 </div>

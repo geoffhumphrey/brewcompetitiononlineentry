@@ -1,5 +1,6 @@
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
 <?php if ($action == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo dateconvert($row_judging['judgingDate'], 2); } else echo "your competition will accept"; ?>.</p><?php } ?>
+<?php if ($section != "step5") { ?>
 <table class="dataTable">
 <tr>
   <td class="dataList" width="5%" nowrap="nowrap"><?php if (($action == "add") || ($action == "edit") || ($filter == "judging")) { ?><a href="index.php?section=admin&go=styles">&laquo;  Back to Styles Accepted List</a><?php } else { ?><a href="index.php?section=admin">&laquo; Back to Admin</a><?php } ?></td>
@@ -9,10 +10,15 @@
   	<?php } ?>
   	<td class="dataList"><span class="icon"><img src="images/note_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=styles&action=add">Add a Custom Style Category</a></td>
   <?php } ?>
-  
 </tr>
 </table> 
-<?php if ((($action == "default") && ($filter == "default")) || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
+<?php } if (
+(($action == "default") && ($filter == "default")) 
+|| 
+($section == "setup") 
+|| 
+(($action == "default") && ($filter == "judging") && ($bid != "default"))
+) { ?>
 <script language="javascript" type="text/javascript">
 //Custom JavaScript Functions by Shawn Olson
 //Copyright 2006-2008
@@ -26,7 +32,7 @@ function checkUncheckAll(theElement) {
      }
     }
 </script>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&dbTable=styles&filter=<?php echo $filter; if ($bid != "default") echo "&bid=".$bid; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&action=update&dbTable=styles&filter=<?php echo $filter; if ($bid != "default") echo "&bid=".$bid; ?>">
 <table class="dataTable">
  <tr>
  	<td colspan="5"><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></td>

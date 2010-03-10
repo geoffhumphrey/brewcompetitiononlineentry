@@ -1,19 +1,5 @@
 <script type="text/javascript" src="js_includes/email_check.js"></script>
-<?php if ($action != "add") { ?>
-<div id="header">
-	<div id="header-inner"><h1>Register</h1></div>
-</div>
-<?php } if ($msg == "1") { ?>
-<div class="error">Sorry, there was a problem with your last login attempt.</div>
-p>Have you <a href="index.php?section=register">registered your account</a> yet?</p>
-<?php } ?>
-<?php if ($msg == "2") { ?>
-<div class="error">Sorry, the user name you entered is already in use.</div>
-<p>Perhaps you have already created an account? If so, <a href="index.php?section=login">log in here</a>.</p>
-<?php } 
-if ($msg == "3") { ?>
-<div class="error">The user name provided is not a valid email address. Please enter a valid email address.</div>
-<?php } ?>
+<?php if ($msg != "default") echo $msg_output; ?>
 <p>Our competition entry system is completely electronic.<ul>
    	  <li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>

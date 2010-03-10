@@ -6,7 +6,7 @@
   <td class="dataHeading bdr1B" width="25%">Category</td>
   <td class="dataHeading bdr1B" width="25%">Brewer</td>
   <td class="dataHeading bdr1B" width="25%">Entry Name</td>
-  <!--<td class="dataHeading bdr1B">Club</td>-->
+  <td class="dataHeading bdr1B">Club</td>
  </tr>
  <?php do { 
     include ('includes/style_convert.inc.php');
@@ -16,7 +16,11 @@
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_club = sprintf("SELECT brewerClubs FROM brewer WHERE id = '%s'", $row_log_winners['brewBrewerID']);
+	$query_user1 = sprintf("SELECT * FROM users WHERE id = '%s'", $row_log_winners['brewBrewerID']);
+	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
+	$row_user1 = mysql_fetch_assoc($user1);
+	
+	$query_club = sprintf("SELECT brewerClubs FROM brewer WHERE brewerEmail = '%s'", $row_user1['user_name']);
 	$club = mysql_query($query_club, $brewing) or die(mysql_error());
 	$row_club = mysql_fetch_assoc($club);
 	?>
@@ -25,7 +29,7 @@
   <td class="dataList"><?php echo $styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")"; } ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewBrewerFirstName']." ".$row_log_winners['brewBrewerLastName']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
-  <!-- <td class="dataList"><?php //echo $row_club['brewerClubs']; ?></td> -->
+  <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log_winners = mysql_fetch_assoc($log_winners)); ?>

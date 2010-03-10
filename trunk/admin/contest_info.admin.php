@@ -1,8 +1,3 @@
-<style type="text/css">
-<!--
-.style1 {font-style: italic}
--->
-</style>
 <form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&dbTable=contest_info&id=1" name="form1">
 <?php if ($section != "step2") { ?>
 <h2>Competition Info</h2>
@@ -135,13 +130,13 @@
     Copy and paste if needed.</em></td>
   </tr>
   <tr>
-    <td class="dataLabel">Shipping Address:</td>
-    <td class="data"><textarea name="contestShippingAddress"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
+    <td class="dataLabel">Name of Shipping Location:</td>
+    <td class="data"><input name="contestShippingName" type="text" value="<?php echo $row_contest_info['contestShippingName']; ?>" size="30" /></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
-    <td class="dataLabel">Drop Off Locations:</td>
-    <td class="data"><textarea name="contestDropOff" cols="70" rows="25"><?php echo $row_contest_info['contestDropOff']; ?></textarea></td>
+    <td class="dataLabel">Shipping Address:</td>
+    <td class="data"><textarea name="contestShippingAddress"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
     <td class="data">&nbsp;</td>
   </tr>
 </table>

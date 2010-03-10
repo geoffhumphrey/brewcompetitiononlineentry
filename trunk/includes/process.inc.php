@@ -822,7 +822,7 @@ if (($action == "add") && ($dbTable == "users") && ($section == "setup")) {
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-	$insertGoTo = "../setup.php?section=step5&go=".$username;
+	$insertGoTo = "../setup.php?section=step7&go=".$username;
 	header(sprintf("Location: %s", $insertGoTo));	
 	
 	session_start();
@@ -910,7 +910,8 @@ brewerJudgeDislikes=%s,
 brewerJudgeLocation=%s, 
 brewerJudgeLocation2=%s, 
 brewerStewardLocation=%s,
-brewerStewardLocation2=%s 
+brewerStewardLocation2=%s,
+brewerAssignment=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['brewerFirstName'], "text"),
                        GetSQLValueString($_POST['brewerLastName'], "text"),
@@ -971,18 +972,19 @@ contestContactEmail,
 contestEntryFee, 
 contestBottles, 
 contestShippingAddress, 
-contestDropOff, 
-
+contestShippingName, 
 contestAwards,
+
 contestWinnersComplete,
 contestEntryCap,
 contestAwardsLocName,
 contestAwardsLocDate,
-
 contestAwardsLocTime,
+
 contestEntryFee2,
 contestEntryFeeDiscount,
 contestEntryFeeDiscountNum,
+contestLogo,
 id
 ) 
 VALUES 
@@ -991,7 +993,7 @@ VALUES
 %s, %s, %s, %s, %s,
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
-%s, %s, %s, %s)",
+%s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
                        GetSQLValueString($_POST['contestHostWebsite'], "text"),
@@ -1005,7 +1007,7 @@ VALUES
                        GetSQLValueString($_POST['contestEntryFee'], "text"),
                        GetSQLValueString($_POST['contestBottles'], "text"),
                        GetSQLValueString($_POST['contestShippingAddress'], "text"),
-                       GetSQLValueString($_POST['contestDropOff'], "text"),
+                       GetSQLValueString($_POST['contestShippingName'], "text"),
                        GetSQLValueString($_POST['contestAwards'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 					   GetSQLValueString($_POST['contestEntryCap'], "text"),
@@ -1015,6 +1017,7 @@ VALUES
 					   GetSQLValueString($_POST['contestEntryFee2'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
+					   GetSQLValueString($_POST['contestLogo'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1045,7 +1048,7 @@ contestContactEmail=%s,
 contestEntryFee=%s, 
 contestBottles=%s, 
 contestShippingAddress=%s, 
-contestDropOff=%s, 
+contestShippingName=%s, 
 
 contestAwards=%s,
 contestWinnersComplete=%s,
@@ -1056,7 +1059,8 @@ contestAwardsLocDate=%s,
 contestAwardsLocTime=%s,
 contestEntryFee2=%s,
 contestEntryFeeDiscount=%s,
-contestEntryFeeDiscountNum=%s
+contestEntryFeeDiscountNum=%s,
+contestLogo=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
@@ -1071,7 +1075,7 @@ WHERE id=%s",
                        GetSQLValueString($_POST['contestEntryFee'], "text"),
                        GetSQLValueString($_POST['contestBottles'], "text"),
                        GetSQLValueString($_POST['contestShippingAddress'], "text"),
-                       GetSQLValueString($_POST['contestDropOff'], "text"),
+                       GetSQLValueString($_POST['contestShippingName'], "text"),
                        GetSQLValueString($_POST['contestAwards'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 					   GetSQLValueString($_POST['contestEntryCap'], "text"),
@@ -1081,6 +1085,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['contestEntryFee2'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
+					   GetSQLValueString($_POST['contestLogo'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1270,7 +1275,8 @@ foreach($_POST['id'] as $id)	{
 	} 
 
 if($result1){ 
-	header("location:../index.php?section=admin&go=styles&filter=$filter&msg=9");  
+	if ($section == "step5") header("location:../setup.php?section=step6");
+	else header("location:../index.php?section=admin&go=styles&filter=$filter&msg=9");
 	}
 
 }
@@ -1328,7 +1334,7 @@ if (($action == "add") && ($dbTable == "judging")) {
 	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step3") $insertGoTo = "../setup.php?section=step3"; else $insertGoTo = "../index.php?section=$section&go=$go";
+	if ($section == "step3") $insertGoTo = "../setup.php?section=step4"; else $insertGoTo = "../index.php?section=$section&go=$go";
 	if ($section == "step3") $insertGoTo .= "&msg=9"; else $insertGoTo .= "&msg=1";
 	//echo $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
@@ -1351,6 +1357,46 @@ if (($action == "edit") && ($dbTable == "judging")) {
 	$updateGoTo = "../index.php?section=admin&go=judging&msg=2";
 	header(sprintf("Location: %s", $updateGoTo));					   
 }
+
+
+// --------------------------- If Adding Judging Locations ------------------------------- //
+
+if (($action == "add") && ($dbTable == "drop_off")) {
+
+  $insertSQL = sprintf("INSERT INTO drop_off (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite) VALUES (%s, %s, %s, %s)",
+                       GetSQLValueString($_POST['dropLocationName'], "text"),
+                       GetSQLValueString($_POST['dropLocation'], "text"),
+                       GetSQLValueString($_POST['dropLocationPhone'], "text"),
+					   GetSQLValueString($_POST['dropLocationWebsite'], "text")
+					   );
+
+	//echo $insertSQL;
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	if ($section == "step4") $insertGoTo = "../setup.php?section=$section"; else $insertGoTo = "../index.php?section=$section&go=$go";
+	if ($section == "step4") $insertGoTo .= "&msg=11"; else $insertGoTo .= "&msg=1";
+	//echo $insertGoTo;
+	header(sprintf("Location: %s", $insertGoTo));					   
+}
+
+// --------------------------- If Editing Drop-Off Locations ------------------------------- //
+
+if (($action == "edit") && ($dbTable == "drop_off")) {
+
+  $updateSQL = sprintf("UPDATE drop_off SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s ,dropLocationWebsite=%s  WHERE id=%s",
+                       GetSQLValueString($_POST['dropLocationName'], "text"),
+                       GetSQLValueString($_POST['dropLocation'], "text"),
+                       GetSQLValueString($_POST['dropLocationPhone'], "text"),
+					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
+					   GetSQLValueString($id, "int"));   
+					   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateGoTo = "../index.php?section=admin&go=dropoff&msg=2";
+	header(sprintf("Location: %s", $updateGoTo));					   
+}
+
 
 // --------------------------- If Adding a Style --------------------------- //
 
