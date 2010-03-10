@@ -1,6 +1,3 @@
-<div id="header">	
-	<div id="header-inner"><h1><?php echo $row_contest_info['contestName']; ?> Rules</h1></div>
-</div>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
 <?php } ?>

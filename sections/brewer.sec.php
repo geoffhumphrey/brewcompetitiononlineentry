@@ -1,23 +1,14 @@
 <?php
-if ($section != "step5") {
+if ($section != "step7") {
 mysql_select_db($database, $brewing);
 $query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $filter); 
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 $totalRows_brewerID = mysql_num_rows($brewerID);
-}
-if ($section == "step5") { ?>
-<div id="header">	
-	<div id="header-inner"><h1>Set Up Step 5: Enter the Admin User's Info</h1></div>
-</div>
-<?php } else { ?>
-<div id="header">
-	<div id="header-inner"><h1><?php if ($action == "add") echo "Step 2: Registrant Information"; else echo "Edit Registrant Information"; ?></h1></div>
-</div>
-<?php } 
-if ($msg != "default") echo "<div class=\"error\">Your account has been created.</div>"; 
-if (($section == "step5") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
-<?php if ($section == "step5") { ?>
+} 
+if ($msg != "default") echo $msg_output; 
+if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+<?php if ($section == "step7") { ?>
 <form action="includes/process.inc.php?section=setup&action=add&dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="brewerSteward" type="hidden" value="N" />
 <input name="brewerJudge" type="hidden" value="N" />
@@ -72,7 +63,7 @@ if (($section == "step5") || ($action == "add") || (($action == "edit") && (($_S
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td class="data">&nbsp;</td>
 </tr>
-<?php if (($go != "entrant") && ($section != "step5")) { ?>
+<?php if (($go != "entrant") && ($section != "step7")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
@@ -115,8 +106,8 @@ if (($section == "step5") || ($action == "add") || (($action == "edit") && (($_S
       <select name="brewerJudgeLocation">
       <option value="99999999" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == "99999999")) echo "SELECTED"; ?>>None (Any Location/Time)</option>
       <?php do { ?>
-      <option value="<?php echo $row_judging['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == $row_judging['id'])) echo "SELECTED"; ?>><?php echo $row_judging['judgingLocName']." ("; echo dateconvert($row_judging['judgingDate'], 3).")"; ?></option>
-      <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+      <option value="<?php echo $row_judging3['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == $row_judging3['id'])) echo "SELECTED"; ?>><?php echo $row_judging3['judgingLocName']." ("; echo dateconvert($row_judging3['judgingDate'], 3).")"; ?></option>
+      <?php } while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
       </select>
       </td>
 </tr>
@@ -168,7 +159,7 @@ if (($section == "step5") || ($action == "add") || (($action == "edit") && (($_S
       <td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></td>
     </tr>
 </table>
-<?php if ($section != "step5") { ?>
+<?php if ($section != "step7") { ?>
 	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
 	<?php if ($go == "entrant") { ?>
 	<input name="brewerJudge" type="hidden" value="N" />

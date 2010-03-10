@@ -1,3 +1,5 @@
+<?php if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; ?>
+
 <h2>Entries</h2>
 <?php if ($action != "print") { ?>
 <form name="form1" method="post" action="includes/process.inc.php?action=update&dbTable=brewing&filter=<?php echo $filter; ?>&bid=<?php echo $bid; ?>&sort=<?php echo $sort; ?>&dir=<?php echo $dir; ?>">

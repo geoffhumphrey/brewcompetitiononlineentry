@@ -525,20 +525,22 @@ ALTER TABLE `contest_info` ADD `contestEntryCap` INT( 8 ) NULL;
 -- ********************************************************************************
 
 ALTER TABLE `contest_info` 
-DROP `contestDate` ,
+DROP `contestDate`,
 DROP `contestJudgingLocation`,
-ADD `contestAwardsLocName` VARCHAR( 255 ) NULL AFTER `contestAwards`,
-ADD `contestAwardsLocDate` DATE NULL AFTER `contestAwardsLocName`,
-ADD `contestAwardsLocTime` VARCHAR( 255 ) NULL AFTER `contestAwardsLocDate`,
 ADD `contestEntryFee2` VARCHAR( 255 ) NULL AFTER `contestEntryFee`,
-ADD `contestEntryFeeDiscount` CHAR( 1 ) NULL DEFAULT 'N' AFTER `contestEntryFee2`,
-ADD `contestEntryFeeDiscountNum` CHAR( 4 ) NULL AFTER `contestEntryFeeDiscount`;
+ADD `contestEntryFeeDiscount` CHAR( 1 ) NULL AFTER `contestEntryFee2`,
+ADD `contestEntryFeeDiscountNum` CHAR( 4 ) NULL AFTER `contestEntryFeeDiscount`,
+ADD `contestAwardsLocName` VARCHAR( 255 ) NULL AFTER `contestAwardsLocation`,
+ADD `contestAwardsLocDate` DATE NULL AFTER `contestAwardsLocName`,
+ADD `contestAwardsLocTime` VARCHAR( 255 ) NULL AFTER `contestAwardsLocDate`;
+
+UPDATE `contest_info` SET `contestEntryFeeDiscount` = 'N' WHERE `id` =1;
 
 CREATE TABLE `judging` (
-`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`judgingDate` DATE NOT NULL ,
-`judgingTime` VARCHAR( 255 ) NOT NULL ,
-`judgingLocName` VARCHAR( 255 ) NOT NULL ,
+`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`judgingDate` DATE NOT NULL,
+`judgingTime` VARCHAR( 255 ) NOT NULL,
+`judgingLocName` VARCHAR( 255 ) NOT NULL,
 `judgingLocation` TEXT NOT NULL 
 ) ENGINE = MYISAM ;
 
@@ -554,5 +556,18 @@ ADD `brewerAssignment` CHAR( 1 ) NULL;
 ALTER TABLE `styles` 
 ADD `brewStyleActive` CHAR( 1 ) NULL DEFAULT 'Y',
 ADD `brewStyleOwn` VARCHAR( 255 ) NULL DEFAULT 'bcoe',
-ADD `brewStyleJudgeLoc` INT( 8 ) NULL;
+ADD `brewStyleJudgingLoc` INT( 8 ) NULL;
+
+ALTER TABLE `brewing` 
+ADD `brewJudgingLocation` INT( 8 ) NULL;
+
+CREATE TABLE `drop_off` (
+`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`dropLocation` TEXT NULL ,
+`dropLocationName` VARCHAR( 255 ) NULL ,
+`dropLocationPhone` VARCHAR( 255 ) NULL,
+`dropLocationWebsite` VARCHAR( 255 ) NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE `contest_info` CHANGE `contestDropOff` `contestShippingName` VARCHAR( 255 ) NULL;
 

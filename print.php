@@ -4,6 +4,7 @@ require ('includes/authentication_nav.inc.php');  session_start();
 require ('includes/url_variables.inc.php');
 require ('includes/db_connect.inc.php');
 include ('includes/plug-ins.inc.php');
+include ('includes/headers.inc.php');
 $today = date('Y-m-d');
 $deadline = $row_contest_info['contestRegistrationDeadline'];
 
@@ -18,7 +19,12 @@ $deadline = $row_contest_info['contestRegistrationDeadline'];
 <body onload="javascript:window.print()">
 <div id="content">
 	<div id="content-inner">
-     <?php 
+    <?php if ($section != "admin") { ?>
+    <div id="header">	
+		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+	</div>
+    <?php 
+	} 
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
 	if ($section != "admin") { ?><div id="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div><?php }  
