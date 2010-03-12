@@ -87,4 +87,34 @@ if ($row_bos['brewWinnerCat'] == "26") $styleConvert3 = "Other Mead";
 if ($row_bos['brewWinnerCat'] == "27") $styleConvert3 = "Standard Cider and Perry";
 if ($row_bos['brewWinnerCat'] == "28") $styleConvert3 = "Specialty Cider and Perry";
 
+
+if ($row_styles['brewStyleGroup'] == "01") $styleConvert4 = "Light Lager"; $styleConvert5 = "1A,1B,1C,1D,1E";
+if ($row_styles['brewStyleGroup'] == "02") $styleConvert4 = "Pilsner"; $styleConvert5 = "2A,2B,2C,";
+if ($row_styles['brewStyleGroup'] == "03") $styleConvert4 = "European Amber Lager"; $styleConvert5 = "3A,3B,";
+if ($row_styles['brewStyleGroup'] == "04") $styleConvert4 = "Dark Lager"; $styleConvert5 = "4A,4B,4C,";
+if ($row_styles['brewStyleGroup'] == "05") $styleConvert4 = "Bock"; $styleConvert5 = "5A,5B,5C,5D,";
+if ($row_styles['brewStyleGroup'] == "06") $styleConvert4 = "Light Hybrid Beer"; $styleConvert5 = "6A,6B,6C,6D,";
+if ($row_styles['brewStyleGroup'] == "07") $styleConvert4 = "Amber Hybrid Beer"; $styleConvert5 = "7A,7B,7C,";
+if ($row_styles['brewStyleGroup'] == "08") $styleConvert4 = "English Pale Ale"; $styleConvert5 = "8A,8B,8C,";
+if ($row_styles['brewStyleGroup'] == "09") $styleConvert4 = "Scottish and Irish Ale"; $styleConvert5 = "9A,9B,9C,9D,9E";
+if ($row_styles['brewStyleGroup'] == "10") $styleConvert4 = "American Ale"; $styleConvert5 = "10A,10B,10C,";
+if ($row_styles['brewStyleGroup'] == "11") $styleConvert4 = "English Brown Ale"; $styleConvert5 = "11A,11B,11C,";
+if ($row_styles['brewStyleGroup'] == "12") $styleConvert4 = "Porter"; $styleConvert5 = "12A,12B,12C,";
+if ($row_styles['brewStyleGroup'] == "13") $styleConvert4 = "Stout"; $styleConvert5 = "13A,13B,13C,13D,13E,13F";
+if ($row_styles['brewStyleGroup'] == "14") $styleConvert4 = "India Pale Ale (IPA)"; $styleConvert5 = "14A,14B,14C,";
+if ($row_styles['brewStyleGroup'] == "15") $styleConvert4 = "German Wheat and Rye Beer"; $styleConvert5 = "15A,15B,15C,15D,";
+if ($row_styles['brewStyleGroup'] == "16") $styleConvert4 = "Belgian and French Ale"; $styleConvert5 = "16A,16B,16C,16D,16E,";
+if ($row_styles['brewStyleGroup'] == "17") $styleConvert4 = "Sour Ale"; $styleConvert5 = "17A,17B,17C,17D,17E,17F";
+if ($row_styles['brewStyleGroup'] == "18") $styleConvert4 = "Belgian Strong Ale"; $styleConvert5 = "18A,18B,18C,18D,18E,";
+if ($row_styles['brewStyleGroup'] == "19") $styleConvert4 = "Strong Ale"; $styleConvert5 = "19A,19B,19C,";
+if ($row_styles['brewStyleGroup'] == "20") $styleConvert4 = "Fruit Beer" ;$styleConvert5 = "20,";
+if ($row_styles['brewStyleGroup'] == "21") $styleConvert4 = "Spice/Herb/Vegetable Beer"; $styleConvert5 = "21A,21B,";
+if ($row_styles['brewStyleGroup'] == "22") $styleConvert4 = "Smoke-Flavored and Wood-Aged Beer"; $styleConvert5 = "22A,22B,22C,";
+if ($row_styles['brewStyleGroup'] == "23") $styleConvert4 = "Specialty Beer"; $styleConvert5 = "23,";
+if ($row_styles['brewStyleGroup'] == "24") $styleConvert4 = "Traditional Mead"; $styleConvert5 = "24A,24B,24C";
+if ($row_styles['brewStyleGroup'] == "25") $styleConvert4 = "Melomel (Fruit Mead)"; $styleConvert5 = "25A,25B,25C";
+if ($row_styles['brewStyleGroup'] == "26") $styleConvert4 = "Other Mead"; $styleConvert5 = "25A,25B,26C";
+if ($row_styles['brewStyleGroup'] == "27") $styleConvert4 = "Standard Cider and Perry"; $styleConvert5 = "27A,27B,27C,27D,27E,";
+if ($row_styles['brewStyleGroup'] == "28") $styleConvert4 = "Specialty Cider and Perry"; $styleConvert5 = "28A,28B,28C,28D,";
+
 ?>

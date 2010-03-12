@@ -4,6 +4,8 @@ require ('../Connections/config.php');
 include ('../includes/db_connect.inc.php');
 include ('../includes/url_variables.inc.php'); 
 
+$type = "entries";
+
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM judging WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
@@ -18,6 +20,8 @@ else $loc = "";
 $date = date("m-d-Y");
 
 function parseCSVComments($comments) {
+  include ('../includes/scrubber.inc.php');
+  $comments = strtr($comments, $html_remove);
   $comments = str_replace('"', '""', $comments); // First off, escape all " and make them ""
   $comments = preg_replace("/[\n\r]/","",$comments); 
   if(eregi(",", $comments) or eregi("\n", $comments) or eregi("\t", $comments) or eregi("\r", $comments) or eregi("\v", $comments)) { // Check if any commas or new lines
@@ -60,7 +64,7 @@ if($numberFields) { // Check if we need to output anything
 	// Start our output of the CSV
 
 	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment; filename=".$contest."_".$type."_emails_".$date.$loc.$extension);
+	header("Content-Disposition: attachment; filename=".$contest."_entires_".$date.$loc.$extension);
 	header("Pragma: no-cache");
 	header("Expires: 0");
 	if ($go == "csv") echo $headers;

@@ -1,5 +1,5 @@
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
-<?php if ($action == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo dateconvert($row_judging['judgingDate'], 2); } else echo "your competition will accept"; ?>.</p><?php } ?>
+<?php if ($action == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo dateconvert($row_judging['judgingDate'], 2); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
 <?php if ($section != "step5") { ?>
 <table class="dataTable">
 <tr>
@@ -40,7 +40,7 @@ function checkUncheckAll(theElement) {
  <tr>
   <td class="dataHeading bdr1B"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></td>
   <td class="dataHeading bdr1B">Category Name</td>
-  <td class="dataHeading bdr1B">Subcategory</td>
+  <td class="dataHeading bdr1B">Category/Sub</td>
   <?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
   <td class="dataHeading bdr1B">Judging Location</td>
   <?php } ?>
@@ -63,7 +63,7 @@ function checkUncheckAll(theElement) {
   <td width="1%" class="dataList"><input name="brewStyleJudgingLoc<?php echo $row_styles['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if ($row_styles['brewStyleJudgingLoc'] == $bid) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td width="15%" class="dataList"><?php echo $row_styles['brewStyle']; ?></td>
-  <td width="5%" class="dataList"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; ?></td>
+  <td width="5%" class="dataList"><?php if ($row_styles['brewStyleGroup'] > 28) echo "Custom"; else echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; ?></td>
   <?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
   <td width="25%" class="dataList">
   <?php if ($row_styles['brewStyleActive'] == "Y") { echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "N/A"; ?>
@@ -148,7 +148,7 @@ function checkUncheckAll(theElement) {
 </tr>
 <tr>
     <td class="dataLabel">Info:</td>
-    <td class="data"><textarea name="brewStyleInfo" cols="67" rows="15"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea></td>
+    <td class="data"><textarea name="brewStyleInfo" cols="50" rows="8" class="mceNoEditor"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea></td>
 </tr>
 <tr>
     	<td class="dataLabel">&nbsp;</td>
@@ -156,8 +156,8 @@ function checkUncheckAll(theElement) {
         <td class="data">&nbsp;</td>
   	</tr>
 </table>
-<input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup']; else echo "0";?>">
-<input type="hidden" name="brewStyleNum" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum']; else echo ""; ?>" >
+<input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup'];?>">
+<input type="hidden" name="brewStyleNum" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum'];?>" >
 <input type="hidden" name="brewStyleActive" value="<?php if ($action == "edit") echo $row_styles['brewStyleActive']; else echo "Y"; ?>">
 <input type="hidden" name="brewStyleOwn" value="<?php if ($action == "edit") echo $row_styles['brewStyleOwn']; else echo "custom"; ?>">
 </form>

@@ -18,6 +18,7 @@
   	</tr>
 </table>
 </form>
+<?php if ($msg != "default") { ?><p><img src="images/exclamation.png"  align="absmiddle"  /><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p><?php } ?>
 <p><img src="images/exclamation.png"  align="absmiddle"  /><span class="data">Did you forget your password? If so, <a href="index.php?section=login&amp;action=forgot">click here to reset it</a>.</span></p>
 <?php
 } 

@@ -1,16 +1,14 @@
 <?php 
-$section = "styles";
 require ('../Connections/config.php');
 require ('../includes/url_variables.inc.php');
 include ('../includes/plug-ins.inc.php');
-mysql_select_db($database, $brewing);
-if ($filter != "default") $query_styles = "SELECT * FROM styles WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
 
-else $query_styles = "SELECT * FROM styles WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
+$query_styles = "SELECT * FROM styles";
+if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
+else $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -86,43 +84,14 @@ elseif (($sort == "brewStyleIBU") 	&& (($row_styles['brewStyleIBU'] == "") || ($
 elseif (($sort == "brewStyleOG") 	&& ($row_styles['brewStyleOG'] == "")) echo "";
 elseif (($sort == "brewStyleFG") 	&& ($row_styles['brewStyleFG'] == "")) echo "";
 elseif (($sort == "brewStyleABV") 	&& ($row_styles['brewStyleABV'] == "")) echo "";
-else { ?>
+else { 
+include ('../includes/style_convert.inc.php');
+?>
 <h2><?php echo $row_styles['brewStyle']; ?></h2>
 <table>
   <tr>
   	 <td class="dataLabel">Category:</td>
-	 <td class="data">
-	 <?php
-						if ($row_styles['brewStyleGroup'] == "0") echo "Unique to this Competition";
-						if ($row_styles['brewStyleGroup'] == "01") echo "Light Lager";
-						if ($row_styles['brewStyleGroup'] == "02") echo "Pilsner";
-						if ($row_styles['brewStyleGroup'] == "03") echo "European Amber Lager";
-						if ($row_styles['brewStyleGroup'] == "04") echo "Dark Lager";
-						if ($row_styles['brewStyleGroup'] == "05") echo "Bock";
-						if ($row_styles['brewStyleGroup'] == "06") echo "Light Hybrid Beer";
-						if ($row_styles['brewStyleGroup'] == "07") echo "Amber Hybrid Beer";
-						if ($row_styles['brewStyleGroup'] == "08") echo "English Pale Ale";
-						if ($row_styles['brewStyleGroup'] == "09") echo "Scottish and Irish Ale";
-						if ($row_styles['brewStyleGroup'] == "10") echo "American Ale";
-						if ($row_styles['brewStyleGroup'] == "11") echo "English Brown Ale";
-						if ($row_styles['brewStyleGroup'] == "12") echo "Porter";
-						if ($row_styles['brewStyleGroup'] == "13") echo "Stout";
-						if ($row_styles['brewStyleGroup'] == "14") echo "India Pale Ale (IPA)";
-						if ($row_styles['brewStyleGroup'] == "15") echo "German Wheat and Rye Beer";
-						if ($row_styles['brewStyleGroup'] == "16") echo "Belgian and French Ale";
-						if ($row_styles['brewStyleGroup'] == "17") echo "Sour Ale";
-						if ($row_styles['brewStyleGroup'] == "18") echo "Belgian Strong Ale";
-						if ($row_styles['brewStyleGroup'] == "19") echo "Strong Ale";
-						if ($row_styles['brewStyleGroup'] == "20") echo "Fruit Beer";
-						if ($row_styles['brewStyleGroup'] == "21") echo "Spice/Herb/Vegetable Beer";
-						if ($row_styles['brewStyleGroup'] == "22") echo "Smoke-Flavored and Wood-Aged Beer";
-						if ($row_styles['brewStyleGroup'] == "23") echo "Specialty Beer";
-						if ($row_styles['brewStyleGroup'] == "24") echo "Traditional Mead";
-						if ($row_styles['brewStyleGroup'] == "25") echo "Melomel (Fruit Mead)";
-						if ($row_styles['brewStyleGroup'] == "26") echo "Other Mead";
-						if ($row_styles['brewStyleGroup'] == "27") echo "Standard Cider and Perry";
-						if ($row_styles['brewStyleGroup'] == "28") echo "Specialty Cider and Perry";
-						?>
+	 <td class="data"><?php echo $styleConvert4; ?>
 	 </td>
   </tr>
   </tr>

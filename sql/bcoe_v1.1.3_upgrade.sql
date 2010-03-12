@@ -19,6 +19,7 @@ CREATE TABLE `judging` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE `brewer` 
+ADD `uid` INT (8) NULL AFTER `id`,
 ADD `brewerJudgeLocation` INT( 8 ) NULL,
 ADD `brewerJudgeLocation2` INT( 8 ) NULL,
 ADD `brewerStewardLocation` INT( 8 ) NULL,

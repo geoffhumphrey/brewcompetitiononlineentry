@@ -13,12 +13,7 @@ $sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 $row_sponsors = mysql_fetch_assoc($sponsors);
 $totalRows_sponsors = mysql_num_rows($sponsors);
 
-$query_styles = "SELECT * FROM styles";
-if ((($section == "entry") || ($section == "brew")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ";
-$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum";
-$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-$row_styles = mysql_fetch_assoc($styles);
-$totalRows_styles = mysql_num_rows($styles);
+
 
 $query_prefs = "SELECT * FROM preferences WHERE id=1";
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
@@ -110,12 +105,13 @@ $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);
 
-if (($section == "admin") && ($go == "make_admin")) {
-$query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $username);
+
+if ($go == "make_admin") $query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $username);
+elseif (($section == "brewer") && ($action == "edit")) $query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $row_brewer['brewerEmail']);
+else $query_user_level = "SELECT id from users";
 $user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
 $row_user_level = mysql_fetch_assoc($user_level);
 $totalRows_user_level = mysql_num_rows($user_level);
-  }
 }
 
 // General judging connection
@@ -167,5 +163,21 @@ if (($section == "brewer") || ($section == "admin")) $query_stewarding2 .= " ORD
 $stewarding2 = mysql_query($query_stewarding2, $brewing) or die(mysql_error());
 $row_stewarding2 = mysql_fetch_assoc($stewarding2);
 $totalRows_stewarding2 = mysql_num_rows($stewarding2);
+
+$query_styles = "SELECT * FROM styles";
+if ((($section == "entry") || ($section == "brew")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
+elseif (($section == "admin") && ($action == "edit")) $query_styles .= " WHERE id='$id'";
+elseif ((($section == "judge") && ($go == "judge")) || ($action == "edit")) $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup < 29  ORDER BY brewStyleGroup,brewStyleNum";
+else $query_styles .= "";
+$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+$row_styles = mysql_fetch_assoc($styles);
+$totalRows_styles = mysql_num_rows($styles);
+
+$query_styles2 = "SELECT * FROM styles";
+if ((($section == "judge") && ($go == "judge")) || ($action == "edit")) $query_styles2 .= " WHERE brewStyleActive='Y' AND brewStyleGroup < 29  ORDER BY brewStyleGroup,brewStyleNum";
+else $query_styles2 .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
+$styles2 = mysql_query($query_styles2, $brewing) or die(mysql_error());
+$row_styles2 = mysql_fetch_assoc($styles2);
+$totalRows_styles2 = mysql_num_rows($styles2);
 
 ?>

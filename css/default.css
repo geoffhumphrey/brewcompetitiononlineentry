@@ -51,6 +51,7 @@ h1 {
 
 h2 {
 padding: 0 0 1.5em 0;
+margin: 0;
 font-size: 1.5em;
 font-weight: bold;
 color: #37517B;
@@ -58,6 +59,7 @@ color: #37517B;
 
 h3 {
 padding: 1em 0 .5em 0;
+margin: 0;
 font-size: 1.2em;
 font-weight: bold;
 color: #37517B;
@@ -75,6 +77,7 @@ border: 1px solid #aaaaaa;
 background-color: #cccccc;
 font-weight: bold;
 padding: 3px;
+margin: 1em 0 1em 0;
 } 
 
 .button:hover {
@@ -118,7 +121,7 @@ padding: 0 0 .5em .4em;
 
 p 
 {
-margin: 0 0 1.25em 0;
+margin: 1.25em 0 1.25em 0;
 }
 
 table 
@@ -205,7 +208,6 @@ color: #666666;
 #content
 {
 }
-
 
 #content-inner
 {
@@ -313,6 +315,25 @@ font-weight: bold;
 
 .dataTable { 
 width: 100%;
+}
+
+.dataTableCompact  { 
+
+}
+
+.dataTableCompact td { 
+vertical-align: top;
+padding: 2px;
+white-space: nowrap;
+}
+
+.dataTableCompact th
+{
+vertical-align: top;
+padding: 1em .5em 1em .5em;
+background-color: #dddddd;
+text-align: left;
+font-size: 1.1em;
 }
 
 .dataHeading 

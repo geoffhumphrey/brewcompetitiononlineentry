@@ -175,11 +175,11 @@ if ($msg != "default") echo $msg_output;
   </tr>
   <tr>
     <td class="dataLabel">Categories Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo $row_brewer['brewerJudgeLikes']; else echo "N/A"; ?></td>
+    <td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']); else echo "N/A"; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">Catagories Not Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo $row_brewer['brewerJudgeDislikes']; else echo "N/A"; ?></td>
+    <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']); else echo "N/A"; ?></td>
   </tr>
   <?php } ?>
   <?php if ($row_brewer['brewerAssignment'] == "") { ?>

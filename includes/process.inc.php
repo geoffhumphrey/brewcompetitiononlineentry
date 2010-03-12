@@ -119,21 +119,20 @@ if ($action == "delete") {
   */
   
   $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-  mysql_select_db($database, $brewing);
   $Result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
   
   if ($dbTable == "archive") { 
   $dropTable = "DROP TABLE users_$filter";
-  mysql_select_db($database, $brewing);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable2 = "DROP TABLE brewing_$filter";
-  mysql_select_db($database, $brewing);
   $Result2 = mysql_query($dropTable2, $brewing) or die(mysql_error());
   
   $dropTable3 = "DROP TABLE brewer_$filter";
-  mysql_select_db($database, $brewing);
   $Result3 = mysql_query($dropTable3, $brewing) or die(mysql_error());
+  
+  $dropTable4 = "DROP TABLE sponsors_$filter";
+  $Result4 = mysql_query($dropTable4, $brewing) or die(mysql_error());
   
   $deleteGoTo = "../index.php?section=admin&go=archive&filter=".$filter."&msg=8";
   header(sprintf("Location: %s", $deleteGoTo));
@@ -837,6 +836,7 @@ if (($action == "add") && ($dbTable == "users") && ($section == "setup")) {
 if (($action == "add") && ($dbTable == "brewer")) {
 
   $insertSQL = sprintf("INSERT INTO brewer (
+  uid,
   brewerFirstName, 
   brewerLastName, 
   brewerAddress, 
@@ -855,8 +855,9 @@ if (($action == "add") && ($dbTable == "brewer")) {
   brewerJudgeLocation2,
   brewerStewardLocation,
   brewerStewardLocation2
-  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['brewerFirstName'], "text"),
+  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['uid'], "int"),
+					   GetSQLValueString($_POST['brewerFirstName'], "text"),
                        GetSQLValueString($_POST['brewerLastName'], "text"),
                        GetSQLValueString($_POST['brewerAddress'], "text"),
                        GetSQLValueString($_POST['brewerCity'], "text"),
@@ -887,7 +888,11 @@ if (($action == "add") && ($dbTable == "brewer")) {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
+if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
+if ($_POST['brewerJudgeLikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
+
 $updateSQL = sprintf("UPDATE brewer SET 
+uid=%s,
 brewerFirstName=%s, 
 brewerLastName=%s, 
 brewerAddress=%s, 
@@ -913,7 +918,8 @@ brewerStewardLocation=%s,
 brewerStewardLocation2=%s,
 brewerAssignment=%s
 WHERE id=%s",
-                       GetSQLValueString($_POST['brewerFirstName'], "text"),
+                       GetSQLValueString($_POST['uid'], "int"),
+					   GetSQLValueString($_POST['brewerFirstName'], "text"),
                        GetSQLValueString($_POST['brewerLastName'], "text"),
                        GetSQLValueString($_POST['brewerAddress'], "text"),
                        GetSQLValueString($_POST['brewerCity'], "text"),
@@ -927,19 +933,19 @@ WHERE id=%s",
                        GetSQLValueString($_POST['brewerJudge'], "text"),
                        GetSQLValueString($_POST['brewerJudgeID'], "text"),
                        GetSQLValueString($_POST['brewerJudgeRank'], "text"),
-                       GetSQLValueString($_POST['brewerJudgeLikes'], "text"),
-                       GetSQLValueString($_POST['brewerJudgeDislikes'], "text"),
+                       GetSQLValueString($likes, "text"),
+                       GetSQLValueString($dislikes, "text"),
 					   GetSQLValueString($_POST['brewerJudgeLocation'], "int"),
 					   GetSQLValueString($_POST['brewerJudgeLocation2'], "int"),
 					   GetSQLValueString($_POST['brewerStewardLocation'], "int"),
 					   GetSQLValueString($_POST['brewerStewardLocation2'], "int"),
-					   GetSQLValueString($_POST['brewerAssignment'], "int"),
+					   GetSQLValueString($_POST['brewerAssignment'], "text"),
                        GetSQLValueString($id, "int"));
   
   if ($_POST['brewerAssignment'] == "J") $updateSQL2 = "UPDATE brewer SET brewerNickname='judge' WHERE id='".$id."'"; 
   elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
   else $updateSQL2 = "UPDATE brewer SET brewerNickname=NULL WHERE id='".$id."'"; 
-  
+
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   $Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
@@ -950,6 +956,7 @@ WHERE id=%s",
   else $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=default&msg=2";
 
   header(sprintf("Location: %s", $updateGoTo));
+
 }
 
 // --------------------------- SETUP: Adding General Contest Info ------------------------------- // 
@@ -1220,7 +1227,7 @@ foreach($_POST['id'] as $id)
 		}
 		
 		if ($_POST["brewerAssignment".$id] == "J") $updateSQL2 = "UPDATE brewer SET brewerNickname='judge' WHERE id='".$id."'"; 
-  		if ($_POST["brewerAssignment".$id] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
+  		elseif ($_POST["brewerAssignment".$id] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
   		else $updateSQL2 = "SELECT id FROM brewer WHERE id='$id'";
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -1247,8 +1254,10 @@ foreach($_POST['id'] as $id)	{
 		 
 		if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) { 
 		 $updateSQL = "UPDATE styles SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
+		 $result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		 //echo $updateSQL."<br>"; 
 		 
-		 // Also need to find all records in the "brewing" table (entries) that have the old judging location associated with the style and update them with the new judging location.		 
+		 // Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.		 
 		 mysql_select_db($database, $brewing);
 		 $query_style_name = "SELECT *FROM styles WHERE id='".$id."'";
 		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
@@ -1258,22 +1267,24 @@ foreach($_POST['id'] as $id)	{
 		 $loc = mysql_query($query_loc, $brewing) or die(mysql_error());
 		 $row_loc = mysql_fetch_assoc($loc);
 		 $totalRows_loc = mysql_num_rows($loc);
+		 //echo $query_loc."<br>";
 		 	if ($totalRows_loc > 0) {
-		 		//do { 
+		 		do { 
+				if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
 				$updateSQL2 = sprintf("UPDATE brewing SET brewJudgingLocation='%s' WHERE id='%s';", $_POST["brewStyleJudgingLoc".$id], $row_loc['id']); 
-				//} 
-				//while($row_loc = mysql_fetch_assoc($loc));
+				$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
+				//echo $updateSQL2."<br>"; 
+				}
+				}
+				 
+				while($row_loc = mysql_fetch_assoc($loc));
 		 	}
-		 $result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		 if ($totalRows_loc > 0) {
-		 $result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 		 }
-		 //echo $updateSQL."<br>"; 
-		 //echo $updateSQL2;
-		 }
+		 
+		 
 		
-	} 
-
+	}
+		 
 if($result1){ 
 	if ($section == "step5") header("location:../setup.php?section=step6");
 	else header("location:../index.php?section=admin&go=styles&filter=$filter&msg=9");
@@ -1401,6 +1412,12 @@ if (($action == "edit") && ($dbTable == "drop_off")) {
 // --------------------------- If Adding a Style --------------------------- //
 
 if (($action == "add") && ($dbTable == "styles")) {
+mysql_select_db($database, $brewing);
+$query_style_name = "SELECT brewStyleGroup FROM `styles` ORDER BY id DESC LIMIT 1";
+$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
+$row_style_name = mysql_fetch_assoc($style_name);
+$style_add_one = $row_style_name['brewStyleGroup'] + 1;
+
   $insertSQL = sprintf("INSERT INTO styles (
   brewStyleNum, 
   brewStyle, 
@@ -1429,7 +1446,7 @@ if (($action == "add") && ($dbTable == "styles")) {
   %s, %s, %s, %s, %s, 
   %s, %s, %s, %s, %s, 
   %s, %s, %s)",
-                       GetSQLValueString($_POST['brewStyleNum'], "text"),
+                       GetSQLValueString($style_add_one, "text"),
                        GetSQLValueString($_POST['brewStyle'], "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),
@@ -1444,10 +1461,11 @@ if (($action == "add") && ($dbTable == "styles")) {
                        GetSQLValueString($_POST['brewStyleType'], "text"),
                        GetSQLValueString($_POST['brewStyleInfo'], "text"),
                        GetSQLValueString($_POST['brewStyleLink'], "text"),
-                       GetSQLValueString($_POST['brewStyleGroup'], "text"),
+                       GetSQLValueString($style_add_one, "text"),
 					   GetSQLValueString($_POST['brewStyleActive'], "text"),
 					   GetSQLValueString($_POST['brewStyleOwn'], "text")
 					   );
+
 
   mysql_select_db($database_brewing, $brewing);
   $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
