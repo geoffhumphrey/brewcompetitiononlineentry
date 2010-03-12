@@ -97,8 +97,8 @@ if ($totalRows_brewer > 0) { ?>
     	<?php if ($filter == "judges") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeID']; ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeRank']; ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeLikes']; ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeDislikes']; ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']); ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']); ?></td>
 	  	<?php } ?>
   <?php } if ($action != "print") { ?>
     <td class="dataList" nowrap="nowrap">

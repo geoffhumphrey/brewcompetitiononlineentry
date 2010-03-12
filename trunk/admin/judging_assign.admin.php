@@ -64,23 +64,21 @@ function checkUncheckAll(theElement) {
   <?php 
   if (($filter == "judges") && ($row_brewer['brewerJudgeAssignedLocation'])) { echo $row_judging_loc['judgingLocName']." ("; echo dateconvert($row_judging_loc['judgingDate'], 3).")"; }
   if (($filter == "stewards") && ($row_brewer['brewerStewardAssignedLocation'])) { echo $row_judging_loc['judgingLocName']." ("; echo dateconvert($row_judging_loc['judgingDate'], 3).")"; }
-  ?>
-  
-  </td>
+  ?>  </td>
   <?php } if ($filter == "judges") { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; ?></td>
-  <td width="10%" class="dataList"><?php echo $row_brewer['brewerJudgeLikes']; ?></td>
-  <td width="10%" class="dataList"><?php echo $row_brewer['brewerJudgeDislikes']; ?></td>
+  <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']) ?></td>
+  <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']) ?></td>
   <?php } if ($bid != "default") { ?>
-  <td width="15%" class="dataList"><?php if ($row_brewer['brewerJudgeLocation'] < "99999998") { echo $row_judging_loc2['judgingLocName']." ("; echo dateconvert($row_judging_loc2['judgingDate'], 3).")"; } else echo "No Preference"; ?></td>
-  <td width="15%" class="dataList"><?php if ($row_brewer['brewerJudgeLocation2'] < "99999998") { echo $row_judging_loc3['judgingLocName']." ("; echo dateconvert($row_judging_loc3['judgingDate'], 3).")"; } else echo "No Preference"; ?></td>
+  <td width="10%" class="dataList"><?php if ($row_brewer['brewerJudgeLocation'] < "99999998") { echo $row_judging_loc2['judgingLocName']." ("; echo dateconvert($row_judging_loc2['judgingDate'], 3).")"; } else echo "No Preference"; ?></td>
+  <td width="10%" class="dataList"><?php if ($row_brewer['brewerJudgeLocation2'] < "99999998") { echo $row_judging_loc3['judgingLocName']." ("; echo dateconvert($row_judging_loc3['judgingDate'], 3).")"; } else echo "No Preference"; ?></td>
   </tr>
   <?php } if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
  <tr>
- 	<td colspan="9" class="bdr1T"><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></td>
+ 	<td colspan="10" class="bdr1T"><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></td>
  </tr>
 </table>
 </form>
-<?php } else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; ?>
+<?php } else { if ($action == "update") echo "<div class='error'>No participants have been assigned as a ".rtrim($filter, "s").".</div>"; else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; } ?>

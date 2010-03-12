@@ -8,6 +8,11 @@ if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM judging WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
+
+$query_brewerID = "SELECT * FROM brewing WHERE brewJudgingLocation='$bid'";
+$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
+$row_brewerID = mysql_fetch_assoc($brewerID);
+
 }
 
 if ($go == "csv") { $separator = ","; $extension = ".csv"; }
@@ -27,9 +32,53 @@ function  parseCSVComments($comments) {
 }
 
 mysql_select_db($database, $brewing);
-if     ($section == "loc") $query_sql = "SELECT brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerNickname, brewerEmail, brewerJudgeID, brewerJudgeRank, brewerClubs, brewerJudgeLikes, brewerJudgeDislikes FROM brewer WHERE (brewerAssignment='J' OR brewerAssignment='S') AND (brewerJudgeAssignedLocation='$bid' OR brewerStewardAssignedLocation='$bid')";
-elseif ($section == "all") $query_sql = "SELECT brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerNickname, brewerEmail, brewerJudgeID, brewerJudgeRank, brewerClubs, brewerJudgeLikes, brewerJudgeDislikes FROM brewer WHERE brewerAssignment='J' OR brewerAssignment='S'";
-else $query_sql = "SELECT brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerNickname, brewerEmail, brewerJudgeID, brewerJudgeRank, brewerClubs, brewerJudgeLikes, brewerJudgeDislikes FROM brewer"; // Start our query of the database
+if     ($section == "loc") 
+$query_sql = "
+SELECT DISTINCT
+brewer.brewerFirstName, 
+brewer.brewerLastName, 
+brewer.brewerAddress, 
+brewer.brewerCity, 
+brewer.brewerState, 
+brewer.brewerZip, 
+brewer.brewerCountry, 
+brewer.brewerPhone1, 
+brewer.brewerNickname, 
+brewer.brewerEmail, 
+brewer.brewerJudgeID, 
+brewer.brewerJudgeRank, 
+brewer.brewerClubs, 
+brewer.brewerJudgeLikes, 
+brewer.brewerJudgeDislikes,
+brewer.id,
+brewing.brewBrewerID,
+brewing.brewJudgingLocation
+FROM brewer, brewing
+WHERE brewer.uid = brewing.brewbrewerID
+AND brewing.brewJudgingLocation = '$bid'
+ORDER BY brewer.brewerLastName ASC
+";
+
+else $query_sql = "
+SELECT 
+brewerFirstName, 
+brewerLastName, 
+brewerAddress, 
+brewerCity, 
+brewerState, 
+brewerZip,
+brewerCountry, 
+brewerPhone1, 
+brewerNickname, 
+brewerEmail, 
+brewerJudgeID, 
+brewerJudgeRank, 
+brewerClubs, 
+brewerJudgeLikes, 
+brewerJudgeDislikes 
+FROM brewer 
+ORDER BY brewerLastName ASC
+"; // Start our query of the database
 
 //echo $query_sql;
 
@@ -50,9 +99,10 @@ if($numberFields) { // Check if we need to output anything
 		$data .= join($separator, $row)."\n"; // Create a new row of data and append it to the last row
 		$row = ''; // Clear the contents of the $row variable to start a new row
 	}
+	
 	// Start our output
 	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment;  filename=".$contest."_".$type."_emails_".$date.$loc.$extension);
+	header("Content-Disposition: attachment;  filename=".$contest."_participants_".$date.$loc.$extension);
 	header("Pragma: no-cache");
 	header("Expires: 0");
 	if ($go == "csv") echo $headers;

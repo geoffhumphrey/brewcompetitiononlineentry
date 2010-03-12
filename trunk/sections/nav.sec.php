@@ -26,6 +26,7 @@
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu4');"><span class="menuItemText">Upload</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu3');"><span class="menuItemText">Export</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu5');"><span class="menuItemText">Maintenance</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
 </div>
 
 <!-- 2nd Tier sub menus  -->
@@ -47,6 +48,7 @@
 <a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
 <a class="menuItem" href="index.php?section=admin&go=judging">Judging Locations</a>
 <a class="menuItem" href="index.php?section=admin&go=styles">Accepted Style Categories</a>
+<?php if ($totalRows_judging > 1) { ?><a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?>
 <a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="index.php?section=admin&go=participants&filter=judges">Available Judges</a>
 <a class="menuItem" href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a>

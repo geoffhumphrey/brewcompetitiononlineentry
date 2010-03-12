@@ -545,6 +545,7 @@ CREATE TABLE `judging` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE `brewer` 
+ADD `uid` INT (8) NULL AFTER `id`,
 ADD `brewerJudgeLocation` INT( 8 ) NULL,
 ADD `brewerJudgeLocation2` INT( 8 ) NULL,
 ADD `brewerStewardLocation` INT( 8 ) NULL,
@@ -570,4 +571,5 @@ CREATE TABLE `drop_off` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE `contest_info` CHANGE `contestDropOff` `contestShippingName` VARCHAR( 255 ) NULL;
+UPDATE `contest_info` SET `contestShippingName` = '' WHERE `id` =1;
 

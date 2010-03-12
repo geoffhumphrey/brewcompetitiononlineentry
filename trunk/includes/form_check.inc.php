@@ -179,12 +179,6 @@ var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.brewName.value))
 	{ errormessage += "\nThe name of the brew"; }
-<?php if (($row_user['userLevel'] == "1") && (greaterDate($deadline,$today))) { ?>
-if(WithoutContent(document.form1.brewOG.value))
-	{ errormessage += "\nOriginal gravity"; }
-if(WithoutContent(document.form1.brewFG.value))
-	{ errormessage += "\nFinal Gravity"; }
-<?php } ?>
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To enter your brew, the following information is required:\n' + errormessage + '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.');

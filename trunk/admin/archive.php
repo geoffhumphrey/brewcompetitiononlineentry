@@ -5,6 +5,7 @@ session_start();
 
 $suffix = strtr($_POST['archiveSuffix'], $space_remove);
 mysql_select_db($database, $brewing);
+
 $query_suffixCheck = sprintf("SELECT archiveSuffix FROM archive WHERE archiveSuffix = '%s'", $_POST['archiveSuffix']);
 $suffixCheck = mysql_query($query_suffixCheck, $brewing) or die(mysql_error());
 $row_suffixCheck = mysql_fetch_assoc($suffixCheck);
@@ -17,30 +18,31 @@ header("Location: ../index.php?section=admin&go=archive&msg=6");
 else {
 
 // First, need to gather current User's information from the current "users" AND current "brewer" tables and store in variables
+mysql_select_db($database, $brewing);
 $query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
 $user = mysql_query($query_user, $brewing) or die(mysql_error());
 $row_user = mysql_fetch_assoc($user);
 
-  $user_name = $row_user['user_name'];
+  $user_name = strtr($row_user['user_name'], $html_string);
   $password = $row_user['password'];
   $userLevel = $row_user['userLevel'];
-  $userQuestion = $row_user['userQuestion'];
-  $userQuestionAnswer = $row_user['userQuestionAnswer'];
+  $userQuestion = strtr($row_user['userQuestion'], $html_string);
+  $userQuestionAnswer = strtr($row_user['userQuestionAnswer'], $html_string);
   
 $query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $row_user['user_name']);
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 
-  $brewerFirstName = $row_name['brewerFirstName'];
-  $brewerLastName = $row_name['brewerLastName'];
-  $brewerAddress = $row_name['brewerAddress'];
-  $brewerCity = $row_name['brewerCity'];
-  $brewerState = $row_name['brewerState'];
-  $brewerZip = $row_name['brewerZip'];
-  $brewerCountry = $row_name['brewerCountry'];
-  $brewerPhone1 = $row_name['brewerPhone1'];
-  $brewerPhone2 = $row_name['brewerPhone2'];
-  $brewerClubs = $row_name['brewerClubs'];
+  $brewerFirstName = strtr($row_name['brewerFirstName'], $html_string);
+  $brewerLastName = strtr($row_name['brewerLastName'], $html_string);
+  $brewerAddress = strtr($row_name['brewerAddress'], $html_string);
+  $brewerCity = strtr($row_name['brewerCity'], $html_string);
+  $brewerState = strtr($row_name['brewerState'], $html_string);
+  $brewerZip = strtr($row_name['brewerZip'], $html_string);
+  $brewerCountry = strtr($row_name['brewerCountry'], $html_string);
+  $brewerPhone1 = strtr($row_name['brewerPhone1'], $html_string);
+  $brewerPhone2 = strtr($row_name['brewerPhone2'], $html_string);
+  $brewerClubs = strtr($row_name['brewerClubs'], $html_string);
   $brewerEmail = $row_name['brewerEmail'];
   $brewerNickname = $row_name['brewerNickname'];
   $brewerSteward = $row_name['brewerSteward'];
@@ -50,268 +52,273 @@ $row_name = mysql_fetch_assoc($name);
   $brewerJudgeLikes = $row_name['brewerJudgeLikes'];
   $brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
 
+
 // Second, rename current "users", "$brewers", "brewing" tables according to information gathered from the form
 $sql1 = "RENAME TABLE ".$database.".users TO ".$database.".users_".$suffix.";";
-mysql_select_db($database, $brewing);
 $Result1 = mysql_query($sql1, $brewing) or die(mysql_error());
 
 $sql2 = "RENAME TABLE ".$database.".brewer  TO ".$database.".brewer_".$suffix.";";
-mysql_select_db($database, $brewing);
 $Result2 = mysql_query($sql2, $brewing) or die(mysql_error());
 
 $sql3 = "RENAME TABLE ".$database.".brewing  TO ".$database.".brewing_".$suffix.";";
-mysql_select_db($database, $brewing);
 $Result3 = mysql_query($sql3, $brewing) or die(mysql_error());
 
 $sql3_a = "RENAME TABLE ".$database.".sponsors  TO ".$database.".sponsors_".$suffix.";";
-mysql_select_db($database, $brewing);
 $Result3_a = mysql_query($sql3_a, $brewing) or die(mysql_error());
 
 // Third, insert a clean "users", "brewers", and "brewing" tables
 
 $sql4 = "
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(8) NOT NULL auto_increment,
-  `user_name` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `password` varchar(250) collate utf8_unicode_ci NOT NULL default '',
-  `userLevel` char(1),
-  `userQuestion` varchar(255),
-  `userQuestionAnswer` varchar(255),
-  PRIMARY KEY  (`id`)
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) NOT NULL,
+  `password` varchar(250) NOT NULL DEFAULT '',
+  `userLevel` char(1) DEFAULT NULL,
+  `userQuestion` varchar(255) DEFAULT NULL,
+  `userQuestionAnswer` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-mysql_select_db($database, $brewing);
 $Result4 = mysql_query($sql4, $brewing) or die(mysql_error());
 
 $sql5 = "
 CREATE TABLE IF NOT EXISTS `brewer` (
-  `id` tinyint(4) NOT NULL auto_increment,
-  `brewerFirstName` varchar(200),
-  `brewerLastName` varchar(200),
-  `brewerAddress` varchar(255),
-  `brewerCity` varchar(255),
-  `brewerState` varchar(255),
-  `brewerZip` varchar(255),
-  `brewerCountry` varchar(255),
-  `brewerPhone1` varchar(255),
-  `brewerPhone2` varchar(255),
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `uid` int(8) DEFAULT NULL,
+  `brewerFirstName` varchar(200) DEFAULT NULL,
+  `brewerLastName` varchar(200) DEFAULT NULL,
+  `brewerAddress` varchar(255) DEFAULT NULL,
+  `brewerCity` varchar(255) DEFAULT NULL,
+  `brewerState` varchar(255) DEFAULT NULL,
+  `brewerZip` varchar(255) DEFAULT NULL,
+  `brewerCountry` varchar(255) DEFAULT NULL,
+  `brewerPhone1` varchar(255) DEFAULT NULL,
+  `brewerPhone2` varchar(255) DEFAULT NULL,
   `brewerClubs` text,
-  `brewerEmail` varchar(255),
-  `brewerNickname` varchar(255),
-  `brewerSteward` char(1),
-  `brewerJudge` char(1),
-  `brewerJudgeID` varchar(255),
-  `brewerJudgeRank` varchar(255),
+  `brewerEmail` varchar(255) DEFAULT NULL,
+  `brewerNickname` varchar(255) DEFAULT NULL,
+  `brewerSteward` char(1) DEFAULT NULL,
+  `brewerJudge` char(1) DEFAULT NULL,
+  `brewerJudgeID` varchar(255) DEFAULT NULL,
+  `brewerJudgeRank` varchar(255) DEFAULT NULL,
   `brewerJudgeLikes` text,
   `brewerJudgeDislikes` text,
-  PRIMARY KEY  (`id`)
+  `brewerJudgeLocation` int(8) DEFAULT NULL,
+  `brewerJudgeLocation2` int(8) DEFAULT NULL,
+  `brewerStewardLocation` int(8) DEFAULT NULL,
+  `brewerStewardLocation2` int(8) DEFAULT NULL,
+  `brewerJudgeAssignedLocation` int(8) DEFAULT NULL,
+  `brewerStewardAssignedLocation` int(8) DEFAULT NULL,
+  `brewerAssignment` char(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
-mysql_select_db($database, $brewing);
+
 $Result5 = mysql_query($sql5, $brewing) or die(mysql_error());
 
 $sql6 = "
 CREATE TABLE IF NOT EXISTS `brewing` (
-  `id` tinyint(4) NOT NULL auto_increment,
-  `brewName` varchar(250),
-  `brewStyle` varchar(250),
-  `brewCategory` char(2),
-  `brewCategorySort` char(2),
-  `brewSubCategory` char(1),
-  `brewBottleDate` date default NULL,
-  `brewDate` date default NULL,
-  `brewYield` varchar(10),
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `brewName` varchar(250) DEFAULT NULL,
+  `brewStyle` varchar(250) DEFAULT NULL,
+  `brewCategory` char(2) DEFAULT NULL,
+  `brewCategorySort` char(2) DEFAULT NULL,
+  `brewSubCategory` char(1) DEFAULT NULL,
+  `brewBottleDate` date DEFAULT NULL,
+  `brewDate` date DEFAULT NULL,
+  `brewYield` varchar(10) DEFAULT NULL,
   `brewInfo` text,
-  `brewMead1` varchar(255),
-  `brewMead2` varchar(255),
-  `brewMead3` varchar(255),
-  `brewExtract1` varchar(100),
-  `brewExtract1Weight` varchar(10),
-  `brewExtract2` varchar(100),
-  `brewExtract2Weight` varchar(10),
-  `brewExtract3` varchar(100),
-  `brewExtract3Weight` varchar(4),
-  `brewExtract4` varchar(100),
-  `brewExtract4Weight` varchar(10),
-  `brewExtract5` varchar(100),
-  `brewExtract5Weight` varchar(10),
-  `brewGrain1` varchar(100),
-  `brewGrain1Weight` varchar(10),
-  `brewGrain2` varchar(100),
-  `brewGrain2Weight` varchar(10),
-  `brewGrain3` varchar(100),
-  `brewGrain3Weight` varchar(10),
-  `brewGrain4` varchar(100),
-  `brewGrain4Weight` varchar(10),
-  `brewGrain5` varchar(100),
-  `brewGrain5Weight` varchar(4),
-  `brewGrain6` varchar(100),
-  `brewGrain6Weight` varchar(10),
-  `brewGrain7` varchar(100),
-  `brewGrain7Weight` varchar(10),
-  `brewGrain8` varchar(100),
-  `brewGrain8Weight` varchar(10),
-  `brewGrain9` varchar(100),
-  `brewGrain9Weight` varchar(10),
-  `brewAddition1` varchar(100),
-  `brewAddition1Amt` varchar(20),
-  `brewAddition2` varchar(100),
-  `brewAddition2Amt` varchar(20),
-  `brewAddition3` varchar(100),
-  `brewAddition3Amt` varchar(20),
-  `brewAddition4` varchar(100),
-  `brewAddition4Amt` varchar(20),
-  `brewAddition5` varchar(100),
-  `brewAddition5Amt` varchar(20),
-  `brewAddition6` varchar(100),
-  `brewAddition6Amt` varchar(20),
-  `brewAddition7` varchar(100),
-  `brewAddition7Amt` varchar(20),
-  `brewAddition8` varchar(100),
-  `brewAddition8Amt` varchar(20),
-  `brewAddition9` varchar(100),
-  `brewAddition9Amt` varchar(20),
-  `brewHops1` varchar(100),
-  `brewHops1Weight` varchar(10),
-  `brewHops1IBU` varchar(10),
-  `brewHops1Time` varchar(25),
-  `brewHops2` varchar(100),
-  `brewHops2Weight` varchar(10),
-  `brewHops2IBU` varchar(10),
-  `brewHops2Time` varchar(25),
-  `brewHops3` varchar(100),
-  `brewHops3Weight` varchar(10),
-  `brewHops3IBU` varchar(10),
-  `brewHops3Time` varchar(25),
-  `brewHops4` varchar(100),
-  `brewHops4Weight` varchar(10),
-  `brewHops4IBU` varchar(10),
-  `brewHops4Time` varchar(25),
-  `brewHops5` varchar(100),
-  `brewHops5Weight` varchar(10),
-  `brewHops5IBU` varchar(10),
-  `brewHops5Time` varchar(25),
-  `brewHops6` varchar(100),
-  `brewHops6Weight` varchar(10),
-  `brewHops6IBU` varchar(10),
-  `brewHops6Time` varchar(25),
-  `brewHops7` varchar(100),
-  `brewHops7Weight` varchar(10),
-  `brewHops7IBU` varchar(10),
-  `brewHops7Time` varchar(25),
-  `brewHops8` varchar(100),
-  `brewHops8Weight` varchar(10),
-  `brewHops8IBU` varchar(10),
-  `brewHops8Time` varchar(25),
-  `brewHops9` varchar(100),
-  `brewHops9Weight` varchar(10),
-  `brewHops9IBU` varchar(10),
-  `brewHops9Time` varchar(25),
-  `brewHops1Use` varchar(25),
-  `brewHops2Use` varchar(25),
-  `brewHops3Use` varchar(25),
-  `brewHops4Use` varchar(25),
-  `brewHops5Use` varchar(25),
-  `brewHops6Use` varchar(25),
-  `brewHops7Use` varchar(25),
-  `brewHops8Use` varchar(25),
-  `brewHops9Use` varchar(25),
-  `brewHops1Type` varchar(25),
-  `brewHops2Type` varchar(25),
-  `brewHops3Type` varchar(25),
-  `brewHops4Type` varchar(25),
-  `brewHops5Type` varchar(25),
-  `brewHops6Type` varchar(25),
-  `brewHops7Type` varchar(25),
-  `brewHops8Type` varchar(25),
-  `brewHops9Type` varchar(25),
-  `brewHops1Form` varchar(25),
-  `brewHops2Form` varchar(25),
-  `brewHops3Form` varchar(25),
-  `brewHops4Form` varchar(25),
-  `brewHops5Form` varchar(25),
-  `brewHops6Form` varchar(25),
-  `brewHops7Form` varchar(25),
-  `brewHops8Form` varchar(25),
-  `brewHops9Form` varchar(25),
-  `brewYeast` varchar(250),
-  `brewYeastMan` varchar(250),
-  `brewYeastForm` varchar(25),
-  `brewYeastType` varchar(25),
-  `brewYeastAmount` varchar(25),
-  `brewYeastStarter` char(1),
+  `brewMead1` varchar(255) DEFAULT NULL,
+  `brewMead2` varchar(255) DEFAULT NULL,
+  `brewMead3` varchar(255) DEFAULT NULL,
+  `brewExtract1` varchar(100) DEFAULT NULL,
+  `brewExtract1Weight` varchar(10) DEFAULT NULL,
+  `brewExtract2` varchar(100) DEFAULT NULL,
+  `brewExtract2Weight` varchar(10) DEFAULT NULL,
+  `brewExtract3` varchar(100) DEFAULT NULL,
+  `brewExtract3Weight` varchar(4) DEFAULT NULL,
+  `brewExtract4` varchar(100) DEFAULT NULL,
+  `brewExtract4Weight` varchar(10) DEFAULT NULL,
+  `brewExtract5` varchar(100) DEFAULT NULL,
+  `brewExtract5Weight` varchar(10) DEFAULT NULL,
+  `brewGrain1` varchar(100) DEFAULT NULL,
+  `brewGrain1Weight` varchar(10) DEFAULT NULL,
+  `brewGrain2` varchar(100) DEFAULT NULL,
+  `brewGrain2Weight` varchar(10) DEFAULT NULL,
+  `brewGrain3` varchar(100) DEFAULT NULL,
+  `brewGrain3Weight` varchar(10) DEFAULT NULL,
+  `brewGrain4` varchar(100) DEFAULT NULL,
+  `brewGrain4Weight` varchar(10) DEFAULT NULL,
+  `brewGrain5` varchar(100) DEFAULT NULL,
+  `brewGrain5Weight` varchar(4) DEFAULT NULL,
+  `brewGrain6` varchar(100) DEFAULT NULL,
+  `brewGrain6Weight` varchar(10) DEFAULT NULL,
+  `brewGrain7` varchar(100) DEFAULT NULL,
+  `brewGrain7Weight` varchar(10) DEFAULT NULL,
+  `brewGrain8` varchar(100) DEFAULT NULL,
+  `brewGrain8Weight` varchar(10) DEFAULT NULL,
+  `brewGrain9` varchar(100) DEFAULT NULL,
+  `brewGrain9Weight` varchar(10) DEFAULT NULL,
+  `brewAddition1` varchar(100) DEFAULT NULL,
+  `brewAddition1Amt` varchar(20) DEFAULT NULL,
+  `brewAddition2` varchar(100) DEFAULT NULL,
+  `brewAddition2Amt` varchar(20) DEFAULT NULL,
+  `brewAddition3` varchar(100) DEFAULT NULL,
+  `brewAddition3Amt` varchar(20) DEFAULT NULL,
+  `brewAddition4` varchar(100) DEFAULT NULL,
+  `brewAddition4Amt` varchar(20) DEFAULT NULL,
+  `brewAddition5` varchar(100) DEFAULT NULL,
+  `brewAddition5Amt` varchar(20) DEFAULT NULL,
+  `brewAddition6` varchar(100) DEFAULT NULL,
+  `brewAddition6Amt` varchar(20) DEFAULT NULL,
+  `brewAddition7` varchar(100) DEFAULT NULL,
+  `brewAddition7Amt` varchar(20) DEFAULT NULL,
+  `brewAddition8` varchar(100) DEFAULT NULL,
+  `brewAddition8Amt` varchar(20) DEFAULT NULL,
+  `brewAddition9` varchar(100) DEFAULT NULL,
+  `brewAddition9Amt` varchar(20) DEFAULT NULL,
+  `brewHops1` varchar(100) DEFAULT NULL,
+  `brewHops1Weight` varchar(10) DEFAULT NULL,
+  `brewHops1IBU` varchar(10) DEFAULT NULL,
+  `brewHops1Time` varchar(25) DEFAULT NULL,
+  `brewHops2` varchar(100) DEFAULT NULL,
+  `brewHops2Weight` varchar(10) DEFAULT NULL,
+  `brewHops2IBU` varchar(10) DEFAULT NULL,
+  `brewHops2Time` varchar(25) DEFAULT NULL,
+  `brewHops3` varchar(100) DEFAULT NULL,
+  `brewHops3Weight` varchar(10) DEFAULT NULL,
+  `brewHops3IBU` varchar(10) DEFAULT NULL,
+  `brewHops3Time` varchar(25) DEFAULT NULL,
+  `brewHops4` varchar(100) DEFAULT NULL,
+  `brewHops4Weight` varchar(10) DEFAULT NULL,
+  `brewHops4IBU` varchar(10) DEFAULT NULL,
+  `brewHops4Time` varchar(25) DEFAULT NULL,
+  `brewHops5` varchar(100) DEFAULT NULL,
+  `brewHops5Weight` varchar(10) DEFAULT NULL,
+  `brewHops5IBU` varchar(10) DEFAULT NULL,
+  `brewHops5Time` varchar(25) DEFAULT NULL,
+  `brewHops6` varchar(100) DEFAULT NULL,
+  `brewHops6Weight` varchar(10) DEFAULT NULL,
+  `brewHops6IBU` varchar(10) DEFAULT NULL,
+  `brewHops6Time` varchar(25) DEFAULT NULL,
+  `brewHops7` varchar(100) DEFAULT NULL,
+  `brewHops7Weight` varchar(10) DEFAULT NULL,
+  `brewHops7IBU` varchar(10) DEFAULT NULL,
+  `brewHops7Time` varchar(25) DEFAULT NULL,
+  `brewHops8` varchar(100) DEFAULT NULL,
+  `brewHops8Weight` varchar(10) DEFAULT NULL,
+  `brewHops8IBU` varchar(10) DEFAULT NULL,
+  `brewHops8Time` varchar(25) DEFAULT NULL,
+  `brewHops9` varchar(100) DEFAULT NULL,
+  `brewHops9Weight` varchar(10) DEFAULT NULL,
+  `brewHops9IBU` varchar(10) DEFAULT NULL,
+  `brewHops9Time` varchar(25) DEFAULT NULL,
+  `brewHops1Use` varchar(25) DEFAULT NULL,
+  `brewHops2Use` varchar(25) DEFAULT NULL,
+  `brewHops3Use` varchar(25) DEFAULT NULL,
+  `brewHops4Use` varchar(25) DEFAULT NULL,
+  `brewHops5Use` varchar(25) DEFAULT NULL,
+  `brewHops6Use` varchar(25) DEFAULT NULL,
+  `brewHops7Use` varchar(25) DEFAULT NULL,
+  `brewHops8Use` varchar(25) DEFAULT NULL,
+  `brewHops9Use` varchar(25) DEFAULT NULL,
+  `brewHops1Type` varchar(25) DEFAULT NULL,
+  `brewHops2Type` varchar(25) DEFAULT NULL,
+  `brewHops3Type` varchar(25) DEFAULT NULL,
+  `brewHops4Type` varchar(25) DEFAULT NULL,
+  `brewHops5Type` varchar(25) DEFAULT NULL,
+  `brewHops6Type` varchar(25) DEFAULT NULL,
+  `brewHops7Type` varchar(25) DEFAULT NULL,
+  `brewHops8Type` varchar(25) DEFAULT NULL,
+  `brewHops9Type` varchar(25) DEFAULT NULL,
+  `brewHops1Form` varchar(25) DEFAULT NULL,
+  `brewHops2Form` varchar(25) DEFAULT NULL,
+  `brewHops3Form` varchar(25) DEFAULT NULL,
+  `brewHops4Form` varchar(25) DEFAULT NULL,
+  `brewHops5Form` varchar(25) DEFAULT NULL,
+  `brewHops6Form` varchar(25) DEFAULT NULL,
+  `brewHops7Form` varchar(25) DEFAULT NULL,
+  `brewHops8Form` varchar(25) DEFAULT NULL,
+  `brewHops9Form` varchar(25) DEFAULT NULL,
+  `brewYeast` varchar(250) DEFAULT NULL,
+  `brewYeastMan` varchar(250) DEFAULT NULL,
+  `brewYeastForm` varchar(25) DEFAULT NULL,
+  `brewYeastType` varchar(25) DEFAULT NULL,
+  `brewYeastAmount` varchar(25) DEFAULT NULL,
+  `brewYeastStarter` char(1) DEFAULT NULL,
   `brewYeastNutrients` text,
-  `brewOG` varchar(10),
-  `brewFG` varchar(10),
-  `brewPrimary` varchar(10),
-  `brewPrimaryTemp` varchar(10),
-  `brewSecondary` varchar(10),
-  `brewSecondaryTemp` varchar(10),
-  `brewOther` varchar(10),
-  `brewOtherTemp` varchar(10),
+  `brewOG` varchar(10) DEFAULT NULL,
+  `brewFG` varchar(10) DEFAULT NULL,
+  `brewPrimary` varchar(10) DEFAULT NULL,
+  `brewPrimaryTemp` varchar(10) DEFAULT NULL,
+  `brewSecondary` varchar(10) DEFAULT NULL,
+  `brewSecondaryTemp` varchar(10) DEFAULT NULL,
+  `brewOther` varchar(10) DEFAULT NULL,
+  `brewOtherTemp` varchar(10) DEFAULT NULL,
   `brewComments` text,
-  `brewMashStep1Name` varchar(250),
-  `brewMashStep1Temp` char(3),
-  `brewMashStep1Time` char(3),
-  `brewMashStep2Name` varchar(250),
-  `brewMashStep2Temp` char(3),
-  `brewMashStep2Time` char(3),
-  `brewMashStep3Name` varchar(250),
-  `brewMashStep3Temp` char(3),
-  `brewMashStep3Time` char(3),
-  `brewMashStep4Name` varchar(250),
-  `brewMashStep4Temp` char(3),
-  `brewMashStep4Time` char(3),
-  `brewMashStep5Name` varchar(250),
-  `brewMashStep5Temp` char(3),
-  `brewMashStep5Time` char(3),
-  `brewFinings` varchar(250),
-  `brewWaterNotes` varchar(250),
-  `brewBrewerID` varchar(250),
-  `brewCarbonationMethod` varchar(255),
-  `brewCarbonationVol` varchar(10),
+  `brewMashStep1Name` varchar(250) DEFAULT NULL,
+  `brewMashStep1Temp` char(3) DEFAULT NULL,
+  `brewMashStep1Time` char(3) DEFAULT NULL,
+  `brewMashStep2Name` varchar(250) DEFAULT NULL,
+  `brewMashStep2Temp` char(3) DEFAULT NULL,
+  `brewMashStep2Time` char(3) DEFAULT NULL,
+  `brewMashStep3Name` varchar(250) DEFAULT NULL,
+  `brewMashStep3Temp` char(3) DEFAULT NULL,
+  `brewMashStep3Time` char(3) DEFAULT NULL,
+  `brewMashStep4Name` varchar(250) DEFAULT NULL,
+  `brewMashStep4Temp` char(3) DEFAULT NULL,
+  `brewMashStep4Time` char(3) DEFAULT NULL,
+  `brewMashStep5Name` varchar(250) DEFAULT NULL,
+  `brewMashStep5Temp` char(3) DEFAULT NULL,
+  `brewMashStep5Time` char(3) DEFAULT NULL,
+  `brewFinings` varchar(250) DEFAULT NULL,
+  `brewWaterNotes` varchar(250) DEFAULT NULL,
+  `brewBrewerID` varchar(250) DEFAULT NULL,
+  `brewCarbonationMethod` varchar(255) DEFAULT NULL,
+  `brewCarbonationVol` varchar(10) DEFAULT NULL,
   `brewCarbonationNotes` text,
-  `brewBoilHours` varchar(255),
-  `brewBoilMins` varchar(255),
-  `brewBrewerFirstName` varchar(255),
-  `brewBrewerLastName` varchar(255),
-  `brewExtract1Use` VARCHAR(255) NULL, 
-  `brewExtract2Use` VARCHAR(255) NULL, 
-  `brewExtract3Use` VARCHAR(255) NULL, 
-  `brewExtract4Use` VARCHAR(255) NULL, 
-  `brewExtract5Use` VARCHAR(255) NULL,
-  `brewGrain1Use` VARCHAR(255) NULL, 
-  `brewGrain2Use` VARCHAR(255) NULL, 
-  `brewGrain3Use` VARCHAR(255) NULL, 
-  `brewGrain4Use` VARCHAR(255) NULL, 
-  `brewGrain5Use` VARCHAR(255) NULL,
-  `brewGrain6Use` VARCHAR(255) NULL, 
-  `brewGrain7Use` VARCHAR(255) NULL, 
-  `brewGrain8Use` VARCHAR(255) NULL, 
-  `brewGrain9Use` VARCHAR(255) NULL,
-  `brewAddition1Use` VARCHAR(255) NULL, 
-  `brewAddition2Use` VARCHAR(255) NULL, 
-  `brewAddition3Use` VARCHAR(255) NULL, 
-  `brewAddition4Use` VARCHAR(255) NULL, 
-  `brewAddition5Use` VARCHAR(255) NULL,
-  `brewAddition6Use` VARCHAR(255) NULL, 
-  `brewAddition7Use` VARCHAR(255) NULL, 
-  `brewAddition8Use` VARCHAR(255) NULL, 
-  `brewAddition9Use` VARCHAR(255) NULL,
-  `brewPaid` CHAR( 1 ) NULL ,
-  `brewWinner` CHAR( 1 ) NULL ,
-  `brewWinnerCat` VARCHAR( 3 ) NULL ,
-  `brewWinnerSubCat` VARCHAR( 3 ) NULL ,
-  `brewWinnerPlace` VARCHAR( 3 ) NULL ,
-  `brewBOSRound` CHAR( 1 ) NULL ,
-  `brewBOSPlace` VARCHAR( 3 ) NULL ,
-  `brewReceived` CHAR( 1 ) NULL ,
-  PRIMARY KEY  (`id`)
+  `brewBoilHours` varchar(255) DEFAULT NULL,
+  `brewBoilMins` varchar(255) DEFAULT NULL,
+  `brewBrewerFirstName` varchar(255) DEFAULT NULL,
+  `brewBrewerLastName` varchar(255) DEFAULT NULL,
+  `brewExtract1Use` varchar(255) DEFAULT NULL,
+  `brewExtract2Use` varchar(255) DEFAULT NULL,
+  `brewExtract3Use` varchar(255) DEFAULT NULL,
+  `brewExtract4Use` varchar(255) DEFAULT NULL,
+  `brewExtract5Use` varchar(255) DEFAULT NULL,
+  `brewGrain1Use` varchar(255) DEFAULT NULL,
+  `brewGrain2Use` varchar(255) DEFAULT NULL,
+  `brewGrain3Use` varchar(255) DEFAULT NULL,
+  `brewGrain4Use` varchar(255) DEFAULT NULL,
+  `brewGrain5Use` varchar(255) DEFAULT NULL,
+  `brewGrain6Use` varchar(255) DEFAULT NULL,
+  `brewGrain7Use` varchar(255) DEFAULT NULL,
+  `brewGrain8Use` varchar(255) DEFAULT NULL,
+  `brewGrain9Use` varchar(255) DEFAULT NULL,
+  `brewAddition1Use` varchar(255) DEFAULT NULL,
+  `brewAddition2Use` varchar(255) DEFAULT NULL,
+  `brewAddition3Use` varchar(255) DEFAULT NULL,
+  `brewAddition4Use` varchar(255) DEFAULT NULL,
+  `brewAddition5Use` varchar(255) DEFAULT NULL,
+  `brewAddition6Use` varchar(255) DEFAULT NULL,
+  `brewAddition7Use` varchar(255) DEFAULT NULL,
+  `brewAddition8Use` varchar(255) DEFAULT NULL,
+  `brewAddition9Use` varchar(255) DEFAULT NULL,
+  `brewPaid` char(1) DEFAULT NULL,
+  `brewWinner` char(1) DEFAULT NULL,
+  `brewWinnerCat` varchar(3) DEFAULT NULL,
+  `brewWinnerSubCat` varchar(3) DEFAULT NULL,
+  `brewWinnerPlace` varchar(3) DEFAULT NULL,
+  `brewBOSRound` char(1) DEFAULT NULL,
+  `brewBOSPlace` varchar(3) DEFAULT NULL,
+  `brewReceived` char(1) DEFAULT NULL,
+  `brewJudgingLocation` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-mysql_select_db($database, $brewing);
 $Result6 = mysql_query($sql6, $brewing) or die(mysql_error());
 
 $sql6_a = "
@@ -325,26 +332,91 @@ CREATE TABLE IF NOT EXISTS `sponsors` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
-mysql_select_db($database, $brewing);
+
 $Result6_a = mysql_query($sql6_a, $brewing) or die(mysql_error());
+
 
 // Fourth, insert current user's info into new "users" and "brewers" table
 
-$sql7 = "INSERT INTO users (id, user_name, password, userLevel, userQuestion, userQuestionAnswer) VALUES (NULL,'$user_name', '$password', '1', '$userQuestion', '$userQuestionAnswer');";
-mysql_select_db($database, $brewing);
+$sql7 = "INSERT INTO users (
+id, 
+user_name, 
+password, 
+userLevel, 
+userQuestion, 
+userQuestionAnswer
+) VALUES ('1','$user_name', '$password', '1', '$userQuestion', '$userQuestionAnswer');";
+
 $Result7 = mysql_query($sql7, $brewing) or die(mysql_error());
 
-$sql8 = "INSERT INTO brewer (id, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerNickname, brewerSteward, brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes) VALUES
-(NULL, '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity', '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerNickname', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes');";
-mysql_select_db($database, $brewing);
+$sql8 = "INSERT INTO brewer (
+id,
+uid, 
+brewerFirstName, 
+brewerLastName, 
+brewerAddress, 
+brewerCity, 
+brewerState,
+brewerZip,
+brewerCountry, 
+brewerPhone1, 
+brewerPhone2, 
+brewerClubs, 
+brewerEmail, 
+brewerNickname, 
+brewerSteward, 
+brewerJudge, 
+brewerJudgeID, 
+brewerJudgeRank, 
+brewerJudgeLikes, 
+brewerJudgeDislikes,  	    	
+brewerJudgeLocation, 			
+brewerJudgeLocation2, 			
+brewerStewardLocation, 			
+brewerStewardLocation2,		
+brewerJudgeAssignedLocation,		
+brewerStewardAssignedLocation,		
+brewerAssignment 
+) 
+VALUES (
+NULL, 
+'1', 
+'$brewerFirstName', 
+'$brewerLastName', 
+'$brewerAddress', 
+'$brewerCity', 
+'$brewerState', 
+'$brewerZip', 
+'$brewerCountry', 
+'$brewerPhone1', 
+'$brewerPhone2', 
+'$brewerClubs', 
+'$brewerEmail', 
+'$brewerNickname', 
+'$brewerSteward', 
+'$brewerJudge', 
+'$brewerJudgeID', 
+'$brewerJudgeRank', 
+'$brewerJudgeLikes', 
+'$brewerJudgeDislikes',
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL
+);";
+
 $Result8 = mysql_query($sql8, $brewing) or die(mysql_error());
 
 // Sixth, insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 $sql9 = sprintf("INSERT INTO archive (id, archiveUserTableName, archiveBrewerTableName, archiveBrewingTableName, archiveSuffix) VALUES (%s, %s, %s, %s, %s);", "''", "'users_".$suffix."'", "'brewer_".$suffix."'", "'brewing_".$suffix."'", "'".$suffix."'");
-mysql_select_db($database, $brewing);
+
 $Result9 = mysql_query($sql9, $brewing) or die(mysql_error());
 
 // Last, log the user in and redirect
+
 session_destroy();
 mysql_select_db($database, $brewing);
 $query_login = "SELECT password FROM users WHERE user_name = '$user_name' AND password = '$password'";
@@ -372,17 +444,18 @@ $totalRows_login = mysql_num_rows($login);
 			}
 
 
-
 /* DEBUG
-echo $sql1."<br>";
-echo $sql2."<br>";
-echo $sql3."<br>";
-echo $sql4."<br>";
-echo $sql5."<br>";
-echo $sql6."<br>";
-echo $sql7."<br>";
-echo $sql8."<br>";
-echo $sql9."<br>";
+echo "<p>".$sql1."</p>";
+echo "<p>".$sql2."</p>";
+echo "<p>".$sql3."</p>";
+echo "<p>".$sql3_a."</p>";
+echo "<p>".$sql4."</p>";
+echo "<p>".$sql5."</p>";
+echo "<p>".$sql6."</p>";
+echo "<p>".$sql6_a."</p>";
+echo "<p>".$sql7."</p>";
+echo "<p>".$sql8."</p>";
+echo "<p>".$sql9."</p>";
 */
 
 }

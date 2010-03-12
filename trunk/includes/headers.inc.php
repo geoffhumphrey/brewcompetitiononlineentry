@@ -21,8 +21,8 @@ switch($section) {
 	
 	case "register":
 	$header_output = "Register";
-	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt.</div><p>Have you <a href=\"index.php?section=register\">registered your account</a> yet?</p>";
-	elseif ($msg == "2") $output = "Sorry, the user name you entered is already in use.</div><p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>";
+	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt. Please try again.";
+	elseif ($msg == "2") { $output = "Sorry, the user name you entered is already in use."; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a></p>."; }
 	elseif ($msg == "3") $output = "The user name provided is not a valid email address. Please enter a valid email address.";
 	else $output = "";
 	break;
@@ -38,8 +38,8 @@ switch($section) {
 	if ($action == "forgot") $header_output = "Reset Password"; 
 	elseif ($action == "logout") $header_output = "Logged Out"; 
 	else $header_output = "Log In";
-	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt.</div><p>Please make sure your email address and password are correct. Have you <a href=\"index.php?section=register\">registered your account</a> yet?</p>"; 
-	elseif ($msg == "2") $output = "Your password has been randomly generated and reset to ".$go.".</div><p>You can now log in using your current username and the new password above.</p>";
+	if     ($msg == "1") { $output = "Sorry, there was a problem with your last login attempt."; $output_extend = "<p>Please make sure your email address and password are correct.</p>"; }
+	elseif ($msg == "2") { $output = "Your password has been randomly generated and reset to ".$go."."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
 	elseif ($msg == "3") $output = "You have been logged out. Log in again?"; 
 	else $output = ""; 
 	break;

@@ -17,14 +17,20 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td width="15%" nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&go=participants">Participants</a></td>
     <td width="15%" nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&go=entries">Entries</a></td>
     <td nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&go=styles">Accepted Style Categories</a><a href="index.php?section=admin&go=entries"></a></td>
-    <td nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&go=sponsors">Sponsors</a><a href="index.php?section=admin&go=participants&filter=judges"></a><a href="index.php?section=admin&go=participants&filter=stewards"></a></td>
+    <td nowrap="nowrap" class="data bdr1T"><?php if ($totalRows_judging > 1) { ?><a href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">&nbsp;</td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&go=judging">Judging Locations</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&go=participants&filter=judges">Available Judges</a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&go=dropoff">Drop-Off Locations</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a><a href="index.php?section=admin&go=dropoff"></a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></a></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">&nbsp;</td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></td>
+    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></td>
   </tr>
   <tr>
     <td width="5%" class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/page_edit.png" align="absmiddle"></span>Add:</td>
@@ -118,21 +124,20 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   <?php if ($totalRows_judging1 > 1) { ?>
   <tr>
     <td class="dataLabel">&nbsp;</td>
-    <td colspan="4" nowrap="nowrap" class="data">Judges and Stewards for Location:
+    <td colspan="4" nowrap="nowrap" class="data">Participants for Location:
     <form name="tabChoice" id="tabChoice">
        	  <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
-            <option value="admin/participants_export.php?section=all&go=tab">All Locations</option>
             <?php do { ?>
     		<option value="admin/participants_export.php?section=loc&go=tab&bid=<?php echo $row_stewarding2['id']; ?>"><?php echo $row_stewarding2['judgingLocName']." ("; echo dateconvert($row_stewarding2['judgingDate'], 3).")"; ?></option>
 		    <?php } while ($row_stewarding2 = mysql_fetch_assoc($stewarding2)) ?>
           </select>
   	</form>
-    <em>* Be sure to make final <a href="index.php?section=admin&action=assign&go=judging&filter=judges">judging</a> and <a href="index.php?section=admin&action=assign&go=judging&filter=stewards">stewarding</a> location assignments before exporting.</em></td>
+    <em>* Be sure to make final <a href="/index.php?section=admin&amp;go=styles&amp;filter=judging">style</a>, <a href="index.php?section=admin&action=assign&go=judging&filter=judges">judging</a> and <a href="index.php?section=admin&action=assign&go=judging&filter=stewards">stewarding</a> location assignments before exporting.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">&nbsp;</td>
-    <td colspan="4" nowrap="nowrap" class="data">Styles; Paid and Received Entries for Location:
+    <td colspan="4" nowrap="nowrap" class="data">Paid and Received Entries for Location:
     <form name="tabChoice" id="tabChoice">
        	  <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
@@ -146,8 +151,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   <tr>
     <td class="dataLabel">&nbsp;</td>
     <td colspan="4" class="data">For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>.
-    <?php if ($totalRows_judging1 > 1) { ?><p>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.</p><?php } ?>
-    </td>
+    <?php if ($totalRows_judging1 > 1) { ?><p>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.</p><?php } ?>    </td>
   </tr>
   <tr>
     <td width="5%" class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/page_excel_go.png" align="absmiddle"></span>Export CSV Files:</td>

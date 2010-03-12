@@ -41,6 +41,7 @@ include ('includes/headers.inc.php');
 <script type="text/javascript" src="js_includes/delete.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
+<script type="text/javascript" src="js_includes/smoothscroll.js" ></script>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
 <script type="text/javascript" src="js_includes/menu.js"></script>
 <?php } 
@@ -51,21 +52,20 @@ if ($section == "admin") { ?>
 if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register")) include ('includes/form_check.inc.php'); ?>
 </head>
 <body>
-
+<a name="top"></a>
 <div id="container">
 <div id="navigation">
 	<div id="navigation-inner"><?php include ('sections/nav.sec.php'); ?></div>
 </div>
 <div id="content">
-	<div id="content-inner">
-    <?php if ($section != "admin") { ?>
-    <div id="header">	
-		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-	</div>
-    <?php 
-	}
-	// Check if registration date has passed. If so, display "registration end" message.
-	if (greaterDate($today,$deadline)) {
+  <div id="content-inner">
+  <?php if ($section != "admin") { ?>
+  <div id="header">	
+	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+  </div>
+  <?php }
+  // Check if registration date has passed. If so, display "registration end" message.
+  if (greaterDate($today,$deadline)) {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
     <div id="closed">Registration has closed. Thanks to everyone who participated.</div>
 	<?php }  
@@ -87,8 +87,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			if ($section == "beerxml")	include ('sections/beerxml.sec.php');
 			}
 		}
-	} else // If registration is not closed
-	{
+  } else { // If registration is not closed
 	if ($section == "register") include ('sections/register.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
 	if ($section == "rules") 	include ('sections/rules.sec.php');
@@ -106,15 +105,17 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "user") 	include ('sections/user.sec.php');
 		if ($section == "beerxml")	include ('sections/beerxml.sec.php');
 	}
-	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML")))  
-	echo "<div id=\"header\"><div id=\"header-inner\"><h1>Restricted Area</h1></div></div>
-	<div class=\"error\">Please register or log in to access this area.</div>";
-	} // End registration date check.
-	?>
-	</div>
+  } // End registration date check.
+  if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML")))  
+  echo "<div id=\"header\"><div id=\"header-inner\"><h1>Restricted Area</h1></div></div>
+  <div class=\"error\">Please register or log in to access this area.</div>";
+  if ($action != "print") { ?>
+  <p><a href="#top">Top</a></p>
+  <?php } ?>
+  </div>
 </div>
-
 </div>
+<a name="bottom"></a>
 <div id="footer">
 	<div id="footer-inner"><?php include ('sections/footer.sec.php'); ?></div>
 </div>
