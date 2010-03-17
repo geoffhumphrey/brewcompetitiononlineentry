@@ -107,8 +107,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	}
   } // End registration date check.
   if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML")))  
-  echo "<div id=\"header\"><div id=\"header-inner\"><h1>Restricted Area</h1></div></div>
-  <div class=\"error\">Please register or log in to access this area.</div>";
+  echo "<div class=\"error\">Please register or log in to access this area.</div>";
   if ($action != "print") { ?>
   <p><a href="#top">Top</a></p>
   <?php } ?>

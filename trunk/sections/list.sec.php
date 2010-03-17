@@ -1,8 +1,15 @@
-<?php if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
+<?php if ($_SESSION["loginUsername"] != $row_user['user_name']) { 
+
+?>
 <p>Please <a href="index.php?section=login">log in</a> or <a href="index.php?section=register">register</a> to view your list of brews entered into the <?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?>, <?php echo $row_contest_info['contestHostLocation']; ?>.</p> 
 <?php } 
 else 
 { 
+$query_brewNotPaid = sprintf("SELECT brewPaid FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['id']);
+$brewNotPaid = mysql_query($query_brewNotPaid, $brewing) or die(mysql_error());
+$row_brewNotPaid = mysql_fetch_assoc($brewNotPaid);
+$totalRows_brewNotPaid = mysql_num_rows($brewNotPaid);
+
 if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
 if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) {
 	$discFee = ($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2'];
@@ -64,13 +71,13 @@ if ($msg != "default") echo $msg_output;
   <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
   <?php } ?>
-  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=425&width=700" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
+  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
   <?php } ?>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
  <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if ($row_contest_info['contestEntryFee'] > 0) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } } ?>
+  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?>
   </td>
  </tr>
 </table>

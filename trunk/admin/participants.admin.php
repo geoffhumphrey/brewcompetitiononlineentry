@@ -92,7 +92,7 @@ if ($totalRows_brewer > 0) { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerJudge'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>" ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
   	<?php } if ($totalRows_judging > 1) { ?>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php if ((($row_brewer['brewerAssignment'] == "J") && ($row_brewer['brewerJudgeAssignedLocation'] != "")) || (($row_brewer['brewerAssignment'] == "S") && ($row_brewer['brewerStewardAssignedLocation'] != ""))) { echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "Not Set"; ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php if ((($row_brewer['brewerAssignment'] == "J") && ($row_brewer['brewerJudgeAssignedLocation'] != "")) || (($row_brewer['brewerAssignment'] == "S") && ($row_brewer['brewerStewardAssignedLocation'] != ""))) { echo $row_judging2['judgingLocName']."<br>("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "Not Set"; ?></td>
 	<?php } if ($filter != "default") { ?>
     	<?php if ($filter == "judges") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerJudgeID']; ?></td>
@@ -211,6 +211,7 @@ if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] =
     </tr>
 </table>
 <input name="brewerEmail" type="hidden" value="<?php echo $username; ?>" />
+<input name="uid" type="hidden" value="<?php echo $row_user_level['id']; ?>" />
 <input name="brewerJudge" type="hidden" value="N" />
 <input name="brewerSteward" type="hidden" value="N" />
 </form>
@@ -219,4 +220,3 @@ if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] =
    }
 } 
 ?>
-</div>

@@ -158,7 +158,7 @@ background-color: #ffffff;
 width: 100%;
 position: absolute;
 margin-bottom: 10px;
-min-height: 40px;
+min-height: 30px;
 }
 
 #navigation-inner
@@ -176,7 +176,8 @@ height: auto;
 
 #header-inner
 {
-margin: 2em 0 2em 0;
+margin: 2em 0 1em 0;
+padding: 1.5em 0;
 }
 
 #header-inner h1
@@ -324,7 +325,6 @@ width: 100%;
 .dataTableCompact td { 
 vertical-align: top;
 padding: 2px;
-white-space: nowrap;
 }
 
 .dataTableCompact th
