@@ -546,10 +546,10 @@ CREATE TABLE `judging` (
 
 ALTER TABLE `brewer` 
 ADD `uid` INT (8) NULL AFTER `id`,
-ADD `brewerJudgeLocation` INT( 8 ) NULL,
-ADD `brewerJudgeLocation2` INT( 8 ) NULL,
-ADD `brewerStewardLocation` INT( 8 ) NULL,
-ADD `brewerStewardLocation2` INT( 8 ) NULL,
+ADD `brewerJudgeLocation` TEXT NULL,
+ADD `brewerJudgeLocation2` TEXT NULL,
+ADD `brewerStewardLocation` TEXT NULL,
+ADD `brewerStewardLocation2` TEXT NULL,
 ADD `brewerJudgeAssignedLocation` INT( 8 ) NULL,
 ADD `brewerStewardAssignedLocation` INT( 8 ) NULL,
 ADD `brewerAssignment` CHAR( 1 ) NULL;
@@ -573,3 +573,4 @@ CREATE TABLE `drop_off` (
 ALTER TABLE `contest_info` CHANGE `contestDropOff` `contestShippingName` VARCHAR( 255 ) NULL;
 UPDATE `contest_info` SET `contestShippingName` = '' WHERE `id` =1;
 
+ALTER TABLE `preferences` ADD `prefsDisplaySpecial` CHAR( 1 ) NULL;

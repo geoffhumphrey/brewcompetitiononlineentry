@@ -71,6 +71,8 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td class="data">&nbsp;</td>
 </tr>
+
+
 <?php if (($go != "entrant") && ($section != "step7")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
@@ -78,58 +80,52 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
       <td class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
-<tr> 
-      <td width="10%" class="dataLabel">1st Preference:</td>
-      <td colspan="2" class="data">
-      <select name="brewerStewardLocation">
-      <option value="99999999" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation'] == "99999999")) echo "SELECTED"; ?>>None</option>
-      <?php do { ?>
-      <option value="<?php echo $row_stewarding['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation'] == $row_stewarding['id'])) echo "SELECTED"; ?>><?php echo $row_stewarding['judgingLocName']." ("; echo dateconvert($row_stewarding['judgingDate'], 3).")"; ?></option>
-      <?php } while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
-      </select>
-      </td>
+<tr>
+<td class="dataLabel">Rank Your Stewarding<br />Location Preferences:</td>
+<td colspan="2" class="data">
+<?php do { ?>
+	<table class="dataTableCompact">
+    	<tr>
+        	<td width="1%" nowrap="nowrap">
+                <select name="brewerStewardLocation[]">
+				<option value="0-0" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation'] == "0-0")) echo "SELECTED"; ?>>No Preference</option>
+				<?php for ($i = 1; $i <= $totalRows_stewarding; $i++) { ?>
+				<option value="<?php echo $i."-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = $i."-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $i; ?></option>
+				<?php } ?>
+				</select>
+            </td>
+            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo dateconvert($row_stewarding['judgingDate'], 3).")"; ?></td>
+        </tr>
+    </table>
+<?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
+</td>
 </tr>
-<tr> 
-      <td width="10%" class="dataLabel">2nd Preference:</td>
-      <td colspan="2" class="data">
-      <select name="brewerStewardLocation2">
-      <option value="99999999" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation2'] == "99999999")) echo "SELECTED"; ?>>None</option>
-      <option value="99999998" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation2'] == "99999998")) echo "SELECTED"; ?>>No 2nd Preference</option>
-      <?php do { ?>
-      <option value="<?php echo $row_stewarding2['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation2'] == $row_stewarding2['id'])) echo "SELECTED"; ?>><?php echo $row_stewarding2['judgingLocName']." ("; echo dateconvert($row_stewarding2['judgingDate'], 3).")"; ?></option>
-      <?php } while ($row_stewarding2 = mysql_fetch_assoc($stewarding2)); ?>
-      </select>
-      </td>
-</tr>
-<?php } ?> 
+<?php } ?>
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
       <td class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "CHECKED"; ?>/> No</td>
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
-<tr> 
-      <td width="10%" class="dataLabel">1st Preference:</td>
-      <td colspan="2" class="data">
-      <select name="brewerJudgeLocation">
-      <option value="99999999" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == "99999999")) echo "SELECTED"; ?>>None</option>
-      <?php do { ?>
-      <option value="<?php echo $row_judging3['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == $row_judging3['id'])) echo "SELECTED"; ?>><?php echo $row_judging3['judgingLocName']." ("; echo dateconvert($row_judging3['judgingDate'], 3).")"; ?></option>
-      <?php } while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
-      </select>
-      </td>
-</tr>
-<tr> 
-      <td width="10%" class="dataLabel">2nd Preference:</td>
-      <td colspan="2" class="data">
-      <select name="brewerJudgeLocation2">
-      <option value="99999999" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation2'] == "99999999")) echo "SELECTED"; ?>>None</option>
-      <option value="99999998" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation2'] == "99999998")) echo "SELECTED"; ?>>No 2nd Preference</option>
-      <?php do { ?>
-      <option value="<?php echo $row_judging2['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation2'] == $row_judging2['id'])) echo "SELECTED"; ?>><?php echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; ?></option>
-      <?php } while ($row_judging2 = mysql_fetch_assoc($judging2)); ?>
-      </select>
-      </td>
+<tr>
+<td class="dataLabel">Rank Your Judging<br />Location Preferences:</td>
+<td class="data" colspan="2">
+<?php do { ?>
+	<table class="dataTableCompact">
+    	<tr>
+        	<td width="1%" nowrap="nowrap">
+            <select name="brewerJudgeLocation[]">
+				<option value="0-0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == "0-0")) echo "SELECTED"; ?>>No Preference</option>
+				<?php for ($i = 1; $i <= $totalRows_judging3; $i++) { ?>
+				<option value="<?php echo $i."-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = $i."-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $i; ?></option>
+				<?php } ?>
+				</select>
+            </td>
+            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo dateconvert($row_judging3['judgingDate'], 3).")"; ?></td>
+        </tr>
+    </table>
+<?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
+</td>
 </tr>
 <?php } ?>
 <?php } ?>
@@ -138,6 +134,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 	  <td>&nbsp;</td>
       <td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></td>
     </tr>
+
 </table>
 <?php if ($section != "step7") { ?>
 	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
@@ -147,7 +144,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
     <input name="brewerAssignment" type="hidden" value="<?php echo $row_brewer['brewerAssignment'];?>" />
 	<?php if ($go == "entrant") { ?>
 	<input name="brewerJudge" type="hidden" value="N" />
-	<input name="brewerSteward" type="hidden" value="N" />
+	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
 </form>

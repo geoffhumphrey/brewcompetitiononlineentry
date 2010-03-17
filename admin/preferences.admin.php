@@ -16,14 +16,19 @@
     <option value="300" <?php if ($row_prefs['prefsCompLogoSize'] == "300") echo "SELECTED"; ?>>300</option>
     <option value="350" <?php if ($row_prefs['prefsCompLogoSize'] == "350") echo "SELECTED"; ?>>350</option>
     <option value="400" <?php if ($row_prefs['prefsCompLogoSize'] == "400") echo "SELECTED"; ?>>400</option>
-    </select> pixels
-    </td>
+    </select> pixels    </td>
     <td class="data">If you upload and display your competition's logo, this is the width, in pixels, that you wish to display it.</td>
   </tr>
   <tr>
     <td class="dataLabel">Winner Display:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate whether you would like to display the winners of the competition for each category and Best of Show.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Require Special Ingredients<br />
+      or Classic Style:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
   </tr>
 </table>
 <h3>Measurements</h3>

@@ -62,7 +62,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td>(required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 27E, 28B-D)</td>
 </tr>
 <tr>
-   <td class="dataLabel" colspan="2"><textarea name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
+   <td class="dataLabel" colspan="2"><textarea <?php if ($msg == "1") echo "style=\"border: 1px solid #FF0000\""; ?>  name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
 </tr>
 </table>
 <table>

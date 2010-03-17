@@ -23,7 +23,8 @@ if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $
 <?php } ?>
 <?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 <h2>Checks</h2>
-<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
+<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.<br />
+</p>
 <?php } ?>
 <?php if  ($row_prefs['prefsPaypal'] == "Y") { 
 if     ($row_prefs['prefsCurrency'] == "&pound;") $currency_code = "GBP";
@@ -33,7 +34,9 @@ else   $currency_code = "USD";
 ?>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <h2>Pay Online</h2>
-<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?><br />
+<em>* Your payment email from PayPal is your receipt. Include a copy with your entries as proof of payment.</em>
+</p>
 <br />
 <input align="left" type="submit" border="0" name="submit" value="" class="paypal" alt="Pay your contest entry fees with PayPal" title="Pay your contest entry fees with PayPal"></p>
 <input type="hidden" name="cmd" value="_xclick">

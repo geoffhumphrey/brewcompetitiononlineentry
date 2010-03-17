@@ -29,8 +29,8 @@ switch($section) {
 
 	case "pay":
 	$header_output = "Pay My Fees";
-	if     ($msg == "1") $output = "Your payment has been received. Thanks and best of luck in the competition."; 
-	elseif ($msg == "2") $output = "Your payment has been cancelled.";
+	if     ($msg == "1") $output = "Your PayPal payment has been received.<br>Please make sure to print the receipt from PayPal and attach it to one of your entries as proof of payment."; 
+	elseif ($msg == "2") $output = "Your PayPal payment has been cancelled.";
 	else $output = "";
 	break;
 	
@@ -63,6 +63,8 @@ switch($section) {
 	case "brew":
 	if ($action == "add") $header_output = "Add an Entry"; 
 	else $header_output = "Edit a Entry";
+	if ($msg == "1") $output = "This entry's style requires more information. Please specify its special ingredients or classic style.";
+	else $output = "";
 	break;
 	
 	case "brewer":

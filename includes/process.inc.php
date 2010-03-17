@@ -171,11 +171,91 @@ $style = explode('-', $styleBreak);
 $styleTrim = ltrim($style[0], "0"); 
 if ($style [0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
 
+switch($styleBreak) {
+	case "6-D":
+	$special = "1";
+	break;
+	
+	case "16-E":
+	$special = "1";
+	break;
+	
+	case "17-F":
+	$special = "1";
+	break;
+	
+	case "20-A":
+	$special = "1";
+	break;
+	
+	case "21-A":
+	$special = "1";
+	break;
+	
+	case "22-B":
+	$special = "1";
+	break;
+	
+	case "6-D":
+	$special = "1";
+	break;
+	
+	case "22-C":
+	$special = "1";
+	break;
+	
+	case "23-A":
+	$special = "1";
+	break;
+	
+	case "25-C":
+	$special = "1";
+	break;
+	
+	case "26-A":
+	$special = "1";
+	break;
+	
+	case "27-E":
+	$special = "1";
+	break;
+	
+	case "28-B":
+	$special = "1";
+	break;
+	
+	case "28-C":
+	$special = "1";
+	break;
+	
+	case "28-D":
+	$special = "1";
+	break;
+	
+	default:
+	$special = "2";
+	break;
+
+}
+
 // Get style name from broken parts
 mysql_select_db($database, $brewing);
 $query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 $row_style_name = mysql_fetch_assoc($style_name);
+$check = $row_style_name['brewStyleOwn'];
+
+if ($row_prefs['prefsDisplaySpecial'] == "Y") { 
+	switch($check) {
+		case "custom":
+		$custom = "1";
+		break;
+	
+		case "bcoe":
+		$custom = "2"; 
+		break;
+	}
+} else $custom = "2";
 
 $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, brewCategorySort, brewSubCategory, brewBottleDate, brewDate, brewYield, brewInfo, brewMead1, brewMead2, brewMead3, brewExtract1, brewExtract1Weight, brewExtract2, brewExtract2Weight, brewExtract3, brewExtract3Weight, brewExtract4, brewExtract4Weight, brewExtract5, brewExtract5Weight, brewGrain1, brewGrain1Weight, brewGrain2, brewGrain2Weight, brewGrain3, brewGrain3Weight, brewGrain4, brewGrain4Weight, brewGrain5, brewGrain5Weight, brewGrain6, brewGrain6Weight, brewGrain7, brewGrain7Weight, brewGrain8, brewGrain8Weight, brewGrain9, brewGrain9Weight, brewAddition1, brewAddition1Amt, brewAddition2, brewAddition2Amt, brewAddition3, brewAddition3Amt, brewAddition4, brewAddition4Amt, brewAddition5, brewAddition5Amt, brewAddition6, brewAddition6Amt, brewAddition7, brewAddition7Amt, brewAddition8, brewAddition8Amt, brewAddition9, brewAddition9Amt, brewHops1, brewHops1Weight, brewHops1IBU, brewHops1Time, brewHops2, brewHops2Weight, brewHops2IBU, brewHops2Time, brewHops3, brewHops3Weight, brewHops3IBU, brewHops3Time, brewHops4, brewHops4Weight, brewHops4IBU, brewHops4Time, brewHops5, brewHops5Weight, brewHops5IBU, brewHops5Time, brewHops6, brewHops6Weight, brewHops6IBU, brewHops6Time, brewHops7, brewHops7Weight, brewHops7IBU, brewHops7Time, brewHops8, brewHops8Weight, brewHops8IBU, brewHops8Time, brewHops9, brewHops9Weight, brewHops9IBU, brewHops9Time, brewHops1Use, brewHops2Use, brewHops3Use, brewHops4Use, brewHops5Use, brewHops6Use, brewHops7Use, brewHops8Use, brewHops9Use, brewHops1Type, brewHops2Type, brewHops3Type, brewHops4Type, brewHops5Type, brewHops6Type, brewHops7Type, brewHops8Type, brewHops9Type, brewHops1Form, brewHops2Form, brewHops3Form, brewHops4Form, brewHops5Form, brewHops6Form, brewHops7Form, brewHops8Form, brewHops9Form, brewYeast, brewYeastMan, brewYeastForm, brewYeastType, brewYeastAmount, brewYeastStarter, brewYeastNutrients, brewOG, brewFG, brewPrimary, brewPrimaryTemp, brewSecondary, brewSecondaryTemp, brewOther, brewOtherTemp, brewComments, brewMashStep1Name, brewMashStep1Temp, brewMashStep1Time, brewMashStep2Name, brewMashStep2Temp, brewMashStep2Time, brewMashStep3Name, brewMashStep3Temp, brewMashStep3Time, brewMashStep4Name, brewMashStep4Temp, brewMashStep4Time, brewMashStep5Name, brewMashStep5Temp, brewMashStep5Time, brewFinings, brewWaterNotes, brewBrewerID, brewCarbonationMethod, brewCarbonationVol, brewCarbonationNotes, brewBoilHours, brewBoilMins, brewBrewerFirstName, brewBrewerLastName, brewExtract1Use, brewExtract2Use, brewExtract3Use, brewExtract4Use, brewExtract5Use, brewGrain1Use, brewGrain2Use, brewGrain3Use, brewGrain4Use, brewGrain5Use, brewGrain6Use, brewGrain7Use, brewGrain8Use, brewGrain9Use, brewAddition1Use, brewAddition2Use, brewAddition3Use, brewAddition4Use, brewAddition5Use, brewAddition6Use, brewAddition7Use, brewAddition8Use, brewAddition9Use, brewJudgingLocation) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['brewName'], "scrubbed"),
@@ -366,11 +446,30 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
 					   GetSQLValueString($row_style_name['brewStyleJudgingLoc'], "int")
 					   );
 
-  	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+  mysql_select_db($database, $brewing);
+  $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-  if ($section == "admin") $insertGoTo = "../index.php?section=admin&go=entries";
+  if (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1")) && ($id == "default")) {
+	mysql_select_db($database, $brewing);
+	$query_brew_id = "SELECT id FROM brewing WHERE brewBrewerID='$brewBrewerID' ORDER BY id DESC LIMIT 1";
+	$brew_id = mysql_query($query_brew_id, $brewing) or die(mysql_error());
+	$row_brew_id = mysql_fetch_assoc($brew_id);
+	
+	$id = $row_brew_id['id'];
+	}
+  
+  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1"))))  $insertGoTo = "../index.php?section=admin&go=entries";
+  elseif (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1"))) {
+		if ($section == "admin") $insertGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
+		else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
+  }
   else $insertGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&action=".$action."&msg=1";
+  //echo $query_brew_id."<br>";
+  //echo $row_brew_id['id']."<br>";
+  //echo $styleBreak."<br>";
+  //echo $special."<br>";
+  //echo $custom."<br>";
+  //echo $insertGoTo;
   header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -401,11 +500,91 @@ $style = explode('-', $styleBreak);
 $styleTrim = ltrim($style[0], "0"); 
 if ($style [0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
 
+switch($styleBreak) {
+	case "6-D":
+	$special = "1";
+	break;
+	
+	case "16-E":
+	$special = "1";
+	break;
+	
+	case "17-F":
+	$special = "1";
+	break;
+	
+	case "20-A":
+	$special = "1";
+	break;
+	
+	case "21-A":
+	$special = "1";
+	break;
+	
+	case "22-B":
+	$special = "1";
+	break;
+	
+	case "6-D":
+	$special = "1";
+	break;
+	
+	case "22-C":
+	$special = "1";
+	break;
+	
+	case "23-A":
+	$special = "1";
+	break;
+	
+	case "25-C":
+	$special = "1";
+	break;
+	
+	case "26-A":
+	$special = "1";
+	break;
+	
+	case "27-E":
+	$special = "1";
+	break;
+	
+	case "28-B":
+	$special = "1";
+	break;
+	
+	case "28-C":
+	$special = "1";
+	break;
+	
+	case "28-D":
+	$special = "1";
+	break;
+	
+	default:
+	$special = "2";
+	break;
+
+}
+
 // Get style name from broken parts
 mysql_select_db($database, $brewing);
 $query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 $row_style_name = mysql_fetch_assoc($style_name);
+$check = $row_style_name['brewStyleOwn'];
+
+if ($row_prefs['prefsDisplaySpecial'] == "Y") { 
+	switch($check) {
+		case "custom":
+		$custom = "1";
+		break;
+	
+		case "bcoe":
+		$custom = "2"; 
+		break;
+	}
+} else $custom = "2";
 
 $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory=%s, brewCategorySort=%s, brewSubCategory=%s, brewBottleDate=%s, brewDate=%s, brewYield=%s, brewInfo=%s, brewMead1=%s, brewMead2=%s, brewMead3=%s, brewExtract1=%s, brewExtract1Weight=%s, brewExtract2=%s, brewExtract2Weight=%s, brewExtract3=%s, brewExtract3Weight=%s, brewExtract4=%s, brewExtract4Weight=%s, brewExtract5=%s, brewExtract5Weight=%s, brewGrain1=%s, brewGrain1Weight=%s, brewGrain2=%s, brewGrain2Weight=%s, brewGrain3=%s, brewGrain3Weight=%s, brewGrain4=%s, brewGrain4Weight=%s, brewGrain5=%s, brewGrain5Weight=%s, brewGrain6=%s, brewGrain6Weight=%s, brewGrain7=%s, brewGrain7Weight=%s, brewGrain8=%s, brewGrain8Weight=%s, brewGrain9=%s, brewGrain9Weight=%s, brewAddition1=%s, brewAddition1Amt=%s, brewAddition2=%s, brewAddition2Amt=%s, brewAddition3=%s, brewAddition3Amt=%s, brewAddition4=%s, brewAddition4Amt=%s, brewAddition5=%s, brewAddition5Amt=%s, brewAddition6=%s, brewAddition6Amt=%s, brewAddition7=%s, brewAddition7Amt=%s, brewAddition8=%s, brewAddition8Amt=%s, brewAddition9=%s, brewAddition9Amt=%s, brewHops1=%s, brewHops1Weight=%s, brewHops1IBU=%s, brewHops1Time=%s, brewHops2=%s, brewHops2Weight=%s, brewHops2IBU=%s, brewHops2Time=%s, brewHops3=%s, brewHops3Weight=%s, brewHops3IBU=%s, brewHops3Time=%s, brewHops4=%s, brewHops4Weight=%s, brewHops4IBU=%s, brewHops4Time=%s, brewHops5=%s, brewHops5Weight=%s, brewHops5IBU=%s, brewHops5Time=%s, brewHops6=%s, brewHops6Weight=%s, brewHops6IBU=%s, brewHops6Time=%s, brewHops7=%s, brewHops7Weight=%s, brewHops7IBU=%s, brewHops7Time=%s, brewHops8=%s, brewHops8Weight=%s, brewHops8IBU=%s, brewHops8Time=%s, brewHops9=%s, brewHops9Weight=%s, brewHops9IBU=%s, brewHops9Time=%s, brewHops1Use=%s, brewHops2Use=%s, brewHops3Use=%s, brewHops4Use=%s, brewHops5Use=%s, brewHops6Use=%s, brewHops7Use=%s, brewHops8Use=%s, brewHops9Use=%s, brewHops1Type=%s, brewHops2Type=%s, brewHops3Type=%s, brewHops4Type=%s, brewHops5Type=%s, brewHops6Type=%s, brewHops7Type=%s, brewHops8Type=%s, brewHops9Type=%s, brewHops1Form=%s, brewHops2Form=%s, brewHops3Form=%s, brewHops4Form=%s, brewHops5Form=%s, brewHops6Form=%s, brewHops7Form=%s, brewHops8Form=%s, brewHops9Form=%s, brewYeast=%s, brewYeastMan=%s, brewYeastForm=%s, brewYeastType=%s, brewYeastAmount=%s, brewYeastStarter=%s, brewYeastNutrients=%s, brewOG=%s, brewFG=%s, brewPrimary=%s, brewPrimaryTemp=%s, brewSecondary=%s, brewSecondaryTemp=%s, brewOther=%s, brewOtherTemp=%s, brewComments=%s, brewMashStep1Name=%s, brewMashStep1Temp=%s, brewMashStep1Time=%s, brewMashStep2Name=%s, brewMashStep2Temp=%s, brewMashStep2Time=%s, brewMashStep3Name=%s, brewMashStep3Temp=%s, brewMashStep3Time=%s, brewMashStep4Name=%s, brewMashStep4Temp=%s, brewMashStep4Time=%s, brewMashStep5Name=%s, brewMashStep5Temp=%s, brewMashStep5Time=%s, brewFinings=%s, brewWaterNotes=%s, brewBrewerID=%s, brewCarbonationMethod=%s, brewCarbonationVol=%s, brewCarbonationNotes=%s, brewBoilHours=%s, brewBoilMins=%s, brewBrewerFirstName=%s, brewBrewerLastName=%s, brewExtract1Use=%s, brewExtract2Use=%s, brewExtract3Use=%s, brewExtract4Use=%s, brewExtract5Use=%s, brewGrain1Use=%s, brewGrain2Use=%s, brewGrain3Use=%s, brewGrain4Use=%s, brewGrain5Use=%s, brewGrain6Use=%s, brewGrain7Use=%s, brewGrain8Use=%s, brewGrain9Use=%s, brewAddition1Use=%s, brewAddition2Use=%s, brewAddition3Use=%s, brewAddition4Use=%s, brewAddition5Use=%s, brewAddition6Use=%s, brewAddition7Use=%s, brewAddition8Use=%s, brewAddition9Use=%s, brewJudgingLocation=%s WHERE id=%s",
                        GetSQLValueString($_POST['brewName'], "scrubbed"),
@@ -598,14 +777,23 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
   
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-  if ($go == "beerXML") {
-  $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&msg=3";
-  } 
+  
+  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1")))) $updateGoTo = "../index.php?section=admin&go=entries";
+  elseif ($go == "beerXML") $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&msg=3";
+  elseif (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1"))) {
+		if ($section == "admin") $updateGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
+		else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
+  }
   else {
   $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter="; if ($section == "admin") $updateGoTo .= "default"; else $updateGoTo .= $filter; $updateGoTo .= "&msg=2";
   }
-  header(sprintf("Location: %s", $updateGoTo));
+ /*
+ echo $special."<br>";
+ echo $check."<br>";
+ echo $custom."<br>";
+ echo $updateGoTo."<br>";
+ */
+ header(sprintf("Location: %s", $updateGoTo));
 }
 
 // --------------------------- If Adding a Participant (User) ------------------------------- //
@@ -852,10 +1040,8 @@ if (($action == "add") && ($dbTable == "brewer")) {
   brewerSteward, 
   brewerJudge, 
   brewerJudgeLocation,
-  brewerJudgeLocation2,
-  brewerStewardLocation,
-  brewerStewardLocation2
-  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  brewerStewardLocation
+  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['uid'], "int"),
 					   GetSQLValueString($_POST['brewerFirstName'], "text"),
                        GetSQLValueString($_POST['brewerLastName'], "text"),
@@ -870,9 +1056,7 @@ if (($action == "add") && ($dbTable == "brewer")) {
 					   GetSQLValueString($_POST['brewerSteward'], "text"),
 					   GetSQLValueString($_POST['brewerJudge'], "text"),
 					   GetSQLValueString($_POST['brewerJudgeLocation'], "int"),
-					   GetSQLValueString($_POST['brewerJudgeLocation2'], "int"),
-					   GetSQLValueString($_POST['brewerStewardLocation'], "int"),
-					   GetSQLValueString($_POST['brewerStewardLocation2'], "int")
+					   GetSQLValueString($_POST['brewerStewardLocation'], "int")
 					   );
 
 	mysql_select_db($database, $brewing);
@@ -888,6 +1072,8 @@ if (($action == "add") && ($dbTable == "brewer")) {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
+$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
 if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
 if ($_POST['brewerJudgeLikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
 
@@ -913,9 +1099,7 @@ brewerJudgeLikes=%s,
 
 brewerJudgeDislikes=%s, 
 brewerJudgeLocation=%s, 
-brewerJudgeLocation2=%s, 
 brewerStewardLocation=%s,
-brewerStewardLocation2=%s,
 brewerAssignment=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['uid'], "int"),
@@ -935,10 +1119,8 @@ WHERE id=%s",
                        GetSQLValueString($_POST['brewerJudgeRank'], "text"),
                        GetSQLValueString($likes, "text"),
                        GetSQLValueString($dislikes, "text"),
-					   GetSQLValueString($_POST['brewerJudgeLocation'], "int"),
-					   GetSQLValueString($_POST['brewerJudgeLocation2'], "int"),
-					   GetSQLValueString($_POST['brewerStewardLocation'], "int"),
-					   GetSQLValueString($_POST['brewerStewardLocation2'], "int"),
+					   GetSQLValueString($location_pref1, "text"),
+					   GetSQLValueString($location_pref2, "text"),
 					   GetSQLValueString($_POST['brewerAssignment'], "text"),
                        GetSQLValueString($id, "int"));
   
@@ -946,9 +1128,17 @@ WHERE id=%s",
   elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
   else $updateSQL2 = "UPDATE brewer SET brewerNickname=NULL WHERE id='".$id."'"; 
 
+  //echo $updateSQL."<br>";
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   $Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
+  
+  /*if (($_POST['brewerAssignment'] != "") && (($_POST['brewerSteward'] == "N") || ($_POST['brewerJudge'] == "N"))) {
+  $updateSQL3 = "UPDATE brewer SET brewerAssignment=NULL WHERE id='".$id."'"; ;
+  $Result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());
+  }
+  */
+
 
   if ($go == "register") $updateGoTo = "../index.php?section=brew&msg=2";	
   elseif ($go == "judge") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=7";
@@ -956,7 +1146,6 @@ WHERE id=%s",
   else $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=default&msg=2";
 
   header(sprintf("Location: %s", $updateGoTo));
-
 }
 
 // --------------------------- SETUP: Adding General Contest Info ------------------------------- // 
@@ -1125,7 +1314,8 @@ prefsSponsorLogos,
 prefsSponsorLogoSize,
 prefsCompLogoSize,
 prefsDisplayWinners,
-id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+prefsDisplaySpecial,
+id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -1138,11 +1328,12 @@ id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 					   GetSQLValueString($_POST['prefsCheck'], "text"),
 					   GetSQLValueString($_POST['prefsCheckPayee'], "text"),
 					   GetSQLValueString($_POST['prefsTransFee'], "text"),
-					   GetSQLValueString("Y", "text"),
-					   GetSQLValueString("Y", "text"),
-					   GetSQLValueString("175", "text"),
-					   GetSQLValueString("250", "text"),
-					   GetSQLValueString("Y", "text"),
+					   GetSQLValueString($_POST['prefsSponsors'], "text"),
+					   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
+					   GetSQLValueString($_POST['prefsSponsorLogoSize'], "text"),
+					   GetSQLValueString($_POST['prefsCompLogoSize'], "text"),
+					   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
+					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -1157,7 +1348,7 @@ id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 
 if (($action == "edit") && ($dbTable == "preferences")) {
 
-$updateSQL = sprintf("UPDATE preferences SET prefsTemp=%s, prefsWeight1=%s, prefsWeight2=%s, prefsLiquid1=%s, prefsLiquid2=%s, prefsPaypal=%s, prefsPaypalAccount=%s, prefsCurrency=%s, prefsCash=%s, prefsCheck=%s, prefsCheckPayee=%s, prefsTransFee=%s, prefsSponsors=%s, prefsSponsorLogos=%s, prefsSponsorLogoSize=%s, prefsCompLogoSize=%s, prefsDisplayWinners=%s WHERE id=%s",
+$updateSQL = sprintf("UPDATE preferences SET prefsTemp=%s, prefsWeight1=%s, prefsWeight2=%s, prefsLiquid1=%s, prefsLiquid2=%s, prefsPaypal=%s, prefsPaypalAccount=%s, prefsCurrency=%s, prefsCash=%s, prefsCheck=%s, prefsCheckPayee=%s, prefsTransFee=%s, prefsSponsors=%s, prefsSponsorLogos=%s, prefsSponsorLogoSize=%s, prefsCompLogoSize=%s, prefsDisplayWinners=%s, prefsDisplaySpecial=%s WHERE id=%s",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -1175,6 +1366,7 @@ $updateSQL = sprintf("UPDATE preferences SET prefsTemp=%s, prefsWeight1=%s, pref
 					   GetSQLValueString($_POST['prefsSponsorLogoSize'], "text"),
 					   GetSQLValueString($_POST['prefsCompLogoSize'], "text"),
 					   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
+					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -1446,7 +1638,7 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
   %s, %s, %s, %s, %s, 
   %s, %s, %s, %s, %s, 
   %s, %s, %s)",
-                       GetSQLValueString($style_add_one, "text"),
+                       GetSQLValueString("A", "text"),
                        GetSQLValueString($_POST['brewStyle'], "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),

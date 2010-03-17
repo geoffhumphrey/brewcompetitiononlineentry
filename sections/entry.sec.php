@@ -70,9 +70,9 @@ table td				{ padding: 2px; }
 .bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
 .headerItalic 		    { font-size: 8px; font-style: italic; }
 table.small	td			{ padding: 1px 2px 1px 3px; }
-table.bottleLabel		{ border-collapse: collapse; }
-table.bottleLabel-inner	{ margin: 15px; width: 300px }
-table.bottleLabel-inner	td { padding: 5px; }
+table.bottleLabel		{ border-collapse: collapse; width: 700px; }
+table.bottleLabel-inner	{ margin: 15px; width: 325px }
+table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 .error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-image: url(../images/error.png); background-position: center left; background-repeat: no-repeat; }
 -->
 </style>
@@ -684,7 +684,7 @@ table.bottleLabel-inner	td { padding: 5px; }
 <table align="center" class="bottleLabel">
   <tr>
     <td align="center" valign="middle">
-    <table class="bdr1_thick bottle bottleLabel-inner" width="450">
+    <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
       </tr>
@@ -735,7 +735,7 @@ table.bottleLabel-inner	td { padding: 5px; }
       </tr>
     </table></td>
     <td align="center" valign="middle">
-      <table class="bdr1_thick bottle bottleLabel-inner" width="450">
+      <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
       </tr>
@@ -787,8 +787,7 @@ table.bottleLabel-inner	td { padding: 5px; }
     </table></td>
   </tr>
   <tr>
-    <td align="center" valign="middle">
-    <table class="bdr1_thick bottle bottleLabel-inner" width="450">
+    <td align="center" valign="middle"><table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
       </tr>
@@ -806,7 +805,7 @@ table.bottleLabel-inner	td { padding: 5px; }
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">State</td>
-        <td width="45%" class="bdr1B"><?php echo $row_brewer['brewerState']; ?></td>
+        <td class="bdr1B"><?php echo $row_brewer['brewerState']; ?></td>
         <td width="5%">Zip</td>
         <td width="50%" class="bdr1B"><?php echo $row_brewer['brewerZip']; ?></td>
       </tr>
@@ -839,7 +838,7 @@ table.bottleLabel-inner	td { padding: 5px; }
       </tr>
     </table></td>
     <td align="center" valign="middle">
-      <table class="bdr1_thick bottle bottleLabel-inner" width="450">
+      <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
       </tr>
