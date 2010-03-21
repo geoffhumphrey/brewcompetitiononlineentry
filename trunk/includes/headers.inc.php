@@ -70,6 +70,12 @@ switch($section) {
 	case "brewer":
 	if ($action == "add") $header_output = "Step 2: Registrant Information"; 
 	else $header_output = "Edit Registrant Information";
+	if ($msg == "1") $output = "Information added successfully."; 
+	break;
+	
+	case "judge":
+	$header_output = "Judge Information"; 
+	if ($msg == "1") $output = "Information added successfully."; 
 	break;
 
 	case "list":

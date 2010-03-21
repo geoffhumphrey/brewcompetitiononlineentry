@@ -318,6 +318,15 @@ font-weight: bold;
 width: 100%;
 }
 
+.dataTable th
+{
+vertical-align: top;
+padding: 1em .5em 1em .5em;
+background-color: #dddddd;
+text-align: left;
+font-size: 1.1em;
+}
+
 .dataTableCompact  { 
 
 }

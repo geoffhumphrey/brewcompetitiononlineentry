@@ -19,11 +19,13 @@ if ($msg != "default") echo $msg_output;
 if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) echo " (".$row_prefs['prefsCurrency'].number_format($regFee, 2)." for the first ".$row_contest_info['contestEntryFeeDiscountNum']." entries, ".$row_prefs['prefsCurrency'].number_format($discFee, 2)." for the remaining ".($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum'])." entries)"; ?>.</p>
 <?php if ($row_prefs['prefsCash'] == "Y") { ?>
 <h2>Cash</h2>
-<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) in a <em>sealed envelope</em> to one of  your bottles.</p>
+<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) in a <em>sealed envelope</em> to one of  your bottles.<br />
+    <em>* Your returned scoresheets will serve as your entry receipt.</em></p>
 <?php } ?>
 <?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 <h2>Checks</h2>
 <p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.<br />
+  <em>* Your check carbon or cancelled check is your entry receipt.</em><br />
 </p>
 <?php } ?>
 <?php if  ($row_prefs['prefsPaypal'] == "Y") { 
@@ -35,7 +37,7 @@ else   $currency_code = "USD";
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <h2>Pay Online</h2>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?><br />
-<em>* Your payment email from PayPal is your receipt. Include a copy with your entries as proof of payment.</em>
+<em>* Your payment email from PayPal is your entry receipt. Include a copy with your entries as proof of payment.</em>
 </p>
 <br />
 <input align="left" type="submit" border="0" name="submit" value="" class="paypal" alt="Pay your contest entry fees with PayPal" title="Pay your contest entry fees with PayPal"></p>

@@ -1,6 +1,3 @@
-<div id="header">
-	<div id="header-inner"><h1>Judge Information</h1></div>
-</div>
 <form action="includes/process.inc.php?action=edit&dbTable=brewer&go=<?php echo $go; ?>&id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
@@ -9,6 +6,8 @@
       <td class="data"><input name="submit" type="submit" class="button" value="Submit Judge Information" /></td>
 </tr>
 </table>
+<input type="hidden" name="register" value="Y" />
+<input type="hidden" name="uid" value="<?php echo $row_brewer['uid']; ?>">
 <input type="hidden" name="brewerEmail" value="<?php echo $_SESSION["loginUsername"]; ?>" />
 <input type="hidden" name="brewerFirstName" value="<?php echo $row_brewer['brewerFirstName']; ?>">
 <input type="hidden" name="brewerLastName" value="<?php echo $row_brewer['brewerLastName']; ?>">

@@ -13,8 +13,6 @@ $sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 $row_sponsors = mysql_fetch_assoc($sponsors);
 $totalRows_sponsors = mysql_num_rows($sponsors);
 
-
-
 $query_prefs = "SELECT * FROM preferences WHERE id=1";
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
