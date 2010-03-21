@@ -1023,6 +1023,14 @@ if (($action == "add") && ($dbTable == "users") && ($section == "setup")) {
 
 if (($action == "add") && ($dbTable == "brewer")) {
 
+if ($totalRows_judging < 2) {  
+$location_pref1 = $_POST['brewerJudgeLocation'];
+$location_pref2 = $_POST['brewerStewardLocation'];
+} else { 
+$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+}
+
   $insertSQL = sprintf("INSERT INTO brewer (
   uid,
   brewerFirstName, 
@@ -1055,13 +1063,13 @@ if (($action == "add") && ($dbTable == "brewer")) {
                        GetSQLValueString($_POST['brewerEmail'], "text"),
 					   GetSQLValueString($_POST['brewerSteward'], "text"),
 					   GetSQLValueString($_POST['brewerJudge'], "text"),
-					   GetSQLValueString($_POST['brewerJudgeLocation'], "int"),
-					   GetSQLValueString($_POST['brewerStewardLocation'], "int")
+					   GetSQLValueString($location_pref1, "text"),
+					   GetSQLValueString($location_pref2, "text")
 					   );
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	
+	//echo $insertSQL;
 	if ($section == "setup") $insertGoTo = "../index.php?msg=success";
 	elseif ($_POST['brewerJudge'] == "Y") $insertGoTo = "../index.php?section=judge&go=judge";
     elseif ($section == "admin") $insertGoTo = "../index.php?section=admin&go=participants&msg=1&username=".$username;
@@ -1072,8 +1080,13 @@ if (($action == "add") && ($dbTable == "brewer")) {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
+if (($_POST['register'] == "Y") || ($totalRows_judging < 2)) {  
+$location_pref1 = $_POST['brewerJudgeLocation'];
+$location_pref2 = $_POST['brewerStewardLocation'];
+} else { 
 $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
 $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+}
 if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
 if ($_POST['brewerJudgeLikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
 

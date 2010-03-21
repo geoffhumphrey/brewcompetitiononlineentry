@@ -35,7 +35,7 @@ if ($msg != "default") echo $msg_output;
 <h2>Entries</h2>
 <?php if ($action != "print") { ?>
 <?php if ($totalRows_log > 0) { ?>
-<p>Below is a list of your entires. Be sure to print entry forms and bottle labels for each.</p>
+<p>Below is a list of your entires. <?php if ($judgingDateReturn == "false") echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
 <?php } ?>
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
 <table class="dataTable">
@@ -52,7 +52,9 @@ if ($msg != "default") echo $msg_output;
   <td class="dataHeading bdr1B">Entry Name</td>
   <td class="dataHeading bdr1B">Style</td>
   <?php if ($action != "print") { ?>
+  <?php if ($judgingDateReturn == "false") { ?>
   <td colspan="3" class="dataHeading bdr1B">Actions</td>
+  <?php } ?>
   <?php } ?>
  </tr>
  <?php do { 
@@ -65,21 +67,25 @@ if ($msg != "default") echo $msg_output;
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
   <td class="dataList" width="25%"><?php echo $row_log['brewName']; ?></td>
-  <td class="dataList" width="25%"><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; ?></td>
+  <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; ?></td>
   <?php if ($action != "print") { ?>
   <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
   <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
-  <?php } ?>
+  <?php } 
+  if ($judgingDateReturn == "false") { ?>
   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
-  <?php } ?>
+  <?php } 
+  }
+  ?>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
+ 
  <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?>
-  </td>
+  <td colspan="5" class="dataHeading bdr1T"><?php if ($judgingDateReturn == "false") {  if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?><?php } else echo "&nbsp;"; ?></td>
  </tr>
+
 </table>
 <?php 
 } else echo "<p>You do not have any entries.</p>"; ?>
@@ -109,8 +115,8 @@ if ($msg != "default") echo $msg_output;
     <td class="data"><?php if ($row_brewer['brewerAddress'] != "") echo $row_brewer['brewerAddress']."<br>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']." ".$row_brewer['brewerCountry']; else echo "None entered"; ?></td>
   </tr>
   <tr>
-    <td class="dataLabel">Phone Numbers:</td>
-    <td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (H) ";  if ($row_brewer['brewerPhone2'] != "") echo $row_brewer['brewerPhone2']." (W)"; ?></td>
+    <td class="dataLabel">Phone Number(s):</td>
+    <td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1) ";  if ($row_brewer['brewerPhone2'] != "") echo "<br>".$row_brewer['brewerPhone2']." (2)"; ?></td>
   </tr>
   <tr>
     <td class="dataLabel">Club:</td>
@@ -123,31 +129,25 @@ if ($msg != "default") echo $msg_output;
   </tr>
   <?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
-    <td class="dataLabel">1st Location Preference:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeLocation'] < "99999998") { 
-	if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
-	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-	<?php } 
-	} 
-	elseif ($row_brewer['brewerJudgeLocation'] == "99999998") echo "No Further Preferences";
-	elseif ($row_brewer['brewerJudgeLocation'] == "99999999") echo "None (Any Location/Time)"; 
-	else echo ""; 
+    <td class="dataLabel">Judging Location Rankings:</td>
+    <td class="data">
+    <table class="dataTableCompact">
+	<?php 
+		$a = explode(",",$row_brewer['brewerJudgeLocation']);
+		sort($a);
+		foreach ($a as $value) {
+			if ($value != "0-0") {
+				$b = substr($value, 2);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $b);
+				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
+				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
+				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
+				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo "</td>\n</tr>";
+				}
+			}
 	?>
-    </td>
-  </tr>
-  <tr>
-    <td class="dataLabel">2nd Location Preference:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeLocation2'] < "99999998") { 
-	if ($row_judging2['judgingDate'] != "") echo dateconvert($row_judging2['judgingDate'], 2)." at "; echo $row_judging2['judgingLocName']; 
-	if ($row_judging2['judgingTime'] != "") echo ", ".$row_judging2['judgingTime']; if (($row_judging2['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging2['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging2['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging2['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging2['judgingLocName']; ?>" title="Map <?php echo $row_judging2['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging2['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging2['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging2['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging2['judgingLocName']; ?>" /></a></span>
-	<?php } 
-	} 
-	elseif ($row_brewer['brewerJudgeLocation2'] == "99999998") echo "No Further Preferences";
-	elseif ($row_brewer['brewerJudgeLocation2'] == "99999999") echo "None (Any Location/Time)"; 
-	else echo ""; 
-	?>
+    </table>
     </td>
   </tr>
   <?php } ?>
@@ -194,36 +194,30 @@ if ($msg != "default") echo $msg_output;
     <td class="dataLabel">Steward?</td>
     <td class="data"><?php if ($row_brewer['brewerSteward'] != "") echo $row_brewer['brewerSteward']; else echo "None entered"; ?></td>
   </tr>
-  <?php if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
+  <?php  if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
-    <td class="dataLabel">1st Location Preference:</td>
-    <td class="data"><?php if ($row_brewer['brewerStewardLocation']  < "99999998") { 
-	if ($row_stewarding['judgingDate'] != "") echo dateconvert($row_stewarding['judgingDate'], 2)." at "; echo $row_stewarding['judgingLocName']; 
-	if ($row_stewarding['judgingTime'] != "") echo ", ".$row_stewarding['judgingTime']; if (($row_stewarding['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_stewarding['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_stewarding['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_stewarding['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_stewarding['judgingLocName']; ?>" title="Map <?php echo $row_stewarding['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_stewarding['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_stewarding['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_stewarding['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_stewarding['judgingLocName']; ?>" /></a></span>
-	<?php } 
-	} 
-	elseif ($row_brewer['brewerStewardLocation'] == "99999998") echo "No Further Preferences";
-	elseif ($row_brewer['brewerStewardLocation'] == "99999999") echo "None (Any Location/Time)"; 
-	else echo ""; 
+    <td class="dataLabel">Stewarding Location Rankings:</td>
+    <td class="data">
+    <table class="dataTableCompact">
+	<?php 
+		$a = explode(",",$row_brewer['brewerStewardLocation']);
+		sort($a);
+		foreach ($a as $value) {
+			if ($value != "0-0") {
+				$b = substr($value, 2);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $b);
+				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
+				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
+				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
+				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo "</td>\n</tr>";
+				}
+			}
 	?>
+    </table>
     </td>
   </tr>
-  <tr>
-    <td class="dataLabel">2nd Location Preference:</td>
-    <td class="data"><?php if ($row_brewer['brewerStewardLocation2'] < "99999998") { 
-	if ($row_stewarding2['judgingDate'] != "") echo dateconvert($row_stewarding2['judgingDate'], 2)." at "; echo $row_stewarding2['judgingLocName']; 
-	if ($row_stewarding2['judgingTime'] != "") echo ", ".$row_stewarding2['judgingTime']; if (($row_stewarding2['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_stewarding2['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_stewarding2['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_stewarding2['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_stewarding2['judgingLocName']; ?>" title="Map <?php echo $row_stewarding2['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_stewarding2['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_stewarding2['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_stewarding2['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_stewarding2['judgingLocName']; ?>" /></a></span>
-	<?php } 
-	} 
-	elseif ($row_brewer['brewerStewardLocation2'] == "99999998") echo "No Further Preferences";
-	elseif ($row_brewer['brewerStewardLocation2'] == "99999999") echo "None (Any Location/Time)"; 
-	else echo ""; 
-	?>
-	</td>
-  </tr>
-  <?php } 
-   } ?>
+  <?php } ?>
+  <?php } ?>
 </table>
 <?php } ?>

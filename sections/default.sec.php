@@ -12,12 +12,10 @@ if (greaterDate($today,$deadline)) {
 	<?php } ?>
 <h2>Thanks To All Who Participated in the <?php echo $row_contest_info['contestName']; ?>!</h2>
 <p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
-	<?php 
-	if ($judgingDateReturn == "true")
-	 {
-	 ?>
+	<?php if ($judgingDateReturn == "true") { ?>
 	<p>Judging has already taken place.</p>
-	<?php include ('closed.sec.php'); }
+	<?php include ('closed.sec.php'); 
+	}
 } 
 else 
 { 
