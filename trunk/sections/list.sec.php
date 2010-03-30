@@ -31,7 +31,7 @@ if ($msg != "default") echo $msg_output;
 <?php if ($action != "print") { ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <?php } else { ?>
-<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; ?> entries in the <?php echo $row_contest_info['contestName'];?>.<?php } ?>
+<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry "; else echo " entires "; ?>in the <?php echo $row_contest_info['contestName'];?>.<?php } ?>
 <h2>Entries</h2>
 <?php if ($action != "print") { ?>
 <?php if ($totalRows_log > 0) { ?>
@@ -42,7 +42,7 @@ if ($msg != "default") echo $msg_output;
  <tr>
    <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=brew&action=add">Add an Entry</a></td>
    <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png" align="absmiddle" /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
-   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=list&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print Your List of Entries and Info</a></td>
+   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=list&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
  </tr>
 </table>
 <?php } ?>
@@ -67,7 +67,7 @@ if ($msg != "default") echo $msg_output;
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
   <td class="dataList" width="25%"><?php echo $row_log['brewName']; ?></td>
-  <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; ?></td>
+  <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
   <?php if ($action != "print") { ?>
   <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
   <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>

@@ -1027,8 +1027,10 @@ if ($totalRows_judging < 2) {
 $location_pref1 = $_POST['brewerJudgeLocation'];
 $location_pref2 = $_POST['brewerStewardLocation'];
 } else { 
-$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+if ($go == "judge") {
+	$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+	$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+	}
 }
 
   $insertSQL = sprintf("INSERT INTO brewer (

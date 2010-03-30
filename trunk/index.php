@@ -67,7 +67,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   // Check if registration date has passed. If so, display "registration end" message.
   if (greaterDate($today,$deadline)) {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
-    <div id="closed">Registration has closed. Thanks to everyone who participated.</div>
+    <div id="closed">Registration has closed.</div>
 	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');

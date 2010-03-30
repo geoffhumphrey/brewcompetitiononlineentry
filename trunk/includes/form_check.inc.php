@@ -1,8 +1,5 @@
 <script type="text/javascript" language="JavaScript">
-
-
 <!-- Javascript code copyright 2003 Bontrager Connection, LLC // Code obtained from http://WillMaster.com/
-
 <?php if (($section == "step1") || (($section == "admin") && ($go == "preferences"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -23,7 +20,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if (($section == "step2") || (($section == "admin") && ($go == "contest_info"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -54,7 +50,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if (($section == "step3") || (($section == "admin") && ($go == "judging"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -75,7 +70,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if (($section == "step4") || (($action == "add") && ($go == "dropoff") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -95,7 +89,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if (($section == "step6") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -108,7 +101,6 @@ if(WithoutContent(document.form1.password.value))
 if(WithoutContent(document.form1.userQuestionAnswer.value))
 	{ errormessage += "\nAn answer to your security question"; }
 <?php } ?>
-
 // Put field checks above this point.// Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('The following information is required to set up the admin user:\n' + errormessage);
@@ -117,7 +109,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if ($section == "step7") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -144,8 +135,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
-
 <?php if (($section == "brewer") || (($action == "add") && ($go == "participants") && ($filter == "info"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -172,13 +161,14 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if ($section == "brew") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.brewName.value))
 	{ errormessage += "\nThe name of the brew"; }
+if(NoneWithContent(document.form1.brewStyle.value))
+	{ errormessage += "\nA style from the drop-down list."; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To enter your brew, the following information is required:\n' + errormessage + '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.');
@@ -187,7 +177,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if ($section == "register") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -206,7 +195,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if ($section == "judge") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -221,7 +209,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 <?php if (($section == "user") && ($action == "password")) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
@@ -238,7 +225,6 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-
 function WithoutContent(ss) {
 if(ss.length > 0) { return false; }
 return true;

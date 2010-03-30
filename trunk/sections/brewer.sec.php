@@ -22,7 +22,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <input name="brewerEmail" type="hidden" value="<?php echo $go; ?>" />
 <input name="uid" type="hidden" value="<?php echo $row_brewerID['id']; ?>" />
 <?php } else { ?>
-<form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&go=".$go."&filter=".$filter; ?>&action=<?php echo $action; ?>&dbTable=brewer<?php if ($action == "edit") echo "&id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&go=".$go."&filter=".$filter; ?>&action=<?php echo $action; ?>&dbTable=brewer&go=<?php echo $go; if ($action == "edit") echo "&id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php } ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
 <table class="dataTable">
