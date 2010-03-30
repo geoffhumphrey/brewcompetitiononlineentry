@@ -1,11 +1,11 @@
 <?php if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Sponsors">Print This Page</a></p>
 <?php } ?>
 <table>
   <tr>
     <?php
 	$sponsors_endRow = 0;
-	$sponsors_columns = 4; // number of columns
+	if ($action == "print") $sponsors_columns = 3; else $sponsors_columns = 4;  // number of columns
 	$sponsors_hloopRow1 = 0; // first row flag
 	do {
     	if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) echo "<tr>";
@@ -28,7 +28,7 @@
     echo("<td>&nbsp;</td>");
     $sponsors_endRow++;
 	}
-echo("</tr>");
-}
-?>
+	echo("</tr>");
+	}
+	?>
 </table>
