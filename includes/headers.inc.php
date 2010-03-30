@@ -22,7 +22,7 @@ switch($section) {
 	case "register":
 	$header_output = "Register";
 	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt. Please try again.";
-	elseif ($msg == "2") { $output = "Sorry, the user name you entered is already in use."; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a></p>."; }
+	elseif ($msg == "2") { $output = "Sorry, the user name you entered is already in use."; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "The user name provided is not a valid email address. Please enter a valid email address.";
 	else $output = "";
 	break;
@@ -121,6 +121,10 @@ switch($section) {
 
 	case "beerxml":
 	$header_output = "Import an Entry Using BeerXML";
+	if ($msg != "default") { 
+	if ($totalRows_styles < 98) $output_extend = "<div class='info'>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles. To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
+	$output = $msg.". You should verify each of your entries for accuracy and to add additional information."; $output_extend .= "<p>To verify your entires, <a href='index.php?section=list&msg=6'>view your list of entries</a> and click edit for each that was imported.";
+	}
 	break;
 
 	case "admin":

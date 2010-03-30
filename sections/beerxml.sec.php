@@ -66,9 +66,7 @@ else
 	$message = "Invalid file specified.";
 
 ?>
-<?php if ($msg != "default") { ?>
-<div class="error"><?php echo $msg; ?>. You should verify each of your entries for accuracy and to add additional information.</div><p>To verify your entires, <a href="index.php?section=list&msg=6">view your list of entries</a> and click edit for each that was imported.
-<?php } ?>
+<?php if ($msg != "default") echo $msg_output; ?>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, ProMash, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>

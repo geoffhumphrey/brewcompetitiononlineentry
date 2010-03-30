@@ -161,10 +161,8 @@ width: 100%;  /* Height of the footer */
 }
 
 #footer-inner {
-background-color: #ffffff;
 padding: 1em;
 font-size: .8em;
-color: #666666;
 }
 
 
@@ -254,6 +252,24 @@ font-weight: bold;
 
 .dataTable { 
 
+}
+
+.dataTableCompact  { 
+
+}
+
+.dataTableCompact td { 
+vertical-align: top;
+padding: 2px;
+}
+
+.dataTableCompact th
+{
+vertical-align: top;
+padding: 1em .5em 1em .5em;
+background-color: #dddddd;
+text-align: left;
+font-size: 1.1em;
 }
 
 .dataHeading 

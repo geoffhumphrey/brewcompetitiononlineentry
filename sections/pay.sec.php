@@ -19,14 +19,13 @@ if ($msg != "default") echo $msg_output;
 if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) echo " (".$row_prefs['prefsCurrency'].number_format($regFee, 2)." for the first ".$row_contest_info['contestEntryFeeDiscountNum']." entries, ".$row_prefs['prefsCurrency'].number_format($discFee, 2)." for the remaining ".($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum'])." entries)"; ?>.</p>
 <?php if ($row_prefs['prefsCash'] == "Y") { ?>
 <h2>Cash</h2>
-<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) in a <em>sealed envelope</em> to one of  your bottles.<br />
-    <em>* Your returned scoresheets will serve as your entry receipt.</em></p>
+<p>Attach cash payment for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) in a <em>sealed envelope</em> to one of  your bottles.</p>
+<p><span class="required">Your returned scoresheets will serve as your entry receipt.</span></p>
 <?php } ?>
 <?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 <h2>Checks</h2>
-<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.<br />
-  <em>* Your check carbon or cancelled check is your entry receipt.</em><br />
-</p>
+<p>Attach a check for the entire entry amount (currently <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?>) to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
+<p><span class="required">Your check carbon or cashed check is your entry receipt.</p>
 <?php } ?>
 <?php if  ($row_prefs['prefsPaypal'] == "Y") { 
 if     ($row_prefs['prefsCurrency'] == "&pound;") $currency_code = "GBP";
@@ -36,9 +35,8 @@ else   $currency_code = "USD";
 ?>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <h2>Pay Online</h2>
-<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?><br />
-<em>* Your payment email from PayPal is your entry receipt. Include a copy with your entries as proof of payment.</em>
-</p>
+<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency'].number_format($fee, 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<p><span class="required">Your payment email from PayPal is your entry receipt. Include a copy with your entries as proof of payment.</p>
 <br />
 <input align="left" type="submit" border="0" name="submit" value="" class="paypal" alt="Pay your contest entry fees with PayPal" title="Pay your contest entry fees with PayPal"></p>
 <input type="hidden" name="cmd" value="_xclick">
@@ -49,8 +47,8 @@ else   $currency_code = "USD";
 <input type="hidden" name="no_shipping" value="1">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="rm" value="1">
-<input type="hidden" name="return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=pay&msg=1"; ?>">
-<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=pay&msg=2"; ?>">
+<input type="hidden" name="return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=1"; ?>">
+<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=2"; ?>">
 <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted">
 </form>
 <br /><br /><br />

@@ -5,6 +5,10 @@ include ('../includes/plug-ins.inc.php');
 include ('../includes/url_variables.inc.php');
 
 mysql_select_db($database, $brewing);
+$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
+$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+$row_contest_info = mysql_fetch_assoc($contest_info);
+
 $query_log = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
@@ -15,25 +19,21 @@ $user = mysql_query($query_user, $brewing) or die(mysql_error());
 $row_user = mysql_fetch_assoc($user);
 $totalRows_user = mysql_num_rows($user);
 
-mysql_select_db($database, $brewing);
 $query_style1 = sprintf("SELECT * FROM styles WHERE brewStyle = '%s'", $style);
 $style1 = mysql_query($query_style1, $brewing) or die(mysql_error());
 $row_style1 = mysql_fetch_assoc($style1);
 $totalRows_style1 = mysql_num_rows($style1);
 
-mysql_select_db($database, $brewing);
 $query_style2 = "SELECT * FROM styles";
 $style2 = mysql_query($query_style2, $brewing) or die(mysql_error());
 $row_style2 = mysql_fetch_assoc($style2);
 $totalRows_style2 = mysql_num_rows($style2);
 
-mysql_select_db($database, $brewing);
 $query_club = "SELECT * FROM brewer WHERE id = '1'";
 $club = mysql_query($query_club, $brewing) or die(mysql_error());
 $row_club = mysql_fetch_assoc($club);
 $totalRows_club = mysql_num_rows($club);
 
-mysql_select_db($database, $brewing);
 $query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $row_user['user_name']);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
@@ -162,7 +162,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
   </tr>
   <tr>
     <td colspan="2" nowrap="nowrap">Category/Subcategory (print full names)</td>
-    <td colspan="4" class="bdr1B"><?php echo $styleConvert.": ".$row_log['brewStyle']; ?></td>
+    <td colspan="4" class="bdr1B"><?php if ($row_log['brewCategory'] < 29) echo $styleConvert; else echo $row_contest_info['contestName']." Style"; echo ": ".$row_log['brewStyle']; ?></td>
   </tr>
 </table>
 <table>

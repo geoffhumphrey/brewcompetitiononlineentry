@@ -1,6 +1,6 @@
-<?php if ($action != "print") { ?><p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p><?php } 
+<?php if ($action != "print") { ?><p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print General Information">Print This Page</a></p><?php } 
 if ($msg != "default") echo $msg_output;
-if ($version >= "1.1.3") { 
+if (($version >= "1.1.3") && ($section == "admin")) { 
 		if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($totalRows_dropoff == 0)) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&action=add&go=dropoff\">Add a drop-off location</a>?</div>";
 		if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($totalRows_judging == 0)) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&action=add&go=judging\">Add a judging location</a>?</div>";
 	}
@@ -9,10 +9,28 @@ if (greaterDate($today,$deadline)) {
 ?>
 	<?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 	<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" />
+	<?php } 
+	if ($judgingDateReturn == "false") { ?>
+    <h2>Thanks and Good Luck To All Who Entered the <?php echo $row_contest_info['contestName']; ?>!</h2>
+    <p>There are <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
+		<h3>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h3>
+		<?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { 
+  		do { ?>
+  		<p>
+  		<?php 
+			if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
+			if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+			<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+    		<?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
+  			<?php } ?>
+		</p>
+		<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+		<?php } ?>
+	<?php } else { ?>
+	<h2>Thanks To All Who Participated in the <?php echo $row_contest_info['contestName']; ?>!</h2>
+    <p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
 	<?php } ?>
-<h2>Thanks To All Who Participated in the <?php echo $row_contest_info['contestName']; ?>!</h2>
-<p>There were <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
-	<?php if ($judgingDateReturn == "true") { ?>
+    <?php if ($judgingDateReturn == "true") { ?>
 	<p>Judging has already taken place.</p>
 	<?php include ('closed.sec.php'); 
 	}

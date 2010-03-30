@@ -13,7 +13,7 @@
   <?php if ($dbTable == "default") { ?>
   <?php if (($filter != "default") || ($bid != "default")) echo "<td class=\"dataList\" width=\"5%\" nowrap=\"nowrap\"><a href=\"index.php?section=admin&go=entries\">View entries in all categories</a></td>"; ?>
   <?php } ?>
-  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&action=print&filter=<?php echo $filter; ?>&bid=<?php echo $bid; ?>&sort=<?php echo $sort; ?>&dir=<?php echo $dir; ?>','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print List of Entries</a></td>
+  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&action=print&filter=<?php echo $filter; ?>&bid=<?php echo $bid; ?>&sort=<?php echo $sort; ?>&dir=<?php echo $dir; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print List of Entries">Print List of Entries</a></td>
 </tr>
 </table>
 <?php } ?>
@@ -43,8 +43,9 @@
   <td class="dataHeading bdr1B"><?php if ($bid == "default") { ?><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewBrewerLastName&dir="; if ($sort == "brewBrewerLastName") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo $dir; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>"><?php } ?>Brewer<?php if ($bid == "default") { ?></a><?php } ?></td>
   <td class="dataHeading bdr1B"><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewReceived&dir="; if ($sort == "brewReceived") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo "DESC"; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>">Rec'd?</a></td>
   <td class="dataHeading bdr1B"><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewPaid&dir="; if ($sort == "brewPaid") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo "DESC"; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>">Paid?</a></td>
-  <td class="dataHeading bdr1B"><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewWinner&dir="; if ($sort == "brewWinner") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo "DESC"; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>">Winner?</a></td>
-  <td class="dataHeading bdr1B">Winner Cat./Sub.</td>
+  <td class="dataHeading bdr1B"><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewWinner&dir="; if ($sort == "brewWinner") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo "DESC"; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>">Win?</a></td>
+  <td class="dataHeading bdr1B">Category</td>
+  <td class="dataHeading bdr1B">Sub-cat.</td>
   <td class="dataHeading bdr1B">Place</td>
   <td class="dataHeading bdr1B"><a href="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?section=".$section."&dbTable=".$dbTable."&go=".$go."&action=".$action."&filter=".$filter."&bid=".$bid."&sort=brewBOSRound&dir="; if ($sort == "brewBOSRound") { if ($dir == "ASC") echo "DESC"; if ($dir == "DESC") echo "ASC"; } else echo "DESC"; ?>" title="Sort <?php if ($sort == "id") { if ($dir == "ASC") echo "Descending"; if ($dir == "DESC") echo "Ascending"; } else echo "Ascending"; ?>">BOS?</a></td>
   <td class="dataHeading bdr1B">BOS Place</td>
@@ -73,9 +74,9 @@
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action != "print") { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "Y") echo "X"; } ?></td>
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action != "print") { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewPaid'] == "Y") echo "X"; } ?></td>
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action != "print") { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewWinner'] == "Y") echo "X"; } ?></td>
-  <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
-  <?php if ($action != "print") { ?>
-  	  <select name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat">
+  <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <?php if ($action != "print") { ?>   
+  <select name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat">
   	  <option value="">&nbsp;&nbsp;&nbsp;</option>
       <option value="01" <?php if ($row_log['brewWinnerCat'] == "01") echo "SELECTED"; ?>>1</option>
       <option value="02" <?php if ($row_log['brewWinnerCat'] == "02") echo "SELECTED"; ?>>2</option>
@@ -106,7 +107,10 @@
       <option value="27" <?php if ($row_log['brewWinnerCat'] == "27") echo "SELECTED"; ?>>27</option>
       <option value="28" <?php if ($row_log['brewWinnerCat'] == "28") echo "SELECTED"; ?>>28</option>
     </select>
-    &nbsp;      
+    <?php } else echo $row_log['brewWinnerCat']; ?>
+  </td>
+  <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <?php if ($action != "print") { ?>   
     <select name="brewWinnerSubCat<?php echo $row_log['id']; ?>" id="brewWinnerSubCat">
   	  <option value="">&nbsp;&nbsp;&nbsp;</option>
       <option value="A" <?php if ($row_log['brewWinnerSubCat'] == "A") echo "SELECTED"; ?>>A</option>
@@ -117,7 +121,7 @@
       <option value="F" <?php if ($row_log['brewWinnerSubCat'] == "F") echo "SELECTED"; ?>>F</option>
       <option value="G" <?php if ($row_log['brewWinnerSubCat'] == "G") echo "SELECTED"; ?>>G</option>
     </select>
-    <?php } else echo $row_log['brewWinnerCat'].$row_log['brewWinnerSubCat']; ?>
+    <?php } else echo $row_log['brewWinnerSubCat']; ?>
     </td>
   <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
       <?php if ($action != "print") { ?>

@@ -44,6 +44,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="dataLabel">Style:</td>
    <td class="data">
    <select name="brewStyle">
+   	 <option value=""></option>
     <?php do {  ?>
      <option value="<?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo "-".$row_styles['brewStyleNum']; ?>" <?php if ($action == "edit") {  if (!(strcmp($row_styles['brewStyle'], $row_log['brewStyle']))) { echo "SELECTED"; } } ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
       <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
