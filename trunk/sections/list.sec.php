@@ -52,7 +52,7 @@ if ($msg != "default") echo $msg_output;
   <td class="dataHeading bdr1B">Entry Name</td>
   <td class="dataHeading bdr1B">Style</td>
   <?php if ($action != "print") { ?>
-  <?php if ($judgingDateReturn == "false") { ?>
+  <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
   <td colspan="3" class="dataHeading bdr1B">Actions</td>
   <?php } ?>
   <?php } ?>
@@ -73,7 +73,7 @@ if ($msg != "default") echo $msg_output;
   <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
   <?php } 
-  if ($judgingDateReturn == "false") { ?>
+  if (greaterDate($today,$deadline)) echo ""; else { ?>
   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
   <?php } 
   }
