@@ -119,11 +119,11 @@ if ($totalRows_brewer > 0) { ?>
 <?php } ?>
 </table>
 <?php } if ($totalRows_brewer == 0) { ?>
-<div class="error">
+
 <?php 
-if ($filter == "default") echo "There are no participants yet."; 
-if (($filter == "judges") || ($filter == "assignJudges")) echo "There are no judges available yet."; 
-if (($filter == "stewards") || ($filter == "assignStewards"))  echo "There are no stewards available yet."; 
+if ($filter == "default") echo "<div class='error'>There are no participants yet.</div>"; 
+if (($filter == "judges") || ($filter == "assignJudges")) echo "<div class='error'>There are no judges available yet.</div>"; 
+if (($filter == "stewards") || ($filter == "assignStewards"))  echo "<div class='error'>There are no stewards available yet.</div>"; 
 }
 } // end if ($action == "default")
 

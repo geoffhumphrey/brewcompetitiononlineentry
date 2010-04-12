@@ -25,6 +25,9 @@ include ('includes/headers.inc.php');
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
 <script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
+<script type="text/javascript" src="js_includes/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js_includes/thickbox.js"></script>
+
 <?php include ('includes/form_check.inc.php'); ?>
 </head>
 <body>
