@@ -30,6 +30,9 @@
   <td class="dataHeading">Total Paid Entry Fees<?php if ($filter != "default") echo " for This Category"; ?>:</td>
   <td class="data">$<?php echo ($totalRows_log_paid * $row_contest_info['contestEntryFee']); ?></td>
 </tr>
+<tr>
+  	<td colspan="2">&nbsp;</td>
+  </tr>
 </table>
 <?php if ($totalRows_log > 0) { ?>
 <?php if ($action != "print") { ?>
@@ -152,6 +155,9 @@
 
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } } while($row_log = mysql_fetch_assoc($log)) ?>
+  <tr>
+  	<td class="bdr1T" colspan="13">&nbsp;</td>
+  </tr>
 </table>
 <?php if ($action != "print") { ?>
 <input type="submit" name="Submit" class="button" value="Update Entries" />
