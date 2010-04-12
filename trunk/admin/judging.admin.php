@@ -7,7 +7,7 @@
 <?php } 
 else 
 	{ 
-	include ('judging_links.admin.php');
+	if ($section == "admin") include ('judging_links.admin.php');
  	if (($action == "default") && ($section != "step3")) include ('judging_default.admin.php'); 
 	if ((($action == "add") || ($action == "edit")) || ($section == "step3")) include ('judging_add.admin.php'); 
 	} // end else 

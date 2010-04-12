@@ -1552,7 +1552,7 @@ if (($action == "add") && ($dbTable == "judging")) {
 	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step3") $insertGoTo = "../setup.php?section=step4"; else $insertGoTo = "../index.php?section=$section&go=$go";
+	if ($section == "step3") $insertGoTo = "../setup.php?section=step3"; else $insertGoTo = "../index.php?section=$section&go=$go";
 	if ($section == "step3") $insertGoTo .= "&msg=9"; else $insertGoTo .= "&msg=1";
 	//echo $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
