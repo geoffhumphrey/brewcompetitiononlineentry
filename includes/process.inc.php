@@ -1196,6 +1196,7 @@ contestEntryFee2,
 contestEntryFeeDiscount,
 contestEntryFeeDiscountNum,
 contestLogo,
+contestBOSAward
 id
 ) 
 VALUES 
@@ -1204,7 +1205,8 @@ VALUES
 %s, %s, %s, %s, %s,
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
-%s, %s, %s, %s, %s)",
+%s, %s, %s, %s, %s,
+%s)",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
                        GetSQLValueString($_POST['contestHostWebsite'], "text"),
@@ -1229,6 +1231,7 @@ VALUES
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
+					   GetSQLValueString($_POST['contestBOSAward'], "text"), 
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1271,7 +1274,8 @@ contestAwardsLocTime=%s,
 contestEntryFee2=%s,
 contestEntryFeeDiscount=%s,
 contestEntryFeeDiscountNum=%s,
-contestLogo=%s
+contestLogo=%s,
+contestBOSAward=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
@@ -1297,6 +1301,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
+					   GetSQLValueString($_POST['contestBOSAward'], "text"), 
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);

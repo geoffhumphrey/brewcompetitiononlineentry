@@ -10,6 +10,7 @@
 <?php if ($row_contest_info['contestBottles'] != "") { ?><a href="#bottle">Bottle Acceptance Rules</a><br /><?php } ?>
 <?php if ($row_contest_info['contestShippingAddress'] != "") { ?><a href="#shipping">Shipping Location and Address</a><br /><?php } ?>
 <?php if ($totalRows_dropoff > 0) { ?><a href="#drop">Drop Off Location<?php if ($totalRows_dropoff > 1) echo "s"; ?></a><br /><?php } ?>
+<?php if ($row_contest_info['contestBOSAward'] != "") { ?><a href="#bos">Best of Show</a><br /><?php }?>
 <?php if ($row_contest_info['contestAwards'] != "") { ?><a href="#awards">Awards</a><br /><?php }?>
 <?php if ($row_contest_info['contestAwardsLocName'] != "") { ?><a href="#ceremony">Awards Ceremony</a><br /><?php } ?>
 <?php } ?>
@@ -78,10 +79,15 @@ if ($totalRows_dropoff > 0) { ?>
 </p>
 <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
-<?php } 
+<?php } ?>
+<?php if ($row_contest_info['contestBOSAward'] != "") { ?>
+<a name="bos"></a><h2>Best of Show</h2>
+<?php echo $row_contest_info['contestBOSAward']; ?>
+<?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
+<?php }
 if ($row_contest_info['contestAwards'] != "") { ?>
 <a name="awards"></a><h2>Awards</h2>
-<p><?php echo $row_contest_info['contestAwards']; ?></p>
+<?php echo $row_contest_info['contestAwards']; ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php } ?>
 <?php if ($row_contest_info['contestAwardsLocName'] != "") { ?>
