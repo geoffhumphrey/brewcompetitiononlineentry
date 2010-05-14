@@ -35,7 +35,7 @@ abstract class Parser {
 	public $inNode;
 
 	function parse($parser,$beerXMLParser){
-		xml_set_object($parser,&$this);
+		xml_set_object($parser,$this);
 		$this->parser = $beerXMLParser;
 	}
 }
