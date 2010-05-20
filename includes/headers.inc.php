@@ -123,7 +123,7 @@ switch($section) {
 	$header_output = "Import an Entry Using BeerXML";
 	if ($msg != "default") { 
 	if ($totalRows_styles < 98) $output_extend = "<div class='info'>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles. To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
-	$output = $msg.". You should verify each of your entries for accuracy and to add additional information."; $output_extend .= "<p>To verify your entires, <a href='index.php?section=list&msg=6'>view your list of entries</a> and click edit for each that was imported.";
+	$output = $msg.". You should verify each of your entries for accuracy and to add additional information."; $output_extend .= "<p>To verify your entires, <a href='index.php?section=list&amp;msg=6'>view your list of entries</a> and click edit for each that was imported.";
 	}
 	break;
 
@@ -181,8 +181,8 @@ switch($section) {
 	elseif ($msg == "8") $output = "Archive \"".$filter."\" deleted."; 
 	elseif ($msg == "9") $output = "The records have been updated.";
 	elseif ($msg == "10") $output = "The username you have entered is already in use.";
-	elseif ($msg == "11") { $output = "Add another drop-off location?"; $output_extend = "<p><a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin&go=dropoff"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step5"; else $output_extend .= "index.php?section=admin'>No</a>"; }
-	elseif ($msg == "12") { $output = "Add another judging location, date, or time?"; $output_extend = "<p><a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step3"; else $output_extend .= "index.php?section=admin&go=judging"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; }
+	elseif ($msg == "11") { $output = "Add another drop-off location?"; $output_extend = "<p><a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin&amp;go=dropoff"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step5"; else $output_extend .= "index.php?section=admin'>No</a>"; }
+	elseif ($msg == "12") { $output = "Add another judging location, date, or time?"; $output_extend = "<p><a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step3"; else $output_extend .= "index.php?section=admin&amp;go=judging"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; }
 	else $output = "";
 	break;
 

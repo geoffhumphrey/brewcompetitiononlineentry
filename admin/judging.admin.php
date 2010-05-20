@@ -3,7 +3,7 @@
 <div class="info">If your competition judging will be held on the same day and location, but separated into two or more designated times (i.e., an AM session and a PM session), define each separately.</div>
 <?php } if ($msg == "9"){ ?>
 <div class="error">Add another judging location, date, or time?</div>
-<p><a href="<?php if ($section == "step3") echo "setup.php?section=step3"; else echo "index.php?section=admin&go=judging"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step3") echo "setup.php?section=step4"; else echo "index.php?section=admin"; ?>">No</a>
+<p><a href="<?php if ($section == "step3") echo "setup.php?section=step3"; else echo "index.php?section=admin&amp;go=judging"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step3") echo "setup.php?section=step4"; else echo "index.php?section=admin"; ?>">No</a>
 <?php } 
 else 
 	{ 

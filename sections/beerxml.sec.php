@@ -17,7 +17,7 @@ $DELETABLE  = false;
 $recipeList = "";
 function formatInsertedRecipes($recipes) {
     foreach($recipes as $id=>$name){
-        $recipelist .= "<tr><td><a href=\"index.php?page=recipeDetail&id=" .$id . "\">".$name."</a></td></tr>";
+        $recipelist .= "<tr><td><a href=\"index.php?page=recipeDetail&amp;id=" .$id . "\">".$name."</a></td></tr>";
     }
     return $recipelist;
 }
@@ -43,7 +43,7 @@ if ($_FILES['userfile']) {
         /*
 		$recipes = '';
         foreach($insertedRecipes as $id=>$name){
-            $recipes .= "<tr><td class=\"dataList\"><a href=\"index.php?section=brew&action=edit&go=beerXML&filter=".count($insertedRecipes)."&id=" .$id . "\">". $name . "</a></td><td class=\"data\"><span class=\"required\"></span></td></tr>";
+            $recipes .= "<tr><td class=\"dataList\"><a href=\"index.php?section=brew&amp;action=edit&amp;go=beerXML&amp;filter=".count($insertedRecipes)."&amp;id=" .$id . "\">". $name . "</a></td><td class=\"data\"><span class=\"required\"></span></td></tr>";
         }
 		*/
 		if (count($insertedRecipes) > 1) $message = count($insertedRecipes) . " entries inserted";
@@ -52,14 +52,14 @@ if ($_FILES['userfile']) {
         $insertedRecipes = $input->insertBlogs();
         $recipes = '';
         foreach($insertedRecipes as $id=>$name){
-            $recipes .= "<tr><td><a href=\"../index.php?page=brewBlogDetail&id=" .$id . "\">" . $name . "</a></td></tr>";
+            $recipes .= "<tr><td><a href=\"../index.php?page=brewBlogDetail&amp;id=" .$id . "\">" . $name . "</a></td></tr>";
         }
         $message = count($insertedRecipes) . " BrewBlogs Inserted";
     }
     $_SESSION['recipes'] = $recipes;
    }
 
-   print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=". htmlentities($message) . "&inserted=true'</script>";
+   print "<script>window.location.href='index.php?section=".$section."&amp;action=importXML&amp;msg=". htmlentities($message) . "&inserted=true'</script>";
 }
 else if (!$_FILES['userfile']) $message = "userfile check failed";
 else

@@ -18,8 +18,8 @@
   	</tr>
 </table>
 </form>
-<?php if ($msg != "default") { ?><p><img src="images/exclamation.png"  align="absmiddle"  /><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p><?php } ?>
-<p><img src="images/exclamation.png"  align="absmiddle"  /><span class="data">Did you forget your password? If so, <a href="index.php?section=login&amp;action=forgot">click here to reset it</a>.</span></p>
+<?php if ($msg != "default") { ?><p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p><?php } ?>
+<p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="index.php?section=login&amp;action=forgot">click here to reset it</a>.</span></p>
 <?php
 } 
 if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are already logged in.</div>";
@@ -28,7 +28,7 @@ if ($action == "forgot") {
 	if ($msg != "default") echo $msg_output; 
 	if ($go == "default") {  ?>
 <p>To reset your password, enter your email address below.</p>
-<form action="index.php?section=login&action=forgot&go=verify" method="POST" name="form1" id="form1">
+<form action="index.php?section=login&amp;action=forgot&amp;go=verify" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Email Address:</td>
@@ -47,7 +47,7 @@ $query_userCheck = "SELECT * FROM users WHERE user_name = '$username'";
 $userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
 $row_userCheck = mysql_fetch_assoc($userCheck);
 $totalRows_userCheck = mysql_num_rows($userCheck);
-if (($totalRows_userCheck == 0) && ($msg == "default")) echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&action=forgot\">Try again?</a>";
+if (($totalRows_userCheck == 0) && ($msg == "default")) echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";
 else { if ($msg != "default") echo $msg_output; } ?>
 <form action="includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 <table class="dataTable">

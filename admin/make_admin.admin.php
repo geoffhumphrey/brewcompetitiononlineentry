@@ -1,8 +1,8 @@
-<form action="includes/process.inc.php?section=<?php echo $section; ?>&action=edit&dbTable=users&go=make_admin" name="form1" method="post">
+<form action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=users&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users admin access with caution. Admin users are able to add, edit, and delete any information in the database.</div>
 <table>
 <tr>
-  <td class="dataList"><a href="index.php?section=admin">&laquo; Back to Admin</a></td>
+  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></td>
   <td class="data">&nbsp;</td>
 </tr>
 <tr>

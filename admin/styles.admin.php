@@ -3,12 +3,12 @@
 <?php if ($section != "step5") { ?>
 <table class="dataTable">
 <tr>
-  <td class="dataList" width="5%" nowrap="nowrap"><?php if (($action == "add") || ($action == "edit") || ($filter == "judging")) { ?><a href="index.php?section=admin&go=styles">&laquo;  Back to Styles Accepted List</a><?php } else { ?><a href="index.php?section=admin">&laquo; Back to Admin</a><?php } ?></td>
+  <td class="dataList" width="5%" nowrap="nowrap"><?php if (($action == "add") || ($action == "edit") || ($filter == "judging")) { ?><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><span class="data"><a href="index.php?section=admin&amp;go=styles">Back to Styles Accepted List</a></span><?php } else { ?><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a><?php } ?></td>
   <?php if ($action == "default") { ?>
   	<?php if (($totalRows_judging > 1) && ($filter == "default")) { ?>
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/note.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=styles&filter=judging">Designate Style Categories for Judging Locations</a></td>
+  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/note.png"  /></span><a class="data" href="index.php?section=admin&amp;go=styles&amp;filter=judging">Designate Style Categories for Judging Locations</a></td>
   	<?php } ?>
-  	<td class="dataList"><span class="icon"><img src="images/note_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=styles&action=add">Add a Custom Style Category</a></td>
+  	<td class="dataList"><span class="icon"><img src="images/note_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a></td>
   <?php } ?>
 </tr>
 </table> 
@@ -32,7 +32,7 @@ function checkUncheckAll(theElement) {
      }
     }
 </script>
-<form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&action=update&dbTable=styles&filter=<?php echo $filter; if ($bid != "default") echo "&bid=".$bid; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=update&amp;dbTable=styles&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <table class="dataTable">
  <tr>
  	<td colspan="5"><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></td>
@@ -72,11 +72,11 @@ function checkUncheckAll(theElement) {
   <td width="5%" class="dataList"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank"><img src="images/link.png" border="0" alt="Link to BJCP Style"></a><?php } else echo "&nbsp;"; ?></td>
   <td class="dataList">
   <?php if ($row_styles['brewStyleOwn'] != "bcoe") { ?>
-  <span class="icon"><a href="index.php?section=admin&go=<?php echo $go; ?>&action=edit&id=<?php echo $row_styles['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_styles['brewStyle']; ?>" title="Edit <?php echo $row_styles['brewStyle']; ?>"></a></span>
-  <span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&go=<?php echo $go; ?>&dbTable=styles&action=delete','id',<?php echo $row_styles['id']; ?>,'Are you sure you want to delete <?php echo $row_styles['brewStyle']; ?>? This cannot be undone.');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_style['brewStyle']; ?>" title="Delete <?php echo $row_style['brewStyle']; ?>"></a></span></td>
+  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_styles['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_styles['brewStyle']; ?>" title="Edit <?php echo $row_styles['brewStyle']; ?>"></a></span>
+  <span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=styles&amp;action=delete','id',<?php echo $row_styles['id']; ?>,'Are you sure you want to delete <?php echo $row_styles['brewStyle']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style['brewStyle']; ?>" title="Delete <?php echo $row_style['brewStyle']; ?>"></a></span></td>
   <?php } else { ?>
-  <span class="icon"><img src="images/pencil_fade.png" align="absmiddle" border="0" /></span>
-  <span class="icon"><img src="images/bin_closed_fade.png" align="absmiddle" border="0" /></span>
+  <span class="icon"><img src="images/pencil_fade.png"  border="0" /></span>
+  <span class="icon"><img src="images/bin_closed_fade.png"  border="0" /></span>
   <?php } ?>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
@@ -89,7 +89,7 @@ function checkUncheckAll(theElement) {
 <?php } ?>
 
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&action=<?php echo $action; ?>&dbTable=styles&go=<?php echo $go; if ($action == "edit") echo "&id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=styles&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
 <tr>
     <td class="dataLabel" >Style Name:</td>
@@ -171,7 +171,7 @@ function checkUncheckAll(theElement) {
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
-	<option value="index.php?section=admin&go=styles&filter=judging&bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo dateconvert($row_judging['judgingDate'], 3).")"; ?></option>
+	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo dateconvert($row_judging['judgingDate'], 3).")"; ?></option>
     <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
   </select>
   </td>

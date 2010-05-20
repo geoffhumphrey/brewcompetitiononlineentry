@@ -12,7 +12,7 @@ function checkUncheckAll(theElement) {
      }
     }
 </script>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&dbTable=brewer&filter=<?php echo $filter; if ($bid != "default") echo "&bid=".$bid; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=brewer&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <table class="dataTable">
  <tr>
  	<td colspan="10"><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></td>

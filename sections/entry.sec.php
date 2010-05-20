@@ -84,8 +84,8 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 <table>
   <tr>
     <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/eye.png" align="absmiddle" />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>&bid=<?php echo $bid; ?>">Print</a></td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/eye.png"  />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="?action=print&amp;id=<?php echo $id; ?>&amp;bid=<?php echo $bid; ?>">Print</a></td>
   </tr>
 </table>
 <?php } ?>
@@ -683,7 +683,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 <a name="labels" id="labels"></a>
 <table align="center" class="bottleLabel">
   <tr>
-    <td align="center" valign="middle">
+    <td align="center" v>
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
@@ -734,7 +734,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
         <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
       </tr>
     </table></td>
-    <td align="center" valign="middle">
+    <td align="center" v>
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
@@ -787,7 +787,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
     </table></td>
   </tr>
   <tr>
-    <td align="center" valign="middle"><table class="bdr1_thick bottle bottleLabel-inner">
+    <td align="center" v><table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
       </tr>
@@ -837,7 +837,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
         <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
       </tr>
     </table></td>
-    <td align="center" valign="middle">
+    <td align="center" v>
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
@@ -891,7 +891,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
     </td>
   </tr>
 </table>
-<?php if ($action != "print") { ?><p align="right"><img src = "../images/arrow_up.png" align="absmiddle" /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;<img src = "../images/printer.png" align="absmiddle" />&nbsp;<a href="?action=print&id=<?php echo $id; ?>&bid=<?php echo $bid; ?>">Print</a></p><?php } ?>
+<?php if ($action != "print") { ?><p align="right"><img src = "../images/arrow_up.png"  /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;<img src = "../images/printer.png"  />&nbsp;<a href="?action=print&amp;id=<?php echo $id; ?>&amp;bid=<?php echo $bid; ?>">Print</a></p><?php } ?>
 
 </div>
 </body>

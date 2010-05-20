@@ -1,4 +1,4 @@
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&action=<?php if ($section == "step3") echo "add"; else echo $action; ?>&dbTable=judging&go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo $action; ?>&amp;dbTable=judging&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>

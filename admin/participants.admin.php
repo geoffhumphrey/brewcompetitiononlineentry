@@ -9,34 +9,34 @@ if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
 <?php if ($action != "print") { ?>
 <table class="dataTable">
 <tr>
-  <td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin">&laquo; Back to Admin</a></td>
+  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></td>
   <?php if ($action != "add") { // 1?>
   		<?php if ($dbTable != "default") { // 1.1 ?>
- 	 	<td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&go=archive">&laquo; Back to Archives</a></td>
+ 	 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=archive">Back to Archives</a></td>
   		<?php } // end 1.1 ?>
-  		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&go=participants&action=add">Add Participant</a></td>
+  		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=participants&amp;action=add">Add Participant</a></td>
   		<?php if ($dbTable == "default") { // 1.2 ?>
         <td class="dataList" width="5%" nowrap="nowrap">
         	<span class="icon">View:</span>
                     <select name="view_participants" id="view_participants" onchange="jumpMenu('self',this,0)">
-                    <option value="index.php?section=admin&go=participants"<?php if ($filter == "default") echo " SELECTED"; ?>>All Participants</option>
-                    <option value="index.php?section=admin&go=participants&filter=judges"<?php if ($filter == "judges") echo " SELECTED"; ?>>Available Judges</option>
-                    <option value="index.php?section=admin&go=participants&filter=stewards"<?php if ($filter == "stewards") echo " SELECTED"; ?>>Available Stewards</option>
-                    <option value="index.php?section=admin&go=participants&filter=assignJudges"<?php if ($filter == "assignJudges") echo " SELECTED"; ?>>Assigned Judges</option>
-                    <option value="index.php?section=admin&go=participants&filter=assignStewards"<?php if ($filter == "assignStewards") echo " SELECTED"; ?>>Assigned Stewards</option>
+                    <option value="index.php?section=admin&amp;go=participants"<?php if ($filter == "default") echo " SELECTED"; ?>>All Participants</option>
+                    <option value="index.php?section=admin&amp;go=participants&amp;filter=judges"<?php if ($filter == "judges") echo " SELECTED"; ?>>Available Judges</option>
+                    <option value="index.php?section=admin&amp;go=participants&amp;filter=stewards"<?php if ($filter == "stewards") echo " SELECTED"; ?>>Available Stewards</option>
+                    <option value="index.php?section=admin&amp;go=participants&amp;filter=assignJudges"<?php if ($filter == "assignJudges") echo " SELECTED"; ?>>Assigned Judges</option>
+                    <option value="index.php?section=admin&amp;go=participants&amp;filter=assignStewards"<?php if ($filter == "assignStewards") echo " SELECTED"; ?>>Assigned Stewards</option>
                     </select>   
    		<?php } // end 1.2 ?>
  <td class="dataList">&nbsp;</td>
  </tr>
  <?php if (($action != "add") && ($dbTable == "default")) { // 2  ?>
  <tr>
- 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=judges">Assign Judges</a></td>
- 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=assign&go=judging&filter=stewards">Assign Stewards</a></td>
- 	<td class="dataList" width="5%" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=judges">Assign Judges to a Location</a><?php } else echo "&nbsp;"; ?></td>
- 	<td class="dataList" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=admin&action=update&go=judging&filter=stewards">Assign Stewards to a Location</a><?php } else echo "&nbsp;"; ?></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a></td>
+ 	<td class="dataList" width="5%" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Assign Judges to a Location</a><?php } else echo "&nbsp;"; ?></td>
+ 	<td class="dataList" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Assign Stewards to a Location</a><?php } else echo "&nbsp;"; ?></td>
  </tr>
  <tr>
- 	<td class="dataList" colspan="4"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&action=print&filter=<?php echo $filter; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
+ 	<td class="dataList" colspan="4"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;action=print&amp;filter=<?php echo $filter; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
 elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?>">Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
 elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?></a></td>
  </tr>
@@ -103,10 +103,10 @@ if ($totalRows_brewer > 0) { ?>
 	  	<?php } ?>
   <?php } if ($action != "print") { ?>
     <td class="dataList" nowrap="nowrap">
-    <span class="icon"><a href="index.php?section=brew&go=entries&filter=<?php echo $row_user1['id']; ?>&action=add"><img src="images/book_add.png" align="absmiddle" border="0" alt="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span> 
-    <span class="icon"><a href="index.php?section=brewer&go=<?php echo $go; ?>&filter=<?php echo $row_brewer['id']; ?>&action=edit&id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span>
-    <span class="icon"><a href="index.php?section=admin&go=make_admin&username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png" align="absmiddle" border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span>
-    <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&go=<?php echo $go; ?>&dbTable=brewer&action=delete&username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
+    <span class="icon"><a href="index.php?section=brew&amp;go=entries&amp;filter=<?php echo $row_user1['id']; ?>&amp;action=add"><img src="images/book_add.png"  border="0" alt="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span> 
+    <span class="icon"><a href="index.php?section=brewer&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_brewer['id']; ?>&amp;action=edit&amp;id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span>
+    <span class="icon"><a href="index.php?section=admin&amp;go=make_admin&amp;username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png"  border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span>
+    <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;dbTable=brewer&amp;action=delete&amp;username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
     </td> 
   <?php } ?> 
   </tr>
@@ -130,7 +130,7 @@ if (($filter == "stewards") || ($filter == "assignStewards"))  echo "<div class=
 if ($action == "add")  { 
 	if ($filter == "default") { ?>
 <script type="text/javascript" src="js_includes/email_check.js"></script>
-<form action="includes/process.inc.php?action=add&dbTable=users&section=<?php echo $section; ?>&go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?action=add&amp;dbTable=users&amp;section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
@@ -154,7 +154,7 @@ if ($action == "add")  {
 <?php } 
 if ($filter == "info") { 
 if (($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
-<form action="includes/process.inc.php?section=<?php echo "admin&go=".$go."&filter=".$filter; ?>&action=<?php echo $action; ?>&dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=<?php echo "admin&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <tr>
       <td class="dataLabel" width="5%">Email:</td>

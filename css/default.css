@@ -3,38 +3,28 @@
 
 /* Links */
 
-a:link
-{
+a:link {
 color: #990000;
 text-decoration: none;
 }
 
-
-a:visited
-{
+a:visited {
 color: #990000;
 text-decoration: none;
 }
 
-
-a:hover,
-a:focus
-{
+a:hover, a:focus {
 color: #0000CC;
 text-decoration: underline;
 }
 
-
-a:active
-{
+a:active {
 color: #0000CC;
-text-decoration: underline;}
+text-decoration: underline;
+}
 
-
-/** body **/
-html, body
-{
-font-family: Verdana, Arial, Helvetica, sans-serif;
+/* body */
+html, body {
 font-size: 11px;
 margin: 0;
 padding: 0;
@@ -42,89 +32,62 @@ height: 100%;
 background-color: #eeeeee;
 }
 
-
-/** HTML elements **/ 
+/* Customized HTML elements */ 
 
 h1 {
-
+font-weight: bold;
+color: #37517B;
+margin: 1em 0 1.5em 0;
 }
 
 h2 {
-padding: 0 0 1.5em 0;
-margin: 0;
-font-size: 1.5em;
 font-weight: bold;
 color: #37517B;
+margin: 1em 0 1em 0;
 }
 
 h3 {
-padding: 1em 0 .5em 0;
-margin: 0;
-font-size: 1.2em;
 font-weight: bold;
 color: #37517B;
+margin: 1em 0 1em 0;
 }
 
 input, textarea, select, submit {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: .9em;
+font-size: 1em;
 border: 1px solid #c0c0c0;
 background-color: #eeeeee;
 }
 
-
-.paypal {
-background-color: #ffffff;
-background-image: url(https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif);
-background-repeat: no-repeat;
-border: 0;
-height: 47px;
-width: 144px;
-cursor: pointer;
-padding: 0;
-margin: 0;
-}
-
-ul
-{
-margin: 0 0 1em 2em;
+ul {
 list-style-type: circle;
 }
 
-ol
-{
-margin: 0 0 1em 2.3em;
+ol {
+
 }
 
-ul li
-{
-padding: 0 0 .5em .7em;
+ul li {
+
 }
 
-ol li
-{
-padding: 0 0 .5em .4em;
+ol li {
+
 }
 
-p 
-{
+p {
 margin: 1.25em 0 1.25em 0;
 }
 
-table 
-{
-border-collapse: collapse;
-font-size: inherit;
+table {
+
 }
 
-td
-{
+td {
 vertical-align: top;
 padding: .5em 2em .5em .5em;
 }
 
-th
-{
+th {
 vertical-align: top;
 padding: 1em .5em 1em .5em;
 background-color: #dddddd;
@@ -132,20 +95,21 @@ text-align: left;
 font-size: 1.1em;
 }
 
+/* Container elements */
+
 #container {
-position:relative;
+position: relative;
 min-height: 95%;
 background-color: #ffffff;
 }
 
 
-/** header **/
+/* header */
 #navigation 
 { 
 width: 100%;
-position: absolute;
-margin-bottom: 10px;
-min-height: 30px;
+position: relative;
+margin-bottom: 0;
 }
 
 #navigation-inner
@@ -163,8 +127,8 @@ height: auto;
 
 #header-inner
 {
-margin: 2em 0 1em 0;
-padding: 1.5em 0;
+margin: 1em 0 1em 0;
+padding: 0;
 }
 
 #header-inner h1
@@ -176,7 +140,7 @@ color: #37517B;
 border-bottom: 1px dashed #37517B;
 }
 
-/** Footer **/
+/* Footer */
 #footer
 {
 bottom: 15px;
@@ -191,15 +155,15 @@ font-size: .8em;
 color: #666666;
 }
 
+/* Content */
 
-/** content **/
 #content
 {
 }
 
 #content-inner
 {
-padding: 40px 1em;
+padding: 15px 1em;
 }
 
 #content-inner-no-nav
@@ -223,11 +187,11 @@ color: #37517B;
 border-bottom: 1px solid #37517B;
 }
 
-/** Nav **/
+/* Nav */
 
 #nav {
 margin: 0 0 0 0;
-padding: 1em 0 1em 0;
+padding: 1em 0 0;
 font-size: .9em;
 }
 
@@ -244,7 +208,19 @@ display: block;
 margin: .5em 0 0 0;
 }
 
-/** Special Classes **/
+/* Custom Elements */
+
+.paypal {
+background-color: #ffffff;
+background-image: url(https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif);
+background-repeat: no-repeat;
+border: 0;
+height: 47px;
+width: 144px;
+cursor: pointer;
+padding: 0;
+margin: 0;
+}
 
 .colorTable {
 border-collapse: collapse;
@@ -258,8 +234,7 @@ white-space: nowrap;
 padding: 2px;
 }
 
-.error 
-{
+.error {
 color: #FF0000;
 font-size: 1.2em;
 font-weight: bold;
@@ -290,8 +265,7 @@ font-weight: bold;
 width: 100%;
 }
 
-.dataTable th
-{
+.dataTable th {
 vertical-align: top;
 padding: 1em .5em 1em .5em;
 background-color: #dddddd;
@@ -299,38 +273,33 @@ text-align: left;
 font-size: 1.1em;
 }
 
-.dataHeading 
-{
+.dataHeading {
 font-weight: bold;
 padding: .5em 0 .5em .5em;
 white-space: nowrap;
 }
 
-.dataList
-{
+.dataList {
 padding: .5em 2em .5em .5em;
 }
 
-.dataLabel
-{
+.dataLabel {
 font-weight: bold;
 padding: .5em .5em .5em 0em;
 white-space: nowrap;
 }
 
-.data
-{
+.data {
 padding: .5em 1em .5em .5em;
 }
 
-.data-left
-{
+.data-left {
 padding: .5em 1em .5em 0;
 }
 
-.icon
-{
-padding: 0 .5em 0 0;
+.icon {
+padding: 0 5px 0 0;
+vertical-align: middle;
 }
 
 .bdr1T {
@@ -353,117 +322,48 @@ border-top: 1px dotted #cccccc;
 background-color:#FFFFCC;
 }
 
-/** Calendar Widget Styles  **/
+.button { 
+border: 1px solid #aaaaaa;
+background-color: #cccccc;
+font-weight: bold;
+padding: 3px;
+} 
 
-#CalendarControlIFrame {
-  display: none;
-  left: 0px;
-  position: absolute;
-  top: 5px;
-  height: 250px;
-  width: 250px;
-  z-index: 99;
+.button:hover {
+border: 1px solid #aaaaaa;
+background-color: #999999;
+cursor: pointer;
 }
 
-#CalendarControl {
-  position:absolute;
-  background-color:#efefef;
-  margin: 5px 0 0 10px;
-  padding:0;
-  display:none;
-  z-index: 100;
+.info {
+color: #000099;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0 0 1em 0;
+padding: .5em .5em .5em 2.2em;
+background-image: url(../images/information.png);
+background-position: .5em;
+background-repeat: no-repeat;
+background-color: #B7D9FF;
+border: 1px solid #000099;
 }
 
-#CalendarControl table {
-  font-family: inherit;
-  font-size: .8em;
-  border: 1px solid #000000;
+.dataTableCompact  { 
 }
 
-#CalendarControl th {
-  font-weight: normal;
-  padding: 1px;
+.dataTableCompact td { 
+vertical-align: top;
+padding: 2px;
 }
 
-#CalendarControl th a {
-  font-weight: normal;
-  text-decoration: none;
-  color: #000000;
-  padding: 1px;
+.dataTableCompact th
+{
+vertical-align: top;
+padding: 1em .5em 1em .5em;
+background-color: #dddddd;
+text-align: left;
+font-size: 1.1em;
 }
-
-#CalendarControl td {
-  text-align: center;
-  padding: 1px;
-}
-
-#CalendarControl .header {
-  background-color: #cccccc;
-}
-
-#CalendarControl .weekday {
-  background-color: #dddddd;
-  color: #000000;
-}
-
-#CalendarControl .weekend {
-  background-color: #bbbbbb;
-  color: #0000000;
-}
-
-#CalendarControl .current {
-  background-color: #eeeeee;
-  color: #000000;
-}
-
-#CalendarControl .weekday,
-#CalendarControl .weekend,
-#CalendarControl .current {
-  display: block;
-  text-decoration: none;
-  width: 2.5em;
-}
-
-#CalendarControl .weekday:hover,
-#CalendarControl .weekend:hover,
-#CalendarControl .current:hover {
-  color:#003399;
-  background-color: #eeeeee;
-}
-
-#CalendarControl .previous {
-  text-align: left;
-}
-
-#CalendarControl .next {
-  text-align: right;
-}
-
-#CalendarControl .previous,
-#CalendarControl .next {
-  padding: 1px 3px 1px 3px;
-}
-
-#CalendarControl .previous a,
-#CalendarControl .next a {
-  color: #000000;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-#CalendarControl .title {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.1em;
-  color: #000000;
-}
-
-#CalendarControl .empty {
-  background-color: #aaaaaa;
-}
-
-
-/* New in Version 1.1 */
 
 .looper {
 width: 120px;
@@ -484,16 +384,14 @@ padding: 0;
 list-style: none;
 }
 
-#sponsor li
-{
+#sponsor li {
 padding: 0 0 1em 1.75em;
 background-image: url(../images/bullet_star.png);
 background-repeat: no-repeat;
 background-position: top left;
 }
 
-.bos 
-{
+.bos {
 color: #990000;
 font-size: 1.2em;
 font-weight: bold;
@@ -504,8 +402,7 @@ background-position: center left;
 background-repeat: no-repeat;
 }
 
-#closed 
-{
+#closed {
 color: #990000;
 font-size: 1.2em;
 font-weight: bold;
@@ -516,118 +413,170 @@ border: 1px solid #FFCC33;
 display: block;
 }
 
+/* Calendar Widget Elements  */
 
-div.menuBar,
-div.menuBar a.menuButton,
-div.menu,
-div.menu a.menuItem {
-  display: inline;
+#CalendarControlIFrame {
+display: none;
+left: 0px;
+position: absolute;
+top: 5px;
+height: 250px;
+width: 250px;
+z-index: 99;
 }
 
-div.menuBar {
+#CalendarControl {
+position:absolute;
+background-color:#efefef;
+margin: 5px 0 0 10px;
+padding:0;
+display:none;
+z-index: 100;
+}
+
+#CalendarControl table {
+font-family: inherit;
+font-size: .8em;
+border: 1px solid #000000;
+}
+
+#CalendarControl th {
+font-weight: normal;
+padding: 1px;
+}
+
+#CalendarControl th a {
+font-weight: normal;
+text-decoration: none;
+color: #000000;
+padding: 1px;
+}
+
+#CalendarControl td {
+text-align: center;
+padding: 1px;
+}
+
+#CalendarControl .header {
+background-color: #cccccc;
+}
+
+#CalendarControl .weekday {
+background-color: #dddddd;
+color: #000000;
+}
+
+#CalendarControl .weekend {
+background-color: #bbbbbb;
+color: #000000;
+}
+
+#CalendarControl .current {
+background-color: #eeeeee;
+color: #000000;
+}
+
+#CalendarControl .weekday, #CalendarControl .weekend, #CalendarControl .current {
+display: block;
+text-decoration: none;
+width: 2.5em;
+}
+
+#CalendarControl .weekday:hover, #CalendarControl .weekend:hover, #CalendarControl .current:hover {
+color:#003399;
+background-color: #eeeeee;
+}
+
+#CalendarControl .previous {
   text-align: left;
 }
 
+#CalendarControl .next {
+text-align: right;
+}
+
+#CalendarControl .previous, #CalendarControl .next {
+  padding: 1px 3px 1px 3px;
+}
+
+#CalendarControl .previous a, #CalendarControl .next a {
+color: #000000;
+text-decoration: none;
+font-weight: bold;
+}
+
+#CalendarControl .title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #000000;
+}
+
+#CalendarControl .empty {
+  background-color: #aaaaaa;
+}
+
+/* Admin menu drop-down styles */
+
+div.menuBar, div.menuBar a.menuButton, div.menu, div.menu a.menuItem {
+display: inline;
+}
+
+div.menuBar {
+text-align: left;
+}
+
 div.menuBar a.menuButton {
-  background-color: transparent;
-  cursor: default;
-  left: 0px;
-  margin: 1px;
-  padding: 2px 6px 2px 6px;
-  position: relative;
-  text-decoration: none;
-  top: 0px;
-  z-index: 100;
+background-color: transparent;
+cursor: default;
+left: 0px;
+margin: 1px;
+padding: 2px 6px 2px 6px;
+position: relative;
+text-decoration: none;
+top: 0px;
+z-index: 100;
 }
 
 div.menuBar a.menuButton:hover {
-  background-color: transparent;
+background-color: transparent;
 }
 
-div.menuBar a.menuButtonActive,
-div.menuBar a.menuButtonActive:hover {
-  background-color: #333333;
-  color: #ffffff;
-
+div.menuBar a.menuButtonActive, div.menuBar a.menuButtonActive:hover {
+background-color: #333333;
+color: #ffffff;
 }
 
 div.menu {
-  background-color: #eeeeee;
-  border: 1px solid #d0d0d0;
-  position: absolute;
-  visibility: hidden;
-  z-index: 101;
+background-color: #eeeeee;
+border: 1px solid #d0d0d0;
+position: absolute;
+visibility: hidden;
+z-index: 101;
 }
 
 div.menu a.menuItem {
-  cursor: default;
-  display: block;
-  padding: 3px 1em;
-  text-decoration: none;
-  white-space: nowrap;
+cursor: default;
+display: block;
+padding: 3px 1em;
+text-decoration: none;
+white-space: nowrap;
 }
 
 div.menu a.menuItem:hover, div.menu a.menuItemHighlight {
-  background-color: #333333;
-  color: #ffffff;
+background-color: #333333;
+color: #ffffff;
 }
 
-div.menu a.menuItem span.menuItemText {}
+div.menu a.menuItem span.menuItemText {
+}
 
 div.menu a.menuItem span.menuItemArrow {
-  margin-right: -.75em;
-  font-size: .7em;
+margin-right: -.75em;
+font-size: .7em;
 }
 
 div.menu div.menuItemSep {
-  border: 1px solid #e0e0e0;
-  margin: 10px 5px;
+border: 1px solid #e0e0e0;
+margin: 10px 5px;
 }
-
-/* New with Version 1.1.3 */
-
-.button { 
-border: 1px solid #aaaaaa;
-background-color: #cccccc;
-font-weight: bold;
-padding: 3px;
-} 
-
-.button:hover {
-border: 1px solid #aaaaaa;
-background-color: #999999;
-cursor: pointer;
-}
-
-.info
-{
-color: #000099;
-font-size: 1.2em;
-font-weight: bold;
-margin: 0 0 1em 0;
-padding: .5em .5em .5em 2.2em;
-background-image: url(../images/information.png);
-background-position: .5em;
-background-repeat: no-repeat;
-background-color: #B7D9FF;
-border: 1px solid #000099;
-}
-
-.dataTableCompact  { 
-
-}
-
-.dataTableCompact td { 
-vertical-align: top;
-padding: 2px;
-}
-
-.dataTableCompact th
-{
-vertical-align: top;
-padding: 1em .5em 1em .5em;
-background-color: #dddddd;
-text-align: left;
-font-size: 1.1em;
-}
-

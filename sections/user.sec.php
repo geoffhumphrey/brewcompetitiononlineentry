@@ -5,7 +5,7 @@ if ($msg != "default") echo $msg_output;
 ?>
 <?php if ($action == "username") echo "<p>Your current email address is ".$row_user['user_name'].".</p>";
 ?>
-<form action="includes/process.inc.php?section=<?php echo $section; ?>&go=<?php echo $action; ?>&action=edit&dbTable=users&id=<?php echo $row_user['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=users&amp;id=<?php echo $row_user['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 <?php if ($action == "username") { ?>
 	<tr>

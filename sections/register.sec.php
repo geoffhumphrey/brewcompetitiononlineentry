@@ -15,8 +15,8 @@
     	<td class="data">
        	  <select name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
-    		<option value="index.php?section=register&go=judge">Yes</option>
-    		<option value="index.php?section=register&go=entrant">No</option>
+    		<option value="index.php?section=register&amp;go=judge">Yes</option>
+    		<option value="index.php?section=register&amp;go=entrant">No</option>
 		  </select>
   		</td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
@@ -24,7 +24,7 @@
 </table>
 </form>
 <?php } else { ?>	  
-<form action="includes/process.inc.php?action=add&dbTable=users&section=register&go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?action=add&amp;dbTable=users&amp;section=register&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>

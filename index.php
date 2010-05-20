@@ -34,6 +34,7 @@ include ('includes/headers.inc.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." | ".$header_output; ?></title>
+<link href="css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/jquery-1.3.2.min.js"></script>
