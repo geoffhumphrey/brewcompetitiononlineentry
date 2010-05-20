@@ -45,16 +45,26 @@
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>
-<h3>Deadlines</h3>
+<h3>Entry and Registration</h3>
 <table>
   <tr>
-    <td class="dataLabel">Entry Deadline:</td>
+    <td class="dataLabel">Entry Window Open:</td>
+    <td class="data"><input name="contestEntryOpen" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryOpen']; ?>" /></td>
+    <td class="data"><span class="required">Required</span> <em>The date entries must be received at drop-off and mail-in locations.</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Entry Window Close:</td>
     <td class="data"><input name="contestEntryDeadline" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryDeadline']; ?>"></td>
     <td class="data"><span class="required">Required</span> 
       <em>The date entries must be received at drop-off and mail-in locations.</em></td>
   </tr>
   <tr>
-    <td class="dataLabel">Registration Deadline:</td>
+    <td class="dataLabel">Registration Open:</td>
+    <td class="data"><input name="contestRegistrationOpen" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationOpen']; ?>" /></td>
+    <td class="data"><span class="required">Required </span><em>The date the system will automatically open registrations.</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Registration Close:</td>
     <td class="data"><input name="contestRegistrationDeadline" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationDeadline']; ?>"></td>
     <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations.</em></td>
   </tr>
@@ -85,7 +95,7 @@
 <h3>Rules</h3>
 <table>
   <tr>
-    <td class="dataLabel">Compeition Rules:</td>
+    <td class="dataLabel">Competition Rules:</td>
     <td class="data"><textarea name="contestRules" cols="70" rows="25"><?php echo $row_contest_info['contestRules']; ?></textarea></td>
     <td class="data"><em>Copy and paste if needed.</em></td>
   </tr>

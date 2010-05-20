@@ -1,7 +1,12 @@
 <?php
 $phpVersion = phpversion();
 $today = date('Y-m-d');
-$deadline = $row_contest_info['contestRegistrationDeadline'];
+
+$reg_open = $row_contest_info['contestRegistrationOpen'];
+$reg_deadline = $row_contest_info['contestRegistrationDeadline'];
+
+$ent_open = $row_contest_info['contestEntryOpen'];
+$ent_deadline = $row_contest_info['contestEntDeadline'];
 
 mysql_select_db($database, $brewing);
 $query_check = "SELECT * FROM judging";
@@ -18,6 +23,16 @@ function greaterDate($start_date,$end_date)
   $start = new Datetime($start_date);
   $end = new Datetime($end_date);
   if ($start > $end)
+   return 1;
+  else
+   return 0;
+}
+
+function lesserDate($start_date,$end_date)
+{
+  $start = new Datetime($start_date);
+  $end = new Datetime($end_date);
+  if ($start < $end)
    return 1;
   else
    return 0;

@@ -28,6 +28,7 @@ if ($row_log['brewCategorySort'] == "25") $styleConvert = "Melomel (Fruit Mead)"
 if ($row_log['brewCategorySort'] == "26") $styleConvert = "Other Mead";
 if ($row_log['brewCategorySort'] == "27") $styleConvert = "Standard Cider and Perry";
 if ($row_log['brewCategorySort'] == "28") $styleConvert = "Specialty Cider and Perry";
+if ($row_log['brewWinnerCat'] >= "29") $styleConvert = $row_log['brewStyle'];
 
 if ($row_log_winners['brewWinnerCat'] == "01") $styleConvert2 = "Light Lager";
 if ($row_log_winners['brewWinnerCat'] == "02") $styleConvert2 = "Pilsner";
@@ -57,6 +58,8 @@ if ($row_log_winners['brewWinnerCat'] == "25") $styleConvert2 = "Melomel (Fruit 
 if ($row_log_winners['brewWinnerCat'] == "26") $styleConvert2 = "Other Mead";
 if ($row_log_winners['brewWinnerCat'] == "27") $styleConvert2 = "Standard Cider and Perry";
 if ($row_log_winners['brewWinnerCat'] == "28") $styleConvert2 = "Specialty Cider and Perry";
+if ($row_log_winners['brewWinnerCat'] >= "29") $styleConvert2 = $row_log_winners['brewStyle'];
+
 
 if ($row_bos['brewWinnerCat'] == "01") $styleConvert3 = "Light Lager";
 if ($row_bos['brewWinnerCat'] == "02") $styleConvert3 = "Pilsner";
@@ -86,6 +89,24 @@ if ($row_bos['brewWinnerCat'] == "25") $styleConvert3 = "Melomel (Fruit Mead)";
 if ($row_bos['brewWinnerCat'] == "26") $styleConvert3 = "Other Mead";
 if ($row_bos['brewWinnerCat'] == "27") $styleConvert3 = "Standard Cider and Perry";
 if ($row_bos['brewWinnerCat'] == "28") $styleConvert3 = "Specialty Cider and Perry";
+if ($row_bos['brewWinnerCat'] >= "29") $styleConvert3 = $row_bos['brewStyle'];
+
+if ($row_bos2['brewWinnerCat'] == "23") $styleConvert7 = "Specialty Beer";
+if ($row_bos2['brewWinnerCat'] == "24") $styleConvert7 = "Traditional Mead";
+if ($row_bos2['brewWinnerCat'] == "25") $styleConvert7 = "Melomel (Fruit Mead)";
+if ($row_bos2['brewWinnerCat'] == "26") $styleConvert7 = "Other Mead";
+if ($row_bos2['brewWinnerCat'] == "27") $styleConvert7 = "Standard Cider and Perry";
+if ($row_bos2['brewWinnerCat'] == "28") $styleConvert7 = "Specialty Cider and Perry";
+
+if ($row_bos3['brewWinnerCat'] == "20") $styleConvert6 = "Fruit Beer";
+if ($row_bos3['brewWinnerCat'] == "21") $styleConvert6 = "Spice/Herb/Vegatable Beer";
+if ($row_bos3['brewWinnerCat'] == "22") $styleConvert6 = "Smoke-Flavored and Wood-Aged Beer";
+if ($row_bos3['brewWinnerCat'] == "23") $styleConvert6 = "Specialty Beer";
+if ($row_bos3['brewWinnerCat'] == "24") $styleConvert6 = "Traditional Mead";
+if ($row_bos3['brewWinnerCat'] == "25") $styleConvert6 = "Melomel (Fruit Mead)";
+if ($row_bos3['brewWinnerCat'] == "26") $styleConvert6 = "Other Mead";
+if ($row_bos3['brewWinnerCat'] == "27") $styleConvert6 = "Standard Cider and Perry";
+if ($row_bos3['brewWinnerCat'] == "28") $styleConvert6 = "Specialty Cider and Perry";
 
 
 if ($row_styles['brewStyleGroup'] == "01") $styleConvert4 = "Light Lager"; $styleConvert5 = "1A,1B,1C,1D,1E";

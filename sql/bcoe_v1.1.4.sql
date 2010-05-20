@@ -1,7 +1,7 @@
 -- Brew Contest Online Signup
 -- http://www.brewcompetition.com
 -- Direct inquiries to prost@brewcompetition.com
--- Release 1.1.0 April 2009
+-- Release 1.1.4 June 2010
 -- This software is free, open source and is covered under the 
 -- General Public License (GPL) from the Open Source Initiative.
 -- As such, you are permitted to download the full source code of 
@@ -15,25 +15,25 @@
 --
 
 CREATE TABLE IF NOT EXISTS `styles` (
-  `id` tinyint(4) NOT NULL auto_increment,
-  `brewStyleNum` char(3) character set latin1 default NULL,
-  `brewStyle` varchar(250) character set latin1 default NULL,
-  `brewStyleOG` varchar(20) character set latin1 default NULL,
-  `brewStyleOGMax` varchar(25) character set latin1 default NULL,
-  `brewStyleFG` varchar(20) character set latin1 default NULL,
-  `brewStyleFGMax` varchar(25) character set latin1 default NULL,
-  `brewStyleABV` varchar(250) character set latin1 default NULL,
-  `brewStyleABVMax` varchar(25) character set latin1 default NULL,
-  `brewStyleIBU` varchar(250) character set latin1 default NULL,
-  `brewStyleIBUMax` varchar(25) character set latin1 default NULL,
-  `brewStyleSRM` varchar(250) character set latin1 default NULL,
-  `brewStyleSRMMax` varchar(25) character set latin1 default NULL,
-  `brewStyleType` varchar(25) character set latin1 default NULL,
-  `brewStyleInfo` text character set latin1,
-  `brewStyleLink` varchar(200) character set latin1 default NULL,
-  `brewStyleGroup` char(2) character set latin1 default NULL,
+  `id` int(8) NOT NULL auto_increment,
+  `brewStyleNum` char(3)  default NULL,
+  `brewStyle` varchar(250)  default NULL,
+  `brewStyleOG` varchar(20)  default NULL,
+  `brewStyleOGMax` varchar(25)  default NULL,
+  `brewStyleFG` varchar(20)  default NULL,
+  `brewStyleFGMax` varchar(25)  default NULL,
+  `brewStyleABV` varchar(250)  default NULL,
+  `brewStyleABVMax` varchar(25)  default NULL,
+  `brewStyleIBU` varchar(250)  default NULL,
+  `brewStyleIBUMax` varchar(25)  default NULL,
+  `brewStyleSRM` varchar(250)  default NULL,
+  `brewStyleSRMMax` varchar(25)  default NULL,
+  `brewStyleType` varchar(25)  default NULL,
+  `brewStyleInfo` text ,
+  `brewStyleLink` varchar(200)  default NULL,
+  `brewStyleGroup` char(2)  default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=99 ;
+) ENGINE=MyISAM;
 
 -- 2008 BJCP Styles
 
@@ -145,27 +145,27 @@ INSERT INTO `styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleOG`, `brewSty
 --
 
 CREATE TABLE IF NOT EXISTS `brewer` (
-  `id` tinyint(4) NOT NULL auto_increment,
-  `brewerFirstName` varchar(200) collate utf8_unicode_ci default NULL,
-  `brewerLastName` varchar(200) collate utf8_unicode_ci default NULL,
-  `brewerAddress` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerCity` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerState` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerZip` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerCountry` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerPhone1` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerPhone2` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerClubs` text collate utf8_unicode_ci,
-  `brewerEmail` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerNickname` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerSteward` char(1) collate utf8_unicode_ci default NULL,
-  `brewerJudge` char(1) collate utf8_unicode_ci default NULL,
-  `brewerJudgeID` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerJudgeRank` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewerJudgeLikes` text collate utf8_unicode_ci,
-  `brewerJudgeDislikes` text collate utf8_unicode_ci,
+  `id` int(8) NOT NULL auto_increment,
+  `brewerFirstName` varchar(200) default NULL,
+  `brewerLastName` varchar(200) default NULL,
+  `brewerAddress` varchar(255) default NULL,
+  `brewerCity` varchar(255) default NULL,
+  `brewerState` varchar(255) default NULL,
+  `brewerZip` varchar(255) default NULL,
+  `brewerCountry` varchar(255) default NULL,
+  `brewerPhone1` varchar(255) default NULL,
+  `brewerPhone2` varchar(255) default NULL,
+  `brewerClubs` text,
+  `brewerEmail` varchar(255) default NULL,
+  `brewerNickname` varchar(255) default NULL,
+  `brewerSteward` char(1) default NULL,
+  `brewerJudge` char(1) default NULL,
+  `brewerJudgeID` varchar(255) default NULL,
+  `brewerJudgeRank` varchar(255) default NULL,
+  `brewerJudgeLikes` text,
+  `brewerJudgeDislikes` text,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -175,171 +175,171 @@ CREATE TABLE IF NOT EXISTS `brewer` (
 --
 
 CREATE TABLE IF NOT EXISTS `brewing` (
-  `id` tinyint(4) NOT NULL auto_increment,
-  `brewName` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewStyle` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewCategory` char(2) collate utf8_unicode_ci default NULL,
-  `brewCategorySort` char(2) collate utf8_unicode_ci default NULL,
-  `brewSubCategory` char(1) collate utf8_unicode_ci default NULL,
+  `id` int(8) NOT NULL auto_increment,
+  `brewName` varchar(250) default NULL,
+  `brewStyle` varchar(250) default NULL,
+  `brewCategory` char(2) default NULL,
+  `brewCategorySort` char(2) default NULL,
+  `brewSubCategory` char(1) default NULL,
   `brewBottleDate` date default NULL,
   `brewDate` date default NULL,
-  `brewYield` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewInfo` text collate utf8_unicode_ci,
-  `brewMead1` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewMead2` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewMead3` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewExtract1` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewExtract1Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewExtract2` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewExtract2Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewExtract3` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewExtract3Weight` varchar(4) collate utf8_unicode_ci default NULL,
-  `brewExtract4` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewExtract4Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewExtract5` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewExtract5Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain1` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain1Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain2` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain2Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain3` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain3Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain4` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain4Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain5` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain5Weight` varchar(4) collate utf8_unicode_ci default NULL,
-  `brewGrain6` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain6Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain7` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain7Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain8` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain8Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewGrain9` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewGrain9Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewAddition1` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition1Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition2` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition2Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition3` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition3Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition4` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition4Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition5` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition5Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition6` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition6Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition7` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition7Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition8` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition8Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewAddition9` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewAddition9Amt` varchar(20) collate utf8_unicode_ci default NULL,
-  `brewHops1` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops1Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops1IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops1Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops2` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops2Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops2IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops2Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops3` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops3Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops3IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops3Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops4` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops4Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops4IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops4Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops5` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops5Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops5IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops5Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops6` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops6Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops6IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops6Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops7` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops7Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops7IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops7Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops8` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops8Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops8IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops8Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops9` varchar(100) collate utf8_unicode_ci default NULL,
-  `brewHops9Weight` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops9IBU` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewHops9Time` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops1Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops2Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops3Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops4Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops5Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops6Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops7Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops8Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops9Use` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops1Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops2Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops3Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops4Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops5Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops6Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops7Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops8Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops9Type` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops1Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops2Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops3Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops4Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops5Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops6Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops7Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops8Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewHops9Form` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewYeast` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewYeastMan` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewYeastForm` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewYeastType` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewYeastAmount` varchar(25) collate utf8_unicode_ci default NULL,
-  `brewYeastStarter` char(1) collate utf8_unicode_ci default NULL,
-  `brewYeastNutrients` text collate utf8_unicode_ci,
-  `brewOG` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewFG` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewPrimary` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewPrimaryTemp` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewSecondary` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewSecondaryTemp` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewOther` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewOtherTemp` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewComments` text collate utf8_unicode_ci,
-  `brewMashStep1Name` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewMashStep1Temp` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep1Time` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep2Name` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewMashStep2Temp` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep2Time` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep3Name` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewMashStep3Temp` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep3Time` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep4Name` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewMashStep4Temp` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep4Time` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep5Name` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewMashStep5Temp` char(3) collate utf8_unicode_ci default NULL,
-  `brewMashStep5Time` char(3) collate utf8_unicode_ci default NULL,
-  `brewFinings` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewWaterNotes` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewBrewerID` varchar(250) collate utf8_unicode_ci default NULL,
-  `brewCarbonationMethod` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewCarbonationVol` varchar(10) collate utf8_unicode_ci default NULL,
-  `brewCarbonationNotes` text collate utf8_unicode_ci,
-  `brewBoilHours` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewBoilMins` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewBrewerFirstName` varchar(255) collate utf8_unicode_ci default NULL,
-  `brewBrewerLastName` varchar(255) collate utf8_unicode_ci default NULL,
+  `brewYield` varchar(10) default NULL,
+  `brewInfo` text,
+  `brewMead1` varchar(255) default NULL,
+  `brewMead2` varchar(255) default NULL,
+  `brewMead3` varchar(255) default NULL,
+  `brewExtract1` varchar(100) default NULL,
+  `brewExtract1Weight` varchar(10) default NULL,
+  `brewExtract2` varchar(100) default NULL,
+  `brewExtract2Weight` varchar(10) default NULL,
+  `brewExtract3` varchar(100) default NULL,
+  `brewExtract3Weight` varchar(4) default NULL,
+  `brewExtract4` varchar(100) default NULL,
+  `brewExtract4Weight` varchar(10) default NULL,
+  `brewExtract5` varchar(100) default NULL,
+  `brewExtract5Weight` varchar(10) default NULL,
+  `brewGrain1` varchar(100) default NULL,
+  `brewGrain1Weight` varchar(10) default NULL,
+  `brewGrain2` varchar(100) default NULL,
+  `brewGrain2Weight` varchar(10) default NULL,
+  `brewGrain3` varchar(100) default NULL,
+  `brewGrain3Weight` varchar(10) default NULL,
+  `brewGrain4` varchar(100) default NULL,
+  `brewGrain4Weight` varchar(10) default NULL,
+  `brewGrain5` varchar(100) default NULL,
+  `brewGrain5Weight` varchar(4) default NULL,
+  `brewGrain6` varchar(100) default NULL,
+  `brewGrain6Weight` varchar(10) default NULL,
+  `brewGrain7` varchar(100) default NULL,
+  `brewGrain7Weight` varchar(10) default NULL,
+  `brewGrain8` varchar(100) default NULL,
+  `brewGrain8Weight` varchar(10) default NULL,
+  `brewGrain9` varchar(100) default NULL,
+  `brewGrain9Weight` varchar(10) default NULL,
+  `brewAddition1` varchar(100) default NULL,
+  `brewAddition1Amt` varchar(20) default NULL,
+  `brewAddition2` varchar(100) default NULL,
+  `brewAddition2Amt` varchar(20) default NULL,
+  `brewAddition3` varchar(100) default NULL,
+  `brewAddition3Amt` varchar(20) default NULL,
+  `brewAddition4` varchar(100) default NULL,
+  `brewAddition4Amt` varchar(20) default NULL,
+  `brewAddition5` varchar(100) default NULL,
+  `brewAddition5Amt` varchar(20) default NULL,
+  `brewAddition6` varchar(100) default NULL,
+  `brewAddition6Amt` varchar(20) default NULL,
+  `brewAddition7` varchar(100) default NULL,
+  `brewAddition7Amt` varchar(20) default NULL,
+  `brewAddition8` varchar(100) default NULL,
+  `brewAddition8Amt` varchar(20) default NULL,
+  `brewAddition9` varchar(100) default NULL,
+  `brewAddition9Amt` varchar(20) default NULL,
+  `brewHops1` varchar(100) default NULL,
+  `brewHops1Weight` varchar(10) default NULL,
+  `brewHops1IBU` varchar(10) default NULL,
+  `brewHops1Time` varchar(25) default NULL,
+  `brewHops2` varchar(100) default NULL,
+  `brewHops2Weight` varchar(10) default NULL,
+  `brewHops2IBU` varchar(10) default NULL,
+  `brewHops2Time` varchar(25) default NULL,
+  `brewHops3` varchar(100) default NULL,
+  `brewHops3Weight` varchar(10) default NULL,
+  `brewHops3IBU` varchar(10) default NULL,
+  `brewHops3Time` varchar(25) default NULL,
+  `brewHops4` varchar(100) default NULL,
+  `brewHops4Weight` varchar(10) default NULL,
+  `brewHops4IBU` varchar(10) default NULL,
+  `brewHops4Time` varchar(25) default NULL,
+  `brewHops5` varchar(100) default NULL,
+  `brewHops5Weight` varchar(10) default NULL,
+  `brewHops5IBU` varchar(10) default NULL,
+  `brewHops5Time` varchar(25) default NULL,
+  `brewHops6` varchar(100) default NULL,
+  `brewHops6Weight` varchar(10) default NULL,
+  `brewHops6IBU` varchar(10) default NULL,
+  `brewHops6Time` varchar(25) default NULL,
+  `brewHops7` varchar(100) default NULL,
+  `brewHops7Weight` varchar(10) default NULL,
+  `brewHops7IBU` varchar(10) default NULL,
+  `brewHops7Time` varchar(25) default NULL,
+  `brewHops8` varchar(100) default NULL,
+  `brewHops8Weight` varchar(10) default NULL,
+  `brewHops8IBU` varchar(10) default NULL,
+  `brewHops8Time` varchar(25) default NULL,
+  `brewHops9` varchar(100) default NULL,
+  `brewHops9Weight` varchar(10) default NULL,
+  `brewHops9IBU` varchar(10) default NULL,
+  `brewHops9Time` varchar(25) default NULL,
+  `brewHops1Use` varchar(25) default NULL,
+  `brewHops2Use` varchar(25) default NULL,
+  `brewHops3Use` varchar(25) default NULL,
+  `brewHops4Use` varchar(25) default NULL,
+  `brewHops5Use` varchar(25) default NULL,
+  `brewHops6Use` varchar(25) default NULL,
+  `brewHops7Use` varchar(25) default NULL,
+  `brewHops8Use` varchar(25) default NULL,
+  `brewHops9Use` varchar(25) default NULL,
+  `brewHops1Type` varchar(25) default NULL,
+  `brewHops2Type` varchar(25) default NULL,
+  `brewHops3Type` varchar(25) default NULL,
+  `brewHops4Type` varchar(25) default NULL,
+  `brewHops5Type` varchar(25) default NULL,
+  `brewHops6Type` varchar(25) default NULL,
+  `brewHops7Type` varchar(25) default NULL,
+  `brewHops8Type` varchar(25) default NULL,
+  `brewHops9Type` varchar(25) default NULL,
+  `brewHops1Form` varchar(25) default NULL,
+  `brewHops2Form` varchar(25) default NULL,
+  `brewHops3Form` varchar(25) default NULL,
+  `brewHops4Form` varchar(25) default NULL,
+  `brewHops5Form` varchar(25) default NULL,
+  `brewHops6Form` varchar(25) default NULL,
+  `brewHops7Form` varchar(25) default NULL,
+  `brewHops8Form` varchar(25) default NULL,
+  `brewHops9Form` varchar(25) default NULL,
+  `brewYeast` varchar(250) default NULL,
+  `brewYeastMan` varchar(250) default NULL,
+  `brewYeastForm` varchar(25) default NULL,
+  `brewYeastType` varchar(25) default NULL,
+  `brewYeastAmount` varchar(25) default NULL,
+  `brewYeastStarter` char(1) default NULL,
+  `brewYeastNutrients` text,
+  `brewOG` varchar(10) default NULL,
+  `brewFG` varchar(10) default NULL,
+  `brewPrimary` varchar(10) default NULL,
+  `brewPrimaryTemp` varchar(10) default NULL,
+  `brewSecondary` varchar(10) default NULL,
+  `brewSecondaryTemp` varchar(10) default NULL,
+  `brewOther` varchar(10) default NULL,
+  `brewOtherTemp` varchar(10) default NULL,
+  `brewComments` text,
+  `brewMashStep1Name` varchar(250) default NULL,
+  `brewMashStep1Temp` char(3) default NULL,
+  `brewMashStep1Time` char(3) default NULL,
+  `brewMashStep2Name` varchar(250) default NULL,
+  `brewMashStep2Temp` char(3) default NULL,
+  `brewMashStep2Time` char(3) default NULL,
+  `brewMashStep3Name` varchar(250) default NULL,
+  `brewMashStep3Temp` char(3) default NULL,
+  `brewMashStep3Time` char(3) default NULL,
+  `brewMashStep4Name` varchar(250) default NULL,
+  `brewMashStep4Temp` char(3) default NULL,
+  `brewMashStep4Time` char(3) default NULL,
+  `brewMashStep5Name` varchar(250) default NULL,
+  `brewMashStep5Temp` char(3) default NULL,
+  `brewMashStep5Time` char(3) default NULL,
+  `brewFinings` varchar(250) default NULL,
+  `brewWaterNotes` varchar(250) default NULL,
+  `brewBrewerID` varchar(250) default NULL,
+  `brewCarbonationMethod` varchar(255) default NULL,
+  `brewCarbonationVol` varchar(10) default NULL,
+  `brewCarbonationNotes` text,
+  `brewBoilHours` varchar(255) default NULL,
+  `brewBoilMins` varchar(255) default NULL,
+  `brewBrewerFirstName` varchar(255) default NULL,
+  `brewBrewerLastName` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
  
 
@@ -349,28 +349,26 @@ CREATE TABLE IF NOT EXISTS `brewing` (
 
 CREATE TABLE IF NOT EXISTS `contest_info` (
   `id` int(1) NOT NULL default '0',
-  `contestName` varchar(255) collate utf8_unicode_ci default NULL,
-  `contestHost` varchar(255) collate utf8_unicode_ci default NULL,
-  `contestHostWebsite` varchar(255) collate utf8_unicode_ci default NULL,
-  `contestHostLocation` varchar(255) collate utf8_unicode_ci default NULL,
+  `contestName` varchar(255) default NULL,
+  `contestHost` varchar(255) default NULL,
+  `contestHostWebsite` varchar(255) default NULL,
+  `contestHostLocation` varchar(255) default NULL,
   `contestDate` date default NULL,
-  `contestDate2` date default NULL,
-  `contestDate3` date default NULL,
   `contestRegistrationDeadline` date default NULL,
   `contestEntryDeadline` date default NULL,
-  `contestRules` text collate utf8_unicode_ci,
-  `contestJudgingLocation` text collate utf8_unicode_ci,
-  `contestAwardsLocation` text collate utf8_unicode_ci,
-  `contestContactName` varchar(255) collate utf8_unicode_ci default NULL,
-  `contestContactEmail` varchar(255) collate utf8_unicode_ci default NULL,
-  `contestEntryFee` varchar(10) collate utf8_unicode_ci default NULL,
-  `contestCategories` text collate utf8_unicode_ci,
-  `contestBottles` text collate utf8_unicode_ci,
-  `contestShippingAddress` text collate utf8_unicode_ci,
-  `contestDropOff` text collate utf8_unicode_ci,
-  `contestAwards` text collate utf8_unicode_ci,
+  `contestRules` text,
+  `contestJudgingLocation` text,
+  `contestAwardsLocation` text,
+  `contestContactName` varchar(255) default NULL,
+  `contestContactEmail` varchar(255) default NULL,
+  `contestEntryFee` varchar(10) default NULL,
+  `contestCategories` text,
+  `contestBottles` text,
+  `contestShippingAddress` text,
+  `contestDropOff` text,
+  `contestAwards` text,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -380,17 +378,17 @@ CREATE TABLE IF NOT EXISTS `contest_info` (
 --
 
 CREATE TABLE IF NOT EXISTS `preferences` (
-  `id` int(5) NOT NULL auto_increment,
-  `prefsTemp` varchar(255) collate utf8_unicode_ci default NULL,
-  `prefsWeight1` varchar(20) collate utf8_unicode_ci default NULL,
-  `prefsWeight2` varchar(20) collate utf8_unicode_ci default NULL,
-  `prefsLiquid1` varchar(20) collate utf8_unicode_ci default NULL,
-  `prefsLiquid2` varchar(20) collate utf8_unicode_ci default NULL,
-  `prefsPaypal` char(1) collate utf8_unicode_ci default NULL,
-  `prefsPaypalAccount` varchar(255) collate utf8_unicode_ci default NULL,
-  `prefsCurrency` varchar(20) collate utf8_unicode_ci default NULL,
+  `id` int(8) NOT NULL auto_increment,
+  `prefsTemp` varchar(255) default NULL,
+  `prefsWeight1` varchar(20) default NULL,
+  `prefsWeight2` varchar(20) default NULL,
+  `prefsLiquid1` varchar(20) default NULL,
+  `prefsLiquid2` varchar(20) default NULL,
+  `prefsPaypal` char(1) default NULL,
+  `prefsPaypalAccount` varchar(255) default NULL,
+  `prefsCurrency` varchar(20) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -401,13 +399,13 @@ CREATE TABLE IF NOT EXISTS `preferences` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(8) NOT NULL auto_increment,
-  `user_name` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `password` varchar(250) collate utf8_unicode_ci NOT NULL default '',
-  `userLevel` char(1) collate utf8_unicode_ci default NULL,
-  `userQuestion` varchar(255) collate utf8_unicode_ci default NULL,
-  `userQuestionAnswer` varchar(255) collate utf8_unicode_ci default NULL,
+  `user_name` varchar(255) NOT NULL,
+  `password` varchar(250) NOT NULL default '',
+  `userLevel` char(1) default NULL,
+  `userQuestion` varchar(255) default NULL,
+  `userQuestionAnswer` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=MyISAM;
 
 
 -- --------------------------------------------------------
@@ -417,19 +415,19 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 CREATE TABLE IF NOT EXISTS `archive` (
-  `id` int(5) NOT NULL auto_increment,
-  `archiveUserTableName` varchar(255) collate utf8_unicode_ci default NULL,
-  `archiveBrewerTableName` varchar(255) collate utf8_unicode_ci default NULL,
-  `archiveBrewingTableName` varchar(255) collate utf8_unicode_ci default NULL,
-  `archiveSuffix` varchar(255) collate utf8_unicode_ci default NULL,
+  `id` int(8) NOT NULL auto_increment,
+  `archiveUserTableName` varchar(255) default NULL,
+  `archiveBrewerTableName` varchar(255) default NULL,
+  `archiveBrewingTableName` varchar(255) default NULL,
+  `archiveSuffix` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=MyISAM;
 
 
 
 -- ********************************************************************************
 --
--- Version 1.1 Updates Follow
+-- Version 1.1.0 Updates Follow
 -- 
 -- ********************************************************************************
 
@@ -495,7 +493,7 @@ ADD `contestLogo` VARCHAR( 255 ) NULL,
 ADD `contestBOSAward` TEXT NULL;
 
  CREATE TABLE `sponsors` (
-`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id` INT(8) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `sponsorName` VARCHAR( 255 ) NULL ,
 `sponsorURL` VARCHAR( 255 ) NULL ,
 `sponsorImage` VARCHAR( 255 ) NULL,
@@ -503,3 +501,90 @@ ADD `contestBOSAward` TEXT NULL;
 `sponsorLocation` TEXT NULL
 ) ENGINE = MYISAM;
 
+-- ********************************************************************************
+--
+-- Version 1.1.1 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` ADD `contestWinnersComplete` TEXT NULL ;
+
+
+-- ********************************************************************************
+--
+-- Version 1.1.2 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` ADD `contestEntryCap` INT( 8 ) NULL;
+
+
+-- ********************************************************************************
+--
+-- Version 1.1.3 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` 
+DROP `contestDate`,
+DROP `contestJudgingLocation`,
+ADD `contestEntryFee2` VARCHAR( 255 ) NULL AFTER `contestEntryFee`,
+ADD `contestEntryFeeDiscount` CHAR( 1 ) NULL AFTER `contestEntryFee2`,
+ADD `contestEntryFeeDiscountNum` CHAR( 4 ) NULL AFTER `contestEntryFeeDiscount`,
+ADD `contestAwardsLocName` VARCHAR( 255 ) NULL AFTER `contestAwardsLocation`,
+ADD `contestAwardsLocDate` DATE NULL AFTER `contestAwardsLocName`,
+ADD `contestAwardsLocTime` VARCHAR( 255 ) NULL AFTER `contestAwardsLocDate`;
+
+UPDATE `contest_info` SET `contestEntryFeeDiscount` = 'N' WHERE `id` =1;
+
+CREATE TABLE `judging` (
+`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`judgingDate` DATE NOT NULL,
+`judgingTime` VARCHAR( 255 ) NOT NULL,
+`judgingLocName` VARCHAR( 255 ) NOT NULL,
+`judgingLocation` TEXT NOT NULL 
+) ENGINE = MYISAM ;
+
+ALTER TABLE `brewer` 
+ADD `uid` INT (8) NULL AFTER `id`,
+ADD `brewerJudgeLocation` TEXT NULL,
+ADD `brewerJudgeLocation2` TEXT NULL,
+ADD `brewerStewardLocation` TEXT NULL,
+ADD `brewerStewardLocation2` TEXT NULL,
+ADD `brewerJudgeAssignedLocation` INT( 8 ) NULL,
+ADD `brewerStewardAssignedLocation` INT( 8 ) NULL,
+ADD `brewerAssignment` CHAR( 1 ) NULL;
+
+ALTER TABLE `styles` 
+ADD `brewStyleActive` CHAR( 1 ) NULL DEFAULT 'Y',
+ADD `brewStyleOwn` VARCHAR( 255 ) NULL DEFAULT 'bcoe',
+ADD `brewStyleJudgingLoc` INT( 8 ) NULL;
+
+ALTER TABLE `brewing` 
+ADD `brewJudgingLocation` INT( 8 ) NULL;
+
+CREATE TABLE `drop_off` (
+`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`dropLocation` TEXT NULL ,
+`dropLocationName` VARCHAR( 255 ) NULL ,
+`dropLocationPhone` VARCHAR( 255 ) NULL,
+`dropLocationWebsite` VARCHAR( 255 ) NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE `contest_info` CHANGE `contestDropOff` `contestShippingName` VARCHAR( 255 ) NULL;
+UPDATE `contest_info` SET `contestShippingName` = '' WHERE `id` =1;
+
+ALTER TABLE `preferences` ADD `prefsDisplaySpecial` CHAR( 1 ) NULL;
+
+-- ********************************************************************************
+--
+-- Version 1.1.4 Updates Follow
+-- 
+-- ********************************************************************************
+
+ALTER TABLE `contest_info` 
+ADD `contestRegistrationOpen` DATE NULL AFTER `contestDate3`,
+ADD `contestEntryOpen` DATE NULL AFTER `contestRegistrationDeadline`;
+
+ALTER TABLE `preferences` ADD `prefsBOSMead` CHAR( 1 ) NULL DEFAULT 'N',
+ADD `prefsBOSCider` CHAR( 1 ) NULL DEFAULT 'N';

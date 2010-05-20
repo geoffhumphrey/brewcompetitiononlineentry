@@ -66,6 +66,10 @@
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
+	$query_styles_num = "SELECT DISTINCT brewStyleGroup FROM styles ORDER BY brewStyleGroup ASC";
+	$styles_num = mysql_query($query_styles_num, $brewing) or die(mysql_error());
+	$row_styles_num = mysql_fetch_assoc($styles_num);
+	$totalRows_styles_num = mysql_num_rows($styles_num);
 	
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
@@ -81,36 +85,11 @@
   <?php if ($action != "print") { ?>   
   <select name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat">
   	  <option value="">&nbsp;&nbsp;&nbsp;</option>
-      <option value="01" <?php if ($row_log['brewWinnerCat'] == "01") echo "SELECTED"; ?>>1</option>
-      <option value="02" <?php if ($row_log['brewWinnerCat'] == "02") echo "SELECTED"; ?>>2</option>
-      <option value="03" <?php if ($row_log['brewWinnerCat'] == "03") echo "SELECTED"; ?>>3</option>
-      <option value="04" <?php if ($row_log['brewWinnerCat'] == "04") echo "SELECTED"; ?>>4</option>
-      <option value="05" <?php if ($row_log['brewWinnerCat'] == "05") echo "SELECTED"; ?>>5</option>
-      <option value="06" <?php if ($row_log['brewWinnerCat'] == "06") echo "SELECTED"; ?>>6</option>
-      <option value="07" <?php if ($row_log['brewWinnerCat'] == "07") echo "SELECTED"; ?>>7</option>
-      <option value="08" <?php if ($row_log['brewWinnerCat'] == "08") echo "SELECTED"; ?>>8</option>
-      <option value="09" <?php if ($row_log['brewWinnerCat'] == "09") echo "SELECTED"; ?>>9</option>
-      <option value="10" <?php if ($row_log['brewWinnerCat'] == "10") echo "SELECTED"; ?>>10</option>
-      <option value="11" <?php if ($row_log['brewWinnerCat'] == "11") echo "SELECTED"; ?>>11</option>
-      <option value="12" <?php if ($row_log['brewWinnerCat'] == "12") echo "SELECTED"; ?>>12</option>
-      <option value="13" <?php if ($row_log['brewWinnerCat'] == "13") echo "SELECTED"; ?>>13</option>
-      <option value="14" <?php if ($row_log['brewWinnerCat'] == "14") echo "SELECTED"; ?>>14</option>
-      <option value="15" <?php if ($row_log['brewWinnerCat'] == "15") echo "SELECTED"; ?>>15</option>
-      <option value="16" <?php if ($row_log['brewWinnerCat'] == "16") echo "SELECTED"; ?>>16</option>
-      <option value="17" <?php if ($row_log['brewWinnerCat'] == "17") echo "SELECTED"; ?>>17</option>
-      <option value="18" <?php if ($row_log['brewWinnerCat'] == "18") echo "SELECTED"; ?>>18</option>
-      <option value="19" <?php if ($row_log['brewWinnerCat'] == "19") echo "SELECTED"; ?>>19</option>
-      <option value="20" <?php if ($row_log['brewWinnerCat'] == "20") echo "SELECTED"; ?>>20</option>
-      <option value="21" <?php if ($row_log['brewWinnerCat'] == "21") echo "SELECTED"; ?>>21</option>
-      <option value="22" <?php if ($row_log['brewWinnerCat'] == "22") echo "SELECTED"; ?>>22</option>
-      <option value="23" <?php if ($row_log['brewWinnerCat'] == "23") echo "SELECTED"; ?>>23</option>
-      <option value="24" <?php if ($row_log['brewWinnerCat'] == "24") echo "SELECTED"; ?>>24</option>
-      <option value="25" <?php if ($row_log['brewWinnerCat'] == "25") echo "SELECTED"; ?>>25</option>
-      <option value="26" <?php if ($row_log['brewWinnerCat'] == "26") echo "SELECTED"; ?>>26</option>
-      <option value="27" <?php if ($row_log['brewWinnerCat'] == "27") echo "SELECTED"; ?>>27</option>
-      <option value="28" <?php if ($row_log['brewWinnerCat'] == "28") echo "SELECTED"; ?>>28</option>
+      <?php do { ?>
+      <option value="<?php echo $row_styles_num['brewStyleGroup']; ?>" <?php if ($row_log['brewWinnerCat'] == $row_styles_num['brewStyleGroup']) echo "SELECTED"; ?>><?php echo $row_styles_num['brewStyleGroup']; ?></option>
+      <?php } while ($row_styles_num = mysql_fetch_assoc($styles_num)); ?>
     </select>
-    <?php } else echo $row_log['brewWinnerCat']; ?>
+  <?php } else echo $row_log['brewWinnerCat']; ?>
   </td>
   <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if ($action != "print") { ?>   

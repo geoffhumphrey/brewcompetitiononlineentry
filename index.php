@@ -15,7 +15,7 @@ $query_setup2 = "SELECT * FROM preferences";
 $setup2 = mysql_query($query_setup2, $brewing);
 $totalRows_setup2 = mysql_num_rows($setup2);
 
-if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup1 == 0)) { 
+if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) { 
 header ("Location: setup.php?section=step1");
 } 
 // If all setup has taken place, run normally
@@ -64,8 +64,34 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   </div>
   <?php }
-  // Check if registration date has passed. If so, display "registration end" message.
-  if (greaterDate($today,$deadline)) {
+  
+  // Check if registration open date has passed. If so, display "registration not open yet" message.
+  if (lesserDate($today,$reg_open)) { 
+  	if ($section != "admin") {
+  	?>
+    <div id="closed">Registration will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?>.</div>
+	<?php }
+	if ($section == "default") 	include ('sections/default.sec.php');
+	if ($section == "login")	include ('sections/login.sec.php');
+	if ($section == "rules") 	include ('sections/rules.sec.php');
+	if ($section == "entry") 	include ('sections/entry_info.sec.php');
+	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "past_winners") include ('sections/past_winners.sec.php');
+	if (isset($_SESSION['loginUsername'])) {
+		if ($row_user['userLevel'] == "1") {
+			if ($section == "list") 	include ('sections/list.sec.php');
+			if ($section == "pay") 		include ('sections/pay.sec.php');
+			if ($section == "admin")	include ('admin/default.admin.php');
+			if ($section == "brewer") 	include ('sections/brewer.sec.php');
+			if ($section == "brew") 	include ('sections/brew.sec.php');
+			if ($section == "judge") 	include ('sections/judge.sec.php');
+			if ($section == "user") 	include ('sections/user.sec.php');
+			if ($section == "beerxml")	include ('sections/beerxml.sec.php');
+			}
+		}
+  }
+  // Check if registration close date has passed. If so, display "registration end" message.
+  elseif (greaterDate($today,$reg_deadline)) {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
     <div id="closed">Registration has closed.</div>
 	<?php }  

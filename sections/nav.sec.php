@@ -7,7 +7,7 @@
   <li><?php if ($section != "rules") { ?><a href="index.php?section=rules">Rules</a><?php } else { ?>Rules<?php } ?></li>
   <li><?php if ($section != "entry") { ?><a href="index.php?section=entry">Entry Information</a><?php } else { ?>Entry Information<?php } ?></li>
   <?php if (($row_prefs['prefsSponsors'] == "Y") && ($row_prefs['prefsSponsorLogos'] == "Y") && ($totalRows_sponsors > 0)) { ?><li><?php if ($section != "sponsors") { ?><a href="index.php?section=sponsors">Sponsors</a><?php } else { ?>Sponsors<?php } ?></li><?php } ?>
-  <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+  <?php if (!lesserDate($today,$reg_open)) { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="index.php?section=register">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_contest_info['contestEntryFee'] > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <?php } ?>
@@ -34,7 +34,7 @@
 <div id="adminMenu0" class="menu">
 <a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
 <a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
-<a class="menuItem" href="index.php?section=admin&go=judging&action=add">A Judging Location</a>
+<a class="menuItem" href="index.php?section=admin&go=judging&action=add">A Judging Location/Date</a>
 <a class="menuItem" href="index.php?section=admin&go=styles&action=add">A Custom Style Category</a>
 <a class="menuItem" href="index.php?section=admin&go=dropoff&action=add">A Drop-Off Location</a>
 </div>
@@ -47,7 +47,7 @@
 <div id="adminMenu2" class="menu" onmouseover="menuMouseover(event)">
 <a class="menuItem" href="index.php?section=admin&go=participants">Participants</a>
 <a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
-<a class="menuItem" href="index.php?section=admin&go=judging">Judging Locations</a>
+<a class="menuItem" href="index.php?section=admin&go=judging">Judging Locations/Dates</a>
 <a class="menuItem" href="index.php?section=admin&go=styles">Accepted Style Categories</a>
 <?php if ($totalRows_judging > 1) { ?><a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?>
 <a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
