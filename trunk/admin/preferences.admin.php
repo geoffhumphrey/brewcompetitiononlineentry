@@ -25,6 +25,16 @@
   	<td class="data">Indicate whether you would like to display the winners of the competition for each category and Best of Show.</td>
   </tr>
   <tr>
+    <td class="dataLabel">Mead BOS:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsBOSMead" value="Y" id="prefsBOSMead_0"  <?php if ($row_prefs['prefsBOSMead'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsBOSMead" value="N" id="prefsBOSMead_1" <?php if ($row_prefs['prefsBOSMead'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate whether your competition awards a separate Best of Show for meads.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Cider BOS:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsBOSCider" value="Y" id="prefsBOSCider_0"  <?php if ($row_prefs['prefsBOSCider'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsBOSCider" value="N" id="prefsBOSCider_1" <?php if ($row_prefs['prefsBOSCider'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate whether your competition awards a separate Best of Show for ciders.</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Require Special Ingredients<br />
       or Classic Style:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>

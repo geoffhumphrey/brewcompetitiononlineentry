@@ -3,9 +3,10 @@
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" />
 <?php } ?>
 <p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Information">Print This Page</a></p>
-<a href="#judging">Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></a><br />
+<a href="#window">Entry Window</a><br />
 <a href="#entry">Entry Fees</a><br />
 <a href="#payment">Payment</a><br />
+<a href="#judging">Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></a><br />
 <a href="#categories">Categories Accepted</a><br />
 <?php if ($row_contest_info['contestBottles'] != "") { ?><a href="#bottle">Bottle Acceptance Rules</a><br /><?php } ?>
 <?php if ($row_contest_info['contestShippingAddress'] != "") { ?><a href="#shipping">Shipping Location and Address</a><br /><?php } ?>
@@ -17,8 +18,19 @@
 
 <h2>Competition Coordinator</h2>
 <p><a href="mailto:<?php echo $row_contest_info['contestContactEmail']; ?>?subject=<?php echo $row_contest_info['contestName']; ?>"><?php echo $row_contest_info['contestContactName']; ?></a><?php if ($action == "print") echo " &mdash; ".$row_contest_info['contestContactEmail']; ?></p>
-<h2>Entry Deadline</h2>
-<p><?php echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?></p>
+<a name="window"></a><h2>Entry Window</h2>
+<p><?php echo dateconvert($row_contest_info['contestEntryOpen'], 2)." through "; echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>.</p>
+<a name="entry"></a><h2>Entry Fees</h2>
+<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
+<a name="payment"></a><h2>Payment</h2>
+<p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
+    <ul>
+    	<?php if ($row_prefs['prefsCash'] == "Y") echo "<li>Cash</li>"; ?>
+        <?php if ($row_prefs['prefsCheck'] == "Y") echo "<li>Check, made out to <em>".$row_prefs['prefsCheckPayee']."</em></li>"; ?>
+        <?php if ($row_prefs['prefsPaypal'] == "Y") echo "<li>PayPal (once registered, click <em>Pay Entry Fees</em> from the main navigation after inputting all entries)</li>"; ?>
+    </ul>
+<?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <a name="judging"></a><h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
 <?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { 
   do { ?>
@@ -33,17 +45,6 @@
 <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php } ?>
-<a name="entry"></a><h2>Entry Fees</h2>
-<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
-<?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
-<a name="payment"></a><h2>Payment</h2>
-<p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
-    <ul>
-    	<?php if ($row_prefs['prefsCash'] == "Y") echo "<li>Cash</li>"; ?>
-        <?php if ($row_prefs['prefsCheck'] == "Y") echo "<li>Check, made out to <em>".$row_prefs['prefsCheckPayee']."</em></li>"; ?>
-        <?php if ($row_prefs['prefsPaypal'] == "Y") echo "<li>PayPal (once registered, click <em>Pay Entry Fees</em> from the main navigation after inputting all entries).</li>"; ?>
-    </ul>
-<?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <a name="categories"></a><h2>Categories Accepted</h2>
 <ul>
   <?php do { ?>

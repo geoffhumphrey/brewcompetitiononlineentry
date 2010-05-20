@@ -7,18 +7,19 @@ $hostname = "localhost";
 /* 
 Change the word root to the username for your database (generally the same as your login code for your web hosting company).
 INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
-For example, if your username is fred then the line should read $username_brewblog = "fred".
+For example, if your username is fred then the line should read $username = "fred".
 */
 $username = "";
+
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
-For example, if your password is flintstone then the line should read $password_brewblog = "flintsone".
+For example, if your password is flintstone then the line should read $password = "flintsone".
 */
 $password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
-If you haven't set up the database yet, please refer to http://competition.brewblogger.net/index.php?page=install for setup instructions. 
+If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
 */
 $database = "";
 
@@ -50,7 +51,6 @@ CORRECT example installation is in a sub-folder on your site:
 $images_dir = "/home/public_html/bcoe";
 
 ******************************************************************************
-
 */
 $images_dir = "";
 
