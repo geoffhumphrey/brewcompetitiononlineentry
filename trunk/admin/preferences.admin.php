@@ -1,7 +1,7 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step1") echo "add"; else echo "edit"; ?>&dbTable=preferences&id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step1") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
 <?php if ($section != "step1") { ?>
 <h2>Preferences</h2>
-<p><a href="index.php?section=admin">&laquo; Back to Admin</a></p>
+<p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
 <?php } ?>
 <h3>General</h3>
 <table>

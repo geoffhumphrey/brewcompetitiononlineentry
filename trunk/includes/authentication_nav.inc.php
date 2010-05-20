@@ -26,7 +26,7 @@ function authenticateUserNav($connection, $username, $password)
 function sessionAuthenticateNav()
 {
   // Check if the user hasn't logged in
-  if (!isset($_SESSION["loginUsername"])) echo "<a href=\"index.php?section=login&action=login\">Log In</a>"; 
+  if (!isset($_SESSION["loginUsername"])) echo "<a href=\"index.php?section=login&amp;action=login\">Log In</a>"; 
   if (isset($_SESSION["loginUsername"]))  echo "<a href=\"includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION["loginUsername"]."</div>";
 }
 

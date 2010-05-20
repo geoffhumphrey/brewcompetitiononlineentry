@@ -32,28 +32,28 @@
 
 <!-- 2nd Tier sub menus  -->
 <div id="adminMenu0" class="menu">
-<a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
-<a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
-<a class="menuItem" href="index.php?section=admin&go=judging&action=add">A Judging Location/Date</a>
-<a class="menuItem" href="index.php?section=admin&go=styles&action=add">A Custom Style Category</a>
-<a class="menuItem" href="index.php?section=admin&go=dropoff&action=add">A Drop-Off Location</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
+<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location/Date</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
 </div>
 
 <div id="adminMenu1" class="menu">
-<a class="menuItem" href="index.php?section=admin&go=contest_info">Competition Info</a>
-<a class="menuItem" href="index.php?section=admin&go=preferences">Preferences</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=contest_info">Competition Info</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=preferences">Preferences</a>
 </div>
 
 <div id="adminMenu2" class="menu" onmouseover="menuMouseover(event)">
-<a class="menuItem" href="index.php?section=admin&go=participants">Participants</a>
-<a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
-<a class="menuItem" href="index.php?section=admin&go=judging">Judging Locations/Dates</a>
-<a class="menuItem" href="index.php?section=admin&go=styles">Accepted Style Categories</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=entries">Entries</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations/Dates</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
 <?php if ($totalRows_judging > 1) { ?><a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?>
 <a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
-<a class="menuItem" href="index.php?section=admin&go=participants&filter=judges">Available Judges</a>
-<a class="menuItem" href="index.php?section=admin&go=participants&filter=stewards">Available Stewards</a>
-<a class="menuItem" href="index.php?section=admin&go=dropoff">Drop-Off Locations</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
 </div>
 
 <div id="adminMenu3" class="menu" onmouseover="menuMouseover(event)">
@@ -64,28 +64,28 @@
 </div>
 
 <div id="adminMenu4" class="menu">
-<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&TB_iframe=true&height=350&width=800" title="Upload Competition Logo Image">Competition Logo</a>
-<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&TB_iframe=true&height=350&width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
+<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
+<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
 </div>
 
 <div id="adminMenu5" class="menu">
-<a class="menuItem" href="index.php?section=admin&go=archive">Archives</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=archive">Archives</a>
 </div>
 
 <div id="adminMenu6" class="menu">
-<a class="menuItem" href="index.php?section=admin&action=assign&go=judging&filter=judges">Judges (Final Assignments)</a>
-<a class="menuItem" href="index.php?section=admin&action=assign&go=judging&filter=stewardss">Stewards (Final Assignments)</a>
+<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Judges (Final Assignments)</a>
+<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewardss">Stewards (Final Assignments)</a>
 <?php if ($totalRows_judging > 1) { ?>
-<a class="menuItem" href="index.php?section=admin&action=update&go=judging&filter=judges">Judges to a Location</a>
-<a class="menuItem" href="index.php?section=admin&action=update&go=judging&filter=stewards">Stewards to a Location</a>
+<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
+<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
 <?php } ?>
 </div>
 
 <!-- 3rd Tier sub menus -->
 <div id="adminMenu2_3" class="menu">
-<a class="menuItem" href="index.php?section=admin&go=sponsors">Manage Sponsors</a>
-<a class="menuItem" href="index.php?section=admin&go=sponsors&action=add">Add Sponsor</a>
-<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&TB_iframe=true&height=350&width=800">Add Sponsor Logo</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=sponsors">Manage Sponsors</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add Sponsor</a>
+<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800">Add Sponsor Logo</a>
 </div>
 
 <div id="adminMenu3_1" class="menu">
@@ -97,20 +97,20 @@
 <a class="menuItem" href="admin/email_export.php">All Participants</a>
 <a class="menuItem" href="admin/email_export.php?filter=judges">All Judges</a>
 <a class="menuItem" href="admin/email_export.php?filter=stewards">All Stewards</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&filter=paid&action=email">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&filter=nopay&action=email">Non-Paid &amp; Received Entries</a>
+<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
+<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
 </div>
 
 <div id="adminMenu3_3" class="menu">
 <a class="menuItem" href="admin/participants_export.php?go=tab">All Participants</a>
-<a class="menuItem" href="admin/entries_export.php?go=tab&filter=paid&action=hccp">Paid &amp; Received Entries</a>
+<a class="menuItem" href="admin/entries_export.php?go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
 <a class="menuItem" href="admin/entries_export.php?go=tab">All Entries</a>
 </div>
 
 <div id="adminMenu3_4" class="menu">
 <a class="menuItem" href="admin/participants_export.php?go=csv">All Participants</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&filter=paid&action=hccp">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&filter=nopay&action=hccp">Non-Paid &amp; Received Entries</a>
+<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
 <a class="menuItem" href="admin/entries_export.php?go=csv">All Entries</a>
 </div>
 <?php } ?>

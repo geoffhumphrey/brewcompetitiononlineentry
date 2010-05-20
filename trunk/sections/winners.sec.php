@@ -25,7 +25,7 @@
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_log_winners['brewWinnerPlace'] == "1") echo "medal_gold_3"; elseif ($row_log_winners['brewWinnerPlace'] == "2") echo "medal_silver_3"; elseif ($row_log_winners['brewWinnerPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png" align="absmiddle" /></span><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
+  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_log_winners['brewWinnerPlace'] == "1") echo "medal_gold_3"; elseif ($row_log_winners['brewWinnerPlace'] == "2") echo "medal_silver_3"; elseif ($row_log_winners['brewWinnerPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
   <td class="dataList"><?php echo $styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")"; } ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewBrewerFirstName']." ".$row_log_winners['brewBrewerLastName']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>

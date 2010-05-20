@@ -1,4 +1,4 @@
-<form action="includes/process.inc.php?action=edit&dbTable=brewer&go=<?php echo $go; ?>&id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?action=edit&amp;dbTable=brewer&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
 <tr>

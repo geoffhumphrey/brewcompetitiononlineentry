@@ -12,7 +12,7 @@ $row_suffixCheck = mysql_fetch_assoc($suffixCheck);
 $totalRows_suffixCheck = mysql_num_rows($suffixCheck);
 
 if ($totalRows_suffixCheck > 0) { 
-header("Location: ../index.php?section=admin&go=archive&msg=6");
+header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=6");
 } 
 
 else {
@@ -432,13 +432,13 @@ $totalRows_login = mysql_num_rows($login);
   			$_SESSION["loginUsername"] = $user_name;
 
   			// If the username/password combo is OK, relocate to the "protected" content index page
-  			header("Location: ../index.php?section=admin&go=archive&msg=7");
+  			header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=7");
   			exit;
 			}
 		else
 			{
   			// If the username/password combo is incorrect or not found, relocate to the login error page
-  			header("Location: ../index.php?section=admin&go=archive&msg=6");
+  			header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=6");
   			session_destroy();
   			exit;
 			}

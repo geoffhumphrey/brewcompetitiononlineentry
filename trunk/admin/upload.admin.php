@@ -47,7 +47,7 @@ if ($_REQUEST[del] && $DELETABLE)  {
   else if (strpos($_REQUEST[del],$upload_dir) === false);  // possible hacking
   else if (substr($_REQUEST[del],0,6)==$upload_dir) {
     unlink($_REQUEST[del]);
-    print "<script>window.location.href='?action=upload&section=".$section."&message=". htmlentities($message) . "&inserted=true'</script>";
+    print "<script>window.location.href='?action=upload&amp;section=".$section."&message=". htmlentities($message) . "&inserted=true'</script>";
   }
 }
 else if ($_FILES['userfile']) {
@@ -85,7 +85,7 @@ while ($file = readdir($handle)) {
       	$filelist .= "<tr>";
 		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  class=\"thickbox\">".$file."</a></td>";
       	$filelist .= "<td width=\"5%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>";
-	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>";
+	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>";
 		else $filelist .="<td>&nbsp;</td>";
 		$filelist .= "</tr>";
    }
@@ -153,7 +153,7 @@ function do_upload($upload_dir, $upload_url) {
   	<tr>
 		<td width="5%" rowspan="2" nowrap><a href="../user_images/<?php echo $fileConfirm; ?>" class="thickbox"><img src="../user_images/<?php echo $fileConfirm; ?>" border="0" width="100"></a></td>
 		<td width="5%" nowrap class="data">Are you sure you want to delete <?php echo $fileConfirm; ?>?</td>
-   		<td width="5%" nowrap class="data"><a href="?action=upload&section=delete&fileConfirm=<?php echo $fileConfirm; ?>">Yes</a></td>
+   		<td width="5%" nowrap class="data"><a href="?action=upload&amp;section=delete&fileConfirm=<?php echo $fileConfirm; ?>">Yes</a></td>
     	<td class="data"><a href="?action=upload">No</a></td>
 	</tr>
   	<tr>

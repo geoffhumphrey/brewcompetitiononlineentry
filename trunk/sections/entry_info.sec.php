@@ -1,8 +1,8 @@
 <?php if ($action != "print") { ?>
 <?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
-<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" />
+<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
-<p><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Information">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Information">Print This Page</a></p>
 <a href="#window">Entry Window</a><br />
 <a href="#entry">Entry Fees</a><br />
 <a href="#payment">Payment</a><br />
@@ -37,8 +37,8 @@
   <p>
   <?php 
 	if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
-	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
     <?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
   <?php } ?>
 </p>
@@ -54,11 +54,11 @@
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php if ($row_contest_info['contestBottles'] != "") { ?>
 <a name="bottle"></a><h2>Bottle Acceptance Rules</h2>
-<p><?php echo $row_contest_info['contestBottles']; ?></p>
+<?php echo $row_contest_info['contestBottles']; ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php } if ($row_contest_info['contestShippingAddress'] != "") { ?>
 <a name="shipping"></a><h2>Shipping Location and Address</h2>
-<p><?php echo $row_contest_info['contestShippingName']."<br \>".$row_contest_info['contestShippingAddress']; ?></p>
+<p><?php echo $row_contest_info['contestShippingName']."<br>".$row_contest_info['contestShippingAddress']; ?></p>
 <h3>Packing &amp; Shipping Hints</h3>
       <ol>
 		<li>Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Do not over pack! Write clearly: "Fragile. This Side Up." on the package. Your package should weigh less than 25 pounds. Please refrain from using &quot;messy&quot; packaging materials such a Styrofoam &quot;peanuts&quot; or pellets; please use packaging material such as bubble wrap.</li>
@@ -72,8 +72,8 @@ if ($totalRows_dropoff > 0) { ?>
 <?php do { ?>
 <p><?php if ($row_dropoff['dropLocationWebsite'] != "") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>"; echo $row_dropoff['dropLocationName']; if ($row_dropoff['dropLocationWebsite'] != "") echo "</a>"; ?><br />
 <?php echo $row_dropoff['dropLocation']; ?>
-<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
-<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
+<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
+<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
 <?php } ?>
 <br />
 <?php echo $row_dropoff['dropLocationPhone']; ?>
@@ -97,8 +97,8 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 	<?php 
 	if ($row_contest_info['contestAwardsLocDate'] != "") echo dateconvert($row_contest_info['contestAwardsLocDate'], 2)." at "; echo $row_contest_info['contestAwardsLocName'];
 	if ($row_contest_info['contestAwardsLocTime'] != "") echo ", ".$row_contest_info['contestAwardsLocTime'];
-	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span><?php } ?>
+	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
+	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span><?php } ?>
     <?php if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation']; ?>
 </p>
 <?php } ?>

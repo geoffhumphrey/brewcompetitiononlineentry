@@ -2,7 +2,7 @@
 <?php if ($msg != "default") echo $msg_output; ?>
 <p>This account will be the Administrator's account with full access to the entry portal site. This account will be able to add, edit and delete any entries and participants, grant administration privileges to other users, and have the ability to export the necessary files to use with other brew contest-related applications such as HCCP and Excel.</p>
 <p>This user will also be able to add, edit, and delete their own entries into the competition.</p>
-<form action="includes/process.inc.php?section=setup&action=add&dbTable=users" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=users" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="userLevel" type="hidden" value="1" />
 <table>
 	<tr>

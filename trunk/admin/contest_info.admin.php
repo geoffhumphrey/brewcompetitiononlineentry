@@ -1,7 +1,7 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&dbTable=contest_info&id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1">
 <?php if ($section != "step2") { ?>
 <h2>Competition Info</h2>
-<p><a href="index.php?section=admin">&laquo; Back to Admin</a></p>
+<p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
 <?php } ?>
 <h3>Contact</h3>
 <table>
@@ -41,7 +41,7 @@
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
     <td class="data"><input name="contestLogo" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
-    <br /><br /><span class="icon"><img src="images/picture_add.png" align="absmiddle"></span><a href="admin/upload.admin.php?KeepThis=true&TB_iframe=true&height=350&width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
+    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>

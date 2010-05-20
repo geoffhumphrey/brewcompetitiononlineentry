@@ -40,9 +40,9 @@ if ($msg != "default") echo $msg_output;
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
 <table class="dataTable">
  <tr>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png" align="absmiddle" /></span><a class="data" href="index.php?section=brew&action=add">Add an Entry</a></td>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png" align="absmiddle" /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
-   <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" /></span><a class="data thickbox" href="print.php?section=list&action=print&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
+   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
+   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
+   <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
  </tr>
 </table>
 <?php } ?>
@@ -70,11 +70,11 @@ if ($msg != "default") echo $msg_output;
   <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
   <?php if ($action != "print") { ?>
   <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png" align="absmiddle" border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&action=edit&id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
-  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png" align="absmiddle" border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&dbTable=brewing&action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
+  <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
+  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
   <?php } 
   if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <td class="dataList"><span class="icon"><img src="images/printer.png" align="absmiddle" border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&TB_iframe=true&height=450&width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
+  <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
   <?php } 
   }
   ?>
@@ -83,7 +83,7 @@ if ($msg != "default") echo $msg_output;
   <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
  
  <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($judgingDateReturn == "false") {  if ($action != "print") { ?><span class="icon"><img src="images/money.png" align="absmiddle" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?><?php } else echo "&nbsp;"; ?></td>
+  <td colspan="5" class="dataHeading bdr1T"><?php if ($judgingDateReturn == "false") {  if ($action != "print") { ?><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?><?php } else echo "&nbsp;"; ?></td>
  </tr>
 
 </table>
@@ -94,9 +94,9 @@ if ($msg != "default") echo $msg_output;
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
 <table class="dataTable">
 	<tr>
-    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png" align="absmiddle" /></span><a class="data" href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&action=edit&id=".$row_brewer['id']; else echo "action=add&section=brewer&go=judge"; ?>">Edit Your Info</a></td>
-    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/email_edit.png" align="absmiddle" /></span><a class="data" href="index.php?section=user&action=username&id=<?php echo $row_user['id']; ?>">Change Email Address</a></td>
-        <td class="dataList"><span class="icon"><img src="images/key.png" align="absmiddle" /></span><a class="data" href="index.php?section=user&action=password&id=<?php echo $row_user['id']; ?>">Change Password</a></td>
+    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a></td>
+    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/email_edit.png"  /></span><a class="data" href="index.php?section=user&amp;action=username&amp;id=<?php echo $row_user['id']; ?>">Change Email Address</a></td>
+        <td class="dataList"><span class="icon"><img src="images/key.png"  /></span><a class="data" href="index.php?section=user&amp;action=password&amp;id=<?php echo $row_user['id']; ?>">Change Password</a></td>
     </tr>
 </table>
 <?php } ?>
@@ -162,8 +162,8 @@ if ($msg != "default") echo $msg_output;
     <td class="data">
     <?php if (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")) {
 	if ($row_judging4['judgingDate'] != "") echo dateconvert($row_judging4['judgingDate'], 2)." at "; echo $row_judging4['judgingLocName']; 
-	if ($row_judging4['judgingTime'] != "") echo ", ".$row_judging4['judgingTime']; if (($row_judging2['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&zoom=13&size=600x400&markers=color:red|<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&sensor=false&KeepThis=true&TB_iframe=true&height=420&width=600" title="Map to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/map.png" align="absmiddle" border="0" alt="Map <?php echo $row_judging4['judgingLocName']; ?>" title="Map <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&source=s_q&hl=en&q=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&KeepThis=true&TB_iframe=true&height=450&width=900" title="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/car.png" align="absmiddle" border="0" alt="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
+	if ($row_judging4['judgingTime'] != "") echo ", ".$row_judging4['judgingTime']; if (($row_judging2['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging4['judgingLocName']; ?>" title="Map <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
+	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_judging4['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging4['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging4['judgingLocName']; ?>" /></a></span>
 	<?php } 
 	} else echo "Contact the competition coordinator for your assignment."; 
 	?>

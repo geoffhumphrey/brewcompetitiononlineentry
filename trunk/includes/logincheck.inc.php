@@ -48,7 +48,7 @@ session_start();
 else
 	{
   		// If the username/password combo is incorrect or not found, relocate to the login error page
-  		header("Location: ../index.php?section=login&msg=1");
+  		header("Location: ../index.php?section=login&amp;msg=1");
   		session_destroy();
   		exit;
 	}
