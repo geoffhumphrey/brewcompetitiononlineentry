@@ -117,6 +117,7 @@ margin-bottom: 0;
 background-color: #eeeeee;
 border-bottom: 1px solid #000000;
 padding: 0 1em 0 1em;
+min-height: 30px;
 }
 
 #header
@@ -143,8 +144,7 @@ border-bottom: 1px dashed #37517B;
 /* Footer */
 #footer
 {
-bottom: 15px;
-width: 100%;  /* Height of the footer */
+width: 100%;
 }
 
 #footer-inner {
@@ -153,6 +153,7 @@ border-top: 1px solid #000000;
 padding: 1em;
 font-size: .8em;
 color: #666666;
+min-height: 15px;
 }
 
 /* Content */
