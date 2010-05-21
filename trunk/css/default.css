@@ -244,7 +244,7 @@ padding: .5em .5em .5em 2.2em;
 background-image: url(../images/error.png);
 background-position:.5em;
 background-repeat: no-repeat;
-background-color: #FFFFCC;
+background-color: #FFFF99;
 border: 1px solid #FF0000;
 }
 
@@ -403,15 +403,30 @@ background-position: center left;
 background-repeat: no-repeat;
 }
 
-#closed {
-color: #990000;
+.error {
+color: #FF0000;
 font-size: 1.2em;
 font-weight: bold;
-margin: 1.3em 0 1em 0;
-padding: .5em;
+margin: .5em 0 1em 0;
+padding: .5em .5em .5em 2.2em;
+background-image: url(../images/error.png);
+background-position: .5em;
+background-repeat: no-repeat;
 background-color: #FFFF99;
-border: 1px solid #FFCC33;
-display: block;
+border: 1px solid #FF0000;
+}
+
+.closed {
+color: #0A4A06;
+font-size: 1.2em;
+font-weight: bold;
+margin: .5em 0 1em 0;
+padding: .5em .5em .5em 2.2em;
+background-image: url(../images/tick.png);
+background-position: .5em;
+background-repeat: no-repeat;
+background-color: #E0FDDF;
+border: 1px solid #0A4A06;
 }
 
 /* Calendar Widget Elements  */
