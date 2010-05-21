@@ -70,7 +70,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   if (lesserDate($today,$reg_open)) { 
   	if ($section != "admin") {
   	?>
-    <div id="closed">Registration will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?>.</div>
+    <div class="closed">Registration will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?>.</div>
 	<?php }
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');
@@ -94,7 +94,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   // Check if registration close date has passed. If so, display "registration end" message.
   elseif (greaterDate($today,$reg_deadline)) {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
-    <div id="closed">Registration has closed.</div>
+    <div class="closed">Registration has closed.</div>
 	<?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "login")	include ('sections/login.sec.php');

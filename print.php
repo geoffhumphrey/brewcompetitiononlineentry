@@ -31,7 +31,7 @@ if (isset($_GET['tb'])) {
 	} 
 	// Check if registration date has passed. If so, display "registration end" message.
 	if (greaterDate($today,$deadline)) {
-	if ($section != "admin") { ?><div id="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div><?php }  
+	if ($section != "admin") { ?><div class="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div><?php }  
 	if ($section == "default") 	include ('sections/default.sec.php');
 	if ($section == "rules") 	include ('sections/rules.sec.php');
 	if ($section == "entry") 	include ('sections/entry_info.sec.php');
