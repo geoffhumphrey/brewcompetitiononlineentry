@@ -20,6 +20,7 @@ include ('includes/headers.inc.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Signup Site</title>
+<link href="css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>

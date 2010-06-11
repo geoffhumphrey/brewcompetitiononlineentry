@@ -116,6 +116,7 @@ function do_upload($upload_dir, $upload_url) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload Image</title>
+<link href="../css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="../css/default.css" rel="stylesheet" type="text/css" />
 <link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="../js_includes/jquery-1.3.2.min.js"></script>

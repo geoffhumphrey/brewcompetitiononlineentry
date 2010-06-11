@@ -20,16 +20,7 @@ header("Content-Disposition: attachment; filename=".str_replace(" ", "_", $row_c
 echo "<html>\n";
 echo "<body>\n";
 echo "<h1>Announcing the ".$row_contest_info['contestName']."</h1>\n";
-echo "<p>".$row_contest_info['contestHost']." announces the ".$row_contest_info['contestName'];
-if ($row_contest_info['contestDate2'] != "") { 
-	if ($row_contest_info['contestDate3'] != "") { echo ", "; echo dateconvert($row_contest_info['contestDate2'], 2); }
-	else { echo " and "; echo dateconvert($row_contest_info['contestDate2'], 2); }
-	} 
-if ($row_contest_info['contestDate3'] != "") { 
-	if ($row_contest_info['contestDate2'] != "") { echo ", and "; echo dateconvert($row_contest_info['contestDate3'], 2); }
-    else { echo " and "; echo dateconvert($row_contest_info['contestDate3'], 2); }
-	} 
-echo ".</p>\n";
+echo "<p>".$row_contest_info['contestHost']." announces the ".$row_contest_info['contestName'].".</p>\n";
 echo "<h2>Entries</h2>\n";
 echo "<p>To enter, please go to ".$website." and proceed through the registration process.</p>\n";
 echo "<h3>Entry Deadline</h3>\n";
