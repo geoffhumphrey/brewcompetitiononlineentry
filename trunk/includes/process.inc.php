@@ -1197,7 +1197,7 @@ contestEntryFee2,
 contestEntryFeeDiscount,
 contestEntryFeeDiscountNum,
 contestLogo,
-contestBOSAward
+contestBOSAward,
 id
 ) 
 VALUES 
@@ -1343,7 +1343,7 @@ prefsDisplayWinners,
 prefsDisplaySpecial,
 prefsBOSMead,
 prefsBOSCider,
-id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),

@@ -12,7 +12,7 @@
 
 
 ALTER TABLE `contest_info` 
-ADD `contestRegistrationOpen` DATE NULL AFTER `contestDate3`,
+ADD `contestRegistrationOpen` DATE NULL AFTER `contestHostLocation`,
 ADD `contestEntryOpen` DATE NULL AFTER `contestRegistrationDeadline`;
 
 
