@@ -18,7 +18,7 @@
   	</tr>
 </table>
 </form>
-<?php if (lesserDate($today,$reg_deadline)) {
+<?php if (lesserDate($today,$reg_deadline) && (!lesserDate($today,$reg_open))) {
  if ($msg != "default") { ?><p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p>
 <?php } } ?>
 <p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="index.php?section=login&amp;action=forgot">click here to reset it</a>.</span></p>

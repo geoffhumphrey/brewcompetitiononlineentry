@@ -66,7 +66,7 @@
   <tr>
     <td class="dataLabel">Registration Close:</td>
     <td class="data"><input name="contestRegistrationDeadline" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationDeadline']; ?>"></td>
-    <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations.</em></td>
+    <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations. For example, if you want to accept registrations through January 1, 2011, the registration deadline should be January 2, 2011 (closes at midnight).</em></td>
   </tr>
 </table>
 <h3>Awards</h3>
