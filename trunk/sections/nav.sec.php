@@ -37,6 +37,7 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location/Date</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
 </div>
 
 <div id="adminMenu1" class="menu">

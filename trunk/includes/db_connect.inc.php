@@ -191,7 +191,7 @@ $row_stewarding2 = mysql_fetch_assoc($stewarding2);
 $totalRows_stewarding2 = mysql_num_rows($stewarding2);
 
 $query_styles = "SELECT * FROM styles";
-if ((($section == "entry") || ($section == "brew")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
+if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 elseif (($section == "admin") && ($action == "edit")) $query_styles .= " WHERE id='$id'";
 elseif ((($section == "judge") && ($go == "judge")) || ($action == "edit")) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 elseif (($section == "beerxml") && ($msg != "default")) $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleOwn='bcoe'";
