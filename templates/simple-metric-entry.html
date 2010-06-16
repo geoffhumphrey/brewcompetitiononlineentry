@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
+
+</head>
+
+<body 
+[onshow_a;block=begin;when [var.action]=='print']
+onload="javascript:window.print()"
+[onshow_a;block=end]
+>
+
+<!--
+This is not intended as a complete example. For some more complex usage, see the BJCP
+form.
+
+More information about Tiny But Strong templating system at
+http://www.tinybutstrong.com/
+-->
+
+<div id="printContainer">
+<a name="labels_top" id="labelsOtop"></a>
+
+<!-- div for non-print header -->
+<div>
+[onshow_b;block=div;when [var.action]!='print']
+<table>
+  <tr>
+    <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
+    <td><a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
+    <td><a href="?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  </tr>
+</table>
+</div> <!-- end non-print header-->
+
+<h1>Entry form [onshow.contest_info.contestName]</h1>
+
+<h2>Brewer</h2>
+
+<ul>
+  <li>Name: [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</li>
+  <li>Address: [onshow.brewer_info.brewerAddress], 
+       [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip],
+       [onshow.brewer_info.brewerCity] </li>
+   <li>Phone: [onshow.brewer_info.brewerPhone1]</li>
+   <li>Club: [onshow.brewer_info.brewerClubs]</li>
+</ul>
+
+<h2>Style entered</h2>
+
+<ul>
+  <li>Style number: [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
+  <li>Style name: [onshow.brewing_info.styleName]</li>
+  
+  <!-- Better formatting and/or conditional display would greatly improve layout here -->
+  <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
+  <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
+</ul>
+
+<h2>Recipe</h2>
+
+<h3>Grains and fermentables</h3>
+
+<table>
+  <tr>
+    <th>Amount</th>
+    <th>Type</th>
+  </tr>
+  <tr>
+    <td>[grains.weight.kg;block=tr] kg ([grains.weight.percent]%)</td>
+    <td>[grains.name]</td>
+  </tr>
+  <tr>
+    <td>[adjuncts.weight.kg;block=tr] kg ([adjuncts.weight.percent]%)</td>
+    <td>[adjuncts.name]</td>
+  </tr>
+  <tr>
+    <td>[extracts.weight.kg;block=tr] kg ([extracts.weight.percent]%)</td>
+    <td>[extracts.name]</td>
+  </tr>
+</table>
+
+<h3>Hops</h3>
+
+<table>
+  <tr>
+    <th>Amount (g)</th>
+    <th>Type</th>
+    <th>%&#945;</th>
+    <th>Usage</th>
+    <th>Minutes</th>
+  </tr>
+  <tr>
+    <td>[hops.weight.g;block=tr]</td>
+    <td>[hops.name]</td>
+    <td>[hops.alphaAcid]</td>
+    <td>[hops.use]</td>
+    <td>[hops.minutes]</td>
+  </tr>
+</table>
+
+<h3>Yeast</h3>
+
+<p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
+
+<p>Fermented at [onshow.brewing_info.brewPrimaryTemp.c]&deg;C for [onshow.brewing_info.brewPrimary]
+days and [onshow.brewing_info.brewSecondaryTemp.c]&deg;C for [onshow.brewing_info.brewSecondary]
+days.</p>
+
+<h3>Processes</h3>
+
+<ul>
+  <li>OG: [onshow.brewing_info.brewOG;frm='0.000']</li>
+  <li>FG: [onshow.brewing_info.brewFG;frm='0.000']</li>
+</ul>
+
+<table>
+  <tr>
+    <th>Mash temperature</th>
+    <th>Minutes</th>
+  </tr>
+  <tr>
+    <td>[mashSteps.temp.c;block=tr]</td>
+    <td>[mashSteps.minutes]</td>
+  </tr>
+</table>
+
+<br style="page-break-after:always;">
+<br />
+<a name="labels" id="labels"></a>
+
+<h1>Bottle labels</h1>
+
+<hr>
+<ul>
+  <li>[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</li>
+  <li>[onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory] 
+      [onshow.brewing_info.styleName]</li>
+</ul>
+<br>
+<br>
+<hr>
+<ul>
+  <li>[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</li>
+  <li>[onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory] 
+      [onshow.brewing_info.styleName]</li>
+</ul>
+
+
+</body>
+</html>

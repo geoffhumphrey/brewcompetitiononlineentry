@@ -2,7 +2,7 @@
 
 <table class="dataTable">
  <tr>
-   <?php if (($action == "add") || ($action == "edit")) { ?><td class="dataList" width="5%" nowrap="nowrap"><a href="index.php?section=admin&amp;go=sponsors">&laquo;  Back to Sponsor List</a></td><?php } else { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/award_star_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a></td><?php } ?>
+   <?php if (($action == "add") || ($action == "edit")) { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a></td><?php } else { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/award_star_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a></td><?php } ?>
    <td class="dataList"><span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image" class="data thickbox"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a></td>
  </tr>
 </table>

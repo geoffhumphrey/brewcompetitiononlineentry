@@ -1,7 +1,7 @@
 <?php 
 require ('../Connections/config.php');
+include ('../includes/url_variables.inc.php');
 include ('../includes/db_connect.inc.php');
-include ('../includes/url_variables.inc.php'); 
 include ('../includes/plug-ins.inc.php'); 
 
 if ($row_contest_info['contestHostWebsite'] != "") $website = $row_contest_info['contestHostWebsite']; 
@@ -50,12 +50,24 @@ echo "<ul>\n";
 	if ($row_prefs['prefsCheck'] == "Y") echo "\t<li>Check, made out to <em>".$row_prefs['prefsCheckPayee']."</em></li>\n";
 	if ($row_prefs['prefsPaypal'] == "Y") echo "\t<li>PayPal (once registered on the website, click <em>Pay Entry Fees</em> from the main navigation after inputting all entries).</li>\n";
 echo "</ul>\n";
+
+echo "<h3>Judging Date"; if ($totalRows_judging > 1) echo "s"; echo "</h3>";
+if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { 
+  do { 
+  echo "<p>";
+	if ($row_judging['judgingDate'] != "") echo dateconvert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
+	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; 
+ 	if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; 
+  echo "</p>\n";
+	} while ($row_judging = mysql_fetch_assoc($judging));
+}
+
 echo "<h3>Categories Accepted</h3>\n";
 echo "<ul>\n";
 do { 
   echo "<li>".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") echo " (Special style: ".$row_contest_info['contestName'].")</li>";
  } while ($row_styles = mysql_fetch_assoc($styles));
-echo "</ul>";
+echo "</ul>\n";
  
 if ($row_contest_info['contestBottles'] != "") 
 {
@@ -81,16 +93,23 @@ echo "<p>".$row_dropoff['dropLocationName']."<br>".$row_dropoff['dropLocationPho
  } while($row_dropoff = mysql_fetch_assoc($dropoff));
 
 } 
+if ($row_contest_info['contestBOSAward'] != "") 
+echo "<h2>Best of Show</h2>\n";
+echo "<p>".$row_contest_info['contestBOSAward']."</p>\n";
 if ($row_contest_info['contestAwards'] != "") 
 { 
 echo "<h2>Awards</h2>\n";
 echo "<p>".$row_contest_info['contestAwards']."</p>\n";
  } 
-if ($row_contest_info['contestAwardsLocation'] != "") 
-{ 
-echo "<h3>Awards Location</h3>\n";
-echo "<p>".$row_contest_info['contestAwardsLocName']."<br>".$row_contest_info['contestAwardsLocation']."</p>\n";
-}
+
+if ($row_contest_info['contestAwardsLocName'] != "") { 
+echo "<h3>Award Ceremony</h3>\n";
+echo "<p>";
+	if ($row_contest_info['contestAwardsLocDate'] != "") echo dateconvert($row_contest_info['contestAwardsLocDate'], 2)." at "; echo $row_contest_info['contestAwardsLocName'];
+	if ($row_contest_info['contestAwardsLocTime'] != "") echo ", ".$row_contest_info['contestAwardsLocTime'];
+	if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation'];
+echo "</p>";
+ } 
 echo "</body>\n";
 echo "</html>\n";
 ?>

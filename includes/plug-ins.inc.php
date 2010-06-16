@@ -111,37 +111,50 @@ $date = "$year-$month-$day";
 return $date;
 	}
 if ($func == 2)	{ //output conversion
-list($year, $month, $day) = split('[-.]', $date); 
-$date = "$day, $year"; 
-if ($month == "01" ) { echo "January "; }
-if ($month == "02" ) { echo "February "; }
-if ($month == "03" ) { echo "March "; }
-if ($month == "04" ) { echo "April "; }
-if ($month == "05" ) { echo "May "; }
-if ($month == "06" ) { echo "June "; }
-if ($month == "07" ) { echo "July "; }
-if ($month == "08" ) { echo "August "; }
-if ($month == "09" ) { echo "September "; }
-if ($month == "10" ) { echo "October "; }
-if ($month == "11" ) { echo "November "; }
-if ($month == "12" ) { echo "December "; }
+list($year, $month, $day) = explode("-", $date);
+if ($month == "01" ) { $month = "January "; }
+if ($month == "02" ) { $month = "February "; }
+if ($month == "03" ) { $month = "March "; }
+if ($month == "04" ) { $month = "April "; }
+if ($month == "05" ) { $month = "May "; }
+if ($month == "06" ) { $month = "June "; }
+if ($month == "07" ) { $month = "July "; }
+if ($month == "08" ) { $month = "August "; }
+if ($month == "09" ) { $month = "September "; }
+if ($month == "10" ) { $month = "October "; }
+if ($month == "11" ) { $month = "November "; }
+if ($month == "12" ) { $month = "December "; }
+$day = ltrim($day, "0");
+/* 
+Future release: add logic to check if user preferences 
+dictate "American" English date formats vs. "British" 
+English date formats
+*/
+$date = "$month $day, $year";
 return $date;
 	}
+	
 if ($func == 3)	{ //output conversion
-list($year, $month, $day) = split('[-.]', $date); 
-$date = "$day, $year"; 
-if ($month == "01" ) { echo "Jan "; }
-if ($month == "02" ) { echo "Feb "; }
-if ($month == "03" ) { echo "Mar "; }
-if ($month == "04" ) { echo "Apr "; }
-if ($month == "05" ) { echo "May "; }
-if ($month == "06" ) { echo "Jun "; }
-if ($month == "07" ) { echo "Jul "; }
-if ($month == "08" ) { echo "Aug "; }
-if ($month == "09" ) { echo "Sep "; }
-if ($month == "10" ) { echo "Oct "; }
-if ($month == "11" ) { echo "Nove "; }
-if ($month == "12" ) { echo "Dec "; }
+list($year, $month, $day) = explode("-", $date);
+if ($month == "01" ) { $month = "Jan"; }
+if ($month == "02" ) { $month = "Feb"; }
+if ($month == "03" ) { $month = "Mar"; }
+if ($month == "04" ) { $month = "Apr"; }
+if ($month == "05" ) { $month = "May"; }
+if ($month == "06" ) { $month = "Jun"; }
+if ($month == "07" ) { $month = "Jul"; }
+if ($month == "08" ) { $month = "Aug"; }
+if ($month == "09" ) { $month = "Sep"; }
+if ($month == "10" ) { $month = "Oct"; }
+if ($month == "11" ) { $month = "Nov"; }
+if ($month == "12" ) { $month = "Dec"; }
+$day = ltrim($day, "0");
+/* 
+Future release: add logic to check if user preferences 
+dictate "American" English date formats vs. "British" 
+English date formats
+*/
+$date = "$month $day, $year";
 return $date;
 	}
 }

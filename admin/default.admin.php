@@ -41,7 +41,9 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   <tr>
     <td class="dataLabel">&nbsp;</td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></td>
-    <td colspan="3" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></td>
+    <td nowrap="nowrap" class="data">&nbsp;</td>
   </tr>
   <tr>
     <td width="5%" class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/pencil.png" ></span>Edit:</td>

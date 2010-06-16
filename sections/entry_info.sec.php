@@ -92,7 +92,7 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php } ?>
 <?php if ($row_contest_info['contestAwardsLocName'] != "") { ?>
-<a name="ceremony"></a><h2>Awards Ceremony</h2>
+<a name="ceremony"></a><h2>Award Ceremony</h2>
 <p>
 	<?php 
 	if ($row_contest_info['contestAwardsLocDate'] != "") echo dateconvert($row_contest_info['contestAwardsLocDate'], 2)." at "; echo $row_contest_info['contestAwardsLocName'];

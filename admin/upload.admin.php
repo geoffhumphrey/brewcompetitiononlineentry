@@ -82,12 +82,12 @@ $handle=opendir($upload_dir);
 $filelist = "";
 while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
-      	$filelist .= "<tr>";
-		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  class=\"thickbox\">".$file."</a></td>";
-      	$filelist .= "<td width=\"5%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>";
-	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>";
-		else $filelist .="<td>&nbsp;</td>";
-		$filelist .= "</tr>";
+      	$filelist .= "<tr>\n";
+		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  class=\"thickbox\">".$file."</a></td>\n";
+      	$filelist .= "<td width=\"5%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
+	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
+		else $filelist .="<td>&nbsp;</td>\n";
+		$filelist .= "</tr>\n";
    }
 }
 
@@ -113,8 +113,10 @@ function do_upload($upload_dir, $upload_url) {
   return $message;
 }
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
 <link href="../css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="../css/default.css" rel="stylesheet" type="text/css" />
