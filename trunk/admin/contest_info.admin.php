@@ -3,20 +3,33 @@
 <h2>Competition Info</h2>
 <p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
 <?php } ?>
+<?php if ($section == "step2") { ?>
 <h3>Contact</h3>
 <table>
   <tr>
-    <td class="dataLabel">Contact Name:</td>
-    <td class="data"><input name="contestContactName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="dataLabel">Competition Coordinator's First Name:</td>
+    <td class="data"><input name="contactLastName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="data"><span class="required">Required</span></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Competition Coordinator's Last Name:</td>
+    <td class="data"><input name="contactFirstName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Contact Email:</td>
-    <td class="data"><input name="contestContactEmail" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactEmail']; ?>"></td>
+    <td class="data"><input name="contactEmail" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactEmail']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
+  <tr>
+  	<td colspan="3">You will be able to enter more contact names after set up via your BCOE Administration area.</td>
+  </tr>
 </table>
-<h3>General Info</h3>
+<?php } ?>
+<?php if (($section != "step2") && ($totalRows_contact == 0)) { ?>
+<div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="index.php?section=admin&go=contacts">add a contact</a>?</div>
+<?php } ?>
+<h3>General</h3>
 <table>
   <tr>
     <td class="dataLabel">Competition Name:</td>

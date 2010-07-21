@@ -1239,9 +1239,27 @@ VALUES
 
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-
-  $insertGoTo = "../setup.php?section=step3";
-  header(sprintf("Location: %s", $insertGoTo));
+  
+  if ($section == "step2") {
+  $insertSQL = sprintf("INSERT INTO contacts (
+	contactFirstName, 
+	contactLastName, 
+	contactPosition, 
+	contactEmail,
+	) 
+	VALUES 
+	(%s, %s, %s, %s)",
+                       GetSQLValueString($_POST['contestName'], "text"),
+                       GetSQLValueString($_POST['contestHost'], "text"),
+                       GetSQLValueString($_POST['contestHostWebsite'], "text"),
+					   GetSQLValueString($_POST['contestBOSAward'], "text"));
+					   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+  	$insertGoTo = "../setup.php?section=step3";
+  	}
+	
+	header(sprintf("Location: %s", $insertGoTo));
 
 }
 
@@ -1521,12 +1539,13 @@ if($result1){
 
 if (($action == "edit") && ($dbTable == "sponsors")) {
 
-  $updateSQL = sprintf("UPDATE sponsors SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s WHERE id=%s",
+  $updateSQL = sprintf("UPDATE sponsors SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
                        GetSQLValueString($_POST['sponsorName'], "text"),
                        GetSQLValueString($_POST['sponsorURL'], "text"),
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
 					   GetSQLValueString($_POST['sponsorLocation'], "text"),
+					   GetSQLValueString($_POST['sponsorLevel'], "int"),
 					   GetSQLValueString($id, "int"));
 
 	mysql_select_db($database, $brewing);
@@ -1540,12 +1559,13 @@ if (($action == "edit") && ($dbTable == "sponsors")) {
 
 if (($action == "add") && ($dbTable == "sponsors")) {
 
-  $insertSQL = sprintf("INSERT INTO sponsors (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation) VALUES (%s, %s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO sponsors (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['sponsorName'], "text"),
                        GetSQLValueString($_POST['sponsorURL'], "text"),
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
-					   GetSQLValueString($_POST['sponsorLocation'], "text")
+					   GetSQLValueString($_POST['sponsorLocation'], "text"),
+					   GetSQLValueString($_POST['sponsorLevel'], "int")
 					   );
 
 	mysql_select_db($database, $brewing);
@@ -1754,4 +1774,57 @@ if (($action == "edit") && ($dbTable == "styles")) {
   header(sprintf("Location: %s", $updateGoTo));
 }
 
+if ($action == "email") { 
+// CAPCHA check
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/captcha/securimage.php';
+$securimage = new Securimage();
+
+if ($securimage->check($_POST['captcha_code']) == false) {
+setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
+setcookie("from_email", $_POST['from_email'], 0, "/");
+setcookie("from_name", $_POST['from_name'], 0, "/");
+setcookie("subject", $_POST['subject'], 0, "/");
+setcookie("message", $_POST['message'], 0, "/");
+header("Location: ../index.php?section=".$section."&action=email&msg=2");
+	}
+
+else 
+
+	{
+
+mysql_select_db($database, $brewing);
+$query_contact = sprintf("SELECT * FROM contacts WHERE id='%s'", $_POST['to']);
+$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+$row_contact = mysql_fetch_assoc($contact);
+
+// Gather the variables from the form
+$to_email = $row_contact['contactEmail'];
+$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
+$from_email = $_POST['from_email'];
+$from_name = $_POST['from_name'];
+$subject = $_POST['subject'];
+$message_post = $_POST['message'];
+
+// Build the message
+$message = "<html>" . "\r\n";
+//$message .= "<head>" . $subject."</head>" . "\r\n";
+$message .= "<body>" . $message_post. "\r\n". "</body>" . "\r\n";
+$message .= "</html>";
+
+$headers  = "MIME-Version: 1.0" . "\r\n";
+$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+$headers .= "To: ".$to_name." <".$to_email.">, " . "\r\n";
+$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
+$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
+
+// Debug
+//echo $to_email."<br>";
+//echo $to_name."<br>";
+//echo $headers."<br>";
+//echo $message;
+
+mail($to_email, $subject, $message, $headers);
+header("Location: ../index.php?section=".$section."&action=email&msg=1&id=".$row_contact['id']);
+	}
+}
 ?>

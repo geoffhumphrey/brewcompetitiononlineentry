@@ -60,6 +60,13 @@ switch($section) {
 	$header_output = "Past Winners";
 	break;
 	
+	case "contact":
+	$header_output = "Contact";
+	if ($msg == "1") $output = "Your message has been sent to ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".";
+	elseif ($msg == "2") $output = "The characters you entered in the CAPTCHA section below were not correct. Please try again.";
+	else $output = "";
+	break;
+	
 	case "brew":
 	if ($action == "add") $header_output = "Add an Entry"; 
 	else $header_output = "Edit a Entry";

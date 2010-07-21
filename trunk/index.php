@@ -50,7 +50,7 @@ if ($section == "admin") { ?>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
 <?php } 
-if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register")) include ('includes/form_check.inc.php'); ?>
+if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include ('includes/form_check.inc.php'); ?>
 </head>
 <body>
 <a name="top"></a>
@@ -72,12 +72,13 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	?>
     <div class="closed">Registration will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?>.</div>
 	<?php }
-	if ($section == "default") 	include ('sections/default.sec.php');
-	if ($section == "login")	include ('sections/login.sec.php');
-	if ($section == "rules") 	include ('sections/rules.sec.php');
-	if ($section == "entry") 	include ('sections/entry_info.sec.php');
-	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "default") 		include ('sections/default.sec.php');
+	if ($section == "login")		include ('sections/login.sec.php');
+	if ($section == "rules") 		include ('sections/rules.sec.php');
+	if ($section == "entry") 		include ('sections/entry_info.sec.php');
+	if ($section == "sponsors") 	include ('sections/sponsors.sec.php');
 	if ($section == "past_winners") include ('sections/past_winners.sec.php');
+	if ($section == "contact") 		include ('sections/contact.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] == "1") {
 			if ($section == "list") 	include ('sections/list.sec.php');
@@ -96,12 +97,13 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && ($judgingDateReturn == "false")) { ?>
     <div class="closed">Registration has closed.</div>
 	<?php }  
-	if ($section == "default") 	include ('sections/default.sec.php');
-	if ($section == "login")	include ('sections/login.sec.php');
-	if ($section == "rules") 	include ('sections/rules.sec.php');
-	if ($section == "entry") 	include ('sections/entry_info.sec.php');
-	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "default") 		include ('sections/default.sec.php');
+	if ($section == "login")		include ('sections/login.sec.php');
+	if ($section == "rules") 		include ('sections/rules.sec.php');
+	if ($section == "entry") 		include ('sections/entry_info.sec.php');
+	if ($section == "sponsors") 	include ('sections/sponsors.sec.php');
 	if ($section == "past_winners") include ('sections/past_winners.sec.php');
+	if ($section == "contact") 		include ('sections/contact.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include ('sections/list.sec.php');
 		if ($section == "pay") 		include ('sections/pay.sec.php');
@@ -115,13 +117,14 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			}
 		}
   } else { // If registration is not closed
-	if ($section == "register") include ('sections/register.sec.php');
-	if ($section == "login")	include ('sections/login.sec.php');
-	if ($section == "rules") 	include ('sections/rules.sec.php');
-	if ($section == "entry") 	include ('sections/entry_info.sec.php');
-	if ($section == "default") 	include ('sections/default.sec.php');
-	if ($section == "sponsors") include ('sections/sponsors.sec.php');
+	if ($section == "register") 	include ('sections/register.sec.php');
+	if ($section == "login")		include ('sections/login.sec.php');
+	if ($section == "rules") 		include ('sections/rules.sec.php');
+	if ($section == "entry") 		include ('sections/entry_info.sec.php');
+	if ($section == "default") 		include ('sections/default.sec.php');
+	if ($section == "sponsors") 	include ('sections/sponsors.sec.php');
 	if ($section == "past_winners") include ('sections/past_winners.sec.php');
+	if ($section == "contact") 		include ('sections/contact.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include ('admin/default.admin.php'); }
 		if ($section == "brewer") 	include ('sections/brewer.sec.php');

@@ -46,11 +46,31 @@
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php } ?>
 <a name="categories"></a><h2>Categories Accepted</h2>
-<ul>
-  <?php do { ?>
-  <li><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") echo " (Special style: ".$row_contest_info['contestName'].")"; ?></li>
-  <?php } while ($row_styles = mysql_fetch_assoc($styles)) ?>
-</ul>
+<table style="border-collapse:collapse;">
+  <tr>
+<?php
+	$styles_endRow = 0;
+	$styles_columns = 3;   // number of columns
+	$styles_hloopRow1 = 0; // first row flag
+	do {
+    	if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) echo "<tr>";
+    ?>
+  	<td>
+  	<?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") echo " (Special Style)"; ?>
+  	</td>
+    <?php  
+		$styles_endRow++;
+		if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
+	} while ($row_styles = mysql_fetch_assoc($styles));
+	if ($styles_endRow != 0) {
+	while ($styles_endRow < $styles_columns) {
+    echo("<td>&nbsp;</td>");
+    $styles_endRow++;
+	}
+	echo("</tr>"); 
+	}
+	?>
+</table>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>
 <?php if ($row_contest_info['contestBottles'] != "") { ?>
 <a name="bottle"></a><h2>Bottle Acceptance Rules</h2>

@@ -225,6 +225,26 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
+<?php if ($section == "contact") { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.from_name.value))
+	{ errormessage += "\nYour name"; }
+if(WithoutContent(document.form1.from_email.value))
+	{ errormessage += "\nYour email"; }
+if(WithoutContent(document.form1.subject.value))
+	{ errormessage += "\nThe subject"; }
+if(WithoutContent(document.form1.message.value))
+	{ errormessage += "\nYour message"; }
+// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required to contact the competition representative:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
 function WithoutContent(ss) {
 if(ss.length > 0) { return false; }
 return true;

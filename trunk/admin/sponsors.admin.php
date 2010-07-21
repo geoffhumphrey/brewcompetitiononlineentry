@@ -27,6 +27,7 @@
   <td class="dataHeading bdr1B">Sponsor Name</td>
   <td class="dataHeading bdr1B">Sponsor Location</td>
   <td class="dataHeading bdr1B">Website Address</td>
+  <td class="dataHeading bdr1B">Level</td>
   <td class="dataHeading bdr1B">Logo?</td>
   <td class="dataHeading bdr1B">Description/Text</td>
   <td class="dataHeading bdr1B">Actions</td>
@@ -36,6 +37,7 @@
   <td width="20%" class="dataList"><?php echo $row_sponsors['sponsorName']; ?></td>
   <td width="15%" class="dataList"><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" class="thickbox"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
+  <td width="5%" class="dataList"><?php echo $row_sponsors['sponsorLevel']; ?></td>
   <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="images/tick.png"  alt="Yes"><?php } else { ?><img src="images/cross.png"  alt="No"><?php } ?></td>
   <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
   <td class="dataList">
@@ -44,7 +46,7 @@
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
  <tr>
- 	<td colspan="8" class="bdr1T">&nbsp;</td>
+ 	<td colspan="9" class="bdr1T">&nbsp;</td>
  </tr>
 </table>
 <?php } } else { ?>
@@ -64,6 +66,19 @@
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
+    <td class="dataLabel">Sponsor Level:</td>
+    <td class="data">
+    <select name="sponsorLevel">
+    	<option value="1" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "1")) echo " SELECTED"; ?>>1</option>
+        <option value="2" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "2")) echo " SELECTED"; ?>>2</option>
+        <option value="3" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "3")) echo " SELECTED"; ?>>3</option>
+        <option value="4" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "4")) echo " SELECTED"; ?>>4</option>
+        <option value="5" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "5")) echo " SELECTED"; ?>>5</option>
+    </select>
+    </td>
+    <td class="data">1 is the highest level of sponsorship; 5 is the lowest.</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Website Address:</td>
     <td class="data"><input name="sponsorURL" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorURL']; ?>"></td>
     <td class="data">Be sure to include the entire website address, including the http:// (e.g., http://www.google.com).</td>
@@ -80,7 +95,7 @@
   </tr>
   <tr>
   	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Add Sponsor"></td>
+  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor"></td>
   </tr>
 </table>
 </form>
