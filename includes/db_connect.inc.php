@@ -8,7 +8,7 @@ $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error())
 $row_contest_info = mysql_fetch_assoc($contest_info);
 $totalRows_contest_info = mysql_num_rows($contest_info);
 
-if (($section == "admin") && ($action == "edit")) $query_sponsors = "SELECT * FROM sponsors WHERE id='$id'"; else $query_sponsors = "SELECT * FROM sponsors ORDER BY sponsorName";
+if (($section == "admin") && ($action == "edit")) $query_sponsors = "SELECT * FROM sponsors WHERE id='$id'"; else $query_sponsors = "SELECT * FROM sponsors ORDER BY sponsorLevel,sponsorName";
 $sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 $row_sponsors = mysql_fetch_assoc($sponsors);
 $totalRows_sponsors = mysql_num_rows($sponsors);
@@ -38,6 +38,13 @@ if ($action == "edit") $query_dropoff .= " WHERE id='$id'";
 $dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
 $row_dropoff = mysql_fetch_assoc($dropoff);
 $totalRows_dropoff = mysql_num_rows($dropoff);
+
+$query_contact = "SELECT * FROM contacts";
+if (($section == "contact") && ($id == "default")) $query_contact .= " ORDER BY contactPosition"; 
+if (($section == "contact") && ($id != "default")) $query_contact .= " WHERE id='$id'";
+$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+$row_contact = mysql_fetch_assoc($contact);
+$totalRows_contact = mysql_num_rows($contact);
 
 if (($section == "default") || ($section == "past_winners")) { 
 if ($section == "past_winners") $dbTable = $dbTable; else $dbTable = "brewing";

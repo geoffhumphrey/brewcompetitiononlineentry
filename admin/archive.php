@@ -329,6 +329,7 @@ CREATE TABLE IF NOT EXISTS `sponsors` (
   `sponsorImage` varchar(255) DEFAULT NULL,
   `sponsorText` text,
   `sponsorLocation` text,
+  `sponsorLevel` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
