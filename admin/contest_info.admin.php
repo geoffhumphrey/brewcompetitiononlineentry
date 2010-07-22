@@ -22,9 +22,10 @@
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
-  	<td colspan="3">You will be able to enter more contact names after set up via your BCOE Administration area.</td>
+  	<td colspan="3"><em>*You will be able to enter more contact names after set up via your BCOE Administration area.</em></td>
   </tr>
 </table>
+<input type="hidden" name="contactPosition" value="Competition Coordinator" />
 <?php } ?>
 <?php if (($section != "step2") && ($totalRows_contact == 0)) { ?>
 <div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="index.php?section=admin&go=contacts">add a contact</a>?</div>

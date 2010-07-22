@@ -40,6 +40,17 @@
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
     <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
   </tr>
+  <tr>
+    <td class="dataLabel">Printed Entry Form to Use:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsEntryForm">
+    <option value="B" <?php if ($row_prefs['prefsEntryForm'] == "B") echo " SELECTED"; ?> />BJCP Official</option>
+    <option value="M" <?php if ($row_prefs['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
+    <option value="U" <?php if ($row_prefs['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
+    </select>
+    </td>
+  	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
+  </tr>
 </table>
 <h3>Measurements</h3>
 <table>
