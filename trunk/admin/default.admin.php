@@ -24,19 +24,21 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging">Judging Locations</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a><a href="index.php?section=admin&amp;go=dropoff"></a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=contacts">Competition Contacts</a></td>
   </tr>
   <tr>
     <td class="dataLabel">&nbsp;</td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></td>
-    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></a></td>
   </tr>
   <tr>
     <td width="5%" class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/page_edit.png" ></span>Add:</td>
     <td width="15%" nowrap="nowrap" class="data bdr1T_dashed"><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></td>
     <td nowrap="nowrap" class="data bdr1T_dashed"><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></td>
-    <td colspan="2" nowrap="nowrap" class="data bdr1T_dashed"><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a><a href="index.php?section=admin&amp;go=dropoff&amp;action=add"></a></td>
+    <td nowrap="nowrap" class="data bdr1T_dashed"><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a><a href="index.php?section=admin&amp;go=dropoff&amp;action=add"></a></td>
+    <td nowrap="nowrap" class="data bdr1T_dashed"><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></td>
   </tr>
   <tr>
     <td class="dataLabel">&nbsp;</td>
@@ -179,6 +181,7 @@ if ($go == "entries") 		include ('admin/entries.admin.php');
 if ($go == "make_admin") 	include ('admin/make_admin.admin.php');
 if ($go == "archive") 	    include ('admin/archive.admin.php');
 if ($go == "sponsors") 	    include ('admin/sponsors.admin.php');
+if ($go == "contacts") 	    include ('admin/contacts.admin.php');
 if ($go == "judging") 	    include ('admin/judging.admin.php');
 if ($go == "styles") 	    include ('admin/styles.admin.php');
 if ($go == "dropoff") 	    include ('admin/dropoff.admin.php');

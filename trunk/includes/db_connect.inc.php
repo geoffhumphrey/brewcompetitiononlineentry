@@ -40,8 +40,7 @@ $row_dropoff = mysql_fetch_assoc($dropoff);
 $totalRows_dropoff = mysql_num_rows($dropoff);
 
 $query_contact = "SELECT * FROM contacts";
-if (($section == "contact") && ($id == "default")) $query_contact .= " ORDER BY contactPosition"; 
-if (($section == "contact") && ($id != "default")) $query_contact .= " WHERE id='$id'";
+if (($section == "admin") && ($action == "edit"))  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
 $contact = mysql_query($query_contact, $brewing) or die(mysql_error());
 $row_contact = mysql_fetch_assoc($contact);
 $totalRows_contact = mysql_num_rows($contact);
