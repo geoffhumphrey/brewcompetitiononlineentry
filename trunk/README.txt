@@ -2,7 +2,7 @@
 **********************************************************************
 **                                                                  **
 ** Brew Contest Online Signup by Geoff Humphrey - zkdigital.com     **
-** Release 1.1.4 Jun 2010                                           **
+** Release 1.1.5 Jul 2010                                           **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** As such, you are permitted to download the full source code of   **
@@ -23,6 +23,17 @@ This software utilizes PHP 5 and MySQL 4 or 5 to process and store data.
 Your web server needs both of these installed and ready for use. 
 
 Contact your web hosting provider if you have any questions.
+
+
+**********************************************************************
+
+Hosting
+
+**********************************************************************
+
+If you are unable to set up your installation, HOSTING IS AVAILABLE!
+Go to http://www.brewcompetition.com and click "Hosting" for
+more information.
 
 
 **********************************************************************
