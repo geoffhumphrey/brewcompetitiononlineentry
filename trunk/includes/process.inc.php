@@ -1240,12 +1240,11 @@ VALUES
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
   
-  if ($section == "step2") {
   $insertSQL = sprintf("INSERT INTO contacts (
 	contactFirstName, 
 	contactLastName, 
 	contactPosition, 
-	contactEmail,
+	contactEmail
 	) 
 	VALUES 
 	(%s, %s, %s, %s)",
@@ -1257,8 +1256,6 @@ VALUES
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
   	$insertGoTo = "../setup.php?section=step3";
-  	}
-	
 	header(sprintf("Location: %s", $insertGoTo));
 
 }
@@ -1361,7 +1358,8 @@ prefsDisplayWinners,
 prefsDisplaySpecial,
 prefsBOSMead,
 prefsBOSCider,
-id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+prefsEntryForm,
+id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -1382,6 +1380,7 @@ id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 					   GetSQLValueString($_POST['prefsBOSMead'], "text"),
 					   GetSQLValueString($_POST['prefsBOSCider'], "text"),
+					   GetSQLValueString($_POST['prefsEntryForm'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -1396,7 +1395,29 @@ id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 
 if (($action == "edit") && ($dbTable == "preferences")) {
 
-$updateSQL = sprintf("UPDATE preferences SET prefsTemp=%s, prefsWeight1=%s, prefsWeight2=%s, prefsLiquid1=%s, prefsLiquid2=%s, prefsPaypal=%s, prefsPaypalAccount=%s, prefsCurrency=%s, prefsCash=%s, prefsCheck=%s, prefsCheckPayee=%s, prefsTransFee=%s, prefsSponsors=%s, prefsSponsorLogos=%s, prefsSponsorLogoSize=%s, prefsCompLogoSize=%s, prefsDisplayWinners=%s, prefsDisplaySpecial=%s, prefsBOSMead=%s, prefsBOSCider=%s WHERE id=%s",
+$updateSQL = sprintf("UPDATE preferences SET 
+prefsTemp=%s, 
+prefsWeight1=%s, 
+prefsWeight2=%s, 
+prefsLiquid1=%s, 
+prefsLiquid2=%s, 
+prefsPaypal=%s, 
+prefsPaypalAccount=%s, 
+prefsCurrency=%s, 
+prefsCash=%s, 
+prefsCheck=%s, 
+prefsCheckPayee=%s, 
+prefsTransFee=%s, 
+prefsSponsors=%s, 
+prefsSponsorLogos=%s, 
+prefsSponsorLogoSize=%s, 
+prefsCompLogoSize=%s, 
+prefsDisplayWinners=%s, 
+prefsDisplaySpecial=%s, 
+prefsBOSMead=%s, 
+prefsBOSCider=%s,
+prefsEntryForm=%s
+WHERE id=%s",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -1417,6 +1438,7 @@ $updateSQL = sprintf("UPDATE preferences SET prefsTemp=%s, prefsWeight1=%s, pref
 					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 					   GetSQLValueString($_POST['prefsBOSMead'], "text"),
 					   GetSQLValueString($_POST['prefsBOSCider'], "text"),
+					   GetSQLValueString($_POST['prefsEntryForm'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);

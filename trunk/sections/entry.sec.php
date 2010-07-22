@@ -265,8 +265,18 @@ for ($i=1; $i <= 9; $i++) {
 }
 
 $TBS =& new clsTinyButStrong;
+
+if ($row_prefs['prefsEntryForm'] == "B") { 
 $TBS->LoadTemplate('../templates/bjcp-entry.html');
-//$TBS->LoadTemplate('../templates/simple-metric-entry.html');
+}
+
+if ($row_prefs['prefsEntryForm'] == "M") { 
+$TBS->LoadTemplate('../templates/simple-metric-entry.html');
+}
+
+if ($row_prefs['prefsEntryForm'] == "U") { 
+$TBS->LoadTemplate('../templates/simple-us-entry.html');
+}
 
 $TBS->MergeBlock('grains',$brewing_info['grains']);
 $TBS->MergeBlock('extracts',$brewing_info['extracts']);

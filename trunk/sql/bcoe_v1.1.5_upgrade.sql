@@ -21,3 +21,5 @@ CREATE TABLE `contacts` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE `drop_off` ADD `dropLocationNotes` VARCHAR( 255 ) NULL;
+
+ALTER TABLE `preferences` ADD `prefsEntryForm` CHAR( 1 ) NULL ;
