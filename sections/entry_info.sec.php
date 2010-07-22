@@ -3,6 +3,7 @@
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
 <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Information">Print This Page</a></p>
+<?php if ($totalRows_contact > 0) { ?><a href="#officials">Competition Official<?php if ($totalRows_contact > 1) echo "s"; ?></a><br /><?php } ?>
 <a href="#window">Entry Window</a><br />
 <a href="#entry">Entry Fees</a><br />
 <a href="#payment">Payment</a><br />
@@ -15,9 +16,15 @@
 <?php if ($row_contest_info['contestAwards'] != "") { ?><a href="#awards">Awards</a><br /><?php }?>
 <?php if ($row_contest_info['contestAwardsLocName'] != "") { ?><a href="#ceremony">Awards Ceremony</a><br /><?php } ?>
 <?php } ?>
-
-<h2>Competition Coordinator</h2>
-<p><a href="mailto:<?php echo $row_contest_info['contestContactEmail']; ?>?subject=<?php echo $row_contest_info['contestName']; ?>"><?php echo $row_contest_info['contestContactName']; ?></a><?php if ($action == "print") echo " &mdash; ".$row_contest_info['contestContactEmail']; ?></p>
+<?php if ($totalRows_contact > 0) { ?>
+<a name="officials"></a><h2>Competition Official<?php if ($totalRows_contact > 1) echo "s"; ?></h2>
+<?php if ($action != "print") { ?><p>You can send an email to any of the following individuals via the <a href="index.php?section=contact">Contact</a> section.</p><?php } ?>
+<ul>
+<?php do { ?>
+<li><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition']; if ($action == "print") echo " (".$row_contact['contactEmail'].")"; ?></li>
+<?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
+</ul>
+<?php } ?>
 <a name="window"></a><h2>Entry Window</h2>
 <p><?php echo dateconvert($row_contest_info['contestEntryOpen'], 2)." through "; echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>.</p>
 <a name="entry"></a><h2>Entry Fees</h2>
@@ -97,6 +104,8 @@ if ($totalRows_dropoff > 0) { ?>
 <?php } ?>
 <br />
 <?php echo $row_dropoff['dropLocationPhone']; ?>
+<br />
+<?php if ($row_dropoff['dropLocationNotes'] != "") echo "*<em>".$row_dropoff['dropLocationNotes']."</em>"; ?>
 </p>
 <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
 <?php if ($action != "print") { ?><p><a href="#top">Top</a></p><?php } ?>

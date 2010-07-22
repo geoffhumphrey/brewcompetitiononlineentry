@@ -10,7 +10,7 @@ if (!isset($_SESSION["loginUsername"])) { session_start(); }
 	<td class="data bdr1T" width="25%">
     <select name="to">
     	<?php do { ?>
-    	<option value="<?php echo $row_contact['id']; ?>" <?php if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; ?>><?php echo $row_contact['contactPosition']; ?></option>
+    	<option value="<?php echo $row_contact['id']; ?>" <?php if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
         <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
     </select>
     </td>

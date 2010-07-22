@@ -19,3 +19,5 @@ CREATE TABLE `contacts` (
 `contactPosition` VARCHAR( 255 ) NULL ,
 `contactEmail` VARCHAR( 255 ) NULL
 ) ENGINE = MYISAM ;
+
+ALTER TABLE `drop_off` ADD `dropLocationNotes` VARCHAR( 255 ) NULL;

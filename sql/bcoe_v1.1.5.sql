@@ -595,7 +595,7 @@ ADD `prefsBOSCider` CHAR( 1 ) NULL DEFAULT 'N';
 -- 
 -- ********************************************************************************
 
-ALTER TABLE `sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL; 
+ALTER TABLE `sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;
 
 CREATE TABLE `contacts` (
 `id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -604,3 +604,5 @@ CREATE TABLE `contacts` (
 `contactPosition` VARCHAR( 255 ) NULL ,
 `contactEmail` VARCHAR( 255 ) NULL
 ) ENGINE = MYISAM ;
+
+ALTER TABLE `drop_off` ADD `dropLocationNotes` VARCHAR( 255 ) NULL;

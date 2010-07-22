@@ -1,5 +1,4 @@
 <h2><?php if ($action == "add") echo "Add a Sponsor"; elseif ($action == "edit") echo "Edit a Sponsor"; else echo "Sponsors"; ?></h2>
-
 <table class="dataTable">
  <tr>
    <?php if (($action == "add") || ($action == "edit")) { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a></td><?php } else { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/award_star_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a></td><?php } ?>
@@ -91,7 +90,7 @@
   <tr>
     <td class="dataLabel">Description:</td>
     <td class="data"><input name="sponsorText"type="text" size="80" value="<?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?>" /></td>
-    <td class="data">Any additional information about the sponsor (e.g., the items donated, money contributed, etc.).</td>
+    <td class="data">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</td>
   </tr>
   <tr>
   	<td>&nbsp;</td>

@@ -177,6 +177,10 @@ switch($section) {
 			case "dropoff":
 			$header_output .= ": Entries";
 			break;
+			
+			case "contacts":
+			$header_output .= ": Contacts";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "Information added successfully."; 

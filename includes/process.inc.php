@@ -1249,10 +1249,10 @@ VALUES
 	) 
 	VALUES 
 	(%s, %s, %s, %s)",
-                       GetSQLValueString($_POST['contestName'], "text"),
-                       GetSQLValueString($_POST['contestHost'], "text"),
-                       GetSQLValueString($_POST['contestHostWebsite'], "text"),
-					   GetSQLValueString($_POST['contestBOSAward'], "text"));
+                       GetSQLValueString($_POST['contactFirstName'], "text"),
+                       GetSQLValueString($_POST['contactLastName'], "text"),
+                       GetSQLValueString($_POST['contactPosition'], "text"),
+					   GetSQLValueString($_POST['contactEmail'], "text"));
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
@@ -1618,11 +1618,12 @@ if (($action == "edit") && ($dbTable == "judging")) {
 
 if (($action == "add") && ($dbTable == "drop_off")) {
 
-  $insertSQL = sprintf("INSERT INTO drop_off (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite) VALUES (%s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO drop_off (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['dropLocationName'], "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
-					   GetSQLValueString($_POST['dropLocationWebsite'], "text")
+					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
+					   GetSQLValueString($_POST['dropLocationNotes'], "text")
 					   );
 
 	//echo $insertSQL;
@@ -1638,11 +1639,12 @@ if (($action == "add") && ($dbTable == "drop_off")) {
 
 if (($action == "edit") && ($dbTable == "drop_off")) {
 
-  $updateSQL = sprintf("UPDATE drop_off SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s ,dropLocationWebsite=%s  WHERE id=%s",
+  $updateSQL = sprintf("UPDATE drop_off SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
                        GetSQLValueString($_POST['dropLocationName'], "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
 					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
+					   GetSQLValueString($_POST['dropLocationNotes'], "text"),
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
@@ -1772,6 +1774,52 @@ if (($action == "edit") && ($dbTable == "styles")) {
 
   $updateGoTo = "../index.php?section=admin&go=styles&msg=2";
   header(sprintf("Location: %s", $updateGoTo));
+}
+
+// --------------------------- If Adding a Contact (Non-setup) --------------------------- //
+
+if (($action == "add") && ($dbTable == "contacts")) {
+
+$insertSQL = sprintf("INSERT INTO contacts (
+	contactFirstName, 
+	contactLastName, 
+	contactPosition, 
+	contactEmail
+	) 
+	VALUES 
+	(%s, %s, %s, %s)",
+                       GetSQLValueString($_POST['contactFirstName'], "text"),
+                       GetSQLValueString($_POST['contactLastName'], "text"),
+                       GetSQLValueString($_POST['contactPosition'], "text"),
+					   GetSQLValueString($_POST['contactEmail'], "text"));
+	//echo $insertSQL;				   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+  	$insertGoTo = "../index.php?section=admin&go=contacts&msg=1";
+	header(sprintf("Location: %s", $insertGoTo));
+
+}
+
+// --------------------------- If Editing a Contact --------------------------- //
+
+if (($action == "edit") && ($dbTable == "contacts")) {
+
+$updateSQL = sprintf("UPDATE contacts SET 
+	contactFirstName=%s, 
+	contactLastName=%s, 
+	contactPosition=%s, 
+	contactEmail=%s
+	WHERE id=%s",
+                       GetSQLValueString($_POST['contactFirstName'], "text"),
+                       GetSQLValueString($_POST['contactLastName'], "text"),
+                       GetSQLValueString($_POST['contactPosition'], "text"),
+					   GetSQLValueString($_POST['contactEmail'], "text"),
+					   GetSQLValueString($id, "int"));
+					   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  	$updateGoTo = "../index.php?section=admin&go=contacts&msg=2";
+	header(sprintf("Location: %s", $updateGoTo));
 }
 
 if ($action == "email") { 

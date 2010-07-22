@@ -36,6 +36,11 @@
     <td class="data"><em>Be sure to include the full website URL including the http://</em></td>
   </tr>
   <tr>
+    <td class="dataLabel">Notes:</td>
+    <td class="data"><input name="dropLocationNotes" size="50" value="<?php if ($action == "edit") echo $row_dropoff['dropLocationNotes']; ?>" /></td>
+    <td class="data"><em>Catch-all for items such as when entries will be picked up at the location, etc.</em></td>
+  </tr>
+  <tr>
     <td class="dataLabel">&nbsp;</td>
     <td class="data"><input type="submit" class="button" value="Submit"></td>
     <td class="data">&nbsp;</td>
@@ -52,21 +57,23 @@ if ($totalRows_dropoff > 0) { ?>
   <td class="dataHeading bdr1B">Phone Number</td>
   <td class="dataHeading bdr1B">Address</td>
   <td class="dataHeading bdr1B">Website</td>
+  <td class="dataHeading bdr1B">Notes</td>
   <td class="dataHeading bdr1B">Actions</td>
  </tr>
  <?php do { ?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td width="15%" class="dataList"><?php echo $row_dropoff['dropLocationName']; ?></td>
-  <td width="15%" class="dataList"><?php echo $row_dropoff['dropLocationPhone']; ?></td>
-  <td width="30%" class="dataList"><?php echo $row_dropoff['dropLocation']; ?></td>
-  <td width="30%" class="dataList"><?php if ($row_dropoff['dropLocationWebsite'] !="") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>".$row_dropoff['dropLocationWebsite']."</a>"; ?></td>
+  <td width="20%" class="dataList"><?php echo $row_dropoff['dropLocationName']; ?></td>
+  <td width="10%" class="dataList"><?php echo $row_dropoff['dropLocationPhone']; ?></td>
+  <td width="25%" class="dataList"><?php echo $row_dropoff['dropLocation']; ?></td>
+  <td width="10%" class="dataList"><?php if ($row_dropoff['dropLocationWebsite'] !="") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>View</a>"; ?></td>
+  <td width="25%" class="dataList"><?php echo $row_dropoff['dropLocationNotes']; ?></td>
   <td class="dataList">
   <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_dropoff['dropLocationName']; ?>" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=drop_off&amp;action=delete','id',<?php echo $row_dropoff['id']; ?>,'Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location?\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_dropoff['dropLocationName']; ?>" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"></a></span></td>
  </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while($row_dropoff = mysql_fetch_assoc($dropoff)) ?>
  <tr>
- 	<td colspan="5" class="bdr1T">&nbsp;</td>
+ 	<td colspan="6" class="bdr1T">&nbsp;</td>
  </tr>
 </table>
 <?php } else echo "No drop-off locations have been specified."; 
