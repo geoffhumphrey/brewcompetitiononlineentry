@@ -55,7 +55,7 @@ else
 <p>Registration opened <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?> and will close  <?php echo dateconvert($row_contest_info['contestRegistrationDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>.</p>
 <p>If you have already registered, please <a href="index.php?section=login">log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or  steward.</p>
 <?php } else { ?>
-<p>Registration for the <?php echo $row_contest_info['contestName']; ?> will open <?php echo dateconvert($row_contest_info['contestEntryOpen'], 2); ?> and will close on <?php echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after the registration close date.</p>
+<p>Registration for the <?php echo $row_contest_info['contestName']; ?> will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?> and will close on <?php echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after the registration close date.</p>
 <?php } ?>
 <h2>Judging and Stewarding</h2>
 <?php if (!lesserDate($today,$reg_open)) { ?>
