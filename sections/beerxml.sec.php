@@ -59,7 +59,7 @@ if ($_FILES['userfile']) {
     $_SESSION['recipes'] = $recipes;
    }
 
-   print "<script>window.location.href='index.php?section=".$section."&amp;action=importXML&amp;msg=". htmlentities($message) . "&inserted=true'</script>";
+   print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=". htmlentities($message) . "&inserted=true'</script>";
 }
 else if (!$_FILES['userfile']) $message = "userfile check failed";
 else
