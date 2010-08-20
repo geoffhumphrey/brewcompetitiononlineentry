@@ -379,6 +379,27 @@ text-align: center;
 padding: 1em .5em 1em .5em;
 }
 
+.looper_large th {
+min-height: 25px;
+vertical-align: top;
+}
+
+.looper_large .location {
+min-height: 15px;
+vertical-align: top;
+}
+
+.looper_large .logo {
+min-height: 200px;
+vertical-align: top;
+}
+
+.looper_large .info {
+min-height: 15px;
+vertical-align: top;
+}
+
+
 #sponsor {
 margin: 0 0 0 1em;
 padding: 0;
@@ -596,3 +617,4 @@ div.menu div.menuItemSep {
 border: 1px solid #e0e0e0;
 margin: 10px 5px;
 }
+
