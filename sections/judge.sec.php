@@ -16,7 +16,7 @@
 <input type="hidden" name="brewerState" value="<?php echo $row_brewer['brewerState']; ?>">
 <input type="hidden" name="brewerZip" value="<?php echo $row_brewer['brewerZip']; ?>">
 <input type="hidden" name="brewerPhone1" value="<?php echo $row_brewer['brewerPhone1']; ?>">
-<input type="hidden" name="brewerPhone2" value="<?php echo $row_brewer['brewerPhone1']; ?>">
+<input type="hidden" name="brewerPhone2" value="<?php echo $row_brewer['brewerPhone2']; ?>">
 <input type="hidden" name="brewerClubs" value="<?php echo $row_brewer['brewerClubs']; ?>">
 <input type="hidden" name="brewerJudge"  value="<?php echo $row_brewer['brewerJudge']; ?>" />
 <input type="hidden" name="brewerSteward"  value="<?php echo $row_brewer['brewerSteward']; ?>" />
