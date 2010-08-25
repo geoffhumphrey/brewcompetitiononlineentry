@@ -43,16 +43,21 @@ if ($action == "forgot") {
 </form>
 <?php  }
 if ($go == "verify") {
-if ($msg == "default") $username = $_POST['loginUsername'];
-mysql_select_db($database, $brewing);
-$query_userCheck = "SELECT * FROM users WHERE user_name = '$username'";
-$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
-$row_userCheck = mysql_fetch_assoc($userCheck);
-$totalRows_userCheck = mysql_num_rows($userCheck);
-if (($totalRows_userCheck == 0) && ($msg == "default")) echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";
-else { if ($msg != "default") echo $msg_output; } ?>
-<form action="includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
-<table class="dataTable">
+	if ($msg == "default") $username = $_POST['loginUsername'];
+	mysql_select_db($database, $brewing);
+	$query_userCheck = "SELECT * FROM users WHERE user_name = '$username'";
+	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
+	$row_userCheck = mysql_fetch_assoc($userCheck);
+	$totalRows_userCheck = mysql_num_rows($userCheck);
+	
+	if ($msg != "default") echo $msg_output;
+	
+	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
+		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";
+		} 
+	else { ?>
+	<form action="includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
+	<table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">ID Verification Question:</td>
         <td class="data"><?php echo $row_userCheck['userQuestion']; ?></td>
@@ -65,9 +70,10 @@ else { if ($msg != "default") echo $msg_output; } ?>
     	<td class="dataLabel">&nbsp;</td>
     	<td class="data"><input type="submit" class="button" value="Reset Password"></td>
   	</tr>
-</table>
-<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
-</form>
-<?php } 
+	</table>
+	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
+	</form>
+	<?php }
 	} 
+}
 ?>
