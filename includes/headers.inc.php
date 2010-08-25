@@ -41,6 +41,7 @@ switch($section) {
 	if     ($msg == "1") { $output = "Sorry, there was a problem with your last login attempt."; $output_extend = "<p>Please make sure your email address and password are correct.</p>"; }
 	elseif ($msg == "2") { $output = "Your password has been randomly generated and reset to ".$go."."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
 	elseif ($msg == "3") $output = "You have been logged out. Log in again?"; 
+	elseif ($msg == "4") $output = "Your verification question does not match what's in the database. Please try again."; 
 	else $output = ""; 
 	break;
 	

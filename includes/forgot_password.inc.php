@@ -66,7 +66,7 @@ $updateSQL = sprintf("UPDATE users SET password='%s' WHERE user_name='%s'", $pas
   header(sprintf("Location: %s", $updateGoTo)); 
 
 } else {
-header("Location: ../index.php?section=login&action=forgot&go=verify&msg=2&username=".$username); 
+header("Location: ../index.php?section=login&action=forgot&go=verify&msg=4&username=".$username); 
 }
 
 /*
