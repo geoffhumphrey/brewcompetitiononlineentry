@@ -1,0 +1,105 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Calendar Widget Elements  */
+
+#CalendarControlIFrame {
+display: none;
+left: 0px;
+position: absolute;
+top: 5px;
+height: 250px;
+width: 250px;
+z-index: 99;
+}
+
+#CalendarControl {
+position:absolute;
+background-color:#efefef;
+margin: 5px 0 0 10px;
+padding:0;
+display:none;
+z-index: 100;
+}
+
+#CalendarControl table {
+font-family: inherit;
+font-size: .8em;
+border: 1px solid #000000;
+}
+
+#CalendarControl th {
+font-weight: normal;
+padding: 1px;
+}
+
+#CalendarControl th a {
+font-weight: normal;
+text-decoration: none;
+color: #000000;
+padding: 1px;
+}
+
+#CalendarControl td {
+text-align: center;
+padding: 1px;
+}
+
+#CalendarControl .header {
+background-color: #cccccc;
+}
+
+#CalendarControl .weekday {
+background-color: #dddddd;
+color: #000000;
+}
+
+#CalendarControl .weekend {
+background-color: #bbbbbb;
+color: #000000;
+}
+
+#CalendarControl .current {
+background-color: #eeeeee;
+color: #000000;
+}
+
+#CalendarControl .weekday, #CalendarControl .weekend, #CalendarControl .current {
+display: block;
+text-decoration: none;
+width: 2.5em;
+}
+
+#CalendarControl .weekday:hover, #CalendarControl .weekend:hover, #CalendarControl .current:hover {
+color:#003399;
+background-color: #eeeeee;
+}
+
+#CalendarControl .previous {
+  text-align: left;
+}
+
+#CalendarControl .next {
+text-align: right;
+}
+
+#CalendarControl .previous, #CalendarControl .next {
+  padding: 1px 3px 1px 3px;
+}
+
+#CalendarControl .previous a, #CalendarControl .next a {
+color: #000000;
+text-decoration: none;
+font-weight: bold;
+}
+
+#CalendarControl .title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #000000;
+}
+
+#CalendarControl .empty {
+  background-color: #aaaaaa;
+}

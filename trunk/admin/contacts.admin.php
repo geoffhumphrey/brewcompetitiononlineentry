@@ -13,26 +13,44 @@
 </table>
 <?php if ($totalRows_contact > 0) { ?>
 <?php if ($action == "default") { ?>
-<table class="dataTable">
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bStateSave" : false,
+			"sPaginationType" : "full_numbers",
+			"aaSorting": [[0,'asc']],
+			"bLengthChange" : true,
+			"iDisplayLength" : 25,
+			"bProcessing" : true,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				{ "asSorting": [  ] },
+				]
+			} );
+		} );
+</script>
+<table class="dataTable" id="sortable">
+<thead>
  <tr>
-  <td class="dataHeading bdr1B">Name</td>
-  <td class="dataHeading bdr1B">Position</td>
-  <td class="dataHeading bdr1B">Email</td>
-  <td class="dataHeading bdr1B">Actions</td>
+  <th class="dataHeading bdr1B">Name</th>
+  <th class="dataHeading bdr1B">Position</th>
+  <th class="dataHeading bdr1B">Email</th>
+  <th class="dataHeading bdr1B">Actions</th>
  </tr>
+</thead>
+<tbody>
  <?php do { ?>
- <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td width="15%" class="dataList"><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?></td>
+ <tr>
+  <td width="15%" class="dataList"><?php echo $row_contact['contactLastName'].", ".$row_contact['contactFirstName'] ; ?></td>
   <td width="15%" class="dataList"><?php echo $row_contact['contactPosition']; ?></td>
   <td width="25%" class="dataList"><?php echo $row_contact['contactEmail']; ?></td>
   <td class="dataList">
   <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit Contact" title="Edit Contact"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=contacts&amp;action=delete','id',<?php echo $row_contact['id']; ?>,'Are you sure you want to delete this contact? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span></td>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while($row_contact = mysql_fetch_assoc($contact)) ?>
- <tr>
- 	<td colspan="9" class="bdr1T">&nbsp;</td>
- </tr>
+</tbody>
 </table>
 <?php } } else { ?>
 <p>There are no contacts in the database.</p>

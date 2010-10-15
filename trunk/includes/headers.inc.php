@@ -93,7 +93,7 @@ switch($section) {
 	break;
 
 	case "list":
-	$header_output = "My List of Entries and Information";
+	$header_output = "My Information and Entries";
 	if ($msg == "1") $output = "Information added successfully."; 
 	elseif ($msg == "2") $output = "Information edited successfully."; 
 	elseif ($msg == "3") $output = "Your email address has been updated."; 

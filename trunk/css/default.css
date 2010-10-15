@@ -1,6 +1,12 @@
 @charset "utf-8";
 /* CSS Document */
 
+@import url("html_elements.css");
+@import url("menus.css");
+@import url("sorting.css");
+@import url("thickbox.css");
+@import url("calendar.css");
+
 /* Links */
 
 a:link {
@@ -90,9 +96,7 @@ padding: .5em 2em .5em .5em;
 th {
 vertical-align: top;
 padding: 1em .5em 1em .5em;
-background-color: #dddddd;
 text-align: left;
-font-size: 1.1em;
 }
 
 /* Container elements */
@@ -142,7 +146,7 @@ border-bottom: 1px dashed #37517B;
 }
 
 /* Footer */
-#footer
+.footer
 {
 width: 100%;
 }
@@ -267,11 +271,7 @@ width: 100%;
 }
 
 .dataTable th {
-vertical-align: top;
-padding: 1em .5em 1em .5em;
-background-color: #dddddd;
-text-align: left;
-font-size: 1.1em;
+background-color: #bec8d8;
 }
 
 .dataHeading {
@@ -304,11 +304,11 @@ vertical-align: middle;
 }
 
 .bdr1T {
-border-top: 1px solid #999999;
+border-top: 1px solid #37517B;
 }
 
 .bdr1B {
-border-bottom: 1px solid #999999;
+border-bottom: 1px solid #37517B;
 }
 
 .bdr1B_dashed {
@@ -332,7 +332,7 @@ padding: 3px;
 
 .button:hover {
 border: 1px solid #aaaaaa;
-background-color: #999999;
+background-color: #bec8d8;
 cursor: pointer;
 }
 
@@ -449,172 +449,3 @@ background-repeat: no-repeat;
 background-color: #E0FDDF;
 border: 1px solid #0A4A06;
 }
-
-/* Calendar Widget Elements  */
-
-#CalendarControlIFrame {
-display: none;
-left: 0px;
-position: absolute;
-top: 5px;
-height: 250px;
-width: 250px;
-z-index: 99;
-}
-
-#CalendarControl {
-position:absolute;
-background-color:#efefef;
-margin: 5px 0 0 10px;
-padding:0;
-display:none;
-z-index: 100;
-}
-
-#CalendarControl table {
-font-family: inherit;
-font-size: .8em;
-border: 1px solid #000000;
-}
-
-#CalendarControl th {
-font-weight: normal;
-padding: 1px;
-}
-
-#CalendarControl th a {
-font-weight: normal;
-text-decoration: none;
-color: #000000;
-padding: 1px;
-}
-
-#CalendarControl td {
-text-align: center;
-padding: 1px;
-}
-
-#CalendarControl .header {
-background-color: #cccccc;
-}
-
-#CalendarControl .weekday {
-background-color: #dddddd;
-color: #000000;
-}
-
-#CalendarControl .weekend {
-background-color: #bbbbbb;
-color: #000000;
-}
-
-#CalendarControl .current {
-background-color: #eeeeee;
-color: #000000;
-}
-
-#CalendarControl .weekday, #CalendarControl .weekend, #CalendarControl .current {
-display: block;
-text-decoration: none;
-width: 2.5em;
-}
-
-#CalendarControl .weekday:hover, #CalendarControl .weekend:hover, #CalendarControl .current:hover {
-color:#003399;
-background-color: #eeeeee;
-}
-
-#CalendarControl .previous {
-  text-align: left;
-}
-
-#CalendarControl .next {
-text-align: right;
-}
-
-#CalendarControl .previous, #CalendarControl .next {
-  padding: 1px 3px 1px 3px;
-}
-
-#CalendarControl .previous a, #CalendarControl .next a {
-color: #000000;
-text-decoration: none;
-font-weight: bold;
-}
-
-#CalendarControl .title {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.1em;
-  color: #000000;
-}
-
-#CalendarControl .empty {
-  background-color: #aaaaaa;
-}
-
-/* Admin menu drop-down styles */
-
-div.menuBar, div.menuBar a.menuButton, div.menu, div.menu a.menuItem {
-display: inline;
-}
-
-div.menuBar {
-text-align: left;
-}
-
-div.menuBar a.menuButton {
-background-color: transparent;
-cursor: default;
-left: 0px;
-margin: 1px;
-padding: 2px 6px 2px 6px;
-position: relative;
-text-decoration: none;
-top: 0px;
-z-index: 100;
-}
-
-div.menuBar a.menuButton:hover {
-background-color: transparent;
-}
-
-div.menuBar a.menuButtonActive, div.menuBar a.menuButtonActive:hover {
-background-color: #333333;
-color: #ffffff;
-}
-
-div.menu {
-background-color: #eeeeee;
-border: 1px solid #d0d0d0;
-position: absolute;
-visibility: hidden;
-z-index: 101;
-}
-
-div.menu a.menuItem {
-cursor: default;
-display: block;
-padding: 3px 1em;
-text-decoration: none;
-white-space: nowrap;
-}
-
-div.menu a.menuItem:hover, div.menu a.menuItemHighlight {
-background-color: #333333;
-color: #ffffff;
-}
-
-div.menu a.menuItem span.menuItemText {
-}
-
-div.menu a.menuItem span.menuItemArrow {
-margin-right: -.75em;
-font-size: .7em;
-}
-
-div.menu div.menuItemSep {
-border: 1px solid #e0e0e0;
-margin: 10px 5px;
-}
-
