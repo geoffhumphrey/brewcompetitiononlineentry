@@ -21,32 +21,53 @@
  <?php } ?>
 </table>
 <?php if ($action == "default") { ?>
-<table class="dataTable">
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bStateSave" : false,
+			"sPaginationType" : "full_numbers",
+			"aaSorting": [[0,'asc']],
+			"bLengthChange" : true,
+			"iDisplayLength" : 25,
+			"bProcessing" : true,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				null,
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				]
+			} );
+		} );
+	</script>
+<table class="dataTable" id="sortable">
+ <thead>
  <tr>
-  <td class="dataHeading bdr1B">Sponsor Name</td>
-  <td class="dataHeading bdr1B">Sponsor Location</td>
-  <td class="dataHeading bdr1B">Website Address</td>
-  <td class="dataHeading bdr1B">Level</td>
-  <td class="dataHeading bdr1B">Logo?</td>
-  <td class="dataHeading bdr1B">Description/Text</td>
-  <td class="dataHeading bdr1B">Actions</td>
+  <th class="dataHeading bdr1B">Sponsor Name</th>
+  <th class="dataHeading bdr1B">Sponsor Location</th>
+  <th class="dataHeading bdr1B">Website Address</th>
+  <th class="dataHeading bdr1B">Level</th>
+  <th class="dataHeading bdr1B">Logo?</th>
+  <th class="dataHeading bdr1B">Description/Text</th>
+  <th class="dataHeading bdr1B">Actions</th>
  </tr>
+ </thead>
+ <tbody>
  <?php do { ?>
- <tr <?php echo " style=\"background-color:$color\"";?>>
+ <tr>
   <td width="20%" class="dataList"><?php echo $row_sponsors['sponsorName']; ?></td>
   <td width="15%" class="dataList"><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" class="thickbox"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
   <td width="5%" class="dataList"><?php echo $row_sponsors['sponsorLevel']; ?></td>
   <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="images/tick.png"  alt="Yes"><?php } else { ?><img src="images/cross.png"  alt="No"><?php } ?></td>
   <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
-  <td class="dataList">
+  <td class="dataList" nowrap="nowrap">
   <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=sponsors&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
-  <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
- <tr>
- 	<td colspan="9" class="bdr1T">&nbsp;</td>
- </tr>
+<?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
+ </tbody>
 </table>
 <?php } } else { ?>
 <p>There are no sponsors in the database.</p>

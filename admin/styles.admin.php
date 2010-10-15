@@ -31,31 +31,54 @@ function checkUncheckAll(theElement) {
 	  }
      }
     }
-</script>
+	</script>
+	<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bStateSave" : false,
+			"sPaginationType" : "full_numbers",
+			"aaSorting": [[2,'asc']],
+			"bLengthChange" : true,
+			"iDisplayLength" : 25,
+			"bProcessing" : true,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				null,
+				null,
+				<?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
+				null,
+				<?php } ?>
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				]
+			} );
+		} );
+	</script>
 <form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=update&amp;dbTable=styles&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
-<table class="dataTable">
+<p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></p>
+<table class="dataTable" id="sortable">
+<thead>
  <tr>
- 	<td colspan="5"><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></td>
- </tr>
- <tr>
-  <td class="dataHeading bdr1B"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></td>
-  <td class="dataHeading bdr1B">Category Name</td>
-  <td class="dataHeading bdr1B">Category/Sub</td>
+  <th class="dataHeading bdr1B"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></th>
+  <th class="dataHeading bdr1B">Category Name</th>
+  <th class="dataHeading bdr1B">#</th>
   <?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
-  <td class="dataHeading bdr1B">Judging Location</td>
+  <th class="dataHeading bdr1B">Judging Location</th>
   <?php } ?>
-  <td class="dataHeading bdr1B">Link</td>
-  <td class="dataHeading bdr1B">Actions</td>
+  <th class="dataHeading bdr1B">Link</th>
+  <th class="dataHeading bdr1B">Actions</th>
  </tr>
+ </thead>
+ <tbody>
  <?php do { 
-    if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
- 	$query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
-	$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
-	$row_judging2 = mysql_fetch_assoc($judging2);
-	$totalRows_judging2 = mysql_num_rows($judging2);
-	}
-?>
- <tr <?php echo " style=\"background-color:$color\"";?>>
+    	if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
+ 		$query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
+		$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
+		$row_judging2 = mysql_fetch_assoc($judging2);
+		$totalRows_judging2 = mysql_num_rows($judging2);
+		}
+	?>
+ <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_styles['id']; ?>" />
   <?php if ($bid == "default") { ?>
   <td width="1%" class="dataList"><input name="brewStyleActive<?php echo $row_styles['id']; ?>" type="checkbox" value="Y" <?php if ($row_styles['brewStyleActive'] == "Y") echo "CHECKED"; ?>></td>
@@ -63,7 +86,7 @@ function checkUncheckAll(theElement) {
   <td width="1%" class="dataList"><input name="brewStyleJudgingLoc<?php echo $row_styles['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if ($row_styles['brewStyleJudgingLoc'] == $bid) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td width="15%" class="dataList"><?php echo $row_styles['brewStyle']; ?></td>
-  <td width="5%" class="dataList"><?php if ($row_styles['brewStyleGroup'] > 28) echo "Custom"; else echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; ?></td>
+  <td width="5%" class="dataList"><?php if ($row_styles['brewStyleGroup'] > 28) echo "Custom"; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
   <?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
   <td width="25%" class="dataList">
   <?php if ($row_styles['brewStyleActive'] == "Y") { echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "N/A"; ?>
@@ -79,12 +102,10 @@ function checkUncheckAll(theElement) {
   <span class="icon"><img src="images/bin_closed_fade.png"  border="0" /></span>
   <?php } ?>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
-  <?php } while($row_styles = mysql_fetch_assoc($styles)) ?>
- <tr>
- 	<td colspan="6" class="bdr1T"><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></td>
- </tr>
-</table>
+ <?php } while($row_styles = mysql_fetch_assoc($styles)) ?>
+ </tbody>
+ </table>
+ <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></p>
 </form>
 <?php } ?>
 

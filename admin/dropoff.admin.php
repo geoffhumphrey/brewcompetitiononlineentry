@@ -51,17 +51,40 @@
  } 
 if (($action == "default") && ($section != "step4")) { 
 if ($totalRows_dropoff > 0) { ?>
-<table class="dataTable">
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bStateSave" : false,
+			"sPaginationType" : "full_numbers",
+			"aaSorting": [[0,'asc']],
+			"bLengthChange" : true,
+			"iDisplayLength" : 10,
+			"bProcessing" : true,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				]
+			} );
+		} );
+</script>
+<table class="dataTable" id="sortable">
+<thead>
  <tr>
-  <td class="dataHeading bdr1B">Name</td>
-  <td class="dataHeading bdr1B">Phone Number</td>
-  <td class="dataHeading bdr1B">Address</td>
-  <td class="dataHeading bdr1B">Website</td>
-  <td class="dataHeading bdr1B">Notes</td>
-  <td class="dataHeading bdr1B">Actions</td>
+  <th class="dataHeading bdr1B">Name</th>
+  <th class="dataHeading bdr1B">Phone Number</th>
+  <th class="dataHeading bdr1B">Address</th>
+  <th class="dataHeading bdr1B">Website</th>
+  <th class="dataHeading bdr1B">Notes</th>
+  <th class="dataHeading bdr1B">Actions</th>
  </tr>
+</thead>
+<tbody>
  <?php do { ?>
- <tr <?php echo " style=\"background-color:$color\"";?>>
+ <tr>
   <td width="20%" class="dataList"><?php echo $row_dropoff['dropLocationName']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_dropoff['dropLocationPhone']; ?></td>
   <td width="25%" class="dataList"><?php echo $row_dropoff['dropLocation']; ?></td>
@@ -70,11 +93,8 @@ if ($totalRows_dropoff > 0) { ?>
   <td class="dataList">
   <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_dropoff['dropLocationName']; ?>" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=drop_off&amp;action=delete','id',<?php echo $row_dropoff['id']; ?>,'Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location?\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_dropoff['dropLocationName']; ?>" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"></a></span></td>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while($row_dropoff = mysql_fetch_assoc($dropoff)) ?>
- <tr>
- 	<td colspan="6" class="bdr1T">&nbsp;</td>
- </tr>
+</tbody>
 </table>
 <?php } else echo "No drop-off locations have been specified."; 
 } ?>

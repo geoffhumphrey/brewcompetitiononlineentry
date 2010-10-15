@@ -1,3 +1,5 @@
+<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
@@ -173,7 +175,8 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td colspan="4" nowrap="nowrap" class="data bdr1B">View and create archived information from previous competitions.</td>
   </tr>
 </table>
-<?php 	} 
+<?php 	} ?>
+<?php 
 if ($go == "contest_info") 	include ('admin/contest_info.admin.php');
 if ($go == "preferences") 	include ('admin/preferences.admin.php');
 if ($go == "participants") 	include ('admin/participants.admin.php');

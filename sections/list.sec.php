@@ -28,67 +28,7 @@ if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); 
 // echo $entry_total;
 if ($msg != "default") echo $msg_output;
 ?>
-<?php if ($action != "print") { ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
-<?php } else { ?>
-<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry "; else echo " entires "; ?>in the <?php echo $row_contest_info['contestName'];?>.<?php } ?>
-<h2>Entries</h2>
-<?php if ($action != "print") { ?>
-<?php if ($totalRows_log > 0) { ?>
-<p>Below is a list of your entires. <?php if ($judgingDateReturn == "false") echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
-<?php } ?>
-<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-<table class="dataTable">
- <tr>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
-   <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
- </tr>
-</table>
-<?php } ?>
-<?php } if ($totalRows_log > 0) { ?>
-<table class="dataTable">
- <tr>
-  <td class="dataHeading bdr1B">Entry Name</td>
-  <td class="dataHeading bdr1B">Style</td>
-  <?php if ($action != "print") { ?>
-  <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <td colspan="3" class="dataHeading bdr1B">Actions</td>
-  <?php } ?>
-  <?php } ?>
- </tr>
- <?php do { 
-	mysql_select_db($database, $brewing);
-	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
-	$style = mysql_query($query_style, $brewing) or die(mysql_error());
-	$row_style = mysql_fetch_assoc($style);
-	$totalRows_style = mysql_num_rows($style);
-	?>
- <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td class="dataList" width="25%"><?php echo $row_log['brewName']; ?></td>
-  <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
-  <?php if ($action != "print") { ?>
-  <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <td class="dataList" width="5%" nowrap="nowrap"> <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a></td>
-  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a></td>
-  <?php } 
-  if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a></td>
-  <?php } 
-  }
-  ?>
- </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
-  <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
- 
- <tr>
-  <td colspan="5" class="dataHeading bdr1T"><?php if ($judgingDateReturn == "false") {  if ($action != "print") { ?><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?><?php } else echo "&nbsp;"; ?></td>
- </tr>
-
-</table>
-<?php 
-} else echo "<p>You do not have any entries.</p>"; ?>
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
@@ -221,3 +161,100 @@ if ($msg != "default") echo $msg_output;
   <?php } ?>
 </table>
 <?php } ?>
+
+<?php if ($action != "print") { ?>
+<?php } else { ?>
+<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry "; else echo " entires "; ?>in the <?php echo $row_contest_info['contestName'];?>.<?php } ?>
+<h2>Entries</h2>
+<?php if ($action != "print") { ?>
+<?php if ($totalRows_log > 0) { ?>
+<p>Below is a list of your entires. <?php if ($judgingDateReturn == "false") echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
+<?php } ?>
+<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+<table class="dataTable">
+<tbody>
+ <tr>
+   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
+   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import an Entry Using BeerXML</a></td>
+   <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
+ </tr>
+</tbody>
+</table>
+<?php if ($judgingDateReturn == "false") { ?>
+<table class="dataTable">
+<tbody>
+ <tr>
+  <td class="dataHeading"><?php  if ($action != "print") { ?><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?></td>
+ </tr>
+</tbody>
+</table>
+<?php } ?>
+<?php } ?>
+<?php } if ($totalRows_log > 0) { ?>
+<?php if ($action != "print") {?>
+<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bStateSave" : false,
+			"sPaginationType" : "full_numbers",
+			"aaSorting": [[0,'asc']],
+			"bLengthChange" : true,
+			"iDisplayLength" : 10,
+			"bProcessing" : true,
+			"aoColumns": [
+				null,
+				null,
+				<?php if ($action != "print") { ?>
+				<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+				{ "asSorting": [  ] },
+				<?php } ?>
+  				<?php } ?>
+				]
+			} );
+		} );
+</script>
+<?php } ?>
+<table class="dataTable" id="sortable">
+<thead>
+ <tr>
+  <th class="dataHeading bdr1B">Entry Name</th>
+  <th class="dataHeading bdr1B">Style</th>
+  <?php if ($action != "print") { ?>
+  <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+  <th class="dataHeading bdr1B">Actions</th>
+  <?php } ?>
+  <?php } ?>
+ </tr>
+</thead>
+<tbody>
+ <?php do { 
+	mysql_select_db($database, $brewing);
+	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
+	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
+	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	$totalRows_style = mysql_num_rows($style);
+	?>
+ <tr>
+  <td class="dataList" width="25%"><?php echo $row_log['brewName']; ?></td>
+  <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
+  <?php if ($action != "print") { ?>
+  		<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+  <td class="dataList">
+  <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>
+  <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
+  	<?php } 
+  if (greaterDate($today,$deadline)) echo ""; else { ?>
+  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a>
+  <?php } ?>
+  </td>
+  <?php  } ?>
+  
+ </tr>
+<?php } while ($row_log = mysql_fetch_assoc($log)); ?>
+</tbody>
+</table>
+<?php 
+} else echo "<p>You do not have any entries.</p>"; ?>

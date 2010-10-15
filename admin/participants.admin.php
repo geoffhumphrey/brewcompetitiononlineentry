@@ -14,17 +14,20 @@ if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
   		<?php if ($dbTable != "default") { // 1.1 ?>
  	 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=archive">Back to Archives</a></td>
   		<?php } // end 1.1 ?>
-  		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=participants&amp;action=add">Add Participant</a></td>
+  		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=participants&amp;action=add">Add a Participant</a></td>
   		<?php if ($dbTable == "default") { // 1.2 ?>
         <td class="dataList" width="5%" nowrap="nowrap">
-        	<span class="icon">View:</span>
-                    <select name="view_participants" id="view_participants" onchange="jumpMenu('self',this,0)">
-                    <option value="index.php?section=admin&amp;go=participants"<?php if ($filter == "default") echo " SELECTED"; ?>>All Participants</option>
-                    <option value="index.php?section=admin&amp;go=participants&amp;filter=judges"<?php if ($filter == "judges") echo " SELECTED"; ?>>Available Judges</option>
-                    <option value="index.php?section=admin&amp;go=participants&amp;filter=stewards"<?php if ($filter == "stewards") echo " SELECTED"; ?>>Available Stewards</option>
-                    <option value="index.php?section=admin&amp;go=participants&amp;filter=assignJudges"<?php if ($filter == "assignJudges") echo " SELECTED"; ?>>Assigned Judges</option>
-                    <option value="index.php?section=admin&amp;go=participants&amp;filter=assignStewards"<?php if ($filter == "assignStewards") echo " SELECTED"; ?>>Assigned Stewards</option>
-                    </select>   
+  		<span class="icon"><img src="images/page.png" /></span>
+  		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries');">View...</a>
+  		</div>
+  		<div id="printMenu_entries" class="menu" onmouseover="menuMouseover(event)">
+  		<a class="menuItem" href="index.php?section=admin&amp;go=participants">All Participants</a>
+  		<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
+  		<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
+        <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a>
+        <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
+  		</div>
+  		</td>
    		<?php } // end 1.2 ?>
  <td class="dataList">&nbsp;</td>
  </tr>
@@ -37,42 +40,79 @@ if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
  </tr>
  <tr>
  	<td class="dataList" colspan="4"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;action=print&amp;filter=<?php echo $filter; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
-elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?>">Print List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
+elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?>">Print This List of <?php if ($filter == "judges") echo "Available Judges"; elseif ($filter == "stewards") echo "Available Stewards"; elseif ($filter == "assignJudges") echo "Assigned Judges"; 
 elseif ($filter == "assignStewards") echo "Assigned Stewards"; else echo "Participants"; ?></a></td>
- </tr>
- <tr>
- 	<td class="dataList" colspan="4">Total: <?php echo $totalRows_brewer; ?></td>
  </tr>
  </table>
  <?php } // end 2
 } 
 }
 if (($action == "default") || ($action == "print")) { 
-if ($totalRows_brewer > 0) { ?>
-<table class="dataTable">
+if ($totalRows_brewer > 0) { 
+	if ($action != "print") { ?>
+	<link href="css/sorting.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+		"aaSorting": [[0,'asc']],
+		"bStateSave" : false,
+		"sPaginationType" : "full_numbers",
+		"bLengthChange" : true,
+		"iDisplayLength" : 25,
+		"bProcessing" : true,
+		"aoColumns": [
+				null,
+				null,
+				{ "asSorting": [  ] },
+				null,
+				<?php if ($filter == "default") { ?>
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				null,
+				<?php } 
+				if ($totalRows_judging > 1) { ?>
+    			{ "asSorting": [  ] },
+  				<?php } if ($filter != "default") { ?>
+    			<?php if ($filter == "judges") { ?>
+   				null,
+    			null,
+    			null,
+    			null,
+    			<?php } ?>
+				<?php } ?>
+				{ "asSorting": [  ] }
+			]
+		} );
+	} );
+	</script>
+   <?php } ?>
+<table class="dataTable" id="sortable">
+<thead>
   <tr>
-    <td class="dataHeading bdr1B">Last</td>
-    <td class="dataHeading bdr1B">First</td>
-    <td class="dataHeading bdr1B">Info</td>
-    <td class="dataHeading bdr1B">Club</td>
+    <th class="dataHeading bdr1B">Last</th>
+    <th class="dataHeading bdr1B">First</th>
+    <th class="dataHeading bdr1B">Info</th>
+    <th class="dataHeading bdr1B">Club</th>
   <?php if ($filter == "default") { ?>
-    <td class="dataHeading bdr1B">Steward?</td>
-    <td class="dataHeading bdr1B">Judge?</td>
-    <td class="dataHeading bdr1B">Assigned As</td>
+    <th class="dataHeading bdr1B">Steward?</th>
+    <th class="dataHeading bdr1B">Judge?</th>
+    <th class="dataHeading bdr1B">Assigned As</th>
   <?php } 
 	if ($totalRows_judging > 1) { ?>
-    <td class="dataHeading bdr1B">Assigned To</td>
+    <th class="dataHeading bdr1B">Assigned To</th>
   <?php } if ($filter != "default") { ?>
     <?php if ($filter == "judges") { ?>
-    <td class="dataHeading bdr1B">ID</td>
-    <td class="dataHeading bdr1B">Rank</td>
-    <td class="dataHeading bdr1B">Likes</td>
-    <td class="dataHeading bdr1B">Dislikes</td>
+    <th class="dataHeading bdr1B">ID</th>
+    <th class="dataHeading bdr1B">Rank</th>
+    <th class="dataHeading bdr1B">Likes</th>
+    <th class="dataHeading bdr1B">Dislikes</th>
     <?php } ?>
   <?php } if ($action != "print") { ?>
-    <td class="dataHeading bdr1B">Actions</td>
+    <th class="dataHeading bdr1B">Actions</th>
   <?php } ?>
   </tr>
+</thead>
+<tbody>
 <?php do { 
     if ($row_brewer['brewerAssignment'] == "J") $query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
 	if ($row_brewer['brewerAssignment'] == "S") $query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
@@ -83,7 +123,7 @@ if ($totalRows_brewer > 0) { ?>
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
 ?>
-  <tr <?php echo " style=\"background-color:$color\"";?>>
+  <tr>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerLastName']; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo $row_brewer['brewerFirstName']; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="12%"><?php echo $row_brewer['brewerAddress']; ?><br><?php echo $row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']; ?><br /><a href="mailto:<?php echo $row_brewer['brewerEmail']; ?>?Subject=<?php if ($filter == "judges") echo "Judging at ".$row_contest_info['contestName']; elseif ($filter == "stewards") echo "Stewarding at ".$row_contest_info['contestName']; else echo $row_contest_info['contestName'];  ?>"><?php echo $row_brewer['brewerEmail']; ?></a><br /><?php if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (H)<br>";  if ($row_brewer['brewerPhone2'] != "") echo $row_brewer['brewerPhone2']." (W)"; ?></td>
@@ -91,7 +131,7 @@ if ($totalRows_brewer > 0) { ?>
   	<?php if ($filter == "default") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerSteward'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>"?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerJudge'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>" ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="5%"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="10%"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
   	<?php } if ($totalRows_judging > 1) { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php if ((($row_brewer['brewerAssignment'] == "J") && ($row_brewer['brewerJudgeAssignedLocation'] != "")) || (($row_brewer['brewerAssignment'] == "S") && ($row_brewer['brewerStewardAssignedLocation'] != ""))) { echo $row_judging2['judgingLocName']."<br>("; echo dateconvert($row_judging2['judgingDate'], 3).")"; } else echo "Not Set"; ?></td>
 	<?php } if ($filter != "default") { ?>
@@ -110,13 +150,8 @@ if ($totalRows_brewer > 0) { ?>
     </td> 
   <?php } ?> 
   </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
 <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
-<?php if ($action != "print") { ?>
-  <tr>
-  	<td class="bdr1T" colspan="13">&nbsp;</td>
-  </tr>
-<?php } ?>
+</tbody>
 </table>
 <?php } if ($totalRows_brewer == 0) { ?>
 

@@ -18,7 +18,7 @@ $totalRows_styles = mysql_num_rows($styles);
 <title>Styles</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css" />
 <link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="../js_includes/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../js_includes/jquery.js"></script>
 <script type="text/javascript" src="../js_includes/thickbox.js"></script>
 <script type="text/javascript">
 <!--
