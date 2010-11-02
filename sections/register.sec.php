@@ -11,8 +11,8 @@
 <form name="judgeChoice" id="judgeChoice">
 <table>
 	<tr>
-    	<td class="dataLabel">Are you registering as a judge or steward?</td>
-    	<td class="data">
+    	<td class="dataLabel" width="5%">Are you registering as a judge or steward?</td>
+    	<td class="data" width="5%">
        	  <select name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
     		<option value="index.php?section=register&amp;go=judge">Yes</option>

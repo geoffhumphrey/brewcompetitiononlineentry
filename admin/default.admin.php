@@ -18,7 +18,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td width="5%" class="dataLabel bdr1T"><span class="icon"><img src="images/book.png" ></span>Manage/View:</td>
     <td width="15%" nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&amp;go=participants">Participants</a></td>
     <td width="15%" nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&amp;go=entries">Entries</a></td>
-    <td nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a><a href="index.php?section=admin&amp;go=entries"></a></td>
+    <td width="15%" nowrap="nowrap" class="data bdr1T"><a href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a><a href="index.php?section=admin&amp;go=entries"></a></td>
     <td nowrap="nowrap" class="data bdr1T"><?php if ($totalRows_judging > 1) { ?><a href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?></td>
   </tr>
   <tr>
@@ -161,10 +161,16 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </tr>
   <tr>
     <td width="5%" class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/page_excel_go.png" ></span>Export CSV Files:</td>
-    <td width="15%" nowrap="nowrap" class="data bdr1T_dashed"><a href="admin/participants_export.php?go=csv">All Participants</a></td>
-    <td width="15%" class="data bdr1T_dashed"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid & Received Entries</a></td>
     <td width="15%" nowrap="nowrap" class="data bdr1T_dashed"><a href="admin/entries_export.php?go=csv">All Entries</a></td>
-    <td class="data bdr1T_dashed"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv"></a> <a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
+    <td width="15%" class="data bdr1T_dashed"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid & Received Entries</a></td>
+    <td colspan="2" nowrap="nowrap" class="data bdr1T_dashed"><a href="admin/entries_export.php?go=csv"></a><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv"></a> <a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">&nbsp;</td>
+    <td nowrap="nowrap"><a href="admin/participants_export.php?go=csv">All Participants</a></td>
+    <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=winners">Winners</a></td>
+    <td nowrap="nowrap" class="data bdr1T_dashed">&nbsp;</td>
+    <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel bdr1T_dashed"><span class="icon"><img src="images/cog.png"  /></span>Maintenance:</td>

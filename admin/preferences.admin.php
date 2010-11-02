@@ -52,6 +52,14 @@
   	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
   </tr>
 </table>
+<h3>Performance</h3>
+<table>
+  <tr>
+  	<td class="dataLabel">Number of Records to Display Per Page:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">The number of records should be displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations. Performance issues may occur if a larger number is defined.</td>
+  </tr>
+</table>
 <h3>Measurements</h3>
 <table>
   <tr>

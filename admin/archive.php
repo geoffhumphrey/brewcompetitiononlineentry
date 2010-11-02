@@ -29,20 +29,20 @@ $row_user = mysql_fetch_assoc($user);
   $userQuestion = strtr($row_user['userQuestion'], $html_string);
   $userQuestionAnswer = strtr($row_user['userQuestionAnswer'], $html_string);
   
-$query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $row_user['user_name']);
+$query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $_SESSION["loginUsername"]);
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 
-  $brewerFirstName = strtr($row_name['brewerFirstName'], $html_string);
-  $brewerLastName = strtr($row_name['brewerLastName'], $html_string);
-  $brewerAddress = strtr($row_name['brewerAddress'], $html_string);
-  $brewerCity = strtr($row_name['brewerCity'], $html_string);
-  $brewerState = strtr($row_name['brewerState'], $html_string);
-  $brewerZip = strtr($row_name['brewerZip'], $html_string);
-  $brewerCountry = strtr($row_name['brewerCountry'], $html_string);
-  $brewerPhone1 = strtr($row_name['brewerPhone1'], $html_string);
-  $brewerPhone2 = strtr($row_name['brewerPhone2'], $html_string);
-  $brewerClubs = strtr($row_name['brewerClubs'], $html_string);
+  $brewerFirstName = $row_name['brewerFirstName'];
+  $brewerLastName = $row_name['brewerLastName'];
+  $brewerAddress = $row_name['brewerAddress'];
+  $brewerCity = $row_name['brewerCity'];
+  $brewerState = $row_name['brewerState'];
+  $brewerZip = $row_name['brewerZip'];
+  $brewerCountry = $row_name['brewerCountry'];
+  $brewerPhone1 = $row_name['brewerPhone1'];
+  $brewerPhone2 = $row_name['brewerPhone2'];
+  $brewerClubs = $row_name['brewerClubs'];
   $brewerEmail = $row_name['brewerEmail'];
   $brewerNickname = $row_name['brewerNickname'];
   $brewerSteward = $row_name['brewerSteward'];
@@ -53,20 +53,20 @@ $row_name = mysql_fetch_assoc($name);
   $brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
 
 
-// Second, rename current "users", "$brewers", "brewing" tables according to information gathered from the form
+// Second, rename current "users", "brewer", "brewing" tables according to information gathered from the form
 $sql1 = "RENAME TABLE ".$database.".users TO ".$database.".users_".$suffix.";";
-$Result1 = mysql_query($sql1, $brewing) or die(mysql_error());
+//$Result1 = mysql_query($sql1, $brewing) or die(mysql_error());
 
 $sql2 = "RENAME TABLE ".$database.".brewer  TO ".$database.".brewer_".$suffix.";";
-$Result2 = mysql_query($sql2, $brewing) or die(mysql_error());
+//$Result2 = mysql_query($sql2, $brewing) or die(mysql_error());
 
 $sql3 = "RENAME TABLE ".$database.".brewing  TO ".$database.".brewing_".$suffix.";";
-$Result3 = mysql_query($sql3, $brewing) or die(mysql_error());
+//$Result3 = mysql_query($sql3, $brewing) or die(mysql_error());
 
 $sql3_a = "RENAME TABLE ".$database.".sponsors  TO ".$database.".sponsors_".$suffix.";";
-$Result3_a = mysql_query($sql3_a, $brewing) or die(mysql_error());
+//$Result3_a = mysql_query($sql3_a, $brewing) or die(mysql_error());
 
-// Third, insert a clean "users", "brewers", and "brewing" tables
+// Third, insert a clean "users", "brewer", "brewing", and "sponsors" tables
 
 $sql4 = "
 CREATE TABLE IF NOT EXISTS `users` (
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-$Result4 = mysql_query($sql4, $brewing) or die(mysql_error());
+//$Result4 = mysql_query($sql4, $brewing) or die(mysql_error());
 
 $sql5 = "
 CREATE TABLE IF NOT EXISTS `brewer` (
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `brewer` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-$Result5 = mysql_query($sql5, $brewing) or die(mysql_error());
+//$Result5 = mysql_query($sql5, $brewing) or die(mysql_error());
 
 $sql6 = "
 CREATE TABLE IF NOT EXISTS `brewing` (
@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `brewing` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-$Result6 = mysql_query($sql6, $brewing) or die(mysql_error());
+//$Result6 = mysql_query($sql6, $brewing) or die(mysql_error());
 
 $sql6_a = "
 CREATE TABLE IF NOT EXISTS `sponsors` (
@@ -334,10 +334,10 @@ CREATE TABLE IF NOT EXISTS `sponsors` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
-$Result6_a = mysql_query($sql6_a, $brewing) or die(mysql_error());
+//$Result6_a = mysql_query($sql6_a, $brewing) or die(mysql_error());
 
 
-// Fourth, insert current user's info into new "users" and "brewers" table
+// Fourth, insert current user's info into new "users" and "brewer" table
 
 $sql7 = "INSERT INTO users (
 id, 
@@ -348,7 +348,7 @@ userQuestion,
 userQuestionAnswer
 ) VALUES ('1','$user_name', '$password', '1', '$userQuestion', '$userQuestionAnswer');";
 
-$Result7 = mysql_query($sql7, $brewing) or die(mysql_error());
+//$Result7 = mysql_query($sql7, $brewing) or die(mysql_error());
 
 $sql8 = "INSERT INTO brewer (
 id,
@@ -409,15 +409,15 @@ NULL,
 NULL
 );";
 
-$Result8 = mysql_query($sql8, $brewing) or die(mysql_error());
+//$Result8 = mysql_query($sql8, $brewing) or die(mysql_error());
 
 // Sixth, insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 $sql9 = sprintf("INSERT INTO archive (id, archiveUserTableName, archiveBrewerTableName, archiveBrewingTableName, archiveSuffix) VALUES (%s, %s, %s, %s, %s);", "''", "'users_".$suffix."'", "'brewer_".$suffix."'", "'brewing_".$suffix."'", "'".$suffix."'");
 
-$Result9 = mysql_query($sql9, $brewing) or die(mysql_error());
+//$Result9 = mysql_query($sql9, $brewing) or die(mysql_error());
 
 // Last, log the user in and redirect
-
+/*
 session_destroy();
 mysql_select_db($database, $brewing);
 $query_login = "SELECT password FROM users WHERE user_name = '$user_name' AND password = '$password'";
@@ -444,8 +444,8 @@ $totalRows_login = mysql_num_rows($login);
   			exit;
 			}
 
+*/
 
-/* DEBUG
 echo "<p>".$sql1."</p>";
 echo "<p>".$sql2."</p>";
 echo "<p>".$sql3."</p>";
@@ -457,7 +457,7 @@ echo "<p>".$sql6_a."</p>";
 echo "<p>".$sql7."</p>";
 echo "<p>".$sql8."</p>";
 echo "<p>".$sql9."</p>";
-*/
+
 
 }
 ?>
