@@ -77,12 +77,22 @@
 	padding: 3px 0;
 }
 
-.dataTables_paginate {
+.dataTables_paginate
+{
 	float: right;
 	min-height: 22px;
 	margin: 15px 0;
 	text-align: right;
-	vertical-align:middle; 
+	vertical-align:middle;
+	color: #000;
+}
+
+.dataTables_paginate a:link,
+.dataTables_paginate a:visited,
+.dataTables_paginate a:hover,
+.dataTables_paginate a:active {
+	color: #000;
+	text-decoration: none;
 }
 
 /* Pagination nested */

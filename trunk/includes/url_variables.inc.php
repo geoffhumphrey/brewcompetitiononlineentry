@@ -45,6 +45,11 @@ if (isset($_GET['sort'])) {
   $sort = (get_magic_quotes_gpc()) ? $_GET['sort'] : addslashes($_GET['sort']);
 }
 
+$psort = "default";
+if (isset($_GET['psort'])) {
+  $psort = (get_magic_quotes_gpc()) ? $_GET['psort'] : addslashes($_GET['psort']);
+}
+
 $dir = "ASC";
 if (isset($_GET['dir'])) {
   $dir = (get_magic_quotes_gpc()) ? $_GET['dir'] : addslashes($_GET['dir']);
@@ -53,6 +58,16 @@ if (isset($_GET['dir'])) {
 $bid = "default";
 if (isset($_GET['bid'])) {
   $bid = (get_magic_quotes_gpc()) ? $_GET['bid'] : addslashes($_GET['bid']);
+}
+
+$limit = "999999";
+if (isset($_GET['limit'])) {
+  $limit = (get_magic_quotes_gpc()) ? $_GET['limit'] : addslashes($_GET['limit']);
+}
+
+$view = "default";
+if (isset($_GET['view'])) {
+  $view = (get_magic_quotes_gpc()) ? $_GET['view'] : addslashes($_GET['view']);
 }
 
 ?>

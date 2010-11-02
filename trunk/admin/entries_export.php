@@ -31,12 +31,21 @@ function parseCSVComments($comments) {
   }
 }
 mysql_select_db($database, $brewing);
+
+// Note: the order of the columns is set to the specifications set by HCCP for import
+
+if ($filter != "winners") {
 $query_sql = "SELECT brewBrewerFirstName, brewBrewerLastName,";
-if (($action == "default") || ($action == "hccp")) $query_sql .= " brewCategory, brewSubCategory, id, brewName, brewInfo, brewMead2, brewMead1 FROM brewing";
-if ($action == "email") $query_sql .= " brewBrewerID FROM brewing";
+if (($action == "default") || ($action == "hccp")) $query_sql .= " brewCategory, brewSubCategory, id, brewName, brewInfo, brewMead2, brewMead1 ";
+if ($action == "default") $query_sql .= ", brewMead3"; 
+if ($action == "email") $query_sql .= " brewBrewerID";
+$query_sql .= " FROM brewing";
 if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
 if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y' AND brewJudgingLocation = '$bid'"; 
 if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = 'N' OR brewPaid = '' AND brewReceived = 'Y'"; 
+}
+
+if ($filter == "winners") $query_sql = "SELECT brewing.brewCategory, brewing.brewSubCategory, brewing.brewStyle,  brewing.brewBrewerLastName,  brewing.brewBrewerFirstName,  brewing.brewName, brewer.brewerClubs, brewer.brewerAddress, brewer.brewerCity, brewer.brewerState, brewer.brewerZip, brewer.brewerEmail,brewing.brewWinner, brewing.brewWinnerPlace, brewing.brewBOSRound, brewing.brewBOSPlace, brewer.brewerFirstName, brewer.brewerLastName FROM brewing LEFT JOIN (brewer) ON ( brewer.brewerFirstName = brewing.brewBrewerFirstName AND brewer.brewerLastName = brewing.brewBrewerLastName ) WHERE brewing.brewWinner = 'Y'";
 //echo $query_sql;
 
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());

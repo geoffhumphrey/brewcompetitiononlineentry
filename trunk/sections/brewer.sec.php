@@ -71,6 +71,11 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td class="data">&nbsp;</td>
 </tr>
+<tr>
+  <td class="dataLabel">AHA Member Number:</td>
+  <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
+  <td class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
+</tr>
 
 
 <?php if (($go != "entrant") && ($section != "step7")) { ?>
@@ -81,17 +86,16 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
-<td class="dataLabel">Rank Your Stewarding<br />Location Preferences:</td>
+<td class="dataLabel">Your Stewarding<br />Location Availabilty:</td>
 <td colspan="2" class="data">
 <?php do { ?>
 	<table class="dataTableCompact">
     	<tr>
         	<td width="1%" nowrap="nowrap">
                 <select name="brewerStewardLocation[]">
-				<option value="0-0" <?php if (($action == "edit") && ($row_brewer['brewerStewardLocation'] == "0-0")) echo "SELECTED"; ?>>No Preference</option>
-				<?php for ($i = 1; $i <= $totalRows_stewarding; $i++) { ?>
-				<option value="<?php echo $i."-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = $i."-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $i; ?></option>
-				<?php } ?>
+                <option value="0-0"></option>
+				<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
 				</select>
             </td>
             <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo dateconvert($row_stewarding['judgingDate'], 3).")"; ?></td>
@@ -108,17 +112,16 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
-<td class="dataLabel">Rank Your Judging<br />Location Preferences:</td>
+<td class="dataLabel">Your Judging<br />Location Availablity:</td>
 <td class="data" colspan="2">
 <?php do { ?>
 	<table class="dataTableCompact">
     	<tr>
         	<td width="1%" nowrap="nowrap">
             <select name="brewerJudgeLocation[]">
-				<option value="0-0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeLocation'] == "0-0")) echo "SELECTED"; ?>>No Preference</option>
-				<?php for ($i = 1; $i <= $totalRows_judging3; $i++) { ?>
-				<option value="<?php echo $i."-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = $i."-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $i; ?></option>
-				<?php } ?>
+            <option value=""></option>
+				<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
 				</select>
             </td>
             <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo dateconvert($row_judging3['judgingDate'], 3).")"; ?></td>
@@ -137,7 +140,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 
 </table>
 <?php if ($section != "step7") { ?>
-	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
+  <input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
 	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] == "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />

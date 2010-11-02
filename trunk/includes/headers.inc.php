@@ -29,8 +29,8 @@ switch($section) {
 
 	case "pay":
 	$header_output = "Pay My Fees";
-	if     ($msg == "1") $output = "Your PayPal payment has been received.<br>Please make sure to print the receipt from PayPal and attach it to one of your entries as proof of payment."; 
-	elseif ($msg == "2") $output = "Your PayPal payment has been cancelled.";
+	if     ($msg == "1") $output = "Your online payment has been received. Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
+	elseif ($msg == "2") $output = "Your online payment has been cancelled.";
 	else $output = "";
 	break;
 	
@@ -46,7 +46,7 @@ switch($section) {
 	break;
 	
 	case "entry":
-	$header_output = $row_contest_info['contestName']." Entry Information";
+	$header_output = $row_contest_info['contestName']." Entry Info";
 	break;
 	
 	case "sponsors":
@@ -82,23 +82,23 @@ switch($section) {
 	break;
 	
 	case "brewer":
-	if ($action == "add") $header_output = "Step 2: Registrant Information"; 
-	else $header_output = "Edit Registrant Information";
-	if ($msg == "1") $output = "Information added successfully."; 
+	if ($action == "add") $header_output = "Step 2: Registrant Info"; 
+	else $header_output = "Edit Registrant Info";
+	if ($msg == "1") $output = "Info added successfully."; 
 	break;
 	
 	case "judge":
-	$header_output = "Judge Information"; 
-	if ($msg == "1") $output = "Information added successfully."; 
+	$header_output = "Judge Info"; 
+	if ($msg == "1") $output = "Info added successfully."; 
 	break;
 
 	case "list":
-	$header_output = "My Information and Entries";
-	if ($msg == "1") $output = "Information added successfully."; 
-	elseif ($msg == "2") $output = "Information edited successfully."; 
+	$header_output = "My Info and Entries";
+	if ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully."; 
 	elseif ($msg == "3") $output = "Your email address has been updated."; 
 	elseif ($msg == "4") $output = "Your password has been updated."; 
-	elseif ($msg == "5") $output = "Information deleted successfully."; 
+	elseif ($msg == "5") $output = "Info deleted successfully."; 
 	elseif ($msg == "6") $output = "You should verify all your entries imported using BeerXML."; 
 	elseif ($msg == "7") $output = "You have registered as a judge or steward. Thank you."; 
 	else $output = "";
@@ -109,7 +109,7 @@ switch($section) {
 	break;
 	
 	case "step2":
-	$header_output = "Set Up: Enter Your Competition Information"; 
+	$header_output = "Set Up: Enter Your Competition Info"; 
 	break;
 	
 	case "step3":
@@ -190,17 +190,29 @@ switch($section) {
 			break;
 		}
 	
-	if     ($msg == "1") $output = "Information added successfully."; 
-	elseif ($msg == "2") $output = "Information edited successfully.";
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
-	elseif ($msg == "5") $output = "Information deleted successfully.";
+	elseif ($msg == "5") $output = "Info deleted successfully.";
 	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a delseifferent one."; 
 	elseif ($msg == "7") $output = "Archives created successfully. Click the archive name to view.";
 	elseif ($msg == "8") $output = "Archive \"".$filter."\" deleted."; 
 	elseif ($msg == "9") $output = "The records have been updated.";
 	elseif ($msg == "10") $output = "The username you have entered is already in use.";
-	elseif ($msg == "11") { $output = "Add another drop-off location?"; $output_extend = "<p><a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin&amp;go=dropoff"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step4") $output_extend .= "setup.php?section=step5"; else $output_extend .= "index.php?section=admin'>No</a>"; }
-	elseif ($msg == "12") { $output = "Add another judging location, date, or time?"; $output_extend = "<p><a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step3"; else $output_extend .= "index.php?section=admin&amp;go=judging"; $output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; }
+	elseif ($msg == "11") { 
+		$output = "Add another drop-off location?"; 
+		$output_extend = "<p><a href='"; 
+		if ($section == "step4") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin&amp;go=dropoff"; 
+		$output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step4")
+		$output_extend .= "setup.php?section=step5"; else $output_extend .= "index.php?section=admin'>No</a>"; 
+		}
+	elseif ($msg == "12") { 
+		$output = "Add another judging location, date, or time?"; 
+		$output_extend = "<p><a href='"; 
+		if ($section == "step3") $output_extend .= "setup.php?section=step3"; else $output_extend .= "index.php?section=admin&amp;go=judging"; 
+		$output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; 
+		if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; 
+		}
 	else $output = "";
 	break;
 

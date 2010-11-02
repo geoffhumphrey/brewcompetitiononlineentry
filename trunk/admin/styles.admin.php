@@ -35,12 +35,13 @@ function checkUncheckAll(theElement) {
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
-			"bStateSave" : false,
+			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
-			"aaSorting": [[2,'asc']],
 			"bLengthChange" : true,
-			"iDisplayLength" : 25,
-			"bProcessing" : true,
+			"iDisplayLength" : <?php echo $limit; ?>,
+			"sDom": 'irtip',
+			"bStateSave" : false,
+			"aaSorting": [[2,'asc']],
 			"aoColumns": [
 				{ "asSorting": [  ] },
 				null,

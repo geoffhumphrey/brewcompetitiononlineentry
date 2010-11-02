@@ -16,11 +16,13 @@
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
-			"bStateSave" : false,
+			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
-			"aaSorting": [[0,'asc']],
 			"bLengthChange" : true,
-			"iDisplayLength" : 25,
+			"iDisplayLength" : <?php echo $limit; ?>,
+			"sDom": 'irtip',
+			"bStateSave" : false,
+			"aaSorting": [[0,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
 				null,

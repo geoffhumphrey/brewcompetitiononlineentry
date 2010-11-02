@@ -4,13 +4,16 @@
 <div class="bos">Congratulations to <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "Beer"; ?> Best of Show Winner <?php echo $row_bos_winner['brewBrewerFirstName']." ".$row_bos_winner['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner['brewName']; ?></em>, garnered the top <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "beer"; ?> prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestBOSAward']; ?>
 <table class="dataTable">
+<thead>
  <tr>
-  <td class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</td>
-  <td class="dataHeading bdr1B" width="25%">Category</td>
-  <td class="dataHeading bdr1B" width="25%">Brewer</td>
-  <td class="dataHeading bdr1B" width="25%">Entry Name</td>
-  <td class="dataHeading bdr1B">Club</td>
+  <th class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</th>
+  <th class="dataHeading bdr1B" width="25%">Category</th>
+  <th class="dataHeading bdr1B" width="25%">Brewer</th>
+  <th class="dataHeading bdr1B" width="25%">Entry Name</th>
+  <th class="dataHeading bdr1B">Club</th>
  </tr>
+</thead>
+<tbody>
  <?php do { 
     include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
@@ -39,6 +42,7 @@
   <tr>
   	<td class="bdr1T" colspan="5">&nbsp;</td>
   </tr>
+</tbody>
 </table>
 <?php } ?>
 
@@ -48,13 +52,16 @@
 <div class="bos">Congratulations to Mead Best of Show Winner <?php echo $row_bos_winner3['brewBrewerFirstName']." ".$row_bos_winner3['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner3['brewName']; ?></em>, garnered the top mead prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php } ?>
 <table class="dataTable">
+<thead>
  <tr>
-  <td class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</td>
-  <td class="dataHeading bdr1B" width="25%">Category</td>
-  <td class="dataHeading bdr1B" width="25%">Brewer</td>
-  <td class="dataHeading bdr1B" width="25%">Entry Name</td>
-  <td class="dataHeading bdr1B">Club</td>
+  <th class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</th>
+  <th class="dataHeading bdr1B" width="25%">Category</th>
+  <th class="dataHeading bdr1B" width="25%">Brewer</th>
+  <th class="dataHeading bdr1B" width="25%">Entry Name</th>
+  <th class="dataHeading bdr1B">Club</th>
  </tr>
+</thead>
+<tbody>
  <?php do { 
     include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
@@ -83,6 +90,7 @@
   <tr>
   	<td class="bdr1T" colspan="5">&nbsp;</td>
   </tr>
+</tbody>
 </table>
 <?php } // end if BOS cider ?>
 
@@ -92,13 +100,16 @@
 <div class="bos">Congratulations to Cider Best of Show Winner <?php echo $row_bos_winner2['brewBrewerFirstName']." ".$row_bos_winner2['brewBrewerLastName']; ?>, whose entry, <em><?php echo $row_bos_winner2['brewName']; ?></em>, garnered the top cider prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php } ?>
 <table class="dataTable">
+<thead>
  <tr>
-  <td class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</td>
-  <td class="dataHeading bdr1B" width="25%">Category</td>
-  <td class="dataHeading bdr1B" width="25%">Brewer</td>
-  <td class="dataHeading bdr1B" width="25%">Entry Name</td>
-  <td class="dataHeading bdr1B">Club</td>
+  <th class="dataHeading bdr1B" width="5%" nowrap="nowrap">Place</th>
+  <th class="dataHeading bdr1B" width="25%">Category</th>
+  <th class="dataHeading bdr1B" width="25%">Brewer</th>
+  <th class="dataHeading bdr1B" width="25%">Entry Name</th>
+  <th class="dataHeading bdr1B">Club</th>
  </tr>
+</thead>
+<tbody>
  <?php do { 
     include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
@@ -127,5 +138,6 @@
   <tr>
   	<td class="bdr1T" colspan="5">&nbsp;</td>
   </tr>
+</tbody>
 </table>
 <?php } // end if BOS cider ?>

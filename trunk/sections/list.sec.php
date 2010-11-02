@@ -5,20 +5,20 @@
 <?php } 
 else 
 { 
-$query_brewNotPaid = sprintf("SELECT brewPaid FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['id']);
+$query_brewNotPaid = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewPaid='' OR brewPaid='N'", $row_brewer['uid']);
 $brewNotPaid = mysql_query($query_brewNotPaid, $brewing) or die(mysql_error());
 $row_brewNotPaid = mysql_fetch_assoc($brewNotPaid);
 $totalRows_brewNotPaid = mysql_num_rows($brewNotPaid);
 
-if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
-if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) {
-	$discFee = ($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2'];
+if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $totalRows_brewNotPaid * $row_contest_info['contestEntryFee'];
+if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_brewNotPaid > $row_contest_info['contestEntryFeeDiscountNum'])) {
+	$discFee = ($totalRows_brewNotPaid - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2'];
 	$regFee = $row_contest_info['contestEntryFeeDiscountNum'] * $row_contest_info['contestEntryFee'];
 	$entry_total = $discFee + $regFee;
 	}
 
-if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log <= $row_contest_info['contestEntryFeeDiscountNum'])) {
-	if ($totalRows_log > 0) $entry_total = $totalRows_log * $row_contest_info['contestEntryFee'];
+if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_brewNotPaid <= $row_contest_info['contestEntryFeeDiscountNum'])) {
+	if ($totalRows_brewNotPaid > 0) $entry_total = $totalRows_brewNotPaid * $row_contest_info['contestEntryFee'];
 	else $entry_total = "0"; 
 } 
  
@@ -62,6 +62,10 @@ if ($msg != "default") echo $msg_output;
     <td class="dataLabel">Club:</td>
     <td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
   </tr>
+  <tr>
+    <td class="dataLabel">AHA Member Number:</td>
+    <td class="data"><?php if ($row_brewer['brewerAHA'] != "") echo $row_brewer['brewerAHA']; else echo "Not provided"; ?></td>
+  </tr>
   <?php if ($row_brewer['brewerAssignment'] == "") { ?>
   <tr>
     <td class="dataLabel">Judge?</td>
@@ -69,12 +73,12 @@ if ($msg != "default") echo $msg_output;
   </tr>
   <?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
-    <td class="dataLabel">Judging Location Rankings:</td>
+    <td class="dataLabel">Judging Availability<br />Locations:</td>
     <td class="data">
-    <table class="dataTableCompact">
-	<?php 
+    	<table class="dataTableCompact">
+		<?php 
 		$a = explode(",",$row_brewer['brewerJudgeLocation']);
-		sort($a);
+		arsort($a);
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
@@ -86,8 +90,8 @@ if ($msg != "default") echo $msg_output;
 				echo "</td>\n</tr>";
 				}
 			}
-	?>
-    </table>
+		?>
+    	</table>
     </td>
   </tr>
   <?php } ?>
@@ -136,12 +140,12 @@ if ($msg != "default") echo $msg_output;
   </tr>
   <?php  if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   <tr>
-    <td class="dataLabel">Stewarding Location Rankings:</td>
+    <td class="dataLabel">Stewarding Availability<br />Locations:</td>
     <td class="data">
     <table class="dataTableCompact">
 	<?php 
 		$a = explode(",",$row_brewer['brewerStewardLocation']);
-		sort($a);
+		arsort($a);
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
@@ -180,11 +184,16 @@ if ($msg != "default") echo $msg_output;
  </tr>
 </tbody>
 </table>
-<?php if ($judgingDateReturn == "false") { ?>
-<table class="dataTable">
+<?php if (($judgingDateReturn == "false") && ($totalRows_log > 0)) { ?>
+<table class="dataTable" style="margin: 0 0 25px 0;">
 <tbody>
  <tr>
-  <td class="dataHeading"><?php  if ($action != "print") { ?><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><?php } ?>Total Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?><?php if ($action != "print") { ?></span><?php } if ($action != "print") { if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_brewNotPaid < $totalRows_log)) { ?><span class="data"><a href="index.php?section=pay">Pay My Entry Fees</a></span><?php } else echo "Your fees have been marked paid by a competition administrator."; } ?></td>
+  <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data">Total Unpaid Entry Fees: <?php echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); ?></span></span></td><br />
+  <?php if (($totalRows_brewNotPaid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
+  <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data">You have <?php echo $totalRows_brewNotPaid; ?> Unpaid <?php if ($totalRows_brewNotPaid == "1") echo "Entry"; else echo "Entries"; ?></span></td>
+  <?php } if ($action != "print") { ?>
+  <td class="data"><?php if (($totalRows_brewNotPaid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data"><a href="index.php?section=pay">Pay Entry Fees</a></span><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><span class="data">Your fees have been paid. Thank you!</span><?php } ?></td>
+  <?php } ?>
  </tr>
 </tbody>
 </table>
@@ -197,12 +206,10 @@ if ($msg != "default") echo $msg_output;
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
 			"bStateSave" : false,
-			"sPaginationType" : "full_numbers",
-			"aaSorting": [[0,'asc']],
-			"bLengthChange" : true,
-			"iDisplayLength" : 10,
-			"bProcessing" : true,
+			"bLengthChange" : false,
 			"aoColumns": [
 				null,
 				null,
@@ -221,6 +228,7 @@ if ($msg != "default") echo $msg_output;
  <tr>
   <th class="dataHeading bdr1B">Entry Name</th>
   <th class="dataHeading bdr1B">Style</th>
+  <th class="dataHeading bdr1B">Paid?</th> 
   <?php if ($action != "print") { ?>
   <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
   <th class="dataHeading bdr1B">Actions</th>
@@ -240,6 +248,7 @@ if ($msg != "default") echo $msg_output;
  <tr>
   <td class="dataList" width="25%"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
+  <td class="dataList" width="5%"><?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?>
   <?php if ($action != "print") { ?>
   		<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
   <td class="dataList">
@@ -251,7 +260,6 @@ if ($msg != "default") echo $msg_output;
   <?php } ?>
   </td>
   <?php  } ?>
-  
  </tr>
 <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
 </tbody>

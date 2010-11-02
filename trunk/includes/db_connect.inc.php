@@ -1,8 +1,22 @@
 <?php
 // General connections
 
+# Connect to the DB
 mysql_select_db($database, $brewing);
 
+if (($section == "pay") && ($msg == "1")) {
+
+	$a = explode('-', $view);
+
+	foreach (array_unique($a) as $value) {
+		$updateSQL = "UPDATE brewing SET brewPaid='Y' WHERE id='".$value."';";
+		mysql_select_db($database, $brewing);
+		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+
+}
+
+# Perform general queries
 $query_contest_info = "SELECT * FROM contest_info WHERE id=1";
 $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
 $row_contest_info = mysql_fetch_assoc($contest_info);
@@ -46,104 +60,192 @@ $row_contact = mysql_fetch_assoc($contact);
 $totalRows_contact = mysql_num_rows($contact);
 
 if (($section == "default") || ($section == "past_winners")) { 
-if ($section == "past_winners") $dbTable = $dbTable; else $dbTable = "brewing";
+	if ($section == "past_winners") $dbTable = $dbTable; else $dbTable = "brewing";
 
-$query_log_winners = "SELECT * FROM $dbTable WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
-$log_winners = mysql_query($query_log_winners, $brewing) or die(mysql_error());
-$row_log_winners = mysql_fetch_assoc($log_winners);
-$totalRows_log_winners = mysql_num_rows($log_winners);
+	$query_log_winners = "SELECT * FROM $dbTable WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
+	$log_winners = mysql_query($query_log_winners, $brewing) or die(mysql_error());
+	$row_log_winners = mysql_fetch_assoc($log_winners);
+	$totalRows_log_winners = mysql_num_rows($log_winners);
 
-$query_bos = "(SELECT * FROM $dbTable WHERE brewCategory >= '1' AND brewCategory <= '23' AND brewBOSRound='Y') UNION (SELECT * FROM $dbTable WHERE brewCategory >= '29' AND brewBOSRound='Y') ORDER BY brewBOSPlace ASC";
-$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
-$row_bos = mysql_fetch_assoc($bos);
-$totalRows_bos = mysql_num_rows($bos);
+	$query_bos = "(SELECT * FROM $dbTable WHERE brewCategory >= '1' AND brewCategory <= '23' AND brewBOSRound='Y') UNION (SELECT * FROM $dbTable WHERE brewCategory >= '29' AND brewBOSRound='Y') ORDER BY brewBOSPlace ASC";
+	$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
+	$row_bos = mysql_fetch_assoc($bos);
+	$totalRows_bos = mysql_num_rows($bos);
 
-$query_bos_winner = "(SELECT * FROM $dbTable WHERE brewCategory >= '1' AND brewCategory <= '23' AND brewBOSRound='Y' AND brewBOSPlace='1') UNION (SELECT * FROM $dbTable WHERE brewCategory >= '29' AND brewBOSRound='Y' AND brewBOSPlace='1')";
-$bos_winner = mysql_query($query_bos_winner, $brewing) or die(mysql_error());
-$row_bos_winner = mysql_fetch_assoc($bos_winner);
-$totalRows_bos_winner = mysql_num_rows($bos_winner);
+	$query_bos_winner = "(SELECT * FROM $dbTable WHERE brewCategory >= '1' AND brewCategory <= '23' AND brewBOSRound='Y' AND brewBOSPlace='1') UNION (SELECT * FROM $dbTable WHERE brewCategory >= '29' AND brewBOSRound='Y' AND brewBOSPlace='1')";
+	$bos_winner = mysql_query($query_bos_winner, $brewing) or die(mysql_error());
+	$row_bos_winner = mysql_fetch_assoc($bos_winner);
+	$totalRows_bos_winner = mysql_num_rows($bos_winner);
 
-$query_bos2 = "SELECT * FROM $dbTable WHERE (brewCategory >= '27' AND brewCategory <= '28') AND brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
-$bos2 = mysql_query($query_bos2, $brewing) or die(mysql_error());
-$row_bos2 = mysql_fetch_assoc($bos2);
-$totalRows_bos2 = mysql_num_rows($bos2);
+	$query_bos2 = "SELECT * FROM $dbTable WHERE (brewCategory >= '27' AND brewCategory <= '28') AND brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
+	$bos2 = mysql_query($query_bos2, $brewing) or die(mysql_error());
+	$row_bos2 = mysql_fetch_assoc($bos2);
+	$totalRows_bos2 = mysql_num_rows($bos2);
 
-$query_bos_winner2 = "SELECT * FROM $dbTable WHERE (brewCategory >= '27' AND brewCategory <= '28') AND brewBOSRound='Y' AND brewBOSPlace='1'";
-$bos_winner2 = mysql_query($query_bos_winner2, $brewing) or die(mysql_error());
-$row_bos_winner2 = mysql_fetch_assoc($bos_winner2);
-$totalRows_bos_winner2 = mysql_num_rows($bos_winner2);
+	$query_bos_winner2 = "SELECT * FROM $dbTable WHERE (brewCategory >= '27' AND brewCategory <= '28') AND brewBOSRound='Y' AND brewBOSPlace='1'";
+	$bos_winner2 = mysql_query($query_bos_winner2, $brewing) or die(mysql_error());
+	$row_bos_winner2 = mysql_fetch_assoc($bos_winner2);
+	$totalRows_bos_winner2 = mysql_num_rows($bos_winner2);
 
-$query_bos3 = "SELECT * FROM $dbTable WHERE (brewCategory >= '24' AND brewCategory <= '26') AND  brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
-$bos3 = mysql_query($query_bos3, $brewing) or die(mysql_error());
-$row_bos3 = mysql_fetch_assoc($bos3);
-$totalRows_bos3 = mysql_num_rows($bos3);
+	$query_bos3 = "SELECT * FROM $dbTable WHERE (brewCategory >= '24' AND brewCategory <= '26') AND  brewBOSRound='Y' ORDER BY brewBOSPlace ASC";
+	$bos3 = mysql_query($query_bos3, $brewing) or die(mysql_error());
+	$row_bos3 = mysql_fetch_assoc($bos3);
+	$totalRows_bos3 = mysql_num_rows($bos3);
 
-$query_bos_winner3 = "SELECT * FROM $dbTable WHERE (brewCategory >= '24' AND brewCategory <= '26') AND brewBOSRound='Y' AND brewBOSPlace='1'";
-$bos_winner3 = mysql_query($query_bos_winner3, $brewing) or die(mysql_error());
-$row_bos_winner3 = mysql_fetch_assoc($bos_winner3);
-$totalRows_bos_winner3 = mysql_num_rows($bos_winner3);
-/*
-echo $query_bos."<br>";
-echo $query_bos_winner."<br>";
-echo $query_bos2."<br>";
-echo $query_bos_winner2."<br>";
-echo $query_bos3."<br>";
-echo $query_bos_winner3."<br>";
-*/
+	$query_bos_winner3 = "SELECT * FROM $dbTable WHERE (brewCategory >= '24' AND brewCategory <= '26') AND brewBOSRound='Y' AND brewBOSPlace='1'";
+	$bos_winner3 = mysql_query($query_bos_winner3, $brewing) or die(mysql_error());
+	$row_bos_winner3 = mysql_fetch_assoc($bos_winner3);
+	$totalRows_bos_winner3 = mysql_num_rows($bos_winner3);
+	/*
+	// DEBUG
+	echo $query_bos."<br>";
+	echo $query_bos_winner."<br>";
+	echo $query_bos2."<br>";
+	echo $query_bos_winner2."<br>";
+	echo $query_bos3."<br>";
+	echo $query_bos_winner3."<br>";
+	*/
 }
+
+$query_entry_count = "SELECT id FROM brewing";
+$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+$totalRows_entry_count = mysql_num_rows($entry_count);
+
+$query_participant_count = "SELECT id FROM brewer";
+$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+$totalRows_participant_count = mysql_num_rows($participant_count);
+
+# Set global pagination variables 
+if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $limit = $row_prefs['prefsRecordLimit']; else $limit = $limit; 
+$display = $limit; // Change to a user preference later!
+$pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
+$start = $display * $pg - $display;
+$of = $start + $display;
+if ($start == 0) $start_display = "1"; else $start_display = $start;
 
 // Session specific queries
 if (isset($_SESSION["loginUsername"]))  {
-$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
-$user = mysql_query($query_user, $brewing) or die(mysql_error());
-$row_user = mysql_fetch_assoc($user);
-$totalRows_user = mysql_num_rows($user);
+	$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
+	$user = mysql_query($query_user, $brewing) or die(mysql_error());
+	$row_user = mysql_fetch_assoc($user);
+	$totalRows_user = mysql_num_rows($user);
 
-$query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $row_user['user_name']);
-$name = mysql_query($query_name, $brewing) or die(mysql_error());
-$row_name = mysql_fetch_assoc($name);
-$totalRows_name = mysql_num_rows($name);
+	$query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $row_user['user_name']);
+	$name = mysql_query($query_name, $brewing) or die(mysql_error());
+	$row_name = mysql_fetch_assoc($name);
+	$totalRows_name = mysql_num_rows($name);
 
-if (($section == "list") || ($section == "pay")) { $query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-elseif (($section == "brew") && ($action == "edit")) { $query_log = "SELECT * FROM brewing WHERE id = '$id'"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { $query_log = "SELECT * FROM brewing ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default")) { $query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default")) { $query_log = "SELECT * FROM $dbTable ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default")) { $query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; }
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default")) { $query_log = "SELECT * FROM brewing WHERE brewBrewerID='$bid' ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; }
-else { $query_log = "SELECT * FROM brewing ORDER BY $sort $dir"; $query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; }
-$log = mysql_query($query_log, $brewing) or die(mysql_error());
-$row_log = mysql_fetch_assoc($log);
-$totalRows_log = mysql_num_rows($log);
+	if ($section == "list") { 
+		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); 
+		$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y'"; 
+		}
+		
+	elseif ($section == "pay") { 
+		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); 
+		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
+		}
+		
+	elseif (($section == "brew") && ($action == "edit")) { 
+		$query_log = "SELECT * FROM brewing WHERE id = '$id'"; 
+		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
+		}
+	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { 
+		$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
+		}
+	elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default")) { 
+		$query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY $sort $dir";
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
+		}
+	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default")) { 
+		$query_log = "SELECT * FROM $dbTable ORDER BY $sort $dir";
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; 
+		}
+	elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default")) { 
+		$query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; 
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
+		}
+	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default")) { 
+		$query_log = "SELECT * FROM brewing WHERE brewBrewerID='$bid' ORDER BY $sort $dir";
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; 
+		}
+	else { 
+		$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
+		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
+		}
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
 
-$log_paid = mysql_query($query_log_paid, $brewing) or die(mysql_error());
-$row_log_paid = mysql_fetch_assoc($log_paid);
-$totalRows_log_paid = mysql_num_rows($log_paid);
+	$log_paid = mysql_query($query_log_paid, $brewing) or die(mysql_error());
+	$row_log_paid = mysql_fetch_assoc($log_paid);
+	$totalRows_log_paid = mysql_num_rows($log_paid);
 
-if (($section == "brewer") && ($action == "edit")) $query_brewer = "SELECT * FROM brewer WHERE id = '$id'";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "judges")   && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "stewards") && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "assignJudges") && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "assignStewards") && ($dbTable == "default")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) $query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) $query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "assign")) $query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "assign")) $query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
-elseif (($section == "admin") && ($go == "make_admin")) $query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
-else $query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $_SESSION["loginUsername"]);
-$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-$row_brewer = mysql_fetch_assoc($brewer);
-$totalRows_brewer = mysql_num_rows($brewer);
+	if (($section == "brewer") && ($action == "edit")) $query_brewer = "SELECT * FROM brewer WHERE id = '$id'";
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) {
+		$query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "judges")   && ($dbTable == "default")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "stewards") && ($dbTable == "default")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "assignJudges") && ($dbTable == "default")) { 
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "assignStewards") && ($dbTable == "default")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) {
+		$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName LIMIT $start, $display";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "assign")) { 
+		$query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "assign")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
+		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		}
+	elseif (($section == "admin") && ($go == "make_admin")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
+		}
+	else $query_brewer = $query_name;
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
 
-
-if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) $query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $username);
-elseif (($section == "brewer") && ($action == "edit")) $query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $row_brewer['brewerEmail']);
-else $query_user_level = "SELECT id from users";
-$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
-$row_user_level = mysql_fetch_assoc($user_level);
-$totalRows_user_level = mysql_num_rows($user_level);
+	if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) {
+		$query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $username);
+		}
+	elseif (($section == "brewer") && ($action == "edit")) { 
+		$query_user_level = sprintf("SELECT * FROM users WHERE user_name = '%s'", $row_brewer['brewerEmail']);
+		}
+	else $query_user_level = "SELECT id from users";
+	$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
+	$row_user_level = mysql_fetch_assoc($user_level);
+	$totalRows_user_level = mysql_num_rows($user_level);
 }
 
 // General judging connection
