@@ -1,6 +1,7 @@
 <?php
 $phpVersion = phpversion();
 $today = date('Y-m-d');
+$agent = $_SERVER['HTTP_USER_AGENT']; 
 
 $reg_open = $row_contest_info['contestRegistrationOpen'];
 $reg_deadline = $row_contest_info['contestRegistrationDeadline'];
@@ -261,11 +262,68 @@ if (($section == "admin") && ($go == "entries")) {
 	$total_fees = array_sum($total_array);
    	return $total_fees;
 	}
-	if (($filter == "default") && (($row_contest_info['contestEntryFeeDiscount'] == "Y") || ($row_contest_info['contestEntryCap'] !=""))) $total_entry_fees = 			total_fees_discount($row_contest_info['contestEntryFee'],$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee2'], "N", $cap, $cap_total); 
+	if (($filter == "default") && (($row_contest_info['contestEntryFeeDiscount'] == "Y") || ($row_contest_info['contestEntryCap'] !=""))) $total_entry_fees = total_fees_discount($row_contest_info['contestEntryFee'],$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee2'], "N", $cap, $cap_total); 
 	elseif ($filter != "default") $total_entry_fees = ($totalRows_log * $row_contest_info['contestEntryFee']); 
 	else $total_entry_fees = ($totalRows_entry_count * $row_contest_info['contestEntryFee']);
 
 	if (($filter == "default") && (($row_contest_info['contestEntryFeeDiscount'] == "Y") || ($row_contest_info['contestEntryCap'] !=""))) $total_paid_entry_fees = total_fees_discount($row_contest_info['contestEntryFee'],$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee2'], "Y", $cap, $cap_total); 
 	else $total_paid_entry_fees = ($totalRows_log_paid * $row_contest_info['contestEntryFee']);
 }
+
+
+
+function unpaid_fees($total_not_paid, $discount, $discount_amt, $cap, $entry_fee, $entry_fee_disc) {
+	
+	switch($discount) {
+		case "N": 
+			$entry_total = $total_not_paid * $entry_fee;
+		break;
+		case "Y":
+			if ($total_not_paid > $discount_amt) {
+				$disc_fee = ($total_not_paid - $discount_amt) * $entry_fee_disc;
+				$reg_fee = $discount_amt * $entry_fee;
+				$entry_total = $disc_fee + $reg_fee;
+				}
+			if ($total_not_paid <= $discount_amt) {
+				if ($total_not_paid > 0) $entry_total = $total_not_paid * $entry_fee;
+				else $entry_total = "0";
+				}
+		break;			
+		} // end switch
+		
+		if ($cap == "0") $entry_total = $entry_total;
+		else { 
+			if ($entry_total > $cap) $entry_total = $cap;
+			else $entry_total = $entry_total;
+		}
+		return $entry_total;
+	
+} // end function
+
+function discount_display($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap) { 
+	if ($total_not_paid > $discount_amt) {
+		$disc_fee = (($total_not_paid - $discount_amt) * $entry_fee_disc);
+		$reg_fee = ($discount_amt * $entry_fee);
+		$total = $disc_fee + $reg_fee;
+		$array["a"] = $total_not_paid - $discount_amt;
+		$array["b"] = $reg_fee;
+		$array["c"] = $disc_fee;
+		if (($cap != "0") && ($total <= $cap)) {
+			$array["d"] = $total;
+			}
+		elseif (($cap != "0") && ($total > $cap)) { 
+			$array["d"] = $cap;
+			}
+		else {
+			$array["d"] = $total;
+			}
+		
+		}
+	if ($total_not_paid <= $discount_amt) {
+		if ($total_not_paid > 0) $array = $total_not_paid * $entry_fee;
+		else $array = "0";
+		}
+	return $array;
+} // end funtion
+
 ?>

@@ -22,11 +22,11 @@
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_user1 = sprintf("SELECT * FROM users WHERE id = '%s'", $row_bos['brewBrewerID']);
+	$query_user1 = sprintf("SELECT * FROM %s WHERE id = '%s'", $user_table, $row_bos['brewBrewerID']);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
 	
-	$query_club = sprintf("SELECT brewerClubs FROM brewer WHERE brewerEmail = '%s'", $row_user1['user_name']);
+	$query_club = sprintf("SELECT brewerClubs FROM %s WHERE brewerEmail = '%s'", $brewer_table, $row_user1['user_name']);
 	$club = mysql_query($query_club, $brewing) or die(mysql_error());
 	$row_club = mysql_fetch_assoc($club);
 	?>

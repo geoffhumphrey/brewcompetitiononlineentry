@@ -13,10 +13,17 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 ?>
 <p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="index.php?section=rules">full competition rules</a>.</p>
 <?php 
-if ($totalRows_archive > 0) include ('past_winners.sec.php'); 
-if (greaterDate($today,$reg_deadline)) include ('reg_closed.sec.php'); 
+//if ($totalRows_archive > 0) include ('past_winners.sec.php'); 
+//if (greaterDate($today,$reg_deadline)) include ('reg_closed.sec.php'); 
 //if (!greaterDate($today,$reg_deadline))include ('judge_closed.sec.php');
-if ($judgingDateReturn == "true") { include ('judge_closed.sec.php'); echo "<p>Judging has already taken place.</p>"; include ('closed.sec.php'); }
+if ($judgingDateReturn == "true") { 
+	include ('judge_closed.sec.php'); 
+	echo "<p>Judging has already taken place.</p>"; 
+	if ($row_prefs['prefsDisplayWinners'] == "Y") { 
+		include ('sections/bos.sec.php');
+		include ('sections/winners.sec.php');  
+	} 
+}
 else 
 { 
 ?>

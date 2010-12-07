@@ -21,3 +21,10 @@
 	paste_remove_styles:"true",
 	editor_deselector : "mceNoEditor"
 	});
+	
+	function toggleEditor(id) {
+		if (!tinyMCE.get(id))
+			tinyMCE.execCommand('mceAddControl', false, id);
+		else
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	}

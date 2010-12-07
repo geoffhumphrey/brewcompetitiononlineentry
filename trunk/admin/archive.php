@@ -6,7 +6,7 @@ session_start();
 $suffix = strtr($_POST['archiveSuffix'], $space_remove);
 mysql_select_db($database, $brewing);
 
-$query_suffixCheck = sprintf("SELECT archiveSuffix FROM archive WHERE archiveSuffix = '%s'", $_POST['archiveSuffix']);
+$query_suffixCheck = sprintf("SELECT archiveSuffix FROM archive WHERE archiveSuffix = '%s'", $suffix);
 $suffixCheck = mysql_query($query_suffixCheck, $brewing) or die(mysql_error());
 $row_suffixCheck = mysql_fetch_assoc($suffixCheck);
 $totalRows_suffixCheck = mysql_num_rows($suffixCheck);
