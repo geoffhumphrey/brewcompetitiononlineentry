@@ -155,7 +155,7 @@ $row_user = mysql_fetch_assoc($user);
 
 if ($row_user['userLevel'] == 1) { 
 $nameBreak = $_POST['brewBrewerID'];
-$name = explode('-', $nameBreak);
+$name = explode('*', $nameBreak);
 $brewBrewerID = $name[0];
 $brewBrewerLastName = $name[1];
 $brewBrewerFirstName = $name[2];
@@ -463,6 +463,7 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
 		if ($section == "admin") $insertGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
 		else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
   }
+  elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
   else $insertGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&action=".$action."&msg=1";
   //echo $query_brew_id."<br>";
   //echo $row_brew_id['id']."<br>";
@@ -484,7 +485,7 @@ $totalRows_user = mysql_num_rows($user);
 
 if ($row_user['userLevel'] == 1) { 
 $nameBreak = $_POST['brewBrewerID'];
-$name = explode('-', $nameBreak);
+$name = explode('*', $nameBreak);
 $brewBrewerID = $name[0];
 $brewBrewerLastName = $name[1];
 $brewBrewerFirstName = $name[2];
@@ -784,6 +785,7 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
 		if ($section == "admin") $updateGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
 		else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
   }
+  elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $updateGoTo = "../index.php?section=admin&go=entries&msg=2";
   else {
   $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter="; if ($section == "admin") $updateGoTo .= "default"; else $updateGoTo .= $filter; $updateGoTo .= "&msg=2";
   }

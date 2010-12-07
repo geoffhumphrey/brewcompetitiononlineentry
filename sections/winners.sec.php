@@ -1,6 +1,9 @@
-<?php 
-if ($judgingDateReturn == "true") { // check if all judging dates have past, if so, display 
+<?php
+
+if (($judgingDateReturn == "true") || ($dbTable != "default")) { // check if all judging dates have past, if so, display 
 	if ($totalRows_log_winners > 0) { // if winners have been designated, display 
+	
+	
 ?>
 <h2>Winning Entries<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
@@ -30,7 +33,7 @@ if ($judgingDateReturn == "true") { // check if all judging dates have past, if 
   <th class="dataHeading bdr1B" width="25%">Category</th>
   <th class="dataHeading bdr1B" width="25%">Brewer</th>
   <th class="dataHeading bdr1B" width="25%">Entry Name</th>
-  <th class="dataHeading bdr1B">Club</tk>
+  <th class="dataHeading bdr1B">Club</th>
  </tr>
 </thead>
 <tbody>
@@ -42,17 +45,17 @@ if ($judgingDateReturn == "true") { // check if all judging dates have past, if 
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_user1 = sprintf("SELECT * FROM users WHERE id = '%s'", $row_log_winners['brewBrewerID']);
+	$query_user1 = sprintf("SELECT * FROM %s WHERE id = '%s'", $user_table, $row_log_winners['brewBrewerID']);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
 	
-	$query_club = sprintf("SELECT brewerClubs FROM brewer WHERE brewerEmail = '%s'", $row_user1['user_name']);
+	$query_club = sprintf("SELECT brewerClubs FROM %s WHERE brewerEmail = '%s'", $brewer_table, $row_user1['user_name']);
 	$club = mysql_query($query_club, $brewing) or die(mysql_error());
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr>
   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_log_winners['brewWinnerPlace'] == "1") echo "medal_gold_3"; elseif ($row_log_winners['brewWinnerPlace'] == "2") echo "medal_silver_3"; elseif ($row_log_winners['brewWinnerPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
-  <td class="dataList"><?php echo $styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")"; } ?></td>
+  <td class="dataList"><?php echo $row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory'];$styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']; } ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewBrewerLastName'].", ".$row_log_winners['brewBrewerFirstName']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>

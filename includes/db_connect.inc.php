@@ -60,7 +60,15 @@ $row_contact = mysql_fetch_assoc($contact);
 $totalRows_contact = mysql_num_rows($contact);
 
 if (($section == "default") || ($section == "past_winners")) { 
-	if ($section == "past_winners") $dbTable = $dbTable; else $dbTable = "brewing";
+	if ($section == "past_winners")	$dbTable = $dbTable; else $dbTable = "brewing";
+	if ($section == "past_winners") {
+		$user_table = "users_".ltrim($dbTable, "brewing_");
+		$brewer_table = "brewer_".ltrim($dbTable, "brewing_");
+	}
+	else {
+		$user_table = "users";
+		$brewer_table = "brewer";
+	}
 
 	$query_log_winners = "SELECT * FROM $dbTable WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
 	$log_winners = mysql_query($query_log_winners, $brewing) or die(mysql_error());
@@ -117,10 +125,9 @@ $totalRows_participant_count = mysql_num_rows($participant_count);
 
 # Set global pagination variables 
 if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $limit = $row_prefs['prefsRecordLimit']; else $limit = $limit; 
-$display = $limit; // Change to a user preference later!
+$display = $limit; 
 $pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
 $start = $display * $pg - $display;
-$of = $start + $display;
 if ($start == 0) $start_display = "1"; else $start_display = $start;
 
 // Session specific queries
@@ -209,7 +216,7 @@ if (isset($_SESSION["loginUsername"]))  {
 		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) {
-		$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName LIMIT $start, $display";
+		$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
 		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) {
@@ -315,4 +322,19 @@ $styles2 = mysql_query($query_styles2, $brewing) or die(mysql_error());
 $row_styles2 = mysql_fetch_assoc($styles2);
 $totalRows_styles2 = mysql_num_rows($styles2);
 
+$query_paid = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['uid']);
+$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
+$row_paid = mysql_fetch_assoc($paid);
+$totalRows_paid = mysql_num_rows($paid);
+
+$query_all = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s'", $row_brewer['uid']);
+$all = mysql_query($query_all, $brewing) or die(mysql_error());
+$row_all = mysql_fetch_assoc($all);
+$totalRows_all = mysql_num_rows($all);
+
+$total_not_paid = ($totalRows_all - $totalRows_paid);
+
+if ($row_contest_info['contestEntryCap'] != "") $cap = $row_contest_info['contestEntryCap']; else $cap = "0";
+if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y";
+if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $discount = "Y";
 ?>

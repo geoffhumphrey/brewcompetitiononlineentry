@@ -67,7 +67,8 @@ else
 
 ?>
 <?php if ($msg != "default") echo $msg_output; ?>
-<p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, ProMash, BrewBlogger, etc. and click <em>Upload</em>.</p>
+<p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
+<p><span class="icon"><img src="images/help.png"  /></span><a class="data thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Get Help">BeerXML Export/Upload Help</a></p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>
 <tr>

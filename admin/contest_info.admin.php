@@ -178,9 +178,11 @@
   </tr>
   <tr>
     <td class="dataLabel">Complete Winners List:</td>
-    <td class="data"><textarea name="contestWinnersComplete" cols="70" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea></td>
-    <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in HTML format and pasted here.</em></td>
+    <td class="data"><textarea name="contestWinnersComplete" cols="70" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea><br /><a href="javascript:toggleEditor('contestWinnersComplete');"></a></td>
+    <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in HTML format and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
+      <p>If you paste using the editor, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>
+  
   <tr>
   	<td>&nbsp;</td>
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit"></td>

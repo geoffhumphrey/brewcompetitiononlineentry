@@ -5,7 +5,7 @@ elseif ($filter == "assignJudges") echo "Assigned Judges";
 elseif ($filter == "assignStewards") echo "Assigned Stewards"; 
 elseif ($action == "add") echo "Add Participant"; 
 else echo "Participants"; 
-if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
+if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 <?php if ($action != "print") { ?>
 <table class="dataTable">
 <tr>
@@ -78,16 +78,28 @@ if ($dbTable != "default") echo ": ".$dbTable; ?></h2>
 if (($action == "default") || ($action == "print")) { 
 if ($totalRows_brewer > 0) { 
 	if ($action != "print") { ?>
+	<?php if ($totalRows_participant_count >= $limit) {
+		$of = $start + $totalRows_brewer;
+		echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing $start_display to $of of $totalRows_participant_count entries</div>"; 
+	}
+	?>
 	<link href="css/sorting.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
+		<?php if (($totalRows_participant_count <= $limit) || ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")))) { ?>
 		"bPaginate" : true,
 		"sPaginationType" : "full_numbers",
 		"bLengthChange" : true,
-		"iDisplayLength" : <?php echo $limit; ?>,
+		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordLimit']/4,0); ?>,
 		"sDom": 'irtip',
 		"bStateSave" : false,
+		<?php } else { ?>
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		<?php } ?>
 		"aaSorting": [[0,'asc']],
 		"bProcessing" : true,
 		"aoColumns": [
@@ -230,6 +242,7 @@ if ($totalRows_brewer > 0) {
     <span class="icon"><a href="index.php?section=brew&amp;go=entries&amp;filter=<?php echo $row_user1['id']; ?>&amp;action=add"><img src="images/book_add.png"  border="0" alt="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Add an entry for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span> 
     <span class="icon"><a href="index.php?section=brewer&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_brewer['id']; ?>&amp;action=edit&amp;id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span>
     <span class="icon"><a href="index.php?section=admin&amp;go=make_admin&amp;username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png"  border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span>
+    <?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?><span class="icon"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank"><img src="images/printer.png"  border="0" alt="Print judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Print judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span><?php } ?>
     <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;dbTable=brewer&amp;action=delete&amp;username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
     </td> 
   <?php } ?> 
@@ -237,6 +250,14 @@ if ($totalRows_brewer > 0) {
 <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
 </tbody>
 </table>
+<?php if ($action != "print") {  
+	if ($totalRows_participant_count >= $display) { 
+	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_participant_count;
+	else $total_paginate = $totalRows_brewer;
+	paginate($display, $pg, $total_paginate);
+	}
+}
+?>
 <?php } if ($totalRows_brewer == 0) { ?>
 
 <?php 

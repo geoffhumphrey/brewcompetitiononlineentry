@@ -1,14 +1,18 @@
 <h2>Registration</h2>
 <?php if (!lesserDate($today,$reg_open)) { ?>
 	<p>Registration opened <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?> and will close  <?php echo dateconvert($row_contest_info['contestRegistrationDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>.</p>
-	<p>If you have already registered, please <a href="index.php?section=login">log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or  steward.</p>
+	<?php if (!isset($_SESSION['loginUsername'])) { ?>
+    <p>If you have already registered, please <a href="index.php?section=login">log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or  steward.</p>
+    <?php } ?>
 <?php } else { ?>
 	<p>Registration for the <?php echo $row_contest_info['contestName']; ?> will open <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?> and will close on <?php echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after the registration close date.</p>
 <?php } ?>
 <h2>Judging and Stewarding</h2>
-<?php if (!lesserDate($today,$reg_open)) { ?>
+<?php if ((!lesserDate($today,$reg_open)) && (!isset($_SESSION['loginUsername']))) { ?>
 	<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href="index.php?section=register&amp;go=judge">please register</a>.</p>
 	<p>If you <em>have</em> registered, <a href="index.php?section=login">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
+<?php } elseif ((!lesserDate($today,$reg_open)) && (isset($_SESSION['loginUsername']))) { ?>
+	<p>Since you have already registered, you can <a href="index.php?section=list">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
     <p>If you are willing to judge or steward, please return to register on or after <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?>.</p>
 <?php } ?>
@@ -17,7 +21,7 @@
 <p>Entries will be accepted <?php echo dateconvert($row_contest_info['contestEntryOpen'], 2)." through "; echo dateconvert($row_contest_info['contestEntryDeadline'], 2); ?>. All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php $date = $row_contest_info['contestEntryDeadline']; echo dateconvert($date, 2); ?>. Entries will not be accepted beyond this date. For details, see the <a href="index.php?section=entry">Entry Information</a> page.</p> 
 <?php if (!lesserDate($today,$reg_open)) { ?>
 	<h3>Enter Your Brews</h3>
-	<p>To enter your brews, please proceed through the <a href="index.php?section=register">registration process</a>.</p>
+	<p>To enter your brews,  <?php if (!isset($_SESSION['loginUsername'])) { ?>please proceed through the <a href="index.php?section=register">registration process</a><?php } else { ?>use the <a href="index.php?section=brew&action=add">add an entry form</a><?php } ?>.</p>
 <?php } ?>
 
 <h2>Competition Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
