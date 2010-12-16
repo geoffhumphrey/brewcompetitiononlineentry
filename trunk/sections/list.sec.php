@@ -109,10 +109,16 @@ if ($msg != "default") echo $msg_output;
     <td class="dataLabel">Assigned As:</td>
     <td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?>
     <?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?>
-    <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print your judging scoresheet labels" title="Print your judging scoresheet labels"></span><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank"><span class="data">Print Your Judging Scoresheet Labels</span></a>
+    <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print your judging scoresheet labels" title="Print your judging scoresheet labels"></span><span class="data"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank">Print Your Judging Scoresheet Labels</a></span><span class="data">[Easter Egg for Firefox Users]</span>
     <ul>
     <li>For use with Avery 5160 labels.</li>
-    <li>Set your browser's printing margins to: Top - 0.2 in., Right - 0 in., Left - 0 in., Bottom - 0 in.</li>
+    <li>Under File &gt; Page Setup:
+      <ul>
+        <li>On the Format &amp; Options tab, choose Portrait and 100% scale.</li>
+        <li>On the Margins &amp; Header/Footer tab, set your browser's printing margins to &#8212; Top: 0.2 in., Right: 0 in., Left: 0 in., Bottom: 0 in. and remove <em>all</em> info from the header and footer.</li>
+      </ul>
+    </li>
+    <li>Be sure to restore your previous printing settings once you've finished printing your labels.</li>
     </ul>
     </p>
 	<?php } ?>
@@ -232,7 +238,7 @@ Your total entry fees are <?php  //echo $row_prefs['prefsCurrency']; echo number
   <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?></td>
   <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
   <?php } if ($action != "print") { ?>
-  <td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
+  <td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay&bid=<?php echo $row_user['id']; ?>">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
   <?php } ?>
  </tr>
 </tbody>
@@ -286,7 +292,7 @@ Your total entry fees are <?php  //echo $row_prefs['prefsCurrency']; echo number
 	$totalRows_style = mysql_num_rows($style);
 	?>
  <tr>
-  <td class="dataList"><?php echo $row_log['brewName']; ?></td>
+  <td class="dataList"><?php echo $row_log['brewName']; if ($row_log['brewCoBrewer'] != "") echo "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>"; ?></td>
   <td class="dataList" <?php if ($judgingDateReturn == "false") echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
   <td class="dataList" width="5%"><?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?>
   <?php if ($action != "print") { ?>

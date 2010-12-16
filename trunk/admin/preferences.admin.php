@@ -55,9 +55,14 @@
 <h3>Performance</h3>
 <table>
   <tr>
-  	<td class="dataLabel">Number of Records to Display Per Page:</td>
+  	<td class="dataLabel">DataTables Record Threshold:</td>
     <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">The number of records should be displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations. Performance issues may occur if a larger number is defined.</td>
+    <td class="data">The threshold of records for BCOE to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Number of Records to Display Per Page:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
 <h3>Measurements</h3>

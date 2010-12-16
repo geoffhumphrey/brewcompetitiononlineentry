@@ -229,72 +229,255 @@ function paginate($display, $pg, $total) {
   echo '</div>';
 }
 
-if (($section == "admin") && ($go == "entries")) {
-	if ($row_contest_info['contestEntryCap'] > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
-	else { $cap = "N"; $cap_total = "0"; }
-
-	function total_fees_discount($entry_fee,$entry_discount_number,$entry_fee_discount,$paid,$cap,$cap_total) {
-	include ('Connections/config.php');
-	mysql_select_db($database, $brewing);
-	$query_users = "SELECT id,user_name FROM users";
-	$users = mysql_query($query_users, $brewing) or die(mysql_error());
-	$row_users = mysql_fetch_assoc($users);
-	$totalRows_users = mysql_num_rows($users);
-
-	do { $d[] = $row_users['id']; } while ($row_users = mysql_fetch_assoc($users));
-		foreach (array_unique($d) as $value) {
-		
-		// Get each entrant's number of entries
-		mysql_select_db($database, $brewing);
-		if ($paid == "N") $query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$value);
-		if ($paid == "Y") $query_entries = sprintf("SELECT brewBrewerID,brewPaid FROM brewing WHERE brewBrewerID='%s' AND brewPaid='%s'",$value,$paid);
-		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-		$row_entries = mysql_fetch_assoc($entries);
-		$totalRows_entries = mysql_num_rows($entries);
+if (($section == "admin") && ($go == "entries") || ($section == "pay")) {
+	$entry_fee = $row_contest_info['contestEntryFee']; // regular entry fee
+	$entry_fee_discount = $row_contest_info['contestEntryFee2']; // price of each entry after entry threshold for discount is met
+	$discount = $row_contest_info['contestEntryFeeDiscount']; // Y or N - is there a discount applied after a certain amount of entries?
+	$entry_discount_number = $row_contest_info['contestEntryFeeDiscountNum']; // Minimum number of entries before discount
+	$cap_no = $row_contest_info['contestEntryCap'];
 	
-		// Calculate the total entry fees taking into account any discounts after prescribed number of entries
-		$total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
-		if ($cap == "N") $total_calc = $total;
-		if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
-		$total_array[] = $total_calc;
+	function total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no) {
+		include ('Connections/config.php');
+		
+		if ($bid == "default") {
+			
+			mysql_select_db($database, $brewing);
+			$query_users = "SELECT id,user_name FROM users";
+			$users = mysql_query($query_users, $brewing) or die(mysql_error());
+			$row_users = mysql_fetch_assoc($users);
+			$totalRows_users = mysql_num_rows($users);
+	
+			do { $d[] = $row_users['id']; } while ($row_users = mysql_fetch_assoc($users));
+			sort($d);
+			
+			foreach (array_unique($d) as $value) {
+			
+			// Get each entrant's number of entries
+			mysql_select_db($database, $brewing);
+			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$value);
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+		
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			//echo "Query: ".$query_entries."<br>";
+			//echo "Total Entries: ".$totalRows_entries."<br>";
+			
+	
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($totalRows_entries > 0) {
+				if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+				else $total = $totalRows_entries * $entry_fee; 
+				//echo "Total: ".$total."<br>";
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+				} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			}
 		}
-   	//print_r($total_array);
-	$total_fees = array_sum($total_array);
-   	return $total_fees;
-	}
-	if (($filter == "default") && (($row_contest_info['contestEntryFeeDiscount'] == "Y") || ($row_contest_info['contestEntryCap'] !=""))) $total_entry_fees = total_fees_discount($row_contest_info['contestEntryFee'],$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee2'], "N", $cap, $cap_total); 
-	elseif ($filter != "default") $total_entry_fees = ($totalRows_log * $row_contest_info['contestEntryFee']); 
-	else $total_entry_fees = ($totalRows_entry_count * $row_contest_info['contestEntryFee']);
+		else {
+			$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
+			$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+			$row_contest_info = mysql_fetch_assoc($contest_info);
 
-	if (($filter == "default") && (($row_contest_info['contestEntryFeeDiscount'] == "Y") || ($row_contest_info['contestEntryCap'] !=""))) $total_paid_entry_fees = total_fees_discount($row_contest_info['contestEntryFee'],$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee2'], "Y", $cap, $cap_total); 
-	else $total_paid_entry_fees = ($totalRows_log_paid * $row_contest_info['contestEntryFee']);
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			
+			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$bid);
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+			
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+			else $total = $totalRows_entries * $entry_fee; 
+			//echo "Total: ".$total."<br>";
+			if ($totalRows_entries > 0) {
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+				} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			}
+   		//print_r($total_array);
+		$total_fees = array_sum($total_array);
+   		return $total_fees;
+		} // end function
+		
+
+	function total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no) {
+		include ('Connections/config.php');
+		if ($bid == "default") {
+			
+			mysql_select_db($database, $brewing);
+			$query_users = "SELECT id,user_name FROM users";
+			$users = mysql_query($query_users, $brewing) or die(mysql_error());
+			$row_users = mysql_fetch_assoc($users);
+			$totalRows_users = mysql_num_rows($users);
+	
+			do { $d[] = $row_users['id']; } while ($row_users = mysql_fetch_assoc($users));
+			sort($d);
+			
+			foreach (array_unique($d) as $value) {
+			// Get each entrant's number of entries
+			mysql_select_db($database, $brewing);
+			//if ($paid == "N") $query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$value);
+			$query_entries = sprintf("SELECT brewBrewerID,brewPaid FROM brewing WHERE brewBrewerID='%s' AND brewPaid='%s'",$value,"Y");
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+				
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			//echo "Query: ".$query_entries."<br>";
+			//echo "Total Entries: ".$totalRows_entries."<br>";
+			
+	
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($totalRows_entries > 0) {
+				if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+				else $total = $totalRows_entries * $entry_fee; 
+				//echo "Total: ".$total."<br>";
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+			} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			}
+		}
+		else {
+			$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
+			$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+			$row_contest_info = mysql_fetch_assoc($contest_info);
+
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			
+			$query_entries = sprintf("SELECT brewBrewerID,brewPaid FROM brewing WHERE brewBrewerID='%s' AND brewPaid='%s'",$bid,"Y");
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+			
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+			else $total = $totalRows_entries * $entry_fee; 
+			//echo "Total: ".$total."<br>";
+			if ($totalRows_entries > 0) {
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+				} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			
+			}
+   		//print_r($total_array);
+		$total_fees = array_sum($total_array);
+   		return $total_fees;
+		} // end function
+
+	function total_fees_to_pay($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no) {
+		include ('Connections/config.php');
+		
+		if ($bid == "default") {
+			
+			mysql_select_db($database, $brewing);
+			$query_users = "SELECT id,user_name FROM users";
+			$users = mysql_query($query_users, $brewing) or die(mysql_error());
+			$row_users = mysql_fetch_assoc($users);
+			$totalRows_users = mysql_num_rows($users);
+	
+			do { $d[] = $row_users['id']; } while ($row_users = mysql_fetch_assoc($users));
+			sort($d);
+			
+			foreach (array_unique($d) as $value) {
+			
+			// Get each entrant's number of entries
+			mysql_select_db($database, $brewing);
+			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$value);
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+		
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			//echo "Query: ".$query_entries."<br>";
+			//echo "Total Entries: ".$totalRows_entries."<br>";
+			
+	
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($totalRows_entries > 0) {
+				if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+				else $total = $totalRows_entries * $entry_fee; 
+				//echo "Total: ".$total."<br>";
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+				} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			}
+		}
+		else {
+			$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
+			$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+			$row_contest_info = mysql_fetch_assoc($contest_info);
+
+			if ($cap_no > 0) { $cap = "Y"; $cap_total = $row_contest_info['contestEntryCap']; }
+			else { $cap = "N"; $cap_total = "0"; }
+			
+			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$bid);
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$totalRows_entries = mysql_num_rows($entries);
+			
+			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
+			if ($discount == "Y") $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
+			else $total = $totalRows_entries * $entry_fee; 
+			//echo "Total: ".$total."<br>";
+			if ($totalRows_entries > 0) {
+				if ($cap == "N") $total_calc = $total;
+				if ($cap == "Y") { if ($total > $cap_total) $total_calc = $cap_total; if ($total <= $cap_total) $total_calc = $total; }
+			//echo "Total Caluclated: ".$total_calc."<br>";
+				} else $total_calc = 0;
+			$total_array[] = $total_calc;
+			}
+   		//print_r($total_array);
+		$total_fees_paid = array_sum($total_array);
+   		return $total_fees_paid;
+		} // end function
+
+	$total_entry_fees = total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no); 
+	$total_paid_entry_fees = total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no);
+	$total_to_pay = total_fees_to_pay($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no); 
 }
 
 
 
-function unpaid_fees($total_not_paid, $discount, $discount_amt, $cap, $entry_fee, $entry_fee_disc) {
-	
+
+
+function unpaid_fees($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap) {
 	switch($discount) {
 		case "N": 
 			$entry_total = $total_not_paid * $entry_fee;
 		break;
 		case "Y":
 			if ($total_not_paid > $discount_amt) {
+				$reg_fee = $discount_amt * $entry_fee; // 
 				$disc_fee = ($total_not_paid - $discount_amt) * $entry_fee_disc;
-				$reg_fee = $discount_amt * $entry_fee;
-				$entry_total = $disc_fee + $reg_fee;
+				$entry_subtotal = $reg_fee + $disc_fee;
 				}
 			if ($total_not_paid <= $discount_amt) {
 				if ($total_not_paid > 0) $entry_total = $total_not_paid * $entry_fee;
-				else $entry_total = "0";
+				else $entry_subtotal = "0";
 				}
 		break;			
 		} // end switch
 		
-		if ($cap == "0") $entry_total = $entry_total;
+		if ($cap == "0") $entry_total = $entry_subtotal;
 		else { 
-			if ($entry_total > $cap) $entry_total = $cap;
-			else $entry_total = $entry_total;
+			if ($entry_subtotal > $cap) $entry_total = $cap;
+			else $entry_total = $entry_subtotal;
 		}
 		return $entry_total;
 	

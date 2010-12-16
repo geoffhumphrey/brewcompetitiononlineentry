@@ -55,7 +55,17 @@ if (($judgingDateReturn == "true") || ($dbTable != "default")) { // check if all
 	?>
  <tr>
   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_log_winners['brewWinnerPlace'] == "1") echo "medal_gold_3"; elseif ($row_log_winners['brewWinnerPlace'] == "2") echo "medal_silver_3"; elseif ($row_log_winners['brewWinnerPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
-  <td class="dataList"><?php echo $row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory'];$styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']; } ?></td>
+  <td class="dataList">
+  <?php 
+  echo $row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory'];$styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']; } 
+  if ($row_log_winners['brewWinnerCat'] >= 29)
+  {
+	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_log_winners['brewWinnerCat']);  
+    $style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	echo ": ".$row_style['brewStyle'];
+  } 
+  ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewBrewerLastName'].", ".$row_log_winners['brewBrewerFirstName']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>

@@ -124,7 +124,7 @@ $participant_count = mysql_query($query_participant_count, $brewing) or die(mysq
 $totalRows_participant_count = mysql_num_rows($participant_count);
 
 # Set global pagination variables 
-if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $limit = $row_prefs['prefsRecordLimit']; else $limit = $limit; 
+if (($totalRows_entry_count > $row_prefs['prefsRecordPaging']) || ($totalRows_participant_count > $row_prefs['prefsRecordPaging'])) $limit = $row_prefs['prefsRecordPaging']; else $limit = $limit; 
 $display = $limit; 
 $pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
 $start = $display * $pg - $display;
