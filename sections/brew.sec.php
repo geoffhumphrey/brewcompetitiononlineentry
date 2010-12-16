@@ -56,6 +56,11 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="data"><input name="brewYield" type="text" size="10" tooltipText="<?php echo $toolTip_decimal; ?>" value="<?php if ($action == "edit") echo $row_log['brewYield']; ?>">&nbsp;<?php echo $row_prefs['prefsLiquid2']; ?></td>
    <td class="data">&nbsp;</td>
 </tr>
+<tr>
+  <td class="dataLabel">Co-Brewer Name:</td>
+  <td class="data"><input type="text"  name="brewCoBrewer" value="<?php if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" size="30"></td>
+  <td class="data">&nbsp;</td>
+</tr>
 </table>
 <table>
 <tr>

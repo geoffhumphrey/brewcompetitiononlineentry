@@ -78,7 +78,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 if (($action == "default") || ($action == "print")) { 
 if ($totalRows_brewer > 0) { 
 	if ($action != "print") { ?>
-	<?php if ($totalRows_participant_count >= $limit) {
+	<?php if ($totalRows_participant_count >= $row_prefs['prefsRecordLimit']) {
 		$of = $start + $totalRows_brewer;
 		echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing $start_display to $of of $totalRows_participant_count entries</div>"; 
 	}
@@ -87,11 +87,11 @@ if ($totalRows_brewer > 0) {
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
-		<?php if (($totalRows_participant_count <= $limit) || ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")))) { ?>
+		<?php if (($totalRows_participant_count <= $row_prefs['prefsRecordLimit']) || ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")))) { ?>
 		"bPaginate" : true,
 		"sPaginationType" : "full_numbers",
 		"bLengthChange" : true,
-		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordLimit']/4,0); ?>,
+		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 		"sDom": 'irtip',
 		"bStateSave" : false,
 		<?php } else { ?>
@@ -251,7 +251,7 @@ if ($totalRows_brewer > 0) {
 </tbody>
 </table>
 <?php if ($action != "print") {  
-	if ($totalRows_participant_count >= $display) { 
+	if ($totalRows_participant_count >= $row_prefs['prefsRecordLimit']) { 
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_participant_count;
 	else $total_paginate = $totalRows_brewer;
 	paginate($display, $pg, $total_paginate);

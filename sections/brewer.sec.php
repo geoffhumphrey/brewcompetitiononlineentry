@@ -29,65 +29,75 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
       <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" size="32" maxlength="20"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />
+      You will be able to identify a co-brewer when adding your entries.</td>
 </tr>
 <tr>
       <td class="dataLabel">Last Name:</td>
       <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
-</tr>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+    </tr>
 <tr>
       <td class="dataLabel">Street Address:</td>
       <td class="data"><input type="text" name="brewerAddress" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">City:</td>
       <td class="data"><input type="text" name="brewerCity" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">State/Country:</td>
       <td class="data"><input type="text" name="brewerState" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Zip/Postal Code:</td>
       <td class="data"><input type="text" name="brewerZip" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 1:</td>
       <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone1']; ?>" size="32"></td>
-      <td class="data"><span class="required">Required</span></td>
+      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
+      <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 2:</td>
       <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone2']; ?>" size="32"></td>
+      <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Club Name:</td>
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
+      <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
   <td class="dataLabel">AHA Member Number:</td>
   <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
-  <td class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
-</tr>
+  <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
+  </tr>
 
 
 <?php if (($go != "entrant") && ($section != "step7")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
-      <td class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
+      <td class="data">&nbsp;</td>
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
 <td class="dataLabel">Your Stewarding<br />Location Availabilty:</td>
-<td colspan="2" class="data">
+<td colspan="3" class="data">
 <?php do { ?>
 	<table class="dataTableCompact">
     	<tr>
@@ -107,12 +117,13 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
-      <td class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "CHECKED"; ?>/> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "CHECKED"; ?>/> No</td>
+      <td class="data">&nbsp;</td>
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
 <td class="dataLabel">Your Judging<br />Location Availablity:</td>
-<td class="data" colspan="2">
+<td class="data" colspan="3">
 <?php do { ?>
 	<table class="dataTableCompact">
     	<tr>
@@ -134,12 +145,12 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <?php if ($action == "edit") include ('judge_info.sec.php'); ?>
 <tr>
 	  <td>&nbsp;</td>
-      <td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></td>
+      <td colspan="3" class="data"><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></td>
     </tr>
 
 </table>
 <?php if ($section != "step7") { ?>
-  <input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
+<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
 	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] == "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />

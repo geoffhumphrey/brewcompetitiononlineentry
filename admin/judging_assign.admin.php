@@ -18,7 +18,7 @@ function checkUncheckAll(theElement) {
 			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
-			"iDisplayLength" : <?php echo $limit; ?>,
+			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
 			"bStateSave" : false,
 			"aaSorting": [[1,'asc']],

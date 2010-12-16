@@ -50,12 +50,16 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
   <td class="data"><?php if ($filter == "default") echo $totalRows_entry_count; else echo $totalRows_log; ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Total Entry Fees<?php if ($filter != "default") echo " for This Category"; ?>:</td>
-  <td class="data">$<?php echo $total_entry_fees; ?></td>
+  <td class="dataHeading">Total Entry Fees:</td>
+  <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_entry_fees; ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Total Paid Entry Fees<?php if ($filter != "default") echo " for This Category"; ?>:</td>
-  <td class="data">$<?php echo $total_paid_entry_fees; ?></td>
+  <td class="dataHeading">Total Paid Entry Fees:</td>
+  <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_paid_entry_fees; ?></td>
+</tr>
+<tr>
+  <td class="dataHeading">Total Unpaid Entry Fees:</td>
+  <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_to_pay; ?></td>
 </tr>
 <tr>
   	<td colspan="2">&nbsp;</td>
@@ -64,22 +68,22 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 <?php } ?>
 <?php if ($totalRows_log > 0) { ?>
 	<?php if ($action != "print") { ?>
-		<?php if ($dbTable == "default") { ?><p><input type="submit" name="Submit" class="button" value="Update Entries" /></p><?php } ?>
-    <?php 
-	if ($totalRows_entry_count >= $limit){ 
-	$of = $start + $totalRows_log;
-	echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of." of ".$totalRows_entry_count." entries</div>";
-	}
-	 ?>
-	
+  <?php if ($dbTable == "default") { ?><p><input type="submit" name="Submit" class="button" value="Update Entries" /></p><?php } ?>
+    	<?php 
+		if ($totalRows_entry_count >= $row_prefs['prefsRecordLimit'])	{ 
+			$of = $start + $totalRows_log;
+			echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of." of ".$totalRows_entry_count." entries</div>";
+			}
+	 	?>
+	<?php //if ($totalRows_entry_count < $row_prefs['prefsRecordLimit'])	{ ?>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
-			<?php if (($totalRows_entry_count <= $limit) || ((($section == "admin") && ($go == "entries") && ($filter == "default")  && ($dbTable != "default")))) { ?>
+			<?php if (($totalRows_entry_count <= $row_prefs['prefsRecordLimit']) || ((($section == "admin") && ($go == "entries") && ($filter == "default")  && ($dbTable != "default")))) { ?>
 			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
-			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordLimit']/4,0); ?>,
+			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
 			"bStateSave" : false,
 			<?php } else { ?>
@@ -110,7 +114,9 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 			} );
 		} );
 	</script>
-	<?php } ?>
+	<?php 
+	//}
+	} ?>
 	<?php if ($action == "print") { ?>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -219,10 +225,10 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 </table>
 
 <?php if ($action != "print") {  
-	if ($totalRows_entry_count >= $display) {
+	if ($totalRows_entry_count >= $row_prefs['prefsRecordLimit'])	{
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_entry_count;
 	else $total_paginate = $totalRows_log;
-	paginate($display, $pg, $total_paginate);
+	paginate($row_prefs['prefsRecordPaging'], $pg, $total_paginate);
 	}
 ?>
 <?php if ($dbTable == "default") { ?><p><input type="submit" name="Submit" class="button" value="Update Entries" /></p><?php } ?>
