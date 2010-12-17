@@ -42,7 +42,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
             </div>
   		</td>
   		<td class="dataList">
-  			<?php if ((totalRows_participant_count > $limit) && ($filter == "default")) { ?>
+  			<?php if ((totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($filter == "default")) { ?>
   			<span class="icon"><img src="images/printer.png" /></span>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants_all');">Print <em>All</em></a></div>
   			<div id="printMenu_participants_all" class="menu" onmouseover="menuMouseover(event)">
@@ -76,18 +76,19 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 } 
 }
 if (($action == "default") || ($action == "print")) { 
-if ($totalRows_brewer > 0) { 
+if ($totalRows_participant_count > 0) { 
 	if ($action != "print") { ?>
-	<?php if ($totalRows_participant_count >= $row_prefs['prefsRecordLimit']) {
+	<?php 
+		if ($totalRows_participant_count > $row_prefs['prefsRecordLimit']) {
 		$of = $start + $totalRows_brewer;
-		echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing $start_display to $of of $totalRows_participant_count entries</div>"; 
-	}
+		echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of." of ".$totalRows_participant_count." entries</div>";
+		}
 	?>
 	<link href="css/sorting.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
-		<?php if (($totalRows_participant_count <= $row_prefs['prefsRecordLimit']) || ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")))) { ?>
+		<?php if ($totalRows_participant_count <= $row_prefs['prefsRecordLimit']) { ?>
 		"bPaginate" : true,
 		"sPaginationType" : "full_numbers",
 		"bLengthChange" : true,

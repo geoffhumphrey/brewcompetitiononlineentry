@@ -124,8 +124,8 @@ $participant_count = mysql_query($query_participant_count, $brewing) or die(mysq
 $totalRows_participant_count = mysql_num_rows($participant_count);
 
 # Set global pagination variables 
-if (($totalRows_entry_count > $row_prefs['prefsRecordPaging']) || ($totalRows_participant_count > $row_prefs['prefsRecordPaging'])) $limit = $row_prefs['prefsRecordPaging']; else $limit = $limit; 
-$display = $limit; 
+//if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $display = $row_prefs['prefsRecordPaging']; else $display = $limit; 
+$display = $row_prefs['prefsRecordPaging']; 
 $pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
 $start = $display * $pg - $display;
 if ($start == 0) $start_display = "1"; else $start_display = $start;
@@ -158,32 +158,32 @@ if (isset($_SESSION["loginUsername"]))  {
 		}
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { 
 		$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 		}
 	elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default")) { 
 		$query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY $sort $dir";
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
 		}
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default")) { 
 		$query_log = "SELECT * FROM $dbTable ORDER BY $sort $dir";
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		//if ($view == "default") $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; 
 		}
 	elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default")) { 
 		$query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; 
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		//if ($view == "default") $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
 		}
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default")) { 
 		$query_log = "SELECT * FROM brewing WHERE brewBrewerID='$bid' ORDER BY $sort $dir";
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; 
 		}
 	else { 
 		$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
-		if ($view == "default") $query_log .= " LIMIT $start, $display";
+		if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 		}
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -197,43 +197,43 @@ if (isset($_SESSION["loginUsername"]))  {
 	if (($section == "brewer") && ($action == "edit")) $query_brewer = "SELECT * FROM brewer WHERE id = '$id'";
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) {
 		$query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "judges")   && ($dbTable == "default")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "stewards") && ($dbTable == "default")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "assignJudges") && ($dbTable == "default")) { 
 		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "assignStewards") && ($dbTable == "default")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) {
 		$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		//if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "assign")) { 
 		$query_brewer = "SELECT * FROM brewer WHERE brewerJudge='Y' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "assign")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
-		if ($view == "default") $query_brewer .= " LIMIT $start, $display";
+		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
 	elseif (($section == "admin") && ($go == "make_admin")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
