@@ -37,7 +37,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 		<p>Attach a check for the entire entry amount to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
 		<p><span class="required"> Your check carbon or cashed check is your entry receipt.</p>
 	<?php } ?>
-	<?php if  (($row_prefs['prefsPaypal'] == "Y") || ($row_prefs['prefsGoogle'] == "Y")) { 
+	<?php if  ($row_prefs['prefsPaypal'] == "Y") { 
 		switch ($row_prefs['prefsCurrency']) {
 			case "&pound;": $currency_code = "GBP";
 			break;
@@ -85,29 +85,6 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 			</td>
    		</tr>
 	</table>
-</form>
-<?php } if ($row_prefs['prefsGoogle'] == "Y") { ?>
-<p>Click the "Buy Now" button below to pay online using Google Checkout.</p>
-<form action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo  $row_prefs['prefsGoogleMerchantID']; ?>" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
-    <table class="dataTable">
-        <tr>
-            <td>
-                <select name="item_selection_1">
-                    <option value="1"><?php echo $row_prefs['prefsCurrency'].number_format($total_entry_fees, 2);?> - <?php echo $row_contest_info['contestName']; ?> Competition Entry Payment</option>
-                </select>
-                <input name="item_option_name_1" type="hidden" value="<?php echo $row_contest_info['contestName']; ?> Competition Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$totalRows_log." Entries)"; ?>"/>
-                <input name="item_option_price_1" type="hidden" value="<?php echo number_format($total_entry_fees, 2);?>"/>
-                <input name="item_option_quantity_1" type="hidden" value="1"/>
-                <input name="item_option_currency_1" type="hidden" value="<?php echo $currency_code; ?>"/>
-                <input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url" value="http://www.example.com"/> 
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input style="border:none" alt="Google Checkout" src="https://checkout.google.com/buttons/buy.gif?merchant_id=<?php echo  $row_prefs['prefsGoogleMerchantID']; ?>&amp;w=117&amp;h=48&amp;style=white&amp;variant=text&amp;loc=en_US" type="image"/>
-            </td>
-        </tr>
-    </table>
 </form>
 <?php } ?>
 <?php } ?>
