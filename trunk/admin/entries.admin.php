@@ -60,7 +60,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 
 <tr>
   <td class="dataHeading">Total Unpaid Entry Fees:</td>
-  <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_to_pay; ?></td>
+  <td class="data"><?php echo $row_prefs['prefsCurrency'].($total_entry_fees - $total_paid_entry_fees); ?></td>
 </tr>
 
 <tr>

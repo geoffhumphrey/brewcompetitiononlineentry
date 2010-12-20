@@ -3,7 +3,7 @@ require ('Connections/config.php');
 
 // Check to see if initial setup has taken place 
 mysql_select_db($database, $brewing);
-$query_setup = "SELECT * FROM users";
+$query_setup = "SELECT * FROM users WHERE NOT id='0'";
 $setup = mysql_query($query_setup, $brewing);
 $totalRows_setup = mysql_num_rows($setup);
 
