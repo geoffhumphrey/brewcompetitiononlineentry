@@ -5,7 +5,7 @@ CHANGE `brewerJudgeLocation` `brewerJudgeLocation` VARCHAR( 255 ) NULL DEFAULT N
 CHANGE `brewerStewardLocation` `brewerStewardLocation` VARCHAR( 255 ) NULL DEFAULT NULL ;
 
 ALTER TABLE `preferences` ADD `prefsRecordLimit` INT( 11 ) NULL DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging';
-ALTER TABLE `preferences` ADD `prefsRecordPaging` INT( 11 ) NULL DEFAULT '75' COMMENT 'User defined per page record limit';
+ALTER TABLE `preferences` ADD `prefsRecordPaging` INT( 11 ) NULL DEFAULT '100' COMMENT 'User defined per page record limit';
 
 -- ***************************** Future Release ***************************** --
 -- ALTER TABLE `preferences` ADD `prefsGoogle` CHAR( 1 ) NULL DEFAULT 'N' ,

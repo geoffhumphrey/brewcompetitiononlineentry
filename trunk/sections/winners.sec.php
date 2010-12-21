@@ -66,7 +66,7 @@ if (($judgingDateReturn == "true") || ($dbTable != "default")) { // check if all
 	echo ": ".$row_style['brewStyle'];
   } 
   ?></td>
-  <td class="dataList"><?php echo $row_log_winners['brewBrewerLastName'].", ".$row_log_winners['brewBrewerFirstName']; ?></td>
+  <td class="dataList"><?php echo $row_log_winners['brewBrewerLastName'].", ".$row_log_winners['brewBrewerFirstName'];  if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>

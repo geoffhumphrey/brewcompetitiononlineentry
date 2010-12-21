@@ -235,10 +235,10 @@ Your total entry fees are <?php  //echo $row_prefs['prefsCurrency']; echo number
 <tbody>
  <tr>
   
-  <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?></td>
+  <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></td>
   <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
   <?php } if ($action != "print") { ?>
-  <td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay&bid=<?php echo $row_user['id']; ?>">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
+  <td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
   <?php } ?>
  </tr>
 </tbody>

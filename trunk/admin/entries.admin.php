@@ -13,7 +13,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
   <?php if ($dbTable == "default") { ?>
   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_edit.png"  /></span><a class="data" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">Add Entry</a></td>
   	<?php if (($filter != "default") || ($bid != "default")) { ?>
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page.png"  /></span><a href="index.php?section=admin&amp;go=entries">View Entries in All Categories</a></td>
+  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page.png"  /></span><a href="index.php?section=admin&amp;go=entries">View Entries <?php if ($filter != "default") echo " for All Categories"; if ($bid != "default") echo " for all Particpants";?></a></td>
   	<?php } ?>
   <?php } ?>
   <td class="dataList" width="5%" nowrap="nowrap">
@@ -46,20 +46,20 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 <?php if ($dbTable == "default") { ?>
 <table class="dataTable">
 <tr>
-  <td class="dataHeading" width="5%">Total Entries<?php if ($filter != "default") echo " In This Category"; ?>:</td>
-  <td class="data"><?php if ($filter == "default") echo $totalRows_entry_count; else echo $totalRows_log; ?></td>
+  <td class="dataHeading" width="5%">Total Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="data"><?php if (($filter == "default") && ($bid == "default")) echo $totalRows_entry_count; else  echo $totalRows_log; ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Total Entry Fees:</td>
+  <td class="dataHeading">Total Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_entry_fees; ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Total Paid Entry Fees:</td>
+  <td class="dataHeading">Total Paid Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_paid_entry_fees; ?></td>
 </tr>
 
 <tr>
-  <td class="dataHeading">Total Unpaid Entry Fees:</td>
+  <td class="dataHeading">Total Unpaid Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].($total_entry_fees - $total_paid_entry_fees); ?></td>
 </tr>
 
@@ -74,7 +74,9 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
     	<?php 
 		if (($dbTable == "default") && ($totalRows_entry_count > $row_prefs['prefsRecordLimit']))	{ 
 			$of = $start + $totalRows_log;
-			echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of." of ".$totalRows_entry_count." entries</div>";
+			echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of;
+			if ($bid != "default") echo " of ".$totalRows_log." entries</div>";
+			if ($bid == "default") echo " of ".$totalRows_entry_count." entries</div>";
 			}
 	 	?>
 	<script type="text/javascript" language="javascript">
@@ -85,7 +87,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
-			"sDom": 'irtip',
+			"sDom": 'ifrtip',
 			"bStateSave" : false,
 			<?php } else { ?>
 			"bPaginate" : false,

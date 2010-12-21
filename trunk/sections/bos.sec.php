@@ -33,7 +33,7 @@
  <tr <?php echo " style=\"background-color:$color\"";?>>
   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos['brewBOSPlace']; ?></td>
   <td class="dataList"><?php echo $styleConvert3; if ($row_bos['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos['brewWinnerCat']; if ($row_bos['brewWinnerSubCat']!= "") echo $row_bos['brewSubCategory']; echo ")"; } ?></td>
-  <td class="dataList"><?php echo $row_bos['brewBrewerFirstName']." ".$row_bos['brewBrewerLastName']; ?></td>
+  <td class="dataList"><?php echo $row_bos['brewBrewerFirstName']." ".$row_bos['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_bos['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
@@ -81,7 +81,7 @@
  <tr <?php echo " style=\"background-color:$color\"";?>>
   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos3['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos3['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos3['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos3['brewBOSPlace']; ?></td>
   <td class="dataList"><?php echo $styleConvert6; if ($row_bos3['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") echo $row_bos3['brewSubCategory']; echo ")"; } ?></td>
-  <td class="dataList"><?php echo $row_bos3['brewBrewerFirstName']." ".$row_bos3['brewBrewerLastName']; ?></td>
+  <td class="dataList"><?php echo $row_bos3['brewBrewerFirstName']." ".$row_bos3['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_bos3['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
@@ -129,7 +129,7 @@
  <tr <?php echo " style=\"background-color:$color\"";?>>
   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos2['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos2['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos2['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos2['brewBOSPlace']; ?></td>
   <td class="dataList"><?php echo $styleConvert7; if ($row_bos2['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") echo $row_bos2['brewSubCategory']; echo ")"; } ?></td>
-  <td class="dataList"><?php echo $row_bos2['brewBrewerFirstName']." ".$row_bos2['brewBrewerLastName']; ?></td>
+  <td class="dataList"><?php echo $row_bos2['brewBrewerFirstName']." ".$row_bos2['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer'];?></td>
   <td class="dataList"><?php echo $row_bos2['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
