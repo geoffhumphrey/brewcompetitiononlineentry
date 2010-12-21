@@ -21,12 +21,12 @@ if ($msg != "default") echo $msg_output;
 <?php if ($total_entry_fees > 0) { ?>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?>
 Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
-<p>Fees are: <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry; <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are: <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <?php } ?>
-<?php if ($total_entry_fees == $total_paid_entry_fees) { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
+<?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
 <?php if ($total_entry_fees == 0) echo "You have not logged any entries yet."; ?>
 
-<?php if (($total_entry_fees > 0) && ($view == "default")) { ?>
+<?php if (($total_to_pay > 0) && ($view == "default")) { ?>
 	<?php if ($row_prefs['prefsCash'] == "Y") { ?>
 		<h2>Cash</h2>
 		<p>Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.</p>

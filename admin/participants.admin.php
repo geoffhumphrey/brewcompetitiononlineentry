@@ -93,7 +93,7 @@ if ($totalRows_participant_count > 0) {
 		"sPaginationType" : "full_numbers",
 		"bLengthChange" : true,
 		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
-		"sDom": 'irtip',
+		"sDom": 'ifrtip',
 		"bStateSave" : false,
 		<?php } else { ?>
 		"bPaginate" : false,
