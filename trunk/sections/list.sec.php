@@ -90,11 +90,11 @@ if ($msg != "default") echo $msg_output;
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
@@ -136,11 +136,11 @@ if ($msg != "default") echo $msg_output;
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $value);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $value);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}
@@ -187,11 +187,11 @@ if ($msg != "default") echo $msg_output;
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
