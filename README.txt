@@ -2,7 +2,7 @@
 **********************************************************************
 **                                                                  **
 ** Brew Contest Online Signup by Geoff Humphrey - zkdigital.com     **
-** Release 1.1.5 Jul 2010                                           **
+** Release 1.1.6 Dec 2010                                           **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** As such, you are permitted to download the full source code of   **
