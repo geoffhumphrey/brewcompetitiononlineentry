@@ -1473,6 +1473,31 @@ WHERE id=%s",
   	header(sprintf("Location: %s", $updateGoTo));
 }
 
+// --------------------------- If Editing Preferences ------------------------------- //
+
+if (($action == "edit") && ($dbTable == "judging_preferences")) {
+
+$updateSQL = sprintf("UPDATE judging_preferences SET
+					 
+jPrefsQueued=%s,
+jPrefsFlightEntries=%s,
+jPrefsFlightJudges=%s,
+jPrefsRounds=%s
+WHERE id=%s",
+                       GetSQLValueString($_POST['jPrefsQueued'], "text"),
+					   GetSQLValueString($_POST['jPrefsFlightEntries'], "text"),
+                       GetSQLValueString($_POST['jPrefsFlightJudges'], "text"),
+                       GetSQLValueString($_POST['jPrefsRounds'], "text"),
+                       GetSQLValueString($id, "int"));
+					   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+
+  	$updateGoTo = "../index.php?section=admin&msg=2";
+  	header(sprintf("Location: %s", $updateGoTo));
+}
+
+
 // --------------------------- If updating records in the brewing table en masse ------------------------------- //
 
 if (($action == "update") && ($dbTable == "brewing")) {

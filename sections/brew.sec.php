@@ -36,7 +36,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 <?php } ?>
 <tr>
-   <td class="dataLabel">Name:</td>
+   <td class="dataLabel">Entry Name:</td>
    <td class="data"><input type="text"  name="brewName" value="<?php if ($action == "edit") echo $row_log['brewName']; ?>" size="30"></td>
    <td class="data"><span class="required">Required</span></td>
 </tr>
