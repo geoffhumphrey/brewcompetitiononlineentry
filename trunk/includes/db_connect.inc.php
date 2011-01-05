@@ -265,6 +265,16 @@ $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
 $totalRows_judging = mysql_num_rows($judging);
 
+$query_judging_prefs = "SELECT * FROM judging_preferences";
+//if (($go == "styles") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
+//elseif (($go == "judging_preferences") && ($action == "update") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
+//elseif (($go == "judging_preferences") && ($action == "edit"))  $query_judging .= " WHERE id='1'";
+//else $query_judging_prefs .= " ORDER BY judgingDate,judgingLocName";
+$query_judging .= " WHERE id='1'";
+$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
+$row_judging_prefs = mysql_fetch_assoc($judging_prefs);
+$totalRows_judging_prefs = mysql_num_rows($judging_prefs);
+
 // Separate connections for selected queries that are housed on the same page.
 $query_judging1 = "SELECT * FROM judging ORDER BY judgingDate,judgingLocName";
 $judging1 = mysql_query($query_judging1, $brewing) or die(mysql_error());
