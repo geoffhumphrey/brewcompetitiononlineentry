@@ -1,2 +1,2 @@
-<p>Before you can start collecting your entries for your competition, your installation needs to be set up. This is the first of five steps that will gather the necessary information to get your competition entry site up and running.</p>
+<p>Before you can start collecting your entries for your competition, your installation needs to be set up. This is the first of seven steps that will gather the necessary information to get your competition entry site up and running.</p>
 <?php include ('admin/preferences.admin.php'); ?>

@@ -36,19 +36,26 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></a></td>
   </tr>
   <tr>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></td>
+    <td colspan="3" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_flights">Flights</a></td>
+  </tr>
+  <tr>
     <td colspan="4" nowrap="nowrap" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/page_edit.png" alt="" /></span>Add</td>
   </tr>
   <tr>
     <td width="15%" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a><a href="index.php?section=admin&amp;go=dropoff&amp;action=add"></a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></td>
+    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a><a href="index.php?section=admin&amp;go=dropoff&amp;action=add"></a><a href="index.php?section=admin&amp;go=contacts&amp;action=add"></a></td>
   </tr>
   <tr>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></td>
-    <td nowrap="nowrap" class="data">&nbsp;</td>
+    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add">Flights to Tables</a></td>
+    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></td>
   </tr>
   <tr>
     <td colspan="4" nowrap="nowrap" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/pencil.png" ></span>Edit</td>
@@ -56,8 +63,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   <tr>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=contest_info">Competition Info</a></td>
     <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=preferences">Site Preferences</a></td>
-    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_preferences">Judging Preferences</a></td>
-    <td nowrap="nowrap" class="data">&nbsp;</td>
+    <td colspan="2" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=judging_preferences">Judging Preferences</a></td>
   </tr>
   <tr>
     <td colspan="4" nowrap="nowrap" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/user_edit.png"  /></span>Assign</td>
@@ -72,6 +78,12 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td nowrap="nowrap" colspan="3" class="data"><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a></td>
   </tr>
   <?php } ?>
+  <?php // if ($totalRows_tables > 1) { ?>
+  <tr>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;action=update&amp;go=assign_tables&amp;filter=judges">Judges to Tables</a></td>
+    <td nowrap="nowrap" colspan="3" class="data"><a href="index.php?section=admin&amp;action=update&amp;go=assign_tables&amp;filter=stewards">Stewards to Tables</a></td>
+  </tr>
+  <?php // } ?>
   <tr>
     <td colspan="4" nowrap="nowrap" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/picture_add.png" alt="" /></span>Upload</td>
   </tr>
@@ -140,28 +152,29 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </tr>
   <?php if ($totalRows_judging1 > 1) { ?>
   <tr>
+  <form name="tabChoice" id="tabChoice">
     <td colspan="4" nowrap="nowrap" class="data">Participants for Location:
-      <form name="tabChoice" id="tabChoice">
         <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <?php do { ?>
           <option value="admin/participants_export.php?section=loc&amp;go=tab&amp;bid=<?php echo $row_stewarding2['id']; ?>"><?php echo $row_stewarding2['judgingLocName']." ("; echo dateconvert($row_stewarding2['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_stewarding2 = mysql_fetch_assoc($stewarding2)) ?>
-          </select>
-      </form>
+          </select><br />
     <em>* Be sure to make final <a href="/index.php?section=admin&amp;go=styles&amp;filter=judging">style</a>, <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em></td>
   </tr>
+  </form>
+  <form name="tabChoice" id="tabChoice">
   <tr>
     <td colspan="4" nowrap="nowrap" class="data">Paid and Received Entries for Location:
-      <form name="tabChoice" id="tabChoice">
         <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <?php do { ?>
           <option value="admin/entries_export.php?section=loc&amp;go=tab&amp;filter=paid&amp;bid=<?php echo $row_judging2['id']; ?>"><?php echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_judging2 = mysql_fetch_assoc($judging2)) ?>
           </select>
-    </form>    </td>
+    </td>
   </tr>
+  </form>    
   <?php } ?>
   <tr>
     <td colspan="4" class="data">For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>.
@@ -185,25 +198,27 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td colspan="4" nowrap="nowrap" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/cog.png" alt=""  /></span>Maintenance</td>
   </tr>
   <tr>
-    <td colspan="4" nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
-  </tr>
-  <tr>
-    <td colspan="4" nowrap="nowrap" class="data">View and create archived information from previous competitions.</td>
+    <td nowrap="nowrap" class="data"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
+    <td colspan="3" nowrap="nowrap" class="data">View and create archived information from previous competitions.</td>
   </tr>
 </table>
 <?php 	} 
+
 if ($go == "contest_info") 				include ('admin/contest_info.admin.php');
 if ($go == "preferences") 				include ('admin/preferences.admin.php');
+if ($go == "judging") 	    			include ('admin/judging.admin.php');
 if ($go == "judging_preferences") 	    include ('admin/judging_preferences.admin.php');
+if ($go == "judging_tables") 	    	include ('admin/judging_tables.admin.php');
+if ($go == "judging_flights") 	    	include ('admin/judging_flights.admin.php');
 if ($go == "participants") 				include ('admin/participants.admin.php');
 if ($go == "entries") 					include ('admin/entries.admin.php');
 if ($go == "make_admin") 				include ('admin/make_admin.admin.php');
 if ($go == "archive") 	    			include ('admin/archive.admin.php');
 if ($go == "sponsors") 	   			 	include ('admin/sponsors.admin.php');
 if ($go == "contacts") 	    			include ('admin/contacts.admin.php');
-if ($go == "judging") 	    			include ('admin/judging.admin.php');
 if ($go == "styles") 	    			include ('admin/styles.admin.php');
 if ($go == "dropoff") 	    			include ('admin/dropoff.admin.php');
+
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

@@ -1,5 +1,4 @@
 <?php 
-
 if ($row_log['brewCategorySort'] == "01") $styleConvert = "Light Lager";
 if ($row_log['brewCategorySort'] == "02") $styleConvert = "Pilsner";
 if ($row_log['brewCategorySort'] == "03") $styleConvert = "European Amber Lager";

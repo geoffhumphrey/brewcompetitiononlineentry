@@ -1,7 +1,7 @@
 -- Brew Contest Online Signup
 -- http://www.brewcompetition.com
 -- Direct inquiries to prost@brewcompetition.com
--- Release 1.1.5 Jul 2010
+-- Release 1.2.0 Jan 2011
 -- This software is free, open source and is covered under the 
 -- General Public License (GPL) from the Open Source Initiative.
 -- As such, you are permitted to download the full source code of 
@@ -622,8 +622,7 @@ CHANGE `brewerJudgeLocation` `brewerJudgeLocation` VARCHAR( 255 ) NULL DEFAULT N
 CHANGE `brewerStewardLocation` `brewerStewardLocation` VARCHAR( 255 ) NULL DEFAULT NULL ;
 
 ALTER TABLE `preferences` ADD `prefsRecordLimit` INT( 11 ) NULL DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging';
-ALTER TABLE `preferences` ADD `prefsRecordPaging` INT( 11 ) NULL DEFAULT '30' COMMENT 'User defined per page record limit';
-UPDATE preferences` SET `prefsRecordLimit` = '300', `prefsRecordPaging` = '30' WHERE `id` = 1;
+ALTER TABLE `preferences` ADD `prefsRecordPaging` INT( 11 ) NULL DEFAULT '100' COMMENT 'User defined per page record limit';
 
 -- ***************************** Future Release ***************************** --
 -- ALTER TABLE `preferences` ADD `prefsGoogle` CHAR( 1 ) NULL DEFAULT 'N' ,
@@ -633,3 +632,41 @@ UPDATE preferences` SET `prefsRecordLimit` = '300', `prefsRecordPaging` = '30' W
 ALTER TABLE `brewer` ADD `brewerAHA` INT( 11 ) NULL ;
 ALTER TABLE `brewing` CHANGE `brewPaid` `brewPaid` CHAR( 1 ) NULL DEFAULT 'N';
 ALTER TABLE `brewing` ADD `brewCoBrewer` VARCHAR( 255 ) NULL ;
+
+-- ********************************************************************************
+--
+-- Version 1.2.0 Updates Follow
+-- 
+-- ********************************************************************************
+
+CREATE TABLE IF NOT EXISTS `judging_preferences` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
+  `jPrefsFlightEntries` int(8) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
+  `jPrefsFlightJudges` int(8) DEFAULT NULL COMMENT 'Maximum amount judges per flight',
+  `jPrefsRounds` int(8) DEFAULT NULL COMMENT 'Number of judging rounds',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM ;
+
+CREATE TABLE IF NOT EXISTS `judging_tables` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
+  `tableStyles` varchar(255) DEFAULT NULL COMMENT 'Array of ids from styles table',
+  `tableNumber` int(5) DEFAULT NULL COMMENT 'User defined for sorting',
+  `tableRound` int(5) DEFAULT NULL COMMENT 'User defined based upon jPrefsRounds judging_preferences table row',
+  `tableLocation` int(5) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
+  `tableJudges` VARCHAR( 255 ) NULL COMMENT 'Array of ids from brewer table',
+  `tableStewards` VARCHAR( 255 ) NULL COMMENT 'Array of ids from brewer table',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM ;
+
+CREATE TABLE IF NOT EXISTS `judging_flights` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `flightTable` int(8) DEFAULT NULL COMMENT 'id of Table from tables',
+  `flightNumber` int(8) DEFAULT NULL,
+  `flightEntries` varchar(255) DEFAULT NULL,
+  `flightRound` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM ;
+
+ALTER TABLE `brewing` ADD `brewScore` INT( 8 ) NULL ;
