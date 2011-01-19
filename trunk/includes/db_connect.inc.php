@@ -137,18 +137,18 @@ if (isset($_SESSION["loginUsername"]))  {
 	$row_user = mysql_fetch_assoc($user);
 	$totalRows_user = mysql_num_rows($user);
 
-	$query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $row_user['user_name']);
+	$query_name = sprintf("SELECT * FROM brewer WHERE uid='%s'", $row_user['id']);
 	$name = mysql_query($query_name, $brewing) or die(mysql_error());
 	$row_name = mysql_fetch_assoc($name);
 	$totalRows_name = mysql_num_rows($name);
 
 	if ($section == "list") { 
-		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); 
+		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']); 
 		$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y'"; 
 		}
 		
 	elseif ($section == "pay") { 
-		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_user['id']); 
+		$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']); 
 		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 		}
 		

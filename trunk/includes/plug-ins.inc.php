@@ -230,7 +230,7 @@ function paginate($display, $pg, $total) {
 }
 
 if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($section == "list")) {
-	if (($section == "list") || ($section == "pay")) $bid = $row_brewer['id'];
+	if (($section == "list") || ($section == "pay")) $bid = $row_brewer['uid'];
 	$entry_fee = $row_contest_info['contestEntryFee']; // regular entry fee
 	$entry_fee_discount = $row_contest_info['contestEntryFee2']; // price of each entry after entry threshold for discount is met
 	$discount = $row_contest_info['contestEntryFeeDiscount']; // Y or N - is there a discount applied after a certain amount of entries?
