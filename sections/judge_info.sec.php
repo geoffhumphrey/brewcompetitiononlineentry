@@ -29,7 +29,7 @@
             </tr>
         	<?php do { 	?>
             <tr>
-            	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; foreach ($a as $value) { if ($value == $b) { echo "CHECKED"; } } ?>></td>
+            	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; ?>" <?php $a = explode(",", $row_tables['tableStyles']); $b = ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']; foreach ($a as $value) { if ($value == $b) { echo "CHECKED"; } } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
                 <td><?php echo $row_styles['brewStyle']; ?></td>
             </tr>

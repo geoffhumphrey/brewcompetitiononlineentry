@@ -643,10 +643,6 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 	//total_fees_to_pay($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no); 
 }
 
-
-
-
-
 function unpaid_fees($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap) {
 	switch($discount) {
 		case "N": 
@@ -700,4 +696,105 @@ function discount_display($total_not_paid, $discount_amt, $entry_fee, $entry_fee
 	return $array;
 } // end funtion
 
+
+function style_convert($number,$type) {
+	switch ($type) {
+		case "1": 
+		switch ($number) {
+			case "01": $style_convert = "Light Lager"; break;
+			case "02": $style_convert = "Pilsner"; break;
+			case "03": $style_convert = "European Amber Lager"; break;
+			case "04": $style_convert = "Dark Lager"; break;
+			case "05": $style_convert = "Bock"; break;
+			case "06": $style_convert = "Light Hybrid Beer"; break;
+			case "07": $style_convert = "Amber Hybrid Beer"; break;
+			case "08": $style_convert = "English Pale Ale"; break;
+			case "09": $style_convert = "Scottish and Irish Ale"; break;
+			case "10": $style_convert = "American Ale"; break;
+			case "11": $style_convert = "English Brown Ale"; break;
+			case "12": $style_convert = "Porter"; break;
+			case "13": $style_convert = "Stout"; break;
+			case "14": $style_convert = "India Pale Ale (IPA)"; break;
+			case "15": $style_convert = "German Wheat and Rye Beer"; break;
+			case "16": $style_convert = "Belgian and French Ale"; break;
+			case "17": $style_convert = "Sour Ale"; break;
+			case "18": $style_convert = "Belgian Strong Ale"; break;
+			case "19": $style_convert = "Strong Ale"; break;
+			case "20": $style_convert = "Fruit Beer"; break;
+			case "21": $style_convert = "Spice/Herb/Vegatable Beer"; break;
+			case "22": $style_convert = "Smoke-Flavored and Wood-Aged Beer"; break;
+			case "23": $style_convert = "Specialty Beer"; break;
+			case "24": $style_convert = "Traditional Mead"; break;
+			case "25": $style_convert = "Melomel (Fruit Mead)"; break;
+			case "26": $style_convert = "Other Mead"; break;
+			case "27": $style_convert = "Standard Cider and Perry"; break;
+			case "28": $style_convert = "Specialty Cider and Perry"; break;
+			default: $style_convert = "Custom Style"; break;
+		}
+		break;
+		case "2":
+		switch ($number) {
+			case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
+			case "02": $style_convert = "2A,2B,2C"; break;
+			case "03": $style_convert = "3A,3B"; break;
+			case "04": $style_convert = "4A,4B,4C"; break;
+			case "05": $style_convert = "5A,5B,5C,5D"; break;
+			case "06": $style_convert = "6A,6B,6C,6D"; break;
+			case "07": $style_convert = "7A,7B,7C"; break;
+			case "08": $style_convert = "8A,8B,8C"; break;
+			case "09": $style_convert = "9A,9B,9C,9D,9E"; break;
+			case "10": $style_convert = "10A,10B,10C"; break;
+			case "11": $style_convert = "11A,11B,11C"; break;
+			case "12": $style_convert = "12A,12B,12C"; break;
+			case "13": $style_convert = "13A,13B,13C,13D,13E,13F"; break;
+			case "14": $style_convert = "14A,14B,14C,"; break;
+			case "15": $style_convert = "15A,15B,15C,15D,"; break;
+			case "16": $style_convert = "16A,16B,16C,16D,16E,"; break;
+			case "17": $style_convert = "17A,17B,17C,17D,17E,17F"; break;
+			case "18": $style_convert = "18A,18B,18C,18D,18E,"; break;
+			case "19": $style_convert = "19A,19B,19C,"; break;
+			case "20": $style_convert = "20"; break;
+			case "21": $style_convert = "21A,21B"; break;
+			case "22": $style_convert = "22A,22B,22C"; break;
+			case "23": $style_convert = "23"; break;
+			case "24": $style_convert = "24A,24B,24C"; break;
+			case "25": $style_convert = "25A,25B,25C"; break;
+			case "26": $style_convert = "25A,25B,26C"; break;
+			case "27": $style_convert = "27A,27B,27C,27D,27E"; break;
+			case "28": $style_convert = "28A,28B,28C,28D"; break;
+			default: $style_convert = "Custom Style"; break;
+		}
+		break;
+	}
+	return $style_convert;
+}
+
+function get_table_info($id,$method) {	
+	include ('Connections/config.php');
+	mysql_select_db($database, $brewing);
+	$query_table_styles = "SELECT * FROM judging_tables";
+	$table_styles = mysql_query($query_table_styles, $brewing) or die(mysql_error());
+	$row_table_styles = mysql_fetch_assoc($table_styles);
+	
+	if ($method == "styles") {
+		do { 
+			$a = explode(",", $row_table_styles['tableStyles']);
+			$b = $id;
+			foreach ($a as $value) {
+				if ($value == $id) return TRUE;
+			}
+		} while ($row_table_styles = mysql_fetch_assoc($table_styles));
+	}	
+	
+	if ($method == "assigned") {
+		do { 
+			$a = explode(",", $row_table_styles['tableStyles']);
+			$b = $id;
+			foreach ($a as $value) {
+				if ($value == $id) $c = "<br><em>[Assigned to Table #".$row_table_styles['tableNumber'].": ".$row_table_styles['tableName']."]</em>";
+			}
+		} while ($row_table_styles = mysql_fetch_assoc($table_styles));
+	return $c;
+  	}
+}
 ?>

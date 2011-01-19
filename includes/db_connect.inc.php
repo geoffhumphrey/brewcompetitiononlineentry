@@ -347,4 +347,10 @@ $total_not_paid = ($totalRows_all - $totalRows_paid);
 if ($row_contest_info['contestEntryCap'] != "") $cap = $row_contest_info['contestEntryCap']; else $cap = "0";
 if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y";
 if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $discount = "Y";
+
+$query_tables = "SELECT * FROM judging_tables";
+$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+$row_tables = mysql_fetch_assoc($tables);
+$totalRows_tables = mysql_num_rows($tables);
+
 ?>
