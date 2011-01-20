@@ -50,7 +50,7 @@
 		This page shows all available buttons and plugins that are included in the TinyMCE core package.
 		There are more examples on how to use TinyMCE in the <a href="http://wiki.moxiecode.com/examples/tinymce/">Wiki</a>.
 	</p>
-
+	<div>
 	<!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
 	<textarea id="elm1" name="elm1" rows="15" cols="80" style="width: 80%">
 		&lt;p&gt;
@@ -61,7 +61,7 @@
 		&lt;/p&gt;
 	</textarea>
 
-	<div>
+
 		<!-- Some integration calls -->
 		<a href="javascript:;" onmousedown="tinyMCE.get('elm1').show();">[Show]</a>
 		<a href="javascript:;" onmousedown="tinyMCE.get('elm1').hide();">[Hide]</a>
@@ -70,13 +70,14 @@
 		<a href="javascript:;" onmousedown="alert(tinyMCE.get('elm1').selection.getContent());">[Get selected HTML]</a>
 		<a href="javascript:;" onmousedown="alert(tinyMCE.get('elm1').selection.getContent({format : 'text'}));">[Get selected text]</a>
 		<a href="javascript:;" onmousedown="alert(tinyMCE.get('elm1').selection.getNode().nodeName);">[Get selected element]</a>
-		<a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent',false,'<b>Hello world!!</b>');">[Insert HTML]</a>
-		<a href="javascript:;" onmousedown="tinyMCE.execCommand('mceReplaceContent',false,'<b>{$selection}</b>');">[Replace selection]</a>
-	</div>
+		<a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent',false,'&lt;b&gt;)Hello world!!&lt;/b&gt;');">[Insert HTML]</a>
+		<a href="javascript:;" onmousedown="tinyMCE.execCommand('mceReplaceContent',false,'&lt;b&gt;{$selection}&lt/b&gt;');">[Replace selection]</a>
 
-	<br />
-	<input type="submit" name="save" value="Submit" />
-	<input type="reset" name="reset" value="Reset" />
+	
+		<br/>
+		<input type="submit" name="save" value="Submit" />
+		<input type="reset" name="reset" value="Reset" />
+	</div>
 </form>
 
 </body>

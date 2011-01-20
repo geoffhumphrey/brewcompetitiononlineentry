@@ -115,13 +115,17 @@ if (($section == "default") || ($section == "past_winners")) {
 	*/
 }
 
-$query_entry_count = "SELECT id FROM brewing";
-$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-$totalRows_entry_count = mysql_num_rows($entry_count);
+$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
+$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+$row = mysql_fetch_array($result);
+$totalRows_entry_count = $row["count"];
+mysql_free_result($result);
 
-$query_participant_count = "SELECT id FROM brewer";
-$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
-$totalRows_participant_count = mysql_num_rows($participant_count);
+$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+$result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+$row = mysql_fetch_assoc($result);
+$totalRows_participant_count = $row["count"];
+mysql_free_result($result);
 
 # Set global pagination variables 
 //if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $display = $row_prefs['prefsRecordPaging']; else $display = $limit; 
