@@ -2015,4 +2015,67 @@ mail($to_email, $subject, $message, $headers);
 header("Location: ../index.php?section=".$section."&action=email&msg=1&id=".$row_contact['id']);
 	}
 }
+
+
+
+
+
+// --------------------------- Adding a Table and Associated Styles ------------------------------- //
+
+if (($action == "add") && ($dbTable == "judging_tables")) {
+
+$table_styles = implode(",",$_POST['tableStyles']);
+
+$insertSQL = sprintf("INSERT INTO judging_tables (
+tableName, 
+tableStyles, 
+tableNumber,
+tableRound,
+tableLocation
+  ) VALUES (%s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['tableName'], "text"),
+					   GetSQLValueString($table_styles, "text"),
+					   GetSQLValueString($_POST['tableNumber'], "text"),
+					   GetSQLValueString($_POST['tableRound'], "text"),
+					   GetSQLValueString($_POST['tableLocation'], "text")
+					   );
+
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	$insertGoTo = "../index.php?section=admin&go=judging_tables&msg=1"; 
+	header(sprintf("Location: %s", $insertGoTo));
+}
+
+// --------------------------- Editing a Table and Associated Styles ------------------------------- //
+
+if (($action == "edit") && ($dbTable == "judging_tables")) {
+$table_styles = implode(",",$_POST['tableStyles']);
+
+$updateSQL = sprintf("UPDATE judging_tables SET 
+
+tableName=%s, 
+tableStyles=%s, 
+tableNumber=%s,
+tableRound=%s,
+tableLocation=%s
+WHERE id=%s",
+                    
+                       GetSQLValueString($_POST['tableName'], "text"),
+					   GetSQLValueString($table_styles, "text"),
+					   GetSQLValueString($_POST['tableNumber'], "text"),
+					   GetSQLValueString($_POST['tableRound'], "text"),
+					   GetSQLValueString($_POST['tableLocation'], "text"),
+                       GetSQLValueString($id, "int"));
+
+  mysql_select_db($database, $brewing);
+  $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  $updateGoTo = "../index.php?section=admin&go=judging_tables&msg=2";
+  header(sprintf("Location: %s", $updateGoTo));
+}
+
+
+
+
+
+
 ?>

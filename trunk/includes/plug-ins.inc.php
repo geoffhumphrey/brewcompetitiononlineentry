@@ -254,10 +254,11 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 			
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$value);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$value);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
+			$row_entries = mysql_fetch_array($entries);
+			$totalRows_entries = $row_entries['count'];
+			mysql_free_result($entries);
 			
 			//echo $cap_total;
 			//echo "Query: ".$query_entries."<br>";
@@ -288,10 +289,11 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 			}
 		}
 		if (($bid != "default") && ($filter == "default")) {		
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$bid);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$bid);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
+			$row_entries = mysql_fetch_array($entries);
+			$totalRows_entries = $row_entries['count'];
+			mysql_free_result($entries);
 			
 			if ($totalRows_entries > 0) {
 				if ($discount == "Y") {
@@ -329,10 +331,11 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 			
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s'",$value, $filter);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s'",$value, $filter);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
+			$row_entries = mysql_fetch_array($entries);
+			$totalRows_entries = $row_entries['count'];
+			mysql_free_result($entries);
 			
 			//echo $cap_total;
 			//echo "Query: ".$query_entries."<br>";
@@ -385,20 +388,23 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 			foreach (array_unique($d) as $value) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$value);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$value);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
+			$row_entries = mysql_fetch_array($entries);
+			$totalRows_entries = $row_entries['count'];
+			mysql_free_result($entries);
 			
-			$query_not_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$value);
+			$query_not_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$value);
 			$entries_not_paid = mysql_query($query_not_paid, $brewing) or die(mysql_error());
-			$row_entries_not_paid = mysql_fetch_assoc($entries_not_paid);
-			$totalRows_entries_not_paid = mysql_num_rows($entries_not_paid);
+			$row_entries_not_paid = mysql_fetch_array($entries_not_paid);
+			$totalRows_entries_not_paid = $row_entries_not_paid['count'];
+			mysql_free_result($entries_not_paid);
 			
-			$query_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$value);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$value);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-			$row_paid = mysql_fetch_assoc($paid);
-			$totalRows_paid = mysql_num_rows($paid);
+			$row_paid = mysql_fetch_array($paid);
+			$totalRows_paid = $row_paid['count'];
+			mysql_free_result($paid);
 				
 			//echo "Query: ".$query_entries."<br>";
 			//echo "Total Entries: ".$totalRows_entries."<br>";
@@ -432,20 +438,23 @@ if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($sect
 			}
 		}
 		if (($bid != "default") && ($filter == "default")) {
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$bid);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$bid);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
+			$row_entries = mysql_fetch_array($entries);
+			$totalRows_entries = $row_entries['count'];
+			mysql_free_result($entries);
 			
-			$query_not_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$bid);
+			$query_not_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$bid);
 			$entries_not_paid = mysql_query($query_not_paid, $brewing) or die(mysql_error());
-			$row_entries_not_paid = mysql_fetch_assoc($entries_not_paid);
-			$totalRows_entries_not_paid = mysql_num_rows($entries_not_paid);
+			$row_entries_not_paid = mysql_fetch_array($entries_not_paid);
+			$totalRows_entries_not_paid = $row_entries_not_paid['count'];
+			mysql_free_result($entries_not_paid);
 			
-			$query_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$bid);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$bid);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-			$row_paid = mysql_fetch_assoc($paid);
-			$totalRows_paid = mysql_num_rows($paid);
+			$row_paid = mysql_fetch_array($paid);
+			$totalRows_paid = $row_paid['count'];
+			mysql_free_result($paid);
 			
 			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
 			if ($totalRows_entries > 0) {
@@ -765,36 +774,123 @@ function style_convert($number,$type) {
 			default: $style_convert = "Custom Style"; break;
 		}
 		break;
+		
+		case "3":
+		$n = ereg_replace('[^0-9]+', '', $number);
+		if ($n > 23) $style_convert = TRUE;
+		else {
+		switch ($number) {
+			case "6D": $style_convert = TRUE; break;
+			case "21A": $style_convert = TRUE; break;
+			case "22B": $style_convert = TRUE; break;
+			case "22C": $style_convert = TRUE; break;
+			case "23A": $style_convert = TRUE; break;
+			case "25C": $style_convert = TRUE; break;
+			case "26A": $style_convert = TRUE; break;
+			case "26C": $style_convert = TRUE; break;
+			case "27E": $style_convert = TRUE; break;
+			case "28B": $style_convert = TRUE; break;
+			default: $style_convert = FALSE; break;
+		    }
+		}
+		break;
 	}
 	return $style_convert;
+	
+	
+	
 }
 
-function get_table_info($id,$method) {	
+function get_table_info($input,$method,$id) {	
 	include ('Connections/config.php');
 	mysql_select_db($database, $brewing);
-	$query_table_styles = "SELECT * FROM judging_tables";
-	$table_styles = mysql_query($query_table_styles, $brewing) or die(mysql_error());
-	$row_table_styles = mysql_fetch_assoc($table_styles);
+	$query_table = "SELECT * FROM judging_tables";
+	if ($id != "default") $query_table .= " WHERE id='$id'"; 
+	$table = mysql_query($query_table, $brewing) or die(mysql_error());
+	$row_table = mysql_fetch_assoc($table);
 	
 	if ($method == "styles") {
 		do { 
-			$a = explode(",", $row_table_styles['tableStyles']);
-			$b = $id;
+			$a = explode(",", $row_table['tableStyles']);
+			$b = $input;
 			foreach ($a as $value) {
-				if ($value == $id) return TRUE;
+				if ($value == $input) return TRUE;
 			}
-		} while ($row_table_styles = mysql_fetch_assoc($table_styles));
-	}	
+		} while ($row_table = mysql_fetch_assoc($table));
+	}
 	
 	if ($method == "assigned") {
 		do { 
-			$a = explode(",", $row_table_styles['tableStyles']);
-			$b = $id;
+			$a = explode(",", $row_table['tableStyles']);
+			$b = $input;
 			foreach ($a as $value) {
-				if ($value == $id) $c = "<br><em>[Assigned to Table #".$row_table_styles['tableNumber'].": ".$row_table_styles['tableName']."]</em>";
+				if ($value == $input) $c = "<br><em>Assigned to Table #".$row_table['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table['id']."'>".$row_table['tableName']."</a></em>";
 			}
-		} while ($row_table_styles = mysql_fetch_assoc($table_styles));
+		} while ($row_table = mysql_fetch_assoc($table));
 	return $c;
   	}
+	
+	if ($method == "list") {
+		$a = explode(",", $row_table['tableStyles']);
+			foreach ($a as $value) {
+				include ('Connections/config.php');
+				mysql_select_db($database, $brewing);
+				$query_styles = "SELECT * FROM styles WHERE id='$value'";
+				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				$row_styles = mysql_fetch_assoc($styles);
+				
+				$c[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].",&nbsp;";
+			}
+	$d = array($c);
+	return $d;
+  	}
+	
+	if ($method == "count_total") {
+		$a = explode(",", $row_table['tableStyles']);
+			foreach ($a as $value) {
+				include ('Connections/config.php');
+				mysql_select_db($database, $brewing);
+				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				$row_styles = mysql_fetch_assoc($styles);
+				
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM brewing WHERE brewStyle='%s'", $row_styles['brewStyle']);
+				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
+				$row_style_count = mysql_fetch_assoc($style_count);
+				$totalRows_style_count = $row_style_count['count'];
+				
+				$c[] = $totalRows_style_count ;
+			}
+	$d = array_sum($c);
+	return $d; 
+  	}
+	
+	if ($method == "count") {
+	include ('Connections/config.php');
+	mysql_select_db($database, $brewing);
+	$query_style = "SELECT brewStyle FROM styles WHERE brewStyle='$input'";
+	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	//echo $query_style."<br>";
+	
+	$query = sprintf("SELECT COUNT(*) FROM brewing WHERE brewStyle='%s'",$row_style['brewStyle']);
+	$result = mysql_query($query, $brewing) or die(mysql_error());
+	$num_rows = mysql_fetch_array($result);
+	// echo $query;
+	//$num_rows = mysql_num_rows($result);
+	return $num_rows[0];
+	}
+}
+
+function displayArrayContent($arrayname) {
+ 	$a = "";
+ 	while(list($key, $value) = each($arrayname)) {
+  		if (is_array($value)) {
+   		$a .= displayArrayContent($value);
+   		}
+  	else $a .= "$value";
+  	}
+ 	$b = rtrim($a, ",&nbsp;");
+ 	return $b;
 }
 ?>

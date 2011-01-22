@@ -42,6 +42,8 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=add">A Flight</a>
 </div>
 
 <div id="adminMenu1" class="menu">
@@ -60,7 +62,8 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=contacts">Competition Contacts</a>
 <a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
-
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
 </div>
 
 <div id="adminMenu3" class="menu" onmouseover="menuMouseover(event)">

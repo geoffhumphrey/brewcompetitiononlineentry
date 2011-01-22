@@ -257,6 +257,7 @@ if (isset($_SESSION["loginUsername"]))  {
 	$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
 	$row_user_level = mysql_fetch_assoc($user_level);
 	$totalRows_user_level = mysql_num_rows($user_level);
+	
 }
 
 // General judging connection
@@ -321,7 +322,7 @@ $totalRows_stewarding2 = mysql_num_rows($stewarding2);
 
 $query_styles = "SELECT * FROM styles";
 if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
-elseif (($section == "admin") && ($action == "edit")) $query_styles .= " WHERE id='$id'";
+elseif (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " WHERE id='$id'";
 elseif ((($section == "judge") && ($go == "judge")) || ($action == "edit")) $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 elseif (($section == "beerxml") && ($msg != "default")) $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleOwn='bcoe'";
 else $query_styles .= "";
@@ -352,9 +353,17 @@ if ($row_contest_info['contestEntryCap'] != "") $cap = $row_contest_info['contes
 if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y";
 if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $discount = "Y";
 
+if (($section == "admin") && ($go == "judging_tables")) {
 $query_tables = "SELECT * FROM judging_tables";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables);
+
+$query_tables_edit = "SELECT * FROM judging_tables";
+if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
+$tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
+$row_tables_edit = mysql_fetch_assoc($tables_edit);
+
+}
 
 ?>

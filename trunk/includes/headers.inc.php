@@ -188,6 +188,10 @@ switch($section) {
 			case "contacts":
 			$header_output .= ": Contacts";
 			break;
+			
+			case "judging_tables":
+			$header_output .= ": Tables";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "Info added successfully."; 
