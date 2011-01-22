@@ -251,7 +251,7 @@ font-weight: bold;
 }
 
 .dataTable { 
-
+width: 100%;
 }
 
 .dataTableCompact  { 
@@ -313,6 +313,16 @@ border-top: 1px solid #000000;
 
 .bdr1B {
 border-bottom: 1px solid #000000;
+}
+
+.bdr1 {
+border: 1px solid #000000;
+}
+
+.box {
+border: 1px solid #000000;
+height: 30px;
+width: 50px;
 }
 
 .admin {

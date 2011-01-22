@@ -62,10 +62,9 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
   <td class="dataHeading">Total Unpaid Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].($total_entry_fees - $total_paid_entry_fees); ?></td>
 </tr>
-
 <tr>
   	<td colspan="2">&nbsp;</td>
-  </tr>
+</tr>
 </table>
 <?php } ?>
 <?php if ($totalRows_log > 0) { ?>
