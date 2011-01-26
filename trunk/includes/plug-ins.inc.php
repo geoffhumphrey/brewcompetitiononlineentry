@@ -839,7 +839,7 @@ function get_table_info($input,$method,$id) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$c[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].",&nbsp;";
+				$c[] = ltrim($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'],"0").",&nbsp;";
 			}
 	$d = array($c);
 	return $d;
@@ -854,7 +854,7 @@ function get_table_info($input,$method,$id) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM brewing WHERE brewStyle='%s'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -873,7 +873,7 @@ function get_table_info($input,$method,$id) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) FROM brewing WHERE brewStyle='%s'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;

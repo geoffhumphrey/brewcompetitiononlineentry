@@ -56,18 +56,18 @@ if (isset($_GET['tb'])) {
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE brewStyle='%s' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		do {
 	?>
     <tr>
-    	<td><p class="box">&nbsp;</p></td>
-        <td class="data"><?php echo $row_entries['id']; ?></td>
-        <td class="data"><?php echo $style." ".$row_entries['brewStyle']; if (style_convert($style,"3")) echo "<br><strong>Special Ingredients/Classic Style:</strong><span class='data'>".$row_entries['brewInfo']."</span>"; ?></td>
-        <td class="data"><p class="box">&nbsp;</p></td>
-        <td class="data"><p class="box">&nbsp;</p></td>
+    	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo style_convert($row_entries['brewCategorySort'],1)."<br>".$style." ".$row_entries['brewStyle']; if (style_convert($style,"3")) echo "<br><strong>Special Ingredients/Classic Style:</strong><span class='data'>".$row_entries['brewInfo']."</span>"; ?></td>
+        <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries));
 	mysql_free_result($styles);
@@ -113,18 +113,18 @@ else { ?>
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE brewStyle='%s' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo FROM brewing WHERE brewStyle='%s' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		do {
 	?>
     <tr>
-    	<td><p class="box">&nbsp;</p></td>
-        <td class="data"><?php echo $row_entries['id']; ?></td>
-        <td class="data"><?php echo $style." ".$row_entries['brewStyle']; if (style_convert($style,"3")) echo "<br><strong>Special Ingredients/Classic Style:</strong><span class='data'>".$row_entries['brewInfo']."</span>"; ?></td>
-        <td class="data"><p class="box">&nbsp;</p></td>
-        <td class="data"><p class="box">&nbsp;</p></td>
+    	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo "<em>".style_convert($row_entries['brewCategorySort'],1)."</em><br>".$style." ".$row_entries['brewStyle']; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style:</strong><br>".$row_entries['brewInfo']."</p>"; ?></td>
+        <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries));
 	mysql_free_result($styles);

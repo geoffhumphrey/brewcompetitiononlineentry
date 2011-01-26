@@ -64,7 +64,7 @@ function checkUncheckAll(theElement) {
   <th class="dataHeading bdr1B">Category Name</th>
   <th class="dataHeading bdr1B">#</th>
   <?php if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { ?>
-  <th class="dataHeading bdr1B">Judging Location</th>
+  <th class="dataHeading bdr1B">Table Assignment</th>
   <?php } ?>
   <th class="dataHeading bdr1B">Link</th>
   <th class="dataHeading bdr1B">Actions</th>

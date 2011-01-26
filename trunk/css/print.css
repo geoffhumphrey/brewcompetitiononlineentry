@@ -315,6 +315,10 @@ border-top: 1px solid #000000;
 border-bottom: 1px solid #000000;
 }
 
+.bdr1B_gray {
+border-bottom: 1px solid #cccccc;
+}
+
 .bdr1 {
 border: 1px solid #000000;
 }
