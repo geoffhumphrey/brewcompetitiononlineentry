@@ -8,30 +8,6 @@ $entry_total_final = unpaid_fees($total_not_paid, $row_contest_info['contestEntr
 if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
 	$discount = discount_display($total_not_paid,$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $cap);
 }
-/*
-$query_paid = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['uid']);
-$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-$row_paid = mysql_fetch_assoc($paid);
-$totalRows_paid = mysql_num_rows($paid);
-
-$total_not_paid = ($totalRows_log - $totalRows_paid);
-
-if ($row_contest_info['contestEntryFeeDiscount'] == "N") $entry_total = $total_not_paid * $row_contest_info['contestEntryFee'];
-if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($total_not_paid > $row_contest_info['contestEntryFeeDiscountNum'])) {
-	$discFee = ($total_not_paid - $row_contest_info['contestEntryFeeDiscountNum']) * $row_contest_info['contestEntryFee2'];
-	$regFee = $row_contest_info['contestEntryFeeDiscountNum'] * $row_contest_info['contestEntryFee'];
-	$entry_total = $discFee + $regFee;
-	}
-
-if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($total_not_paid <= $row_contest_info['contestEntryFeeDiscountNum'])) {
-	if ($total_not_paid > 0) $entry_total = $total_not_paid * $row_contest_info['contestEntryFee'];
-	else $entry_total = "0"; 
-} 
- 
-if (($row_contest_info['contestEntryCap'] != "") && ($entry_total > $row_contest_info['contestEntryCap'])) { $fee = ($row_contest_info['contestEntryCap'] * .029); $entry_total_final = $row_contest_info['contestEntryCap']; } else { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
-if ($row_contest_info['contestEntryCap'] == "") { $fee = ($entry_total * .029); $entry_total_final = $entry_total; }
-*/
-
 if ($msg != "default") echo $msg_output;
 ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
@@ -48,41 +24,41 @@ if ($msg != "default") echo $msg_output;
 <?php } ?>
 <?php } ?>
 <table class="dataTable">
-  <tr>
-    <td class="dataLabel" width="5%">Name:</td>
-    <td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Email:</td>
-    <td class="data"><?php echo $row_brewer['brewerEmail']; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Address:</td>
-    <td class="data"><?php if ($row_brewer['brewerAddress'] != "") echo $row_brewer['brewerAddress']."<br>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']." ".$row_brewer['brewerCountry']; else echo "None entered"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Phone Number(s):</td>
-    <td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1) ";  if ($row_brewer['brewerPhone2'] != "") echo "<br>".$row_brewer['brewerPhone2']." (2)"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Club:</td>
-    <td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">AHA Member Number:</td>
-    <td class="data"><?php if ($row_brewer['brewerAHA'] != "") echo $row_brewer['brewerAHA']; else echo "Not provided"; ?></td>
-  </tr>
-  <?php if ($row_brewer['brewerAssignment'] == "") { ?>
-  <tr>
-    <td class="dataLabel">Judge?</td>
-    <td class="data">
-	<?php if ($row_brewer['brewerJudge'] != "") echo  $row_brewer['brewerJudge']; else echo "None entered"; ?>
-    </td>
-  </tr>
-  <?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
-  <tr>
-    <td class="dataLabel">Judging Availability<br />Locations:</td>
-    <td class="data">
+  	<tr>
+    	<td class="dataLabel" width="5%">Name:</td>
+    	<td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></td>
+  	</tr>
+  	<tr>
+   	 	<td class="dataLabel">Email:</td>
+   	 	<td class="data"><?php echo $row_brewer['brewerEmail']; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">Address:</td>
+    	<td class="data"><?php if ($row_brewer['brewerAddress'] != "") echo $row_brewer['brewerAddress']."<br>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']." ".$row_brewer['brewerCountry']; else echo "None entered"; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">Phone Number(s):</td>
+    	<td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1) ";  if ($row_brewer['brewerPhone2'] != "") echo "<br>".$row_brewer['brewerPhone2']." (2)"; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">Club:</td>
+    	<td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">AHA Member Number:</td>
+    	<td class="data"><?php if ($row_brewer['brewerAHA'] != "") echo $row_brewer['brewerAHA']; else echo "Not provided"; ?></td>
+  	</tr>
+  	<?php if ($row_brewer['brewerAssignment'] == "") { ?>
+  	<tr>
+    	<td class="dataLabel">Judge?</td>
+    	<td class="data">
+		<?php if ($row_brewer['brewerJudge'] != "") echo  $row_brewer['brewerJudge']; else echo "None entered"; ?>
+    	</td>
+  	</tr>
+  	<?php if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
+  	<tr>
+    	<td class="dataLabel">Judging Availability<br />Locations:</td>
+    	<td class="data">
     	<table class="dataTableCompact">
 		<?php 
 		$a = explode(",",$row_brewer['brewerJudgeLocation']);
@@ -101,35 +77,35 @@ if ($msg != "default") echo $msg_output;
 			}
 		?>
     	</table>
-    </td>
-  </tr>
-  <?php } ?>
-  <?php } else { ?>
-  <tr>
-    <td class="dataLabel">Assigned As:</td>
-    <td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?>
-    <?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?>
-    <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print your judging scoresheet labels" title="Print your judging scoresheet labels"></span><span class="data"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank">Print Your Judging Scoresheet Labels</a></span><span class="data">[Easter Egg for Firefox Users]</span>
+    	</td>
+  	</tr>
+  	<?php } ?>
+  	<?php } else { ?>
+  	<tr>
+    	<td class="dataLabel">Assigned As:</td>
+		<td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?>
+    	<?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?>
+    	<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print your judging scoresheet labels" title="Print your judging scoresheet labels"></span><span class="data"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank">Print Your Judging Scoresheet Labels</a></span><span class="data">[Easter Egg for Firefox Users]</span>
     <ul>
-    <li>For use with Avery 5160 labels.</li>
-    <li>Under File &gt; Page Setup:
-      <ul>
-        <li>On the Format &amp; Options tab, choose Portrait and 100% scale.</li>
-        <li>On the Margins &amp; Header/Footer tab, set your browser's printing margins to &#8212; Top: 0.2 in., Right: 0 in., Left: 0 in., Bottom: 0 in. and remove <em>all</em> info from the header and footer.</li>
-      </ul>
-    </li>
-    <li>Be sure to restore your previous printing settings once you've finished printing your labels.</li>
+    	<li>For use with Avery 5160 labels.</li>
+    	<li>Under File &gt; Page Setup:
+      	<ul>
+        	<li>On the Format &amp; Options tab, choose Portrait and 100% scale.</li>
+       	 	<li>On the Margins &amp; Header/Footer tab, set your browser's printing margins to &#8212; Top: 0.2 in., Right: 0 in., Left: 0 in., Bottom: 0 in. and remove <em>all</em> info from the header and footer.</li>
+      	</ul>
+    	</li>
+    		<li>Be sure to restore your previous printing settings once you've finished printing your labels.</li>
     </ul>
-    </p>
-	<?php } ?>
-    </td>
-  </tr>
-  <?php if ($totalRows_judging3 > 1) { ?>
-  <tr>
-    <td class="dataLabel">Location<?php if ($totalRows_judging > 1) echo "(s)"; ?>:</td>
-    <td class="data">
+   	 </p>
+		<?php } ?>
+    	</td>
+  	</tr>
+  	<?php if ($totalRows_judging3 > 1) { ?>
+  	<tr>
+    	<td class="dataLabel">Location<?php if ($totalRows_judging > 1) echo "(s)"; ?>:</td>
+    	<td class="data">
     <?php if (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")) { ?>
-    <table class="dataTableCompact">
+    	<table class="dataTableCompact">
 		<?php 
 		if ($row_brewer['brewerAssignment'] == "J") $a = explode(",",$row_brewer['brewerJudgeAssignedLocation']);
 		if ($row_brewer['brewerAssignment'] == "S") $a = explode(",",$row_brewer['brewerStewardAssignedLocation']);
@@ -149,39 +125,39 @@ if ($msg != "default") echo $msg_output;
 	<?php 
 	} else echo "Contact the competition coordinator for your assignment."; 
 	?>
-    </td>
-  </tr>
-  <?php } ?>
-  <?php } ?>
-  <?php if ((($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "") || ($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "J"))) { ?>
-  <tr>
-    <td class="dataLabel">BJCP Judge ID:</td>
-    <td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">BJCP Rank:</td>
-    <td class="data"><?php  if ($row_brewer['brewerJudgeRank'] != "") echo  $row_brewer['brewerJudgeRank']; else echo "N/A"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Categories Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']); else echo "N/A"; ?></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Catagories Not Preferred:</td>
-    <td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']); else echo "N/A"; ?></td>
-  </tr>
-  <?php } ?>
-  <?php if ($row_brewer['brewerAssignment'] == "") { ?>
-  <tr>
-    <td class="dataLabel">Steward?</td>
-    <td class="data"><?php if ($row_brewer['brewerSteward'] != "") echo $row_brewer['brewerSteward']; else echo "None entered"; ?></td>
-  </tr>
-  <?php  if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
-  <tr>
-    <td class="dataLabel">Stewarding Availability<br />Locations:</td>
-    <td class="data">
-    <table class="dataTableCompact">
-	<?php 
+    	</td>
+  	</tr>
+  	<?php } ?>
+  	<?php } ?>
+  	<?php if ((($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "") || ($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "J"))) { ?>
+  	<tr>
+    	<td class="dataLabel">BJCP Judge ID:</td>
+    	<td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
+	</tr>
+  	<tr>
+    	<td class="dataLabel">BJCP Rank:</td>
+   	 <td class="data"><?php  if ($row_brewer['brewerJudgeRank'] != "") echo  $row_brewer['brewerJudgeRank']; else echo "N/A"; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">Categories Preferred:</td>
+    	<td class="data"><?php if ($row_brewer['brewerJudgeLikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']); else echo "N/A"; ?></td>
+  	</tr>
+  	<tr>
+    	<td class="dataLabel">Catagories Not Preferred:</td>
+    	<td class="data"><?php if ($row_brewer['brewerJudgeDislikes'] != "") echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']); else echo "N/A"; ?></td>
+  	</tr>
+  	<?php } ?>
+  	<?php if ($row_brewer['brewerAssignment'] == "") { ?>
+  	<tr>
+    	<td class="dataLabel">Steward?</td>
+    	<td class="data"><?php if ($row_brewer['brewerSteward'] != "") echo $row_brewer['brewerSteward']; else echo "None entered"; ?></td>
+  	</tr>
+  	<?php  if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
+  	<tr>
+    	<td class="dataLabel">Stewarding Availability<br />Locations:</td>
+    	<td class="data">
+    	<table class="dataTableCompact">
+		<?php 
 		$a = explode(",",$row_brewer['brewerStewardLocation']);
 		arsort($a);
 		foreach ($a as $value) {
@@ -196,9 +172,9 @@ if ($msg != "default") echo $msg_output;
 				}
 			else echo "";
 			}
-	?>
-    </table>
-    </td>
+		?>
+    	</table>
+    	</td>
   </tr>
   <?php } ?>
   <?php } ?>
@@ -216,31 +192,24 @@ if ($msg != "default") echo $msg_output;
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
 <table class="dataTable">
 <tbody>
- <tr>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import Entries Using BeerXML</a></td>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/help.png"  /></span><a class="data thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Get Help">BeerXML Export/Upload Help</a></td>
-   <td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
- </tr>
+ 	<tr>
+   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
+   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import Entries Using BeerXML</a></td>
+   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/help.png"  /></span><a class="data thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Get Help">BeerXML Export/Upload Help</a></td>
+   		<td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
+ 	</tr>
 </tbody>
 </table>
 <?php if (($judgingDateReturn == "false") && ($totalRows_log > 0)) { ?>
-<!--
-<p>You currently have <?php //echo $total_not_paid; ?> <strong>unpaid</strong> <?php //if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; if ($entry_total_final > 0) { ?>
-Your total entry fees are <?php  //echo $row_prefs['prefsCurrency']; echo number_format($entry_total_final, 2); if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && ($totalRows_log > $row_contest_info['contestEntryFeeDiscountNum'])) echo " (".$row_prefs['prefsCurrency'].number_format($regFee, 2)." for the first ".$row_contest_info['contestEntryFeeDiscountNum']." entries, ".$row_prefs['prefsCurrency'].number_format($discFee, 2)." for the remaining ".($totalRows_log - $row_contest_info['contestEntryFeeDiscountNum'])." entries)"; ?>.<?php // } ?></p>
--->
-
-
 <table class="dataTable" style="margin: 0 0 25px 0;">
 <tbody>
- <tr>
-  
-  <td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></td>
+ 	<tr>
+  		<td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></td>
   <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
   <?php } if ($action != "print") { ?>
-  <td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
+  		<td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
   <?php } ?>
- </tr>
+ 	</tr>
 </tbody>
 </table>
 <?php } ?>
@@ -302,7 +271,7 @@ Your total entry fees are <?php  //echo $row_prefs['prefsCurrency']; echo number
   <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
   	<?php } 
   if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Lables for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Lables</a>
+  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   <?php } ?>
   </td>
   <?php  } ?>
