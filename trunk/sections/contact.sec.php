@@ -9,9 +9,13 @@ if (!isset($_SESSION["loginUsername"])) { session_start(); }
 	<td class="dataLabel bdr1T" width="5%">Contact:</td>
 	<td class="data bdr1T" width="25%">
     <select name="to">
-    	<?php do { ?>
-    	<option value="<?php echo $row_contact['id']; ?>" <?php if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
-        <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
+    	<?php 
+    		$contacts = getContacts();
+    		 while ($row_contact = mysql_fetch_assoc($contacts)) 
+    		 { 
+    		?>
+    	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
+        <?php }; ?>
     </select>
     </td>
     <td class="data bdr1T"><span class="required">Required</span></td>

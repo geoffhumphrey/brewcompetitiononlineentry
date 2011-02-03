@@ -3,7 +3,8 @@
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
 <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Information">Print This Page</a></p>
-<?php if ($totalRows_contact > 0) { ?><a href="#officials">Competition Official<?php if ($totalRows_contact > 1) echo "s"; ?></a><br /><?php } ?>
+<?php $contact_count= getContactCount();
+if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($contact_count > 1) echo "s"; ?></a><br /><?php } ?>
 <a href="#window">Entry Window</a><br />
 <a href="#entry">Entry Fees</a><br />
 <a href="#payment">Payment</a><br />
@@ -16,8 +17,8 @@
 <?php if ($row_contest_info['contestAwards'] != "") { ?><a href="#awards">Awards</a><br /><?php }?>
 <?php if ($row_contest_info['contestAwardsLocName'] != "") { ?><a href="#ceremony">Awards Ceremony</a><br /><?php } ?>
 <?php } ?>
-<?php if ($totalRows_contact > 0) { ?>
-<a name="officials"></a><h2>Competition Official<?php if ($totalRows_contact > 1) echo "s"; ?></h2>
+<?php if ($contact_count > 0) { ?>
+<a name="officials"></a><h2>Competition Official<?php if ($contact_count > 1) echo "s"; ?></h2>
 <?php if ($action != "print") { ?><p>You can send an email to any of the following individuals via the <a href="index.php?section=contact">Contact</a> section.</p><?php } ?>
 <ul>
 <?php do { ?>

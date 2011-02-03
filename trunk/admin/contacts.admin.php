@@ -11,7 +11,7 @@
    <?php } ?>
    </tr>
 </table>
-<?php if ($totalRows_contact > 0) { ?>
+<?php if (getContactCount() > 0) { ?>
 <?php if ($action == "default") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
