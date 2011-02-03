@@ -7,7 +7,7 @@
   <li><?php if ($section != "rules") { ?><a href="index.php?section=rules">Rules</a><?php } else { ?>Rules<?php } ?></li>
   <li><?php if ($section != "entry") { ?><a href="index.php?section=entry">Entry Information</a><?php } else { ?>Entry Information<?php } ?></li>
   <?php if (($row_prefs['prefsSponsors'] == "Y") && ($row_prefs['prefsSponsorLogos'] == "Y") && ($totalRows_sponsors > 0)) { ?><li><?php if ($section != "sponsors") { ?><a href="index.php?section=sponsors">Sponsors</a><?php } else { ?>Sponsors<?php } ?></li><?php } ?>
-  <?php if ($totalRows_contact > 0) { ?>
+  <?php if (getContactCount() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="index.php?section=contact">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
   <?php if (lesserDate($today,$reg_deadline) && (!lesserDate($today,$reg_open)))  { ?>
