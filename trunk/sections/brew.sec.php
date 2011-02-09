@@ -895,6 +895,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
   </td>
   </tr>
 </table>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 <?php } 
 else echo "<div class=\"error\">The requested entry was not entered under the currently logged in user's credentials.</div>";

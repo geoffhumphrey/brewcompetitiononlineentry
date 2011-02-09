@@ -32,5 +32,6 @@ if ($action == "password") {
 </table>
 <input name="user_name_old" type="hidden" value="<?php echo $row_user['user_name']; ?>">
 <input name="userLevel" type="hidden" value="<?php echo $row_user['userLevel']; ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 <?php } else echo "<div class=\"error\">You can only edit your own user name and password.</div>"; ?>

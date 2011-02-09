@@ -644,6 +644,8 @@ CREATE TABLE IF NOT EXISTS `judging_preferences` (
   `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsBOSMethod` INT(11) NULL DEFAULT NULL COMMENT '1= 1st place only, 2 = 1 and 2 places, 3=1,2,3 places',
+  `jPrefsBOSCider` char(1) NULL DEFAULT NULL COMMENT 'separate BOS for ciders?',
+  `jPrefsBOSMead` char(1) NULL DEFAULT NULL COMMENT 'separate BOS for mead?',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;
 
@@ -651,9 +653,11 @@ INSERT INTO `judging_preferences` (
 `id` ,
 `jPrefsQueued` ,
 `jPrefsFlightEntries` ,
-`jPrefsBOSMethod`
+`jPrefsBOSMethod`,
+`jPrefsBOSCider`,
+`jPrefsBOSMead`
 )
-VALUES ('1' , 'N', '12', '1');
+VALUES ('1' , 'N', '12', '1', 'N', 'N');
 
 CREATE TABLE IF NOT EXISTS `judging_tables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -671,12 +675,10 @@ CREATE TABLE IF NOT EXISTS `judging_flights` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
   `flightNumber` int(11) DEFAULT NULL,
-  `flightEntries` varchar(255) DEFAULT NULL,
+  `flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
   `flightRound` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;
-
-ALTER TABLE `brewing` ADD `brewScore` INT( 8 ) NULL ;
 
 CREATE TABLE `judging_scores` (
 `id` INT(11) NOT NULL AUTO_INCREMENT ,
@@ -687,3 +689,6 @@ CREATE TABLE `judging_scores` (
 `scorePlace` INT(11) NULL COMMENT 'place of entry as assigned by judges',
 PRIMARY KEY (`id`)
 ) ENGINE = MYISAM ;
+
+ALTER TABLE `brewing` ADD `brewScore` INT( 8 ) NULL ;
+ALTER TABLE `judging` ADD `judgingRounds` INT( 11 ) NULL DEFAULT '1' COMMENT 'number of rounds at location';

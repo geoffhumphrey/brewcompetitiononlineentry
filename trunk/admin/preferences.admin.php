@@ -183,4 +183,5 @@
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Set Preferences"></td>
   </tr>
 </table>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>

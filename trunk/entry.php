@@ -25,7 +25,7 @@ $query_logged_in = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSI
 $logged_in_user = mysql_query($query_logged_in, $brewing) or die(mysql_error());
 $row_logged_in_user = mysql_fetch_assoc($logged_in_user);
 
-$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail = '%s'", $row_brewer_user_info['user_name']);
+$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_brewer_user_info['id']);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $brewer_info = mysql_fetch_assoc($brewer);
 

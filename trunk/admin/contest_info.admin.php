@@ -83,29 +83,6 @@
     <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations. For example, if you want to accept registrations through January 1, 2011, the registration deadline should be January 2, 2011 (closes at midnight).</em></td>
   </tr>
 </table>
-<h3>Awards</h3>
-<table>
-  <tr>
-    <td class="dataLabel">Awards Date:</td>
-    <td class="data"><input name="contestAwardsLocDate" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestAwardsLocDate']; ?>"></td>
-    <td class="data"><em>Provide even if the date of judging is the same.</em></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Awards Start Time:</td>
-    <td class="data"><input name="contestAwardsLocTime" size="30" value="<?php echo $row_contest_info['contestAwardsLocTime']; ?>"></td>
-    <td class="data"><em>The approximate time the awards ceremony will begin.</em></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Awards Location Name:</td>
-    <td class="data"><input name="contestAwardsLocName" size="30" value="<?php echo $row_contest_info['contestAwardsLocName']; ?>"></td>
-    <td class="data"><em>Provide the name of the awards location.</em></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Awards Location Address:</td>
-    <td class="data"><textarea name="contestAwardsLocation"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestAwardsLocation']; ?></textarea></td>
-    <td class="data"><em>Provide the address of the award location. The more complete (e.g., street address, city, state, zip) the better.</em></td>
-  </tr> 
-</table>
 <h3>Rules</h3>
 <table>
   <tr>
@@ -167,6 +144,28 @@
 <h3>Awards</h3>
 <table>
   <tr>
+    <td class="dataLabel">Awards Date:</td>
+    <td class="data"><input name="contestAwardsLocDate" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestAwardsLocDate']; ?>"></td>
+    <td class="data"><em>Provide even if the date of judging is the same.</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Awards Start Time:</td>
+    <td class="data"><input name="contestAwardsLocTime" size="30" value="<?php echo $row_contest_info['contestAwardsLocTime']; ?>"></td>
+    <td class="data"><em>The approximate time the awards ceremony will begin.</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Awards Location Name:</td>
+    <td class="data"><input name="contestAwardsLocName" size="30" value="<?php echo $row_contest_info['contestAwardsLocName']; ?>"></td>
+    <td class="data"><em>Provide the name of the awards location.</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Awards Location Address:</td>
+    <td class="data"><textarea name="contestAwardsLocation"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestAwardsLocation']; ?></textarea></td>
+    <td class="data"><em>Provide the address of the award location. The more complete (e.g., street address, city, state, zip) the better.</em></td>
+  </tr> 
+</table>
+<table>
+  <tr>
     <td class="dataLabel">Awards Structure:</td>
     <td class="data"><textarea name="contestAwards" cols="70" rows="25"><?php echo $row_contest_info['contestAwards']; ?></textarea></td>
     <td class="data"><em>Indicate places for each category, BOS procedure, qualifying criteria, etc.</em></td>
@@ -188,4 +187,5 @@
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit"></td>
   </tr>
 </table>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>

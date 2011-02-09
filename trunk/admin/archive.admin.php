@@ -3,6 +3,7 @@
 <form action="admin/archive.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s participant and entry information?\nThis cannot be undone.');">
 <input name="archiveSuffix" type="text" size="10" value="<?php echo date('Y'); ?>">
 <input name="submit" type="submit" class="button" value="Archive Now">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 <?php if ($totalRows_archive > 0) { ?>
 <h2>Archived Data</h2>

@@ -20,9 +20,10 @@
     <td nowrap="nowrap" class="data">
       <input type="radio" name="jPrefsBOSMethod" value="1" id="jPrefsBOSMethod_0" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "1") echo "checked"; ?> />1st place only<br />
       <input type="radio" name="jPrefsBOSMethod" value="2" id="jPrefsBOSMethod_1" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "2") echo "checked"; ?> />1st and 2nd places only<br />
-      <input type="radio" name="jPrefsBOSMethod" value="3" id="jPrefsBOSMethod_2" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "3") echo "checked"; ?> />1st, 2nd, and 3rd places
+      <input type="radio" name="jPrefsBOSMethod" value="3" id="jPrefsBOSMethod_2" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "3") echo "checked"; ?> />1st, 2nd, and 3rd places<br />
+      <input type="radio" name="jPrefsBOSMethod" value="4" id="jPrefsBOSMethod_3" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "4") echo "checked"; ?> />Defined by user
     </td>
-  	<td class="data">Indicate which places from each table will advance to the BOS Round.</td>
+  	<td class="data">Indicate which places from each table will advance to the BOS Round or whether you will define each BOS entry manually.</td>
   </tr>
   <tr>
     <td>&nbsp;</td>

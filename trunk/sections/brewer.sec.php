@@ -159,6 +159,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

@@ -53,13 +53,11 @@ $dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
 $row_dropoff = mysql_fetch_assoc($dropoff);
 $totalRows_dropoff = mysql_num_rows($dropoff);
 
-
-// This doesn't seem to be in use - each page uses its own db query.
-//$query_contact = "SELECT * FROM contacts";
-//if (($section == "admin") && ($action == "edit"))  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
-//$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-//$row_contact = mysql_fetch_assoc($contact);
-//$totalRows_contact = mysql_num_rows($contact);
+$query_contact = "SELECT * FROM contacts";
+if (($section == "admin") && ($action == "edit"))  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
+$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+$row_contact = mysql_fetch_assoc($contact);
+$totalRows_contact = mysql_num_rows($contact);
 
 if (($section == "default") || ($section == "past_winners")) { 
 	if ($section == "past_winners")	$dbTable = $dbTable; else $dbTable = "brewing";
@@ -121,6 +119,12 @@ $query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
 $result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 $row = mysql_fetch_array($result);
 $totalRows_entry_count = $row["count"];
+mysql_free_result($result);
+
+$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+$result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+$row = mysql_fetch_assoc($result);
+$totalRows_participant_count = $row["count"];
 mysql_free_result($result);
 
 # Set global pagination variables 
@@ -350,29 +354,31 @@ if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y
 if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $discount = "Y";
 
 if ($section == "admin") {
-$query_tables = "SELECT * FROM judging_tables";
-if ($id == "default") $query_tables_edit .= " ORDER BY tableNumber ASC";
-$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-$row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
+	$query_tables = "SELECT * FROM judging_tables";
+	if ($id == "default") $query_tables .= " ORDER BY tableNumber ASC";
+	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+	$row_tables = mysql_fetch_assoc($tables);
+	$totalRows_tables = mysql_num_rows($tables);
+
+	$query_tables_edit = "SELECT * FROM judging_tables";
+	if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
+	if ($id == "default") $query_tables_edit .= " ORDER BY tableNumber ASC";
+	$tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
+	$row_tables_edit = mysql_fetch_assoc($tables_edit);
+	
+	$tables_edit2 = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
+	$row_tables_edit2 = mysql_fetch_assoc($tables_edit2);
+
+	if ($go == "judging_scores") {
+
+	}
+
+	if ($go == "judging_flights") {
+	
+	}
 
 }
 
-
-function getParticipantCount() 
-{
-	require ('Connections/config.php');
-	
-	mysql_select_db($database, $brewing);
-	
-	$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
-	$result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
-	$row = mysql_fetch_assoc($result);
-	$participantCount = $row["count"];
-	mysql_free_result($result);
-	return $participantCount;
-
-}
 
 function getContactCount() 
 {
@@ -398,6 +404,5 @@ function getContacts()
 	$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
 	return $contacts;
 }
-
 
 ?>

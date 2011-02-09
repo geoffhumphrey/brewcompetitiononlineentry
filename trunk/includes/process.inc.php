@@ -3,6 +3,12 @@ require ('../Connections/config.php');
 require ('db_connect.inc.php');
 require ('url_variables.inc.php');
 
+// Global Variables
+
+$insertGoTo = $_POST['relocate']."&msg=1";
+$updateGoTo = $_POST['relocate']."&msg=2";
+$deleteGoTo = $_POST['relocate']."&msg=5";
+
 session_start(); 
 //require ('authentication.inc.php'); session_start(); sessionAuthenticate();
 
@@ -33,6 +39,8 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   }
   return $theValue;
 }
+
+
 
 if ($action == "delete") {
 
@@ -134,12 +142,10 @@ if ($action == "delete") {
   $dropTable4 = "DROP TABLE sponsors_$filter";
   $Result4 = mysql_query($dropTable4, $brewing) or die(mysql_error());
   
-  $deleteGoTo = "../index.php?section=admin&go=archive&filter=".$filter."&msg=8";
   header(sprintf("Location: %s", $deleteGoTo));
   }
   
   if ($dbTable != "archive") { 
-  $deleteGoTo = "../index.php?section=".$section."&go=".$go."&msg=5";
   header(sprintf("Location: %s", $deleteGoTo));
   }
 
@@ -464,14 +470,8 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
 		if ($section == "admin") $insertGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
 		else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
   }
-  elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
-  else $insertGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&action=".$action."&msg=1";
-  //echo $query_brew_id."<br>";
-  //echo $row_brew_id['id']."<br>";
-  //echo $styleBreak."<br>";
-  //echo $special."<br>";
-  //echo $custom."<br>";
-  //echo $insertGoTo;
+  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
+  else $insertGoTo = "../index.php?section=list";
   header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -787,10 +787,8 @@ $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory
 		if ($section == "admin") $updateGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
 		else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
   }
-  elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $updateGoTo = "../index.php?section=admin&go=entries&msg=2";
-  else {
-  $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter="; if ($section == "admin") $updateGoTo .= "default"; else $updateGoTo .= $filter; $updateGoTo .= "&msg=2";
-  }
+  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $updateGoTo = "../index.php?section=admin&go=entries&msg=2";
+  else  $updateGoTo = "../index.php?section=list";
  /*
  echo $special."<br>";
  echo $check."<br>";
@@ -903,8 +901,6 @@ $updateSQL = sprintf("UPDATE users SET userLevel=%s WHERE user_name=%s",
 					   
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  
-  $updateGoTo = "../index.php?section=".$section."&go=participants&msg=2";
   header(sprintf("Location: %s", $updateGoTo));  
 }
 
@@ -1081,7 +1077,7 @@ if ($go == "judge") {
 	if ($section == "setup") $insertGoTo = "../index.php?msg=success";
 	elseif ($_POST['brewerJudge'] == "Y") $insertGoTo = "../index.php?section=judge&go=judge";
     elseif ($section == "admin") $insertGoTo = "../index.php?section=admin&go=participants&msg=1&username=".$username;
-	else $insertGoTo = "../index.php?section=list&msg=1"; 
+	else $insertGoTo = $insertGoTo; 
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -1166,7 +1162,7 @@ WHERE id=%s",
   if ($go == "register") $updateGoTo = "../index.php?section=brew&msg=2";	
   elseif ($go == "judge") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=7";
   elseif ($go == "default") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=2";
-  else $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=default&msg=2";
+  else $updateGoTo = $updateGoTo;
 
   header(sprintf("Location: %s", $updateGoTo));
 }
@@ -1335,8 +1331,6 @@ WHERE id=%s",
 
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-  $updateGoTo = "../index.php?section=admin&msg=2";
   header(sprintf("Location: %s", $updateGoTo));
 
 }
@@ -1468,9 +1462,7 @@ WHERE id=%s",
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-  	$updateGoTo = "../index.php?section=admin&msg=2";
-  	header(sprintf("Location: %s", $updateGoTo));
+	header(sprintf("Location: %s", $updateGoTo));
 }
 
 // --------------------------- If updating records in the brewing table en masse ------------------------------- //
@@ -1665,8 +1657,6 @@ if (($action == "edit") && ($dbTable == "sponsors")) {
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	
-	$updateGoTo = "../index.php?section=admin&go=sponsors&msg=2";
 	header(sprintf("Location: %s", $updateGoTo));					   
 }
 
@@ -1685,8 +1675,6 @@ if (($action == "add") && ($dbTable == "sponsors")) {
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	
-	$insertGoTo = "../index.php?section=admin&go=sponsors&msg=1";
 	header(sprintf("Location: %s", $insertGoTo));					   
 }
 
@@ -1704,9 +1692,7 @@ if (($action == "add") && ($dbTable == "judging")) {
 	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step3") $insertGoTo = "../setup.php?section=step3"; else $insertGoTo = "../index.php?section=$section&go=$go";
-	if ($section == "step3") $insertGoTo .= "&msg=9"; else $insertGoTo .= "&msg=1";
-	//echo $insertGoTo;
+	if ($section == "step3") $insertGoTo = "../setup.php?section=step3&msg=9"; else $insertGoTo = $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
 }
 
@@ -1723,8 +1709,6 @@ if (($action == "edit") && ($dbTable == "judging")) {
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	
-	$updateGoTo = "../index.php?section=admin&go=judging&msg=2";
 	header(sprintf("Location: %s", $updateGoTo));					   
 }
 
@@ -1741,12 +1725,9 @@ if (($action == "add") && ($dbTable == "drop_off")) {
 					   GetSQLValueString($_POST['dropLocationNotes'], "text")
 					   );
 
-	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step4") $insertGoTo = "../setup.php?section=$section"; else $insertGoTo = "../index.php?section=$section&go=$go";
-	if ($section == "step4") $insertGoTo .= "&msg=11"; else $insertGoTo .= "&msg=1";
-	//echo $insertGoTo;
+	if ($section == "step4") $insertGoTo = "../setup.php?section=$section&msg=11"; else $insertGoTo = $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
 }
 
@@ -1764,8 +1745,6 @@ if (($action == "edit") && ($dbTable == "drop_off")) {
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	
-	$updateGoTo = "../index.php?section=admin&go=dropoff&msg=2";
 	header(sprintf("Location: %s", $updateGoTo));					   
 }
 
@@ -1830,8 +1809,6 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 
   mysql_select_db($database_brewing, $brewing);
   $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-
-  $insertGoTo = "../index.php?section=admin&go=styles&msg=1";
   header(sprintf("Location: %s", $insertGoTo));
 
 }
@@ -1886,8 +1863,6 @@ if (($action == "edit") && ($dbTable == "styles")) {
 
   mysql_select_db($database_brewing, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-  $updateGoTo = "../index.php?section=admin&go=styles&msg=2";
   header(sprintf("Location: %s", $updateGoTo));
 }
 
@@ -1910,7 +1885,6 @@ $insertSQL = sprintf("INSERT INTO contacts (
 	//echo $insertSQL;				   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-  	$insertGoTo = "../index.php?section=admin&go=contacts&msg=1";
 	header(sprintf("Location: %s", $insertGoTo));
 
 }
@@ -1933,8 +1907,7 @@ $updateSQL = sprintf("UPDATE contacts SET
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  	$updateGoTo = "../index.php?section=admin&go=contacts&msg=2";
-	header(sprintf("Location: %s", $updateGoTo));
+  	header(sprintf("Location: %s", $updateGoTo));
 }
 
 if ($action == "email") { 
@@ -2008,9 +1981,7 @@ WHERE id=%s",
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-  	$updateGoTo = "../index.php?section=admin&msg=2";
-  	header(sprintf("Location: %s", $updateGoTo));
+	header(sprintf("Location: %s", $updateGoTo));
 }
 
 
@@ -2038,7 +2009,6 @@ tableLocation
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	$insertGoTo = "../index.php?section=admin&go=judging_tables&msg=1"; 
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -2065,13 +2035,112 @@ WHERE id=%s",
 
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  $updateGoTo = "../index.php?section=admin&go=judging_tables&msg=2";
+
+  
+  // Check to see if flights have been designated already
+  
+  
+  // If so, loop through and remove the flight designation (table has changed)
+  
+  
   header(sprintf("Location: %s", $updateGoTo));
 }
 
+if (($action == "add") && ($dbTable == "judging_flights")) { 
 
+foreach($_POST['id'] as $id)	{
+	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
+	$insertSQL = sprintf("INSERT INTO judging_flights (
+	flightTable, 
+	flightNumber, 
+	flightEntryID
+  	) VALUES (%s, %s, %s)",
+                       GetSQLValueString($_POST['flightTable'], "text"),
+					   GetSQLValueString($flight_number, "text"),
+					   GetSQLValueString($id, "text")
+					   );
 
+	//echo $insertSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	}
 
+	header(sprintf("Location: %s", $insertGoTo));
+
+}
+
+if (($action == "edit") && ($dbTable == "judging_flights")) { 
+
+foreach($_POST['id'] as $id)	{
+	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
+	$updateSQL = sprintf("UPDATE judging_flights SET
+	flightTable=%s,
+	flightNumber=%s
+	WHERE id=%s",
+                       GetSQLValueString($_POST['flightTable'], "text"),
+					   GetSQLValueString($flight_number, "text"),
+					   GetSQLValueString($id, "text")
+					   );
+
+	//echo $updateSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+	header(sprintf("Location: %s", $updateGoTo));
+}
+
+if (($action == "add") && ($dbTable == "judging_scores")) { 
+
+foreach($_POST['id'] as $id)	{
+	$insertSQL = sprintf("INSERT INTO judging_scores (
+	eid, 
+	bid, 
+	scoreTable,
+	scoreEntry,
+	scorePlace
+  	) VALUES (%s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['eid'.$id], "text"),
+					   GetSQLValueString($_POST['bid'.$id], "text"),
+					   GetSQLValueString($_POST['scoreTable'.$id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$id], "text")
+					   );
+
+	//echo $insertSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	}
+	
+	header(sprintf("Location: %s", $insertGoTo));
+
+}
+
+if (($action == "edit") && ($dbTable == "judging_scores")) { 
+
+foreach($_POST['id'] as $id)	{
+	$updateSQL = sprintf("UPDATE judging_scores SET
+	eid=%s,
+	bid=%s,
+	scoreTable=%s,
+	scoreEntry=%s,
+	scorePlace=%s
+	WHERE id=%s",
+                       GetSQLValueString($_POST['eid'.$id], "text"),
+					   GetSQLValueString($_POST['bid'.$id], "text"),
+					   GetSQLValueString($_POST['scoreTable'.$id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$id], "text"),
+					   GetSQLValueString($id, "text")
+					   );
+
+	//echo $updateSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+	
+	header(sprintf("Location: %s", $updateGoTo));
+
+}
 
 
 ?>
