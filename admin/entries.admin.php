@@ -186,7 +186,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 	
 	?>
  <tr>
-   <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
+  <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['id']; ?></td>
   <td <?php if ($action != "print") { ?>width="20%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td <?php if ($action != "print") { ?>width="10%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if ($action != "print") echo $row_log['brewCategorySort'].$row_log['brewSubCategory']; else echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$styleConvert; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
@@ -232,6 +232,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 	}
 ?>
 <?php if ($dbTable == "default") { ?><p><input type="submit" name="Submit" class="button" value="Update Entries" /></p><?php } ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 
 <?php } 

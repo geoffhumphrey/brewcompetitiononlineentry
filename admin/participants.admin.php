@@ -291,6 +291,7 @@ if ($action == "add")  {
   	</tr>
 </table>
 <input type="hidden" name="userLevel" value="2" />
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
 <?php } 
 if ($filter == "info") { 

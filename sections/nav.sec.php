@@ -23,14 +23,32 @@
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
 <!-- 1st Tier Sub Menus -->
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat0');"><span class="menuItemText">Entry and Data Collection</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat1');"><span class="menuItemText">Sorting</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat2');"><span class="menuItemText">Competition Prep</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu5');"><span class="menuItemText">Maintenance</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
+</div>
+
+<div id="adminMenuCat0" class="menu">
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu2');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu0');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu1');"><span class="menuItemText">Edit</span><span class="menuItemArrow">&#9654;</span></a>
-<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu6');"><span class="menuItemText">Assign</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu4');"><span class="menuItemText">Upload</span><span class="menuItemArrow">&#9654;</span></a>
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu3');"><span class="menuItemText">Export</span><span class="menuItemArrow">&#9654;</span></a>
-<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu5');"><span class="menuItemText">Maintenance</span><span class="menuItemArrow">&#9654;</span></a>
-<a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
+</div>
+
+
+<div id="adminMenuCat1" class="menu">
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu7');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu8');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+</div>
+
+<div id="adminMenuCat2" class="menu">
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu9');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu10');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu6');"><span class="menuItemText">Assign</span><span class="menuItemArrow">&#9654;</span></a>
+<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu3');"><span class="menuItemText">Export</span><span class="menuItemArrow">&#9654;</span></a>
 </div>
 
 <!-- 2nd Tier sub menus  -->
@@ -42,8 +60,7 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=add">A Flight</a>
+
 </div>
 
 <div id="adminMenu1" class="menu">
@@ -56,14 +73,11 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=entries">Entries</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations/Dates</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
-<?php if ($totalRows_judging > 1) { ?><a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;filter=judging">Style Categories for Judging Locations</a><?php } else echo ""; ?>
 <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=contacts">Competition Contacts</a>
-<a class="menuItem" href="" onclick="return false;"  onmouseover="menuItemMouseover(event, 'adminMenu2_3');"><span class="menuItemText">Sponsors</span><span class="menuItemArrow">&#9654;</span></a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=sponsors">Sponsors</a>
 </div>
 
 <div id="adminMenu3" class="menu" onmouseover="menuMouseover(event)">
@@ -89,6 +103,36 @@
 <a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
 <a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
 <?php } ?>
+</div>
+
+<div id="adminMenu7" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
+<a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
+<a class="menuItem" href="index.php?section=admin&go=entries&action=received">Entries by Category</a>
+</div>
+
+<div id="adminMenu8" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
+<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
+</div>
+
+<div id="adminMenu9" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
+<?php if ($totalRows_judging > 1) { ?>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables&amp;filter=location">Tables by Judging Location</a>
+<?php } ?>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
+<a class="menuItem" href="index.php?section=admin&go=judging_tables&filter=orphans">Styles Not Assigned to Tables</a>
+</div>
+
+<div id="adminMenu10" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
+<a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
+<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=add">A Table</a>
+<a class="menuItem" href="index.php?section=admin&go=judging_flights">Flights to Tables</a>
+<a class="menuItem" href="index.php?section=admin&go=judging_flights&action=rounds">Flights to Rounds</a>
+<a class="menuItem" href="index.php?section=admin&go=judging_scores">Scores by Table</a>
+
 </div>
 
 <!-- 3rd Tier sub menus -->

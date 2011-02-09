@@ -893,4 +893,13 @@ function displayArrayContent($arrayname) {
  	$b = rtrim($a, ",&nbsp;");
  	return $b;
 }
+
+function relocate($referer) {
+	// determine if referrer has any msg=X variables attached
+	if (strstr($referer,"&msg")) { 
+	$pattern = array("/[0-9]/", "/&msg=/");
+	$referer = preg_replace($pattern, "", $referer);
+	}
+	return $referer;
+}
 ?>

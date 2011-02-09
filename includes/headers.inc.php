@@ -192,6 +192,10 @@ switch($section) {
 			case "judging_tables":
 			$header_output .= ": Tables";
 			break;
+			
+			case "judging_flights":
+			$header_output .= ": Flights";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "Info added successfully."; 
