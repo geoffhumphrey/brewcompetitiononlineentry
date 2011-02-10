@@ -880,6 +880,31 @@ function get_table_info($input,$method,$id) {
 	//$num_rows = mysql_num_rows($result);
 	return $num_rows[0];
 	}
+	
+	if ($method == "count_scores") {
+		$a = explode(",", $row_table['tableStyles']);
+			foreach ($a as $value) {
+				include ('Connections/config.php');
+				mysql_select_db($database, $brewing);
+				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				$row_styles = mysql_fetch_assoc($styles);
+				
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
+				$row_style_count = mysql_fetch_assoc($style_count);
+				$totalRows_style_count = $row_style_count['count'];
+									
+				$c[] = $totalRows_style_count;
+				
+			}
+	$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $input);
+	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
+	$row_score_count = mysql_fetch_assoc($score_count);
+	$totalRows_score_count = $row_score_count['count'];
+	$e = array_sum($c);
+	if ($e == $totalRows_score_count) return true;
+  	}
 }
 
 function displayArrayContent($arrayname) {

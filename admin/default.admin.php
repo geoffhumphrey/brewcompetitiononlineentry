@@ -123,7 +123,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </tr>
   <tr>
     <td class="data"><a href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></td>
-    <td colspan="3" class="data">&nbsp;</td>
+    <td colspan="3" class="data"><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></td>
   </tr>
   <tr>
     <td colspan="4" class="dataLabel bdr1B_dashed">Add</td>
@@ -139,19 +139,11 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></td>
   </tr>
   <tr>
-    <td class="data"><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></td>
-    <td colspan="3" class="data"><a href="index.php?section=admin&amp;go=contacts&amp;action=add"></a></td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Export Promo Materials</td>
-  </tr>
-  <tr>
-    <td width="15%" class="data"><a href="admin/promo_export.admin.php?action=html">HTML</a></td>
-    <td colspan="3" width="15%" class="data"><a href="admin/promo_export.admin.php?action=word">Word</a></td>
-  </tr>   
+    <td colspan="4" class="data"><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a><a href="index.php?section=admin&amp;go=contacts&amp;action=add"></a></td>
+    </tr> 
 </table>
 </div>
-<p class="trigger"><span class="icon"><img src="images/arrow_refresh.png"  /></span>Sorting</p>
+<p class="trigger"><span class="icon"><img src="images/arrow_refresh.png"  /></span>Sorting Received Entries</p>
 <div class="toggle_container">
 <table class="dataTable">
   <tr>
@@ -179,38 +171,30 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </tr>
   <tr>
     <td width="15%" class="data"><a href="index.php?section=admin&amp;go=participants">Participants</a></td>
-    <td width="15%" class="data"><a href="index.php?section=admin&amp;go=entries">Entries</a></td>
-    <td width="15%" class="data"><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></td>
-    <td class="data">&nbsp;</td>
+    <td colspan="3" class="data"><a href="index.php?section=admin&amp;go=entries">Entries</a></td>
+    </tr>
+  <tr>
+  	<td class="data"><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></td>
+  	<td width="15%" class="data"><a href="index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">Styles Not Assigned to Tables</a></td>
+    <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=judging_flights">Flights</a></td>
   </tr>
   <tr>
-    <td class="data"><a href="index.php?section=admin&amp;go=judging_flights">Judging Assignments</a></td>
+    <td class="data"><a href="index.php?section=admin&amp;go=assign_tables">Judging Assignments</a></td>
     <td class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></td>
-    <td class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></td>
-    <td class="data">&nbsp;</td>
-  </tr>
+    <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></td>
+    </tr>
+  
   <tr>
-    <td colspan="2" class="data">Styles Not Assigned to Tables</td>
-    <td class="data">&nbsp;</td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed"><span class="icon"><img src="images/page_edit.png" alt="" /></span>Add</td>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Add</td>
   </tr>
   <tr>
     <td width="15%" class="data"><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></td>
-    <td class="data"><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></td>
-    <td colspan="2" class="data">&nbsp;</td>
-  </tr>
+    <td colspan="3" class="data"><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></td>
+    </tr>
   <tr>
     <td class="data"><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></td>
     <td class="data"><a href="index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></td>
-    <td colspan="2" class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td class="data">Scores By Table</td>
-    <td class="data">Flights to Rounds</td>
-    <td colspan="2" class="data">&nbsp;</td>
+    <td colspan="2" class="data">Flights to Rounds</td>
   </tr>
   <tr>
     <td colspan="4" class="dataLabel bdr1B_dashed">Assign</td>
@@ -231,13 +215,77 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <td nowrap="nowrap" colspan="3" class="data"><a href="index.php?section=admin&amp;action=update&amp;go=assign_tables&amp;filter=stewards">Stewards to a Table</a></td>
   </tr>
   <?php } ?>
+</table>
+</div>
+<p class="trigger"><span class="icon"><img src="images/rosette.png"  /></span>Scoring</p>
+<div class="toggle_container">
+<table class="dataTable">
   <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Export Email Addresses (CSV)</td>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Manage/View</td>
+  </tr>
+  <tr>
+    <td width="15%"><a href="index.php?section=admin&amp;go=participants">Participants</a></td>
+    <td width="15%" class="data"><a href="index.php?section=admin&amp;go=entries">Entries</a></td>
+    <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></td> 
+  </tr>
+  <tr>
+  	<td class="data"><a href="index.php?section=admin&amp;go=judging_scores">Scores by Table</a></td>
+    <td class="data"><a href="index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a></td>
+    <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=judging_scores&amp;filter=bos">BOS Scores</a></td>
+  </tr>
+  <tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Add</td>
+  </tr>
+  <tr>
+    <td><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add">Scores By Table</a></td>
+    <td class="data"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=category">Scores by Category</a></td>
+    <td colspan="2" class="data"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=bos">BOS Scores</a></td>
+  </tr>
+</table>
+</div>
+<p class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</p>
+<div class="toggle_container">
+<table class="dataTable">
+<tbody>
+  <tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Pre-Competition</td>
+  </tr>
+  <tr>
+    <td width="15%"><a class="thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets by Table</a></td>
+    <td colspan="3" class="data"><a class="thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;filter=category&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Category">Pull Sheets By Category</a></td>
+    </tr>
+  <tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">During Competition</td>
+  </tr>
+  <tr>
+    <td class="data">Judging Assignments</td>
+    <td width="15%" class="data">Steward Assignments</td>
+    <td width="15%" class="data">Table Cards</td>
+    <td class="data">Pullsheets for BOS</td>
+  </tr>
+  <tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Post-Competition</td>
+  </tr>
+  <tr>
+    <td class="data">Results by Table</td>
+    <td class="data">Results by Category</td>
+    <td class="data">Judge/Steward/Staff Points</td>
+    <td class="data">Judge/Steward/Staff Points (XML)</td>
+  </tr>
+</tbody>
+</table>
+</div>
+<p class="trigger"><span class="icon"><img src="images/page_go.png"  /></span>Exporting</p>
+<div class="toggle_container">
+<table class="dataTable">
+<tbody>
+<tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Email Addresses (CSV Files)</td>
   </tr>
   <tr>
     <td width="15%" class="data"><a href="admin/email_export.php">All Participants</a></td>
     <td width="15%" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid & Received Entries</a><a href="admin/email_export.php?filter=judges"></a></td>
-    <td class="data"><a href="admin/entries_export.php?go=csv&amp;action=email">All Entries</a></td>
+    <td width="15%" class="data"><a href="admin/entries_export.php?go=csv&amp;action=email">All Entries</a></td>
     <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a><a href="admin/email_export.php?filter=stewards"></a><a href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email"></a> <a href="admin/email_export.php?filter=judges"></a><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email"></a><a href="admin/email_export.php?filter=stewards"></a></td>
   </tr>
   <?php if ($totalRows_judging == 1) { ?>
@@ -275,98 +323,11 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <em>* Be sure to make final <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em>    </td>
   </tr>
   <?php } ?>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Export CSV Files</td>
-  </tr>
-  <tr>
-    <td width="15%" class="data"><a href="admin/entries_export.php?go=csv">All Entries</a></td>
-    <td width="15%" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid & Received Entries</a></td>
-    <td colspan="2" class="data"><a href="admin/entries_export.php?go=csv"></a><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv"></a> <a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
-  </tr>
-  <tr>
-    <td nowrap="nowrap"><a href="admin/participants_export.php?go=csv">All Participants</a></td>
-    <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=winners">Winners</a><a href="admin/participants_export.php?go=csv"> (CSV)</a></td>
-    <td class="data">&nbsp;</td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Maintenance</td>
-  </tr>
-  <tr>
-    <td class="data"><a href="index.php?section=admin&amp;go=archive">Archives</a></td>
-    <td colspan="3" class="data">View and create archived information from previous competitions.</td>
-  </tr>
-</table>
-</div>
-<p class="trigger"><span class="icon"><img src="images/rosette.png"  /></span>Scoring</p>
-<div class="toggle_container">
-<table class="dataTable">
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Manage/View</td>
-  </tr>
-  <tr>
-    <td width="15%"><a href="index.php?section=admin&amp;go=participants">Participants</a></td>
-    <td width="15%" class="data"><a href="index.php?section=admin&amp;go=entries">Entries</a></td>
-    <td width="15%" class="data"><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></td>
-    <td class="data">Scores By Table</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Add</td>
-  </tr>
-  <tr>
-    <td>Scores By Table</td>
-    <td class="data">Scores by Category</td>
-    <td colspan="2" class="data">BOS Results</td>
-  </tr>
-</table>
-</div>
-<p class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</p>
-<div class="toggle_container">
-<table class="dataTable">
-<tbody>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Pre-Competition</td>
-  </tr>
-  <tr>
-    <td width="15%">Pull Sheets By Table</td>
-    <td width="15%" class="data">Pull Sheets By Category</td>
-    <td width="15%" class="data">Pull Sheets for BOS</td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">During Competition</td>
-  </tr>
-  <tr>
-    <td>Judging Assignments</td>
-    <td class="data">Steward Assignments</td>
-    <td class="data">Table Cards</td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="dataLabel bdr1B_dashed">Post-Competition</td>
-  </tr>
-  <tr>
-    <td>Results by Table</td>
-    <td class="data">Results by Table with Scores</td>
-    <td class="data">Results by Category</td>
-    <td class="data">Results by Category with Scores</td>
-  </tr>
-  <tr>
-    <td>Judge/Steward/Staff Points</td>
-    <td colspan="3" class="data">Judge/Steward/Staff Points (XML)</td>
-    </tr>
-</tbody>
-</table>
-</div>
-<p class="trigger"><span class="icon"><img src="images/page_go.png"  /></span>Exporting to HCCP</p>
-<div class="toggle_container">
-<table class="dataTable">
-<tbody>
  <tr>
-    <td colspan="3" class="dataLabel bdr1B_dashed">Export Tab Delimited Files</td>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Tab Delimited Files</td>
   </tr>
   <tr>
-    <td colspan="3">For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.</p><?php } ?> 
+    <td colspan="4">For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.</p><?php } ?> 
     </td>
   </tr>
   <tr>
@@ -389,7 +350,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </form>
   <form name="tabChoice" id="tabChoice">
   <tr>
-    <td colspan="3" class="data">Paid and Received Entries for Location:
+    <td colspan="4" class="data">Paid and Received Entries for Location:
         <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <?php do { ?>
@@ -401,19 +362,34 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   </form>    
   <?php } ?>
   <tr>
-    <td colspan="3" class="dataLabel bdr1B_dashed">Export CSV Files</td>
+    <td colspan="4" class="dataLabel bdr1B_dashed">CSV Files</td>
   </tr>
   <tr>
     <td><a href="admin/entries_export.php?go=csv">All Entries</a></td>
     <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=paid">Paid & Received Entries</a></td>
-    <td class="data"><a href="admin/entries_export.php?go=csv"></a><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv"></a> <a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
+    <td colspan="2" class="data"><a href="admin/entries_export.php?go=csv"></a><a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp"></a><a href="admin/entries_export.php?go=csv"></a> <a href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="admin/entries_export.php?go=csv"></a></td>
   </tr>
   <tr>
     <td><a href="admin/participants_export.php?go=csv">All Participants</a></td>
-    <td class="data"><a href="admin/entries_export.php?go=csv&amp;filter=winners">Winners</a></td>
-    <td class="data">&nbsp;</td>
-    <td class="data">&nbsp;</td>
+    <td colspan="3" class="data"><a href="admin/entries_export.php?go=csv&amp;filter=winners">Winners</a></td>
   </tr>
+  <tr>
+    <td colspan="4" class="dataLabel bdr1B_dashed">Promo Materials</td>
+  </tr>
+  <tr>
+    <td width="15%" class="data"><a href="admin/promo_export.admin.php?action=html">HTML</a></td>
+    <td colspan="3" width="15%" class="data"><a href="admin/promo_export.admin.php?action=word">Word</a></td>
+  </tr>  
+</table>
+</div>
+<p class="trigger"><span class="icon"><img src="images/camera_add.png" /></span>Archiving</p>
+<div class="toggle_container">
+<table class="dataTable">
+<tbody>
+<tr>
+	<td class="data"><a href="index.php?section=admin&amp;go=archive">Archive Competition Data</a></td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>

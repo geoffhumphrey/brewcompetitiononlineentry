@@ -25,9 +25,8 @@
     </td>
   	<td class="data">Indicate which places from each table will advance to the BOS Round or whether you will define each BOS entry manually.</td>
   </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Set Preferences"></td>
-  </tr>
 </table>
+<p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
+
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
 </form>
