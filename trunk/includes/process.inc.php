@@ -2091,7 +2091,8 @@ foreach($_POST['id'] as $id)	{
 
 if (($action == "add") && ($dbTable == "judging_scores")) { 
 
-foreach($_POST['id'] as $id)	{
+foreach($_POST['score_id'] as $score_id)	{
+	if ($_POST['scoreEntry'.$score_id] != "") {
 	$insertSQL = sprintf("INSERT INTO judging_scores (
 	eid, 
 	bid, 
@@ -2099,16 +2100,17 @@ foreach($_POST['id'] as $id)	{
 	scoreEntry,
 	scorePlace
   	) VALUES (%s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['eid'.$id], "text"),
-					   GetSQLValueString($_POST['bid'.$id], "text"),
-					   GetSQLValueString($_POST['scoreTable'.$id], "text"),
-					   GetSQLValueString($_POST['scoreEntry'.$id], "text"),
-					   GetSQLValueString($_POST['scorePlace'.$id], "text")
+                       GetSQLValueString($_POST['eid'.$score_id], "text"),
+					   GetSQLValueString($_POST['bid'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text")
 					   );
 
 	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		}
 	}
 	
 	header(sprintf("Location: %s", $insertGoTo));
@@ -2116,8 +2118,8 @@ foreach($_POST['id'] as $id)	{
 }
 
 if (($action == "edit") && ($dbTable == "judging_scores")) { 
-
-foreach($_POST['id'] as $id)	{
+foreach($_POST['score_id'] as $score_id)	{
+	if (($_POST['scoreEntry'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "Y")) {
 	$updateSQL = sprintf("UPDATE judging_scores SET
 	eid=%s,
 	bid=%s,
@@ -2125,19 +2127,38 @@ foreach($_POST['id'] as $id)	{
 	scoreEntry=%s,
 	scorePlace=%s
 	WHERE id=%s",
-                       GetSQLValueString($_POST['eid'.$id], "text"),
-					   GetSQLValueString($_POST['bid'.$id], "text"),
-					   GetSQLValueString($_POST['scoreTable'.$id], "text"),
-					   GetSQLValueString($_POST['scoreEntry'.$id], "text"),
-					   GetSQLValueString($_POST['scorePlace'.$id], "text"),
-					   GetSQLValueString($id, "text")
+                       GetSQLValueString($_POST['eid'.$score_id], "text"),
+					   GetSQLValueString($_POST['bid'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($score_id, "text")
 					   );
 
 	//echo $updateSQL."<br>";
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
-	
+	if (($_POST['scoreEntry'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
+	$insertSQL = sprintf("INSERT INTO judging_scores (
+	eid, 
+	bid, 
+	scoreTable,
+	scoreEntry,
+	scorePlace
+  	) VALUES (%s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['eid'.$score_id], "text"),
+					   GetSQLValueString($_POST['bid'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text")
+					   );
+
+	//echo $insertSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
+		}
+	}
 	header(sprintf("Location: %s", $updateGoTo));
 
 }

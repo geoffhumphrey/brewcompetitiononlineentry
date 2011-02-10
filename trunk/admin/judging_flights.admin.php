@@ -1,10 +1,10 @@
 <h2 onload="updateButCount(event);">
 <?php 
-if ($action == "edit") echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
-elseif ($action == "add") echo "Define Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
+if (($action == "edit") && ($id != "default")) echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
+elseif (($action == "add") && ($id != "default")) echo "Define Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
 else echo "Define/Edit Flights"; ?></h2>
 <?php if ($id =="default") { 
-	if ($totalRows_tables > 0) {
+if ($totalRows_tables > 0) {
 ?>
 <form>
 <table class="dataTable">

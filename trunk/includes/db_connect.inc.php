@@ -116,6 +116,7 @@ if (($section == "default") || ($section == "past_winners")) {
 }
 
 $query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
+if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
 $result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 $row = mysql_fetch_array($result);
 $totalRows_entry_count = $row["count"];
@@ -366,11 +367,15 @@ if ($section == "admin") {
 	$tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
 	$row_tables_edit = mysql_fetch_assoc($tables_edit);
 	
-	$tables_edit2 = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
-	$row_tables_edit2 = mysql_fetch_assoc($tables_edit2);
+	$tables_edit_2 = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
+	$row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2);
 
 	if ($go == "judging_scores") {
-
+	$query_scores = "SELECT * FROM judging_scores ORDER BY eid ASC";
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	$totalRows_scores = mysql_num_rows($scores);
+	
 	}
 
 	if ($go == "judging_flights") {
