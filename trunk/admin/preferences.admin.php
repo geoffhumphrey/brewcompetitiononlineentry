@@ -1,8 +1,20 @@
 <form method="post" action="includes/process.inc.php?action=<?php if ($section == "step1") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
 <?php if ($section != "step1") { ?>
 <h2>Preferences</h2>
-<p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
+<div class="adminSubNavContainer">
+  	<span class="adminSubNav">
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+	</span>
+</div>
 <?php } ?>
+<h3>Competition Organization</h3>
+<table>
+  <tr>
+    <td class="dataLabel">BCOE for Competition Organization:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsCompOrg" value="Y" id="prefsCompOrg_0"  <?php if ($row_prefs['prefsCompOrg'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsCompOrg" value="N" id="prefsCompOrg_1" <?php if ($row_prefs['prefsCompOrg'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate if BCOE will be used to organize the competition (e.g., defining tables, defining flights, assigning judges to tables, printing pull sheets, etc.). If Yes, there will be no need to utilize a thrid party tool such as HCCP.</td>
+  </tr>
+</table>
 <h3>General</h3>
 <table>
   <tr>
@@ -22,17 +34,7 @@
   <tr>
     <td class="dataLabel">Winner Display:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate whether you would like to display the winners of the competition for each category and Best of Show.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Mead BOS:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsBOSMead" value="Y" id="prefsBOSMead_0"  <?php if ($row_prefs['prefsBOSMead'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsBOSMead" value="N" id="prefsBOSMead_1" <?php if ($row_prefs['prefsBOSMead'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate whether your competition awards a separate Best of Show for meads.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Cider BOS:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsBOSCider" value="Y" id="prefsBOSCider_0"  <?php if ($row_prefs['prefsBOSCider'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsBOSCider" value="N" id="prefsBOSCider_1" <?php if ($row_prefs['prefsBOSCider'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate whether your competition awards a separate Best of Show for ciders.</td>
+  	<td class="data">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</td>
   </tr>
   <tr>
     <td class="dataLabel">Require Special Ingredients<br />
@@ -178,10 +180,7 @@
     </td>
     <td class="data">This is the default size, in pixels, that will each sponsor's logo will display on the <em>sponsors</em> page. Generally, the default setting of 150 is sufficient.</td>
   </tr>
-  <tr>
-  	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Set Preferences"></td>
-  </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>

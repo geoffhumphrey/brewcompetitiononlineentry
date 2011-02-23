@@ -1,7 +1,28 @@
 <?php
 $phpVersion = phpversion();
 $today = date('Y-m-d');
-$agent = $_SERVER['HTTP_USER_AGENT']; 
+$agent = $_SERVER['HTTP_USER_AGENT'];
+
+$pg = "default";
+if (isset($_GET['pg'])) {
+  $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
+}
+
+function relocate($referer,$page) {
+	// determine if referrer has any msg=X variables attached
+	if (strstr($referer,"&msg")) { 
+	$pattern = array("/[0-9]/", "/&msg=/");
+	$referer = preg_replace($pattern, "", $referer);
+	$pattern = array("/[0-9]/", "/&id=/");
+	$referer = preg_replace($pattern, "", $referer);
+	if ($page != "default") { 
+		$pattern = array("/[0-9]/", "/&pg=/"); 
+		$referer = preg_replace($pattern, "", $referer); 
+		$referer .= "&pg=".$page; 
+		}
+	}
+	return $referer;
+}
 
 $reg_open = $row_contest_info['contestRegistrationOpen'];
 $reg_deadline = $row_contest_info['contestRegistrationDeadline'];
@@ -10,7 +31,7 @@ $ent_open = $row_contest_info['contestEntryOpen'];
 $ent_deadline = $row_contest_info['contestEntDeadline'];
 
 mysql_select_db($database, $brewing);
-$query_check = "SELECT * FROM judging";
+$query_check = "SELECT * FROM judging_locations";
 $check = mysql_query($query_check, $brewing) or die(mysql_error());
 $row_check = mysql_fetch_assoc($check);
 do {
@@ -229,7 +250,7 @@ function paginate($display, $pg, $total) {
   echo '</div>';
 }
 
-if (($section == "admin") && ($go == "entries") || ($section == "pay") || ($section == "list")) {
+if (($action != "delete") && (($section == "admin") && ($go == "entries") || ($section == "pay") || ($section == "list"))) {
 	if (($section == "list") || ($section == "pay")) $bid = $row_brewer['uid'];
 	$entry_fee = $row_contest_info['contestEntryFee']; // regular entry fee
 	$entry_fee_discount = $row_contest_info['contestEntryFee2']; // price of each entry after entry threshold for discount is met
@@ -796,9 +817,6 @@ function style_convert($number,$type) {
 		break;
 	}
 	return $style_convert;
-	
-	
-	
 }
 
 function get_table_info($input,$method,$id) {	
@@ -919,12 +937,83 @@ function displayArrayContent($arrayname) {
  	return $b;
 }
 
-function relocate($referer) {
-	// determine if referrer has any msg=X variables attached
-	if (strstr($referer,"&msg")) { 
-	$pattern = array("/[0-9]/", "/&msg=/");
-	$referer = preg_replace($pattern, "", $referer);
+function bos_place($eid) { 
+	include ('Connections/config.php');
+	mysql_select_db($database, $brewing);
+	$query_bos_place = "SELECT scorePlace,scoreEntry FROM judging_scores_bos WHERE eid='$eid'";
+	$bos_place = mysql_query($query_bos_place, $brewing) or die(mysql_error());
+	$row_bos_place = mysql_fetch_assoc($bos_place);
+	$value = $row_bos_place['scorePlace']."-".$row_bos_place['scoreEntry'];
+	return $value;
+}
+
+function style_type($type) { 
+	switch($type) { 
+		case "Mead": $type = "3";
+		break;
+		case "Cider": $type = "2";
+		break;
+		case "Mixed": $type = "1";
+		break;
+		case "Ale": $type = "1";
+		break;
+		case "Lager": $type = "1";
+		break;
+		default: $type = $type;
+		break;
 	}
-	return $referer;
+	return $type;
+}
+
+function check_bos_loc($id) { 
+include ('Connections/config.php');
+$query_judging = "SELECT judgingLocName,judgingDate FROM judging_locations WHERE id='$id'";
+$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
+$row_judging = mysql_fetch_assoc($judging);
+$totalRows_judging = mysql_num_rows($judging);
+$bos_loc = $row_judging['judgingLocName']." (".dateconvert($row_judging['judgingDate'], 3).")";
+return $bos_loc;
+}
+
+function bos_method($value) {
+	switch($value) {
+		case "1": $bos_method = "1st place only";
+		break;
+		case "2": $bos_method = "1st and 2nd places only";
+		break;
+		case "3": $bos_method = "1st, 2nd, and 3rd places";
+		break;
+		case "4": $bos_method = "Defined by Admin";
+		break;
+	}
+	return $bos_method;
+}
+
+function text_number($n) {
+    # Array holding the teen numbers. If the last 2 numbers of $n are in this array, then we'll add 'th' to the end of $n
+    $teen_array = array(11, 12, 13, 14, 15, 16, 17, 18, 19);
+   
+    # Array holding all the single digit numbers. If the last number of $n, or if $n itself, is a key in this array, then we'll add that key's value to the end of $n
+    $single_array = array(1 => 'st', 2 => 'nd', 3 => 'rd', 4 => 'th', 5 => 'th', 6 => 'th', 7 => 'th', 8 => 'th', 9 => 'th', 0 => 'th');
+   
+    # Store the last 2 digits of $n in order to check if it's a teen number.
+    $if_teen = substr($n, -2, 2);
+   
+    # Store the last digit of $n in order to check if it's a teen number. If $n is a single digit, $single will simply equal $n.
+    $single = substr($n, -1, 1);
+   
+    # If $if_teen is in array $teen_array, store $n with 'th' concantenated onto the end of it into $new_n
+    if ( in_array($if_teen, $teen_array) )
+    {
+        $new_n = $n . 'th';
+    }
+    # $n is not a teen, so concant the appropriate value of it's $single_array key onto the end of $n and save it into $new_n
+    elseif ( $single_array[$single] )
+    {
+        $new_n = $n . $single_array[$single];   
+    }
+   
+    # Return new
+    return $new_n;
 }
 ?>

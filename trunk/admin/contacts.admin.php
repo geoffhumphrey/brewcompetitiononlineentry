@@ -1,16 +1,20 @@
 <h2><?php if ($action == "add") echo "Add a Contact"; elseif ($action == "edit") echo "Edit a Contact"; else echo "Contacts"; ?></h2>
-<table class="dataTable">
- <tr>
-   <?php if ($action == "default") { ?>
-   <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></td>
-   <?php } ?>
-   <?php if (($action == "add") || ($action == "edit")) { ?>
-   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=contacts">Back to Contacts List</a></td>
+<div class="adminSubNavContainer">
+	<?php if ($action == "default") { ?>
+   	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    </span>
+   	<?php } ?>
+   	<?php if (($action == "add") || ($action == "edit")) { ?>
+   <span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=contacts">Back to Contacts List</a>
+   </span>
    <?php } else { ?>
-   <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/user_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=contacts&amp;action=add">Add a Contact</a></td>
+   <span class="adminSubNav">
+    	<span class="icon"><img src="images/user_add.png"  /></span><a href="index.php?section=admin&amp;go=contacts&amp;action=add">Add a Contact</a>
+   </span>
    <?php } ?>
-   </tr>
-</table>
+</div>
 <?php if (getContactCount() > 0) { ?>
 <?php if ($action == "default") { ?>
 <script type="text/javascript" language="javascript">
@@ -85,6 +89,6 @@
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Contact"></td>
   </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } ?>

@@ -1,6 +1,6 @@
 <?php 
 mysql_select_db($database, $brewing);
-$query_judging_locs = "SELECT * FROM judging";
+$query_judging_locs = "SELECT * FROM judging_locations";
 $judging_locs = mysql_query($query_judging_locs, $brewing) or die(mysql_error());
 $row_judging_locs = mysql_fetch_assoc($judging_locs);
 $totalRows_judging_locs = mysql_num_rows($judging_locs);

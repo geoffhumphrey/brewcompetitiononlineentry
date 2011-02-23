@@ -5,73 +5,101 @@ else echo "Tables";
 if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 <?php if ($action != "print") { ?>
 <p>To ensure accuracy, verify that all paid and received entries have been marked as so via the <a href="index.php?section=admin&amp;go=entries">Manage Entries</a> screen.</p>
-<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-<p><a href="index.php?section=admin&amp;go=judging_preferences">Competition organization preferences</a> are set to maximum <?php echo $row_judging_prefs['jPrefsFlightEntries']; ?> entries per flight.</p>
-<?php } ?>
-<table class="dataTable" style="margin: 0 0 20px 0;">
+<?php if ($action == "default") { ?>
+<table class="dataTable">
 <tbody>
-<tr>
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a class="data" href="index.php?section=admin">Back to Admin</a><?php } else { ?><a class="data" href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?></td> 
-  	<?php if (($action == "default") || ($action == "edit")) { ?>
-  	<td class="dataList" <? if ($action == "default") echo "width='5%' nowrap='nowrap'"; ?>><span class="icon"><img src="images/application_add.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a></td>
-    <?php } ?>
-    <?php if ($action == "default") { ?>
-    <td class="dataList" width="5%" nowrap="nowrap">
-  	<span class="icon"><img src="images/printer.png" alt="Print" title="Print..." /></span>
-  	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_tables');">Print...</a></div>
-  	<div id="printMenu_tables" class="menu" onmouseover="menuMouseover(event)">
-  	<a class="menuItem thickbox" href="print.php?section=admin&amp;go=judging_tables&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Tables List</a>
-    <a class="menuItem thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Pullsheets by Table</a>
-  	</div>
-    </td>
-    <?php if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>
-    <td class="dataList" width="5%" nowrap="nowrap">
-    <img src="images/application_form.png" alt="Define/Edit flights" title="Define/Edit flights" />
-    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
-    <div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
-    <?php do { 
-	$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $row_tables_edit['id']);
-	$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
-	$row_flights_2 = mysql_fetch_assoc($flights_2);
-	$totalRows_flights_2 = $row_flights_2['count'];
-	$entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
-	
-	if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { 
-	?>
-    <a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
-    <?php }
- 	mysql_free_result($flights_2);
-	} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); 
-	?>
-    </div>
-    </td>
-    <?php } // end if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) ?>
-    <?php if ($totalRows_tables > 0) { ?>
-    <td class="dataList">
-    <img src="images/rosette.png" alt="Enter/Edit scores" title="Enter/Edit scores" />
-    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
-    <div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
-    <?php do { 
-	$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables_edit_2['id']);
-	$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
-	$row_scores_2 = mysql_fetch_assoc($scores_2);
-	$totalRows_scores_2 = $row_scores_2['count'];
-	?>
-    <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_2  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
-    <?php 
-	mysql_free_result($scores_2);
-	} while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); 
-	?>
-    </div>
-  	</td>
-    <?php } // end if ($totalRows_tables > 0) ?>
-  <?php } // end if ($action == "default")?>
-</tr>
-<tr>
-	
-</tr>
+	<tr>
+    	<td><p><a href="index.php?section=admin&amp;go=judging_preferences">Competition organization preferences</a> are set to:</p></td>
+        <td><p>A Best of Show round is enabled for the following <a href="index.php?section=admin&amp;go=style_types">Style Types</a>:</p></td>
+    </tr>
+	<tr>
+    	<td width="35%">
+			<ul>
+				<li><?php if ($row_judging_prefs['jPrefsQueued'] == "Y") echo "Queued Judging (no flights)."; else echo "Non-Queued Judging (flights must be defined)."; ?></li>
+				<li>Maximum Rounds <?php if ($totalRows_judging > 0) echo "Per Location"; ?>: <?php echo $row_judging_prefs['jPrefsRounds']; ?>.</li>
+    			<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+    			<li>Maximum Entries Per Flight: <?php echo $row_judging_prefs['jPrefsFlightEntries']; ?>.</li> 
+    			<?php } ?>
+       	 	</ul>
+        </td>
+        <td>
+			<ul>
+            	<?php do { ?>
+            	<li><?php echo $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod']).")."; ?></li>
+                <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+            </ul>
+      	</td>
+    </tr>
 </tbody>
 </table>
+<?php } ?>
+<div class="adminSubNavContainer">
+		<span class="adminSubNav">
+        	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a href="index.php?section=admin">Back to Admin</a><?php } else { ?><a href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?>
+     	</span> 
+<?php if (($action == "default") || ($action == "edit")) { ?>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/application_add.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a>
+    </span>
+<?php } ?>
+<?php if ($action == "default") { ?>
+	<span class="adminSubNav">
+  		<span class="icon"><img src="images/printer.png" alt="Print" title="Print..." /></span>
+  		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_tables');">Print...</a></div>
+  		<div id="printMenu_tables" class="menu" onmouseover="menuMouseover(event)">
+  			<a class="menuItem thickbox" href="print.php?section=admin&amp;go=judging_tables&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Tables List</a>
+    		<a class="menuItem thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Pullsheets by Table</a>
+		</div>
+	</span>
+	<?php if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/application_form.png" alt="Define/Edit flights" title="Define/Edit flights" /></span>
+    	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
+    	<div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
+    		<?php do { 
+			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $row_tables_edit['id']);
+			$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
+			$row_flights_2 = mysql_fetch_assoc($flights_2);
+			$totalRows_flights_2 = $row_flights_2['count'];
+			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
+			if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { 
+			?>
+    		<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+    		<?php } mysql_free_result($flights_2); } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+    	</div>
+	</span>
+	<?php } // end if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) ?>
+</div>
+<div class="adminSubNavContainer">
+	<?php if ($totalRows_tables > 0) { ?>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/rosette.png" alt="View Scores"></span>
+    	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoreMenu');">View Scores...</a></div>
+  		<div id="scoreMenu" class="menu" onmouseover="menuMouseover(event)">
+  			<a class="menuItem" href="index.php?section=admin&go=judging_scores">By Table</a>
+    		<a class="menuItem" href="index.php?section=admin&go=judging_scores&amp;filter=category">By Category</a>
+  		</div>
+	</span>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
+   	 	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
+    	<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
+    		<?php do { 
+			$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables_edit_2['id']);
+			$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
+			$row_scores_2 = mysql_fetch_assoc($scores_2);
+			$totalRows_scores_2 = $row_scores_2['count'];
+			?>
+    		<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_2  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
+    		<?php mysql_free_result($scores_2);	} while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
+		</div>
+	</span>
+    <span class="adminSubNav">
+		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Scores" title="View BOS Entries and Scores" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Scores</a>
+    </span>
+  	<?php } // end if ($totalRows_tables > 0) ?>
+<?php } // end if ($action == "default")?>
+</div>
 <?php } ?>
 <?php if (($action == "default") || ($action == "print") && ($totalRows_tables > 0)) { ?>
 <script type="text/javascript" language="javascript">
@@ -115,7 +143,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
     </thead>
     <tbody>
     <?php do { 
-	$query_location_3 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_tables['tableLocation']);
+	$query_location_3 = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_tables['tableLocation']);
 	$location_3 = mysql_query($query_location_3, $brewing) or die(mysql_error());
 	$row_location_3 = mysql_fetch_assoc($location_3);
 	
@@ -227,7 +255,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
   </tbody>
 </table>
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } // end if (($action == "add") || ($action == "edit")) 
 mysql_free_result($styles);

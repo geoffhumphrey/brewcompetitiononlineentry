@@ -1,8 +1,12 @@
 <script type="text/javascript" src="js_includes/usable_forms.js"></script>
 <form method="post" action="includes/process.inc.php?action=edit&amp;dbTable=judging_preferences&amp;id=1" name="form1">
 <?php if ($section != "step1") { ?>
-<h2> Competition Organization Preferences</h2>
-<p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
+<h2>Competition Organization Preferences</h2>
+<div class="adminSubNavContainer">
+	<span class="adminSubNavContainer">
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+	</span>
+</div>
 <?php } ?>
 <table>
   <tr>
@@ -13,20 +17,19 @@
   <tr rel="queued_no">
     <td class="dataLabel">Entries per Flight:</td>
     <td nowrap="nowrap" class="data"><input name="jPrefsFlightEntries" type="text" value="<?php echo $row_judging_prefs['jPrefsFlightEntries']; ?>" size="5" maxlength="5" /></td>
-  	<td class="data">Indicate the maximum amount of entries per judging flight.</td>
+  	<td class="data">Indicate the maximum amount of entries per judging flight for all judging locations.</td>
   </tr>
-  <tr rel="queued_no">
-    <td class="dataLabel">BOS:</td>
-    <td nowrap="nowrap" class="data">
-      <input type="radio" name="jPrefsBOSMethod" value="1" id="jPrefsBOSMethod_0" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "1") echo "checked"; ?> />1st place only<br />
-      <input type="radio" name="jPrefsBOSMethod" value="2" id="jPrefsBOSMethod_1" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "2") echo "checked"; ?> />1st and 2nd places only<br />
-      <input type="radio" name="jPrefsBOSMethod" value="3" id="jPrefsBOSMethod_2" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "3") echo "checked"; ?> />1st, 2nd, and 3rd places<br />
-      <input type="radio" name="jPrefsBOSMethod" value="4" id="jPrefsBOSMethod_3" <?php if ($row_judging_prefs['jPrefsBOSMethod'] == "4") echo "checked"; ?> />Defined by user
-    </td>
-  	<td class="data">Indicate which places from each table will advance to the BOS Round or whether you will define each BOS entry manually.</td>
+  <tr>
+    <td class="dataLabel">Maximum Rounds Per Location:</td>
+    <td nowrap="nowrap" class="data"><input name="jPrefsRounds" type="text" value="<?php echo $row_judging_prefs['jPrefsRounds']; ?>" size="5" maxlength="5" /></td>
+  	<td class="data">Indicate the maximum amount of rounds for each of the competition's locations. This <em>does not</em> include the Best of Show (BOS) round(s).</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Places in BOS Round:</td>
+    <td nowrap="nowrap" class="data"><input name="jPrefsMaxBOS" type="text" value="<?php echo $row_judging_prefs['jPrefsMaxBOS']; ?>" size="5" maxlength="5" /></td>
+    <td class="data">Indicate the maximu number of places for each of the competition's Best of Show (BOS) <a href="index.php?section=admin&amp;go=style_types">style types</a>. </td>
   </tr>
 </table>
 <p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
-
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>

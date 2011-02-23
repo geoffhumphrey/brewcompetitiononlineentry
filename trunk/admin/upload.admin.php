@@ -118,7 +118,6 @@ function do_upload($upload_dir, $upload_url) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
-<link href="../css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="../css/default.css" rel="stylesheet" type="text/css" />
 <link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="../js_includes/jquery.js"></script>

@@ -262,7 +262,7 @@ if (isset($_SESSION["loginUsername"]))  {
 }
 
 // General judging connection
-$query_judging = "SELECT * FROM judging";
+$query_judging = "SELECT * FROM judging_locations";
 if (($go == "styles") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
 elseif (($go == "judging") && ($action == "update") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
 elseif (($go == "judging") && (($action == "add") || ($action == "edit")))  $query_judging .= " WHERE id='$id'";
@@ -276,45 +276,45 @@ $query_judging_prefs = "SELECT * FROM judging_preferences";
 //elseif (($go == "judging_preferences") && ($action == "update") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
 //elseif (($go == "judging_preferences") && ($action == "edit"))  $query_judging .= " WHERE id='1'";
 //else $query_judging_prefs .= " ORDER BY judgingDate,judgingLocName";
-$query_judging .= " WHERE id='1'";
+$query_judging_prefs .= " WHERE id='1'";
 $judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
 $row_judging_prefs = mysql_fetch_assoc($judging_prefs);
 $totalRows_judging_prefs = mysql_num_rows($judging_prefs);
 
 // Separate connections for selected queries that are housed on the same page.
-$query_judging1 = "SELECT * FROM judging ORDER BY judgingDate,judgingLocName";
+$query_judging1 = "SELECT * FROM judging_locations ORDER BY judgingDate,judgingLocName";
 $judging1 = mysql_query($query_judging1, $brewing) or die(mysql_error());
 $row_judging1 = mysql_fetch_assoc($judging1);
 $totalRows_judging1 = mysql_num_rows($judging1);
 
-$query_judging2 = "SELECT * FROM judging";
+$query_judging2 = "SELECT * FROM judging_locations";
 if ($section == "list") $query_judging2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerJudgeLocation2']);
 if (($section == "brewer") || ($section == "admin")) $query_judging2 .= " ORDER BY judgingDate,judgingLocName";
 $judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 $row_judging2 = mysql_fetch_assoc($judging2);
 $totalRows_judging2 = mysql_num_rows($judging2);
 
-$query_judging3 = "SELECT * FROM judging";
+$query_judging3 = "SELECT * FROM judging_locations";
 if ((($section == "brewer") && ($action == "edit")) || ($section == "admin")) $query_judging3 .= " ORDER BY judgingDate,judgingLocName";
 $judging3 = mysql_query($query_judging3, $brewing) or die(mysql_error());
 $row_judging3 = mysql_fetch_assoc($judging3);
 $totalRows_judging3 = mysql_num_rows($judging3);
 
-$query_judging4 = "SELECT * FROM judging";
+$query_judging4 = "SELECT * FROM judging_locations";
 if (($row_brewer['brewerJudgeAssignedLocation'] != "") && ($row_brewer['brewerStewardAssignedLocation'] == "")) $query_judging4 .= sprintf(" WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
 if (($row_brewer['brewerJudgeAssignedLocation'] == "") && ($row_brewer['brewerStewardAssignedLocation'] != "")) $query_judging4 .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
 $judging4 = mysql_query($query_judging4, $brewing) or die(mysql_error());
 $row_judging4 = mysql_fetch_assoc($judging4);
 $totalRows_judging4 = mysql_num_rows($judging4);
 
-$query_stewarding = "SELECT * FROM judging";
+$query_stewarding = "SELECT * FROM judging_locations";
 if ($section == "list") $query_stewarding .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation']);
 if (($section == "brewer") || ($section == "admin")) $query_stewarding .= " ORDER BY judgingDate,judgingLocName";
 $stewarding = mysql_query($query_stewarding, $brewing) or die(mysql_error());
 $row_stewarding = mysql_fetch_assoc($stewarding);
 $totalRows_stewarding = mysql_num_rows($stewarding);
 
-$query_stewarding2 = "SELECT * FROM judging";
+$query_stewarding2 = "SELECT * FROM judging_locations";
 if ($section == "list") $query_stewarding2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation2']);
 if (($section == "brewer") || ($section == "admin")) $query_stewarding2 .= " ORDER BY judgingDate,judgingLocName";
 $stewarding2 = mysql_query($query_stewarding2, $brewing) or die(mysql_error());
@@ -355,15 +355,22 @@ if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y
 if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $discount = "Y";
 
 if ($section == "admin") {
+	$query_style_type = "SELECT * FROM style_types"; 
+	if ($filter !="default") $query_style_type .= " WHERE id='$filter'";
+	if ($id !="default") $query_style_type .= " WHERE id='$id'";
+	if ($go == "judging_tables") $query_style_type .= " WHERE styleTypeBOS='Y'";
+	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+	$row_style_type = mysql_fetch_assoc($style_type);
+
 	$query_tables = "SELECT * FROM judging_tables";
-	if ($id == "default") $query_tables .= " ORDER BY tableNumber ASC";
+	if (($id == "default") || ($go == "judging_scores")) $query_tables .= " ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	$totalRows_tables = mysql_num_rows($tables);
 
 	$query_tables_edit = "SELECT * FROM judging_tables";
 	if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
-	if ($id == "default") $query_tables_edit .= " ORDER BY tableNumber ASC";
+	if (($id == "default") || ($go == "judging_scores"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
 	$tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
 	$row_tables_edit = mysql_fetch_assoc($tables_edit);
 	
@@ -378,10 +385,66 @@ if ($section == "admin") {
 	
 	}
 
-	if ($go == "judging_flights") {
+	if ($go == "judging_scores_bos") {
+	if ($action == "default") { 
+	$query_style_types = "SELECT * FROM style_types";
+	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+	$row_style_types = mysql_fetch_assoc($style_types);
 	
+	$query_style_types_2 = "SELECT * FROM style_types";
+	$style_types_2 = mysql_query($query_style_types_2, $brewing) or die(mysql_error());
+	$row_style_types_2 = mysql_fetch_assoc($style_types_2);
+	
+	/*
+	if ($row_judging_prefs['jPrefsBOSBeer'] == "Y") { 
+		$query_beer_bos = "SELECT * FROM judging_scores";
+		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "1") $query_beer_bos .= " WHERE scoreType='B' AND scorePlace='1'";
+		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "2") $query_beer_bos .= " WHERE scoreType='B' AND (scorePlace='1' OR scorePlace='2')";
+		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "3") $query_beer_bos .= " WHERE (scoreType='B' AND scorePlace='1') OR (scoreType='B' AND scorePlace='2') OR (scoreType='B' AND scorePlace='3')";
+		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_beer_bos .= " WHERE scoreType='B' AND scorePlace='1'";
+		$query_beer_bos .= " ORDER BY scoreTable ASC";
+		$beer_bos = mysql_query($query_beer_bos, $brewing) or die(mysql_error());
+		$row_beer_bos = mysql_fetch_assoc($beer_bos);
+		$totalRows_beer_bos = mysql_num_rows($beer_bos);
 	}
-
+	if ($row_judging_prefs['jPrefsBOSCider'] == "Y") { 
+		$query_cider_bos = "SELECT * FROM judging_scores";
+		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "1") $query_cider_bos .= " WHERE scoreType='C' AND scorePlace='1'";
+		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "2") $query_cider_bos .= " WHERE scoreType='C' AND (scorePlace='1' OR scorePlace='2')";
+		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "3") $query_cider_bos .= " WHERE (scoreType='C' AND scorePlace='1') OR (scoreType='C' AND scorePlace='2') OR (scoreType='C' AND scorePlace='3')";
+		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_cider_bos .= " WHERE scoreType='C' AND scorePlace='1'";
+		$query_cider_bos .= " ORDER BY scoreTable ASC";
+		$cider_bos = mysql_query($query_cider_bos, $brewing) or die(mysql_error());
+		$row_cider_bos = mysql_fetch_assoc($cider_bos);
+		$totalRows_cider_bos = mysql_num_rows($cider_bos);
+		}
+	if ($row_judging_prefs['jPrefsBOSCider'] == "Y") { 
+		$query_mead_bos = "SELECT * FROM judging_scores";
+		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "1") $query_mead_bos .= " WHERE scoreType='M' AND scorePlace='1'";
+		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "2") $query_mead_bos .= " WHERE scoreType='M' AND (scorePlace='1' OR scorePlace='2')";
+		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "3") $query_mead_bos .= " WHERE (scoreType='M' AND scorePlace='1') OR (scoreType='M' AND scorePlace='2') OR (scoreType='M' AND scorePlace='3')";
+		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_mead_bos .= " WHERE scoreType='B' AND scorePlace='1'";
+		$query_mead_bos .= " ORDER BY scoreTable ASC";
+		$mead_bos = mysql_query($query_mead_bos, $brewing) or die(mysql_error());
+		$row_mead_bos = mysql_fetch_assoc($mead_bos);
+		$totalRows_mead_bos = mysql_num_rows($mead_bos);
+		}
+	*/
+	} // end if ($action == "default);
+	
+	if ($action != "default") {
+		$query_enter_bos = "SELECT * FROM judging_scores";
+		if ($row_style_type['styleTypeBOSMethod'] == "1") $query_enter_bos .= " WHERE scoreType='$filter' AND scorePlace='1'";
+		if ($row_style_type['styleTypeBOSMethod'] == "2") $query_enter_bos .= " WHERE scoreType='$filter' AND (scorePlace='1' OR scorePlace='2')";
+		if ($row_style_type['styleTypeBOSMethod'] == "3") $query_enter_bos .= " WHERE (scoreType='$filter' AND scorePlace='1') OR (scoreType='$filter' AND scorePlace='2') OR (scoreType='$filter' AND scorePlace='3')";
+		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_enter_bos .= " WHERE scoreType='B' AND scorePlace='1'";
+		$query_enter_bos .= " ORDER BY scoreTable ASC";
+		$enter_bos = mysql_query($query_enter_bos, $brewing) or die(mysql_error());
+		$row_enter_bos = mysql_fetch_assoc($enter_bos);
+		$totalRows_enter_bos = mysql_num_rows($enter_bos);
+		//echo $query_enter_bos;
+	}
+  }  
 }
 
 

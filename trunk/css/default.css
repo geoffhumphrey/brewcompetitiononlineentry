@@ -449,3 +449,71 @@ background-repeat: no-repeat;
 background-color: #E0FDDF;
 border: 1px solid #0A4A06;
 }
+
+.adminSubNavContainer {
+margin: 10px 0 20px 0;
+}
+
+.adminSubNav {
+padding: 1em 1.5em 1em 0;
+white-space: nowrap;
+}
+
+.trigger {
+	padding: 5px 0 5px 0;
+	cursor: pointer;
+	position: relative;
+	margin: 1px;
+    font-weight: bold;
+	font-size: 1.2em;
+}
+
+.trigger a {
+	outline: 0;
+}
+
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
+ 	text-decoration: none;
+}
+
+.toggle_container {
+	background-image: none;
+	/* Use the following for accordian */
+	/* display: none */
+}
+
+.toggle_container a {
+	/* Use the following for accordian */
+	/* display: block */
+}
+
+.admin_default {
+	margin: 0 0 1.5em 0;
+	padding: 0 .5em 0 0;
+}
+
+.admin_default ul {
+	display: inline;
+}
+
+.admin_default li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default li li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default_header {
+	border-bottom: 1px dotted #bbbbbb;
+	font-size: 1em;
+	font-weight: bold;
+	margin: 1.5em 0 .5em 0;
+	padding: 0 0 .5em 0;
+}

@@ -1,25 +1,23 @@
 <h2><?php if ($action == "add") echo "Add a Sponsor"; elseif ($action == "edit") echo "Edit a Sponsor"; else echo "Sponsors"; ?></h2>
-<table class="dataTable">
- <tr>
-   <?php if (($action == "add") || ($action == "edit")) { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a></td><?php } else { ?><td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/award_star_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a></td><?php } ?>
-   <td class="dataList"><span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image" class="data thickbox"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a></td>
- </tr>
-</table>
+<div class="adminSubNavContainer">
+   	<span class="adminSubNav">
+    	<?php if (($action == "add") || ($action == "edit")) { ?>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a>
+        <?php } else { ?>
+        <span class="icon"><img src="images/award_star_add.png"  /></span><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a>
+   		<?php } ?>
+    </span>
+   	<span class="adminSubNav">
+    	<span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image" class="data thickbox"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
+	</span>
+</div>
 <?php if ($totalRows_sponsors > 0) { ?>
-<table class="dataTable">
- <?php if ($action == "default") { ?>
- <tr>
- 	<td class="data"><img src="images/tick.png"  alt="Yes" title="Yes"></td>
-    <td class="data">=</td>
-    <td class="data">The logo's image file is present on the server and the name of the file entered matches the file's name on the server.</td>
- </tr>
- <tr>
-    <td class="data"><img src="images/cross.png"  alt="No" title="No"></td>
-    <td class="data">=</td>
-    <td class="data">No logo present, possibly due to a) the name of the file in the sponsor's record does not match the name of the uploaded file, b) the name of the file is missing in the record, or c) the file has not been uploaded to the server.</td>
- </tr>
- <?php } ?>
-</table>
+<?php if ($action == "default") { ?>
+<div class="adminSubNavContainer">
+<p><span class="icon"><img src="images/tick.png"  alt="Yes" title="Yes"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
+<p><span class="icon"><img src="images/cross.png"  alt="No" title="No"></span> =  No logo.
+</div>
+<?php } ?>
 <?php if ($action == "default") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -119,6 +117,6 @@
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor"></td>
   </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } ?>

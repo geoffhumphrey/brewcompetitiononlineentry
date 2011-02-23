@@ -196,6 +196,18 @@ switch($section) {
 			case "judging_flights":
 			$header_output .= ": Flights";
 			break;
+			
+			case "judging_scores":
+			$header_output .= ": Scoring";
+			break;
+			
+			case "judging_scores_bos":
+			$header_output .= ": Best of Show";
+			break;
+			
+			case "style_types":
+			$header_output .= ": Style Types";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "Info added successfully."; 

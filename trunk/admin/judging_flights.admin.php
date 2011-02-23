@@ -106,15 +106,17 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 }
 </script>
 <p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo $flight_count; ?> flights. For each entry below, designate the flight in which it will be judged.</p>
-<table class="dataTable" style="margin: 0 0 20px 0;">
-<tbody>
-<tr>
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></td> 
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&go=judging_tables">Back to Tables List</a></td>
-    <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/note_add.png" alt="Define Another Flight"></span><a class="data" href="index.php?section=admin&go=judging_flights">Define/Edit Another Flight</a></td>
-</tr>
-</tbody>
-</table>
+<div class="adminSubNavContainer">
+ 	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    </span>
+   	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>
+    </span>
+    <span class="adminSubNav">
+    	<span class="icon"><img src="images/note_add.png" alt="Define Another Flight"></span><a href="index.php?section=admin&go=judging_flights">Define/Edit Another Flight</a>
+    </span>
+</div>
 <form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
 <thead>
@@ -176,6 +178,6 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
     </tr>
 </tbody>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } // end if ($id !="default") ?>

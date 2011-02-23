@@ -1,6 +1,6 @@
 <?php if ($section == "past_winners") { ?>
 <?php if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data" href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $dbTable; ?>&amp;action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a href="#" onClick="window.open('print.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $dbTable; ?>&amp;action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
 <?php }  
 }
 if ($totalRows_archive > 0) { ?>
