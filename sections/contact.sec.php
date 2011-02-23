@@ -62,7 +62,7 @@ if (!isset($_SESSION["loginUsername"])) { session_start(); }
   	<td colspan="2" class="data"><input name="clear" type="button" class="button" value="Clear Values" onClick="window.location.href='index.php?section=contact'"></td>
 </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
 <?php } 
 if ($msg == "1")

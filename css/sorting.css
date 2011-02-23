@@ -33,7 +33,6 @@
 
 .dataTables_wrapper {
 	position: relative;
-	min-height: 302px;
 	clear: both;
 	_height: 302px;
 	zoom: 1; /* Feeling sorry for IE */
@@ -85,6 +84,7 @@
 	text-align: right;
 	vertical-align:middle;
 	color: #000;
+	white-space: nowrap;
 }
 
 .dataTables_paginate a:link,

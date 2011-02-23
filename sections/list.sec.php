@@ -14,13 +14,17 @@ if ($msg != "default") echo $msg_output;
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
 <?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-<table class="dataTable">
-	<tr>
-    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a></td>
-    	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/email_edit.png"  /></span><a class="data" href="index.php?section=user&amp;action=username&amp;id=<?php echo $row_user['id']; ?>">Change Email Address</a></td>
-        <td class="dataList"><span class="icon"><img src="images/key.png"  /></span><a class="data" href="index.php?section=user&amp;action=password&amp;id=<?php echo $row_user['id']; ?>">Change Password</a></td>
-    </tr>
-</table>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">
+        <span class="icon"><img src="images/user_edit.png" /></span><a href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
+    </span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/email_edit.png" /></span><a href="index.php?section=user&amp;action=username&amp;id=<?php echo $row_user['id']; ?>">Change Your Email Address</a>
+    </span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/key.png" /></span><a href="index.php?section=user&amp;action=password&amp;id=<?php echo $row_user['id']; ?>">Change Your Password</a>
+    </span>
+</div>
 <?php } ?>
 <?php } ?>
 <table class="dataTable">
@@ -66,7 +70,7 @@ if ($msg != "default") echo $msg_output;
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging_locations WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -112,7 +116,7 @@ if ($msg != "default") echo $msg_output;
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $value);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging_locations WHERE id='%s'", $value);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -163,7 +167,7 @@ if ($msg != "default") echo $msg_output;
 		foreach ($a as $value) {
 			if ($value != "0-0") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM judging_locations WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -180,41 +184,40 @@ if ($msg != "default") echo $msg_output;
   <?php } ?>
 </table>
 <?php } ?>
-
-<?php if ($action != "print") { ?>
-<?php } else { ?>
-<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry "; else echo " entires "; ?>in the <?php echo $row_contest_info['contestName'];?>.<?php } ?>
 <h2>Entries</h2>
-<?php if ($action != "print") { ?>
 <?php if ($totalRows_log > 0) { ?>
-<p>Below is a list of your entires. <?php if ($judgingDateReturn == "false") echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
+<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry"; else echo " entries"; ?>. Each is listed below. <?php if ($judgingDateReturn == "false") echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
 <?php } ?>
-<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-<table class="dataTable">
-<tbody>
- 	<tr>
-   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/book_add.png"  /></span><a class="data" href="index.php?section=brew&amp;action=add">Add an Entry</a></td>
-   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/page_code.png"  /></span><a class="data" href="index.php?section=beerxml">Import Entries Using BeerXML</a></td>
-   		<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/help.png"  /></span><a class="data thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Get Help">BeerXML Export/Upload Help</a></td>
-   		<td class="dataList"><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a></td>
- 	</tr>
-</tbody>
-</table>
+<?php if ($action != "print") { ?>
+<?php if (!greaterDate($today,$deadline)) { ?>
+<div class="adminSubNavContainer">
+   	<span class="adminSubNav">
+        <span class="icon"><img src="images/book_add.png"  /></span><a href="index.php?section=brew&amp;action=add">Add an Entry</a>
+   	</span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/page_code.png"  /></span><a href="index.php?section=beerxml">Import Entries Using BeerXML</a>
+   	</span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Get Help">BeerXML Export/Upload Help</a>
+   	</span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
+	</span>
+</div>
 <?php if (($judgingDateReturn == "false") && ($totalRows_log > 0)) { ?>
-<table class="dataTable" style="margin: 0 0 25px 0;">
-<tbody>
- 	<tr>
-  		<td class="data" width="5%" nowrap="nowrap"><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></td>
-  <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
-  <?php } if ($action != "print") { ?>
-  		<td class="data"><?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?></td>
-  <?php } ?>
- 	</tr>
-</tbody>
-</table>
-<?php } ?>
-<?php } ?>
-<?php } if ($totalRows_log > 0) { ?>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">
+		<span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?>
+	</span>
+   	<span class="adminSubNav">
+        <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
+    </span>
+</div>
+<?php } // end if (($judgingDateReturn == "false") && ($totalRows_log > 0)) ?>
+<?php } // end if (!greaterDate($today,$deadline)) ?>
+<?php } // end if ($action != "print")
+if ($totalRows_log > 0) { 
+?>
 <?php if ($action != "print") {?>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>

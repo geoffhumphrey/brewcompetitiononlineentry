@@ -70,4 +70,9 @@ if (isset($_GET['view'])) {
   $view = (get_magic_quotes_gpc()) ? $_GET['view'] : addslashes($_GET['view']);
 }
 
+$pg = "default";
+if (isset($_GET['pg'])) {
+  $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
+}
+
 ?>

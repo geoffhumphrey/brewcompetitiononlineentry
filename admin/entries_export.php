@@ -7,7 +7,7 @@ include ('../includes/url_variables.inc.php');
 $type = "entries";
 
 if ($bid != "") {
-$query_judging = "SELECT judgingLocName FROM judging WHERE id='$bid'";
+$query_judging = "SELECT judgingLocName FROM judging_locations WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
 }

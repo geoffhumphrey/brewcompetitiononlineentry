@@ -71,8 +71,8 @@ function checkUncheckAll(theElement) {
   <tbody>
   <?php 
  	do { 
-		/* if ($filter == "judges") $query_judging_loc = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
-		if ($filter == "stewards") $query_judging_loc = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
+		/* if ($filter == "judges") $query_judging_loc = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
+		if ($filter == "stewards") $query_judging_loc = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
 		$judging_loc = mysql_query($query_judging_loc, $brewing) or die(mysql_error());
 		$row_judging_loc = mysql_fetch_assoc($judging_loc);
 		$totalRows_judging_loc = mysql_num_rows($judging_loc);
@@ -97,7 +97,7 @@ function checkUncheckAll(theElement) {
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $value);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging_locations WHERE id='%s'", $value);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -125,7 +125,7 @@ function checkUncheckAll(theElement) {
 		foreach ($a as $value) {
 			if ($value != "") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging_locations WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				if (substr($value, 0, 1) == "Y") { 
@@ -144,6 +144,6 @@ function checkUncheckAll(theElement) {
 </tbody>
 </table>
 <p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } else { if ($action == "update") echo "<div class='error'>No participants have been assigned as a ".rtrim($filter, "s").".</div>"; else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; } ?>

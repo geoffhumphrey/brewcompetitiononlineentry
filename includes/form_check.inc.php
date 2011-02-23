@@ -245,6 +245,22 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
+<?php if (($section == "admin") && ($go == "styles")) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.brewStyle.value))
+	{ errormessage += "\nThe style name"; }
+if(WithoutContent(document.form1.brewStyleType.value))
+	{ errormessage += "\nThe style type"; }
+// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required to add or edit your custom style:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
 function WithoutContent(ss) {
 if(ss.length > 0) { return false; }
 return true;

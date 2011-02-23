@@ -1,7 +1,11 @@
 <form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1">
 <?php if ($section != "step2") { ?>
 <h2>Competition Info</h2>
-<p><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></p>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    </span>
+</div>
 <?php } ?>
 <?php if ($section == "step2") { ?>
 <h3>Contact</h3>
@@ -92,16 +96,16 @@
   </tr>
 </table>
 <h3>Entries</h3>
-<table>
+<table class="dataTable">
   <tr>
     <td class="dataLabel">Entry Fee:</td>
     <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee']; ?>"></td>
     <td class="data style1"> <span class="required">Required </span>Fee for a single entry (<?php echo $row_prefs['prefsCurrency']; ?>) - please enter a zero (0) for a free entry fee.</td>
   </tr>
   <tr>
-    <td class="dataLabel">Entry Fee Cap:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
-    <td class="data"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., $5 for the first entry, $10 for unlimited, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
+    <td class="dataLabel bdr1B_dashed">Entry Fee Cap:</td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
+    <td class="data bdr1B_dashed"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php echo $row_prefs['prefsCurrency']; ?>X for the first X number of entries, <?php echo $row_prefs['prefsCurrency']; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Discount Multiple Entries:</td>
@@ -118,17 +122,26 @@
     <td class="data"><em>The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</em></td>
   </tr>
   <tr>
-    <td class="dataLabel">Discounted Entry Fee:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee2']; ?>"></td>
-    <td class="data"><em>Fee for a single, </em>discounted<em> entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
+    <td class="dataLabel bdr1B_dashed">Discounted Entry Fee:</td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee2']; ?>"></td>
+    <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
+  </tr>
+   <tr>
+    <td class="dataLabel">Member Discount Password:</td>
+    <td class="data"><input name="contestEntryFeePassword" type="text" size="10" maxlength="30" value="<?php echo $row_contest_info['contestEntryFeePassword']; ?>"></td>
+    <td class="data"><em>Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</em></td>
+  </tr>
+  <tr>
+    <td class="dataLabel bdr1B_dashed">Member Discount Fee:</td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
+    <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
   </tr>
 </table>
-<table>
+<table class="dataTable">
   <tr>
-    <td class="dataLabel">Bottle Acceptance Rules:</td>
-    <td class="data"><textarea name="contestBottles" cols="70" rows="25"><?php  echo $row_contest_info['contestBottles']; ?></textarea></td>
-    <td class="data"><em>Indicate the number of bottles, size, color, etc.<br>
-    Copy and paste if needed.</em></td>
+    <td class="dataLabel bdr1B_dashed">Bottle Acceptance Rules:</td>
+    <td class="data bdr1B_dashed"><textarea name="contestBottles" cols="70" rows="25"><?php  echo $row_contest_info['contestBottles']; ?></textarea></td>
+    <td class="data bdr1B_dashed"><em>Indicate the number of bottles, size, color, etc. Copy and paste if needed.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Name of Shipping Location:</td>
@@ -175,11 +188,14 @@
     <td class="data"><textarea name="contestBOSAward" cols="70" rows="25"><?php echo $row_contest_info['contestBOSAward']; ?></textarea></td>
     <td class="data"><em>Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</em></td>
   </tr>
+</table>
+<h3>Winners List</h3>
+<table class="dataTable">
   <tr>
     <td class="dataLabel">Complete Winners List:</td>
     <td class="data"><textarea name="contestWinnersComplete" cols="70" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea><br /><a href="javascript:toggleEditor('contestWinnersComplete');"></a></td>
-    <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in HTML format and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
-      <p>If you paste using the editor, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
+    <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in <strong>HTML format</strong> and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
+      <p>If you paste using the editor to the left, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>
   
   <tr>
@@ -187,5 +203,5 @@
   	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit"></td>
   </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>

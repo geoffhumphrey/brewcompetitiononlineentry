@@ -7,19 +7,22 @@ elseif ($action == "add") echo "Add Participant";
 else echo "Participants"; 
 if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 <?php if ($action != "print") { ?>
-<table class="dataTable">
-<tr>
-  <td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin">Back to Admin</a></td>
-  <?php if ($action != "add") { // 1?>
-  		<?php if ($dbTable != "default") { // 1.1 ?>
- 	 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a class="data" href="index.php?section=admin&amp;go=archive">Back to Archives</a></td>
-  		<?php } // end 1.1 ?>
-        <?php if ($dbTable == "default") { // 1.2 ?>
-  		<td class="dataList" width="5%" nowrap="nowrap">
-        	<span class="icon"><img src="images/user_add.png"  /></span><a class="data" href="index.php?section=admin&amp;go=participants&amp;action=add">Add a Participant</a>
-        </td>
-        <td class="dataList" width="5%" nowrap="nowrap">
-  			<span class="icon"><img src="images/page.png" /></span>
+<div class="adminSubNavContainer">
+  	<span class="adminSubNav">
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    </span>
+  	<?php if ($action != "add") { ?>
+  	<?php if ($dbTable != "default") { ?>
+ 	<span class="adminSubNav">
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=archive">Back to Archives</a>
+  	</span>
+	<?php } ?>
+    <?php if ($dbTable == "default") { ?>
+  	<span class="adminSubNav">
+		<span class="icon"><img src="images/user_add.png"  /></span><a href="index.php?section=admin&amp;go=participants&amp;action=add">Add a Participant</a>
+    </span>
+    <span class="adminSubNav">
+		<span class="icon"><img src="images/page.png" /></span>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'views');">View...</a></div>
   			<div id="views" class="menu" onmouseover="menuMouseover(event)">
   				<a class="menuItem" href="index.php?section=admin&amp;go=participants">All Participants</a>
@@ -28,9 +31,9 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
         		<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a>
         		<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
   			</div>
-  		</td>
-        <td class="dataList" width="5%" nowrap="nowrap">
-  			<span class="icon"><img src="images/printer.png" /></span>
+  	</span>
+    <span class="adminSubNav">
+		<span class="icon"><img src="images/printer.png" /></span>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants');">Print <em>This</em> List</a></div>
   			<div id="printMenu_participants" class="menu" onmouseover="menuMouseover(event)">
   				<a class="menuItem thickbox" href="print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Last Name</a>
@@ -40,17 +43,19 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 				<a class="menuItem thickbox" href="print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=judge_rank&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Judge Rank</a>
 				<?php } ?>
             </div>
-  		</td>
-  		<td class="dataList">
-  			<?php if ((totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($filter == "default")) { ?>
-  			<span class="icon"><img src="images/printer.png" /></span>
+  	</span>
+  	<span class="adminSubNav">
+		<?php if ((totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($filter == "default")) { ?>
+  		<span class="icon"><img src="images/printer.png" /></span>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants_all');">Print <em>All</em></a></div>
   			<div id="printMenu_participants_all" class="menu" onmouseover="menuMouseover(event)">
   				<a class="menuItem thickbox" href="print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Last Name</a>
   				<a class="menuItem thickbox" href="print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=club&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Club</a>
             </div>
-            <?php } if ($filter != "default") { ?>
-            <span class="icon"><img src="images/printer.png" /></span>
+    </span>
+    <span class="adminSubNav">
+        <?php } if ($filter != "default") { ?>
+        <span class="icon"><img src="images/printer.png" /></span>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants_all');">Print <em>All</em></a></div>
   			<div id="printMenu_participants_all" class="menu" onmouseover="menuMouseover(event)">
   				<a class="menuItem thickbox" href="print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Last Name</a>
@@ -61,19 +66,28 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); ?></h2>
 				<?php } ?>
             </div>
   			<?php } else echo "&nbsp;"; ?>
-  		</td>
-</tr>
-<?php } // end 1.2 ?>
-<?php if (($action != "add") && ($dbTable == "default")) { // 2  ?>
- <tr>
- 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a></td>
- 	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a></td>
- 	<td class="dataList" width="5%" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Assign Judges to a Location</a><?php } else echo "&nbsp;"; ?></td>
- 	<td class="dataList" nowrap="nowrap"><?php if ($totalRows_judging > 1) { ?><span class="icon"><img src="images/user_edit.png"  /></span><a class="data" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Assign Stewards to a Location</a><?php } else echo "&nbsp;"; ?></td>
- </tr>
-</table>
- <?php } // end 2
-} 
+  	</span>
+	<?php } // end 1.2 ?>
+</div>
+<div class="adminSubNavContainer">
+	<?php if (($action != "add") && ($dbTable == "default")) { // 2  ?>
+ 	<span class="adminSubNav">
+		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a>
+ 	</span>
+    <span class="adminSubNav">
+		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a>
+ 	</span>
+	<?php if ($totalRows_judging > 1) { ?>
+    <span class="adminSubNav">
+		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Assign Judges to a Location</a>
+	</span>
+ 	<span class="adminSubNav">
+		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Assign Stewards to a Location</a>
+	</span>
+	<?php }  ?>
+ <?php } // end 2 ?>
+</div>
+<?php } 
 }
 if (($action == "default") || ($action == "print")) { 
 if ($totalRows_participant_count > 0) { 
@@ -190,8 +204,8 @@ if ($totalRows_participant_count > 0) {
 </thead>
 <tbody>
 <?php do { 
-    if ($row_brewer['brewerAssignment'] == "J") $query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
-	if ($row_brewer['brewerAssignment'] == "S") $query_judging2 = sprintf("SELECT * FROM judging WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
+    if ($row_brewer['brewerAssignment'] == "J") $query_judging2 = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
+	if ($row_brewer['brewerAssignment'] == "S") $query_judging2 = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
 	$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 	$row_judging2 = mysql_fetch_assoc($judging2);
 	
@@ -218,7 +232,7 @@ if ($totalRows_participant_count > 0) {
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging WHERE id='%s'", $value);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging_locations WHERE id='%s'", $value);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -244,7 +258,7 @@ if ($totalRows_participant_count > 0) {
     <span class="icon"><a href="index.php?section=brewer&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_brewer['id']; ?>&amp;action=edit&amp;id=<?php echo $row_brewer['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span>
     <span class="icon"><a href="index.php?section=admin&amp;go=make_admin&amp;username=<?php echo $row_brewer['brewerEmail'];?>"><img src="images/lock_edit.png"  border="0" alt="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>'s User Level"></a></span>
     <?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?><span class="icon"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank"><img src="images/printer.png"  border="0" alt="Print judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Print judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span><?php } ?>
-    <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;dbTable=brewer&amp;action=delete&amp;username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
+    <span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;dbTable=brewer&amp;action=delete&amp;username=<?php echo $row_brewer['brewerEmail'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>?\nALL entries for this participant WILL BE DELETED as well.\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Delete <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a><?php } ?></span>
     </td> 
   <?php } ?> 
   </tr>
@@ -291,7 +305,7 @@ if ($action == "add")  {
   	</tr>
 </table>
 <input type="hidden" name="userLevel" value="2" />
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
 <?php } 
 if ($filter == "info") { 

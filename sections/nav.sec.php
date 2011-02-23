@@ -78,7 +78,6 @@
 <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu22');"><span class="menuItemText">Promo Materials</span><span class="menuItemArrow">&#9654;</span></a>
 </div>
 
-<!-- 2nd Tier sub menus  -->
 <div id="adminMenu0" class="menu">
 <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
 <a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
@@ -150,7 +149,7 @@
 
 <div id="adminMenu11" class="menu">
 <a class="menuItem" href="index.php?section=admin&amp;go=preferences">Site Preferences</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_preferences">Judging Preferences</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a>
 </div>
 
 <div id="adminMenu12" class="menu">
@@ -168,13 +167,12 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores">Scores by Table</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;filter=bos">BOS Scores</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Scores</a>
 </div>
 
 <div id="adminMenu15" class="menu">
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=add">Scores by Table</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=category">Scores by Category</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=bos">BOS Scores</a>
 </div>
 
 <div id="adminMenu16" class="menu">

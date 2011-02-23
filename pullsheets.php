@@ -29,7 +29,7 @@ if (isset($_GET['tb'])) {
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." - ". get_table_info(1,"count_total",$row_tables['id'])." Entries"; ?></h1>
             <?php if ($row_tables['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT * FROM judging WHERE id='%s'", $row_tables['tableLocation']);
+			$query_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_tables['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
@@ -86,7 +86,7 @@ else { ?>
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']." - ". get_table_info(1,"count_total",$row_tables_edit['id'])." Entries"; ?></h1>
             <?php if ($row_tables_edit['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT * FROM judging WHERE id='%s'", $row_tables_edit['tableLocation']);
+			$query_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_tables_edit['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>

@@ -3,14 +3,14 @@ require ('../Connections/config.php');
 require ('db_connect.inc.php');
 require ('url_variables.inc.php');
 
-// Global Variables
-
-$insertGoTo = $_POST['relocate']."&msg=1";
-$updateGoTo = $_POST['relocate']."&msg=2";
-$deleteGoTo = $_POST['relocate']."&msg=5";
-
-session_start(); 
-//require ('authentication.inc.php'); session_start(); sessionAuthenticate();
+function relocate($referer) {
+	// determine if referrer has any msg=X variables attached
+	if (strstr($referer,"&msg")) { 
+	$pattern = array("/[0-9]/", "/&msg=/");
+	$referer = preg_replace($pattern, "", $referer);
+	}
+	return $referer;
+}
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
@@ -41,6 +41,16 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 
 
+//require ('plug-ins.inc.php');
+// Global Variables
+
+$insertGoTo = $_POST['relocate']."&msg=1";
+$updateGoTo = $_POST['relocate']."&msg=2";
+$massUpdateGoTo = $_POST['relocate']."&msg=9";
+$deleteGoTo = relocate($_SERVER['HTTP_REFERER'])."&msg=5";
+
+session_start(); 
+//require ('authentication.inc.php'); session_start(); sessionAuthenticate();
 
 if ($action == "delete") {
 
@@ -103,6 +113,7 @@ if ($action == "delete") {
 
 
   if ($go == "participants") {
+  
   mysql_select_db($database, $brewing);
   $query_delete_brewer = sprintf("SELECT id FROM users WHERE user_name='%s'", $username);
   $delete_brewer = mysql_query($query_delete_brewer, $brewing) or die(mysql_error()); 
@@ -111,6 +122,36 @@ if ($action == "delete") {
   $deleteUser = sprintf("DELETE FROM users WHERE id='%s'", $row_delete_brewer['id']);
   mysql_select_db($database, $brewing);
   $Result = mysql_query($deleteUser, $brewing) or die(mysql_error());
+  
+  $deleteBrewer = sprintf("DELETE FROM brewer WHERE uid='%s'", $row_delete_brewer['id']);
+  mysql_select_db($database, $brewing);
+  $Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
+  
+  $query_entries = sprintf("SELECT id from brewing WHERE brewBrewerID='%s'", $row_delete_brewer['id']);
+  $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+  $row_entries = mysql_fetch_assoc($entries);
+  
+  do { $a[] = $row_entries['id']; } while ($row_entries = mysql_fetch_assoc($entries));
+
+  sort($a);
+  
+  	foreach ($a as $id) { 
+  	$deleteEntries = sprintf("DELETE FROM brewing WHERE id='%s'", $id);
+  	mysql_select_db($database, $brewing);
+  	$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error());
+  	}
+  
+  }
+  
+  if ($go == "entries") {
+  mysql_select_db($database, $brewing);
+  $query_delete_entry = sprintf("SELECT id FROM judging_scores WHERE eid='%s'", $id);
+  $delete_entry = mysql_query($query_delete_entry, $brewing) or die(mysql_error()); 
+  $row_delete_entry = mysql_fetch_assoc($delete_entry);
+  
+  $deleteScore = sprintf("DELETE FROM judging_scores WHERE id='%s'", $row_delete_entry['id']);
+  mysql_select_db($database, $brewing);
+  $Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
   }
   
   /*
@@ -263,7 +304,195 @@ if ($row_prefs['prefsDisplaySpecial'] == "Y") {
 	}
 } else $custom = "2";
 
-$insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, brewCategorySort, brewSubCategory, brewBottleDate, brewDate, brewYield, brewInfo, brewMead1, brewMead2, brewMead3, brewExtract1, brewExtract1Weight, brewExtract2, brewExtract2Weight, brewExtract3, brewExtract3Weight, brewExtract4, brewExtract4Weight, brewExtract5, brewExtract5Weight, brewGrain1, brewGrain1Weight, brewGrain2, brewGrain2Weight, brewGrain3, brewGrain3Weight, brewGrain4, brewGrain4Weight, brewGrain5, brewGrain5Weight, brewGrain6, brewGrain6Weight, brewGrain7, brewGrain7Weight, brewGrain8, brewGrain8Weight, brewGrain9, brewGrain9Weight, brewAddition1, brewAddition1Amt, brewAddition2, brewAddition2Amt, brewAddition3, brewAddition3Amt, brewAddition4, brewAddition4Amt, brewAddition5, brewAddition5Amt, brewAddition6, brewAddition6Amt, brewAddition7, brewAddition7Amt, brewAddition8, brewAddition8Amt, brewAddition9, brewAddition9Amt, brewHops1, brewHops1Weight, brewHops1IBU, brewHops1Time, brewHops2, brewHops2Weight, brewHops2IBU, brewHops2Time, brewHops3, brewHops3Weight, brewHops3IBU, brewHops3Time, brewHops4, brewHops4Weight, brewHops4IBU, brewHops4Time, brewHops5, brewHops5Weight, brewHops5IBU, brewHops5Time, brewHops6, brewHops6Weight, brewHops6IBU, brewHops6Time, brewHops7, brewHops7Weight, brewHops7IBU, brewHops7Time, brewHops8, brewHops8Weight, brewHops8IBU, brewHops8Time, brewHops9, brewHops9Weight, brewHops9IBU, brewHops9Time, brewHops1Use, brewHops2Use, brewHops3Use, brewHops4Use, brewHops5Use, brewHops6Use, brewHops7Use, brewHops8Use, brewHops9Use, brewHops1Type, brewHops2Type, brewHops3Type, brewHops4Type, brewHops5Type, brewHops6Type, brewHops7Type, brewHops8Type, brewHops9Type, brewHops1Form, brewHops2Form, brewHops3Form, brewHops4Form, brewHops5Form, brewHops6Form, brewHops7Form, brewHops8Form, brewHops9Form, brewYeast, brewYeastMan, brewYeastForm, brewYeastType, brewYeastAmount, brewYeastStarter, brewYeastNutrients, brewOG, brewFG, brewPrimary, brewPrimaryTemp, brewSecondary, brewSecondaryTemp, brewOther, brewOtherTemp, brewComments, brewMashStep1Name, brewMashStep1Temp, brewMashStep1Time, brewMashStep2Name, brewMashStep2Temp, brewMashStep2Time, brewMashStep3Name, brewMashStep3Temp, brewMashStep3Time, brewMashStep4Name, brewMashStep4Temp, brewMashStep4Time, brewMashStep5Name, brewMashStep5Temp, brewMashStep5Time, brewFinings, brewWaterNotes, brewBrewerID, brewCarbonationMethod, brewCarbonationVol, brewCarbonationNotes, brewBoilHours, brewBoilMins, brewBrewerFirstName, brewBrewerLastName, brewExtract1Use, brewExtract2Use, brewExtract3Use, brewExtract4Use, brewExtract5Use, brewGrain1Use, brewGrain2Use, brewGrain3Use, brewGrain4Use, brewGrain5Use, brewGrain6Use, brewGrain7Use, brewGrain8Use, brewGrain9Use, brewAddition1Use, brewAddition2Use, brewAddition3Use, brewAddition4Use, brewAddition5Use, brewAddition6Use, brewAddition7Use, brewAddition8Use, brewAddition9Use, brewJudgingLocation, brewCoBrewer) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+$insertSQL = sprintf("
+INSERT INTO brewing (
+brewName,
+brewStyle,
+brewCategory, 
+brewCategorySort, 
+brewSubCategory, 
+brewBottleDate, 
+brewDate, 
+brewYield, 
+brewInfo, 
+brewMead1, 
+brewMead2, 
+brewMead3, 
+brewExtract1, 
+brewExtract1Weight, 
+brewExtract2, 
+brewExtract2Weight, 
+brewExtract3, 
+brewExtract3Weight, 
+brewExtract4, 
+brewExtract4Weight, 
+brewExtract5, brewExtract5Weight, 
+brewGrain1, 
+brewGrain1Weight, 
+brewGrain2, 
+brewGrain2Weight, 
+brewGrain3, 
+brewGrain3Weight, 
+brewGrain4, 
+brewGrain4Weight, 
+brewGrain5, 
+brewGrain5Weight, 
+brewGrain6, 
+brewGrain6Weight, 
+brewGrain7, 
+brewGrain7Weight, 
+brewGrain8, 
+brewGrain8Weight, 
+brewGrain9, 
+brewGrain9Weight, 
+brewAddition1, 
+brewAddition1Amt, 
+brewAddition2, 
+brewAddition2Amt, 
+brewAddition3, 
+brewAddition3Amt, 
+brewAddition4, 
+brewAddition4Amt, 
+brewAddition5, 
+brewAddition5Amt, 
+brewAddition6, 
+brewAddition6Amt, 
+brewAddition7, 
+brewAddition7Amt, 
+brewAddition8, 
+brewAddition8Amt, 
+brewAddition9, 
+brewAddition9Amt, 
+brewHops1, 
+brewHops1Weight, 
+brewHops1IBU, 
+brewHops1Time, 
+brewHops2, 
+brewHops2Weight, 
+brewHops2IBU, 
+brewHops2Time, 
+brewHops3, 
+brewHops3Weight, 
+brewHops3IBU, 
+brewHops3Time, 
+brewHops4, 
+brewHops4Weight, 
+brewHops4IBU, 
+brewHops4Time, 
+brewHops5, 
+brewHops5Weight, 
+brewHops5IBU, 
+brewHops5Time, 
+brewHops6, 
+brewHops6Weight, 
+brewHops6IBU, 
+brewHops6Time, 
+brewHops7, 
+brewHops7Weight, 
+brewHops7IBU, 
+brewHops7Time, 
+brewHops8, 
+brewHops8Weight, 
+brewHops8IBU, 
+brewHops8Time, 
+brewHops9, 
+brewHops9Weight, 
+brewHops9IBU, 
+brewHops9Time, 
+brewHops1Use, 
+brewHops2Use, 
+brewHops3Use, 
+brewHops4Use, 
+brewHops5Use, 
+brewHops6Use, 
+brewHops7Use, 
+brewHops8Use, 
+brewHops9Use, 
+brewHops1Type, 
+brewHops2Type, 
+brewHops3Type, 
+brewHops4Type, 
+brewHops5Type, 
+brewHops6Type, 
+brewHops7Type, 
+brewHops8Type, 
+brewHops9Type, 
+brewHops1Form, 
+brewHops2Form, 
+brewHops3Form, 
+brewHops4Form, 
+brewHops5Form, 
+brewHops6Form, 
+brewHops7Form, 
+brewHops8Form, 
+brewHops9Form, 
+brewYeast, 
+brewYeastMan, 
+brewYeastForm, 
+brewYeastType, 
+brewYeastAmount, 
+brewYeastStarter, 
+brewYeastNutrients, 
+brewOG, 
+brewFG, 
+brewPrimary, 
+brewPrimaryTemp, 
+brewSecondary, 
+brewSecondaryTemp, 
+brewOther, 
+brewOtherTemp, 
+brewComments, 
+brewMashStep1Name, 
+brewMashStep1Temp, 
+brewMashStep1Time, 
+brewMashStep2Name, 
+brewMashStep2Temp, 
+brewMashStep2Time, 
+brewMashStep3Name, 
+brewMashStep3Temp, 
+brewMashStep3Time, 
+brewMashStep4Name, 
+brewMashStep4Temp, 
+brewMashStep4Time, 
+brewMashStep5Name, 
+brewMashStep5Temp, 
+brewMashStep5Time, 
+brewFinings, 
+brewWaterNotes, 
+brewBrewerID, 
+brewCarbonationMethod, 
+brewCarbonationVol, 
+brewCarbonationNotes, 
+brewBoilHours, 
+brewBoilMins, 
+brewBrewerFirstName, 
+brewBrewerLastName, 
+brewExtract1Use, 
+brewExtract2Use, 
+brewExtract3Use, 
+brewExtract4Use, 
+brewExtract5Use, 
+brewGrain1Use, 
+brewGrain2Use, 
+brewGrain3Use, 
+brewGrain4Use, 
+brewGrain5Use, 
+brewGrain6Use, 
+brewGrain7Use, 
+brewGrain8Use, 
+brewGrain9Use, 
+brewAddition1Use, 
+brewAddition2Use, 
+brewAddition3Use, 
+brewAddition4Use, 
+brewAddition5Use, 
+brewAddition6Use, 
+brewAddition7Use, 
+brewAddition8Use, 
+brewAddition9Use, 
+brewJudgingLocation, 
+brewCoBrewer) VALUES 
+(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['brewName'], "scrubbed"),
                        GetSQLValueString($row_style_name['brewStyle'], "text"),
 					   GetSQLValueString($styleTrim, "text"),
@@ -471,8 +700,8 @@ $insertSQL = sprintf("INSERT INTO brewing (brewName, brewStyle, brewCategory, br
 		else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
   }
   //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
-  else $insertGoTo = "../index.php?section=list";
-  header(sprintf("Location: %s", $insertGoTo));
+ else $insertGoTo = "../index.php?section=list";
+ // header(sprintf("Location: %s", $insertGoTo));
 }
 
 // --------------------------- If Editing an Entry ------------------------------- //
@@ -1202,6 +1431,8 @@ contestEntryFeeDiscount,
 contestEntryFeeDiscountNum,
 contestLogo,
 contestBOSAward,
+contestEntryFeePassword,
+contestEntryFeePasswordNum,
 id
 ) 
 VALUES 
@@ -1211,7 +1442,7 @@ VALUES
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s,
-%s, %s, %s)",
+%s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
                        GetSQLValueString($_POST['contestHostWebsite'], "text"),
@@ -1238,7 +1469,9 @@ VALUES
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
-					   GetSQLValueString($_POST['contestBOSAward'], "text"), 
+					   GetSQLValueString($_POST['contestBOSAward'], "text"),
+					   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
+					   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1298,7 +1531,9 @@ contestEntryFee2=%s,
 contestEntryFeeDiscount=%s,
 contestEntryFeeDiscountNum=%s,
 contestLogo=%s,
-contestBOSAward=%s
+contestBOSAward=%s,
+contestEntryFeePassword=%s,
+contestEntryFeePasswordNum=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['contestName'], "text"),
                        GetSQLValueString($_POST['contestHost'], "text"),
@@ -1326,7 +1561,9 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
-					   GetSQLValueString($_POST['contestBOSAward'], "text"), 
+					   GetSQLValueString($_POST['contestBOSAward'], "text"),
+					   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
+					   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1361,8 +1598,7 @@ prefsSponsorLogoSize,
 prefsCompLogoSize,
 prefsDisplayWinners,
 prefsDisplaySpecial,
-prefsBOSMead,
-prefsBOSCider,
+prefsCompOrg,
 
 prefsEntryForm,
 prefsRecordLimit,
@@ -1372,7 +1608,7 @@ id) VALUES (
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
-%s, %s, %s, %s)",
+%s, %s, %s)",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -1391,8 +1627,7 @@ id) VALUES (
 					   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 					   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
-					   GetSQLValueString($_POST['prefsBOSMead'], "text"),
-					   GetSQLValueString($_POST['prefsBOSCider'], "text"),
+					   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 					   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 					   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 					   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
@@ -1429,8 +1664,7 @@ prefsSponsorLogoSize=%s,
 prefsCompLogoSize=%s, 
 prefsDisplayWinners=%s, 
 prefsDisplaySpecial=%s, 
-prefsBOSMead=%s, 
-prefsBOSCider=%s,
+prefsCompOrg=%s, 
 prefsEntryForm=%s,
 prefsRecordLimit=%s,
 prefsRecordPaging=%s
@@ -1453,8 +1687,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 					   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
-					   GetSQLValueString($_POST['prefsBOSMead'], "text"),
-					   GetSQLValueString($_POST['prefsBOSCider'], "text"),
+					   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 					   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 					   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 					   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
@@ -1488,7 +1721,7 @@ foreach($_POST['id'] as $id)
 	} 
 
 if($result1){ 
-	header("location:../index.php?section=admin&go=entries&action=default&filter=".$filter."&bid=".$bid."&sort=".$sort."&dir=".$dir."&msg=9");  
+	header(sprintf("Location: %s", $massUpdateGoTo)); 
 	}
 }
 
@@ -1586,7 +1819,7 @@ foreach($_POST['id'] as $id)
 		
 	} 
 
- if($result1){ header("location:../index.php?section=admin&action=".$action."&go=judging&filter=".$filter."&bid=".$bid."&msg=9");  }
+ if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
 }
 
 // --------------------------- If updating records in the styles table en masse ------------------------------- //
@@ -1636,7 +1869,7 @@ foreach($_POST['id'] as $id)	{
 		 
 if($result1){ 
 	if ($section == "step5") header("location:../setup.php?section=step6");
-	else header("location:../index.php?section=admin&go=styles&filter=$filter&msg=9");
+	else header(sprintf("Location: %s", $massUpdateGoTo));
 	}
 
 }
@@ -1972,11 +2205,13 @@ $updateSQL = sprintf("UPDATE judging_preferences SET
 					 
 jPrefsQueued=%s,
 jPrefsFlightEntries=%s,
-jPrefsBOSMethod=%s
+jPrefsMaxBOS=%s,
+jPrefsRounds=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['jPrefsQueued'], "text"),
-					   GetSQLValueString($_POST['jPrefsFlightEntries'], "text"),
-                       GetSQLValueString($_POST['jPrefsBOSMethod'], "text"),
+					   GetSQLValueString($_POST['jPrefsFlightEntries'], "int"),
+                       GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
+					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -2037,9 +2272,7 @@ WHERE id=%s",
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
   
-  // Check to see if flights have been designated already
-  
-  
+  // Check to see if flights have been designated already -----------------------------------------------------------------------------------------------------------
   // If so, loop through and remove the flight designation (table has changed)
   
   
@@ -2098,13 +2331,15 @@ foreach($_POST['score_id'] as $score_id)	{
 	bid, 
 	scoreTable,
 	scoreEntry,
-	scorePlace
-  	) VALUES (%s, %s, %s, %s, %s)",
+	scorePlace,
+	scoreType
+  	) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
-					   GetSQLValueString($_POST['scorePlace'.$score_id], "text")
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
 					   );
 
 	//echo $insertSQL."<br>";
@@ -2125,13 +2360,15 @@ foreach($_POST['score_id'] as $score_id)	{
 	bid=%s,
 	scoreTable=%s,
 	scoreEntry=%s,
-	scorePlace=%s
+	scorePlace=%s,
+	scoreType=%s
 	WHERE id=%s",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
 					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
 					   GetSQLValueString($score_id, "text")
 					   );
 
@@ -2145,13 +2382,15 @@ foreach($_POST['score_id'] as $score_id)	{
 	bid, 
 	scoreTable,
 	scoreEntry,
-	scorePlace
-  	) VALUES (%s, %s, %s, %s, %s)",
+	scorePlace,
+	scoreType
+  	) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
-					   GetSQLValueString($_POST['scorePlace'.$score_id], "text")
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
 					   );
 
 	//echo $insertSQL."<br>";
@@ -2163,5 +2402,89 @@ foreach($_POST['score_id'] as $score_id)	{
 
 }
 
+if (($action == "enter") && ($dbTable == "judging_scores_bos")) { 
+foreach($_POST['score_id'] as $score_id)	{
+	if ($_POST['scorePrevious'.$score_id] == "Y") {
+	$updateSQL = sprintf("UPDATE judging_scores_bos SET
+	eid=%s,
+	bid=%s,
+	scoreEntry=%s,
+	scorePlace=%s,
+	scoreType=%s
+	WHERE id=%s",
+                       GetSQLValueString($_POST['eid'.$score_id], "text"),
+					   GetSQLValueString($_POST['bid'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
+					   GetSQLValueString($_POST['id'.$score_id], "text")
+					   );
+
+	#echo $updateSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+	if (($_POST['scorePlace'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
+	$insertSQL = sprintf("INSERT INTO judging_scores_bos (
+	eid, 
+	bid, 
+	scoreEntry,
+	scorePlace,
+	scoreType
+  	) VALUES (%s, %s, %s, %s, %s)",
+                       GetSQLValueString($_POST['eid'.$score_id], "text"),
+					   GetSQLValueString($_POST['bid'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
+					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
+					   );
+
+	#echo $insertSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
+		}
+	}
+	header(sprintf("Location: %s", $updateGoTo));
+
+}
+
+if (($action == "add") && ($dbTable == "style_types")) { 
+$insertSQL = sprintf("INSERT INTO style_types (
+	styleTypeName, 
+	styleTypeOwn, 
+	styleTypeBOS, 
+	styleTypeBOSMethod
+	) 
+	VALUES 
+	(%s, %s, %s, %s)",
+                       GetSQLValueString($_POST['styleTypeName'], "text"),
+                       GetSQLValueString($_POST['styleTypeOwn'], "text"),
+                       GetSQLValueString($_POST['styleTypeBOS'], "text"),
+					   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"));
+	//echo $insertSQL;				   
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	header(sprintf("Location: %s", $insertGoTo));
+
+}
+
+if (($action == "edit") && ($dbTable == "style_types")) { 
+$updateSQL = sprintf("UPDATE style_types SET
+	styleTypeName=%s, 
+	styleTypeOwn=%s, 
+	styleTypeBOS=%s, 
+	styleTypeBOSMethod=%s
+	WHERE id=%s",
+                       GetSQLValueString($_POST['styleTypeName'], "text"),
+                       GetSQLValueString($_POST['styleTypeOwn'], "text"),
+                       GetSQLValueString($_POST['styleTypeBOS'], "text"),
+					   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
+                       GetSQLValueString($id, "int"));
+	//echo $updateSQL."<br>";
+  	mysql_select_db($database_brewing, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  	header(sprintf("Location: %s", $updateGoTo));
+
+}
 
 ?>

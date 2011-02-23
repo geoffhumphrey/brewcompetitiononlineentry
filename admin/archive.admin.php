@@ -1,16 +1,14 @@
 <h2>Archive Competition Data</h2>
-<table class="dataTable" style="margin: 0 0 20px 0;">
-<tbody>
-<tr>
-  	<td class="dataList" width="5%" nowrap="nowrap"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a class="data" href="index.php?section=admin">Back to Admin</a><?php } else { ?><a class="data" href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?></td> 
-</tr>
-</tbody>
-</table>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a href="index.php?section=admin">Back to Admin</a><?php } else { ?><a href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?>
+	</span>
+</div>
 <p>To archive the current user, participant, entry, and result data, please provide a name of the archive. For example, if your competition is held yearly, you could use the year.</p>
 <form action="admin/archive.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s current data?\nThis cannot be undone.');">
-<p><input name="archiveSuffix" type="text" size="10" value="<?php echo date('Y'); ?>"></p>
+<p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"></p>
 <p><input name="submit" type="submit" class="button" value="Archive Now"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER']); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php if ($totalRows_archive > 0) { ?>
 <h2>Archived Data</h2>
