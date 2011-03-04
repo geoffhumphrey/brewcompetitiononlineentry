@@ -1,4 +1,4 @@
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo $action; ?>&amp;dbTable=judging&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo $action; ?>&amp;dbTable=judging_locations&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>
@@ -8,7 +8,7 @@
   <tr>
     <td class="dataLabel">Name:</td>
     <td class="data"><input name="judgingLocName" size="30" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>"></td>
-    <td class="data"><span class="required">Required</span> <em>Provide the name of the judging location</em></td>
+    <td class="data"><span class="required">Required</span> <em>Provide the name of the judging location.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Start Time:</td>
@@ -18,13 +18,14 @@
   <tr>
     <td class="dataLabel">Address:</td>
     <td class="data"><textarea name="judgingLocation" cols="40" rows="7" class="mceNoEditor"><?php if ($action == "edit") echo $row_judging['judgingLocation']; ?></textarea></td>
-    <td class="data"><span class="required">Required</span> <em>Provide the street address, city, and zip code</em></td>
+    <td class="data"><span class="required">Required</span> <em>Provide the street address, city, and zip code.</em></td>
   </tr>
   <tr>
-    	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" class="button" value="Submit"></td>
-        <td class="data">&nbsp;</td>
+    	<td class="dataLabel">Judging Rounds:</td>
+    	<td class="data"><input name="judgingRounds" size="5" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; else echo "2"; ?>"></td>
+        <td class="data"><span class="required">Required</span> <em>Provide the number of judging rounds anticipated for this location (<strong>not</strong> including Best of Show).</em></td>
   	</tr>
 </table>
+<input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit";?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>

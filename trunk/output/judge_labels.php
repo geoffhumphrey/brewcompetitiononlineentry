@@ -1,6 +1,6 @@
 <?php 
-require ('../Connections/config.php');
-include ('../includes/url_variables.inc.php'); 
+require('output.bootstrap.php');
+
 $query_brewer = "SELECT * FROM brewer WHERE id='$id'";
 mysql_select_db($database, $brewing);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());

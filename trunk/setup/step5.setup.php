@@ -1,1 +1,1 @@
-<?php include ('admin/styles.admin.php'); ?>
+<?php include (ADMIN.'styles.admin.php'); ?>

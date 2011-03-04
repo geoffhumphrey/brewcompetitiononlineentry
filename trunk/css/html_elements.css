@@ -47,16 +47,16 @@ margin-bottom: 0.909em;
 /** lists **/
   /* standardize list item indentation */
 ul, ol {
-padding-left: 2em;
+
 }
 
 ul ul, ul ol, ol ol, ol ul
 {
-margin: .3em;
+
 }
 
 li {
-padding: .3em; 
+
 }
 
 ul          { list-style-type: disc; }

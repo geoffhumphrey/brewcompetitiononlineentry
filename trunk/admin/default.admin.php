@@ -100,11 +100,19 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
     <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
-    <li><a href="index.php?section=admin&amp;go=entries&amp;action=choose">Entries by Category (Mark as Paid/Received)</a></li>
+</ul>
+<ul class="admin_default">
+    <li>Mark Entries as Paid/Received for Category:</li>
+    <li><?php echo style_choose($section,"entries",$action,$filter); ?></li>
+</ul>
 <p class="admin_default_header">Add</p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
     <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
+</ul>
+<p class="admin_default_header">Print</p>
+<ul class="admin_default">
+    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;filter=bottle&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Bottle Labels</a></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</p>
@@ -181,14 +189,15 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <p class="admin_default_header">Add</p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add">Scores By Table</a></li>
-    <li><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=category">Scores by Category</a></li>
+    <li>Scores by Category</li>
+    <li><?php echo style_choose($section,"judging_scores","add",$filter); ?></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</p>
 <div class="toggle_container">
 <p class="admin_default_header">Pre-Competition</p>
 <ul class="admin_default">
-    <li><a class="thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets</a></li>
+    <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets</a></li>
     <li><a href="">Table Cards</a></li>
 </ul>
 <ul class="admin_default">
@@ -201,7 +210,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     	<ul>
         	<li>&#9654;</li>
     	  <?php do { ?>
-          	<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
+          	<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
           <?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
         </ul>
     </li>
@@ -267,7 +276,6 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 	<?php if ($totalRows_judging1 > 1) { ?>
 <ul class="admin_default">
     <li>Judges for Location:
-      <form name="judgeChoice" id="judgeChoice">
         <select name="judge_location" id="judge_location" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <option value="admin/email_export.php?go=csv&amp;filter=judges&amp;section=all">All Locations</option>
@@ -275,13 +283,11 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
           <option value="admin/email_export.php?go=csv&amp;filter=judges&amp;section=loc&amp;bid=<?php echo $row_judging1['id']; ?>"><?php echo $row_judging1['judgingLocName']." ("; echo dateconvert($row_judging1['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
           </select>
-      </form> 
     </li>
     <li><em>* Be sure to make final <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em></li>
 </ul>
 <ul class="admin_default">
     <li>Stewards for Location:
-      <form name="judgeChoice" id="judgeChoice">
         <select name="judge_location" id="judge_location" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <option value="admin/email_export.php?go=csv&amp;filter=stewards&amp;section=all">All Locations</option>
@@ -289,7 +295,6 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
           <option value="admin/email_export.php?go=csv&amp;filter=stewards&amp;section=loc&amp;bid=<?php echo $row_stewarding['id']; ?>"><?php echo $row_stewarding['judgingLocName']." ("; echo dateconvert($row_stewarding['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_stewarding = mysql_fetch_assoc($stewarding)) ?>
           </select>
-      </form>
     </li>
     <li><em>* Be sure to make final <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em>    </li>
 </ul>
@@ -306,32 +311,27 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   <?php if ($totalRows_judging1 > 1) { ?>
 <ul class="admin_default">
     <li>Participants for Location:
-      	<form name="tabChoice" id="tabChoice">
         <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <?php do { ?>
           <option value="admin/participants_export.php?section=loc&amp;go=tab&amp;bid=<?php echo $row_stewarding2['id']; ?>"><?php echo $row_stewarding2['judgingLocName']." ("; echo dateconvert($row_stewarding2['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_stewarding2 = mysql_fetch_assoc($stewarding2)) ?>
         </select>
-    	</form>
     </li>
     <li><em>* Be sure to make final <a href="/index.php?section=admin&amp;go=styles&amp;filter=judging">style</a>, <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em></li>
 </ul>
 <ul class="admin_default">
     <li>Paid and Received Entries for Location:
-   	 <form name="tabChoice" id="tabChoice">
         <select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
           <option value=""></option>
           <?php do { ?>
           <option value="admin/entries_export.php?section=loc&amp;go=tab&amp;filter=paid&amp;bid=<?php echo $row_judging2['id']; ?>"><?php echo $row_judging2['judgingLocName']." ("; echo dateconvert($row_judging2['judgingDate'], 3).")"; ?></option>
           <?php } while ($row_judging2 = mysql_fetch_assoc($judging2)) ?>
         </select>
-      </form>
     </li>
 </ul>   
   	<?php } ?>
   <?php } ?>
-  <tr>
 <p class="admin_default_header">CSV Files</p>
 <ul class="admin_default">
     <li><a href="admin/entries_export.php?go=csv">All Entries</a></li>
@@ -341,6 +341,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <ul class="admin_default">
     <li><a href="admin/participants_export.php?go=csv">All Participants</a></li>
     <li><a href="admin/entries_export.php?go=csv&amp;filter=winners">Winners</a></li>
+</ul>
 <p class="admin_default_header">Promo Materials</p>
 <ul class="admin_default">
     <li><a href="admin/promo_export.admin.php?action=html">HTML</a></li>
@@ -353,25 +354,26 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 	<li><a href="index.php?section=admin&amp;go=archive">Archive Competition Data</a></li>
 </ul>
 </div>
+</div>
 <?php 	} 
 
-if ($go == "contest_info") 				include ('admin/contest_info.admin.php');
-if ($go == "preferences") 				include ('admin/preferences.admin.php');
-if ($go == "judging") 	    			include ('admin/judging.admin.php');
-if ($go == "judging_preferences") 	    include ('admin/judging_preferences.admin.php');
-if ($go == "judging_tables") 	    	include ('admin/judging_tables.admin.php');
-if ($go == "judging_flights") 	    	include ('admin/judging_flights.admin.php');
-if ($go == "judging_scores") 	    	include ('admin/judging_scores.admin.php');
-if ($go == "judging_scores_bos")    	include ('admin/judging_scores_bos.admin.php');
-if ($go == "participants") 				include ('admin/participants.admin.php');
-if ($go == "entries") 					include ('admin/entries.admin.php');
-if ($go == "make_admin") 				include ('admin/make_admin.admin.php');
-if ($go == "archive") 	    			include ('admin/archive.admin.php');
-if ($go == "sponsors") 	   			 	include ('admin/sponsors.admin.php');
-if ($go == "contacts") 	    			include ('admin/contacts.admin.php');
-if ($go == "styles") 	    			include ('admin/styles.admin.php');
-if ($go == "style_types")    			include ('admin/style_types.admin.php');
-if ($go == "dropoff") 	    			include ('admin/dropoff.admin.php');
+if ($go == "contest_info") 				include (ADMIN.'contest_info.admin.php');
+if ($go == "preferences") 				include (ADMIN.'preferences.admin.php');
+if ($go == "judging") 	    			include (ADMIN.'judging.admin.php');
+if ($go == "judging_preferences") 	    include (ADMIN.'judging_preferences.admin.php');
+if ($go == "judging_tables") 	    	include (ADMIN.'judging_tables.admin.php');
+if ($go == "judging_flights") 	    	include (ADMIN.'judging_flights.admin.php');
+if ($go == "judging_scores") 	    	include (ADMIN.'judging_scores.admin.php');
+if ($go == "judging_scores_bos")    	include (ADMIN.'judging_scores_bos.admin.php');
+if ($go == "participants") 				include (ADMIN.'participants.admin.php');
+if ($go == "entries") 					include (ADMIN.'entries.admin.php');
+if ($go == "make_admin") 				include (ADMIN.'make_admin.admin.php');
+if ($go == "archive") 	    			include (ADMIN.'archive.admin.php');
+if ($go == "sponsors") 	   			 	include (ADMIN.'sponsors.admin.php');
+if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
+if ($go == "styles") 	    			include (ADMIN.'styles.admin.php');
+if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
+if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";

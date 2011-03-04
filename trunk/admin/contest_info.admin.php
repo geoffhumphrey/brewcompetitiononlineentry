@@ -12,17 +12,17 @@
 <table>
   <tr>
     <td class="dataLabel">Competition Coordinator's First Name:</td>
-    <td class="data"><input name="contactLastName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="data"><input name="contactLastName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Competition Coordinator's Last Name:</td>
-    <td class="data"><input name="contactFirstName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="data"><input name="contactFirstName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Contact Email:</td>
-    <td class="data"><input name="contactEmail" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactEmail']; ?>"></td>
+    <td class="data"><input name="contactEmail" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactEmail']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
@@ -38,27 +38,27 @@
 <table>
   <tr>
     <td class="dataLabel">Competition Name:</td>
-    <td class="data"><input name="contestName" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestName']; ?>"></td>
+    <td class="data"><input name="contestName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Hosted By:</td>
-    <td class="data"><input name="contestHost" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHost']; ?>"></td>
+    <td class="data"><input name="contestHost" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHost']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Host Location:</td>
-    <td class="data"><input name="contestHostLocation" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostLocation']; ?>"></td>
+    <td class="data"><input name="contestHostLocation" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostLocation']; ?>"></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel">Host Website Address:</td>
-    <td class="data"><input name="contestHostWebsite" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostWebsite']; ?>"></td>
+    <td class="data"><input name="contestHostWebsite" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostWebsite']; ?>"></td>
     <td class="data"><em>Provide the entire website address including the http://</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
-    <td class="data"><input name="contestLogo" type="text" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
+    <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
     <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
@@ -67,23 +67,23 @@
 <table>
   <tr>
     <td class="dataLabel">Entry Window Open:</td>
-    <td class="data"><input name="contestEntryOpen" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryOpen']; ?>" /></td>
+    <td class="data"><input name="contestEntryOpen" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryOpen']; ?>" /></td>
     <td class="data"><span class="required">Required</span> <em>The date entries must be received at drop-off and mail-in locations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Window Close:</td>
-    <td class="data"><input name="contestEntryDeadline" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryDeadline']; ?>"></td>
+    <td class="data"><input name="contestEntryDeadline" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestEntryDeadline']; ?>"></td>
     <td class="data"><span class="required">Required</span> 
       <em>The date entries must be received at drop-off and mail-in locations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Registration Open:</td>
-    <td class="data"><input name="contestRegistrationOpen" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationOpen']; ?>" /></td>
+    <td class="data"><input name="contestRegistrationOpen" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationOpen']; ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date the system will automatically open registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Registration Close:</td>
-    <td class="data"><input name="contestRegistrationDeadline" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationDeadline']; ?>"></td>
+    <td class="data"><input name="contestRegistrationDeadline" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationDeadline']; ?>"></td>
     <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations. For example, if you want to accept registrations through January 1, 2011, the registration deadline should be January 2, 2011 (closes at midnight).</em></td>
   </tr>
 </table>
@@ -99,12 +99,12 @@
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Entry Fee:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee']; ?>"></td>
+    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee']; ?>"></td>
     <td class="data style1"> <span class="required">Required </span>Fee for a single entry (<?php echo $row_prefs['prefsCurrency']; ?>) - please enter a zero (0) for a free entry fee.</td>
   </tr>
   <tr>
     <td class="dataLabel bdr1B_dashed">Entry Fee Cap:</td>
-    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
     <td class="data bdr1B_dashed"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php echo $row_prefs['prefsCurrency']; ?>X for the first X number of entries, <?php echo $row_prefs['prefsCurrency']; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
   </tr>
   <tr>
@@ -118,22 +118,22 @@
   </tr>
   <tr>
     <td class="dataLabel">Minimum Entries for Discount:</td>
-    <td class="data"><input name="contestEntryFeeDiscountNum" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeeDiscountNum']; ?>"></td>
+    <td class="data"><input name="contestEntryFeeDiscountNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeeDiscountNum']; ?>"></td>
     <td class="data"><em>The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</em></td>
   </tr>
   <tr>
     <td class="dataLabel bdr1B_dashed">Discounted Entry Fee:</td>
-    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee2']; ?>"></td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee2']; ?>"></td>
     <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
   </tr>
    <tr>
     <td class="dataLabel">Member Discount Password:</td>
-    <td class="data"><input name="contestEntryFeePassword" type="text" size="10" maxlength="30" value="<?php echo $row_contest_info['contestEntryFeePassword']; ?>"></td>
+    <td class="data"><input name="contestEntryFeePassword" type="text" class="submit" size="10" maxlength="30" value="<?php echo $row_contest_info['contestEntryFeePassword']; ?>"></td>
     <td class="data"><em>Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</em></td>
   </tr>
   <tr>
     <td class="dataLabel bdr1B_dashed">Member Discount Fee:</td>
-    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
+    <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
     <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
   </tr>
 </table>
@@ -145,12 +145,12 @@
   </tr>
   <tr>
     <td class="dataLabel">Name of Shipping Location:</td>
-    <td class="data"><input name="contestShippingName" type="text" value="<?php echo $row_contest_info['contestShippingName']; ?>" size="30" /></td>
+    <td class="data"><input name="contestShippingName" type="text" class="submit" value="<?php echo $row_contest_info['contestShippingName']; ?>" size="30" /></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel">Shipping Address:</td>
-    <td class="data"><textarea name="contestShippingAddress"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
+    <td class="data"><textarea name="contestShippingAddress" class="submit" cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
     <td class="data">&nbsp;</td>
   </tr>
 </table>
@@ -158,34 +158,34 @@
 <table>
   <tr>
     <td class="dataLabel">Awards Date:</td>
-    <td class="data"><input name="contestAwardsLocDate" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestAwardsLocDate']; ?>"></td>
+    <td class="data"><input name="contestAwardsLocDate" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestAwardsLocDate']; ?>"></td>
     <td class="data"><em>Provide even if the date of judging is the same.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Start Time:</td>
-    <td class="data"><input name="contestAwardsLocTime" size="30" value="<?php echo $row_contest_info['contestAwardsLocTime']; ?>"></td>
+    <td class="data"><input name="contestAwardsLocTime" type="text" class="submit" size="30" value="<?php echo $row_contest_info['contestAwardsLocTime']; ?>"></td>
     <td class="data"><em>The approximate time the awards ceremony will begin.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Location Name:</td>
-    <td class="data"><input name="contestAwardsLocName" size="30" value="<?php echo $row_contest_info['contestAwardsLocName']; ?>"></td>
+    <td class="data"><input name="contestAwardsLocName" type="text" class="submit" size="30" value="<?php echo $row_contest_info['contestAwardsLocName']; ?>"></td>
     <td class="data"><em>Provide the name of the awards location.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Location Address:</td>
-    <td class="data"><textarea name="contestAwardsLocation"  cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestAwardsLocation']; ?></textarea></td>
+    <td class="data"><textarea name="contestAwardsLocation" cols="40" rows="7" class="submit mceNoEditor"><?php echo $row_contest_info['contestAwardsLocation']; ?></textarea></td>
     <td class="data"><em>Provide the address of the award location. The more complete (e.g., street address, city, state, zip) the better.</em></td>
   </tr> 
 </table>
 <table>
   <tr>
     <td class="dataLabel">Awards Structure:</td>
-    <td class="data"><textarea name="contestAwards" cols="70" rows="25"><?php echo $row_contest_info['contestAwards']; ?></textarea></td>
+    <td class="data"><textarea name="contestAwards" class="submit" cols="70" rows="25"><?php echo $row_contest_info['contestAwards']; ?></textarea></td>
     <td class="data"><em>Indicate places for each category, BOS procedure, qualifying criteria, etc.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Best of Show Award:</td>
-    <td class="data"><textarea name="contestBOSAward" cols="70" rows="25"><?php echo $row_contest_info['contestBOSAward']; ?></textarea></td>
+    <td class="data"><textarea name="contestBOSAward" class="submit" cols="70" rows="25"><?php echo $row_contest_info['contestBOSAward']; ?></textarea></td>
     <td class="data"><em>Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</em></td>
   </tr>
 </table>
@@ -193,7 +193,7 @@
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Complete Winners List:</td>
-    <td class="data"><textarea name="contestWinnersComplete" cols="70" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea><br /><a href="javascript:toggleEditor('contestWinnersComplete');"></a></td>
+    <td class="data"><textarea name="contestWinnersComplete" class="submit" cols="70" rows="25"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea><br /><a href="javascript:toggleEditor('contestWinnersComplete');"></a></td>
     <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in <strong>HTML format</strong> and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
       <p>If you paste using the editor to the left, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>

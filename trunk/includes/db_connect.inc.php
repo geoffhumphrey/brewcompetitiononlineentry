@@ -22,42 +22,60 @@ $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error())
 $row_contest_info = mysql_fetch_assoc($contest_info);
 $totalRows_contest_info = mysql_num_rows($contest_info);
 
-if (($section == "admin") && ($action == "edit")) $query_sponsors = "SELECT * FROM sponsors WHERE id='$id'"; else $query_sponsors = "SELECT * FROM sponsors ORDER BY sponsorLevel,sponsorName";
+if ((($section == "admin") && ($go == "sponsors")) || ($section == "default")) {
+if ($action == "edit") $query_sponsors = "SELECT * FROM sponsors WHERE id='$id'"; else $query_sponsors = "SELECT * FROM sponsors ORDER BY sponsorLevel,sponsorName";
 $sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 $row_sponsors = mysql_fetch_assoc($sponsors);
 $totalRows_sponsors = mysql_num_rows($sponsors);
+}
 
 $query_prefs = "SELECT * FROM preferences WHERE id=1";
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
 $totalRows_prefs = mysql_num_rows($prefs);
 
+$query_judging_prefs = "SELECT * FROM judging_preferences WHERE id='1'";
+$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
+$row_judging_prefs = mysql_fetch_assoc($judging_prefs);
+$totalRows_judging_prefs = mysql_num_rows($judging_prefs);
+
+if ($section == "brew") {
 $query_brewers = "SELECT * FROM brewer ORDER BY brewerLastName";
 $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
 $row_brewers = mysql_fetch_assoc($brewers);
 $totalRows_brewers = mysql_num_rows($brewers);
+}
 
+/*
 $query_entries = "SELECT id FROM brewing";
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);
+*/
 
+/*
 $query_archive = "SELECT * FROM archive";
 $archive = mysql_query($query_archive, $brewing) or die(mysql_error());
 $row_archive = mysql_fetch_assoc($archive);
 $totalRows_archive = mysql_num_rows($archive);
 
-$query_dropoff = "SELECT * FROM drop_off";
-if ($action == "edit") $query_dropoff .= " WHERE id='$id'";
-$dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
-$row_dropoff = mysql_fetch_assoc($dropoff);
-$totalRows_dropoff = mysql_num_rows($dropoff);
+*/
+if ((($section && "admin") && ($go == "dropoff")) || ($section == "contact")) { 
+	$query_dropoff = "SELECT * FROM drop_off";
+	if ($action == "edit") $query_dropoff .= " WHERE id='$id'";
+	$dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
+	$row_dropoff = mysql_fetch_assoc($dropoff);
+	$totalRows_dropoff = mysql_num_rows($dropoff);
+}
 
+
+if ((($section && "admin") && ($go == "contacts")) || ($section == "entry") || ($section == "contact") || ($section == "default")) { 
 $query_contact = "SELECT * FROM contacts";
-if (($section == "admin") && ($action == "edit"))  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
+if ($action == "edit")  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
 $contact = mysql_query($query_contact, $brewing) or die(mysql_error());
 $row_contact = mysql_fetch_assoc($contact);
 $totalRows_contact = mysql_num_rows($contact);
+}
 
 if (($section == "default") || ($section == "past_winners")) { 
 	if ($section == "past_winners")	$dbTable = $dbTable; else $dbTable = "brewing";
@@ -115,21 +133,25 @@ if (($section == "default") || ($section == "past_winners")) {
 	*/
 }
 
-$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
-if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
-$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-$row = mysql_fetch_array($result);
-$totalRows_entry_count = $row["count"];
-mysql_free_result($result);
+if ((($section && "admin") && (($go == "judging_scores") || ($go == "entries"))) || ($section == "default")) { 
+	$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
+	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
+	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_array($result);
+	$totalRows_entry_count = $row["count"];
+	mysql_free_result($result);
 
+}
+
+if (($section && "admin") && ($go == "participants")) {
 $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
 $result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 $row = mysql_fetch_assoc($result);
 $totalRows_participant_count = $row["count"];
 mysql_free_result($result);
+}
 
 # Set global pagination variables 
-//if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) || ($totalRows_participant_count > $row_prefs['prefsRecordLimit'])) $display = $row_prefs['prefsRecordPaging']; else $display = $limit; 
 $display = $row_prefs['prefsRecordPaging']; 
 $pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
 $start = $display * $pg - $display;
@@ -161,6 +183,7 @@ if (isset($_SESSION["loginUsername"]))  {
 		$query_log = "SELECT * FROM brewing WHERE id = '$id'"; 
 		$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 		}
+		
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { 
 		$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
 		if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
@@ -271,16 +294,6 @@ $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
 $totalRows_judging = mysql_num_rows($judging);
 
-$query_judging_prefs = "SELECT * FROM judging_preferences";
-//if (($go == "styles") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
-//elseif (($go == "judging_preferences") && ($action == "update") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
-//elseif (($go == "judging_preferences") && ($action == "edit"))  $query_judging .= " WHERE id='1'";
-//else $query_judging_prefs .= " ORDER BY judgingDate,judgingLocName";
-$query_judging_prefs .= " WHERE id='1'";
-$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
-$row_judging_prefs = mysql_fetch_assoc($judging_prefs);
-$totalRows_judging_prefs = mysql_num_rows($judging_prefs);
-
 // Separate connections for selected queries that are housed on the same page.
 $query_judging1 = "SELECT * FROM judging_locations ORDER BY judgingDate,judgingLocName";
 $judging1 = mysql_query($query_judging1, $brewing) or die(mysql_error());
@@ -338,17 +351,21 @@ $styles2 = mysql_query($query_styles2, $brewing) or die(mysql_error());
 $row_styles2 = mysql_fetch_assoc($styles2);
 $totalRows_styles2 = mysql_num_rows($styles2);
 
-$query_paid = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['uid']);
-$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-$row_paid = mysql_fetch_assoc($paid);
-$totalRows_paid = mysql_num_rows($paid);
 
+if (($section == "pay") || ($section == "list") || (($section == "admin") && ($go == "entries"))) {
 $query_all = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s'", $row_brewer['uid']);
 $all = mysql_query($query_all, $brewing) or die(mysql_error());
 $row_all = mysql_fetch_assoc($all);
 $totalRows_all = mysql_num_rows($all);
 
+$query_paid = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $row_brewer['uid']);
+$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
+$row_paid = mysql_fetch_assoc($paid);
+$totalRows_paid = mysql_num_rows($paid);
+
 $total_not_paid = ($totalRows_all - $totalRows_paid);
+
+}
 
 if ($row_contest_info['contestEntryCap'] != "") $cap = $row_contest_info['contestEntryCap']; else $cap = "0";
 if ($row_prefs['prefsTransFee'] != "Y") $paypal_fee = "N"; else $paypal_fee = "Y";
@@ -357,8 +374,8 @@ if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $
 if ($section == "admin") {
 	$query_style_type = "SELECT * FROM style_types"; 
 	if ($filter !="default") $query_style_type .= " WHERE id='$filter'";
-	if ($id !="default") $query_style_type .= " WHERE id='$id'";
-	if ($go == "judging_tables") $query_style_type .= " WHERE styleTypeBOS='Y'";
+	if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
+	if (($go == "judging_tables") && ($action == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 	$row_style_type = mysql_fetch_assoc($style_type);
 
@@ -370,7 +387,7 @@ if ($section == "admin") {
 
 	$query_tables_edit = "SELECT * FROM judging_tables";
 	if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
-	if (($id == "default") || ($go == "judging_scores"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
+	if (($id == "default") || ($go == "judging_scores") || ($go == "judging_flights"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
 	$tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
 	$row_tables_edit = mysql_fetch_assoc($tables_edit);
 	
@@ -395,41 +412,6 @@ if ($section == "admin") {
 	$style_types_2 = mysql_query($query_style_types_2, $brewing) or die(mysql_error());
 	$row_style_types_2 = mysql_fetch_assoc($style_types_2);
 	
-	/*
-	if ($row_judging_prefs['jPrefsBOSBeer'] == "Y") { 
-		$query_beer_bos = "SELECT * FROM judging_scores";
-		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "1") $query_beer_bos .= " WHERE scoreType='B' AND scorePlace='1'";
-		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "2") $query_beer_bos .= " WHERE scoreType='B' AND (scorePlace='1' OR scorePlace='2')";
-		if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "3") $query_beer_bos .= " WHERE (scoreType='B' AND scorePlace='1') OR (scoreType='B' AND scorePlace='2') OR (scoreType='B' AND scorePlace='3')";
-		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_beer_bos .= " WHERE scoreType='B' AND scorePlace='1'";
-		$query_beer_bos .= " ORDER BY scoreTable ASC";
-		$beer_bos = mysql_query($query_beer_bos, $brewing) or die(mysql_error());
-		$row_beer_bos = mysql_fetch_assoc($beer_bos);
-		$totalRows_beer_bos = mysql_num_rows($beer_bos);
-	}
-	if ($row_judging_prefs['jPrefsBOSCider'] == "Y") { 
-		$query_cider_bos = "SELECT * FROM judging_scores";
-		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "1") $query_cider_bos .= " WHERE scoreType='C' AND scorePlace='1'";
-		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "2") $query_cider_bos .= " WHERE scoreType='C' AND (scorePlace='1' OR scorePlace='2')";
-		if ($row_judging_prefs['jPrefsBOSMethodCider'] == "3") $query_cider_bos .= " WHERE (scoreType='C' AND scorePlace='1') OR (scoreType='C' AND scorePlace='2') OR (scoreType='C' AND scorePlace='3')";
-		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_cider_bos .= " WHERE scoreType='C' AND scorePlace='1'";
-		$query_cider_bos .= " ORDER BY scoreTable ASC";
-		$cider_bos = mysql_query($query_cider_bos, $brewing) or die(mysql_error());
-		$row_cider_bos = mysql_fetch_assoc($cider_bos);
-		$totalRows_cider_bos = mysql_num_rows($cider_bos);
-		}
-	if ($row_judging_prefs['jPrefsBOSCider'] == "Y") { 
-		$query_mead_bos = "SELECT * FROM judging_scores";
-		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "1") $query_mead_bos .= " WHERE scoreType='M' AND scorePlace='1'";
-		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "2") $query_mead_bos .= " WHERE scoreType='M' AND (scorePlace='1' OR scorePlace='2')";
-		if ($row_judging_prefs['jPrefsBOSMethodMead'] == "3") $query_mead_bos .= " WHERE (scoreType='M' AND scorePlace='1') OR (scoreType='M' AND scorePlace='2') OR (scoreType='M' AND scorePlace='3')";
-		//if ($row_judging_prefs['jPrefsBOSMethodBeer'] == "4") $query_mead_bos .= " WHERE scoreType='B' AND scorePlace='1'";
-		$query_mead_bos .= " ORDER BY scoreTable ASC";
-		$mead_bos = mysql_query($query_mead_bos, $brewing) or die(mysql_error());
-		$row_mead_bos = mysql_fetch_assoc($mead_bos);
-		$totalRows_mead_bos = mysql_num_rows($mead_bos);
-		}
-	*/
 	} // end if ($action == "default);
 	
 	if ($action != "default") {

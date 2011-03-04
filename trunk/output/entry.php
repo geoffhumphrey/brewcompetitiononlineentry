@@ -1,11 +1,6 @@
-<?php require_once('Connections/config.php'); 
-session_start();
-//include ('includes/db_connect.inc.php');
-include ('includes/plug-ins.inc.php');
-include ('includes/url_variables.inc.php');
-
-// Templating system
-include_once ('includes/tbs_class_php5.php');
+<?php 
+require('output.bootstrap.php');
+include_once(INCLUDES.'tbs_class_php5.php');
 
 mysql_select_db($database, $brewing);
 
@@ -96,7 +91,7 @@ switch ($brewing_info['brewMead3']) {
 }
 
 // Style name
-include ('includes/style_convert.inc.php'); // User friendly style names
+include (INCLUDES.'style_convert.inc.php'); // User friendly style names
 if ($brewing_info['brewCategory'] < 29) 
   $brewing_info['styleName'] = $brewing_info['brewStyle'];
 else
@@ -267,15 +262,15 @@ for ($i=1; $i <= 9; $i++) {
 $TBS =& new clsTinyButStrong;
 
 if ($row_prefs['prefsEntryForm'] == "B") { 
-$TBS->LoadTemplate('templates/bjcp-entry.html');
+$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 }
 
 if ($row_prefs['prefsEntryForm'] == "M") { 
-$TBS->LoadTemplate('templates/simple-metric-entry.html');
+$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
 }
 
 if ($row_prefs['prefsEntryForm'] == "U") { 
-$TBS->LoadTemplate('templates/simple-us-entry.html');
+$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
 }
 
 $TBS->MergeBlock('grains',$brewing_info['grains']);

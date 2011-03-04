@@ -21,9 +21,8 @@ VALUES ('1' , 'N', '12', '7', '3');
 CREATE TABLE IF NOT EXISTS `judging_tables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
-  `tableStyles` varchar(255) DEFAULT NULL COMMENT 'Array of ids from styles table',
+  `tableStyles` TEXT DEFAULT NULL COMMENT 'Array of ids from styles table',
   `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
-  `tableRound` int(11) DEFAULT NULL COMMENT 'User defined based upon jPrefsRounds judging_preferences table row',
   `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
   `tableJudges` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table',
   `tableStewards` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table',
@@ -34,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `judging_flights` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
   `flightNumber` int(11) DEFAULT NULL,
-  `flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
+  `flightEntryID` TEXT NULL DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table',
   `flightRound` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;

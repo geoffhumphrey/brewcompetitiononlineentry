@@ -1,7 +1,5 @@
 <?php 
-require ('../Connections/config.php');
-require ('../includes/url_variables.inc.php');
-include ('../includes/plug-ins.inc.php');
+require('output.bootstrap.php');
 
 $query_styles = "SELECT * FROM styles";
 if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
@@ -17,17 +15,7 @@ $totalRows_styles = mysql_num_rows($styles);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Styles</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css" />
-<link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="../js_includes/jquery.js"></script>
-<script type="text/javascript" src="../js_includes/thickbox.js"></script>
-<script type="text/javascript">
-<!--
-function jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
+<script type="text/javascript" src="../js_includes/jump_menu.js"></script>
 </head>
 <body>
 <div id="container">
@@ -39,42 +27,7 @@ function jumpMenu(targ,selObj,restore){ //v3.0
     <table>
 	<tr>
   	<td class="dataLabel">Filter By Style Name</td>
-  	<td class="data">
-  	<form name="form2" method="post" action="">
-          	<select name="styleMenu" onChange="jumpMenu('self',this,0)" class="left">
-		  	<option value="styles.sec.php">All</option> 
-            <option value="styles.sec.php?filter=0" <?php if ($filter == "0") echo "SELECTED"; ?>>Unique to this Competition</option>
-            <option value="styles.sec.php?filter=01" <?php if ($filter == "01") echo "SELECTED"; ?>>Light Lager</option>
-			<option value="styles.sec.php?filter=02" <?php if ($filter == "02") echo "SELECTED"; ?>>Pilsner</option>
-            <option value="styles.sec.php?filter=03" <?php if ($filter == "03") echo "SELECTED"; ?>>European Amber Lager</option>
-			<option value="styles.sec.php?filter=04" <?php if ($filter == "04") echo "SELECTED"; ?>>Dark Lager</option>
-            <option value="styles.sec.php?filter=05" <?php if ($filter == "05") echo "SELECTED"; ?>>Bock</option>
-            <option value="styles.sec.php?filter=06" <?php if ($filter == "06") echo "SELECTED"; ?>>Light Hybrid Beer</option>
-            <option value="styles.sec.php?filter=07" <?php if ($filter == "07") echo "SELECTED"; ?>>Amber Hybrid Beer</option>
-            <option value="styles.sec.php?filter=08" <?php if ($filter == "08") echo "SELECTED"; ?>>English Pale Ale</option>
-			<option value="styles.sec.php?filter=09" <?php if ($filter == "09") echo "SELECTED"; ?>>Scottish and Irish Ale</option>
-          	<option value="styles.sec.php?filter=10" <?php if ($filter == "10") echo "SELECTED"; ?>>American Ale</option>
-			<option value="styles.sec.php?filter=11" <?php if ($filter == "11") echo "SELECTED"; ?>>English Brown Ale</option>
-            <option value="styles.sec.php?filter=12" <?php if ($filter == "12") echo "SELECTED"; ?>>Porter</option>
-			<option value="styles.sec.php?filter=13" <?php if ($filter == "13") echo "SELECTED"; ?>>Stout</option>
-            <option value="styles.sec.php?filter=14" <?php if ($filter == "14") echo "SELECTED"; ?>>India Pale Ale (IPA)</option>
-            <option value="styles.sec.php?filter=15" <?php if ($filter == "15") echo "SELECTED"; ?>>German Wheat and Rye Beer</option>
-            <option value="styles.sec.php?filter=16" <?php if ($filter == "16") echo "SELECTED"; ?>>Belgian and French Ale</option>
-            <option value="styles.sec.php?filter=17" <?php if ($filter == "17") echo "SELECTED"; ?>>Sour Ale</option>
-			<option value="styles.sec.php?filter=18" <?php if ($filter == "18") echo "SELECTED"; ?>>Belgian Strong Ale</option>
-			<option value="styles.sec.php?filter=19" <?php if ($filter == "19") echo "SELECTED"; ?>>Strong Ale</option>
-          	<option value="styles.sec.php?filter=20" <?php if ($filter == "20") echo "SELECTED"; ?>>Fruit Beer</option>
-			<option value="styles.sec.php?filter=21" <?php if ($filter == "21") echo "SELECTED"; ?>>Spice/Herb/Vegetable Beer</option>
-            <option value="styles.sec.php?filter=22" <?php if ($filter == "22") echo "SELECTED"; ?>>Smoke-Flavored and Wood-Aged Beer</option>
-			<option value="styles.sec.php?filter=23" <?php if ($filter == "23") echo "SELECTED"; ?>>Specialty Beer</option>
-            <option value="styles.sec.php?filter=24" <?php if ($filter == "24") echo "SELECTED"; ?>>Traditional Mead</option>
-            <option value="styles.sec.php?filter=25" <?php if ($filter == "25") echo "SELECTED"; ?>>Melomel (Fruit Mead)</option>
-            <option value="styles.sec.php?filter=26" <?php if ($filter == "26") echo "SELECTED"; ?>>Other Mead</option>
-            <option value="styles.sec.php?filter=27" <?php if ($filter == "27") echo "SELECTED"; ?>>Standard Cider and Perry</option>
-			<option value="styles.sec.php?filter=28" <?php if ($filter == "28") echo "SELECTED"; ?>>Specialty Cider and Perry</option>
-			</select>
-		</form>
-	  </td>
+  	<td class="data"><?php echo style_choose($section,"default","default",$filter); ?></td>
     </tr>
   </table>
 <?php if ($totalRows_styles > 0) { ?>
@@ -91,7 +44,7 @@ include ('../includes/style_convert.inc.php');
 <table>
   <tr>
   	 <td class="dataLabel">Category:</td>
-	 <td class="data"><?php echo $styleConvert4; ?>
+	 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],1)?>
 	 </td>
   </tr>
   </tr>

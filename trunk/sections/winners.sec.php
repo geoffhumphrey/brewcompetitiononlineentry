@@ -1,9 +1,7 @@
 <?php
 
-if (($judgingDateReturn == "true") || ($dbTable != "default")) { // check if all judging dates have past, if so, display 
-	if ($totalRows_log_winners > 0) { // if winners have been designated, display 
-	
-	
+if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judging dates have past, if so, display 
+	if ($totalRows_log_winners > 0) { // if winners have been designated, display 	
 ?>
 <h2>Winning Entries<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>

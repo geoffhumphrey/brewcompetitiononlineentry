@@ -40,8 +40,6 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 
-
-//require ('plug-ins.inc.php');
 // Global Variables
 
 $insertGoTo = $_POST['relocate']."&msg=1";
@@ -1913,13 +1911,14 @@ if (($action == "add") && ($dbTable == "sponsors")) {
 
 // --------------------------- If Adding Judging Locations ------------------------------- //
 
-if (($action == "add") && ($dbTable == "judging")) {
+if (($action == "add") && ($dbTable == "judging_locations")) {
 
-  $insertSQL = sprintf("INSERT INTO judging (judgingDate, judgingTime, judgingLocation, judgingLocName) VALUES (%s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO judging_locations (judgingDate, judgingTime, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['judgingDate'], "text"),
                        GetSQLValueString($_POST['judgingTime'], "text"),
                        GetSQLValueString($_POST['judgingLocation'], "text"),
-                       GetSQLValueString($_POST['judgingLocName'], "text")
+                       GetSQLValueString($_POST['judgingLocName'], "text"),
+					   GetSQLValueString($_POST['judgingRounds'], "text")
 					   );
 
 	//echo $insertSQL;
@@ -1931,13 +1930,14 @@ if (($action == "add") && ($dbTable == "judging")) {
 
 // --------------------------- If Editing Judging Locations ------------------------------- //
 
-if (($action == "edit") && ($dbTable == "judging")) {
+if (($action == "edit") && ($dbTable == "judging_locations")) {
 
-  $updateSQL = sprintf("UPDATE judging SET judgingDate=%s, judgingTime=%s, judgingLocation=%s, judgingLocName=%s WHERE id=%s",
+  $updateSQL = sprintf("UPDATE judging_locations SET judgingDate=%s, judgingTime=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
                        GetSQLValueString($_POST['judgingDate'], "text"),
                        GetSQLValueString($_POST['judgingTime'], "text"),
                        GetSQLValueString($_POST['judgingLocation'], "text"),
                        GetSQLValueString($_POST['judgingLocName'], "text"),
+					   GetSQLValueString($_POST['judgingRounds'], "text"),
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
@@ -2096,6 +2096,17 @@ if (($action == "edit") && ($dbTable == "styles")) {
 
   mysql_select_db($database_brewing, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  
+  	$query_log = sprintf("SELECT id FROM brewing WHERE brewStyle = '%s'",$_POST['brewStyleOld']); 
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
+	  
+  do {
+	 $updateSQL = sprintf("UPDATE brewing SET brewStyle='%s' WHERE id='%s'", $_POST['brewStyle'],$row_log['id']);
+	 $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  } while ($row_log = mysql_fetch_assoc($log));
+  
   header(sprintf("Location: %s", $updateGoTo));
 }
 
@@ -2250,7 +2261,7 @@ tableLocation
 // --------------------------- Editing a Table and Associated Styles ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "judging_tables")) {
-$table_styles = implode(",",$_POST['tableStyles']);
+if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = "";
 
 $updateSQL = sprintf("UPDATE judging_tables SET 
 
@@ -2280,7 +2291,24 @@ WHERE id=%s",
 }
 
 if (($action == "add") && ($dbTable == "judging_flights")) { 
+/*
+foreach($_POST['id'] as $id)	{
+	$flight_number[] = ltrim($_POST['flightNumber'.$id],"flight");
+	$entry_number[] = $_POST['flightEntryID'.$id]."-".ltrim($_POST['flightNumber'.$id],"flight");
+}
+//print_r(array_unique($flight_number));
+//echo "<p>";
+//print_r($entry_number);
+	//
+	//echo $a[0]."<br>";
+	//echo $a[1];
+	
+$x = max($flight_number);
+for($i=1; $i<$x+1; $i++) {
 
+	print_r(array_unique($c)); echo "<br>";
+}
+*/
 foreach($_POST['id'] as $id)	{
 	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
 	$insertSQL = sprintf("INSERT INTO judging_flights (
@@ -2299,13 +2327,14 @@ foreach($_POST['id'] as $id)	{
 	}
 
 	header(sprintf("Location: %s", $insertGoTo));
-
 }
 
 if (($action == "edit") && ($dbTable == "judging_flights")) { 
 
 foreach($_POST['id'] as $id)	{
 	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
+	
+	if ($id <= "999999") {
 	$updateSQL = sprintf("UPDATE judging_flights SET
 	flightTable=%s,
 	flightNumber=%s
@@ -2319,7 +2348,43 @@ foreach($_POST['id'] as $id)	{
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
+	if ($id > "999999"){
+	$insertSQL = sprintf("INSERT INTO judging_flights (
+	flightTable, 
+	flightNumber, 
+	flightEntryID
+  	) VALUES (%s, %s, %s)",
+                       GetSQLValueString($_POST['flightTable'], "text"),
+					   GetSQLValueString($flight_number, "text"),
+					   GetSQLValueString($_POST['flightEntryID'.$id], "text")
+					   );
+
+	//echo $insertSQL."<br>";
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	}
+   }
 	header(sprintf("Location: %s", $updateGoTo));
+}
+
+if (($action == "assign") && ($dbTable == "judging_flights")) { 
+
+foreach (array_unique($_POST['id']) as $a) {
+	$query_flights = sprintf("SELECT id FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
+	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+	$row_flights = mysql_fetch_assoc($flights);
+	//echo $query_flights."<br>";
+	do {
+	$updateSQL = sprintf("UPDATE judging_flights SET flightRound=%s WHERE id=%s", 
+		GetSQLValueString($_POST['flightRound'.$a], "text"), 
+		GetSQLValueString($row_flights['id'], "int")
+		);
+	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	//echo $updateSQL.";<br>";
+	} while ($row_flights = mysql_fetch_assoc($flights));
+ }
+header(sprintf("Location: %s", $updateGoTo));
 }
 
 if (($action == "add") && ($dbTable == "judging_scores")) { 

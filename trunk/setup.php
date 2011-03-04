@@ -12,7 +12,7 @@ else
 {
 require ('includes/url_variables.inc.php');
 require ('includes/db_connect.inc.php');
-include ('includes/plug-ins.inc.php');
+include ('includes/functions.inc.php');
 include ('includes/headers.inc.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -34,7 +34,7 @@ include ('includes/headers.inc.php');
 <body>
 <div id="container">
 <div id="navigation">
-	<div id="navigation-inner"><?php include ('sections/nav.sec.php'); ?></div>
+	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
 </div>
 	<div id="content">
 		<div id="content-inner">
@@ -54,7 +54,7 @@ include ('includes/headers.inc.php');
 	</div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><?php include ('sections/footer.sec.php'); ?></div>
+	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?></div>
 </div>
 </body>
 </html>
