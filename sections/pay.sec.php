@@ -1,31 +1,15 @@
-<?php
-/*
-echo $total_entry_fees;
-$total_entry_fees = unpaid_fees($total_not_paid, $row_contest_info['contestEntryFeeDiscount'],$row_contest_info['contestEntryFeeDiscountNum'], $cap, $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2']);
-
-if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
-	$discount = discount_display($total_not_paid,$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $cap);
-}
-
-if ($view != "default") {
-$a = explode("-", $view);
-	foreach ($a as $value) { 
-	$updateSQL = "UPDATE brewing SET brewPaid='Y' WHERE id='$value'";
-		mysql_select_db($database, $brewing);
-		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	}
-}
-*/
-if ($msg != "default") echo $msg_output;
+<?php if ($msg != "default") echo $msg_output; 
+$total_entry_fees = total_fees($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
+if ($total_entry_fees > 0) { 
+$total_paid_entry_fees = total_fees_paid($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
+$total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 ?>
-<?php if ($total_entry_fees > 0) { ?>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?>
 Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are: <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <?php } ?>
 <?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
 <?php if ($total_entry_fees == 0) echo "You have not logged any entries yet."; ?>
-
 <?php if (($total_to_pay > 0) && ($view == "default")) { ?>
 	<?php if ($row_prefs['prefsCash'] == "Y") { ?>
 		<h2>Cash</h2>
@@ -35,7 +19,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 	<?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 		<h2>Checks</h2>
 		<p>Attach a check for the entire entry amount to one of your bottles. Checks should be made out to <em><?php echo $row_prefs['prefsCheckPayee']; ?></em>.</p>
-		<p><span class="required"> Your check carbon or cashed check is your entry receipt.</p>
+		<p><span class="required"> Your check carbon or cashed check is your entry receipt.</span></p>
 	<?php } ?>
 	<?php if  ($row_prefs['prefsPaypal'] == "Y") { 
 		switch ($row_prefs['prefsCurrency']) {
@@ -50,7 +34,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 
 ?>
 <h2>Pay Online</h2>
-<p><span class="required"> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</p>
+<p><span class="required"> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</span></p>
 <p>You are paying for the following entries:</p>
 	<ol>
     <?php 
@@ -65,7 +49,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 <?php } ?>
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format(($total_to_pay * .029), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
-<p class="error"> To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_prefs['prefsPaypalAccount']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
+<p class="error"> To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_contest_info['contestHost']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 	<table class="dataTable">
 		<tr>
@@ -73,7 +57,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 			<input align="left" type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" value="" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal"></p>
 			<input type="hidden" name="cmd" value="_xclick">
 			<input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
-			<input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Competition Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$total_not_paid." Entries)"; ?>">
+			<input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$total_not_paid." Entries)"; ?>">
 			<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
 			<input type="hidden" name="cn" value="Message to the organizers:">
 			<input type="hidden" name="no_shipping" value="1">

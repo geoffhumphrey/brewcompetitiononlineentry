@@ -8,6 +8,28 @@ if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
 }
 
+function check_setup() {
+	include(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
+	$setup = mysql_query($query_setup, $brewing);
+	$row_setup = mysql_fetch_assoc($setup);
+	$totalRows_setup = $row_setup['count'];
+
+	$query_setup1 = "SELECT COUNT(*) as 'count' FROM contest_info";
+	$setup1 = mysql_query($query_setup1, $brewing);
+	$row_setup1 = mysql_fetch_assoc($setup1);
+	$totalRows_setup1 = $row_setup1['count'];
+
+	$query_setup2 = "SELECT COUNT(*) as 'count' FROM preferences";
+	$setup2 = mysql_query($query_setup2, $brewing);
+	$row_setup2 = mysql_fetch_assoc($setup2);
+	$totalRows_setup2 = $row_setup2['count'];
+
+	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
+	else return false;
+}
+
 function relocate($referer,$page) {
 	// determine if referrer has any msg=X variables attached
 	if (strstr($referer,"&msg")) { 
@@ -24,21 +46,20 @@ function relocate($referer,$page) {
 	return $referer;
 }
 
-$reg_open = $row_contest_info['contestRegistrationOpen'];
-$reg_deadline = $row_contest_info['contestRegistrationDeadline'];
-
-$ent_open = $row_contest_info['contestEntryOpen'];
-$ent_deadline = $row_contest_info['contestEntDeadline'];
-
-mysql_select_db($database, $brewing);
-$query_check = "SELECT * FROM judging_locations";
-$check = mysql_query($query_check, $brewing) or die(mysql_error());
-$row_check = mysql_fetch_assoc($check);
-do {
- 	if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
- 	else $newDate[] = 0;
+function judging_date_return() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_check = "SELECT judgingDate FROM judging_locations";
+	$check = mysql_query($query_check, $brewing) or die(mysql_error());
+	$row_check = mysql_fetch_assoc($check);
+	do {
+ 		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
+ 		else $newDate[] = 0;
 	} while ($row_check = mysql_fetch_assoc($check));
-	if (in_array(1, $newDate)) $judgingDateReturn = "false"; else $judgingDateReturn = "true";
+	if (in_array(1, $newDate)) return true; 
+	else return false;
+}
+
 
 function greaterDate($start_date,$end_date)
 {
@@ -249,17 +270,9 @@ function paginate($display, $pg, $total) {
   echo ($pg < $pages) ? "$next$last" : '<span id="sortable_next" class="next paginate_button">Next</span><span id="sortable_last" class="last paginate_button">Last</span>';
   echo '</div>';
 }
-
-if (($action != "delete") && (($section == "admin") && ($go == "entries") || ($section == "pay") || ($section == "list"))) {
-	if (($section == "list") || ($section == "pay")) $bid = $row_brewer['uid'];
-	$entry_fee = $row_contest_info['contestEntryFee']; // regular entry fee
-	$entry_fee_discount = $row_contest_info['contestEntryFee2']; // price of each entry after entry threshold for discount is met
-	$discount = $row_contest_info['contestEntryFeeDiscount']; // Y or N - is there a discount applied after a certain amount of entries?
-	$entry_discount_number = $row_contest_info['contestEntryFeeDiscountNum']; // Minimum number of entries before discount
-	$cap_no = $row_contest_info['contestEntryCap'];
 	
 	function total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
-		include ('Connections/config.php');
+		include(CONFIG.'config.php');
 		
 		if (($bid == "default") && ($filter == "default")) {
 			mysql_select_db($database, $brewing);
@@ -394,7 +407,7 @@ if (($action != "delete") && (($section == "admin") && ($go == "entries") || ($s
 		
 
 	function total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
-		include ('Connections/config.php');
+		include(CONFIG.'config.php');
 		if (($bid == "default") && ($filter == "default")) {
 			
 			mysql_select_db($database, $brewing);
@@ -566,112 +579,11 @@ if (($action != "delete") && (($section == "admin") && ($go == "entries") || ($s
 		$total_fees = array_sum($total_array);
    		return $total_fees;
 		} // end function
-
-	/*
-	function total_fees_to_pay($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no) {
-		include ('Connections/config.php');
 		
-		if ($bid == "default") {
-			
-			mysql_select_db($database, $brewing);
-			$query_users = "SELECT id,user_name FROM users";
-			$users = mysql_query($query_users, $brewing) or die(mysql_error());
-			$row_users = mysql_fetch_assoc($users);
-			$totalRows_users = mysql_num_rows($users);
-	
-			do { $d[] = $row_users['id']; } while ($row_users = mysql_fetch_assoc($users));
-			sort($d);
-			
-			foreach (array_unique($d) as $value) {
-			
-			// Get each entrant's number of entries
-			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$value);
-			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
-			
-			$query_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$value);
-			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-			$row_paid = mysql_fetch_assoc($paid);
-			$totalRows_paid = mysql_num_rows($paid);
-		
-			if ($cap_no > 0) { $cap = "Y"; $cap_total = $cap_no; }
-			else { $cap = "N"; $cap_total = "0"; }
-	
-			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
-			if ($totalRows_entries > 0) {
-				if ($discount == "Y") {
-				 if (($totalRows_paid <= $entry_discount_number) && ($totalRows_entries <= $entry_discount_number)) $total = $totalRows_entries * $entry_fee;
-				 if (($totalRows_paid <= $entry_discount_number) && ($totalRows_entries > $entry_discount_number)) $total = ((($totalRows_entries - $entry_discount_number) * $entry_fee_discount) + ($entry_discount_number * $entry_fee));
-				 if ($totalRows_paid > $entry_discount_number) $total = $totalRows_entries * $entry_fee_discount;
-				 }
-				else $total = $totalRows_entries * $entry_fee;
-				if (($cap == "N") || (($cap == "Y") && ($total < $cap_total))) $total_calc = $total;
-				else $total_calc = $cap_total;
-				} else $total_calc = 0;
-			$total_array[] = $total_calc;
-			}
-		}
-		else {
-			$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
-			$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-			$row_contest_info = mysql_fetch_assoc($contest_info);
-
-			if ($cap_no > 0) { $cap = "Y"; $cap_total = $cap_no; }
-			else { $cap = "N"; $cap_total = "0"; }
-			
-			$query_entries = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s'",$bid);
-			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$totalRows_entries = mysql_num_rows($entries);
-			
-			$query_not_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND NOT brewPaid='Y'",$bid);
-			$entries_not_paid = mysql_query($query_not_paid, $brewing) or die(mysql_error());
-			$row_entries_not_paid = mysql_fetch_assoc($entries_not_paid);
-			$totalRows_entries_not_paid = mysql_num_rows($entries_not_paid);
-			
-			$query_paid = sprintf("SELECT brewBrewerID FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$bid);
-			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
-			$row_paid = mysql_fetch_assoc($paid);
-			$totalRows_paid = mysql_num_rows($paid);
-			
-			// Calculate the total entry fees taking into account any discounts after prescribed number of entries
-			if ($discount == "Y") {
-				 $a = $entry_discount_number * $entry_fee;
-				 $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
-				 $c = $a + $b;
-				 $d = ($totalRows_entries_not_paid * $entry_fee);
-				 $e = ($totalRows_entries_not_paid * $entry_fee_discount);
-				 //echo $c;
-				 if (($totalRows_paid == 0) && ($totalRows_entries >= $entry_discount_number)) $total = $c;
-				 if (($totalRows_paid > 0) && ($totalRows_entries <= $entry_discount_number)) $total = $d;
-				 if (($totalRows_paid > 0) && ($totalRows_entries > $entry_discount_number)) $total = $e;
-				 }
-			else $total = $totalRows_entries * $entry_fee;
-				echo $entry_discount_number."<br>";
-				echo $totalRows_paid."<br>";
-				echo $totalRows_entries."<br>";
-				echo "Total: ".$total."<br>";
-
-			if ($totalRows_entries > 0) {
-				if (($cap == "N") || (($cap == "Y") && ($total < $cap_total))) $total_calc = $total;
-				else $total_calc = $cap_total;
-				//echo "Total Caluclated: ".$total_calc."<br>";
-				} else $total_calc = 0;
-			$total_array[] = $total_calc;
-			}
-   		//print_r($total_array);
-		$total_fees_to_pay = array_sum($total_array);
-		//echo $total_fees_paid;
-   		return $total_fees_to_pay;
-		} // end function
-		*/
-	$total_entry_fees = total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter); 
-	$total_paid_entry_fees = total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter);
-	$total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
+	//$total_entry_fees = total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter); 
+	//$total_paid_entry_fees = total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter);
+	//$total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
 	//total_fees_to_pay($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no); 
-}
 
 function unpaid_fees($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap) {
 	switch($discount) {
@@ -815,12 +727,16 @@ function style_convert($number,$type) {
 		    }
 		}
 		break;
+		
+		
+		
+		
 	}
 	return $style_convert;
 }
 
 function get_table_info($input,$method,$id) {	
-	include ('Connections/config.php');
+	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_table = "SELECT * FROM judging_tables";
 	if ($id != "default") $query_table .= " WHERE id='$id'"; 
@@ -851,7 +767,7 @@ function get_table_info($input,$method,$id) {
 	if ($method == "list") {
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include ('Connections/config.php');
+				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
 				$query_styles = "SELECT * FROM styles WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -866,7 +782,7 @@ function get_table_info($input,$method,$id) {
 	if ($method == "count_total") {
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include ('Connections/config.php');
+				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
 				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -884,7 +800,7 @@ function get_table_info($input,$method,$id) {
   	}
 	
 	if ($method == "count") {
-	include ('Connections/config.php');
+	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_style = "SELECT brewStyle FROM styles WHERE brewStyle='$input'";
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
@@ -902,7 +818,7 @@ function get_table_info($input,$method,$id) {
 	if ($method == "count_scores") {
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include ('Connections/config.php');
+				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
 				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -938,7 +854,7 @@ function displayArrayContent($arrayname) {
 }
 
 function bos_place($eid) { 
-	include ('Connections/config.php');
+	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_bos_place = "SELECT scorePlace,scoreEntry FROM judging_scores_bos WHERE eid='$eid'";
 	$bos_place = mysql_query($query_bos_place, $brewing) or die(mysql_error());
@@ -947,32 +863,57 @@ function bos_place($eid) {
 	return $value;
 }
 
-function style_type($type) { 
-	switch($type) { 
-		case "Mead": $type = "3";
-		break;
-		case "Cider": $type = "2";
-		break;
-		case "Mixed": $type = "1";
-		break;
-		case "Ale": $type = "1";
-		break;
-		case "Lager": $type = "1";
-		break;
-		default: $type = $type;
-		break;
+function style_type($type,$method,$source) { 
+	if ($method == "1") { 
+		switch($type) { 
+			case "Mead": $type = "3";
+			break;
+			case "Cider": $type = "2";
+			break;
+			case "Mixed": $type = "1";
+			break;
+			case "Ale": $type = "1";
+			break;
+			case "Lager": $type = "1";
+			break;
+			default: $type = $type;
+			break;
+		}
+	}
+	
+	if (($method == "2") && ($source == "bcoe")) { 
+		switch($type) {
+			case "3": $type = "Mead";
+			break;
+			case "2": $type = "Cider";
+			break;
+			case "1": $type = "Beer";
+			break;
+			default: $type = $type;
+			break;
+		}
+	}
+	
+	if (($method == "2") && ($source == "custom")) { 
+		include(CONFIG.'config.php');
+		mysql_select_db($database, $brewing);
+		
+		$query_style_type = "SELECT styleTypeName FROM style_types WHERE id='$type'"; 
+		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+		$row_style_type = mysql_fetch_assoc($style_type);
+		$type = $row_style_type['styleTypeName'];
 	}
 	return $type;
 }
 
 function check_bos_loc($id) { 
-include ('Connections/config.php');
-$query_judging = "SELECT judgingLocName,judgingDate FROM judging_locations WHERE id='$id'";
-$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
-$row_judging = mysql_fetch_assoc($judging);
-$totalRows_judging = mysql_num_rows($judging);
-$bos_loc = $row_judging['judgingLocName']." (".dateconvert($row_judging['judgingDate'], 3).")";
-return $bos_loc;
+	include(CONFIG.'config.php');
+	$query_judging = "SELECT judgingLocName,judgingDate FROM judging_locations WHERE id='$id'";
+	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
+	$row_judging = mysql_fetch_assoc($judging);
+	$totalRows_judging = mysql_num_rows($judging);
+	$bos_loc = $row_judging['judgingLocName']." (".dateconvert($row_judging['judgingDate'], 3).")";
+	return $bos_loc;
 }
 
 function bos_method($value) {
@@ -1003,17 +944,129 @@ function text_number($n) {
     $single = substr($n, -1, 1);
    
     # If $if_teen is in array $teen_array, store $n with 'th' concantenated onto the end of it into $new_n
-    if ( in_array($if_teen, $teen_array) )
-    {
+    if (in_array($if_teen, $teen_array)) {
         $new_n = $n . 'th';
-    }
+    	}
     # $n is not a teen, so concant the appropriate value of it's $single_array key onto the end of $n and save it into $new_n
-    elseif ( $single_array[$single] )
-    {
+    elseif ($single_array[$single])  {
         $new_n = $n . $single_array[$single];   
-    }
-   
+    	}
+		
     # Return new
     return $new_n;
 }
+
+function style_choose($section,$go,$action,$filter) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$style_choose = '<select name="brewStyle" onchange="jumpMenu(\'self\',this,0)">';
+	$style_choose .= '<option value="">Select Below</option>';
+	for($i=1; $i<29; $i++) { 
+		if ($i <= 9) $num = "0".$i; else $num = $i;
+		$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategory='$i'";
+		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+		$row = mysql_fetch_array($result);
+		if ($num == $filter) $selected = ' "selected"'; else $selected = '';
+		if ($row['count'] > 0) { $style_choose .= '<option value="'.$_SERVER['SCRIPT_NAME'].'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.'"'.$selected.'>'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</option>'; }
+	}
+	
+	$query_styles = "SELECT brewStyle,brewStyleGroup FROM styles WHERE brewStyleGroup >= 29";
+	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+	$row_styles = mysql_fetch_assoc($styles);
+	$totalRows_styles = mysql_num_rows($styles);
+	
+	do {  
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategorySort='%s'",$row_styles['brewStyleGroup']);
+		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+		$row = mysql_fetch_array($result);
+		if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
+		if ($row['count'] > 0) { $style_choose .= '<option value="'.$_SERVER['SCRIPT_NAME'].'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].'"'.$selected.'>'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</option>'; } 
+	} while ($row_styles = mysql_fetch_assoc($styles));
+	
+	$style_choose .= '</select>';
+	return $style_choose;   			
+}
+
+function table_location($table_id) { 
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_table = sprintf("SELECT tableLocation FROM judging_tables WHERE id='%s'", $table_id);
+	$table = mysql_query($query_table, $brewing) or die(mysql_error());
+	$row_table = mysql_fetch_assoc($table);
+	
+	$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_table['tableLocation']);
+	$location = mysql_query($query_location, $brewing) or die(mysql_error());
+	$row_location = mysql_fetch_assoc($location);
+	$totalRows_location = mysql_num_rows($location);
+	
+	if ($totalRows_location == 1) {
+    $table_location = $row_location['judgingLocName'].", ".dateconvert($row_location['judgingDate'], 3)." - ".$row_location['judgingTime'];
+	}
+	else $table_location = ""; 
+	return $table_location;
+}
+
+function flight_count($table_id,$method) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $table_id);
+	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+	$row_flights = mysql_fetch_assoc($flights);
+	
+	switch($method) {
+		case "1": if ($row_flights['count'] > 0) return true; else return false;
+		break;
+		
+		case "2": return $row_flights['count'];
+		break;
+	}
+	
+}
+
+function score_count($table_id,$method) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $table_id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	switch($method) {
+		case "1": if ($row_scores['count'] > 0) return true; else return false;
+		break;
+		
+		case "2": return $row_scores['count'];
+		break;
+	}
+	
+}
+
+// function to generate random number
+function random_generator($digits,$method){
+srand ((double) microtime() * 10000000);
+
+//Array of alphabet
+if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
+
+$random_generator = "";// Initialize the string to store random numbers
+for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
+	if(rand(1,2) == 1){// to decide the digit should be numeric or alphabet
+	// Add one random alphabet 
+	$rand_index = array_rand($input);
+	$random_generator .=$input[$rand_index]; // One char is added
+	}
+	else
+	{
+	// Add one numeric digit between 1 and 10
+	$random_generator .=rand(1,10); // one number is added
+	} // end of if else
+} // end of for loop 
+
+return $random_generator;
+
+} // end of function
+	
+	
+
 ?>

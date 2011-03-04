@@ -62,6 +62,8 @@ if(WithoutContent(document.form1.judgingTime.value))
 	{ errormessage += "\nThe time judging begins at this location"; }
 if(WithoutContent(document.form1.judgingLocation.value))
 	{ errormessage += "\nThe judging location's address"; }
+if(WithoutContent(document.form1.judgingRounds.value))
+	{ errormessage += "\nThe number of rounds at this location"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('The following information is required to set up your site preferences:\n' + errormessage);

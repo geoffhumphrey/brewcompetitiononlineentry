@@ -2,7 +2,7 @@
 require ('../Connections/config.php');
 include ('../includes/db_connect.inc.php');
 include ('../includes/url_variables.inc.php'); 
-include ('../includes/plug-ins.inc.php'); 
+include ('../includes/functions.inc.php'); 
 
 mysql_select_db($database_brewing, $brewing);
 $query_log = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);

@@ -89,7 +89,7 @@ function checkUncheckAll(theElement) {
   <?php } ?>
   <td width="15%" class="dataList"><?php echo $row_styles['brewStyle']; ?></td>
   <td width="5%" class="dataList"><?php if ($row_styles['brewStyleGroup'] > 28) echo "Custom"; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
-  <td width="5%" class="dataList"><?php echo style_type($row_styles['brewStyleType']); ?></td>
+  <td width="5%" class="dataList"><?php if (style_type($row_styles['brewStyleType'],"1","") <= "3") $style_own = "bcoe"; else $style_own = "custom"; echo style_type($row_styles['brewStyleType'],"2",$style_own); ?></td>
   <td width="5%" class="dataList"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank"><img src="images/link.png" border="0" alt="Link to BJCP Style"></a><?php } else echo "&nbsp;"; ?></td>
   
   <td class="dataList">
@@ -122,7 +122,7 @@ function checkUncheckAll(theElement) {
     <select name="brewStyleType" id="brewStyleType" class="text_area">
     	<option value=""></option>
         <?php do { ?>
-        <option value="<?php echo $row_style_type['id']; ?>" <?php if ($action == "edit") if (style_type($row_styles['brewStyleType']) == $row_style_type['id']) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
+        <option value="<?php echo $row_style_type['id']; ?>" <?php if ($action == "edit") if (style_type($row_styles['brewStyleType'],"1","bcoe") == $row_style_type['id']) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
     	<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
     </select>
     <span class="required">Required</span><span class="data">No types that fit?</span><span class="icon"><img src="images/page_add.png" /></span><a href="index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a></span> 
@@ -178,6 +178,7 @@ function checkUncheckAll(theElement) {
         <td class="data">&nbsp;</td>
   	</tr>
 </table>
+<input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo $row_styles['brewStyle'];?>">
 <input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup'];?>">
 <input type="hidden" name="brewStyleNum" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum'];?>" >
 <input type="hidden" name="brewStyleActive" value="<?php if ($action == "edit") echo $row_styles['brewStyleActive']; else echo "Y"; ?>">

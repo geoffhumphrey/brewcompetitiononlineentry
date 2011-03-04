@@ -1,4 +1,3 @@
-
 <?php if (strstr($section,"step")) { ?>
 <p class="setupTitle">Set Up Your Brew Competition Online Signup Site</p>
 <?php } else { ?>
@@ -10,7 +9,7 @@
   <?php if (getContactCount() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="index.php?section=contact">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
-  <?php if (lesserDate($today,$reg_deadline) && (!lesserDate($today,$reg_open)))  { ?>
+  <?php if (lesserDate($today,$row_contest_info['contestRegistrationDeadline']) && (!lesserDate($today,$row_contest_info['contestRegistrationOpen'])))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="index.php?section=register">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_contest_info['contestEntryFee'] > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay&bid=<?php echo $row_user['id']; ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <?php } ?>
@@ -176,8 +175,8 @@
 </div>
 
 <div id="adminMenu16" class="menu">
-<a class="menuItem thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets by Table</a>
-<a class="menuItem thickbox" href="pullsheets.php?section=admin&amp;go=judging_tables&amp;filter=category&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Category">Pull Sheets By Category</a>
+<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets by Table</a>
+<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;filter=category&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Category">Pull Sheets By Category</a>
 </div>
 
 <div id="adminMenu17" class="menu">

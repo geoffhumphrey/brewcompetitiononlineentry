@@ -1,9 +1,28 @@
 <h2 onload="updateButCount(event);">
 <?php 
-if (($action == "edit") && ($id != "default")) echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
-elseif (($action == "add") && ($id != "default")) echo "Define Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
+if (($action == "edit") && ($id != "default") && ($filter == "default")) echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
+elseif (($action == "add") && ($id != "default") && ($filter == "default")) echo "Define Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
+elseif (($action == "assign") && ($filter == "rounds"))  echo "Assign Flights to Rounds"; 
 else echo "Define/Edit Flights"; ?></h2>
-<?php if ($id =="default") { 
+<div class="adminSubNavContainer">
+ 	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    </span>
+   	<span class="adminSubNav">
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>
+    </span>
+    <?php if ($action != "default") { ?>
+    <span class="adminSubNav">
+    	<span class="icon"><img src="images/application_form_add.png" alt="Define Another Flight"></span><a href="index.php?section=admin&go=judging_flights">Define/Edit Flights</a>
+    </span>
+    <?php } ?>
+    <?php if ($filter == "default") { ?>
+    <span class="adminSubNav">
+    	<span class="icon"><img src="images/note_add.png" alt="Assign Flights to Rounds"></span><a href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Assign Flights to Rounds</a>
+    </span>
+    <?php } ?>
+</div>
+<?php if (($id =="default") && ($filter == "default")) { 
 if ($totalRows_tables > 0) {
 ?>
 <form>
@@ -42,54 +61,47 @@ $round_count = $row_tables_edit['tableRound'];
 ?>
 
 <script type="text/javascript">
-function updateButCount(e)
-{
+function updateButCount(e) {
 
-// Get event from W3C or IE event model
-var e = e || window.event; 
+	// Get event from W3C or IE event model
+	var e = e || window.event; 
 
-// Test that appropriate features are supported
-if ( !document.getElementsByTagName
-|| !document.getElementById
-) return;
+	// Test that appropriate features are supported
+	if (!document.getElementsByTagName || !document.getElementById) return;
 
-// Initialise variable for keeping count
-var butCount = {
-	<?php for($i=1; $i<$flight_count+1; $i++) { 
-	echo "flight".$i.":0, ";
-	}
-	?>
-	num:0
-	
+	// Initialise variable for keeping count
+	var butCount = {
+		<?php for($i=1; $i<$flight_count+1; $i++) { echo "flight".$i.":0, ";} ?>
+		num:0
 	};
-//var butSummary = 'Answers cleared';
+	//var butSummary = 'Answers cleared';
 
-// Event may have come from load, click or reset
-// If event was from 'reset', skip counting yes/no
-if (e && 'reset' != e.type){
+	// Event may have come from load, click or reset
+	// If event was from 'reset', skip counting yes/no
+	if (e && 'reset' != e.type) {
 
-// Get a collection of the inputs inside x
-var x = document.getElementById('flightCount');
-var rButs = x.getElementsByTagName('input');
-var temp;
+	// Get a collection of the inputs inside x
+	var x = document.getElementById('flightCount');
+	var rButs = x.getElementsByTagName('input');
+	var temp;
 
-// Loop over all the inputs
-for (var i=0, len=rButs.length; i<len; ++i){
-temp = rButs[i];
+	// Loop over all the inputs
+		for (var i=0, len=rButs.length; i<len; ++i){
+		temp = rButs[i];
 
-// If the input is a radio button
-if ('radio' == temp.type ) {
+		// If the input is a radio button
+		if ('radio' == temp.type ) {
 
-// Add one to the count of radio buttons
-butCount.num += 1;
+		// Add one to the count of radio buttons
+		butCount.num += 1;
 
-// If the button is checked
-if (temp.checked){
+		// If the button is checked
+		if (temp.checked){
 
-// Add one to butCount.yes or butCount.no as appropriate
-butCount[temp.value] += 1;
-}
-}
+		// Add one to butCount.yes or butCount.no as appropriate
+		butCount[temp.value] += 1;
+		}
+	}
 }
 
 // Build the summary string - divide butCount.num by two
@@ -105,28 +117,19 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 // document.getElementById('summary').innerHTML = butSummary;
 }
 </script>
+<?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id)."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo $flight_count; ?> flights. For each entry below, designate the flight in which it will be judged.</p>
-<div class="adminSubNavContainer">
- 	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
-    </span>
-   	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>
-    </span>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="images/note_add.png" alt="Define Another Flight"></span><a href="index.php?section=admin&go=judging_flights">Define/Edit Another Flight</a>
-    </span>
-</div>
 <form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
 <thead>
 	<tr>
-    	<th class="dataList" width="1%" nowrap="nowrap">#</th>
-        <th class="dataList" width="35%">Category</th>
+    	<th class="dataHeading bdr1B" width="1%" nowrap="nowrap">#</th>
+        <th class="dataHeading bdr1B" width="30%">Category</th>
         <?php for($i=1; $i<$flight_count+1; $i++) { ?>
-    	<th class="dataList" width="1%" nowrap="nowrap">Flight <?php echo $i; ?></th>
+    	<th class="dataHeading bdr1B" width="1%" nowrap="nowrap">Flight <?php echo $i; ?></th>
 		<?php } ?>
-        <th class="dataList">Special Ingredients/Classic Style</th>
+        <th class="dataHeading bdr1B"width="10%">Round</th>
+        <th class="dataHeading bdr1B">Special Ingredients/Classic Style</th>
     </tr>
 </thead>
 <tbody>
@@ -144,23 +147,27 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
 		
+		
 		do {	
 			if ($action == "edit") {
-				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID FROM judging_flights WHERE flightEntryID='%s'", $row_entries['id']);
+				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM judging_flights WHERE flightEntryID='%s'", $row_entries['id']);
 				$flight_number = mysql_query($query_flight_number, $brewing) or die(mysql_error());
 				$row_flight_number = mysql_fetch_assoc($flight_number);	
+				$random = random_generator(7,2);
 			}
-		
+	
 	?>
 	<tr <?php echo "style=\"background-color:$color\""; ?>>
 		<td><?php echo $row_entries['id']; ?>
-        <input type="hidden" name="id[]" value="<?php if ($action == "add") echo $row_entries['id']; if ($action == "edit") echo $row_flight_number['id']?>" />
+        <input type="hidden" name="id[]" value="<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random ?>" />
         <input type="hidden" name="flightTable" value="<?php echo $row_tables_edit['id']; ?>" />
+        <input type="hidden" name="flightEntryID<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random; ?>" value="<?php echo $row_entries['id']; ?>" />
         </td>
         <td><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
         <?php for($i=1; $i<$flight_count+1; $i++) { ?>
-    	<td class="data"><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if ($action == "edit") echo $row_flight_number['id']; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($row_flight_number['flightNumber'] == $i)) echo "checked"; ?>></td>
+    	<td class="data"><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($row_flight_number['flightNumber'] == $i)) echo "checked"; ?>></td>
 		<?php } ?>
+        <td class="data"><?php if ($action == "edit") echo $row_flight_number['flightRound']; ?></td>
         <td><?php echo $row_entries['brewInfo']; ?></td>
 	</tr>
     <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
@@ -175,9 +182,73 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
     	<td class="bdr1T" id="flight<?php echo $i; ?>"></td>
         <?php } ?>
         <td class="bdr1T">&nbsp;</td>
+        <td class="bdr1T">&nbsp;</td>
     </tr>
 </tbody>
 </table>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } // end if ($id !="default") ?>
+
+<?php 
+if (($action == "assign") && ($filter == "rounds")) { 
+	if ($totalRows_tables > 0) { 
+?>
+<form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
+<p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
+<?php 
+		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
+		foreach ($a as $flight_table){
+			$query_flights = sprintf("SELECT * FROM judging_flights WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
+			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+			$row_flights = mysql_fetch_assoc($flights);
+			$totalRows_flights = mysql_num_rows($flights);
+	
+			$query_tables = sprintf("SELECT id,tableNumber,tableName,tableLocation FROM judging_tables WHERE id='%s'",$flight_table);
+			$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+			$row_tables = mysql_fetch_assoc($tables);
+			
+			$query_table_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'",$row_tables['tableLocation']);
+			$table_location = mysql_query($query_table_location, $brewing) or die(mysql_error());
+			$row_table_location = mysql_fetch_assoc($table_location);
+	
+			
+?>
+	
+	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if ($totalRows_flights > 0) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php } else { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".dateconvert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> - (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<?php 
+	if ($totalRows_flights > 0) {
+		for($i=1; $i<$row_flights['flightNumber']+1; $i++) { 
+		
+		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
+		$round_no = mysql_query($query_round_no, $brewing) or die(mysql_error());
+		$row_round_no = mysql_fetch_assoc($round_no);
+		
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s'", $flight_table, $i);
+		$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+		$row_entry_count = mysql_fetch_assoc($entry_count);
+		
+		$random = random_generator(7,2);
+		?>
+		<p>Assign Flight <?php echo $i; ?> to:
+        <span class="data">
+        <input type="hidden" name="id[]" value="<?php echo $random ?>" />
+        <input type="hidden" name="flightTable<?php echo $random ?>" value="<?php echo $row_tables['id']; ?>" />
+        <input type="hidden" name="flightNumber<?php echo $random ?>" value="<?php echo $i; ?>" />
+        <select name="flightRound<?php echo $random ?>">
+        <?php for($r=1; $r<$row_table_location['judgingRounds']+1; $r++) { ?>
+		<option value="<?php echo $r; ?>" <?php if ($row_round_no['flightRound'] == $r) echo "selected"; ?>>Round <?php echo $r; ?></option>
+		<?php } ?>
+		</select>
+        </span>
+        <span class="data">(<?php echo $row_entry_count['count']; ?> entries)</span>
+        </p>
+		<?php }
+	} else echo "<p>No flights have been defined.</p>";
+  } ?>
+<p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
+<input type="hidden" name="relocate" value="../index.php?section=admin&action=<?php echo $action; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
+</form>
+<?php } // end if ($totalRows_tables > 0) ?>
+<?php } // end if ($action == "assign") ?>

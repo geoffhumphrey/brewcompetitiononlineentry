@@ -1,10 +1,5 @@
 <?php 
-require ('Connections/config.php');
-require ('includes/authentication_nav.inc.php');  session_start(); 
-require ('includes/url_variables.inc.php');
-require ('includes/db_connect.inc.php');
-include ('includes/plug-ins.inc.php');
-include ('includes/headers.inc.php');
+require('output.bootstrap.php');
 $today = date('Y-m-d');
 $deadline = $row_contest_info['contestRegistrationDeadline'];
 $tb = "default";
@@ -19,7 +14,7 @@ if (isset($_GET['tb'])) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
-<link href="css/print.css" rel="stylesheet" type="text/css" />
+<link href="../css/print.css" rel="stylesheet" type="text/css" />
 </head>
 <body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
 <?php if ($id == "default") do { ?>

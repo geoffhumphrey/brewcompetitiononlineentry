@@ -3,7 +3,7 @@ require ('../Connections/config.php');
 require ('../includes/authentication_nav.inc.php');  session_start(); 
 require ('../includes/url_variables.inc.php');
 require ('../includes/db_connect.inc.php');
-include ('../includes/plug-ins.inc.php');
+include ('../includes/functions.inc.php');
 
 $imageSrc = "../images/";
 

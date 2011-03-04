@@ -68,11 +68,14 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="data">
    <select name="brewStyle">
    	 <option value=""></option>
-    <?php do {  ?>
-     <option value="<?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo "-".$row_styles['brewStyleNum']; ?>" <?php if ($action == "edit") {  if (!(strcmp($row_styles['brewStyle'], $row_log['brewStyle']))) { echo "SELECTED"; } } ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
-      <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
-   </select></td>
-   <td class="data"><span class="required">Required</span><span class="icon"><img src="images/information.png"  /></span><a class="thickbox" href="sections/styles.sec.php?KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">View Accepted Styles</a></td>
+    <?php do {  
+	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
+	?>
+     <option value="<?php echo $style_value; ?>" <?php if ($action == "edit")  if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
+    <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
+   </select>
+   </td>
+   <td class="data"><span class="required">Required</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">View Accepted Styles</a></td>
 </tr>
 </table>
 <table>

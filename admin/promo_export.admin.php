@@ -2,7 +2,7 @@
 require ('../Connections/config.php');
 include ('../includes/url_variables.inc.php');
 include ('../includes/db_connect.inc.php');
-include ('../includes/plug-ins.inc.php'); 
+include ('../includes/functions.inc.php'); 
 
 if ($row_contest_info['contestHostWebsite'] != "") $website = $row_contest_info['contestHostWebsite']; 
 	else $website = $_SERVER['SERVER_NAME'];
