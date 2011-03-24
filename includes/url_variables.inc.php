@@ -75,4 +75,10 @@ if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
 }
 
+$tb = "default";
+if (isset($_GET['tb'])) {
+  $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
+}
+
+
 ?>

@@ -1,40 +1,47 @@
 <?php
-require ('Connections/config.php'); 
+define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
+define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
+define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
+define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
+define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
+define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
+define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
+
+require(CONFIG.'config.php');
+require(INCLUDES.'functions.inc.php'); 
 
 // Check to see if initial setup has taken place 
 mysql_select_db($database, $brewing);
-$query_setup = "SELECT * FROM brewer";
+$query_setup = "SELECT COUNT(*) as 'count' FROM brewer";
 $setup = mysql_query($query_setup, $brewing);
-$totalRows_setup = mysql_num_rows($setup);
+$totalRows_setup = $row_setup['count'];
 
 if ($totalRows_setup > 0) header ('Location: index.php'); 
 else
 {
-require ('includes/url_variables.inc.php');
-require ('includes/db_connect.inc.php');
-include ('includes/functions.inc.php');
-include ('includes/headers.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_connect.inc.php');
+require(INCLUDES.'headers.inc.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Set Up Your Brew Competition Online Signup Site</title>
+<title>Set Up Your Brew Competition Online Entry Site</title>
 <link href="css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
-<script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
+<script type="text/javascript" src="js_includes/calendar_control.js" ></script>
 <script type="text/javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
-
-<?php include ('includes/form_check.inc.php'); ?>
+<?php include(INCLUDES.'form_check.inc.php'); ?>
 </head>
 <body>
 <div id="container">
 <div id="navigation">
-	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
+	<div id="navigation-inner"><?php include(SECTIONS.'nav.sec.php'); ?></div>
 </div>
 	<div id="content">
 		<div id="content-inner">
@@ -42,19 +49,20 @@ include ('includes/headers.inc.php');
 			<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 		</div>
     	<?php
-        if ($section == "step1") 	include ('setup/step1.setup.php');
-		if ($section == "step2") 	include ('setup/step2.setup.php');
-		if ($section == "step3") 	include ('setup/step3.setup.php');
-		if ($section == "step4") 	include ('setup/step4.setup.php');
-		if ($section == "step5") 	include ('setup/step5.setup.php');
-		if ($section == "step6") 	include ('setup/step6.setup.php');
-		if ($section == "step7") 	include ('setup/step7.setup.php');
+        if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
+		if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
+		if ($section == "step3") 	include(SETUP.'site_preferences.setup.php');
+		if ($section == "step4") 	include(SETUP.'competition_info.setup.php');
+		if ($section == "step6") 	include(SETUP.'drop-off.setup.php');
+		if ($section == "step5") 	include(SETUP.'judging_locations.setup.php');
+		if ($section == "step7") 	include(SETUP.'accepted_styles.setup.php');
+		if ($section == "step8") 	include(SETUP.'judging_preferences.setup.php');
 		?>
     	</div>
 	</div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?></div>
+	<div id="footer-inner"><?php include(SECTIONS.'footer.sec.php'); ?></div>
 </div>
 </body>
 </html>

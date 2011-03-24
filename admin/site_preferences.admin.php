@@ -1,5 +1,5 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step1") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
-<?php if ($section != "step1") { ?>
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
+<?php if ($section != "step3") { ?>
 <h2>Preferences</h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
@@ -10,9 +10,9 @@
 <h3>Competition Organization</h3>
 <table>
   <tr>
-    <td class="dataLabel">BCOE for Competition Organization:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsCompOrg" value="Y" id="prefsCompOrg_0"  <?php if ($row_prefs['prefsCompOrg'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsCompOrg" value="N" id="prefsCompOrg_1" <?php if ($row_prefs['prefsCompOrg'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate if BCOE will be used to organize the competition (e.g., defining tables, defining flights, assigning judges to tables, printing pull sheets, etc.). If Yes, there will be no need to utilize a thrid party tool such as HCCP.</td>
+    <td class="dataLabel">Use for Competition Organization:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsCompOrg" value="Y" id="prefsCompOrg_0"  <?php if ($row_prefs['prefsCompOrg'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsCompOrg" value="N" id="prefsCompOrg_1" <?php if ($row_prefs['prefsCompOrg'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate if your installation will be used to organize the competition (e.g., defining tables, defining flights, assigning judges to tables, printing pull sheets, etc.). If Yes, there will be no need to utilize a thrid party tool such as HCCP.</td>
   </tr>
 </table>
 <h3>General</h3>
@@ -33,13 +33,13 @@
   </tr>
   <tr>
     <td class="dataLabel">Winner Display:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</td>
   </tr>
   <tr>
     <td class="dataLabel">Require Special Ingredients<br />
       or Classic Style:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
     <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
   </tr>
   <tr>
@@ -58,12 +58,12 @@
 <table>
   <tr>
   	<td class="dataLabel">DataTables Record Threshold:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step1") echo "300"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">The threshold of records for BCOE to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "300"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
   </tr>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step1") echo "30"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "30"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
@@ -121,7 +121,7 @@
     <td class="data">&nbsp;</td>
     <tr>
       <td class="dataLabel">Cash for Payment:</td>
-      <td class="data"><input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($row_prefs['prefsCash'] == "Y") echo "CHECKED";  if ($section == "step1") echo "CHECKED"; ?> /> 
+      <td class="data"><input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($row_prefs['prefsCash'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> 
       Yes&nbsp;&nbsp;
         <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($row_prefs['prefsCash'] == "N") echo "CHECKED"; ?>/> 
         No</td>
@@ -129,7 +129,7 @@
     </tr>
     <tr>
       <td class="dataLabel">Checks for Payment:</td>
-      <td class="data"><input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($row_prefs['prefsCheck'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> 
+      <td class="data"><input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($row_prefs['prefsCheck'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> 
         Yes&nbsp;&nbsp;
         <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($row_prefs['prefsCheck'] == "N") echo "CHECKED"; ?>/> 
         No</td>
@@ -142,7 +142,7 @@
   </tr>
   <tr>
   	<td class="dataLabel">PayPal for Payment:</td>
-   	<td class="data"><input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($row_prefs['prefsPaypal'] == "Y") echo "CHECKED";  if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($row_prefs['prefsPaypal'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td class="data"><input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($row_prefs['prefsPaypal'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($row_prefs['prefsPaypal'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to accept credit card payments via PayPal?</td>
   </tr>
   <tr>
@@ -152,7 +152,7 @@
   </tr>
   <tr>
   	<td class="dataLabel">Entrant Pays PayPal Fees:</td>
-   	<td class="data"><input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td class="data"><input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want participants paying via PayPal to also pay the transaction fees?<br />PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</td>
   </tr>
 </table>
@@ -160,13 +160,13 @@
 <table>
   <tr>
   	<td class="dataLabel">Sponsor Display:</td>
-   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefsSponsors_0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefsSponsors_1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefsSponsors_0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefsSponsors_1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to display the competition sponsors?</td>
   </tr>
   <tr>
   	<td class="dataLabel">Sponsor Logos:</td>
-   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "CHECKED"; if ($section == "step1") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($row_prefs['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Do you want to display the competition sponsors' individual logos (you will need to collect and upload all logos to your installation of BCOE via the <a href="index.php?section=admin&amp;go=sponsors">sponsor administration page</a>)?</td>
+   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($row_prefs['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Do you want to display the competition sponsors' individual logos (you will need to collect and upload all logos to your installation via the <a href="index.php?section=admin&amp;go=sponsors">sponsor administration page</a>)?</td>
   </tr>
   <tr>
   	<td class="dataLabel">Sponsor Logo Size:</td>

@@ -728,9 +728,17 @@ function style_convert($number,$type) {
 		}
 		break;
 		
-		
-		
-		
+		case "4":
+		$a = explode(",",$number);
+		include(CONFIG.'config.php');
+	    mysql_select_db($database, $brewing);
+		foreach ($a as $value) {
+			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
+			$style = mysql_query($query_style, $brewing) or die(mysql_error());
+			$row_style = mysql_fetch_assoc($style);
+			$style_convert[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+		}
+		break;
 	}
 	return $style_convert;
 }
@@ -742,6 +750,33 @@ function get_table_info($input,$method,$id) {
 	if ($id != "default") $query_table .= " WHERE id='$id'"; 
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
+	
+	if ($method == "unassigned") {
+		$return = "";
+		$query_styles = "SELECT id,brewStyle FROM styles";
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		
+		do { $a[] = $row_styles['id']; } while ($row_styles = mysql_fetch_assoc($styles));
+		sort($a);
+		//echo "<p>"; print_r($a); echo "</p>";
+		foreach ($a as $value) { 
+			//echo $input."<br>";
+			$b = array(explode(",",$input));
+			//echo "<p>".print_r($b)."</p>";
+			//echo "<p>-".$value."-</p>";
+			if (in_array($value,$b)) { 
+				echo "Yes. The style ID is $value.<br>";
+				//$query_styles1 = "SELECT brewStyle FROM styles WHERE id='$value'";
+				//$styles1 = mysql_query($query_styles1, $brewing) or die(mysql_error());
+				//$row_styles1 = mysql_fetch_assoc($styles1);
+				//echo "<p>".$row_styles1['brewStyle']."</p>";
+				}
+			
+				//else echo "No.<br>";
+		}
+	return $return;
+	}
 	
 	if ($method == "styles") {
 		do { 
@@ -841,15 +876,18 @@ function get_table_info($input,$method,$id) {
   	}
 }
 
-function displayArrayContent($arrayname) {
+function displayArrayContent($arrayname,$method) {
  	$a = "";
  	while(list($key, $value) = each($arrayname)) {
   		if (is_array($value)) {
-   		$a .= displayArrayContent($value);
+   		$a .= displayArrayContent($value,'');
+		
    		}
   	else $a .= "$value";
+	if ($method == "2") $a .= ", ";
+	if ($method == "1") $a .= "";
   	}
- 	$b = rtrim($a, ",&nbsp;");
+	$b = rtrim($a, ",&nbsp;");
  	return $b;
 }
 
@@ -868,14 +906,19 @@ function style_type($type,$method,$source) {
 		switch($type) { 
 			case "Mead": $type = "3";
 			break;
+			
 			case "Cider": $type = "2";
 			break;
+			
 			case "Mixed": $type = "1";
 			break;
+			
 			case "Ale": $type = "1";
 			break;
+			
 			case "Lager": $type = "1";
 			break;
+			
 			default: $type = $type;
 			break;
 		}
@@ -885,10 +928,22 @@ function style_type($type,$method,$source) {
 		switch($type) {
 			case "3": $type = "Mead";
 			break;
+			
 			case "2": $type = "Cider";
 			break;
+			
 			case "1": $type = "Beer";
 			break;
+			
+			case "Lager": $type = "Beer";
+			break;
+			
+			case "Ale": $type = "Beer";
+			break;
+			
+			case "Mixed": $type = "Beer";
+			break;
+			
 			default: $type = $type;
 			break;
 		}
@@ -1067,6 +1122,59 @@ return $random_generator;
 
 } // end of function
 	
+function orphan_styles() { 
+	include(CONFIG.'config.php');
+	$query_styles = "SELECT id,brewStyle,brewStyleType FROM styles WHERE brewStyleGroup >= 29";
+	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+	$row_styles = mysql_fetch_assoc($styles);
+	$totalRows_styles = mysql_num_rows($styles);
 	
+	$query_style_types = "SELECT id FROM style_types WHERE styleTypeOwn = 'custom'";
+	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+	$row_style_types = mysql_fetch_assoc($style_types);
+	$totalRows_style_types = mysql_num_rows($style_types);
+	
+	do { $a[] = style_type($row_style_types['id'], "2", "bcoe"); } while ($row_style_types = mysql_fetch_assoc($style_types));
 
+	$return = "";
+	if ($totalRows_styles > 0) {
+		do {
+			if (!in_array($row_styles['brewStyleType'], $a)) { 
+				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
+			}
+		} while ($row_styles = mysql_fetch_assoc($styles));
+	}
+	if ($return == "") $return .= "<p>All custom styles have a valid style type associated with them.</p>";
+	return $return;
+
+}
+
+
+function bjcp_rank($rank) {
+    switch($rank) {
+		case "Apprentice": $return = "Level 1:";
+		break;
+		case "Recognized": $return = "Level 2:";
+		break;
+		case "Certified": $return = "Level 3:";
+		break;
+		case "National": $return = "Level 4:";
+		break;
+		case "Master": $return = "Level 5:";
+		break;
+		case "Grand Master": $return = "Level 6:";
+		break;
+		case "Honorary Master": $return = "Level 5:";
+		break;
+		case "Honorary Grand Master": $return = "Level 6:";
+		break;
+		case "Experienced": $return = "Level 0:";
+		break;
+		case "Professional Brewer": $return = "Level 2:";
+		break;
+		default: $return = "";
+	}
+	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
+	return $return;
+}
 ?>

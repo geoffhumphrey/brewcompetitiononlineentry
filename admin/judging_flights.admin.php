@@ -18,7 +18,7 @@ else echo "Define/Edit Flights"; ?></h2>
     <?php } ?>
     <?php if ($filter == "default") { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/note_add.png" alt="Assign Flights to Rounds"></span><a href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Assign Flights to Rounds</a>
+    	<span class="icon"><img src="images/application_form_magnify.png" alt="Assign Flights to Rounds" title="Assign Flights to Rounds" /></span><a href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Assign Flights to Rounds</a>
     </span>
     <?php } ?>
 </div>
@@ -216,7 +216,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 ?>
 	
 	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if ($totalRows_flights > 0) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php } else { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".dateconvert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> - (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".dateconvert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		for($i=1; $i<$row_flights['flightNumber']+1; $i++) { 

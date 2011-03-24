@@ -1,7 +1,7 @@
 RENAME TABLE `judging` TO `judging_locations`;
 
 CREATE TABLE IF NOT EXISTS `judging_preferences` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsMaxBOS` INT(11) NULL DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
@@ -19,7 +19,7 @@ INSERT INTO `judging_preferences` (
 VALUES ('1' , 'N', '12', '7', '3');
 
 CREATE TABLE IF NOT EXISTS `judging_tables` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
   `tableStyles` TEXT DEFAULT NULL COMMENT 'Array of ids from styles table',
   `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `judging_tables` (
 ) ENGINE=MyISAM ;
 
 CREATE TABLE IF NOT EXISTS `judging_flights` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` TEXT NULL DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table',
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `judging_flights` (
 ) ENGINE=MyISAM ;
 
 CREATE TABLE `judging_scores` (
-`id` INT(11) NOT NULL AUTO_INCREMENT ,
+`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `eid` INT(11) NULL COMMENT 'entry id from brewing table',
 `bid` INT(11) NULL COMMENT 'brewer id from brewer table',
 `scoreTable` INT(11) NULL COMMENT 'id of table from judging_tables table',
@@ -50,7 +50,7 @@ PRIMARY KEY (`id`)
 ) ENGINE = MYISAM;
 
 CREATE TABLE `judging_scores_bos` (
-`id` INT(11) NOT NULL AUTO_INCREMENT ,
+`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `eid` INT(11) NULL COMMENT 'entry id from brewing table',
 `bid` INT(11) NULL COMMENT 'brewer id from brewer table',
 `scoreEntry` INT(11) NULL COMMENT 'numerical score assigned by judges',
@@ -60,7 +60,7 @@ PRIMARY KEY (`id`)
 ) ENGINE = MYISAM;
 
 CREATE TABLE `style_types` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `styleTypeName` VARCHAR( 255 ) NULL,
 `styleTypeOwn` VARCHAR( 255 ) NULL,
 `styleTypeBOS` CHAR( 1 ) NULL,
@@ -77,13 +77,27 @@ INSERT INTO `style_types` (
 )
 VALUES ('1', 'Beer', 'bcoe', 'Y', '1'), ('2', 'Cider', 'bcoe', 'Y', '1'), ('3', 'Mead', 'boce', 'Y', '1');
 
+CREATE TABLE `judging_assignments` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`bid` INT( 11 ) NULL COMMENT 'id from brewer table',
+`assignment` CHAR ( 1 ) NULL,
+`assignTable` INT( 11 ) NULL COMMENT 'id from judging_tables table',
+`assignFlight` INT( 11 ) NULL ,
+`assignRound` INT( 11 ) NULL,
+`assignLocation` INT ( 11 ) NULL
+) ENGINE = MYISAM ;
+
 ALTER TABLE `brewing` ADD `brewScore` INT( 8 ) NULL ;
-ALTER TABLE `judging` ADD `judgingRounds` INT( 11 ) NULL DEFAULT '1' COMMENT 'number of rounds at location';
+ALTER TABLE `judging_locations` ADD `judgingRounds` INT( 11 ) NULL DEFAULT '1' COMMENT 'number of rounds at location';
 
 ALTER TABLE `contest_info` ADD `contestEntryFeePassword` VARCHAR( 255 ) NULL ;
 ALTER TABLE `contest_info` ADD `contestEntryFeePasswordNum` INT( 11 ) NULL ;
 
-ALTER TABLE `brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this participant receives a discount';
-
 ALTER TABLE `preferences` ADD `prefsCompOrg` CHAR( 1 ) NULL; 
 UPDATE `preferences` SET `prefsCompOrg` = 'Y' WHERE `preferences`.`id` =1;
+
+ALTER TABLE `brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this participant receives a discount';
+ALTER TABLE `brewer` DROP `brewerJudgeLocation2` ; 
+ALTER TABLE `brewer` DROP `brewerStewardLocation2` ;
+ALTER TABLE `brewer` ADD `brewerJudgeAssignedTable` VARCHAR (255) NULL COMMENT 'Array of judging_tables ids';
+ALTER TABLE `brewer` ADD `brewerStewardAssignedTable` VARCHAR (255) NULL COMMENT 'Array of judging_tables ids';

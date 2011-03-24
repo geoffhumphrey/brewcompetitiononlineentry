@@ -1,6 +1,6 @@
 <h2>
 <?php 
-if ($action == "enter") echo "Enter/Edit BOS Scores - ".$row_style_type['styleTypeName']; else echo "Best of Show Entries and Scores"; 
+if ($action == "enter") echo "Enter/Edit BOS Places - ".$row_style_type['styleTypeName']; else echo "Best of Show (BOS) Entries and Places"; 
 if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); 
 ?>
 </h2>
@@ -16,7 +16,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
     </span>
     <?php if ($action != "default") { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_scores_bos">Back to BOS Scores List</a>
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_scores_bos">Back to BOS Entries and Places List</a>
     </span>
 	<?php } ?>
     <?php if ($action == "default") { ?>
@@ -27,7 +27,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 		<?php do { 
 			$a[] = $row_style_types['id'];
 			if ($row_style_types['styleTypeBOS'] == "Y") { ?>
-			<a class="menuItem" href="#<?php echo $row_style_types['id'] ?>">BOS Entries and Scores - <?php echo $row_style_types['styleTypeName']; ?></a>
+			<a class="menuItem" href="#<?php echo $row_style_types['id'] ?>">BOS Entries and Places - <?php echo $row_style_types['styleTypeName']; ?></a>
 		<?php 
 			}
 		} while ($row_style_types = mysql_fetch_assoc($style_types));
@@ -40,7 +40,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 		<div id="scoresMenu_bos_2" class="menu" onmouseover="menuMouseover(event)">
 		<?php do { 
 			if ($row_style_types_2['styleTypeBOS'] == "Y") { ?>
-			<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Scores - <?php echo $row_style_types_2['styleTypeName']; ?></a>
+			<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places - <?php echo $row_style_types_2['styleTypeName']; ?></a>
 		<?php 
 			}
 		} while ($row_style_types_2 = mysql_fetch_assoc($style_types_2));
@@ -83,13 +83,13 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	$totalRows_bos = mysql_num_rows($bos);
 
 ?>
-<a name="<?php echo $type; ?>"></a><h3>BOS Entries and Scores - <?php echo $row_style_type['styleTypeName']; ?></h3>
+<a name="<?php echo $type; ?>"></a><h3>BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></h3>
+<?php if ($totalRows_bos > 0) { ?>
 <div class="adminSubNavContainer">
 <span class="adminSubNav">
-    <span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit BOS Scores" title="Enter/Edit BOS Scores" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Scores - <?php echo $row_style_type['styleTypeName']; ?></a></span>
+    <span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit BOS Entries and Places" title="Enter/Edit BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></a></span>
 </span> 
 </div>
-<?php if ($totalRows_bos > 0) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $type; ?>').dataTable( {
@@ -109,7 +109,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 				null,
 				null,
 				null,
-				null,
+				null
 				]
 			} );
 		} );
@@ -185,7 +185,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 				null,
 				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 			]
 			} );
 		} );

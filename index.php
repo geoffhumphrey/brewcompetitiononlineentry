@@ -31,7 +31,7 @@ require(INCLUDES.'headers.inc.php');
 <script type="text/javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
-<script type="text/javascript" src="js_includes/CalendarControl.js" ></script>
+<script type="text/javascript" src="js_includes/calendar_control.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="js_includes/smoothscroll.js" ></script>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
@@ -41,7 +41,7 @@ if ($section == "admin") { ?>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>
 <?php } 
-if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include ('includes/form_check.inc.php'); ?>
+if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include(INCLUDES.'form_check.inc.php'); ?>
 </head>
 <body>
 <a name="top"></a>
@@ -138,9 +138,6 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   </div>
   <div class="error">Please register or log in to access this area.</div>
-  <?php } 
-  if ($action != "print") { ?>
-  <p><a href="#top">Top</a></p>
   <?php } ?>
   </div>
 </div>

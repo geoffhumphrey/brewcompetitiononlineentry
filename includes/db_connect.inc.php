@@ -22,7 +22,7 @@ $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error())
 $row_contest_info = mysql_fetch_assoc($contest_info);
 $totalRows_contest_info = mysql_num_rows($contest_info);
 
-if ((($section == "admin") && ($go == "sponsors")) || ($section == "default")) {
+if ((($section == "admin") && ($go == "sponsors")) || ($section == "sponsors")) {
 if ($action == "edit") $query_sponsors = "SELECT * FROM sponsors WHERE id='$id'"; else $query_sponsors = "SELECT * FROM sponsors ORDER BY sponsorLevel,sponsorName";
 $sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 $row_sponsors = mysql_fetch_assoc($sponsors);
@@ -69,7 +69,7 @@ if ((($section && "admin") && ($go == "dropoff")) || ($section == "contact")) {
 }
 
 
-if ((($section && "admin") && ($go == "contacts")) || ($section == "entry") || ($section == "contact") || ($section == "default")) { 
+if (($section && "admin") || ($section == "entry") || ($section == "contact") || ($section == "default")) { 
 $query_contact = "SELECT * FROM contacts";
 if ($action == "edit")  $query_contact .= " WHERE id='$id'"; else $query_contact .= " ORDER BY contactLastName,contactPosition"; 
 $contact = mysql_query($query_contact, $brewing) or die(mysql_error());
@@ -263,6 +263,12 @@ if (isset($_SESSION["loginUsername"]))  {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerSteward='Y' ORDER BY brewerLastName";
 		if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 		}
+	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges")  && ($dbTable == "default")) { 
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+		}
+	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewards")  && ($dbTable == "default")) {
+		$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+		}
 	elseif (($section == "admin") && ($go == "make_admin")) {
 		$query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
 		}
@@ -373,9 +379,10 @@ if ($row_contest_info['contestEntryFeeDiscount'] != "Y") $discount = "N"; else $
 
 if ($section == "admin") {
 	$query_style_type = "SELECT * FROM style_types"; 
-	if ($filter !="default") $query_style_type .= " WHERE id='$filter'";
+	if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
+	if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 	if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
-	if (($go == "judging_tables") && ($action == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
+	if (($go == "judging_tables") && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 	$row_style_type = mysql_fetch_assoc($style_type);
 

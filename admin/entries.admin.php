@@ -114,7 +114,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 				{ "asSorting": [  ] },
 				<?php } ?>
 				<?php if ($dbTable == "default") { ?>
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				<?php } ?>
 				]
 			} );

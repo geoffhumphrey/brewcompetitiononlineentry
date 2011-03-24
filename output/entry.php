@@ -1,5 +1,11 @@
 <?php 
 require('output.bootstrap.php');
+include(INCLUDES.'functions.inc.php');
+include(INCLUDES.'authentication_nav.inc.php');  session_start(); 
+include(INCLUDES.'url_variables.inc.php');
+include(INCLUDES.'db_connect.inc.php');
+include(INCLUDES.'version.inc.php');
+include(INCLUDES.'headers.inc.php');
 include_once(INCLUDES.'tbs_class_php5.php');
 
 mysql_select_db($database, $brewing);

@@ -1,7 +1,16 @@
 <?php 
-require ('../Connections/config.php'); 
-require ('db_connect.inc.php');
-require ('url_variables.inc.php');
+/*
+ * Module:      process.inc.php
+ * Description: This module does all the heavy lifting for any DB updates; new entries,
+ *              new users, organization, etc.
+ */
+
+define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
+define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
+define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
+require(CONFIG.'config.php'); 
+require(INCLUDES.'db_connect.inc.php');
+require(INCLUDES.'url_variables.inc.php');
 
 function relocate($referer) {
 	// determine if referrer has any msg=X variables attached
@@ -52,7 +61,7 @@ session_start();
 
 if ($action == "delete") {
 
-  if ($go == "judging") {
+  if ($go == "judging_location") {
   // remove relational location ids from affected rows in brewer's table
   mysql_select_db($database, $brewing);
   $query_loc = "SELECT * from brewer WHERE brewerJudgeLocation='$id'";
@@ -148,22 +157,44 @@ if ($action == "delete") {
   $row_delete_entry = mysql_fetch_assoc($delete_entry);
   
   $deleteScore = sprintf("DELETE FROM judging_scores WHERE id='%s'", $row_delete_entry['id']);
-  mysql_select_db($database, $brewing);
   $Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
   }
   
-  /*
-  if ($go == "user") {
- 	mysql_select_db($database, $brewing);
-	$query_delete_user = "SELECT id FROM brewer WHERE brewerEmail='$username'";
-	$delete_user = mysql_query($query_delete_user, $brewing) or die(mysql_error());
-	$row_delete_usere = mysql_fetch_assoc($delete_user);
-  
-  $deleteSQL = sprintf("DELETE FROM brewer WHERE id='%s'", $row_delete_user['id']);
-  mysql_select_db($database, $brewing);
-  $Result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+  if ($go == "judging_tables") {
+	mysql_select_db($database, $brewing);
+  	$query_delete_scores = sprintf("SELECT id,eid FROM judging_scores WHERE scoreTable='%s'", $id);
+  	$delete_scores = mysql_query($query_delete_scores, $brewing) or die(mysql_error()); 
+  	$row_delete_scores = mysql_fetch_assoc($delete_scores);
+	
+	do { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; } while ($row_delete_scores = mysql_fetch_assoc($delete_scores));
+	
+	foreach ($a as $sid) {
+		$deleteScore = sprintf("DELETE FROM judging_scores WHERE id='%s'", $sid);
+		$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
+		}
+
+	$query_delete_flights = sprintf("SELECT id,flightTable FROM judging_flights WHERE flightTable='%s'", $id);
+  	$delete_flights = mysql_query($query_delete_flights, $brewing) or die(mysql_error()); 
+  	$row_delete_flights = mysql_fetch_assoc($delete_flights);
+	
+	do { $b[] = $row_delete_flights['id']; } while ($row_delete_flights = mysql_fetch_assoc($delete_flights));
+	
+	foreach ($b as $fid) {
+		$deleteFlight = sprintf("DELETE FROM judging_flights WHERE id='%s'", $fid);
+		$Result = mysql_query($deleteFlight, $brewing) or die(mysql_error());
+		}
+	
+	foreach ($c as $eid) {
+		$query_delete_bos = sprintf("SELECT id,eid FROM judging_scores_bos WHERE eid='%s'", $eid);
+  		$delete_bos = mysql_query($query_delete_bos, $brewing) or die(mysql_error()); 
+  		$row_delete_bos = mysql_fetch_assoc($delete_bos);
+		if ($eid == $row_delete_bos['eid']) {
+			$deleteBOS = sprintf("DELETE FROM judging_scores_bos WHERE id='%s'", $row_delete_bos['id']);
+			$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
+			}
+		}
   }
-  */
+  
   
   $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
   $Result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
@@ -1236,14 +1267,14 @@ if (($action == "add") && ($dbTable == "users") && ($section == "setup")) {
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-	$insertGoTo = "../setup.php?section=step7&go=".$username;
+	$insertGoTo = "../setup.php?section=step2&go=".$username;
 	header(sprintf("Location: %s", $insertGoTo));	
 	
 	session_start();
   	$_SESSION["loginUsername"] = $username;
 	
 	}
-	else header("Location: ../setup.php?section=step4&msg=1");
+	else header("Location: ../setup.php?section=step1&msg=1");
 }
 
 // --------------------------- Adding Participant's or Admin's Info ------------------------------- //
@@ -1301,7 +1332,7 @@ if ($go == "judge") {
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	//echo $insertSQL;
-	if ($section == "setup") $insertGoTo = "../index.php?msg=success";
+	if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
 	elseif ($_POST['brewerJudge'] == "Y") $insertGoTo = "../index.php?section=judge&go=judge";
     elseif ($section == "admin") $insertGoTo = "../index.php?section=admin&go=participants&msg=1&username=".$username;
 	else $insertGoTo = $insertGoTo; 
@@ -1490,7 +1521,7 @@ VALUES
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-  	$insertGoTo = "../setup.php?section=step3";
+  	$insertGoTo = "../setup.php?section=step5";
 	header(sprintf("Location: %s", $insertGoTo));
 
 }
@@ -1634,7 +1665,7 @@ id) VALUES (
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-  	$insertGoTo = "../setup.php?section=step2";
+  	$insertGoTo = "../setup.php?section=step4";
   	header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -1723,7 +1754,7 @@ if($result1){
 	}
 }
 
-// --------------------------- If updating records in the brewing table en masse ------------------------------- //
+// --------------------------- If updating records in the brewer table en masse ------------------------------- //
 
 if (($action == "update") && ($dbTable == "brewer")) {
 
@@ -1808,16 +1839,16 @@ foreach($_POST['id'] as $id)
 		$result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());	
 		
 		// Debug
-		//echo "<p>".$updateSQL."<br>";
-		//echo $updateSQL2."<br>";
-		//echo $updateSQL3."</p>";
+		echo "<p>".$updateSQL."<br>";
+		echo $updateSQL2."<br>";
+		echo $updateSQL3."</p>";
 
 		
 		
 		
 	} 
 
- if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
+ //if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
 }
 
 // --------------------------- If updating records in the styles table en masse ------------------------------- //
@@ -1866,7 +1897,8 @@ foreach($_POST['id'] as $id)	{
 	}
 		 
 if($result1){ 
-	if ($section == "step5") header("location:../setup.php?section=step6");
+	if (($section == "step7") && ($row_prefs['prefsCompOrg'] == "N")) header("location:../index.php?msg=success");
+	elseif (($section == "step7") && ($row_prefs['prefsCompOrg'] == "Y")) header("location:../setup.php?section=step8");
 	else header(sprintf("Location: %s", $massUpdateGoTo));
 	}
 
@@ -1924,7 +1956,7 @@ if (($action == "add") && ($dbTable == "judging_locations")) {
 	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step3") $insertGoTo = "../setup.php?section=step3&msg=9"; else $insertGoTo = $insertGoTo;
+	if ($section == "step5") $insertGoTo = "../setup.php?section=step5&msg=9"; else $insertGoTo = $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
 }
 
@@ -1946,7 +1978,7 @@ if (($action == "edit") && ($dbTable == "judging_locations")) {
 }
 
 
-// --------------------------- If Adding Judging Locations ------------------------------- //
+// --------------------------- If Adding Drop-off Locations ------------------------------- //
 
 if (($action == "add") && ($dbTable == "drop_off")) {
 
@@ -1960,7 +1992,7 @@ if (($action == "add") && ($dbTable == "drop_off")) {
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	if ($section == "step4") $insertGoTo = "../setup.php?section=$section&msg=11"; else $insertGoTo = $insertGoTo;
+	if ($section == "step6") $insertGoTo = "../setup.php?section=$section&msg=11"; else $insertGoTo = $insertGoTo;
 	header(sprintf("Location: %s", $insertGoTo));					   
 }
 
@@ -2210,8 +2242,8 @@ header("Location: ../index.php?section=".$section."&action=email&msg=1&id=".$row
 
 // --------------------------- If Editing Judging Preferences ------------------------------- //
 
-if (($action == "edit") && ($dbTable == "judging_preferences")) {
-
+if ((($action == "edit") && ($dbTable == "judging_preferences")) || ($section == "step8")) {
+if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $row_judging_prefs['jPrefsFlightEntries'];
 $updateSQL = sprintf("UPDATE judging_preferences SET
 					 
 jPrefsQueued=%s,
@@ -2220,14 +2252,14 @@ jPrefsMaxBOS=%s,
 jPrefsRounds=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['jPrefsQueued'], "text"),
-					   GetSQLValueString($_POST['jPrefsFlightEntries'], "int"),
+					   GetSQLValueString($flight_ent, "int"),
                        GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
 					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	header(sprintf("Location: %s", $updateGoTo));
+	if ($section == "step8") header("location:../index.php?msg=success"); else header(sprintf("Location: %s", $updateGoTo));
 }
 
 
@@ -2243,13 +2275,11 @@ $insertSQL = sprintf("INSERT INTO judging_tables (
 tableName, 
 tableStyles, 
 tableNumber,
-tableRound,
 tableLocation
-  ) VALUES (%s, %s, %s, %s, %s)",
+  ) VALUES (%s, %s, %s, %s)",
                        GetSQLValueString($_POST['tableName'], "text"),
 					   GetSQLValueString($table_styles, "text"),
 					   GetSQLValueString($_POST['tableNumber'], "text"),
-					   GetSQLValueString($_POST['tableRound'], "text"),
 					   GetSQLValueString($_POST['tableLocation'], "text")
 					   );
 
@@ -2268,14 +2298,12 @@ $updateSQL = sprintf("UPDATE judging_tables SET
 tableName=%s, 
 tableStyles=%s, 
 tableNumber=%s,
-tableRound=%s,
 tableLocation=%s
 WHERE id=%s",
                     
                        GetSQLValueString($_POST['tableName'], "text"),
 					   GetSQLValueString($table_styles, "text"),
 					   GetSQLValueString($_POST['tableNumber'], "text"),
-					   GetSQLValueString($_POST['tableRound'], "text"),
 					   GetSQLValueString($_POST['tableLocation'], "text"),
                        GetSQLValueString($id, "int"));
 
@@ -2284,7 +2312,7 @@ WHERE id=%s",
 
   
   // Check to see if flights have been designated already -----------------------------------------------------------------------------------------------------------
-  // If so, loop through and remove the flight designation (table has changed)
+  // If so, loop through and remove the flight designation (table has changed)??
   
   
   header(sprintf("Location: %s", $updateGoTo));
@@ -2552,4 +2580,115 @@ $updateSQL = sprintf("UPDATE style_types SET
 
 }
 
+if (($action == "update") && ($dbTable == "judging_assignments")) {
+
+if ($filter == "stewards") $assignment = "S"; else $assignment = "J";
+$table_id = $id;
+foreach ($_POST['bid'] as $bid) { 
+	if ($view == "N") { // NOT using queued judging
+		for($i=1; $i<$limit+1; $i++) { // loop through the rounds
+		//echo "<p>".rtrim($_POST[$i.'-assignFlight'.$bid],"-".$i)."<p>";
+			if (($_POST['unassign'.$bid] == "N") && ($_POST[$i.'-assignFlight'.$bid] != "D-".$i)) {
+				$parts = explode("-",$_POST[$i.'-assignFlight'.$bid]);
+				//echo "<p>";
+				//echo $_POST['unassign'.$bid]." - ";
+				//echo $parts[0]."<br>";
+				//echo $parts[1]."<br>";
+				//echo $parts[2]."<br>";
+				// Check to see if already assigned.
+				
+				mysql_select_db($database, $brewing);
+				$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s'", $bid, $id, $parts[0], $parts[1]);
+				$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+				$row_assignments = mysql_fetch_assoc($assignments);	
+				$totalRows_assignments = mysql_num_rows($assignments);
+				
+				//echo $query_assignments."<br>";
+				//echo $totalRows_assignments."<br>";
+			
+				// If not, add a new record.
+				if ($totalRows_assignments == 0) {
+					$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) 
+					VALUES (%s, %s, %s, %s, %s, %s)",
+                       GetSQLValueString($bid, "text"),
+                       GetSQLValueString($assignment, "text"),
+                       GetSQLValueString($id, "text"),
+					   GetSQLValueString($parts[1], "text"),
+					   GetSQLValueString($parts[0], "text"),
+					   GetSQLValueString($_POST['assignLocation'.$bid], "text"));
+					//echo $bid."<br>";
+					//echo $_POST[$i.'-assignFlight'.$bid]."<br>";
+					//echo $insertSQL.";</p>";				   
+					
+					mysql_select_db($database, $brewing);
+  					$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				}
+				
+				// If so, get id and update the record. 
+				if ($totalRows_assignments > 0) {
+						$updateSQL = sprintf("UPDATE judging_assignments SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s",
+                       	GetSQLValueString($bid, "text"),
+                      	GetSQLValueString($assignment, "text"),
+                       	GetSQLValueString($table_id, "text"),
+					   	GetSQLValueString($parts[1], "text"),
+					   	GetSQLValueString($parts[0], "text"),
+						GetSQLValueString($_POST['assignLocation'.$bid], "text"),
+					   	GetSQLValueString($row_assignments['id'], "text")
+					   );
+					//echo $_POST[$i.'-assignFlight'.$bid]."<br>";
+					//echo $updateSQL.";</p>";		
+					mysql_select_db($database, $brewing);
+  					$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+				}			
+			}
+			// if assigned to another round and the "unassigned" checkbox is selected
+			if ((($_POST['unassign'.$bid] != "N") && ($_POST['unassign'.$bid] != "")) && ($_POST[$i.'-assignFlight'.$bid] != "D-".$i)) {
+				
+				$delete = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $_POST['unassign'.$bid]);
+				mysql_select_db($database, $brewing);
+  				$Result = mysql_query($delete , $brewing) or die(mysql_error());
+				//echo "<p>".$delete."</p>";
+				$parts = explode("-",$_POST[$i.'-assignFlight'.$bid]);
+				//echo "<p>";
+				$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) 
+					VALUES (%s, %s, %s, %s, %s, %s)",
+                       GetSQLValueString($bid, "text"),
+                       GetSQLValueString($assignment, "text"),
+                       GetSQLValueString($id, "text"),
+					   GetSQLValueString($parts[1], "text"),
+					   GetSQLValueString($parts[0], "text"),
+					   GetSQLValueString($_POST['assignLocation'.$bid], "text"));
+				//echo $insertSQL.";</p>";
+				mysql_select_db($database, $brewing);
+  				$Result = mysql_query($insertSQL , $brewing) or die(mysql_error());
+			}
+			
+			// if already assigned to table, round and flight, but are "unassigned"
+			if (($_POST['unassign'.$bid] == "N") && ($_POST[$i.'-assignFlight'.$bid] == "D-".$i)) {
+				$parts = explode("-",$_POST[$i.'-assignFlight'.$bid]);
+				//echo $_POST[$i.'-assignFlight'.$bid]."<br>";
+					mysql_select_db($database, $brewing);
+					$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignFlight='%s'", $bid, $_POST['assignLocation'.$bid], $parts[1]);
+					$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+					$row_assignments = mysql_fetch_assoc($assignments);
+					$totalRows_assignments = mysql_num_rows($assignments);
+					
+					if ($totalRows_assignments > 0) {
+						$delete = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $row_assignments['id']);
+						//echo "<p>".$bid."<br>".$_POST[$i.'-assignFlight'.$bid]."<br>".$delete;
+						//echo $parts[0]."<br>";
+						//echo $parts[1]."<br>";
+						//echo "</p>";
+					mysql_select_db($database, $brewing);
+  					$Result = mysql_query($delete , $brewing) or die(mysql_error());	
+					}
+			}
+		} // end for loop
+	} // end if ($view == "N")
+	else { 
+	echo "Queued judging<br>";
+	}
+header(sprintf("Location: %s", $updateGoTo));
+  }	
+} // end if (($action == "update") && ($dbTable == "judging_assignments"))
 ?>

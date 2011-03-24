@@ -1,7 +1,6 @@
 <script type="text/javascript" src="js_includes/email_check.js"></script>
 <?php if ($msg != "default") echo $msg_output; ?>
-<p>This account will be the Administrator's account with full access to the entry portal site. This account will be able to add, edit and delete any entries and participants, grant administration privileges to other users, and have the ability to export the necessary files to use with other brew contest-related applications such as HCCP and Excel.</p>
-<p>This user will also be able to add, edit, and delete their own entries into the competition.</p>
+<p class="info">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions. The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</p>
 <form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=users" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="userLevel" type="hidden" value="1" />
 <table>
@@ -30,10 +29,6 @@
     	<td class="data"><input name="userQuestionAnswer" type="text" class="submit" size="30"></td>
         <td class="data"><span class="required">Required</span></td>
   	</tr>
-  	<tr>
-    	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" class="button" value="Register"></td>
-        <td class="data">&nbsp;</td>
-  	</tr>
 </table>
+<p><input type="submit" class="button" value="Register"></p>
 </form>

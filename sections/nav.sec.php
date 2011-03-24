@@ -1,5 +1,5 @@
 <?php if (strstr($section,"step")) { ?>
-<p class="setupTitle">Set Up Your Brew Competition Online Signup Site</p>
+<div class="setupTitle">Set Up Your Brew Competition Online Entry and Managment Site</div>
 <?php } else { ?>
 <ul id="nav">
   <li><?php if ($section != "default") { ?><a href="index.php"><?php echo $row_contest_info['contestName']; ?> Home</a><?php } else { echo $row_contest_info['contestName']; ?> Home<?php } ?></li>
@@ -166,7 +166,7 @@
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores">Scores by Table</a>
 <a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a>
-<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Scores</a>
+<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a>
 </div>
 
 <div id="adminMenu15" class="menu">
@@ -194,30 +194,30 @@
 </div>
 
 <div id="adminMenu19" class="menu">
-<a class="menuItem" href="admin/email_export.php">All Participants</a>
-<a class="menuItem" href="admin/email_export.php?filter=judges">All Judges</a>
-<a class="menuItem" href="admin/email_export.php?filter=stewards">All Stewards</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
+<a class="menuItem" href="output/email_export.php">All Participants</a>
+<a class="menuItem" href="output/email_export.php?filter=judges">All Judges</a>
+<a class="menuItem" href="output/email_export.php?filter=stewards">All Stewards</a>
+<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
+<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
 </div>
 
 <div id="adminMenu20" class="menu">
-<a class="menuItem" href="admin/participants_export.php?go=tab">All Participants</a>
-<a class="menuItem" href="admin/entries_export.php?go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=tab">All Entries</a>
+<a class="menuItem" href="output/participants_export.php?go=tab">All Participants</a>
+<a class="menuItem" href="output/entries_export.php?go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+<a class="menuItem" href="output/entries_export.php?go=tab">All Entries</a>
 </div>
 
 <div id="adminMenu21" class="menu">
-<a class="menuItem" href="admin/entries_export.php?go=csv">All Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
-<a class="menuItem" href="admin/participants_export.php?go=csv">All Participants</a>
-<a class="menuItem" href="admin/participants_export.php?go=csv&amp;filter=winners">Winners</a>
+<a class="menuItem" href="output/entries_export.php?go=csv">All Entries</a>
+<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
+<a class="menuItem" href="output/participants_export.php?go=csv">All Participants</a>
+<a class="menuItem" href="output/participants_export.php?go=csv&amp;filter=winners">Winners</a>
 </div>
 
 <div id="adminMenu22" class="menu">
-<a class="menuItem" href="admin/promo_export.admin.php?action=html">HTML</a>
-<a class="menuItem" href="admin/promo_export.admin.php?action=word">Word</a>
+<a class="menuItem" href="output/promo_export.php?action=html">HTML</a>
+<a class="menuItem" href="output/promo_export.php?action=word">Word</a>
 </div>
 
 <?php } ?>

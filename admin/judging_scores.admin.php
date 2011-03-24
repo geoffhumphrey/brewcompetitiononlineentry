@@ -35,11 +35,12 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
     <?php } // end if ($totalRows_tables > 0) 
 	} ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Scores" title="View BOS Entries and Scores" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Scores</a>
+		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
 </div>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
+<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
 	<span class="adminSubNav">
 		<em>All</em> scores have not been entered for table(s):
 	</span>
@@ -57,6 +58,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 		<?php } while ($row_tables = mysql_fetch_assoc($tables));?>
         </select>
      </span>
+<?php } ?>
 </div>
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
@@ -81,7 +83,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 				null,
 				null,
 				null,
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
@@ -105,24 +107,28 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
+	$query_styles_1 = sprintf("SELECT brewStyle FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
+	$styles_1 = mysql_query($query_styles_1, $brewing) or die(mysql_error());
+	$row_styles_1 = mysql_fetch_assoc($styles_1);
+	
 	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM judging_tables WHERE id='%s'", $row_scores['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
-		if ($row_tables_1['id'] != "") { // if table is erased.
+		//if ($row_tables_1['id'] != "") { // if table is erased.
 	?>
 	<tr>
     	<td><?php echo $row_scores['eid']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_entries_1['brewStyle']; ?></td>
+        <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
         <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; else echo $row_scores['scorePlace']; ?></td>  
         <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a class="thickbox" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700"><img src="images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
         </td>
     </tr>
     <?php 
-		}
+		//}
 	} while ($row_scores = mysql_fetch_assoc($scores)); ?>
 </tbody>
 </table>
@@ -145,7 +151,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 				null,
 				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 			]
 			} );
 		} );
@@ -166,11 +172,11 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 	
 	foreach (array_unique($a) as $value) {
 		
-		$query_styles = sprintf("SELECT brewStyle,brewStyleType FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM styles WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -194,7 +200,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
         <td><?php echo $row_entries['id']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
+        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">
@@ -216,5 +222,22 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_");
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
-<?php } // end if ($id != "default"); ?>
+<?php } // end if ($id != "default"); 
+else { ?>
+<p><strong>Add/Edit Scores for:</strong><span class="data">
+	<select name="table_choice_1" id="table_choice_1" onchange="jumpMenu('self',this,0)">
+        <option>Choose Below</option>
+       	<?php do { 
+		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables['id']);
+		$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
+		$row_scores_2 = mysql_fetch_assoc($scores_2);
+		if ($row_scores_2['count'] > 0) $a = "edit"; else $a = "add";
+		 ?>
+        <option value="index.php?section=admin&amp;&go=judging_scores&amp;action=<?php echo $a; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option> 
+		<?php  mysql_free_result($scores_2); ?>
+		<?php } while ($row_tables = mysql_fetch_assoc($tables));?>
+    </select>
+</span>
+</p>
+<?php } ?>
 <?php } ?>

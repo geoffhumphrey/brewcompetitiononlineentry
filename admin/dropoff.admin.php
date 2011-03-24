@@ -1,27 +1,27 @@
 <h2><?php if ($action == "add") echo "Add a Drop-Off Location"; elseif ($action == "edit") echo "Edit a Drop-Off Location"; else echo "Drop-Off Locations"; ?></h2>
 <?php  if ($msg == "11"){ ?>
 <div class="error">Add another drop-off location?</div>
-<p><a href="<?php if ($section == "step4") echo "setup.php?section=step4"; else echo "index.php?section=admin&amp;go=dropoff"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step4") echo "setup.php?section=step5"; else echo "index.php?section=admin"; ?>">No</a>
+<p><a href="<?php if ($section == "step6") echo "setup.php?section=step6"; else echo "index.php?section=admin&amp;go=dropoff"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step6") echo "setup.php?section=step7"; else echo "index.php?section=admin"; ?>">No</a>
 <?php } else { ?>
 <?php if (($action == "update") || ($action == "assign")) { ?><p><?php if ($bid == "default") echo "Choose ".$filter." to assign.";  else echo "Check below which ".$filter." will be assigned to the ".$row_dropoff['dropLocationName']. " location."; ?></p><?php }?>
 <div class="adminSubNavContainer">
-   <?php if ((($action == "default") || ($action == "update") || ($action == "assign")) && ($section != "step4")) { ?>
+   <?php if ((($action == "default") || ($action == "update") || ($action == "assign")) && ($section != "step6")) { ?>
    <span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
    </span>
    <?php } ?>
-   <?php if ((($action == "add") || ($action == "edit")) && ($section != "step4")) { ?>
+   <?php if ((($action == "add") || ($action == "edit")) && ($section != "step6")) { ?>
   	<span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=dropoff">Back to Drop-Off Location List</a>
     </span>
-	<?php } elseif (($section != "step4") && ($filter == "default")) { ?>
+	<?php } elseif (($section != "step6") && ($filter == "default")) { ?>
    	<span class="adminSubNav">
     	<span class="icon"><img src="images/award_star_add.png"  /></span><a href="index.php?section=admin&amp;go=dropoff&amp;action=add">Add a Drop-Off Location</a>
    	</span>
 	<?php } ?>
 </div>
-<?php if ((($action == "add") || ($action == "edit")) || ($section == "step4")) { ?>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step4") echo "add"; else echo $action; ?>&amp;dbTable=drop_off&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<?php if ((($action == "add") || ($action == "edit")) || ($section == "step6")) { ?>
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step6") echo "add"; else echo $action; ?>&amp;dbTable=drop_off&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Name:</td>
@@ -58,7 +58,7 @@
 </form>
 <?php } 
  } 
-if (($action == "default") && ($section != "step4")) { 
+if (($action == "default") && ($section != "step6")) { 
 if ($totalRows_dropoff > 0) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -77,7 +77,7 @@ if ($totalRows_dropoff > 0) { ?>
 				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
