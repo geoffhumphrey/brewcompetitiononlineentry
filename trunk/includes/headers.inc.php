@@ -5,7 +5,8 @@ switch($section) {
 	
 	case "default":
 	$header_output = $row_contest_info['contestName'];
-	if ($msg == "success") $output = "Setup was successful. Use the Admin menu above to further customize your competition site."; 
+	if ($msg == "success") $output = "Setup was successful.";
+	$output_extend = "<p class='info'>Log in using the admin user you just created and go to the <em>Admin</em> menu in the navigation bar above to further customize your competition's site.</p>"; 
 	break;
 
 	case "user":
@@ -105,32 +106,36 @@ switch($section) {
 	break;
 
 	case "step1":
-	$header_output = "Set Up: Define Preferences";
-	break;
-	
-	case "step2":
-	$header_output = "Set Up: Enter Your Competition Info"; 
-	break;
-	
-	case "step3":
-	$header_output = "Set Up: Enter Judging Date(s)";
-	break;
-
-	case "step4":
-	$header_output = "Set Up: Enter Drop-Off Locations";
-	break;
-	
-	case "step5":
-	$header_output = "Set Up: Designate Accepted Styles";
-	break;
-	
-	case "step6":
 	$header_output = "Set Up: Create an Admin User Account";
 	if ($msg == "1") $output = "Please provide an email address.";
 	break;
 	
-	case "step7":
+	case "step2":
 	$header_output = "Set Up: Enter the Admin User's Info";
+	break;
+	
+	case "step3":
+	$header_output = "Set Up: Define Preferences";
+	break;
+	
+	case "step4":
+	$header_output = "Set Up: Enter Your Competition Info"; 
+	break;
+	
+	case "step5":
+	$header_output = "Set Up: Enter Judging Location(s) and Date(s)";
+	break;
+
+	case "step6":
+	$header_output = "Set Up: Enter Drop-Off Locations";
+	break;
+	
+	case "step7":
+	$header_output = "Set Up: Designate Accepted Styles";
+	break;
+	
+	case "step8":
+	$header_output = "Set Up: Competition Organization Preferences";
 	break;
 
 	case "beerxml":

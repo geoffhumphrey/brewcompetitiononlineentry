@@ -1,6 +1,6 @@
 <script type="text/javascript" language="JavaScript">
 <!-- Javascript code copyright 2003 Bontrager Connection, LLC // Code obtained from http://WillMaster.com/
-<?php if (($section == "step1") || (($section == "admin") && ($go == "preferences"))) { ?>
+<?php if (($section == "step3") || (($section == "admin") && ($go == "preferences"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -20,7 +20,7 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if (($section == "step2") || (($section == "admin") && ($go == "contest_info"))) { ?>
+<?php if (($section == "step4") || (($section == "admin") && ($go == "contest_info"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -50,7 +50,7 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if (($section == "step3") || (($section == "admin") && ($go == "judging"))) { ?>
+<?php if (($section == "step5") || (($section == "admin") && ($go == "judging"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -72,7 +72,7 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if (($section == "step4") || (($action == "add") && ($go == "dropoff") && ($filter == "default"))) { ?>
+<?php if (($section == "step6") || (($action == "add") && ($go == "dropoff") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -91,7 +91,7 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if (($section == "step6") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
+<?php if (($section == "step1") || (($action == "add") && ($go == "participants") && ($filter == "default"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -105,13 +105,13 @@ if(WithoutContent(document.form1.userQuestionAnswer.value))
 <?php } ?>
 // Put field checks above this point.// Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up the admin user:\n' + errormessage);
+	alert('The following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if ($section == "step7") { ?>
+<?php if ($section == "step2") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -131,7 +131,7 @@ if(WithoutContent(document.form1.brewerPhone1.value))
 	{ errormessage += "\nAt least one phone number"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up the admin user information:\n' + errormessage);
+	alert('The following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -263,6 +263,44 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
+
+
+<?php if (($section == "admin") && ($go == "judging_tables")) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.tableName.value))
+	{ errormessage += "\nThe table name"; }
+if(WithoutContent(document.form1.tableNumber.value))
+	{ errormessage += "\nThe table number"; }
+// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required to add or edit table:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
+
+<?php if (($section == "admin") && ($go == "judging_preferences")) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.jPrefsFlightEntries.value))
+	{ errormessage += "\nThe Entries per Flight"; }
+if(WithoutContent(document.form1.jPrefsRounds.value))
+	{ errormessage += "\nThe Maximum Rounds Per Location"; }
+if(WithoutContent(document.form1.jPrefsMaxBOS.value))
+	{ errormessage += "\nThe Maximum Places in BOS Round"; }// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('The following information is required:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
+
+
 function WithoutContent(ss) {
 if(ss.length > 0) { return false; }
 return true;

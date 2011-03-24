@@ -1,21 +1,21 @@
 
 <?php
-if ($section != "step7") {
+if ($section != "step2") {
 mysql_select_db($database, $brewing);
 $query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $filter); 
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 $totalRows_brewerID = mysql_num_rows($brewerID);
 } 
-if ($section == "step7")  {
+if ($section == "step2")  {
 $query_brewerID = sprintf("SELECT * FROM users WHERE user_name = '%s'", $go); 
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 $totalRows_brewerID = mysql_num_rows($brewerID);
 }
 if ($msg != "default") echo $msg_output; 
-if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
-<?php if ($section == "step7") { ?>
+if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+<?php if ($section == "step2") { ?>
 <form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="brewerSteward" type="hidden" value="N" />
 <input name="brewerJudge" type="hidden" value="N" />
@@ -25,6 +25,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=brewer&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php } ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
+<p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
@@ -87,7 +88,7 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
   </tr>
 
 
-<?php if (($go != "entrant") && ($section != "step7")) { ?>
+<?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
@@ -142,13 +143,9 @@ if (($section == "step7") || ($action == "add") || (($action == "edit") && (($_S
 <?php } ?>
 <?php } ?>
 <?php if ($action == "edit") include ('judge_info.sec.php'); ?>
-<tr>
-	  <td>&nbsp;</td>
-      <td colspan="3" class="data"><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></td>
-    </tr>
-
 </table>
-<?php if ($section != "step7") { ?>
+<p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
+<?php if ($section != "step2") { ?>
 <input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
 	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] == "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />

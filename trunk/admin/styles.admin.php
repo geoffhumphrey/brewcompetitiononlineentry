@@ -1,11 +1,10 @@
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
-<?php if ($action == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo dateconvert($row_judging['judgingDate'], 2); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
-<?php if ($section != "step5") { ?>
+<?php if ($section != "step7") { ?>
 <div class="adminSubNavContainer">
-	<?php if (($action == "add") || ($action == "edit") || ($filter == "judging")) { ?>
     <span class="adminSubNav">
         <span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
     </span> 
+    <?php if (($action == "add") || ($action == "edit") || ($filter != "default")) { ?>
    	<span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=styles">Back to Styles Accepted List</a>
     </span>
@@ -24,7 +23,8 @@
     </span>
 <?php } ?>
 </div>
-<?php } if ((($action == "default") && ($filter == "default")) || ($section == "setup") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
+<?php if ($filter == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo dateconvert($row_judging['judgingDate'], 2); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
+<?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
 <script language="javascript" type="text/javascript">
 //Custom JavaScript Functions by Shawn Olson
 //Copyright 2006-2008
@@ -38,6 +38,8 @@ function checkUncheckAll(theElement) {
      }
     }
 	</script>
+<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -53,7 +55,7 @@ function checkUncheckAll(theElement) {
 				null,
 				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
@@ -202,3 +204,9 @@ function checkUncheckAll(theElement) {
 </tr>
 </table>
 <?php } ?>
+
+<?php if (($action == "default") && ($filter == "orphans") && ($bid == "default")) { ?>
+<h3>Styles Without a Valid Style Type</h3>
+<?php 
+echo orphan_styles();
+} ?>

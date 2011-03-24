@@ -1,6 +1,6 @@
 <script type="text/javascript" src="js_includes/usable_forms.js"></script>
-<form method="post" action="includes/process.inc.php?action=edit&amp;dbTable=judging_preferences&amp;id=1" name="form1">
-<?php if ($section != "step1") { ?>
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=judging_preferences&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<?php if ($section != "step8") { ?>
 <h2>Competition Organization Preferences</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNavContainer">
@@ -25,9 +25,9 @@
   	<td class="data">Indicate the maximum amount of rounds for each of the competition's locations. This <em>does not</em> include the Best of Show (BOS) round(s).</td>
   </tr>
   <tr>
-    <td class="dataLabel">Places in BOS Round:</td>
+    <td class="dataLabel">Maximum Places in BOS Round:</td>
     <td nowrap="nowrap" class="data"><input name="jPrefsMaxBOS" type="text" value="<?php echo $row_judging_prefs['jPrefsMaxBOS']; ?>" size="5" maxlength="5" /></td>
-    <td class="data">Indicate the maximu number of places for each of the competition's Best of Show (BOS) <a href="index.php?section=admin&amp;go=style_types">style types</a>. </td>
+    <td class="data">Indicate the maximum number of places for each of the competition's Best of Show (BOS) <a href="index.php?section=admin&amp;go=style_types">style types</a>. </td>
   </tr>
 </table>
 <p><input name="submit" type="submit" class="button" value="Set Preferences"></p>

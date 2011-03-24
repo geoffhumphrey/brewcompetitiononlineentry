@@ -1,5 +1,5 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step2") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1">
-<?php if ($section != "step2") { ?>
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1">
+<?php if ($section != "step4") { ?>
 <h2>Competition Info</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
@@ -7,7 +7,7 @@
     </span>
 </div>
 <?php } ?>
-<?php if ($section == "step2") { ?>
+<?php if ($section == "step4") { ?>
 <h3>Contact</h3>
 <table>
   <tr>
@@ -26,12 +26,12 @@
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
-  	<td colspan="3"><em>*You will be able to enter more contact names after set up via your BCOE Administration area.</em></td>
+  	<td colspan="3"><em>*You will be able to enter more contact names after set up via the Administration area.</em></td>
   </tr>
 </table>
 <input type="hidden" name="contactPosition" value="Competition Coordinator" />
 <?php } ?>
-<?php if (($section != "step2") && (getContactCount() == 0)) { ?>
+<?php if (($section != "step4") && (getContactCount() == 0)) { ?>
 <div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="index.php?section=admin&go=contacts">add a contact</a>?</div>
 <?php } ?>
 <h3>General</h3>
@@ -112,7 +112,7 @@
     <td nowrap="nowrap" class="data">
     <input type="radio" name="contestEntryFeeDiscount" value="Y" id="contestEntryFeeDiscount_0"  <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo "CHECKED"; ?> /> 
     Yes&nbsp;&nbsp;
-    <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if ($row_contest_info['contestEntryFeeDiscount'] == "N") echo "CHECKED"; ?>/> 
+    <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if ($row_contest_info['contestEntryFeeDiscount'] == "N") echo "CHECKED"; if ($section == "step4") echo "CHECKED"; ?>/> 
     No    </td>
     <td class="data"><em>Designate Yes or No if your competition offers a discounted entry fee after a certain number is reached.</em></td>
   </tr>
@@ -150,7 +150,7 @@
   </tr>
   <tr>
     <td class="dataLabel">Shipping Address:</td>
-    <td class="data"><textarea name="contestShippingAddress" class="submit" cols="40" rows="7" class="mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
+    <td class="data"><textarea name="contestShippingAddress" cols="40" rows="7" class="submit mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
     <td class="data">&nbsp;</td>
   </tr>
 </table>
@@ -189,6 +189,7 @@
     <td class="data"><em>Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</em></td>
   </tr>
 </table>
+<?php if ($section != "step4") { ?>
 <h3>Winners List</h3>
 <table class="dataTable">
   <tr>
@@ -197,11 +198,8 @@
     <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in <strong>HTML format</strong> and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
       <p>If you paste using the editor to the left, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>
-  
-  <tr>
-  	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Submit"></td>
-  </tr>
 </table>
+<?php } ?>
+<p><input name="submit" type="submit" class="button" value="Submit"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>

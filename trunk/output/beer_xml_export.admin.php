@@ -1,15 +1,14 @@
 <?php 
-require ('../Connections/config.php');
-include ('../includes/db_connect.inc.php');
-include ('../includes/url_variables.inc.php'); 
-include ('../includes/functions.inc.php'); 
+require('output.bootstrap.php');
+include(INCLUDES.'functions.inc.php');
+include(INCLUDES.'url_variables.inc.php'); 
+//include(INCLUDES.'db_connect.inc.php');
 
 mysql_select_db($database_brewing, $brewing);
 $query_log = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log);
-
 
 mysql_select_db($database_brewing, $brewing);
 $query_name = "SELECT * FROM brewer WHERE id='$bid'";

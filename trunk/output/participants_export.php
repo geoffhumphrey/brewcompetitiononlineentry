@@ -1,8 +1,9 @@
 <?php
 // script courtesy of http://www.wlscripting.com/tutorial/37 (modified to accomodate TAB delimited files)
-require ('../Connections/config.php');
-include ('../includes/db_connect.inc.php');
-include ('../includes/url_variables.inc.php'); 
+require('output.bootstrap.php');
+include(INCLUDES.'functions.inc.php');
+include(INCLUDES.'url_variables.inc.php'); 
+include(INCLUDES.'db_connect.inc.php');
 
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM judging_locations WHERE id='$bid'";

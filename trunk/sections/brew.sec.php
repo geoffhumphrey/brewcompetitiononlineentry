@@ -55,13 +55,13 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
    </select>
    </td>
-   <td class="data"><span class="required">Required</span></td>
+   <td class="data"><span class="required">Required for all entires</span></td>
 </tr>
 <?php } ?>
 <tr>
    <td class="dataLabel">Entry Name:</td>
    <td class="data"><input type="text"  name="brewName" value="<?php if ($action == "edit") echo $row_log['brewName']; ?>" size="30"></td>
-   <td class="data"><span class="required">Required</span></td>
+   <td class="data"><span class="required">Required for all entires</span></td>
 </tr>
 <tr>
    <td class="dataLabel">Style:</td>
@@ -75,7 +75,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
    </select>
    </td>
-   <td class="data"><span class="required">Required</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">View Accepted Styles</a></td>
+   <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">View Accepted Styles</a></td>
 </tr>
 </table>
 <table>
@@ -89,11 +89,23 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="dataLabel" colspan="2"><textarea <?php if ($msg == "1") echo "style=\"border: 1px solid #FF0000\""; ?>  name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
 </tr>
 </table>
+<table>
+<tr>
+   <td class="dataLabel">For Mead and Cider:</td>
+   <td class="data"><input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED"; ?>/> Still<br /><input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED"; ?>/> Petillant<br /><input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED"; ?>/> Sparkling</td>
+   <td class="data"><input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED"; ?> /> Dry<br /><input type="radio" name="brewMead2" value="Semi-Sweet" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED"; ?>/> Semi-Sweet<br /><input type="radio" name="brewMead2" value="Sweet" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED"; ?>/> Sweet</td>
+</tr>
+<tr>
+   <td class="dataLabel">For Mead:</td>
+   <td class="data"><input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED"; ?> /> Hydromel (light)<br /><input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED"; ?> /> Standard<br /><input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED"; ?> /> Sack (strong)</td>
+   <td>&nbsp;</td>
+</tr>
+</table>
 <h2>Optional Information</h2>
 <p>The information below is not required to process your entry. However, the more information you provide about your entry, the more complete the required entry documentation will be.</p>
 <p>Click the headings below to expand and collapse each category.</p>
 <div id="menu_container">
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General Information</p>
+<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General</p>
 <div class="toggle_container">
 <table>
 <tr>
@@ -105,18 +117,6 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
   <td class="dataLabel">Co-Brewer Name:</td>
   <td class="data"><input type="text"  name="brewCoBrewer" value="<?php if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" size="30"></td>
   <td class="data">&nbsp;</td>
-</tr>
-</table>
-<table>
-<tr>
-   <td class="dataLabel">For Mead and Cider:</td>
-   <td class="data"><input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED"; ?>/> Still<br /><input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED"; ?>/> Petillant<br /><input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED"; ?>/> Sparkling</td>
-   <td class="data"><input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED"; ?> /> Dry<br /><input type="radio" name="brewMead2" value="Semi-Sweet" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED"; ?>/> Semi-Sweet<br /><input type="radio" name="brewMead2" value="Sweet" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED"; ?>/> Sweet</td>
-</tr>
-<tr>
-   <td class="dataLabel">For Mead:</td>
-   <td class="data"><input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED"; ?> /> Hydromel (light)<br /><input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED"; ?> /> Standard<br /><input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED"; ?> /> Sack (strong)</td>
-   <td>&nbsp;</td>
 </tr>
 </table>
 </div>

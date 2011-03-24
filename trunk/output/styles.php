@@ -38,7 +38,7 @@ elseif (($sort == "brewStyleOG") 	&& ($row_styles['brewStyleOG'] == "")) echo ""
 elseif (($sort == "brewStyleFG") 	&& ($row_styles['brewStyleFG'] == "")) echo "";
 elseif (($sort == "brewStyleABV") 	&& ($row_styles['brewStyleABV'] == "")) echo "";
 else { 
-include ('../includes/style_convert.inc.php');
+include(INCLUDES.'style_convert.inc.php');
 ?>
 <h2><?php echo $row_styles['brewStyle']; ?></h2>
 <table>
