@@ -1,4 +1,5 @@
-<?php 
+<?php
+include(DB.'entries.db.php');
 if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
 ?>
 <h2>Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
@@ -157,19 +158,19 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
-  <th class="dataHeading bdr1B">Ent. #</th>
-  <th class="dataHeading bdr1B">Name</th>
-  <th class="dataHeading bdr1B">Category</th>
-  <th class="dataHeading bdr1B">Brewer</th>
-  <th class="dataHeading bdr1B">Paid?</th>
-  <th class="dataHeading bdr1B">Rec'd?</th>
+  <th width="3%" class="dataHeading bdr1B">Ent. #</th>
+  <th width="15%" class="dataHeading bdr1B">Name</th>
+  <th width="15%" class="dataHeading bdr1B">Category</th>
+  <th width="15%" class="dataHeading bdr1B">Brewer</th>
+  <th width="3%" class="dataHeading bdr1B">Paid?</th>
+  <th width="3%" class="dataHeading bdr1B">Rec'd?</th>
   <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-  <th class="dataHeading bdr1B">Win?</th>
-  <th class="dataHeading bdr1B">Category</th>
-  <th class="dataHeading bdr1B">Sub-cat.</th>
-  <th class="dataHeading bdr1B">Place</th>
-  <th class="dataHeading bdr1B">BOS?</th>
-  <th class="dataHeading bdr1B">BOS Place</th>
+  <th width="3%" class="dataHeading bdr1B">Win?</th>
+  <th width="3%" class="dataHeading bdr1B">Category</th>
+  <th width="3%" class="dataHeading bdr1B">Sub-cat.</th>
+  <th width="3%" class="dataHeading bdr1B">Place</th>
+  <th width="3%" class="dataHeading bdr1B">BOS?</th>
+  <th width="3%" class="dataHeading bdr1B">BOS Place</th>
 <?php } ?>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <th class="dataHeading bdr1B">Actions</th>
@@ -180,7 +181,6 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
  <?php 
  	do {
 	{  
-    include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
 	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
@@ -192,35 +192,38 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 	$row_styles_num = mysql_fetch_assoc($styles_num);
 	$totalRows_styles_num = mysql_num_rows($styles_num);
 	
+	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
+	
+	
 	?>
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['id']; ?></td>
-  <td <?php if ($action != "print") { ?>width="20%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
-  <td <?php if ($action != "print") { ?>width="10%"<?php } else { ?>width="20%"<?php } ?> class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if ($action != "print") echo $row_log['brewCategorySort'].$row_log['brewSubCategory']; else echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$styleConvert; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td width="20%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_log['brewBrewerLastName'].", ".$row_log['brewBrewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewPaid'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
-  <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewReceived'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewPaid'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewReceived'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
   
 <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-  <td width="5%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewWinner'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
-  <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewWinner'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if (($action != "print") && ($dbTable == "default")) { ?>   
   <input type="text" name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat" size="3" value="<?php echo $row_log['brewWinnerCat']; ?>" />
   <?php } else echo $row_log['brewWinnerCat']; ?>
   </td>
-  <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if (($action != "print") && ($dbTable == "default")) { ?>   
   <input type="text" name="brewWinnerSubCat<?php echo $row_log['id']; ?>" id="brewWinnerSubCat" size="3" value="<?php echo $row_log['brewWinnerSubCat']; ?>" />
   <?php } else echo $row_log['brewWinnerSubCat']; ?>
   </td>
-  <td width="3%" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <input type="text" name="brewWinnerPlace<?php echo $row_log['id']; ?>" id="brewWinnerPlace" size="3" value="<?php echo $row_log['brewWinnerPlace']; ?>" />
   <?php } else echo $row_log['brewWinnerPlace']; ?>
   </td>
-  <td width="3%" class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewBOSRound" name="brewBOSRound<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewBOSRound'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewBOSRound'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
-  <td width="3%" class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">
+  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewBOSRound" name="brewBOSRound<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewBOSRound'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewBOSRound'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">
   	  <?php if (($action != "print") && ($dbTable == "default")) { ?>
       <input type="text" name="brewBOSPlace<?php echo $row_log['id']; ?>" id="brewBOSPlace" size="3" value="<?php echo $row_log['brewBOSPlace']; ?>" />
       <?php } else echo $row_log['brewBOSPlace']; ?>
@@ -228,7 +231,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 <?php } // end if ($row_prefs['prefsCompOrg'] == "N") ?>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
+  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a class="thickbox" href="sections/entry.sec.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
   </td>
   <?php } ?>
   </tr>

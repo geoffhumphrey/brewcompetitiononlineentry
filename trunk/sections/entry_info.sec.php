@@ -1,4 +1,10 @@
-<?php if ($action != "print") { ?>
+<?php 
+include(DB.'common.db.php');
+include(DB.'dropoff.db.php');
+include(DB.'contacts.db.php');
+include(DB.'judging_locations.db.php');
+include(DB.'styles.db.php'); 
+if ($action != "print") { ?>
 <?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>

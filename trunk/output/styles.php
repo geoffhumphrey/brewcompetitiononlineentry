@@ -1,5 +1,9 @@
 <?php 
 require('output.bootstrap.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(DB.'common.db.php');
+require(INCLUDES.'version.inc.php');
 
 $query_styles = "SELECT * FROM styles";
 if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
@@ -14,7 +18,7 @@ $totalRows_styles = mysql_num_rows($styles);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Styles</title>
-<link href="../css/default.css" rel="stylesheet" type="text/css" />
+<link href="../css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../js_includes/jump_menu.js"></script>
 </head>
 <body>
@@ -38,7 +42,6 @@ elseif (($sort == "brewStyleOG") 	&& ($row_styles['brewStyleOG'] == "")) echo ""
 elseif (($sort == "brewStyleFG") 	&& ($row_styles['brewStyleFG'] == "")) echo "";
 elseif (($sort == "brewStyleABV") 	&& ($row_styles['brewStyleABV'] == "")) echo "";
 else { 
-include(INCLUDES.'style_convert.inc.php');
 ?>
 <h2><?php echo $row_styles['brewStyle']; ?></h2>
 <table>
@@ -57,57 +60,54 @@ include(INCLUDES.'style_convert.inc.php');
   	<td class="data-left"><p><?php echo $row_styles['brewStyleInfo']; ?></td>
   </tr>
 </table>
-<table>
+<table class="dataTable">
   <tr>
-  	<td class="dataLabel">OG Range</td>
-    <td class="dataLabel data">FG Range</td>
-    <td class="dataLabel data">ABV Range</td>
-    <td class="dataLabel data">Bitterness Range</td>
-    <td class="dataLabel data">Color Range</td>
+  	<th class="dataLabel">OG Range</th>
+    <th class="dataLabel data">FG Range</th>
+    <th class="dataLabel data">ABV Range</th>
+    <th class="dataLabel data">Bitterness Range</th>
+    <th class="dataLabel data">Color Range</th>
   </tr>
   <tr>
-  	<td class="data-left">
+  	<td class="data-left" nowrap="nowrap">
   	<?php 
 						  if ($row_styles['brewStyleOG'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleOG'] != "") { echo $row_styles['brewStyleOG']." &ndash; ".$row_styles['brewStyleOGMax']; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data">
+    <td class="data" nowrap="nowrap">
 	<?php 
 						  if ($row_styles['brewStyleFG'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleFG'] != "") { echo $row_styles['brewStyleFG']." &ndash; ".$row_styles['brewStyleFGMax']; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data">
+    <td class="data" nowrap="nowrap">
 	<?php 
 						  if ($row_styles['brewStyleABV'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleABV'] != "" ) { echo $row_styles['brewStyleABV']."% &ndash; ".$row_styles['brewStyleABVMax']."%"; } 
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data">
+    <td class="data" nowrap="nowrap">
 	<?php 
 						  if ($row_styles['brewStyleIBU'] == "")  { echo "Varies"; }
 						  elseif ($row_styles['brewStyleIBU'] == "N/A") { echo "N/A"; }
-						  elseif ($row_styles['brewStyleIBU'] != "") { $IBUmin = ltrim ($row_styles['brewStyleIBU'], "0"); $IBUmax = ltrim ($row_styles['brewStyleIBUMax'], "0"); echo $IBUmin." &ndash; ".$IBUmax." IBU"; }
+						  elseif ($row_styles['brewStyleIBU'] != "") { echo ltrim($row_styles['brewStyleIBU'], "0")." &ndash; ".ltrim($row_styles['brewStyleIBUMax'], "0")." IBU"; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
     <td class="data">
 	<?php
-						  if (($page == "reference") || ($page == "brewBlogCurrent") || ($page == "brewBlogDetail") || ($page == "recipeDetail")  || ($page == "recipeList")  || ($page == "brewBlogList") || ($page == "awardsList")) { include ('includes/colorStyle.inc.php'); } else { include ('../includes/colorStyle.inc.php'); }
 						  if ($row_styles['brewStyleSRM'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleSRM'] == "N/A") { echo "N/A"; }
 						  elseif ($row_styles['brewStyleSRM'] != "") 
 						  	{ 
 						  	$SRMmin = ltrim ($row_styles['brewStyleSRM'], "0"); 
 						  	$SRMmax = ltrim ($row_styles['brewStyleSRMMax'], "0"); 
-							if ($SRMmin > "15") $color = "#ffffff"; else $color = "#000000"; 
-							if ($SRMmax > "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
+							if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
+							if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
 						  		echo "
-								<table>
+								<table width='100%'>
 								<tr>
-								<td class='colorTabletd' width='49%' style='background-color: ".$beercolorMin."; border: 1px solid #000000; color: ".$color."'>".$SRMmin."</td>		
-								<td class='colorTabletd' width='2%'>&ndash;</td>
-								<td class='colorTabletd' width='49%' style='background-color: ".$beercolorMax."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td>
+								<td style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td>
 								</tr>
 								</table>
 								"; 

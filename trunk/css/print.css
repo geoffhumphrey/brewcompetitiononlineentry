@@ -35,7 +35,7 @@ text-decoration: none;
 /** body **/
 html, body
 {
-font-family: Arial, Verdana, Helvetica, sans-serif;
+font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
 font-size: 12px;
 margin: 0;
 padding: 0;
@@ -67,7 +67,7 @@ color: #000000;
 }
 
 input, textarea, submit, select {
-font-family: Arial, Verdana, Helvetica, sans-serif;
+font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
 font-size: .9em;
 }
 
@@ -355,20 +355,50 @@ padding: 0;
 list-style: disc;
 }
 
-#sponsor li
-{
+#sponsor li {
 padding: 0 0 1em 1.75em;
 }
 
-.bos 
-{
+.bos {
 font-size: 1.2em;
 font-weight: bold;
 margin: 1em 0 1em 0;
 padding: .5em .5em .5em .5em;
 }
 
-#closed 
-{
+#closed {
+}
 
+.table_card {
+	text-align: center;
+	margin: 0 0 400px 0;
+}
+
+.table_card h1 {
+	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-size: 6em;
+	margin: 0;
+	padding: 3em 0 0 0;
+}
+
+.table_card h2 {
+	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-style: italic;
+	font-size: 4em;
+	margin: 0;
+	padding: 0;
+}
+
+.table_card h3 {
+	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-size: 2em;
+	margin: 0;
+	padding: 0;
+}
+
+.table_card h4 {
+	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-size: 1.5em;
+	margin: 0;
+	padding: 1em 0;
 }

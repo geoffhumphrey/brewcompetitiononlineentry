@@ -1,3 +1,7 @@
+<?php 
+include(DB.'styles.db.php'); 
+include(DB.'entries.db.php');
+?>
 <script type="text/javascript">
 $(document).ready(function(){
 	$(".toggle_container").hide();
@@ -24,6 +28,11 @@ $(document).ready(function()
 */
 </script>
 <?php 
+$query_brewers = "SELECT * FROM brewer ORDER BY brewerLastName";
+$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
+$row_brewers = mysql_fetch_assoc($brewers);
+$totalRows_brewers = mysql_num_rows($brewers);
+
 if ($msg != "default") echo $msg_output; 
 if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log['brewBrewerID']) || ($row_user['userLevel'] == 1)))) {
 	if ($filter == "default") { ?>
@@ -75,7 +84,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
    </select>
    </td>
-   <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">View Accepted Styles</a></td>
+   <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800">View Accepted Styles</a></td>
 </tr>
 </table>
 <table>

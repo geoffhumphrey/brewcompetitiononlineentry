@@ -1,3 +1,4 @@
+<?php include(DB.'contacts.db.php'); ?>
 <h2><?php if ($action == "add") echo "Add a Contact"; elseif ($action == "edit") echo "Edit a Contact"; else echo "Contacts"; ?></h2>
 <div class="adminSubNavContainer">
 	<?php if ($action == "default") { ?>

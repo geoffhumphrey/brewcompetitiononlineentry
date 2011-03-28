@@ -1,4 +1,7 @@
-<?php if ($totalRows_bos > 0) { ?>
+<?php 
+include(DB.'entries.db.php');
+if ($totalRows_bos > 0) { 
+?>
 <h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "<h3>Beer Categories</h3>"; ?>
 <div class="bos">Congratulations to <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "Beer"; ?> Best of Show Winner <?php echo $row_bos_winner['brewBrewerFirstName']." ".$row_bos_winner['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner['brewName']; ?></em>, garnered the top <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "beer"; ?> prize in the <?php echo $row_contest_info['contestName']; ?>!</div>

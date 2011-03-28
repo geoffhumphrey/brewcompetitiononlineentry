@@ -1,3 +1,7 @@
+<?php 
+include(DB.'brewer.db.php');
+include(DB.'judging_locations.db.php'); 
+?>
 <h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; else echo "";  } else echo "Judging Locations"; ?></h2>
 <?php if (($filter == "default") && ($msg == "9")) { ?>
 <div class="error">Add another judging location, date, or time?</div>

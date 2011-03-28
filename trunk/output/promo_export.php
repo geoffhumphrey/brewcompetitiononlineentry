@@ -1,8 +1,14 @@
 <?php 
 require('output.bootstrap.php');
-include(INCLUDES.'functions.inc.php');
-include(INCLUDES.'url_variables.inc.php'); 
-include(INCLUDES.'db_connect.inc.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(DB.'common.db.php');
+require(INCLUDES.'version.inc.php');
+require(INCLUDES.'headers.inc.php');
+include(DB.'dropoff.db.php');
+include(DB.'sponsors.db.php');
+include(DB.'contacts.db.php');
+include(DB.'styles.db.php'); 
 
 if ($row_contest_info['contestHostWebsite'] != "") $website = $row_contest_info['contestHostWebsite']; 
 	else $website = $_SERVER['SERVER_NAME'];

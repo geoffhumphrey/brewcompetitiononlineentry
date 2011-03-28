@@ -638,6 +638,35 @@ function discount_display($total_not_paid, $discount_amt, $entry_fee, $entry_fee
 	return $array;
 } // end funtion
 
+function total_not_paid_brewer($bid) { 
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+
+	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'", $bid);
+	$all = mysql_query($query_all, $brewing) or die(mysql_error());
+	$row_all = mysql_fetch_assoc($all);
+	$totalRows_all = $row_all['count'];
+
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $bid);
+	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
+	$row_paid = mysql_fetch_assoc($paid);
+	$totalRows_paid = $row_paid['count'];
+
+	$total_not_paid = ($totalRows_all - $totalRows_paid);
+	return $total_not_paid;
+}
+
+function total_paid_received() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
+	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
+	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_array($result);
+	mysql_free_result($result);
+	return $row['count'];
+}
 
 function style_convert($number,$type) {
 	switch ($type) {
@@ -750,6 +779,20 @@ function get_table_info($input,$method,$id) {
 	if ($id != "default") $query_table .= " WHERE id='$id'"; 
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
+	
+	if ($method == "basic") {
+		$return = $row_table['tableNumber']."^".$row_table['tableName']."^".$row_table['tableLocation'];
+		return $return;
+	}
+	
+	if ($method == "location") { // used in output/assignments.php and output/pullsheets.php
+		$query_judging_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $input);
+		$judging_location = mysql_query($query_judging_location, $brewing) or die(mysql_error());
+		$row_judging_location = mysql_fetch_assoc($judging_location);
+		
+		$return = $row_judging_location['judgingDate']."^".$row_judging_location['judgingTime']."^".$row_judging_location['judgingLocName'];
+		return $return;
+	}
 	
 	if ($method == "unassigned") {
 		$return = "";
@@ -1177,4 +1220,87 @@ function bjcp_rank($rank) {
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
 	return $return;
 }
+
+
+function srm_color($srm,$method) {
+	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
+	
+    if ($srm >= 01 && $srm < 02) $return = "#f3f993";
+elseif ($srm >= 02 && $srm < 03) $return = "#f5f75c";
+elseif ($srm >= 03 && $srm < 04) $return = "#f6f513";
+elseif ($srm >= 04 && $srm < 05) $return = "#eae615";
+elseif ($srm >= 05 && $srm < 06) $return = "#e0d01b";
+elseif ($srm >= 06 && $srm < 07) $return = "#d5bc26";
+elseif ($srm >= 07 && $srm < 08) $return = "#cdaa37";
+elseif ($srm >= 08 && $srm < 09) $return = "#c1963c";
+elseif ($srm >= 09 && $srm < 10) $return = "#be8c3a";
+elseif ($srm >= 10 && $srm < 11) $return = "#be823a";
+elseif ($srm >= 11 && $srm < 12) $return = "#c17a37";
+elseif ($srm >= 12 && $srm < 13) $return = "#bf7138";
+elseif ($srm >= 13 && $srm < 14) $return = "#bc6733";
+elseif ($srm >= 14 && $srm < 15) $return = "#b26033";
+elseif ($srm >= 15 && $srm < 16) $return = "#a85839";
+elseif ($srm >= 16 && $srm < 17) $return = "#985336";
+elseif ($srm >= 17 && $srm < 18) $return = "#8d4c32";
+elseif ($srm >= 18 && $srm < 19) $return = "#7c452d";
+elseif ($srm >= 19 && $srm < 20) $return = "#6b3a1e";
+elseif ($srm >= 20 && $srm < 21) $return = "#5d341a";
+elseif ($srm >= 21 && $srm < 22) $return = "#4e2a0c";
+elseif ($srm >= 22 && $srm < 23) $return = "#4a2727";
+elseif ($srm >= 23 && $srm < 24) $return = "#361f1b";
+elseif ($srm >= 24 && $srm < 25) $return = "#261716";
+elseif ($srm >= 25 && $srm < 26) $return = "#231716";
+elseif ($srm >= 26 && $srm < 27) $return = "#19100f";
+elseif ($srm >= 27 && $srm < 28) $return = "#16100f";
+elseif ($srm >= 28 && $srm < 29) $return = "#120d0c";
+elseif ($srm >= 29 && $srm < 30) $return = "#100b0a";
+elseif ($srm >= 30 && $srm < 31) $return = "#050b0a";
+elseif ($srm > 31) $return = "#000000";
+  else $return = "#ffffff";
+return $return;
+}
+
+function getContactCount() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_contact_count = "SELECT COUNT(*) as 'count' FROM contacts";
+	$result = mysql_query($query_contact_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_assoc($result);
+	$contactCount = $row["count"];
+	mysql_free_result($result);
+	return $contactCount;
+}
+
+function getContacts() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_contacts = "SELECT * FROM contacts ORDER BY contactLastName, contactPosition";
+	$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
+	return $contacts;
+}
+
+function brewer_info($bid) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID FROM brewer WHERE id='%s'", $bid);
+	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
+	$row_brewer_info = mysql_fetch_assoc($brewer_info);
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID'];
+	return $r;
+}
+
+function get_entry_count() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
+	$row_paid = mysql_fetch_assoc($paid);
+	$r = $row_paid['count'];
+	return $r;
+
+}
+
 ?>

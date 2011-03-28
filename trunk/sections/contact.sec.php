@@ -1,4 +1,5 @@
 <?php if ($msg != "default") echo $msg_output; 
+include(DB.'contacts.db.php');
 if ($msg != "1") {
 if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>

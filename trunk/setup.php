@@ -6,13 +6,14 @@ define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
 define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
+define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
 
 require(CONFIG.'config.php');
 require(INCLUDES.'functions.inc.php'); 
 
 // Check to see if initial setup has taken place 
 mysql_select_db($database, $brewing);
-$query_setup = "SELECT COUNT(*) as 'count' FROM brewer";
+$query_setup = "SELECT COUNT(*) as 'count' FROM users";
 $setup = mysql_query($query_setup, $brewing);
 $totalRows_setup = $row_setup['count'];
 
@@ -20,7 +21,8 @@ if ($totalRows_setup > 0) header ('Location: index.php');
 else
 {
 require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_connect.inc.php');
+require(DB.'common.db.php');
+require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

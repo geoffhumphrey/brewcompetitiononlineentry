@@ -1,3 +1,4 @@
+
 <tr>
       <td width="10%" class="dataLabel">BJCP ID:</td>
       <td class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /><br />If you are not a BJCP recognized judge, please enter a zero (0).</td>
