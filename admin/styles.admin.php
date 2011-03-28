@@ -1,3 +1,7 @@
+<?php 
+include(DB.'judging_locations.db.php'); 
+include(DB.'styles.db.php'); 
+?>
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
 <?php if ($section != "step7") { ?>
 <div class="adminSubNavContainer">

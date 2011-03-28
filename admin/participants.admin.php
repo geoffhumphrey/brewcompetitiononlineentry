@@ -1,3 +1,13 @@
+<?php 
+include(DB.'brewer.db.php');
+include(DB.'judging_locations.db.php'); 
+$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+$result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+$row = mysql_fetch_assoc($result);
+$totalRows_participant_count = $row["count"];
+mysql_free_result($result);
+?>
+
 <h2><?php 
 if ($filter == "judges") echo "Available Judges"; 
 elseif ($filter == "stewards") echo "Available Stewards";

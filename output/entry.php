@@ -1,9 +1,8 @@
 <?php 
 require('output.bootstrap.php');
-include(INCLUDES.'functions.inc.php');
-include(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-include(INCLUDES.'url_variables.inc.php');
-include(INCLUDES.'db_connect.inc.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(DB.'common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
 include_once(INCLUDES.'tbs_class_php5.php');
@@ -97,7 +96,6 @@ switch ($brewing_info['brewMead3']) {
 }
 
 // Style name
-include (INCLUDES.'style_convert.inc.php'); // User friendly style names
 if ($brewing_info['brewCategory'] < 29) 
   $brewing_info['styleName'] = $brewing_info['brewStyle'];
 else

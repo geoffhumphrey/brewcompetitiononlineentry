@@ -1,3 +1,4 @@
+<?php //include(DB.'judging_locations.db.php'); ?>
 <h2>Registration</h2>
 <?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
 	<p>Registration opened <?php echo dateconvert($row_contest_info['contestRegistrationOpen'], 2); ?> and will close  <?php echo dateconvert($row_contest_info['contestRegistrationDeadline'], 2); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after <?php $date = $row_contest_info['contestRegistrationDeadline']; echo dateconvert($date, 2); ?>.</p>

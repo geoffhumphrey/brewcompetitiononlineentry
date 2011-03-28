@@ -1,3 +1,4 @@
+<?php include(DB.'brewer.db.php'); ?>
 <form action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=users&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users admin access with caution. Admin users are able to add, edit, and delete any information in the database.</div>
 <div class="adminSubNavContainer">

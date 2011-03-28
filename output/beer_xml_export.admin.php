@@ -1,8 +1,8 @@
 <?php 
 require('output.bootstrap.php');
-include(INCLUDES.'functions.inc.php');
-include(INCLUDES.'url_variables.inc.php'); 
-//include(INCLUDES.'db_connect.inc.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php'); 
+require(DB.'common.db.php');
 
 mysql_select_db($database_brewing, $brewing);
 $query_log = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);

@@ -1,3 +1,4 @@
+<?php include(DB.'winners.db.php'); ?>
 <?php
 
 if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judging dates have past, if so, display 

@@ -1,3 +1,4 @@
+<?php include(DB.'dropoff.db.php'); ?>
 <h2><?php if ($action == "add") echo "Add a Drop-Off Location"; elseif ($action == "edit") echo "Edit a Drop-Off Location"; else echo "Drop-Off Locations"; ?></h2>
 <?php  if ($msg == "11"){ ?>
 <div class="error">Add another drop-off location?</div>

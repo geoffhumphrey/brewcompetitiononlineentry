@@ -1,4 +1,15 @@
-<?php if ($msg != "default") echo $msg_output; 
+<?php 
+if ($msg == "1") {
+	$a = explode('-', $view);
+	foreach (array_unique($a) as $value) {
+		$updateSQL = "UPDATE brewing SET brewPaid='Y' WHERE id='".$value."';";
+		mysql_select_db($database, $brewing);
+		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+}
+$total_not_paid = total_not_paid_brewer($row_brewer['uid']);
+include(DB.'brewer.db.php');
+if ($msg != "default") echo $msg_output; 
 $total_entry_fees = total_fees($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
 if ($total_entry_fees > 0) { 
 $total_paid_entry_fees = total_fees_paid($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);

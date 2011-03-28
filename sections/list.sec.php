@@ -3,6 +3,11 @@
 <?php } 
 else 
 { 
+$total_not_paid = total_not_paid_brewer($row_brewer['uid']);
+include(DB.'brewer.db.php');
+include(DB.'entries.db.php');
+
+
 $entry_total_final = unpaid_fees($total_not_paid, $row_contest_info['contestEntryFeeDiscount'],$row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2']);
 
 if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
@@ -215,6 +220,7 @@ if ($msg != "default") echo $msg_output;
 	</span>
 </div>
 <?php if ((judging_date_return()) && ($totalRows_log > 0)) { 
+
 $total_entry_fees = total_fees($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
 $total_paid_entry_fees = total_fees_paid($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees; 

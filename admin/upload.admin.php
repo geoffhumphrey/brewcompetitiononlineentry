@@ -1,9 +1,12 @@
 <?php 
-require ('../Connections/config.php'); 
-require ('../includes/authentication_nav.inc.php');  session_start(); 
-require ('../includes/url_variables.inc.php');
-require ('../includes/db_connect.inc.php');
-include ('../includes/functions.inc.php');
+include('../output/output.bootstrap.php');
+require(CONFIG.'config.php');
+require(INCLUDES.'functions.inc.php'); 
+require(INCLUDES.'url_variables.inc.php');
+require(DB.'common.db.php');
+require(INCLUDES.'version.inc.php');
+require(INCLUDES.'headers.inc.php');
+
 
 $imageSrc = "../images/";
 
@@ -118,10 +121,46 @@ function do_upload($upload_dir, $upload_url) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
-<link href="../css/default.css" rel="stylesheet" type="text/css" />
+<link href="../css/print.css" rel="stylesheet" type="text/css" />
 <link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="../js_includes/jquery.js"></script>
 <script type="text/javascript" src="../js_includes/thickbox.js"></script>
+<style type="text/css">
+#content-inner a:link {
+	color:#00F;
+}
+#content-inner a:visited, a:active {
+	
+}
+
+#content-inner a:hover {
+	text-decoration: underline;
+}
+
+.button { 
+border: 1px solid #aaaaaa;
+background-color: #cccccc;
+font-weight: bold;
+padding: 3px;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+} 
+
+.button:hover {
+border: 1px solid #aaaaaa;
+background-color: #bec8d8;
+cursor: pointer;
+}
+
+input, textarea, select, submit {
+font-size: 1em;
+border: 1px solid #c0c0c0;
+background-color: #eeeeee;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+}
+
+</style>
 </head>
 <body>
 <div id="container">
@@ -130,7 +169,7 @@ function do_upload($upload_dir, $upload_url) {
 	<h2>Upload Images</h2>
 	<?php if ($section == "default") { ?>
 	<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
-	<table>
+	<table class="dataTable">
 	<tr>
 		<td class="dataLabel" width="5%">Image File:</td>
 		<td class="data" width="10%"><input name="userfile" type="file" class="submit" id="userfile" size="60"></td>
@@ -144,7 +183,7 @@ function do_upload($upload_dir, $upload_url) {
 	</table>
 	</form>
 	<h2>Files in the Directory</h2>
-	<table>
+	<table class="dataTable">
 	<?php echo $filelist; ?>
 	</tr>
 	</table>

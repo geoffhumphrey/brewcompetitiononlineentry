@@ -1,3 +1,4 @@
+<?php include(DB.'judging_locations.db.php'); ?>
 <h2 onload="updateButCount(event);">
 <?php 
 if (($action == "edit") && ($id != "default") && ($filter == "default")) echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 

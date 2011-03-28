@@ -1,3 +1,7 @@
+<?php 
+include(DB.'judging_locations.db.php'); 
+include(DB.'stewarding.db.php'); 
+?>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 <?php if (($section == "admin") && ($go == "default")) { ?>
@@ -9,7 +13,6 @@ $(document).ready(function(){
 	});
 	// $("div.toggle_container:eq(0)").show();
 });
-
 /* 
 // For accordian effect
 $(document).ready(function()
@@ -39,11 +42,11 @@ if ($go == "default") {
 if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
 
 ?>
-<p>Click the headings below to expand and collapse each category.</p>
+<p>Click the headings below to expand and collapse each category.&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <div id="menu_container">
 <p class="trigger"><span class="icon"><img src="images/cog.png"  /></span>Preferences</p>
 <div class="toggle_container">
-<p class="admin_default_header">Edit</p>
+<p class="admin_default_header">Edit&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
 	<li><a href="index.php?section=admin&amp;go=preferences">Site Preferences</a></li>
     <li><a href="index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a></li>
@@ -51,19 +54,19 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </div>
 <p class="trigger"><span class="icon"><img src="images/page.png"  /></span>Competition Info</p>
 <div class="toggle_container">
-<p class="admin_default_header">Edit</p>
+<p class="admin_default_header">Edit&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
 	<li><a href="index.php?section=admin&amp;go=contest_info">Competition Info</a></li>
 </ul>
-<p class="admin_default_header">Upload</p>
+<p class="admin_default_header">Upload&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-	<li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Competition Logo</a></li>
-    <li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image" class="thickbox">Sponsor Logos</a></li>
+	<li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Competition Logo</a></li>
+    <li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Sponsor Logo Image" class="thickbox">Sponsor Logos</a></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/note.png"  /></span>Entry and Data Gathering</p>
 <div class="toggle_container">
-<p class="admin_default_header">Manage/View</p>
+<p class="admin_default_header">Manage/View&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
 	<li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
     <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
@@ -80,7 +83,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
     <li><a href="index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
 </ul>
-<p class="admin_default_header">Add</p>
+<p class="admin_default_header">Add&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
     <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
@@ -96,7 +99,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </div>
 <p class="trigger"><span class="icon"><img src="images/arrow_refresh.png"  /></span>Sorting Received Entries</p>
 <div class="toggle_container">
-<p class="admin_default_header">Manage/View</p>
+<p class="admin_default_header">Manage/View&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
     <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
@@ -105,19 +108,19 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li>Mark Entries as Paid/Received for Category:</li>
     <li><?php echo style_choose($section,"entries",$action,$filter); ?></li>
 </ul>
-<p class="admin_default_header">Add</p>
+<p class="admin_default_header">Add&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
     <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 </ul>
-<p class="admin_default_header">Print</p>
+<p class="admin_default_header">Print&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;filter=bottle&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700">Bottle Labels</a></li>
+    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;filter=bottle&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800">Bottle Labels</a></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</p>
 <div class="toggle_container">
-<p class="admin_default_header">Manage/View</p>
+<p class="admin_default_header">Manage/View&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
     <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
@@ -136,7 +139,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></li>
     <li><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></li>
 </ul>
-<p class="admin_default_header">Add</p>
+<p class="admin_default_header">Add&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
     <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
@@ -148,7 +151,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds">Flights to Rounds</a></li>
 </ul>
   <?php } ?>
-<p class="admin_default_header">Assign</p>
+<p class="admin_default_header">Assign&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
   <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges">Judges (Final Assignments)</a></li>
@@ -172,7 +175,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
 <p class="trigger"><span class="icon"><img src="images/rosette.png"  /></span>Scoring</p>
 <div class="toggle_container">
-<p class="admin_default_header">Manage/View</p>
+<p class="admin_default_header">Manage/View&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
     <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
@@ -183,38 +186,77 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a></li>
     <li><a href="index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a></li>
 </ul>
-<p class="admin_default_header">Add</p>
+<p class="admin_default_header">Add&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add">Scores</a></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</p>
 <div class="toggle_container">
-<p class="admin_default_header">Pre-Competition</p>
+<p class="admin_default_header">Before Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-    <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets</a></li>
-    <li><a href="">Table Cards</a></li>
+	<li>Pullsheets</li>
+    <li>&#9654;</li>
+    <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print All Table Pullsheets">All Tables</a></li>
+    <li>
+    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
+    	<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
+    		<?php do { ?>
+			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
+    		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+    	</div>
+    </li>
 </ul>
 <ul class="admin_default">
-	<li><a href="output/assignments.php?section=admin&amp;go=assignments&amp;filter=judges">Judge Assignments</a></li>
-    <li><a href="output/assignments.php?section=admin&amp;go=sign-in&amp;filter=judges">Judge Sign-in Sheet</a></li>   
+	<li>Table Cards</li>
+    <li>&#9654;</li>
+    <li><a class="thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Pullsheets by Table">All Tables</a></li>
+    <li>
+    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
+    	<div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
+    		<?php do { ?>
+			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+    		<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+    	</div>
+    </li>
 </ul>
 <ul class="admin_default">
-	<li><a href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=default">Steward Assignments</a></li>
-    <li><a href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in">Steward Sign-in Sheet</a></li>   
+	<li>Judge Assignments</li>
+    <li>&#9654;</li>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Judge Assignments by Table">By Table</a></li>
+    <?php if ($totalRows_judging > 1) { ?>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Judge Assignments by Location">By Location</a></li>
+    <?php } ?>
 </ul>
-<p class="admin_default_header">During the Competition</p>
+<ul class="admin_default">
+	<li>Steward Assignments</li>
+    <li>&#9654;</li>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Steward Assignments by Table">By Table</a></li>
+    <?php if ($totalRows_judging > 1) { ?>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Steward Assignments by Location">By Location</a></li>
+	<?php } ?>
+</ul>
+<ul class="admin_default">
+	<li>Sign-in Sheets</li>
+    <li>&#9654;</li>
+   	<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print a Judge Sign-in Sheet">Judges</a></li>   
+	<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
+</ul>
+<p class="admin_default_header">During Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li>BOS Pullsheets 
     	<ul>
         	<li>&#9654;</li>
+            <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print All BOS Pullsheets">All</a></li>
     	  <?php do { ?>
-          	<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
+          	<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
           <?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
         </ul>
     </li>
 </ul>
-<p class="admin_default_header">Post-Competition</p>
+<p class="admin_default_header">After Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="">Results by Table with BOS(s)</a>
     	<ul>
@@ -258,7 +300,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <?php } ?>
 <p class="trigger"><span class="icon"><img src="images/page_go.png"  /></span>Exporting</p>
 <div class="toggle_container">
-<p class="admin_default_header">Email Addresses (CSV Files)</p>
+<p class="admin_default_header">Email Addresses (CSV Files)&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="output/email_export.php">All Participants</a></li>
     <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid & Received Entries</a><a href="output/email_export.php?section=admin&amp;filter=judges"></a></li>
@@ -299,7 +341,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </ul>
  <?php } ?>
  <?php } ?>
-<p class="admin_default_header">Tab Delimited Files</li>
+<p class="admin_default_header">Tab Delimited Files&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></li>
 <p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
 <ul class="admin_default">
     <li><a href="output/participants_export.php?section=admin&amp;go=tab">All Participants</a></li>
@@ -331,7 +373,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </ul>   
   	<?php } ?>
   <?php } ?>
-<p class="admin_default_header">CSV Files</p>
+<p class="admin_default_header">CSV Files&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a></li>
     <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a></li>
@@ -341,7 +383,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>
     <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
 </ul>
-<p class="admin_default_header">Promo Materials</p>
+<p class="admin_default_header">Promo Materials&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
     <li><a href="output/promo_export.php?section=admin&amp;go=html&amp;action=html">HTML</a></li>
     <li><a href="output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a></li>
@@ -349,13 +391,14 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </div>
 <p class="trigger"><span class="icon"><img src="images/camera_add.png" /></span>Archiving</p>
 <div class="toggle_container">
+<p class="admin_default_header">Manage/View&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-	<li><a href="index.php?section=admin&amp;go=archive">Archive Competition Data</a></li>
+	<li><a href="index.php?section=admin&amp;go=archive">Archives</a></li>
 </ul>
 </div>
 </div>
 <?php 	} 
-
+include(DB.'admin_common.db.php');
 if ($go == "contest_info") 				include (ADMIN.'competition_info.admin.php');
 if ($go == "preferences") 				include (ADMIN.'site_preferences.admin.php');
 if ($go == "judging") 	    			include (ADMIN.'judging_locations.admin.php');

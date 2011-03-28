@@ -1,4 +1,5 @@
-<?php if judging_date_return() { ?>
+<?php
+if judging_date_return() { ?>
 <h2>Thanks and Good Luck To All Who Entered the <?php echo $row_contest_info['contestName']; ?>!</h2>
 <p>There are <?php echo $totalRows_entries; ?> entries and <?php echo $totalRows_brewers; ?> registered brewers, judges, and stewards.</p>
 <h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>

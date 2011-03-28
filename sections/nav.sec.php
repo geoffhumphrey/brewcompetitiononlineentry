@@ -156,8 +156,8 @@
 </div>
 
 <div id="adminMenu13" class="menu">
-<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
-<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=350&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
+<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
+<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
 </div>
 
 <div id="adminMenu14" class="menu">
@@ -175,8 +175,8 @@
 </div>
 
 <div id="adminMenu16" class="menu">
-<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Table">Pullsheets by Table</a>
-<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;filter=category&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=425&amp;width=700" title="Print Pullsheets by Category">Pull Sheets By Category</a>
+<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Pullsheets by Table">Pullsheets by Table</a>
+<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;filter=category&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Pullsheets by Category">Pull Sheets By Category</a>
 </div>
 
 <div id="adminMenu17" class="menu">

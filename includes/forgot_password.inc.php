@@ -1,11 +1,9 @@
 <?php
-
+include('../output/output.bootstrap.php')
 // Based upon a script from www.plus2net.com 
-
-include "../Connections/config.php";
-include "../includes/db_connect.inc.php"; 
-include "../includes/functions.inc.php";
-
+require(CONFIG.'config.php');
+require(INCLUDES.'functions.inc.php'); 
+require(DB.'common.db.php');
 $username = $_POST['loginUsername'];
 
 mysql_select_db($database, $brewing);

@@ -1,5 +1,7 @@
-
-<?php
+<?php 
+include(DB.'brewer.db.php');
+include(DB.'judging_locations.db.php');
+include(DB.'stewarding.db.php'); 
 if ($section != "step2") {
 mysql_select_db($database, $brewing);
 $query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $filter); 
