@@ -1,4 +1,5 @@
 <?php 
+include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 ?>
@@ -398,7 +399,6 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </div>
 </div>
 <?php 	} 
-include(DB.'admin_common.db.php');
 if ($go == "contest_info") 				include (ADMIN.'competition_info.admin.php');
 if ($go == "preferences") 				include (ADMIN.'site_preferences.admin.php');
 if ($go == "judging") 	    			include (ADMIN.'judging_locations.admin.php');
