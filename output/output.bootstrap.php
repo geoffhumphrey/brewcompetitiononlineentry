@@ -6,6 +6,6 @@ define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
 define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
+define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start();
 ?>

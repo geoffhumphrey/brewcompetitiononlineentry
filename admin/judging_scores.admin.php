@@ -3,7 +3,7 @@ if (($action == "edit") && ($id != "default")) echo "Edit Scores for Table #".$r
 elseif (($action == "add") && ($id != "default")) echo "Add Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
 else echo "Scores"; 
 if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); 
-$totalRows_entry_count = total_paid_received();
+$totalRows_entry_count = total_paid_received($go,"default");
 ?></h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
@@ -197,7 +197,7 @@ $totalRows_entry_count = total_paid_received();
         <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if ($row_scores['id'] != "") echo "Y"; else echo "N"; ?>" />
     	<?php } ?>
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['eid'] != "")) echo $row_scores['eid']; else echo $row_entries['id']; ?>" />
-        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['brewBrewerID']; ?>" />
+        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
         <td><?php echo $row_entries['id']; ?></td>

@@ -42,6 +42,11 @@
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
+    <td class="dataLabel">BJCP Competition ID:</td>
+    <td class="data"><input name="contestID" type="text" class="submit" size="10" maxlength="255" value="<?php echo $row_contest_info['contestID']; ?>"></td>
+    <td class="data">&nbsp;</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Hosted By:</td>
     <td class="data"><input name="contestHost" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHost']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>

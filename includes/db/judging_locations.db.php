@@ -9,6 +9,7 @@ $row_judging = mysql_fetch_assoc($judging);
 $totalRows_judging = mysql_num_rows($judging); 
 
 // Separate connections for selected queries that are housed on the same page.
+// ********************* Should be replaced with function *********************
 $query_judging1 = "SELECT * FROM judging_locations ORDER BY judgingDate,judgingLocName";
 $judging1 = mysql_query($query_judging1, $brewing) or die(mysql_error());
 $row_judging1 = mysql_fetch_assoc($judging1);

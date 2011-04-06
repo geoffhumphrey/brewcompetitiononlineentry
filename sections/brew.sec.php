@@ -55,12 +55,8 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
    <td class="dataLabel">Brewer:</td>
    <td class="data">
    <select name="brewBrewerID">
-    <?php do { 
-    //$query_user1 = sprintf("SELECT id FROM users WHERE id = '%s'", $row_brewers['uid']);
-	//$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
-	//$row_user1 = mysql_fetch_assoc($user1);
-     ?>
-   	<option value="<?php echo $row_brewers['uid']."*".$row_brewers['brewerLastName']."*".$row_brewers['brewerFirstName']; ?>" <?php if (($action == "add") && ($filter == $row_brewers['uid'])) echo "SELECTED"; elseif (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['uid'])) echo "SELECTED";  elseif ((($action == "add") && ($filter == "default")) && ($_SESSION['loginUserName'] == $row_brewers['user_name'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
+    <?php do { ?>
+   	<option value="<?php echo $row_brewers['id']."*".$row_brewers['brewerLastName']."*".$row_brewers['brewerFirstName']; ?>" <?php if (($action == "add") && ($filter == $row_brewers['uid'])) echo "SELECTED"; elseif (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['uid'])) echo "SELECTED";  elseif ((($action == "add") && ($filter == "default")) && ($_SESSION['loginUserName'] == $row_brewers['user_name'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
     <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
    </select>
    </td>

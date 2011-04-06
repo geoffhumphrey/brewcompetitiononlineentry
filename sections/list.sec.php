@@ -92,24 +92,15 @@ if ($msg != "default") echo $msg_output;
   	<?php } else { ?>
   	<tr>
     	<td class="dataLabel">Assigned As:</td>
-		<td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?>
-    	<?php if (($row_brewer['brewerAssignment'] == "J") && (strstr($agent, "Firefox/3"))) /* only works in Firefox as of now */ { ?>
-    	<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print your judging scoresheet labels" title="Print your judging scoresheet labels"></span><span class="data"><a href="output/judge_labels.php?id=<?php echo $row_brewer['id']; ?>" target="_blank">Print Your Judging Scoresheet Labels</a></span><span class="data">[Easter Egg for Firefox Users]</span>
-    <ul>
-    	<li>For use with Avery 5160 labels.</li>
-    	<li>Under File &gt; Page Setup:
-      	<ul>
-        	<li>On the Format &amp; Options tab, choose Portrait and 100% scale.</li>
-       	 	<li>On the Margins &amp; Header/Footer tab, set your browser's printing margins to &#8212; Top: 0.2 in., Right: 0 in., Left: 0 in., Bottom: 0 in. and remove <em>all</em> info from the header and footer.</li>
-      	</ul>
-    	</li>
-    		<li>Be sure to restore your previous printing settings once you've finished printing your labels.</li>
-    </ul>
-   	 </p>
-		<?php } ?>
-    	</td>
+		<td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?></td>
   	</tr>
-  	<?php if ($totalRows_judging3 > 1) { ?>
+    <?php if ($row_brewer['brewerAssignment'] == "J") /* only works in Firefox as of now */ { ?>
+    <tr>
+    	<td class="dataLabel">&nbsp;</td>
+		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><span class="data"><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
+  	</tr>
+  	<?php } ?>
+	<?php if ($totalRows_judging3 > 1) { ?>
   	<tr>
     	<td class="dataLabel">Location<?php if ($totalRows_judging > 1) echo "(s)"; ?>:</td>
     	<td class="data">
@@ -295,7 +286,7 @@ if ($totalRows_log > 0) {
   <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
   	<?php } 
   if (greaterDate($today,$deadline)) echo ""; else { ?>
-  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
+  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   <?php } ?>
   </td>
   <?php  } ?>

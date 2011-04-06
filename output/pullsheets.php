@@ -3,6 +3,7 @@ require('output.bootstrap.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
+include(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 

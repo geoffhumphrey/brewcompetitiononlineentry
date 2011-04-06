@@ -1,5 +1,5 @@
 <?php
-if ($phpVersion >= "5") { 
+if ($php_version >= "5") { 
 
 include ('includes/beerXML/input_beer_xml.inc.php');
 //Mmaximum file size.
@@ -89,6 +89,6 @@ else
 	<div id="header-inner"><h1>Import Beer XML File</h1></div>
 </div>
 <div class="error">Your server's version of PHP does not support the BeerXML import feature.</div>
-<p>PHP version 5.x is required &mdash; this server is running PHP version <?php echo $phpVersion; ?>.</p>
+<p>PHP version 5.x is required &mdash; this server is running PHP version <?php echo $php_version; ?>.</p>
 <?php } ?>
 

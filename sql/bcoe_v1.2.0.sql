@@ -733,7 +733,7 @@ ALTER TABLE `judging_locations` ADD `judgingRounds` INT( 11 ) NULL DEFAULT '1' C
 
 ALTER TABLE `contest_info` ADD `contestEntryFeePassword` VARCHAR( 255 ) NULL ;
 ALTER TABLE `contest_info` ADD `contestEntryFeePasswordNum` INT( 11 ) NULL ;
-
+ALTER TABLE `contest_info` ADD `contestID` VARCHAR( 11 ) NULL ;
 
 ALTER TABLE `preferences` ADD `prefsCompOrg` CHAR( 1 ) NULL; 
 UPDATE `preferences` SET `prefsCompOrg` = 'Y' WHERE `preferences`.`id` =1;
@@ -741,5 +741,4 @@ UPDATE `preferences` SET `prefsCompOrg` = 'Y' WHERE `preferences`.`id` =1;
 ALTER TABLE `brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this participant receives a discount';
 ALTER TABLE `brewer` DROP `brewerJudgeLocation2` ; 
 ALTER TABLE `brewer` DROP `brewerStewardLocation2` ;
-ALTER TABLE `brewer` ADD `brewerJudgeAssignedTable` VARCHAR (255) NULL COMMENT 'Array of judging_tables ids';
-ALTER TABLE `brewer` ADD `brewerStewardAssignedTable` VARCHAR (255) NULL COMMENT 'Array of judging_tables ids';
+ALTER TABLE `brewer` ADD `brewerJudgeBOS` CHAR ( 1 ) NULL COMMENT 'Y if judged in BOS round';

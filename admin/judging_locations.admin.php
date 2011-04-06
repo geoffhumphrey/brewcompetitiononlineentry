@@ -1,6 +1,51 @@
 <?php 
+/**
+ * Module:      judging_locations.admin.php
+ * Description: This module houses all participant (brewer) related functionality
+ *              involved in assigning participants a role - judge, steward, staff.
+ *              Also provids judging location related functions - add, edit, delete.
+ *
+ */
+
 include(DB.'brewer.db.php');
 include(DB.'judging_locations.db.php'); 
+
+// Page specific functions
+
+function brewer_assignment($a,$method){ 
+	switch($method) {
+	case "1": // 
+		if ($a == "J") $r = "Judge"; 
+		elseif ($a == "S") $r = "Steward"; 
+		elseif ($a == "X") $r = "Staff";  
+		else $r = "Not Set";
+	break;
+	case "2": // for $filter URL variable
+		if ($a == "judges") $r = "J"; 
+		elseif ($a == "stewards") $r = "S"; 
+		elseif ($a == "staff") $r = "X";
+		elseif ($a == "bos") $r = "Y";
+		else $r = "";
+	break;
+	case "3": // for $filter URL variable
+		if ($a == "judges") $r = "Judges"; 
+		elseif ($a == "stewards") $r = "Stewards"; 
+		elseif ($a == "staff") $r = "Staff";
+		elseif ($a == "bos") $r = "BOS Judges";
+		else $r = "";
+	break;
+	}
+return $r;
+}
+
+function brewer_assignment_checked($a,$b) {
+	if (($a == "judges") && ($b == "J")) $r = "CHECKED"; 	
+	elseif (($a == "stewards") && ($b == "S")) $r = "CHECKED";
+	elseif (($a == "staff") && ($b == "X")) $r = "CHECKED";
+	elseif (($a == "bos") && ($b == "Y")) $r = "CHECKED"; 
+	else $r = "";
+	return $r;
+}
 ?>
 <h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; else echo "";  } else echo "Judging Locations"; ?></h2>
 <?php if (($filter == "default") && ($msg == "9")) { ?>
@@ -8,7 +53,7 @@ include(DB.'judging_locations.db.php');
 <p><a href="<?php if ($section == "step5") echo "setup.php?section=step5"; else echo "index.php?section=admin&amp;go=judging"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step5") echo "setup.php?section=step6"; else echo "index.php?section=admin"; ?>">No</a>
 <?php } else { ?> 
     <?php if ($section == "admin") { ?>
-	<?php if (($action == "update") || ($action == "assign")) { ?><p><?php if ($bid == "default") echo "Choose ".$filter." to assign.";  else echo "Check below which ".$filter." will be assigned to the ".$row_judging['judgingLocName']. " location."; ?></p><?php }?>
+	<?php if (($action == "update") || ($action == "assign")) { ?><p><?php if (($bid == "default") && ($filter != "bos")) echo "Choose ".$filter." to assign.";  elseif ($bid != "default") echo "Check below which ".$filter." will be assigned to the ".$row_judging['judgingLocName']. " location."; elseif ($filter == "bos") echo "Choose the judges that will judge in the Best of Show round(s) and be awarded 0.5 BJCP experience points."; else echo "" ?></p><?php }?>
 <div class="adminSubNavContainer">
    	<?php if (($action == "default") || ($action == "update") || ($action == "assign")) { ?>
     <span class="adminSubNav">
@@ -35,6 +80,9 @@ include(DB.'judging_locations.db.php');
  	</span>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a>
+ 	</span>
+    <span class="adminSubNav">
+    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
  	</span>
 	<?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
     <span class="adminSubNav">
@@ -160,7 +208,7 @@ function checkUncheckAll(theElement) {
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
-			"sDom": 'irtip',
+			"sDom": 'irftip',
 			"bStateSave" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : true,
@@ -175,10 +223,10 @@ function checkUncheckAll(theElement) {
 				<?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
 				{ "asSorting": [  ] },
 				<?php } ?>
-				<?php if ($filter == "judges") { ?>
+				<?php if (($filter == "judges") || ($filter == "bos")) { ?>
 				null,
 				null,
-					<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
+					<?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges"))  { ?>
 				null,
 				null,
 					<?php } ?>
@@ -191,7 +239,7 @@ function checkUncheckAll(theElement) {
 		} );
 	</script>
 <form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=brewer&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
-<p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></p>
+<p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" />&nbsp;<span class="required">Click "<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" <em>before</em> paging through records.</span></p>
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
@@ -201,10 +249,10 @@ function checkUncheckAll(theElement) {
   <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
   <th class="dataHeading bdr1B">Assigned To</th>
   <?php } ?>
-  <?php if ($filter == "judges") { ?>
+  <?php if (($filter == "judges") || ($filter == "bos")) { ?>
   <th class="dataHeading bdr1B">ID</th>
   <th class="dataHeading bdr1B">Rank</th>
-  	<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
+  	<?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
   <th class="dataHeading bdr1B">Likes</th>
   <th class="dataHeading bdr1B">Dislikes</th>
   	<?php } ?>
@@ -216,22 +264,18 @@ function checkUncheckAll(theElement) {
   <tbody>
   <?php 
  	do { 
-		/* if ($filter == "judges") $query_judging_loc = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
-		if ($filter == "stewards") $query_judging_loc = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
-		$judging_loc = mysql_query($query_judging_loc, $brewing) or die(mysql_error());
-		$row_judging_loc = mysql_fetch_assoc($judging_loc);
-		$totalRows_judging_loc = mysql_num_rows($judging_loc);
-		*/
+	if ($filter == "bos") $assignment = $row_brewer['brewerJudgeBOS'];
+	else $assignment = $row_brewer['brewerAssignment'];
  ?>
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_brewer['id']; ?>" />
   <?php if ($bid == "default") { ?>
-  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="<?php if ($filter == "judges") echo "J"; if ($filter == "stewards") echo "S"; ?>" <?php if (($filter == "judges") && ($row_brewer['brewerAssignment'] == "J")) echo "CHECKED"; if (($filter == "stewards") && ($row_brewer['brewerAssignment'] == "S")) echo "CHECKED"; ?>></td>
+  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="<?php echo brewer_assignment($filter,"2"); ?>" <?php echo brewer_assignment_checked($filter,$assignment); ?>></td>
   <?php } else { ?>
   <td width="1%" class="dataList"><input name="<?php if ($filter == "judges") echo "brewerJudgeAssignedLocation".$row_brewer['id']; if ($filter == "stewards") echo "brewerStewardAssignedLocation".$row_brewer['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if (($filter == "judges") && strstr($row_brewer['brewerJudgeAssignedLocation'], $bid)) echo "CHECKED"; if (($filter == "stewards") && strstr($row_brewer['brewerStewardAssignedLocation'], $bid)) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td width="10%" class="dataList"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
-  <td width="5%" class="dataList"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
+  <td width="5%" class="dataList"><?php echo brewer_assignment($row_brewer['brewerAssignment'],"1"); ?></td>
   <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
   <td width="15%" class="dataList">
   <?php if ((($row_brewer['brewerAssignment'] == "J") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignment'] == "S") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>
@@ -253,12 +297,11 @@ function checkUncheckAll(theElement) {
 		?>
     	</table>
 		<?php } else echo "Not Set"; ?>
-  
   </td>
-  <?php } if ($filter == "judges") { ?>
+  <?php } if (($filter == "judges") || ($filter == "bos")) { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; ?></td>
-  <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
+  <?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']) ?></td>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']) ?></td>
   <?php } ?>
@@ -290,16 +333,21 @@ function checkUncheckAll(theElement) {
   <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
 </tbody>
 </table>
-<p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") { echo "Assign as "; if ($filter == "judges") echo "Judges"; else echo "Stewards"; } else echo "Submit"; ?>" /></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" />&nbsp;<span class="required">Click "<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" <em>before</em> paging through records.</span></p>
+<input type="hidden" name="relocate" value="<?php echo relocate($current_page,"default"); ?>">
 </form>
-<?php } else { if ($action == "update") echo "<div class='error'>No participants have been assigned as a ".rtrim($filter, "s").".</div>"; else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; } ?>
+<?php } else { if ($action == "update") echo "<div class='error'>No $filter have been assigned.</div>"; else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; } ?>
 <?php } // end if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) ?>
- 
+
+
+
+
+
+
 <?php if (($action == "update") && ($bid == "default")) {  ?>
 <table>
  <tr>
-   <td class="dataLabel">Assign <?php if ($filter == "judges") echo "Judges"; if ($filter == "stewards") echo "Stewards"; ?> To:</td>
+   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3"); ?> To:</td>
    <td class="data">
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
@@ -311,3 +359,4 @@ function checkUncheckAll(theElement) {
 </tr>
 </table>
 <?php } // end if (($action == "update") && ($bid == "default")) ?>
+<?php } ?>
