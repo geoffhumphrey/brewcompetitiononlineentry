@@ -40,6 +40,10 @@ if ($go == "judging_scores_bos") {
 		} // end if ($action == "default);
 	
 	if ($action != "default") {
+		$query_style_types = "SELECT * FROM style_types";
+		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+		$row_style_types = mysql_fetch_assoc($style_types);
+		
 		$query_enter_bos = "SELECT * FROM judging_scores";
 		if ($row_style_type['styleTypeBOSMethod'] == "1") $query_enter_bos .= " WHERE scoreType='$filter' AND scorePlace='1'";
 		if ($row_style_type['styleTypeBOSMethod'] == "2") $query_enter_bos .= " WHERE scoreType='$filter' AND (scorePlace='1' OR scorePlace='2')";

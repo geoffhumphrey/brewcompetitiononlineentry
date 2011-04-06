@@ -529,7 +529,7 @@ function unassign($bid,$location,$round,$table_id) {
 <?php do { ?>
 	<tr> 
     	<td nowrap="nowrap"><?php echo $row_brewer['id']." - "; ?><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
-        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank']); ?></td>
+        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); ?></td>
         <td nowrap="nowrap"><?php if (($row_brewer['brewerJudgeID'] != "") && ($row_brewer['brewerJudgeID'] != "0")) echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
         <input type="hidden" name="bid[]" value="<?php echo $row_brewer['id']; ?>" />
         <input type="hidden" name="assignTable<?php echo $row_brewer['id']; ?>" value="<?php echo $id; ?>" />

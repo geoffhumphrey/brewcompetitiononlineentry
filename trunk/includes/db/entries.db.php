@@ -1,5 +1,5 @@
 <?php
-$totalRows_entry_count = total_paid_received();
+$totalRows_entry_count = total_paid_received($go,"default");
 if ($section == "list") { 
 	$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']); 
 	$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y'"; 

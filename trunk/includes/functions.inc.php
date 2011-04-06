@@ -1,37 +1,22 @@
 <?php
-$phpVersion = phpversion();
+/**
+ * Module:      functions.inc.php
+ * Description: This module houses all site-wide function definitions. If a function
+ *              or variable is called from more than 2 modules, it is housed here.
+ *
+ */
+ 
+$php_version = phpversion();
 $today = date('Y-m-d');
-$agent = $_SERVER['HTTP_USER_AGENT'];
+$current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 
 $pg = "default";
 if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
 }
 
-function check_setup() {
-	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
-	$setup = mysql_query($query_setup, $brewing);
-	$row_setup = mysql_fetch_assoc($setup);
-	$totalRows_setup = $row_setup['count'];
-
-	$query_setup1 = "SELECT COUNT(*) as 'count' FROM contest_info";
-	$setup1 = mysql_query($query_setup1, $brewing);
-	$row_setup1 = mysql_fetch_assoc($setup1);
-	$totalRows_setup1 = $row_setup1['count'];
-
-	$query_setup2 = "SELECT COUNT(*) as 'count' FROM preferences";
-	$setup2 = mysql_query($query_setup2, $brewing);
-	$row_setup2 = mysql_fetch_assoc($setup2);
-	$totalRows_setup2 = $row_setup2['count'];
-
-	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
-	else return false;
-}
-
 function relocate($referer,$page) {
-	// determine if referrer has any msg=X variables attached
+	// determine if referrer has any msg=X or id=X variables attached and remove
 	if (strstr($referer,"&msg")) { 
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
@@ -656,12 +641,13 @@ function total_not_paid_brewer($bid) {
 	return $total_not_paid;
 }
 
-function total_paid_received() {
+function total_paid_received($go,$id) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
 	$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
 	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
+	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	mysql_free_result($result);
@@ -1001,6 +987,16 @@ function style_type($type,$method,$source) {
 		$row_style_type = mysql_fetch_assoc($style_type);
 		$type = $row_style_type['styleTypeName'];
 	}
+	
+	if ($method == "3") { 
+		include(CONFIG.'config.php');
+		mysql_select_db($database, $brewing);
+		
+		$query_style_type = "SELECT styleTypeName FROM style_types WHERE id='$type'"; 
+		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+		$row_style_type = mysql_fetch_assoc($style_type);
+		$type = $row_style_type['styleTypeName'];
+	}
 	return $type;
 }
 
@@ -1193,31 +1189,48 @@ function orphan_styles() {
 }
 
 
-function bjcp_rank($rank) {
-    switch($rank) {
-		case "Apprentice": $return = "Level 1:";
-		break;
-		case "Recognized": $return = "Level 2:";
-		break;
-		case "Certified": $return = "Level 3:";
-		break;
-		case "National": $return = "Level 4:";
-		break;
-		case "Master": $return = "Level 5:";
-		break;
-		case "Grand Master": $return = "Level 6:";
-		break;
-		case "Honorary Master": $return = "Level 5:";
-		break;
-		case "Honorary Grand Master": $return = "Level 6:";
-		break;
-		case "Experienced": $return = "Level 0:";
-		break;
-		case "Professional Brewer": $return = "Level 2:";
-		break;
-		default: $return = "";
-	}
+function bjcp_rank($rank,$method) {
+    if ($method == "1") {
+		switch($rank) {
+			case "Apprentice": $return = "Level 1:";
+			break;
+			case "Recognized": $return = "Level 2:";
+			break;
+			case "Certified": $return = "Level 3:";
+			break;
+			case "National": $return = "Level 4:";
+			break;
+			case "Master": $return = "Level 5:";
+			break;
+			case "Grand Master": $return = "Level 6:";
+			break;
+			case "Honorary Master": $return = "Level 5:";
+			break;
+			case "Honorary Grand Master": $return = "Level 6:";
+			break;
+			case "Experienced": $return = "Level 0:";
+			break;
+			case "Professional Brewer": $return = "Level 2:";
+			break;
+			default: $return = "";
+		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
+	}
+	
+	if ($method == "2") {
+		switch($rank) {
+			case "None": $return = "Experienced Judge";
+			break;
+			case "": $return = "Experienced Judge";
+			break;
+			case "Professional Brewer": $return = $rank;
+			break;
+			case "Experienced": $return = $rank." Judge";
+			break;
+			default: $return = "BJCP ".$rank." Judge";
+		}
+	}
+	
 	return $return;
 }
 
@@ -1226,37 +1239,37 @@ function srm_color($srm,$method) {
 	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
 	
     if ($srm >= 01 && $srm < 02) $return = "#f3f993";
-elseif ($srm >= 02 && $srm < 03) $return = "#f5f75c";
-elseif ($srm >= 03 && $srm < 04) $return = "#f6f513";
-elseif ($srm >= 04 && $srm < 05) $return = "#eae615";
-elseif ($srm >= 05 && $srm < 06) $return = "#e0d01b";
-elseif ($srm >= 06 && $srm < 07) $return = "#d5bc26";
-elseif ($srm >= 07 && $srm < 08) $return = "#cdaa37";
-elseif ($srm >= 08 && $srm < 09) $return = "#c1963c";
-elseif ($srm >= 09 && $srm < 10) $return = "#be8c3a";
-elseif ($srm >= 10 && $srm < 11) $return = "#be823a";
-elseif ($srm >= 11 && $srm < 12) $return = "#c17a37";
-elseif ($srm >= 12 && $srm < 13) $return = "#bf7138";
-elseif ($srm >= 13 && $srm < 14) $return = "#bc6733";
-elseif ($srm >= 14 && $srm < 15) $return = "#b26033";
-elseif ($srm >= 15 && $srm < 16) $return = "#a85839";
-elseif ($srm >= 16 && $srm < 17) $return = "#985336";
-elseif ($srm >= 17 && $srm < 18) $return = "#8d4c32";
-elseif ($srm >= 18 && $srm < 19) $return = "#7c452d";
-elseif ($srm >= 19 && $srm < 20) $return = "#6b3a1e";
-elseif ($srm >= 20 && $srm < 21) $return = "#5d341a";
-elseif ($srm >= 21 && $srm < 22) $return = "#4e2a0c";
-elseif ($srm >= 22 && $srm < 23) $return = "#4a2727";
-elseif ($srm >= 23 && $srm < 24) $return = "#361f1b";
-elseif ($srm >= 24 && $srm < 25) $return = "#261716";
-elseif ($srm >= 25 && $srm < 26) $return = "#231716";
-elseif ($srm >= 26 && $srm < 27) $return = "#19100f";
-elseif ($srm >= 27 && $srm < 28) $return = "#16100f";
-elseif ($srm >= 28 && $srm < 29) $return = "#120d0c";
-elseif ($srm >= 29 && $srm < 30) $return = "#100b0a";
-elseif ($srm >= 30 && $srm < 31) $return = "#050b0a";
-elseif ($srm > 31) $return = "#000000";
-  else $return = "#ffffff";
+	elseif ($srm >= 02 && $srm < 03) $return = "#f5f75c";
+	elseif ($srm >= 03 && $srm < 04) $return = "#f6f513";
+	elseif ($srm >= 04 && $srm < 05) $return = "#eae615";
+	elseif ($srm >= 05 && $srm < 06) $return = "#e0d01b";
+	elseif ($srm >= 06 && $srm < 07) $return = "#d5bc26";
+	elseif ($srm >= 07 && $srm < 08) $return = "#cdaa37";
+	elseif ($srm >= 08 && $srm < 09) $return = "#c1963c";
+	elseif ($srm >= 09 && $srm < 10) $return = "#be8c3a";
+	elseif ($srm >= 10 && $srm < 11) $return = "#be823a";
+	elseif ($srm >= 11 && $srm < 12) $return = "#c17a37";
+	elseif ($srm >= 12 && $srm < 13) $return = "#bf7138";
+	elseif ($srm >= 13 && $srm < 14) $return = "#bc6733";
+	elseif ($srm >= 14 && $srm < 15) $return = "#b26033";
+	elseif ($srm >= 15 && $srm < 16) $return = "#a85839";
+	elseif ($srm >= 16 && $srm < 17) $return = "#985336";
+	elseif ($srm >= 17 && $srm < 18) $return = "#8d4c32";
+	elseif ($srm >= 18 && $srm < 19) $return = "#7c452d";
+	elseif ($srm >= 19 && $srm < 20) $return = "#6b3a1e";
+	elseif ($srm >= 20 && $srm < 21) $return = "#5d341a";
+	elseif ($srm >= 21 && $srm < 22) $return = "#4e2a0c";
+	elseif ($srm >= 22 && $srm < 23) $return = "#4a2727";
+	elseif ($srm >= 23 && $srm < 24) $return = "#361f1b";
+	elseif ($srm >= 24 && $srm < 25) $return = "#261716";
+	elseif ($srm >= 25 && $srm < 26) $return = "#231716";
+	elseif ($srm >= 26 && $srm < 27) $return = "#19100f";
+	elseif ($srm >= 27 && $srm < 28) $return = "#16100f";
+	elseif ($srm >= 28 && $srm < 29) $return = "#120d0c";
+	elseif ($srm >= 29 && $srm < 30) $return = "#100b0a";
+	elseif ($srm >= 30 && $srm < 31) $return = "#050b0a";
+	elseif ($srm > 31) $return = "#000000";
+  	else $return = "#ffffff";
 return $return;
 }
 
@@ -1284,10 +1297,10 @@ function getContacts() {
 function brewer_info($bid) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID FROM brewer WHERE id='%s'", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS FROM brewer WHERE id='%s'", $bid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID'];
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS'];
 	return $r;
 }
 
@@ -1300,7 +1313,23 @@ function get_entry_count() {
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
 	return $r;
+}
 
+function display_place($place) {
+	switch($place){
+		case "1": $place = "1st";
+		break;
+		case "2": $place = "2nd";
+		break;
+		case "3": $place = "3rd";
+		break;
+		case "4": $place = "4th";
+		break;
+		case "5": $place = "HM";
+		break;
+		default: $place = "N/A";
+	}
+	return $place;
 }
 
 ?>

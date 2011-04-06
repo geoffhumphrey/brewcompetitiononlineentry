@@ -2,9 +2,10 @@
 include(DB.'brewer.db.php');
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
+include(DB.'styles.db.php'); 
 if ($section != "step2") {
 mysql_select_db($database, $brewing);
-$query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $filter); 
+$query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $id); 
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 $totalRows_brewerID = mysql_num_rows($brewerID);

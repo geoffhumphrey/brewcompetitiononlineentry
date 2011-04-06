@@ -216,7 +216,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
         <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if ($row_scores['id'] != "") echo "Y"; else echo "N"; ?>" />
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $row_entries['id']; ?>" />
-        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $row_entries['brewBrewerID']; ?>" />
+        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
         <?php if ($row_scores['id'] != "") { ?>
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $row_scores['id']; ?>" />

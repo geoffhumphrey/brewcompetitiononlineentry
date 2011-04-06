@@ -97,6 +97,12 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <li><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
     <li><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
 </ul>
+<p class="admin_default_header">Assign&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
+<ul class="admin_default">
+	<li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
+	<li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
+    <li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
+</ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/arrow_refresh.png"  /></span>Sorting Received Entries</p>
 <div class="toggle_container">
@@ -107,7 +113,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </ul>
 <ul class="admin_default">
     <li>Mark Entries as Paid/Received for Category:</li>
-    <li><?php echo style_choose($section,"entries",$action,$filter); ?></li>
+    <li><?php echo style_choose($section,"entries",$action,$filter,"index.php","none"); ?></li>
 </ul>
 <p class="admin_default_header">Add&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
@@ -116,7 +122,10 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </ul>
 <p class="admin_default_header">Print&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;filter=bottle&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800">Bottle Labels</a></li>
+	<li>Bottle Labels (Avery 5160) - Download PDF:</li>
+    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">All Categories</a></li>
+	<li>For Category:</li>
+	<li><?php echo style_choose($section,"entries","bottle",$filter,"output/labels.php","none"); ?></li>
 </ul>
 </div>
 <p class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</p>
@@ -169,6 +178,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
   	<?php if ($totalRows_tables > 1) { ?>
 <ul class="admin_default">
     <li><a href="index.php?section=admin&amp;go=judging_tables&amp;action=assign">Judges or Stewards to a Table</a></li>
+    <li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a></li>
 </ul>
   	<?php } ?>
   <?php } ?>
@@ -196,8 +206,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 <div class="toggle_container">
 <p class="admin_default_header">Before Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-	<li>Pullsheets</li>
-    <li>&#9654;</li>
+	<li>Print Pullsheets:</li>
     <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print All Table Pullsheets">All Tables</a></li>
     <li>
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
@@ -209,8 +218,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     </li>
 </ul>
 <ul class="admin_default">
-	<li>Table Cards</li>
-    <li>&#9654;</li>
+	<li>Print Table Cards:</li>
     <li><a class="thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Pullsheets by Table">All Tables</a></li>
     <li>
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
@@ -222,8 +230,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     </li>
 </ul>
 <ul class="admin_default">
-	<li>Judge Assignments</li>
-    <li>&#9654;</li>
+	<li>Print Judge Assignments:</li>
     <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
     <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Judge Assignments by Table">By Table</a></li>
     <?php if ($totalRows_judging > 1) { ?>
@@ -231,8 +238,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     <?php } ?>
 </ul>
 <ul class="admin_default">
-	<li>Steward Assignments</li>
-    <li>&#9654;</li>
+	<li>Print Steward Assignments:</li>
     <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
     <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print Steward Assignments by Table">By Table</a></li>
     <?php if ($totalRows_judging > 1) { ?>
@@ -240,17 +246,15 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 	<?php } ?>
 </ul>
 <ul class="admin_default">
-	<li>Sign-in Sheets</li>
-    <li>&#9654;</li>
-   	<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print a Judge Sign-in Sheet">Judges</a></li>   
+	<li>Print Sign-in Sheets:</li>
+    <li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print a Judge Sign-in Sheet">Judges</a></li>   
 	<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
 </ul>
 <p class="admin_default_header">During Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-    <li>BOS Pullsheets 
+    <li>Print BOS Pullsheets:
     	<ul>
-        	<li>&#9654;</li>
-            <li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print All BOS Pullsheets">All</a></li>
+        	<li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Print All BOS Pullsheets">All</a></li>
     	  <?php do { ?>
           	<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
           <?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
@@ -259,40 +263,36 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
 </ul>
 <p class="admin_default_header">After Judging&nbsp;<a href="" alt="Get Help" title="Get Help"><span class="icon"><img src="images/help.png"  /></span></a></p>
 <ul class="admin_default">
-    <li><a href="">Results by Table with BOS(s)</a>
-    	<ul>
-        	<li>&#9654;</li>
-        	<li><a href="output/results.php?section=admin&amp;go=judging_scores&amp;filter=all&amp;view=pdf">PDF</a></li>
-        	<li><a href="output/results.php?section=admin&amp;go=judging_scores&amp;filter=all&amp;view=html">HTML</a></li>
-       	</ul>
-    </li>
+    <li>Results Report by Table (with Scores):</li>
+    <li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+    <li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
 </ul>
 <ul class="admin_default">
-    <li><a href="">BOS Round(s) Only</a>
-    	<ul>
-        	<li>&#9654;</li>
-        	<li><a href="output/results.php?section=admin&amp;go=judging_scores&amp;filter=bos&amp;view=pdf">PDF</a></li>
-        	<li><a href="output/results.php?section=admin&amp;go=judging_scores&amp;filter=bos&amp;view=html">HTML</a></li>
-       	</ul>
-    </li>
+    <li>Results Report by Table (without Scores):</li>
+    <li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+    <li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
+    <li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>
+    <li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html">Download HTML (Winners Only)</a></li>
 </ul>
 <ul class="admin_default">
-    <li><a href="">Judge/Steward/Staff Points</a>
-    	<ul>
-        	<li>&#9654;</li>
-        	<li><a href="">PDF</a></li>
-            <li><a href="">HTML</a></li>
-        	<li><a href="">XML</a></li>
-       	</ul>
-    </li>
+    <li>BOS Round(s) Results Report:</li>
+    <li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="BOS Round(s) Results Report">Print</a></li>
+	<li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
+    <li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">Download HTML</a></li>	
 </ul>
 <ul class="admin_default">
-    <li>Participant Address Labels
-    	<ul>
-        	<li>&#9654;</li>
-        	<li><a href="output/labels.php?section=admin&amp;go=participants&amp;filter=address&amp;view=pdf">PDF</a></li>
-       	</ul>
-    </li>
+    <li>BJCP Judge/Steward/Staff Points Report:</li>
+    <li><a class="thickbox" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="BJCP Judge/Steward/Staff Points Report">Print</a></li>
+    <li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
+    <li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Download XML</a></li>
+</ul>
+<ul class="admin_default">
+    <li>Award Labels (Avery 5160):</li>
+    <li><a href="output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Download PDF</a></li>
+</ul>
+<ul class="admin_default">
+    <li>Participant Address Labels (Avery 5160):</li>
+    <li><a href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Download PDF</a></li>
 </ul>
 <ul class="admin_default">
     <li><a href="">Generate a Link to Results</a> (for posting to a website, blog, Facebook, etc.)</li>

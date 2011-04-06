@@ -370,23 +370,27 @@ padding: .5em .5em .5em .5em;
 }
 
 .table_card {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
-	margin: 0 0 400px 0;
 }
 
 .table_card h1 {
 	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
-	font-size: 6em;
+	font-size: 8em;
 	margin: 0;
-	padding: 3em 0 0 0;
+	padding: 0;
+	text-align: center;
 }
 
 .table_card h2 {
 	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
 	font-style: italic;
-	font-size: 4em;
+	font-size: 3em;
 	margin: 0;
 	padding: 0;
+	text-align: center;
 }
 
 .table_card h3 {
@@ -394,6 +398,7 @@ padding: .5em .5em .5em .5em;
 	font-size: 2em;
 	margin: 0;
 	padding: 0;
+	text-align: center;
 }
 
 .table_card h4 {
@@ -401,4 +406,31 @@ padding: .5em .5em .5em .5em;
 	font-size: 1.5em;
 	margin: 0;
 	padding: 1em 0;
+	text-align: center;
+}
+
+.table_card .dataTable {
+	width: 100%;
+	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-size: 1.3em;
+	margin: 1em 0;
+	border-collapse: collapse;
+}
+
+.table_card .dataTable th {
+	display: none;
+}
+
+.table_card .dataTable td {
+	text-align: left;
+	padding: 10px 5px;
+}
+
+.table_card hr {
+	border: 0;
+	color: #000000;
+	background-color: #000000;
+	height: 1px;
+	width: 100%;
+	margin: 2.25em 0 2.25em 0;
 }

@@ -47,7 +47,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 </div>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-    <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter); ?></span>
+    <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,"index.php","none"); ?></span>
 </div>
 <?php } ?>
 <?php if ($dbTable == "default") { ?>

@@ -1,10 +1,13 @@
 <?php 
+session_start(); 
 require('output.bootstrap.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
+include(INCLUDES.'scrubber.inc.php');
+
 include_once(INCLUDES.'tbs_class_php5.php');
 
 mysql_select_db($database, $brewing);
@@ -17,7 +20,7 @@ $query_brewing = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);
 $log = mysql_query($query_brewing, $brewing) or die(mysql_error());
 $brewing_info = mysql_fetch_assoc($log);
 
-$query_brewer_user = sprintf("SELECT * FROM users WHERE id = '%s'", $brewing_info['brewBrewerID']);
+$query_brewer_user = sprintf("SELECT * FROM users WHERE id = '%s'", $bid);
 $user = mysql_query($query_brewer_user, $brewing) or die(mysql_error());
 $row_brewer_user_info = mysql_fetch_assoc($user);
 
@@ -25,7 +28,7 @@ $query_logged_in = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSI
 $logged_in_user = mysql_query($query_logged_in, $brewing) or die(mysql_error());
 $row_logged_in_user = mysql_fetch_assoc($logged_in_user);
 
-$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_brewer_user_info['id']);
+$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $bid);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $brewer_info = mysql_fetch_assoc($brewer);
 
@@ -41,6 +44,13 @@ if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
   echo "</body>";
   exit();
 }
+
+$brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
+$brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove);
+$brewer_info['brewerAddress'] = strtr($brewer_info['brewerAddress'],$html_remove);
+$brewer_info['brewerCity'] = strtr($brewer_info['brewerCity'],$html_remove);
+$brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);
+$brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
 
 // Get some values that are easier to work with in the templates
 $brewing_info['carbonation'] = 'unknown';
