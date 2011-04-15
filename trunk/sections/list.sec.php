@@ -79,7 +79,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
@@ -116,7 +116,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}
@@ -142,7 +142,7 @@ if ($msg != "default") echo $msg_output;
     	<td class="dataLabel">Categories Preferred:</td>
     	<td class="data">
 		<?php 
-		if ($row_brewer['brewerJudgeLikes'] != "") echo rtrim(displayArrayContent(style_convert($row_brewer['brewerJudgeLikes'],4),2),", ");
+		if ($row_brewer['brewerJudgeLikes'] != "") echo rtrim(display_array_content(style_convert($row_brewer['brewerJudgeLikes'],4),2),", ");
 	    else echo "N/A";		
 		?>
         </td>
@@ -151,7 +151,7 @@ if ($msg != "default") echo $msg_output;
     	<td class="dataLabel">Catagories Not Preferred:</td>
     	<td class="data">
         <?php 
-		if ($row_brewer['brewerJudgeDislikes'] != "") echo rtrim(displayArrayContent(style_convert($row_brewer['brewerJudgeDislikes'],4),2),", "); 
+		if ($row_brewer['brewerJudgeDislikes'] != "") echo rtrim(display_array_content(style_convert($row_brewer['brewerJudgeDislikes'],4),2),", "); 
 	    else echo "N/A";		
 		?>
         </td>
@@ -177,7 +177,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
@@ -243,9 +243,10 @@ if ($totalRows_log > 0) {
 			"aoColumns": [
 				null,
 				null,
+				null,
 				<?php if ($action != "print") { ?>
 				<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				<?php } ?>
   				<?php } ?>
 				]

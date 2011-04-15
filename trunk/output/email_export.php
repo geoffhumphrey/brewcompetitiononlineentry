@@ -32,10 +32,12 @@ function parseCSVComments($comments) {
 }
 
 mysql_select_db($database, $brewing);
-$query_sql = "SELECT brewerFirstName, brewerLastName, brewerEmail FROM brewer";
-if (($filter == "judges") && ($section == "all"))   $query_sql .= " WHERE brewerAssignment='J'";
+$query_sql = "SELECT brewerFirstName, brewerLastName, brewerEmail"; 
+if ($filter == "judges") $query_sql .= ", brewerJudgeLikes, brewerJudgeDislikes";
+$query_sql .= " FROM brewer";
+if (($filter == "judges") && ($section == "default"))   $query_sql .= " WHERE brewerAssignment='J'";
 if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
-if (($filter == "stewards") && ($section == "all")) $query_sql .= " WHERE brewerAssignment='S'";
+if (($filter == "stewards") && ($section == "default")) $query_sql .= " WHERE brewerAssignment='S'";
 if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $numberFields = mysql_num_fields($sql); // Find out how many fields we are fetching

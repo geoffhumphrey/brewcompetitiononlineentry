@@ -31,7 +31,7 @@
 </table>
 <input type="hidden" name="contactPosition" value="Competition Coordinator" />
 <?php } ?>
-<?php if (($section != "step4") && (getContactCount() == 0)) { ?>
+<?php if (($section != "step4") && (get_contact_count() == 0)) { ?>
 <div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="index.php?section=admin&go=contacts">add a contact</a>?</div>
 <?php } ?>
 <h3>General</h3>

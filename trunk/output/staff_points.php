@@ -477,7 +477,7 @@ if ($view == "default") { // printing from browser ?>
     <h2>Staff</h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable3').dataTable( {
+		$('#sortable99').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -492,7 +492,7 @@ if ($view == "default") { // printing from browser ?>
 			} );
 		} );
 	</script>
-    <table class="dataTable" id="sortable3">
+    <table class="dataTable" id="sortable99">
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="35%">Name</th>

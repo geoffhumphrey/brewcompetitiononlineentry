@@ -111,7 +111,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                 </select>
             </td>
-            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo dateconvert($row_stewarding['judgingDate'], 3)." - ".$row_stewarding['judgingTime'].")"; ?></td>
+            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo date_convert($row_stewarding['judgingDate'], 3)." - ".$row_stewarding['judgingTime'].")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
@@ -137,7 +137,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 				<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
       		</select>
             </td>
-            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo dateconvert($row_judging3['judgingDate'], 3)." - ".$row_judging3['judgingTime'].")"; ?></td>
+            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo date_convert($row_judging3['judgingDate'], 3)." - ".$row_judging3['judgingTime'].")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>

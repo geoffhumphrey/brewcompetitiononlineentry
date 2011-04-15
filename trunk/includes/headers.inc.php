@@ -1,12 +1,21 @@
 <?php
-// Output headers and messages based upon the $section URL variable.
+
+/**
+ * Module:      headers.inc.php
+ * Description: This module defines all header text for the application based
+ *              upon URL variables.
+ * 
+ */
 
 switch($section) {
 	
 	case "default":
 	$header_output = $row_contest_info['contestName'];
-	if ($msg == "success") $output = "Setup was successful.";
-	$output_extend = "<p class='info'>Log in using the admin user you just created and go to the <em>Admin</em> menu in the navigation bar above to further customize your competition's site.</p>"; 
+	if ($msg == "success") { 
+		$output = "Setup was successful.";
+		$output_extend = "<p class='info'>Log in using the admin user you just created and go to the <em>Admin</em> menu in the navigation bar above to further customize your competition's site.</p>"; 
+	}
+	if ($msg == "2") $output = "Info edited successfully."; 
 	break;
 
 	case "user":
@@ -42,7 +51,7 @@ switch($section) {
 	if     ($msg == "1") { $output = "Sorry, there was a problem with your last login attempt."; $output_extend = "<p>Please make sure your email address and password are correct.</p>"; }
 	elseif ($msg == "2") { $output = "Your password has been randomly generated and reset to ".$go."."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
 	elseif ($msg == "3") $output = "You have been logged out. Log in again?"; 
-	elseif ($msg == "4") $output = "Your verification question does not match what's in the database. Please try again."; 
+	elseif ($msg == "4") $output = "Your verification question does not match what is in the database. Please try again."; 
 	else $output = ""; 
 	break;
 	
@@ -77,7 +86,7 @@ switch($section) {
 	
 	case "brew":
 	if ($action == "add") $header_output = "Add an Entry"; 
-	else $header_output = "Edit a Entry";
+	else $header_output = "Edit an Entry";
 	if ($msg == "1") $output = "This entry's style requires more information. Please specify its special ingredients or classic style.";
 	else $output = "";
 	break;

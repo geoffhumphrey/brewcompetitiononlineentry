@@ -11,7 +11,7 @@ if (!isset($_SESSION["loginUsername"])) { session_start(); }
 	<td class="data bdr1T" width="25%">
     <select name="to">
     	<?php 
-    		$contacts = getContacts();
+    		$contacts = get_contacts();
     		 while ($row_contact = mysql_fetch_assoc($contacts)) 
     		 { 
     		?>

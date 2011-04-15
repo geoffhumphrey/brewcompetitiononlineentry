@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Module: archive.inc.php
+ * Module:      archive.inc.php
  * Description: This module takes the current database tables and renames them 
  *              for archiving purposes so that data is still available.
  */
@@ -17,18 +17,17 @@ session_start();
 $suffix = strtr($_POST['archiveSuffix'], $space_remove);
 mysql_select_db($database, $brewing);
 
-$query_suffixCheck = sprintf("SELECT archiveSuffix FROM archive WHERE archiveSuffix = '%s'", $suffix);
-$suffixCheck = mysql_query($query_suffixCheck, $brewing) or die(mysql_error());
-$row_suffixCheck = mysql_fetch_assoc($suffixCheck);
-$totalRows_suffixCheck = mysql_num_rows($suffixCheck);
+$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM archive WHERE archiveSuffix = '%s'", $suffix);
+$suffix_check = mysql_query($query_suffix_check, $brewing) or die(mysql_error());
+$row_suffix_check = mysql_fetch_assoc($suffix_check);
 
-if ($totalRows_suffixCheck > 0) { 
+if ($row_suffix_check['count'] > 0) { 
 header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=6");
 } 
 
 else {
 
-// First, need to gather current User's information from the current "users" AND current "brewer" tables and store in variables
+// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
 mysql_select_db($database, $brewing);
 $query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
 $user = mysql_query($query_user, $brewing) or die(mysql_error());
@@ -44,10 +43,10 @@ $query_name = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $_SESSION["
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 
-  $brewerFirstName = $row_name['brewerFirstName'];
-  $brewerLastName = $row_name['brewerLastName'];
-  $brewerAddress = $row_name['brewerAddress'];
-  $brewerCity = $row_name['brewerCity'];
+  $brewerFirstName = strtr($row_name['brewerFirstName'],$html_string);
+  $brewerLastName = strtr($row_name['brewerLastName'],$html_string);
+  $brewerAddress = strtr($row_name['brewerAddress'],$html_string);
+  $brewerCity = strtr($row_name['brewerCity'],$html_string);
   $brewerState = $row_name['brewerState'];
   $brewerZip = $row_name['brewerZip'];
   $brewerCountry = $row_name['brewerCountry'];
@@ -62,24 +61,53 @@ $row_name = mysql_fetch_assoc($name);
   $brewerJudgeRank = $row_name['brewerJudgeRank'];
   $brewerJudgeLikes = $row_name['brewerJudgeLikes'];
   $brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
+  $brewerAHA = $row_name['brewerAHA'];
 
 
 // Second, rename current "users", "brewer", "brewing" tables according to information gathered from the form
-$sql1 = "RENAME TABLE ".$database.".users TO ".$database.".users_".$suffix.";";
-$Result1 = mysql_query($sql1, $brewing) or die(mysql_error());
+$rename_users = "RENAME TABLE ".$database.".users TO ".$database.".users_".$suffix.";";
+//echo "<p>".$rename_users."</p>";
+$result = mysql_query($rename_users, $brewing) or die(mysql_error());
 
-$sql2 = "RENAME TABLE ".$database.".brewer  TO ".$database.".brewer_".$suffix.";";
-$Result2 = mysql_query($sql2, $brewing) or die(mysql_error());
+$rename_brewer = "RENAME TABLE ".$database.".brewer  TO ".$database.".brewer_".$suffix.";";
+//echo "<p>".$rename_brewer."</p>";
+$result = mysql_query($rename_brewer, $brewing) or die(mysql_error());
 
-$sql3 = "RENAME TABLE ".$database.".brewing  TO ".$database.".brewing_".$suffix.";";
-$Result3 = mysql_query($sql3, $brewing) or die(mysql_error());
+$rename_brewing = "RENAME TABLE ".$database.".brewing  TO ".$database.".brewing_".$suffix.";";
+//echo "<p>".$rename_brewing."</p>";
+$result = mysql_query($rename_brewing, $brewing) or die(mysql_error());
 
-$sql3_a = "RENAME TABLE ".$database.".sponsors  TO ".$database.".sponsors_".$suffix.";";
-$Result3_a = mysql_query($sql3_a, $brewing) or die(mysql_error());
+$rename_sponsors = "RENAME TABLE ".$database.".sponsors  TO ".$database.".sponsors_".$suffix.";";
+//echo "<p>".$rename_judging_sponsors."</p>";
+$result = mysql_query($rename_sponsors , $brewing) or die(mysql_error());
+
+$rename_judging_assignments = "RENAME TABLE ".$database.".judging_assignments  TO ".$database.".judging_assignments_".$suffix.";";
+//echo "<p>".$rename_judging_assignments."</p>";
+$result = mysql_query($rename_judging_assignments, $brewing) or die(mysql_error());
+
+$rename_judging_flights = "RENAME TABLE ".$database.".judging_flights  TO ".$database.".judging_flights_".$suffix.";";
+//echo "<p>".$rename_judging_flights."</p>";
+$result = mysql_query($rename_judging_flights, $brewing) or die(mysql_error());
+
+$rename_judging_scores = "RENAME TABLE ".$database.".judging_scores  TO ".$database.".judging_scores_".$suffix.";";
+//echo "<p>".$rename_judging_scores."</p>";
+$result = mysql_query($rename_judging_scores, $brewing) or die(mysql_error());
+
+$rename_judging_scores_bos = "RENAME TABLE ".$database.".judging_scores_bos  TO ".$database.".judging_scores_bos_".$suffix.";";
+//echo "<p>".$rename_judging_scores_bos."</p>";
+$result = mysql_query($rename_judging_scores_bos, $brewing) or die(mysql_error());
+
+$rename_judging_tables = "RENAME TABLE ".$database.".judging_tables  TO ".$database.".judging_tables_".$suffix.";";
+//echo "<p>".$rename_judging_tables."</p>";
+$result = mysql_query($rename_judging_tables, $brewing) or die(mysql_error());
+
+$rename_style_types = "RENAME TABLE ".$database.".style_types  TO ".$database.".style_types_".$suffix.";";
+//echo "<p>".$rename_style_types."</p>";
+$result = mysql_query($rename_style_types, $brewing) or die(mysql_error());
 
 // Third, insert a clean "users", "brewer", "brewing", and "sponsors" tables
 
-$sql4 = "
+$create_users = "
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) NOT NULL,
@@ -88,12 +116,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userQuestion` varchar(255) DEFAULT NULL,
   `userQuestionAnswer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ";
+//echo "<p>".$create_users."</p>";
+$result = mysql_query($create_users, $brewing) or die(mysql_error());
 
-$Result4 = mysql_query($sql4, $brewing) or die(mysql_error());
-
-$sql5 = "
+$create_brewer = "
 CREATE TABLE IF NOT EXISTS `brewer` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `uid` int(8) DEFAULT NULL,
@@ -106,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `brewer` (
   `brewerCountry` varchar(255) DEFAULT NULL,
   `brewerPhone1` varchar(255) DEFAULT NULL,
   `brewerPhone2` varchar(255) DEFAULT NULL,
-  `brewerClubs` text,
+  `brewerClubs` text ,
   `brewerEmail` varchar(255) DEFAULT NULL,
   `brewerNickname` varchar(255) DEFAULT NULL,
   `brewerSteward` char(1) DEFAULT NULL,
@@ -115,21 +143,21 @@ CREATE TABLE IF NOT EXISTS `brewer` (
   `brewerJudgeRank` varchar(255) DEFAULT NULL,
   `brewerJudgeLikes` text,
   `brewerJudgeDislikes` text,
-  `brewerJudgeLocation` int(8) DEFAULT NULL,
-  `brewerJudgeLocation2` int(8) DEFAULT NULL,
-  `brewerStewardLocation` int(8) DEFAULT NULL,
-  `brewerStewardLocation2` int(8) DEFAULT NULL,
-  `brewerJudgeAssignedLocation` int(8) DEFAULT NULL,
-  `brewerStewardAssignedLocation` int(8) DEFAULT NULL,
+  `brewerJudgeLocation` varchar(255) DEFAULT NULL,
+  `brewerStewardLocation` varchar(255) DEFAULT NULL,
+  `brewerJudgeAssignedLocation` varchar(255) DEFAULT NULL,
+  `brewerStewardAssignedLocation` varchar(255) DEFAULT NULL,
   `brewerAssignment` char(1) DEFAULT NULL,
+  `brewerAHA` int(11) DEFAULT NULL,
+  `brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
+  `brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
   PRIMARY KEY (`id`)
-
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 ";
+//echo "<p>".$create_brewer."</p>";
+$result = mysql_query($create_brewer, $brewing) or die(mysql_error());
 
-$Result5 = mysql_query($sql5, $brewing) or die(mysql_error());
-
-$sql6 = "
+$create_brewing = "
 CREATE TABLE IF NOT EXISTS `brewing` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `brewName` varchar(250) DEFAULT NULL,
@@ -260,8 +288,8 @@ CREATE TABLE IF NOT EXISTS `brewing` (
   `brewYeastAmount` varchar(25) DEFAULT NULL,
   `brewYeastStarter` char(1) DEFAULT NULL,
   `brewYeastNutrients` text,
-  `brewOG` varchar(10) DEFAULT NULL,
-  `brewFG` varchar(10) DEFAULT NULL,
+  `brewOG` float DEFAULT NULL,
+  `brewFG` float DEFAULT NULL,
   `brewPrimary` varchar(10) DEFAULT NULL,
   `brewPrimaryTemp` varchar(10) DEFAULT NULL,
   `brewSecondary` varchar(10) DEFAULT NULL,
@@ -317,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `brewing` (
   `brewAddition7Use` varchar(255) DEFAULT NULL,
   `brewAddition8Use` varchar(255) DEFAULT NULL,
   `brewAddition9Use` varchar(255) DEFAULT NULL,
-  `brewPaid` char(1) DEFAULT NULL,
+  `brewPaid` char(1) DEFAULT 'N',
   `brewWinner` char(1) DEFAULT NULL,
   `brewWinnerCat` varchar(3) DEFAULT NULL,
   `brewWinnerSubCat` varchar(3) DEFAULT NULL,
@@ -326,13 +354,14 @@ CREATE TABLE IF NOT EXISTS `brewing` (
   `brewBOSPlace` varchar(3) DEFAULT NULL,
   `brewReceived` char(1) DEFAULT NULL,
   `brewJudgingLocation` int(8) DEFAULT NULL,
+  `brewCoBrewer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 ";
+//echo "<p>".$create_brewing."</p>";
+$result = mysql_query($create_brewing, $brewing) or die(mysql_error());
 
-$Result6 = mysql_query($sql6, $brewing) or die(mysql_error());
-
-$sql6_a = "
+$create_sponsors = "
 CREATE TABLE IF NOT EXISTS `sponsors` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `sponsorName` varchar(255) DEFAULT NULL,
@@ -342,15 +371,105 @@ CREATE TABLE IF NOT EXISTS `sponsors` (
   `sponsorLocation` text,
   `sponsorLevel` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ";
+//echo "<p>".$create_sponsors."</p>";
+$result = mysql_query($create_sponsors, $brewing) or die(mysql_error());
 
-$Result6_a = mysql_query($sql6_a, $brewing) or die(mysql_error());
+$create_judging_assignments = "
+CREATE TABLE IF NOT EXISTS `judging_assignments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bid` int(11) DEFAULT NULL COMMENT 'id from brewer',
+  `assignment` char(1) DEFAULT NULL,
+  `assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables',
+  `assignFlight` int(11) DEFAULT NULL,
+  `assignRound` int(11) DEFAULT NULL,
+  `assignLocation` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+";
+//echo "<p>".$create_judging_assignments."</p>";
+$result = mysql_query($create_judging_assignments, $brewing) or die(mysql_error());
 
+$create_judging_flights = "
+CREATE TABLE IF NOT EXISTS `judging_flights` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `flightTable` int(8) DEFAULT NULL COMMENT 'id of Table from tables',
+  `flightNumber` int(8) DEFAULT NULL,
+  `flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
+  `flightRound` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+";
+//echo "<p>".$create_judging_flights."</p>";
+$result = mysql_query($create_judging_flights, $brewing) or die(mysql_error());
 
-// Fourth, insert current user's info into new "users" and "brewer" table
+$create_judging_scores = "
+CREATE TABLE IF NOT EXISTS `judging_scores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
+  `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
+  `scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
+  `scoreEntry` int(11) DEFAULT NULL COMMENT 'numerical score assigned by judges',
+  `scorePlace` int(11) DEFAULT NULL COMMENT 'place of entry as assigned by judges',
+  `scoreType` char(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+";
+//echo "<p>".$create_judging_scores."</p>";
+$result = mysql_query($create_judging_scores, $brewing) or die(mysql_error());
 
-$sql7 = "INSERT INTO users (
+$create_judging_scores_bos = "
+CREATE TABLE IF NOT EXISTS `judging_scores_bos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
+  `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
+  `scoreEntry` varchar(3) DEFAULT NULL COMMENT 'numerical score assigned by judges',
+  `scorePlace` varchar(3) DEFAULT NULL COMMENT 'place of entry as assigned by judges',
+  `scoreType` char(1) DEFAULT NULL COMMENT 'id of row from the style_type table',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+";
+//echo "<p>".$create_judging_scores_bos."</p>";
+$result = mysql_query($create_judging_scores_bos, $brewing) or die(mysql_error());
+
+$create_judging_tables = "
+CREATE TABLE IF NOT EXISTS `judging_tables` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `tableName` varchar(255) CHARACTER SET latin1 DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
+  `tableStyles` text CHARACTER SET latin1 COMMENT 'Array of ids from styles table',
+  `tableNumber` int(5) DEFAULT NULL COMMENT 'User defined for sorting',
+  `tableLocation` int(5) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
+  `tableJudges` varchar(255) CHARACTER SET latin1 DEFAULT NULL COMMENT 'Array of ids from brewer table',
+  `tableStewards` varchar(255) CHARACTER SET latin1 DEFAULT NULL COMMENT 'Array of ids from brewer table',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+";
+//echo "<p>".$create_judging_tables."</p>";
+$result = mysql_query($create_judging_tables, $brewing) or die(mysql_error());
+
+$create_style_types = "
+CREATE TABLE IF NOT EXISTS `style_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `styleTypeName` varchar(255) DEFAULT NULL,
+  `styleTypeOwn` varchar(255) DEFAULT NULL,
+  `styleTypeBOS` char(1) DEFAULT NULL,
+  `styleTypeBOSMethod` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8; ";
+$result = mysql_query($create_style_types, $brewing) or die(mysql_error());
+
+$insert_style_types = "
+INSERT INTO style_types (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
+(1, 'Beer', 'bcoe', 'Y', 1),
+(2, 'Cider', 'bcoe', 'Y', 3),
+(3, 'Mead', 'bcoe', 'Y', 3)
+";
+//echo "<p>".$create_style_types."</p>";
+$result = mysql_query($insert_style_types, $brewing) or die(mysql_error());
+
+// Insert current user's info into new "users" and "brewer" table
+$insert_users = "INSERT INTO users (
 id, 
 user_name, 
 password, 
@@ -358,37 +477,38 @@ userLevel,
 userQuestion, 
 userQuestionAnswer
 ) VALUES ('1','$user_name', '$password', '1', '$userQuestion', '$userQuestionAnswer');";
+//echo "<p>".$insert_users."</p>";
+$result = mysql_query($insert_users, $brewing) or die(mysql_error());
 
-$Result7 = mysql_query($sql7, $brewing) or die(mysql_error());
-
-$sql8 = "INSERT INTO brewer (
+$insert_brewer = "INSERT INTO brewer (
 id,
-uid, 
-brewerFirstName, 
-brewerLastName, 
-brewerAddress, 
-brewerCity, 
+uid,
+brewerFirstName,
+brewerLastName,
+brewerAddress,
+brewerCity,
 brewerState,
 brewerZip,
-brewerCountry, 
-brewerPhone1, 
-brewerPhone2, 
-brewerClubs, 
-brewerEmail, 
-brewerNickname, 
-brewerSteward, 
-brewerJudge, 
-brewerJudgeID, 
-brewerJudgeRank, 
-brewerJudgeLikes, 
-brewerJudgeDislikes,  	    	
-brewerJudgeLocation, 			
-brewerJudgeLocation2, 			
-brewerStewardLocation, 			
-brewerStewardLocation2,		
-brewerJudgeAssignedLocation,		
-brewerStewardAssignedLocation,		
-brewerAssignment 
+brewerCountry,
+brewerPhone1,
+brewerPhone2,
+brewerClubs,
+brewerEmail,
+brewerNickname,
+brewerSteward,
+brewerJudge,
+brewerJudgeID,
+brewerJudgeRank,
+brewerJudgeLikes,
+brewerJudgeDislikes,
+brewerJudgeLocation,
+brewerStewardLocation,
+brewerJudgeAssignedLocation,
+brewerStewardAssignedLocation,
+brewerAssignment,
+brewerAHA,
+brewerDiscount,
+brewerJudgeBOS
 ) 
 VALUES (
 NULL, 
@@ -416,59 +536,39 @@ NULL,
 NULL,
 NULL,
 NULL,
+'$brewerAHA',
 NULL,
 NULL
 );";
+//echo "<p>".$insert_brewer."</p>";
+$result = mysql_query($insert_brewer, $brewing) or die(mysql_error());
 
-$Result8 = mysql_query($sql8, $brewing) or die(mysql_error());
-
-// Sixth, insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-$sql9 = sprintf("INSERT INTO archive (id, archiveUserTableName, archiveBrewerTableName, archiveBrewingTableName, archiveSuffix) VALUES (%s, %s, %s, %s, %s);", "''", "'users_".$suffix."'", "'brewer_".$suffix."'", "'brewing_".$suffix."'", "'".$suffix."'");
-
-$Result9 = mysql_query($sql9, $brewing) or die(mysql_error());
+// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
+$insert_archive = sprintf("INSERT INTO archive (id, archiveSuffix) VALUES (%s, %s);", "''", "'".$suffix."'");
+//echo "<p>".$insert_archive."</p>";
+$result = mysql_query($insert_archive, $brewing) or die(mysql_error());
 
 // Last, log the user in and redirect
-
 session_destroy();
 mysql_select_db($database, $brewing);
-$query_login = "SELECT password FROM users WHERE user_name = '$user_name' AND password = '$password'";
+$query_login = "SELECT COUNT(*) as 'count' FROM users WHERE user_name = '$user_name' AND password = '$password'";
 $login = mysql_query($query_login, $brewing) or die(mysql_error());
 $row_login = mysql_fetch_assoc($login);
-$totalRows_login = mysql_num_rows($login);
 
-	session_start();
-		// Authenticate the user
-		if ($totalRows_login == 1)
-			{
-  			// Register the loginUsername
-  			$_SESSION["loginUsername"] = $user_name;
-
-  			// If the username/password combo is OK, relocate to the "protected" content index page
-  			header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=7");
-  			exit;
-			}
-		else
-			{
-  			// If the username/password combo is incorrect or not found, relocate to the login error page
-  			header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=6");
-  			session_destroy();
-  			exit;
-			}
-
-
-/*
-echo "<p>".$sql1."</p>";
-echo "<p>".$sql2."</p>";
-echo "<p>".$sql3."</p>";
-echo "<p>".$sql3_a."</p>";
-echo "<p>".$sql4."</p>";
-echo "<p>".$sql5."</p>";
-echo "<p>".$sql6."</p>";
-echo "<p>".$sql6_a."</p>";
-echo "<p>".$sql7."</p>";
-echo "<p>".$sql8."</p>";
-echo "<p>".$sql9."</p>";
-*/
-
+session_start();
+	// Authenticate the user
+	if ($row_login['count'] == 1) {
+  		// Register the loginUsername
+ 		$_SESSION["loginUsername"] = $user_name;
+		// If the username/password combo is OK, relocate to the "protected" content index page
+  		header("Location: ../index.php?section=admin&go=archive&msg=7");
+  		exit;
+		}
+	else {
+  		// If the username/password combo is incorrect or not found, relocate to the login error page
+  		header("Location: ../index.php?section=admin&go=archive&msg=6");
+  		session_destroy();
+  		exit;
+		}
 }
 ?>

@@ -1,10 +1,87 @@
-<?php 
+<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
+<?php if ($row_prefs['prefsCompOrg'] == "Y") { 
+	// Display BOS winners for each applicable style type
+	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+	sort($a);
+	foreach ($a as $type) {
+		if ($section == "past_winners") $style_types = "style_types_".$trimmed;	else $style_types = "style_types";
+		$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'", $style_types, $type);
+		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+		$row_style_type = mysql_fetch_assoc($style_type);
+		
+		if ($row_style_type['styleTypeBOS'] == "Y") { 
+			$query_bos = "SELECT * FROM $judging_scores_bos WHERE (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') AND scoreType='$type' ORDER BY scorePlace ASC";
+			$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
+			$row_bos = mysql_fetch_assoc($bos);
+			$totalRows_bos = mysql_num_rows($bos);
+			if ($totalRows_bos > 0) { 
+			
+			$random = random_generator(6,2);
+			
+?>        
+<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h2>
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $random; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				]
+			} );
+		} );
+	</script>
+<table class="dataTable" id="sortable<?php echo $random; ?>">
+<thead>
+	<tr>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
+        <th class="dataList bdr1B">Style</th>
+    </tr>
+</thead>
+<tbody>
+	<?php do {
+	
+	$query_entries = sprintf("SELECT brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM $dbTable WHERE id='%s'", $row_bos['eid']);
+	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+	$row_entries = mysql_fetch_assoc($entries);
+	$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
+	
+	?>
+	<tr>
+        <td class="data"><?php echo display_place($row_bos['scorePlace']); ?></td>
+        <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
+        <td class="data"><?php echo $row_entries['brewName']; ?></td>
+        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>   
+    </tr>
+    <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
+	mysql_free_result($bos);
+	mysql_free_result($entries);
+	?>
+</tbody>
+</table>
+<?php 	} 
+	else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
+    } 
+  }
+//if ($row_contest_info['contestBOSAward'] != "") echo "<h3>Best of Show Award(s)</h3>".$row_contest_info['contestBOSAward']; 
+} // end if ($row_prefs['prefsCompOrg'] == "Y") 
+
+
+
+if ($row_prefs['prefsCompOrg'] == "N") { 
 include(DB.'entries.db.php');
 if ($totalRows_bos > 0) { 
 ?>
-<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "<h3>Beer Categories</h3>"; ?>
-<div class="bos">Congratulations to <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "Beer"; ?> Best of Show Winner <?php echo $row_bos_winner['brewBrewerFirstName']." ".$row_bos_winner['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner['brewName']; ?></em>, garnered the top <?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "beer"; ?> prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestBOSAward']; ?>
 <table class="dataTable">
 <thead>
@@ -18,7 +95,7 @@ if ($totalRows_bos > 0) {
 </thead>
 <tbody>
  <?php do { 
-    include ('includes/style_convert.inc.php');
+    
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos['brewWinnerCat'], $row_bos['brewWinnerSubCat']);
@@ -34,8 +111,19 @@ if ($totalRows_bos > 0) {
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos['brewBOSPlace']; ?></td>
-  <td class="dataList"><?php echo $styleConvert3; if ($row_bos['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos['brewWinnerCat']; if ($row_bos['brewWinnerSubCat']!= "") echo $row_bos['brewSubCategory']; echo ")"; } ?></td>
+  <td class="dataList" nowrap="nowrap"><?php echo $row_bos['brewBOSPlace']; ?></td>
+  <td class="dataList">
+  <?php 
+  	echo style_convert($row_bos['brewWinnerCat'],"1"); if ($row_bos['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos['brewWinnerCat']; if ($row_bos['brewWinnerSubCat']!= "") echo $row_bos['brewSubCategory']; echo ")"; } 
+  	if ($row_bos['brewWinnerCat'] >= 29) {
+		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos['brewWinnerCat']);  
+    	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		echo ": ".$row_style['brewStyle'];
+  		} 
+	 ?>
+  </td>
+  
   <td class="dataList"><?php echo $row_bos['brewBrewerFirstName']." ".$row_bos['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_bos['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
@@ -52,7 +140,6 @@ if ($totalRows_bos > 0) {
 <?php if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
 <h3>Mead Categories</h3>
 <?php if ($totalRows_bos_winner3 > 0) { ?>
-<div class="bos">Congratulations to Mead Best of Show Winner <?php echo $row_bos_winner3['brewBrewerFirstName']." ".$row_bos_winner3['brewBrewerLastName'];; ?>, whose entry, <em><?php echo $row_bos_winner3['brewName']; ?></em>, garnered the top mead prize in the <?php echo $row_contest_info['contestName']; ?>!</div>
 <?php } ?>
 <table class="dataTable">
 <thead>
@@ -66,7 +153,7 @@ if ($totalRows_bos > 0) {
 </thead>
 <tbody>
  <?php do { 
-    include ('includes/style_convert.inc.php');
+    
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos3['brewWinnerCat'], $row_bos3['brewWinnerSubCat']);
@@ -82,8 +169,18 @@ if ($totalRows_bos > 0) {
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos3['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos3['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos3['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos3['brewBOSPlace']; ?></td>
-  <td class="dataList"><?php echo $styleConvert6; if ($row_bos3['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") echo $row_bos3['brewSubCategory']; echo ")"; } ?></td>
+  <td class="dataList" nowrap="nowrap"><?php echo $row_bos3['brewBOSPlace']; ?></td>
+  <td class="dataList">
+  <?php 
+  	echo $row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") echo $row_bos3['brewSubCategory']; echo ")"; } 
+  	if ($row_bos2['brewWinnerCat'] >= 29) {
+		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos3['brewWinnerCat']);  
+    	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		echo ": ".$row_style['brewStyle'];
+  		} 
+	 ?>
+  </td>
   <td class="dataList"><?php echo $row_bos3['brewBrewerFirstName']." ".$row_bos3['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_bos3['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
@@ -114,7 +211,6 @@ if ($totalRows_bos > 0) {
 </thead>
 <tbody>
  <?php do { 
-    include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos2['brewWinnerCat'], $row_bos2['brewWinnerSubCat']);
@@ -130,8 +226,18 @@ if ($totalRows_bos > 0) {
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr <?php echo " style=\"background-color:$color\"";?>>
-  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_bos2['brewBOSPlace'] == "1") echo "medal_gold_3"; elseif ($row_bos2['brewBOSPlace'] == "2") echo "medal_silver_3"; elseif ($row_bos2['brewBOSPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_bos2['brewBOSPlace']; ?></td>
-  <td class="dataList"><?php echo $styleConvert7; if ($row_bos2['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") echo $row_bos2['brewSubCategory']; echo ")"; } ?></td>
+  <td class="dataList" nowrap="nowrap"><?php echo $row_bos2['brewBOSPlace']; ?></td>
+  <td class="dataList">
+  <?php 
+  	echo $row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") echo $row_bos2['brewSubCategory']; echo ")"; } 
+  	if ($row_bos2['brewWinnerCat'] >= 29) {
+		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos2['brewWinnerCat']);  
+    	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		echo ": ".$row_style['brewStyle'];
+  		} 
+	 ?>
+  </td>
   <td class="dataList"><?php echo $row_bos2['brewBrewerFirstName']." ".$row_bos2['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer'];?></td>
   <td class="dataList"><?php echo $row_bos2['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
@@ -143,4 +249,6 @@ if ($totalRows_bos > 0) {
   </tr>
 </tbody>
 </table>
-<?php } // end if BOS cider ?>
+<?php } 
+}
+// end if BOS cider ?>

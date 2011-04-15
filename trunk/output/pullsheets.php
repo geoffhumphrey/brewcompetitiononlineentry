@@ -76,8 +76,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".dateconvert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'])."<br>Flights: ".$flights; ?></p>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
 	</div>
@@ -171,8 +171,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".dateconvert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'])."<br>Flights: ".$flights; ?></p>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
 	</div>
@@ -257,7 +257,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
 <?php if (($go == "judging_tables") && ($id == "default"))  
 do { 
-$entry_count = get_table_info(1,"count_total",$row_tables['id']);
+$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 ?>
 <div id="content">
 	<div id="content-inner">
@@ -269,7 +269,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".dateconvert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>
@@ -338,7 +338,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id']);
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
 if (($go == "judging_tables") && ($id != "default")) { 
-$entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
+$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
 ?>
 <div id="content">
 	<div id="content-inner">
@@ -350,7 +350,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".dateconvert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>

@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-/* Admin menu drop-down styles */
+/* Admin menu drop-down styles, used in the /includes/nav.inc.php */
 
 div.menuBar, 
 div.menuBar a.menuButton, 
@@ -71,3 +71,26 @@ div.menu div.menuItemSep {
 border: 1px solid #e0e0e0;
 margin: 10px 5px;
 }
+
+
+/* Used in the /admin/default.admin.php page (jquery accordian styles) */
+#menu_container {
+	width: 100%;
+}
+#menu_container .trigger a:link, #menu_container .trigger a:visited {
+  	display: block;
+  	padding: 0;
+  	background-image: url(../images/arrow_down_small.png);
+  	background-repeat: no-repeat;
+  	background-position: 99% 50%;
+	
+}
+
+#menu_container .trigger a:hover, #menu_container .trigger a:active, #menu_container .trigger a:focus {
+	
+	}
+
+#menu_container .trigger.open a:link, #menu_container .trigger.open a:visited {
+	background:#eee url(../images/arrow_up_small.png) 
+	no-repeat 99% 50%;
+	}

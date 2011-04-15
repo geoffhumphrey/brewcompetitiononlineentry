@@ -17,7 +17,8 @@ function brewer_assignment($a,$method){
 	case "1": // 
 		if ($a == "J") $r = "Judge"; 
 		elseif ($a == "S") $r = "Steward"; 
-		elseif ($a == "X") $r = "Staff";  
+		elseif ($a == "X") $r = "Staff";
+		elseif ($a == "O") $r = "Organizer"; 
 		else $r = "Not Set";
 	break;
 	case "2": // for $filter URL variable
@@ -39,15 +40,16 @@ return $r;
 }
 
 function brewer_assignment_checked($a,$b) {
-	if (($a == "judges") && ($b == "J")) $r = "CHECKED"; 	
+	if (($a == "judges") && ($b == "J")) $r = "CHECKED"; 
 	elseif (($a == "stewards") && ($b == "S")) $r = "CHECKED";
 	elseif (($a == "staff") && ($b == "X")) $r = "CHECKED";
 	elseif (($a == "bos") && ($b == "Y")) $r = "CHECKED"; 
+	elseif (($a == "staff") && ($b == "O")) $r = "DISABLED";
 	else $r = "";
 	return $r;
 }
 ?>
-<h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; else echo "";  } else echo "Judging Locations"; ?></h2>
+<h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; elseif ($filter == "staff") echo " Staff"; else echo "";  } else echo "Judging Locations"; ?></h2>
 <?php if (($filter == "default") && ($msg == "9")) { ?>
 <div class="error">Add another judging location, date, or time?</div>
 <p><a href="<?php if ($section == "step5") echo "setup.php?section=step5"; else echo "index.php?section=admin&amp;go=judging"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step5") echo "setup.php?section=step6"; else echo "index.php?section=admin"; ?>">No</a>
@@ -119,7 +121,8 @@ function brewer_assignment_checked($a,$b) {
 				null,
 				null,
 				null,
-				{ "asSorting": [  ] },
+				null,
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
@@ -139,7 +142,7 @@ function brewer_assignment_checked($a,$b) {
  <?php do { ?>
  <tr>
   <td width="25%" class="dataList"><?php echo $row_judging_locs['judgingLocName']; ?></td>
-  <td width="15%" class="dataList"><?php echo dateconvert($row_judging_locs['judgingDate'], 2); ?></td>
+  <td width="15%" class="dataList"><?php echo date_convert($row_judging_locs['judgingDate'], 2); ?></td>
   <td width="15%" class="dataList"><?php echo $row_judging_locs['judgingTime']; ?></td>
   <td width="30%" class="dataList"><?php echo $row_judging_locs['judgingLocation']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_judging_locs['judgingRounds']; ?></td>
@@ -215,11 +218,7 @@ function checkUncheckAll(theElement) {
 			"aoColumns": [
 				{ "asSorting": [  ] },
 				null,
-				<?php if ($filter == "default") { ?>
 				null,
-				<?php } else { ?>
-				{ "asSorting": [  ] },
-				<?php } ?>
 				<?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
 				{ "asSorting": [  ] },
 				<?php } ?>
@@ -232,14 +231,35 @@ function checkUncheckAll(theElement) {
 					<?php } ?>
 				<?php } ?>
 				<?php if ($bid != "default") { ?>
-				null,
+				null
 				<?php } ?>
 				]
 			} );
 		} );
 	</script>
+
 <form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=brewer&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
+<?php if ($filter == "staff") { 
+$query_brewers = "SELECT * FROM brewer ORDER BY brewerLastName";
+$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
+$row_brewers = mysql_fetch_assoc($brewers);
+?>
+<h3>Organizer</h3>
+<p><strong>Designate the Competition Organizer:</strong> <span class="data"><select name="Organizer">
+	<option value="">Choose Below:</option>
+    <?php do { ?>
+   	<option value="<?php echo $row_brewers['uid']; ?>" <?php if (($row_brewers['brewerAssignment'] == "O")) echo "SELECTED";?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
+    <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
+   </select>
+</span></p>
+<p>According to <a href="http://www.bjcp.org/rules.php" target="_blank">BJCP rules</a>, the Organizer is "...the single program participant who completes and signs the application to register or sanction a competition and who in all ways assumes responsibility for the direction of that competition."</p>
+<p>If the organizer is not on this list, <a href="index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
+<h3>Staff</h3>
+<p>According to <a href="http://www.bjcp.org/rules.php" target="_blank">BJCP rules</a>, staff members are "...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge."
+<p>If a staff member is not on this list, <a href="index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
+<?php } ?>
 <p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" />&nbsp;<span class="required">Click "<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" <em>before</em> paging through records.</span></p>
+
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
@@ -270,7 +290,7 @@ function checkUncheckAll(theElement) {
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_brewer['id']; ?>" />
   <?php if ($bid == "default") { ?>
-  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="<?php echo brewer_assignment($filter,"2"); ?>" <?php echo brewer_assignment_checked($filter,$assignment); ?>></td>
+  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="<?php echo brewer_assignment($filter,"2"); ?>" <?php echo brewer_assignment_checked($filter,$assignment);?>></td>
   <?php } else { ?>
   <td width="1%" class="dataList"><input name="<?php if ($filter == "judges") echo "brewerJudgeAssignedLocation".$row_brewer['id']; if ($filter == "stewards") echo "brewerStewardAssignedLocation".$row_brewer['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if (($filter == "judges") && strstr($row_brewer['brewerJudgeAssignedLocation'], $bid)) echo "CHECKED"; if (($filter == "stewards") && strstr($row_brewer['brewerStewardAssignedLocation'], $bid)) echo "CHECKED"; ?>></td>
   <?php } ?>
@@ -290,7 +310,7 @@ function checkUncheckAll(theElement) {
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3).")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}
@@ -320,7 +340,7 @@ function checkUncheckAll(theElement) {
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				if (substr($value, 0, 1) == "Y") { 
 					echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-					echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+					echo date_convert($row_judging_loc3['judgingDate'], 3).")</td>\n";
 					echo "</td>\n</tr>";
 				}
 				}
@@ -352,7 +372,7 @@ function checkUncheckAll(theElement) {
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
-	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo dateconvert($row_judging['judgingDate'], 3).")"; ?></option>
+	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3).")"; ?></option>
     <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
    </select>
   </td>

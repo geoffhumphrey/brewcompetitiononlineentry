@@ -39,7 +39,7 @@ if ($totalRows_tables > 0) {
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
-			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
+			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
 			?>
             <?php if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { ?>
           	<option value="index.php?section=admin&amp;go=judging_flights&amp;&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #:".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
@@ -56,7 +56,7 @@ if ($totalRows_tables > 0) {
 } 
 if ($id !="default") { 
 // get variables
-$entry_count = get_table_info(1,"count_total",$row_tables_edit['id']);
+$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
 $flight_count = ceil($entry_count/$row_judging_prefs['jPrefsFlightEntries']);
 $round_count = $row_tables_edit['tableRound']; 
 ?>
@@ -217,7 +217,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 ?>
 	
 	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if ($totalRows_flights > 0) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php } else { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".dateconvert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		for($i=1; $i<$row_flights['flightNumber']+1; $i++) { 

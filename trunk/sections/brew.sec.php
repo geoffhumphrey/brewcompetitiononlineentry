@@ -1,32 +1,14 @@
 <?php 
+/**
+ * Module:      brew.sec.php
+ * Description: This module the functionality for users to add/edit individual competition
+ *              entries - references the "brewing" database table.
+ *
+ */
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
 ?>
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".toggle_container").hide();
-	$(".trigger").click(function(){
-		$(this).next(".toggle_container").slideToggle(400);
-	});
-	// $("div.toggle_container:eq(0)").show();
-});
-
-/* 
-// For accordian effect
-$(document).ready(function()
-{
-	//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
-	$("#menu_container p.trigger").click(function()
-    {
-		$(this).css({backgroundImage:"url(images/bullet_star.png)"}).next("div.toggle_container").slideToggle(300).siblings("div.toggle_container").slideUp("slow");
-       	$(this).siblings().css({backgroundImage:"url(images/bullet_go.png)"});
-	});
-	//slides the element with class "menu_body" when mouse is over the paragraph
-	$("div.toggle_container:eq(0)").show();
-});
-
-*/
-</script>
+<script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php 
 $query_brewers = "SELECT * FROM brewer ORDER BY brewerLastName";
 $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
@@ -110,7 +92,9 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <p>The information below is not required to process your entry. However, the more information you provide about your entry, the more complete the required entry documentation will be.</p>
 <p>Click the headings below to expand and collapse each category.</p>
 <div id="menu_container">
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General</p>
+<div id="outer">
+<div class="menus">
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -125,7 +109,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Dates</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Dates</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -138,7 +122,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Specific Gravities</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Specific Gravities</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -151,7 +135,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Malt Extracts</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Malt Extracts</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -231,7 +215,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Grain</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Grain</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -371,7 +355,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Adjuncts</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Adjuncts</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -511,7 +495,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Hops</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Hops</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -794,7 +778,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Mash Schedule</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Mash Schedule</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -839,7 +823,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Water Treatment</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Water Treatment</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -848,7 +832,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Culture</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Culture</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -888,7 +872,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Nutrients</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Nutrients</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -897,7 +881,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Carbonation</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Carbonation</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -914,7 +898,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Boil</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Boil</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -927,7 +911,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentation</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentation</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -944,7 +928,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Finings</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Finings</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -953,13 +937,15 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 </tr>
 </table>
 </div>
-<p class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Brewer's Specifics</p>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Brewer's Specifics</h4>
 <div class="toggle_container">
 <table>
   <tr>
     <td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
   </tr>
 </table>
+</div>
+</div>
 </div>
 </div>
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>

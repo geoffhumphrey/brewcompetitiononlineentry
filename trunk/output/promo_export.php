@@ -30,9 +30,9 @@ $output .= "<p>".$row_contest_info['contestHost']." announces the ".$row_contest
 $output .= "<h2>Entries</h2>\n";
 $output .= "<p>To enter, please go to ".$website." and proceed through the registration process.</p>\n";
 $output .= "<h3>Entry Deadline</h3>\n";
-$output .= "<p>All entries must be received by our shipping location or at a drop-off location by "; $date = $row_contest_info['contestEntryDeadline']; $output .= dateconvert($date, 2).". Entries will not be accepted beyond this date.</p>\n";
+$output .= "<p>All entries must be received by our shipping location or at a drop-off location by "; $date = $row_contest_info['contestEntryDeadline']; $output .= date_convert($date, 2).". Entries will not be accepted beyond this date.</p>\n";
 $output .= "<h3>Registration Deadline</h3>\n";
-$output .= "<p>Registration will close on "; $date = $row_contest_info['contestRegistrationDeadline']; $output .= dateconvert($date, 2).". Please note: registered users will <em>not</em> be able to add, view, edit, or delete entries on the registration website after "; $date = $row_contest_info['contestRegistrationDeadline']; $output .= dateconvert($date, 2).".</p>\n";
+$output .= "<p>Registration will close on "; $date = $row_contest_info['contestRegistrationDeadline']; $output .= date_convert($date, 2).". Please note: registered users will <em>not</em> be able to add, view, edit, or delete entries on the registration website after "; $date = $row_contest_info['contestRegistrationDeadline']; $output .= date_convert($date, 2).".</p>\n";
 $output .= "<h2>Call for Judges and Stewards</h2>\n"; 
 $output .= "<p>If you are willing to be a judge or steward, please go to ".$website.", register, and fill out the appropriate information.</p>\n";
 $output .= "<h2>Competition Officials</h2>\n";
@@ -66,7 +66,7 @@ $output .= "<h3>Judging Date"; if ($totalRows_judging > 1) $output .= "s"; $outp
 if ($totalRows_judging == 0) $output .= "<p>The competition judging date is yet to be determined. Please check back later."; else { 
   do { 
   $output .= "<p>";
-	if ($row_judging['judgingDate'] != "") $output .= dateconvert($row_judging['judgingDate'], 2)." at "; $output .= $row_judging['judgingLocName']; 
+	if ($row_judging['judgingDate'] != "") $output .= date_convert($row_judging['judgingDate'], 2)." at "; $output .= $row_judging['judgingLocName']; 
 	if ($row_judging['judgingTime'] != "") $output .= ", ".$row_judging['judgingTime']; 
  	if ($row_judging['judgingLocation'] != "") $output .= "<br />".$row_judging['judgingLocation']; 
   $output .= "</p>\n";
@@ -116,7 +116,7 @@ $output .= "<p>".$row_contest_info['contestAwards']."</p>\n";
 if ($row_contest_info['contestAwardsLocName'] != "") { 
 $output .= "<h3>Award Ceremony</h3>\n";
 $output .= "<p>";
-	if ($row_contest_info['contestAwardsLocDate'] != "") $output .= dateconvert($row_contest_info['contestAwardsLocDate'], 2)." at "; $output .= $row_contest_info['contestAwardsLocName'];
+	if ($row_contest_info['contestAwardsLocDate'] != "") $output .= date_convert($row_contest_info['contestAwardsLocDate'], 2)." at "; $output .= $row_contest_info['contestAwardsLocName'];
 	if ($row_contest_info['contestAwardsLocTime'] != "") $output .= ", ".$row_contest_info['contestAwardsLocTime'];
 	if ($row_contest_info['contestAwardsLocation'] != "") $output .= "<br />".$row_contest_info['contestAwardsLocation'];
 $output .= "</p>";
