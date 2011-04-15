@@ -22,6 +22,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -33,21 +34,28 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
         <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
         <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
-        <th class="dataList bdr1B">Style</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Style</th>
+        <th class="dataList bdr1B">Club</th>
     </tr>
 </thead>
     <tbody>
     <?php 
-		$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $judging_scores, $row_tables['id']);
+		$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $scores_db_table, $row_tables['id']);
 		$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5')";	
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		$totalRows_scores = mysql_num_rows($scores);
 		
 		do { 
-			$query_entries = sprintf("SELECT id,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM  $dbTable WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM  $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_assoc($entries);
+			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
+			
+			$query_brewer = sprintf("SELECT id,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
+			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+			$row_brewer = mysql_fetch_assoc($brewer);
+			
 			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
 			$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
@@ -59,6 +67,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
         <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
+        <td class="data"><?php echo $row_brewer['brewerClubs']; ?></td>
     </tr>
     <?php 
 			mysql_free_result($styles);
@@ -110,11 +119,11 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_user1 = sprintf("SELECT * FROM %s WHERE id = '%s'", $user_table, $row_log_winners['brewBrewerID']);
+	$query_user1 = sprintf("SELECT * FROM %s WHERE id = '%s'", $users_db_table, $row_log_winners['brewBrewerID']);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
 	
-	$query_club = sprintf("SELECT brewerClubs FROM %s WHERE brewerEmail = '%s'", $brewer_table, $row_user1['user_name']);
+	$query_club = sprintf("SELECT brewerClubs FROM %s WHERE brewerEmail = '%s'", $brewer_db_table, $row_user1['user_name']);
 	$club = mysql_query($query_club, $brewing) or die(mysql_error());
 	$row_club = mysql_fetch_assoc($club);
 	?>

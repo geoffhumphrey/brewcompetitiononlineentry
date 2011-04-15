@@ -21,15 +21,16 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 		if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 		if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
 	} 
-if (judging_date_return()) { ?>
+if (!judging_date_return()) { ?>
 <p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="index.php?section=rules">competition rules</a>.</p>
 <?php }
-if (!judging_date_return()) { 
+if (judging_date_return()) { 
 	include ('judge_closed.sec.php'); 
 	if ($row_prefs['prefsDisplayWinners'] == "Y") {  ?>
 		<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 	<?php
+		include (INCLUDES.'db_tables.inc.php');
 		include (DB.'winners.db.php'); 
 		include (SECTIONS.'bos.sec.php');
 		include (SECTIONS.'winners.sec.php');  

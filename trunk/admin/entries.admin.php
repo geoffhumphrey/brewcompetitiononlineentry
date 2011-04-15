@@ -108,16 +108,16 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 				null,
 				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				<?php } ?>
-				<?php if ($dbTable == "default") { ?>
+				<?php if ($dbTable == "default") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
 				]
@@ -144,14 +144,14 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-			<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				{ "asSorting": [  ] 
+			<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>},
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 			<?php } ?>
 				]
 			} );

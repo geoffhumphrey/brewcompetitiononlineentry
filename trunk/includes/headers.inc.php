@@ -181,11 +181,15 @@ switch($section) {
 			case "contest_info":
 			$header_output .= ""; 
 			break;
+			*/
 			
 			case "preferences":
-			$header_output .= "";
+			$header_output .= ": Preferences";
 			break;
-			*/
+			
+			case "judging_preferences":
+			$header_output .= ": Preferences";
+			break;
 			
 			case "archive":
 			$header_output .= ": Archives";

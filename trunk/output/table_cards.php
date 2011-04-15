@@ -58,7 +58,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
     	
         <?php do { 
 			$judge_info = explode("^",brewer_info($row_assignments['bid'])); 
-			if ($row_assignments['assignment'] == "S") $assignment = "&ndash Steward"; else $assignment = "&ndash Judge";
+			if ($row_assignments['assignment'] == "S") $assignment = "&ndash; Steward"; else $assignment = "&ndash; Judge";
 			if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
 			if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
 		?>
@@ -115,7 +115,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
     	
         <?php do { 
 			$judge_info = explode("^",brewer_info($row_assignments['bid'])); 
-			if ($row_assignments['assignment'] == "S") $assignment = "&ndash Steward"; else $assignment = "&ndash Judge";
+			if ($row_assignments['assignment'] == "S") $assignment = "&ndash; Steward"; else $assignment = "&ndash; Judge";
 			if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
 			if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
 		?>

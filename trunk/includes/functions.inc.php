@@ -727,8 +727,12 @@ function style_convert($number,$type) {
 		if ($n > 23) $style_convert = TRUE;
 		else {
 		switch ($number) {
-			case "6D": $style_convert = TRUE; break;
+			case "06D": $style_convert = TRUE; break;
+			case "16E": $style_convert = TRUE; break;
+			case "17F": $style_convert = TRUE; break;
+			case "20A": $style_convert = TRUE; break;
 			case "21A": $style_convert = TRUE; break;
+			case "21B": $style_convert = TRUE; break;
 			case "22B": $style_convert = TRUE; break;
 			case "22C": $style_convert = TRUE; break;
 			case "23A": $style_convert = TRUE; break;
@@ -737,6 +741,8 @@ function style_convert($number,$type) {
 			case "26C": $style_convert = TRUE; break;
 			case "27E": $style_convert = TRUE; break;
 			case "28B": $style_convert = TRUE; break;
+			case "28C": $style_convert = TRUE; break;
+			case "28D": $style_convert = TRUE; break;
 			default: $style_convert = FALSE; break;
 		    }
 		}
@@ -1052,7 +1058,7 @@ function text_number($n) {
     return $new_n;
 }
 
-function style_choose($section,$go,$action,$filter) {
+function style_choose($section,$go,$action,$filter,$script_name) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
@@ -1064,7 +1070,7 @@ function style_choose($section,$go,$action,$filter) {
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
 		if ($num == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<option value="'.$_SERVER['SCRIPT_NAME'].'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.'"'.$selected.'>'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</option>'; }
+		if ($row['count'] > 0) { $style_choose .= '<option value="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.'"'.$selected.'>'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</option>'; }
 	}
 	
 	$query_styles = "SELECT brewStyle,brewStyleGroup FROM styles WHERE brewStyleGroup >= 29";
@@ -1077,7 +1083,7 @@ function style_choose($section,$go,$action,$filter) {
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
 		if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<option value="'.$_SERVER['SCRIPT_NAME'].'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].'"'.$selected.'>'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</option>'; } 
+		if ($row['count'] > 0) { $style_choose .= '<option value="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].'"'.$selected.'>'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</option>'; } 
 	} while ($row_styles = mysql_fetch_assoc($styles));
 	
 	$style_choose .= '</select>';

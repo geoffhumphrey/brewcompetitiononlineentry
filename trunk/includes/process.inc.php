@@ -226,14 +226,32 @@ if ($action == "delete") {
   $dropTable = "DROP TABLE users_$filter";
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
-  $dropTable2 = "DROP TABLE brewing_$filter";
-  $Result2 = mysql_query($dropTable2, $brewing) or die(mysql_error());
+  $dropTable = "DROP TABLE brewing_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
-  $dropTable3 = "DROP TABLE brewer_$filter";
-  $Result3 = mysql_query($dropTable3, $brewing) or die(mysql_error());
+  $dropTable = "DROP TABLE brewer_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
-  $dropTable4 = "DROP TABLE sponsors_$filter";
-  $Result4 = mysql_query($dropTable4, $brewing) or die(mysql_error());
+  $dropTable = "DROP TABLE sponsors_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE judging_assignments_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE judging_flights_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE judging_scores_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE judging_scores_bos_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE judging_tables_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+  
+  $dropTable = "DROP TABLE style_types_$filter";
+  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   header(sprintf("Location: %s", $deleteGoTo));
   }
