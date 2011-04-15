@@ -23,7 +23,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
     	<span class="icon"><img src="images/page.png"  /></span><a href="index.php?section=admin&amp;go=entries">View Entries <?php if ($filter != "default") echo " for All Categories"; if ($bid != "default") echo " for all Particpants";?></a>
    	</span>
     <?php } ?>
-	<?php } ?>
+	
   	<span class="adminSubNav">
     	<span class="icon"><img src="images/printer.png" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries');">Print <em>This</em> List</a></div>
   		<div id="printMenu_entries" class="menu" onmouseover="menuMouseover(event)">
@@ -44,12 +44,15 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition a
   		</div>
   </span>
   <?php } ?>
+  <?php } ?>
 </div>
+<?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
     <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,"index.php","none"); ?></span>
 </div>
-<?php } ?>
+<?php } 
+} ?>
 <?php if ($dbTable == "default") { ?>
 <table class="dataTable">
 <tr>

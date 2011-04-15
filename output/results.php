@@ -7,12 +7,6 @@ require(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-/*
-$query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";
-$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-$row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
-*/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -34,7 +28,7 @@ $totalRows_tables = mysql_num_rows($tables);
 	</div>
 <?php if (($go == "judging_scores") && ($action == "default"))  { ?>
 <?php do { 
-$entry_count = get_table_info(1,"count_total",$row_tables['id']);
+$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 ?>
     <div id="header">	
 		<div id="header-inner">

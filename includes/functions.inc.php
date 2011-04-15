@@ -2,7 +2,7 @@
 /**
  * Module:      functions.inc.php
  * Description: This module houses all site-wide function definitions. If a function
- *              or variable is called from more than 2 modules, it is housed here.
+ *              or variable is called from multiple modules, it is housed here.
  *
  */
  
@@ -42,7 +42,6 @@ function judging_date_return() {
  		else $newDate[] = 0;
 	} while ($row_check = mysql_fetch_assoc($check));
 	if (in_array(1, $newDate)) return true; 
-	else return false;
 }
 
 
@@ -73,7 +72,7 @@ $color2 = "#eeeeee";
 
 // ---------------------------- Temperature, Weight, and Volume Conversion ----------------------------------
 
-function tempconvert($temp,$t) { // $t = desired output, defined at function call
+function temp_convert($temp,$t) { // $t = desired output, defined at function call
 if ($t == "F") { // Celsius to F if source is C
 	$tcon = (($temp - 32) / 1.8); 
     return round ($tcon, 1);
@@ -85,7 +84,7 @@ if ($t == "C") { // F to Celsius
 	}
 }
 
-function weightconvert($weight,$w) { // $w = desired output, defined at function call
+function weight_convert($weight,$w) { // $w = desired output, defined at function call
 if ($w == "pounds") { // kilograms to pounds
 	$wcon = ($weight * 2.2046);
 	return round ($wcon, 2);
@@ -107,7 +106,7 @@ if ($w == "kilograms") { // pounds to kilograms
 	}
 }
 
-function volumeconvert($volume,$v) {  // $v = desired output, defined at function call
+function volume_convert($volume,$v) {  // $v = desired output, defined at function call
 if ($v == "gallons") { // liters to gallons
 	$vcon = ($volume * 0.2641);
 	return round ($vcon, 2);
@@ -132,7 +131,7 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 
 // ---------------------------- Date Conversion -----------------------------------------
 // http://www.phpbuilder.com/annotate/message.php3?id=1031006
-function dateconvert($date,$func) {
+function date_convert($date,$func) {
 if ($func == 1)	{ //insert conversion
 list($day, $month, $year) = split('[/.-]', $date); 
 $date = "$year-$month-$day"; 
@@ -256,7 +255,7 @@ function paginate($display, $pg, $total) {
   echo '</div>';
 }
 	
-	function total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
+function total_fees($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
 		include(CONFIG.'config.php');
 		
 		if (($bid == "default") && ($filter == "default")) {
@@ -391,7 +390,7 @@ function paginate($display, $pg, $total) {
 	} // end function
 		
 
-	function total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
+function total_fees_paid($bid, $entry_fee, $entry_fee_discount, $discount, $entry_discount_number, $cap_no, $filter) {
 		include(CONFIG.'config.php');
 		if (($bid == "default") && ($filter == "default")) {
 			
@@ -758,10 +757,13 @@ function style_convert($number,$type) {
 	return $style_convert;
 }
 
-function get_table_info($input,$method,$id) {	
+function get_table_info($input,$method,$id,$dbTable) {	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_table = "SELECT * FROM judging_tables";
+	
+	include(INCLUDES.'db_tables.inc.php');
+	
+	$query_table = "SELECT * FROM $tables_db_table";
 	if ($id != "default") $query_table .= " WHERE id='$id'"; 
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
@@ -844,6 +846,7 @@ function get_table_info($input,$method,$id) {
   	}
 	
 	if ($method == "count_total") {
+		
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
 				include(CONFIG.'config.php');
@@ -852,11 +855,10 @@ function get_table_info($input,$method,$id) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
-				
 				$c[] = $totalRows_style_count ;
 			}
 	$d = array_sum($c);
@@ -871,7 +873,7 @@ function get_table_info($input,$method,$id) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -905,11 +907,11 @@ function get_table_info($input,$method,$id) {
   	}
 }
 
-function displayArrayContent($arrayname,$method) {
+function display_array_content($arrayname,$method) {
  	$a = "";
  	while(list($key, $value) = each($arrayname)) {
   		if (is_array($value)) {
-   		$a .= displayArrayContent($value,'');
+   		$a .= display_array_content($value,'');
 		
    		}
   	else $a .= "$value";
@@ -1006,7 +1008,7 @@ function check_bos_loc($id) {
 	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 	$row_judging = mysql_fetch_assoc($judging);
 	$totalRows_judging = mysql_num_rows($judging);
-	$bos_loc = $row_judging['judgingLocName']." (".dateconvert($row_judging['judgingDate'], 3).")";
+	$bos_loc = $row_judging['judgingLocName']." (".date_convert($row_judging['judgingDate'], 3).")";
 	return $bos_loc;
 }
 
@@ -1095,7 +1097,7 @@ function table_location($table_id) {
 	$totalRows_location = mysql_num_rows($location);
 	
 	if ($totalRows_location == 1) {
-    $table_location = $row_location['judgingLocName'].", ".dateconvert($row_location['judgingDate'], 3)." - ".$row_location['judgingTime'];
+    $table_location = $row_location['judgingLocName'].", ".date_convert($row_location['judgingDate'], 3)." - ".$row_location['judgingTime'];
 	}
 	else $table_location = ""; 
 	return $table_location;
@@ -1137,28 +1139,26 @@ function score_count($table_id,$method) {
 
 // function to generate random number
 function random_generator($digits,$method){
-srand ((double) microtime() * 10000000);
+	srand ((double) microtime() * 10000000);
 
-//Array of alphabet
-if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
+	//Array of alphabet
+	if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+	if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
 
-$random_generator = "";// Initialize the string to store random numbers
-for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
-	if(rand(1,2) == 1){// to decide the digit should be numeric or alphabet
-	// Add one random alphabet 
-	$rand_index = array_rand($input);
-	$random_generator .=$input[$rand_index]; // One char is added
-	}
-	else
-	{
-	// Add one numeric digit between 1 and 10
-	$random_generator .=rand(1,10); // one number is added
-	} // end of if else
-} // end of for loop 
+	$random_generator = "";// Initialize the string to store random numbers
+	for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
+		if(rand(1,2) == 1){// to decide the digit should be numeric or alphabet
+		// Add one random alphabet 
+		$rand_index = array_rand($input);
+		$random_generator .=$input[$rand_index]; // One char is added
+		}
+		else {
+		// Add one numeric digit between 1 and 10
+		$random_generator .=rand(1,10); // one number is added
+		} // end of if else
+	} // end of for loop 
 
-return $random_generator;
-
+	return $random_generator;
 } // end of function
 	
 function orphan_styles() { 
@@ -1187,7 +1187,6 @@ function orphan_styles() {
 	return $return;
 
 }
-
 
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
@@ -1273,7 +1272,7 @@ function srm_color($srm,$method) {
 return $return;
 }
 
-function getContactCount() {
+function get_contact_count() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
@@ -1285,7 +1284,7 @@ function getContactCount() {
 	return $contactCount;
 }
 
-function getContacts() {
+function get_contacts() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
@@ -1313,6 +1312,20 @@ function get_entry_count() {
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
 	return $r;
+	mysql_free_result($row_paid);
+}
+
+function get_participant_count() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+	$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+	$row_participant_count = mysql_fetch_assoc($participant_count);
+	
+	return $row_participant_count['count'];
+	
+	mysql_free_result($participant_count);
+
 }
 
 function display_place($place) {
@@ -1330,6 +1343,16 @@ function display_place($place) {
 		default: $place = "N/A";
 	}
 	return $place;
+}
+
+function get_suffix($dbTable) {
+	if (strstr($dbTable,"judging_tables_")) $suffix = ltrim($dbTable,"judging_tables_");
+	if (strstr($dbTable,"judging_flights_")) $suffix = ltrim($dbTable,"judging_flights_");
+	if (strstr($dbTable,"judging_scores_")) $suffix = ltrim($dbTable,"judging_scores_");
+	if (strstr($dbTable,"judging_scores_bos")) $suffix = ltrim($dbTable,"judging_scores_bos");
+	if (strstr($dbTable,"brewing_"))  $suffix = ltrim($dbTable,"brewing_");
+	if (strstr($dbTable,"brewer_"))  $suffix = ltrim($dbTable,"brewer_");
+	return $suffix;
 }
 
 ?>

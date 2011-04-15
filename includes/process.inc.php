@@ -16,11 +16,18 @@ require(CONFIG.'config.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 
-function relocate($referer) {
-	// determine if referrer has any msg=X variables attached
+function relocate($referer,$page) {
+	// determine if referrer has any msg=X or id=X variables attached and remove
 	if (strstr($referer,"&msg")) { 
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
+	$pattern = array("/[0-9]/", "/&id=/");
+	$referer = preg_replace($pattern, "", $referer);
+	if ($page != "default") { 
+		$pattern = array("/[0-9]/", "/&pg=/"); 
+		$referer = preg_replace($pattern, "", $referer); 
+		$referer .= "&pg=".$page; 
+		}
 	}
 	return $referer;
 }
@@ -58,7 +65,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 $insertGoTo = $_POST['relocate']."&msg=1";
 $updateGoTo = $_POST['relocate']."&msg=2";
 $massUpdateGoTo = $_POST['relocate']."&msg=9";
-$deleteGoTo = relocate($_SERVER['HTTP_REFERER'])."&msg=5";
+$deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=5";
 
 session_start(); 
 //require ('authentication.inc.php'); session_start(); sessionAuthenticate();
@@ -166,6 +173,18 @@ if ($action == "delete") {
   
   if ($go == "judging_tables") {
 	mysql_select_db($database, $brewing);
+	
+	$query_delete_assign = sprintf("SELECT id FROM judging_scores WHERE assignTable='%s'", $id);
+  	$delete_assign = mysql_query($query_delete_assign, $brewing) or die(mysql_error()); 
+  	$row_delete_assign = mysql_fetch_assoc($delete_assign);
+	
+	do { $z[] = $row_delete_assign['id']; } while (mysql_fetch_assoc($delete_judge_assign));
+	
+	foreach ($z as $aid) {
+		$deleteAssign = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $aid);
+		$Result = mysql_query($deleteAssign, $brewing) or die(mysql_error());
+		}
+	
   	$query_delete_scores = sprintf("SELECT id,eid FROM judging_scores WHERE scoreTable='%s'", $id);
   	$delete_scores = mysql_query($query_delete_scores, $brewing) or die(mysql_error()); 
   	$row_delete_scores = mysql_fetch_assoc($delete_scores);
@@ -1767,9 +1786,21 @@ if($result1){
 
 if (($action == "update") && ($dbTable == "brewer")) {
 
-foreach($_POST['id'] as $id)
+	if ($filter == "staff") {
+	$query_organizer = "SELECT uid FROM brewer WHERE brewerAssignment='O'";
+	$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
+	$row_organizer = mysql_fetch_assoc($organizer);
+	
+	if ($row_organizer['uid'] != $_POST['Organizer']) {
+		$updateSQL = sprintf("UPDATE brewer SET brewerAssignment='' WHERE uid='%s'", $row_organizer['uid']);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = sprintf("UPDATE brewer SET brewerAssignment='O' WHERE uid='%s'", $_POST['Organizer']);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		}
+	}
 
-	{ 
+	foreach($_POST['id'] as $id){ 
 		mysql_select_db($database, $brewing);		
 		if (($bid == "default") && ($_POST["brewerAssignment".$id] != "") && ($filter != "bos")) {
 		$updateSQL = "UPDATE brewer SET brewerAssignment='";
@@ -2294,35 +2325,201 @@ tableLocation
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	
+	$query_table = "SELECT id FROM judging_tables ORDER BY id DESC LIMIT 1";
+	$table = mysql_query($query_table, $brewing) or die(mysql_error());
+	$row_table = mysql_fetch_assoc($table);
+	
+	// Add all entries affected entries to Flight1 (if non-queued judging)
+	
+	$a = explode(",",$table_styles);
+	
+	foreach (array_unique($a) as $value) {
+	
+		$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM styles WHERE id='%s'", $value);
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		
+		$query_entries = sprintf("SELECT id FROM brewing WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+		$row_entries = mysql_fetch_assoc($entries);
+		
+		do {
+			
+			$insertSQL = sprintf("INSERT INTO judging_flights (
+				flightTable, 
+				flightNumber, 
+				flightEntryID
+  				) VALUES (%s, %s, %s)",
+                       GetSQLValueString($row_table['id'], "text"),
+					   GetSQLValueString("1", "text"),
+					   GetSQLValueString($row_entries['id'], "text")
+					   );
+
+			//echo $insertSQL."<br>";
+			mysql_select_db($database, $brewing);
+  			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			
+		} while ($row_entries = mysql_fetch_assoc($entries));
+	}
+	
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
 // --------------------------- Editing a Table and Associated Styles ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "judging_tables")) {
-if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = "";
+	
+	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = "";
 
-$updateSQL = sprintf("UPDATE judging_tables SET 
-
-tableName=%s, 
-tableStyles=%s, 
-tableNumber=%s,
-tableLocation=%s
-WHERE id=%s",
+	$updateSQL = sprintf("UPDATE judging_tables SET 
+	tableName=%s, 
+	tableStyles=%s, 
+	tableNumber=%s,
+	tableLocation=%s
+	WHERE id=%s",
                     
-                       GetSQLValueString($_POST['tableName'], "text"),
-					   GetSQLValueString($table_styles, "text"),
-					   GetSQLValueString($_POST['tableNumber'], "text"),
-					   GetSQLValueString($_POST['tableLocation'], "text"),
-                       GetSQLValueString($id, "int"));
+	GetSQLValueString($_POST['tableName'], "text"),
+	GetSQLValueString($table_styles, "text"),
+	GetSQLValueString($_POST['tableNumber'], "text"),
+	GetSQLValueString($_POST['tableLocation'], "text"),
+	GetSQLValueString($id, "text"));
 
-  mysql_select_db($database, $brewing);
-  $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
+  	mysql_select_db($database, $brewing);
+  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
-  // Check to see if flights have been designated already -----------------------------------------------------------------------------------------------------------
-  // If so, loop through and remove the flight designation (table has changed)??
-  
+  	// Check to see if flights have been designated already
+  	$query_flight_count = sprintf("SELECT id,flightEntryID FROM judging_flights WHERE flightTable='%s'", $id);
+	$flight_count = mysql_query($query_flight_count, $brewing) or die(mysql_error());
+	$row_flight_count = mysql_fetch_assoc($flight_count);
+	$totalRows_flight_count = mysql_num_rows($flight_count);
+	
+	//echo "<p>".$totalRows_flight_count."<p>";
+  	
+	// If flights are designated and the Table's styles have changed, loop through the judging_flights and update or remove the affected entries
+  	if (($totalRows_flight_count > 0) && ($table_styles != "")) {
+		
+		$query_flight_round = sprintf("SELECT flightRound FROM judging_flights WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $id);
+		$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
+		$row_flight_round = mysql_fetch_assoc($flight_round);
+		
+		$a = explode(",",$table_styles);
+		
+		$query_table_styles = "SELECT id,tableStyles FROM judging_tables";
+		$table_styles = mysql_query($query_table_styles, $brewing) or die(mysql_error());
+		$row_table_styles = mysql_fetch_assoc($table_styles);
+					
+		do { $t[] = $row_table_styles['id']; } while ($row_table_styles = mysql_fetch_assoc($table_styles));
+	
+	// Update or remove	
+		do { $f[] = $row_flight_count['id']; } while ($row_flight_count = mysql_fetch_assoc($flight_count)); 
+		
+		foreach ($f as $id) {
+			unset($update);
+			unset($b);	
+			
+			$query_entry_style = sprintf("SELECT flightEntryID FROM judging_flights WHERE id='%s'", $id);
+			$entry_style = mysql_query($query_entry_style, $brewing) or die(mysql_error());
+			$row_entry_style = mysql_fetch_assoc($entry_style);
+			//echo $query_entry_style."<br>";
+			
+			$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM brewing WHERE id='%s'", $row_entry_style['flightEntryID']);
+			$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
+			$row_entry = mysql_fetch_assoc($entry);
+			//echo $query_entry."<br>";
+			
+			foreach ($t as $table_id) {
+				
+				$query_table_style = sprintf("SELECT id,tableStyles FROM judging_tables WHERE id='%s'", $table_id);
+				$table_style = mysql_query($query_table_style, $brewing) or die(mysql_error());
+				$row_table_style = mysql_fetch_assoc($table_style);
+				//echo $query_table_style."<br>";
+				
+				$query_style = sprintf("SELECT id FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+				$style = mysql_query($query_style, $brewing) or die(mysql_error());
+				$row_style = mysql_fetch_assoc($style);
+				//echo $query_style."<br>";
+				
+				$array = explode(",",$row_table_style['tableStyles']);
+				//print_r($array);
+				//echo "<br>";
+				if (in_array($row_style['id'],$array)) $update[] = $row_table_style['id']; else $update[] = "N";
+			}
+			
+			$query_flight_info = sprintf("SELECT id,flightEntryID,flightTable FROM judging_flights WHERE id='%s'", $id);
+			$flight_info = mysql_query($query_flight_info, $brewing) or die(mysql_error());
+			$row_flight_info = mysql_fetch_assoc($flight_info);
+			$totalRows_flight_info = mysql_num_rows($flight_info);
+			
+			$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM brewing WHERE id='%s'", $row_flight_info['flightEntryID']);
+			$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
+			$row_entry = mysql_fetch_assoc($entry);
+			
+			$entry_style = $row_entry['brewCategorySort'].$row_entry['brewSubCategory'];
+			
+			//echo "<p>".$query_entry."<br>";
+			
+			foreach ($a as $style_id) {
+				
+				$b[] = 0;
+				
+				$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='%s'", $style_id);
+				$style = mysql_query($query_style, $brewing) or die(mysql_error());
+				$row_style = mysql_fetch_assoc($style);
+			
+				//echo $query_style."<br>";
+				
+				$table_style = $row_style['brewStyleGroup'].$row_style['brewStyleNum'];
+				
+				//echo "Table Style: ".$table_style."<br>";
+				//echo "Entry Style: ".$entry_style."<br>";
+				
+				if ($table_style == $entry_style) $b[] = 1;
+				if ($table_style != $entry_style) $b[] = 0;
+			}
+			
+			$update = array_filter($update,"is_numeric");
+			$update = implode("",$update);
+			$delete = array_sum($b);
+			
+			//echo $update."<br>";
+			//echo $delete."<br>";
+			
+			// Delete if no table found that contains the entry's style
+			if (($delete == 0) && ($update == "")) {
+				$delete = sprintf("DELETE FROM judging_flights WHERE id='%s'", $row_flight_info['id']);
+				echo $delete."<br>";
+  				mysql_select_db($database, $brewing);
+  				$Result = mysql_query($delete, $brewing) or die(mysql_error());	
+			}
+			
+			// If table style is assigned to another table, reassign the entry to that table
+			if (($delete == 0) && ($update != "")) {
+				$updateSQL = sprintf("UPDATE judging_flights SET
+					flightTable=%s, 
+					flightNumber=%s, 
+					flightRound=%s
+					WHERE id=%s",
+                       GetSQLValueString($update, "text"),
+                       GetSQLValueString("1", "text"),
+                       GetSQLValueString("1", "text"),
+                       GetSQLValueString($id, "text"));
+				//echo $updateSQL."<br>";
+  				mysql_select_db($database_brewing, $brewing);
+  				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+			}
+		}
+	} //end if (($row_flight_count['count'] > 0) && ($table_styles != ""))
+	
+	// Remove all flight rows if unassigning all present table styles
+	if (($totalRows_flight_count > 0) && ($table_styles == "")) {
+		do { $a[] = $row_flight_count['id']; } while ($row_flight_count = mysql_fetch_assoc($flight_count));
+		foreach ($a as $id) {
+			$delete = sprintf("DELETE FROM judging_flights WHERE id='%s'", $id);
+  			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($delete, $brewing) or die(mysql_error());
+			}
+	} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
   
   header(sprintf("Location: %s", $updateGoTo));
 }
@@ -2346,61 +2543,60 @@ for($i=1; $i<$x+1; $i++) {
 	print_r(array_unique($c)); echo "<br>";
 }
 */
-foreach($_POST['id'] as $id)	{
-	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
-	$insertSQL = sprintf("INSERT INTO judging_flights (
-	flightTable, 
-	flightNumber, 
-	flightEntryID
-  	) VALUES (%s, %s, %s)",
+	foreach($_POST['id'] as $id)	{
+		$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
+		$insertSQL = sprintf("INSERT INTO judging_flights (
+		flightTable, 
+		flightNumber, 
+		flightEntryID
+  		) VALUES (%s, %s, %s)",
                        GetSQLValueString($_POST['flightTable'], "text"),
 					   GetSQLValueString($flight_number, "text"),
 					   GetSQLValueString($id, "text")
 					   );
 
-	//echo $insertSQL."<br>";
-	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	}
-
+		//echo $insertSQL."<br>";
+		mysql_select_db($database, $brewing);
+  		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		}
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
 if (($action == "edit") && ($dbTable == "judging_flights")) { 
 
-foreach($_POST['id'] as $id)	{
-	$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
+	foreach($_POST['id'] as $id)	{
+		$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
 	
-	if ($id <= "999999") {
-	$updateSQL = sprintf("UPDATE judging_flights SET
-	flightTable=%s,
-	flightNumber=%s
-	WHERE id=%s",
+		if ($id <= "999999") {
+			$updateSQL = sprintf("UPDATE judging_flights SET
+			flightTable=%s,
+			flightNumber=%s
+			WHERE id=%s",
                        GetSQLValueString($_POST['flightTable'], "text"),
 					   GetSQLValueString($flight_number, "text"),
 					   GetSQLValueString($id, "text")
 					   );
 
-	//echo $updateSQL."<br>";
-	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	}
-	if ($id > "999999"){
-	$insertSQL = sprintf("INSERT INTO judging_flights (
-	flightTable, 
-	flightNumber, 
-	flightEntryID
-  	) VALUES (%s, %s, %s)",
+			//echo $updateSQL."<br>";
+			mysql_select_db($database, $brewing);
+  			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		}
+		if ($id > "999999"){
+			$insertSQL = sprintf("INSERT INTO judging_flights (
+			flightTable, 
+			flightNumber, 
+			flightEntryID
+  			) VALUES (%s, %s, %s)",
                        GetSQLValueString($_POST['flightTable'], "text"),
 					   GetSQLValueString($flight_number, "text"),
 					   GetSQLValueString($_POST['flightEntryID'.$id], "text")
 					   );
 
-	//echo $insertSQL."<br>";
-	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	}
-   }
+			//echo $insertSQL."<br>";
+			mysql_select_db($database, $brewing);
+  			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		}
+  	}
 	header(sprintf("Location: %s", $updateGoTo));
 }
 

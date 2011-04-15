@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `styles` (
   `brewStyleType` varchar(25)  default NULL,
   `brewStyleInfo` text ,
   `brewStyleLink` varchar(200)  default NULL,
-  `brewStyleGroup` char(2)  default NULL,
+  `brewStyleGroup` INT(11)  default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 

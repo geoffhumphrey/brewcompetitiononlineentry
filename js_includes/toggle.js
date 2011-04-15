@@ -1,534 +1,205 @@
-// SpryCollapsiblePanel.js - version 0.7 - Spry Pre-Release 1.6.1
-//
-// Copyright (c) 2006. Adobe Systems Incorporated.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-//
-//   * Redistributions of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//   * Redistributions in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//   * Neither the name of Adobe Systems Incorporated nor the names of its
-//     contributors may be used to endorse or promote products derived from this
-//     software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-// POSSIBILITY OF SUCH DAMAGE.
+/* ---------------------------------------------
+Accordian Effect
+http://adipalaz.com/experiments/jquery/accordion3.html
+Requires: jQuery v.1.4.2+
+Copyright (c) 2009 Adriana Palazova
+Useful link: http://www.learningjquery.com/2007/03/accordion-madness
+------------------------------------------------ */
+$(function() {
+    $('#outer h4.trigger').wrapInner('<a style="display:block" href="#" title="expand/collapse"></a>');
+   
+    /*demo 1 - div.demo:eq(0) - Accordion slide effect with first section initially expanded
+    $('#outer div.demo:eq(0)').find('h4.expand:eq(0)').addClass('open').end()
+    .find('div.collapse:gt(0)').hide().end()
+    .find('h4.expand').click(function() {
+        $(this).toggleClass('open').siblings().removeClass('open').end()
+        .next('div.collapse').slideToggle().siblings('div.collapse:visible').slideUp();
+        return false;
+    });
+    
+    //demo 2 - div.demo:eq(1) - Accordion slide effect with first section initially expanded. Always keeps one section visible 
+    $('#outer div.demo:eq(1)').find('h4.expand:eq(0)').addClass('open').end()
+    .find('div.collapse:gt(0)').hide().end()
+    .find('h4.expand').click(function() {
+        $(this).addClass('open').siblings().removeClass('open').end()
+        .next('div.collapse:hidden').slideToggle().siblings('div.collapse:visible').slideUp();
+        return false;
+    });
+    */
+    //demo 3 - div.demo:eq(2) - Queued Slide Effects 
+    $('#outer div.menus:eq(0)').find('h4.trigger:eq(0)').addClass('open').end()
+    .find('div.toggle_container:gt(0)').hide().end()
+    .find('h4.trigger').each(function() {
+          $(this).click(function() {
+          
+              var $thisCllps = $(this).next('div.toggle_container');
+              var $cllpsVisible = $(this).siblings('h4.trigger').next('div.toggle_container:visible');
+              
+              ($cllpsVisible.length) ? $(this).toggleClass('open').siblings('h4.trigger').removeClass('open')
+                  .next('div.toggle_container:visible').slideUp('fast', function() {
+                  $thisCllps.slideDown();
+                  }) : $(this).toggleClass('open').next('div.toggle_container').slideToggle();
+              return false;
+          });
+     });
 
-var Spry;
-if (!Spry) Spry = {};
-if (!Spry.Widget) Spry.Widget = {};
+});
 
-Spry.Widget.CollapsiblePanel = function(element, opts)
-{
-	this.element = this.getElement(element);
-	this.focusElement = null;
-	this.hoverClass = "CollapsiblePanelTabHover";
-	this.openClass = "CollapsiblePanelOpen";
-	this.closedClass = "CollapsiblePanelClosed";
-	this.focusedClass = "CollapsiblePanelFocused";
-	this.enableAnimation = true;
-	this.enableKeyboardNavigation = true;
-	this.animator = null;
-	this.hasFocus = false;
-	this.contentIsOpen = true;
 
-	this.openPanelKeyCode = Spry.Widget.CollapsiblePanel.KEY_DOWN;
-	this.closePanelKeyCode = Spry.Widget.CollapsiblePanel.KEY_UP;
 
-	Spry.Widget.CollapsiblePanel.setOptions(this, opts);
+/* ---------------------------------------------
+Sidebar Toggler v.1.0.2
+http://adipalaz.com/experiments/jquery/toggle_sidebar.html
+Requires: jQuery v.1.4.2+
+Copyright (c) 2009 Adriana Palazova
+Dual licensed under the MIT (http://www.adipalaz.com/docs/mit-license.txt) and GPL (http://www.adipalaz.com/docs/gpl-license.txt) licenses.
+------------------------------------------------ */
+(function($) {
+$.fn.toggleSidebar = function(options, arg) {
+    var opts = $.extend({}, $.fn.toggleSidebar.defaults, options);   
 
-	this.attachBehaviors();
+    return this.each(function() {
+        $$ = $(this);
+        var o = $.meta ? $.extend({}, opts, $$.data()) : opts;
+        
+        // Generate the element that handles the toggle action:
+        var trigger1, triger2;
+        (o.initState == 'shown') ? (trigger1 = o.triggerShow, trigger2 = o.triggerHide) : (trigger1 = o.triggerHide, trigger2 = o.triggerShow);
+        $('<a class="trigger" href="#" />').text(trigger2).insertBefore('#' + $$.attr("id") + ' ' + o.sidebar);
+
+        // the variables we need to create the animation effect:
+        var $trigger = $$.find('a.trigger'),
+            $thisPanel = $$.find(o.sidebar),
+            $main = $$.closest(o.wrapper).find(o.mainContent),
+            pw = $thisPanel.width(), // the width of the sidebar
+            tw = $trigger.outerWidth(true), // the width of the trigger
+            hTimeout = null;
+        // initial positions
+        init = $.fn.toggleSidebar.init[o.init];
+        init($$, $trigger, $thisPanel, $main, pw, tw, o);
+        // event
+        if (o.event == 'click') {
+            var ev = 'click';
+        } else {
+            if (o.focus) {var addev = ' focus';} else {var addev = '';} // for backward compatibility
+            if (o.addEvents) {var addev = ' ' + o.addEvents;} else {var addev = '';}
+            var ev = 'mouseenter' + addev;
+        }
+         
+        $$.delegate('a.trigger', ev, function(ev) {
+            ev.preventDefault();
+            var $trigger = $(this),
+                setanim = (o.attr && $.isFunction($.fn.toggleSidebar.animations[$trigger.attr(o.attr)])) ? $trigger.attr(o.attr) : null, 
+                animation = setanim || o.animation,
+                anim = $.fn.toggleSidebar.animations[animation];
+            if ($.isFunction(anim)) {
+                if (o.event == 'click') {
+                    anim($$, $trigger, $thisPanel, $main, pw, tw, o);
+                } else {
+                  hTimeout = window.setTimeout(function() {
+                      anim($$, $trigger, $thisPanel, $main, pw, tw, o);
+                  }, o.interval);        
+                  //$trigger.click(function() {$trigger.blur();});
+                }
+            } else {
+              //alert('The ' + animation +  ' function is not defined!');
+              //return false;
+            }
+        });
+        if (o.event != 'click') {$$.delegate('a.trigger', 'mouseleave', function() {window.clearTimeout(hTimeout); });}
+    });
+};
+// define defaults and override with options, if available:
+$.fn.toggleSidebar.defaults = {
+    initState : 'shown', // 'shown' or 'hidden' - the initial state of the sliding panel
+    animation : 'queuedEffects', // the animation effect
+    init : 'initPositions', // the initial positions of the elements, needed when the switchable panel is initially hidden
+    full : false, // if 'true', the expanded main content will use the whole of the available space (optional)
+    position : 'right', // position of the switchable panel
+    triggerShow : 'Show', // the text of the trigger for showing
+    triggerHide : 'Hide', // the text of the trigger for hiding
+    sidebar : 'div.slide', // the selector for the switchable panel
+    mainContent : '#main', // the selector for the main column
+    wrapper : '#content', // the selector for the element that wraps the columns
+    p : 5, // the distance between the columns
+    attr : 'id', //[*] null, or an attribute 'id', 'class', etc. of the trigger element.  
+    speed : 400, // the duration of the animation
+    event : 'click', //'click', 'hover'
+    addEvents : 'click', // it is needed for  keyboard accessibility when we use {event:'hover'}
+    interval : 300 // time-interval for delayed actions used to prevent the accidental activation of animations when we use {event:hover} (in milliseconds)
+    //[*] If {attr} is not null, and its name coincides with the name of one of the defined animation functions, this function will be used for the animation.
 };
 
-Spry.Widget.CollapsiblePanel.prototype.getElement = function(ele)
-{
-	if (ele && typeof ele == "string")
-		return document.getElementById(ele);
-	return ele;
+// initial state
+$.fn.toggleSidebar.init = {
+    initPositions : function($$, $trigger, $thisPanel, $main, pw, tw, o) {
+                if (o.initState == 'hidden') {
+                    var mrg = (o.full == true) ? 0 : tw+o.p;
+                    switch (o.position) {
+                      case 'right': var pos='right'; var margin='margin-right'; break;
+                      case 'left': var pos='left'; var margin='margin-left'; break;
+                      default: var pos='right'; var margin='margin-right';
+                    }
+                    $(o.sidebar, $$).css(pos, -(pw+1));
+                    $main.css(margin, (mrg));
+                    $trigger.addClass('collapsed');
+                }
+    }
 };
+// Pre-defined animation functions (you can add your own custom animations here).
+// To save file size, feel free to remove any animation function you don't need.
+$.fn.toggleSidebar.animations = {
+    queuedEffects : function($$, $trigger, $thisPanel, $main, pw, tw, o) {
+                if (o.full == true) {var mrg=0} else {var mrg=tw+o.p}
+                $trigger.animate({opacity: 0}, o.speed);
+                if ($trigger.text() == o.triggerShow) {
+                    $main.animate({marginRight: (pw+o.p)}, o.speed, function() {
+                      $thisPanel.animate({opacity: 1}, 'fast').animate({right: 0}, o.speed, function() {
+                        $trigger.removeClass('collapsed').text(o.triggerHide).animate({opacity: 1}, o.speed);
+                    }); });
+                } else {
+                    $thisPanel.animate({opacity: 0, right: -(pw+1)}, o.speed, function() {
+                      $main.animate({marginRight:  (mrg)}, o.speed, function() {
+                        $trigger.addClass('collapsed').text(o.triggerShow).animate({opacity: 1}, o.speed);
+                    }); });
+                };
+            },
+                
+    concurrentEffects : function($$, $trigger, $thisPanel, $main, pw, tw, o) {
+                if (o.full == true) {var mrg=0} else {var mrg=tw+o.p}
+                $trigger.animate({opacity: 0}, 'fast');
+                if ($trigger.text() == o.triggerShow) {
+                    $main.animate({marginRight: (pw+o.p)}, o.speed, 'linear');
+                    $thisPanel.animate({ right: 0, opacity: 1}, o.speed, function() {
+                        $trigger.removeClass('collapsed').text(o.triggerHide).animate({opacity: 1}, o.speed);
+                    });
+                } else {
+                    $thisPanel.animate({opacity: 0, right: -(pw+1)}, o.speed, 'linear');
+                    $main.animate({marginRight:  (mrg)},  o.speed, function() {
+                        $trigger.addClass('collapsed').text(o.triggerShow).animate({opacity: 1}, o.speed);
+                    });
+                };
+            },
 
-Spry.Widget.CollapsiblePanel.prototype.addClassName = function(ele, className)
-{
-	if (!ele || !className || (ele.className && ele.className.search(new RegExp("\\b" + className + "\\b")) != -1))
-		return;
-	ele.className += (ele.className ? " " : "") + className;
+    simpleToggle : function($$, $trigger, $thisPanel, $main, pw, tw, o) {
+                if (o.full == true) {var mrg=0} else {var mrg=tw+o.p}
+                if ($trigger.text() == o.triggerShow) {
+                    $trigger.removeClass('collapsed').text(o.triggerHide);
+                    $thisPanel.css({right: 0, opacity: 1});
+                    $main.css({marginRight: (pw+o.p)});
+                } else {
+                    $trigger.addClass('collapsed').text(o.triggerShow);
+                    $thisPanel.css({right: -(pw+1), opacity: 0});
+                    $main.css({marginRight: (mrg)});
+                };
+            }
 };
-
-Spry.Widget.CollapsiblePanel.prototype.removeClassName = function(ele, className)
-{
-	if (!ele || !className || (ele.className && ele.className.search(new RegExp("\\b" + className + "\\b")) == -1))
-		return;
-	ele.className = ele.className.replace(new RegExp("\\s*\\b" + className + "\\b", "g"), "");
-};
-
-Spry.Widget.CollapsiblePanel.prototype.hasClassName = function(ele, className)
-{
-	if (!ele || !className || !ele.className || ele.className.search(new RegExp("\\b" + className + "\\b")) == -1)
-		return false;
-	return true;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.setDisplay = function(ele, display)
-{
-	if( ele )
-		ele.style.display = display;
-};
-
-Spry.Widget.CollapsiblePanel.setOptions = function(obj, optionsObj, ignoreUndefinedProps)
-{
-	if (!optionsObj)
-		return;
-	for (var optionName in optionsObj)
-	{
-		if (ignoreUndefinedProps && optionsObj[optionName] == undefined)
-			continue;
-		obj[optionName] = optionsObj[optionName];
-	}
-};
-
-Spry.Widget.CollapsiblePanel.prototype.onTabMouseOver = function(e)
-{
-	this.addClassName(this.getTab(), this.hoverClass);
-	return false;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.onTabMouseOut = function(e)
-{
-	this.removeClassName(this.getTab(), this.hoverClass);
-	return false;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.open = function()
-{
-	this.contentIsOpen = true;
-	if (this.enableAnimation)
-	{
-		if (this.animator)
-			this.animator.stop();
-		this.animator = new Spry.Widget.CollapsiblePanel.PanelAnimator(this, true, { duration: this.duration, fps: this.fps, transition: this.transition });
-		this.animator.start();
-	}
-	else
-		this.setDisplay(this.getContent(), "block");
-
-	this.removeClassName(this.element, this.closedClass);
-	this.addClassName(this.element, this.openClass);
-};
-
-Spry.Widget.CollapsiblePanel.prototype.close = function()
-{
-	this.contentIsOpen = false;
-	if (this.enableAnimation)
-	{
-		if (this.animator)
-			this.animator.stop();
-		this.animator = new Spry.Widget.CollapsiblePanel.PanelAnimator(this, false, { duration: this.duration, fps: this.fps, transition: this.transition });
-		this.animator.start();
-	}
-	else
-		this.setDisplay(this.getContent(), "none");
-
-	this.removeClassName(this.element, this.openClass);
-	this.addClassName(this.element, this.closedClass);
-};
-
-Spry.Widget.CollapsiblePanel.prototype.onTabClick = function(e)
-{
-	if (this.isOpen())
-		this.close();
-	else
-		this.open();
-
-	this.focus();
-
-	return this.stopPropagation(e);
-};
-
-Spry.Widget.CollapsiblePanel.prototype.onFocus = function(e)
-{
-	this.hasFocus = true;
-	this.addClassName(this.element, this.focusedClass);
-	return false;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.onBlur = function(e)
-{
-	this.hasFocus = false;
-	this.removeClassName(this.element, this.focusedClass);
-	return false;
-};
-
-Spry.Widget.CollapsiblePanel.KEY_UP = 38;
-Spry.Widget.CollapsiblePanel.KEY_DOWN = 40;
-
-Spry.Widget.CollapsiblePanel.prototype.onKeyDown = function(e)
-{
-	var key = e.keyCode;
-	if (!this.hasFocus || (key != this.openPanelKeyCode && key != this.closePanelKeyCode))
-		return true;
-
-	if (this.isOpen() && key == this.closePanelKeyCode)
-		this.close();
-	else if ( key == this.openPanelKeyCode)
-		this.open();
-	
-	return this.stopPropagation(e);
-};
-
-Spry.Widget.CollapsiblePanel.prototype.stopPropagation = function(e)
-{
-	if (e.preventDefault) e.preventDefault();
-	else e.returnValue = false;
-	if (e.stopPropagation) e.stopPropagation();
-	else e.cancelBubble = true;
-	return false;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.attachPanelHandlers = function()
-{
-	var tab = this.getTab();
-	if (!tab)
-		return;
-
-	var self = this;
-	Spry.Widget.CollapsiblePanel.addEventListener(tab, "click", function(e) { return self.onTabClick(e); }, false);
-	Spry.Widget.CollapsiblePanel.addEventListener(tab, "mouseover", function(e) { return self.onTabMouseOver(e); }, false);
-	Spry.Widget.CollapsiblePanel.addEventListener(tab, "mouseout", function(e) { return self.onTabMouseOut(e); }, false);
-
-	if (this.enableKeyboardNavigation)
-	{
-		// XXX: IE doesn't allow the setting of tabindex dynamically. This means we can't
-		// rely on adding the tabindex attribute if it is missing to enable keyboard navigation
-		// by default.
-
-		// Find the first element within the tab container that has a tabindex or the first
-		// anchor tag.
-		
-		var tabIndexEle = null;
-		var tabAnchorEle = null;
-
-		this.preorderTraversal(tab, function(node) {
-			if (node.nodeType == 1 /* NODE.ELEMENT_NODE */)
-			{
-				var tabIndexAttr = tab.attributes.getNamedItem("tabindex");
-				if (tabIndexAttr)
-				{
-					tabIndexEle = node;
-					return true;
-				}
-				if (!tabAnchorEle && node.nodeName.toLowerCase() == "a")
-					tabAnchorEle = node;
-			}
-			return false;
-		});
-
-		if (tabIndexEle)
-			this.focusElement = tabIndexEle;
-		else if (tabAnchorEle)
-			this.focusElement = tabAnchorEle;
-
-		if (this.focusElement)
-		{
-			Spry.Widget.CollapsiblePanel.addEventListener(this.focusElement, "focus", function(e) { return self.onFocus(e); }, false);
-			Spry.Widget.CollapsiblePanel.addEventListener(this.focusElement, "blur", function(e) { return self.onBlur(e); }, false);
-			Spry.Widget.CollapsiblePanel.addEventListener(this.focusElement, "keydown", function(e) { return self.onKeyDown(e); }, false);
-		}
-	}
-};
-
-Spry.Widget.CollapsiblePanel.addEventListener = function(element, eventType, handler, capture)
-{
-	try
-	{
-		if (element.addEventListener)
-			element.addEventListener(eventType, handler, capture);
-		else if (element.attachEvent)
-			element.attachEvent("on" + eventType, handler);
-	}
-	catch (e) {}
-};
-
-Spry.Widget.CollapsiblePanel.prototype.preorderTraversal = function(root, func)
-{
-	var stopTraversal = false;
-	if (root)
-	{
-		stopTraversal = func(root);
-		if (root.hasChildNodes())
-		{
-			var child = root.firstChild;
-			while (!stopTraversal && child)
-			{
-				stopTraversal = this.preorderTraversal(child, func);
-				try { child = child.nextSibling; } catch (e) { child = null; }
-			}
-		}
-	}
-	return stopTraversal;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.attachBehaviors = function()
-{
-	var panel = this.element;
-	var tab = this.getTab();
-	var content = this.getContent();
-
-	if (this.contentIsOpen || this.hasClassName(panel, this.openClass))
-	{
-		this.addClassName(panel, this.openClass);
-		this.removeClassName(panel, this.closedClass);
-		this.setDisplay(content, "block");
-		this.contentIsOpen = true;
-	}
-	else
-	{
-		this.removeClassName(panel, this.openClass);
-		this.addClassName(panel, this.closedClass);
-		this.setDisplay(content, "none");
-		this.contentIsOpen = false;
-	}
-
-	this.attachPanelHandlers();
-};
-
-Spry.Widget.CollapsiblePanel.prototype.getTab = function()
-{
-	return this.getElementChildren(this.element)[0];
-};
-
-Spry.Widget.CollapsiblePanel.prototype.getContent = function()
-{
-	return this.getElementChildren(this.element)[1];
-};
-
-Spry.Widget.CollapsiblePanel.prototype.isOpen = function()
-{
-	return this.contentIsOpen;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.getElementChildren = function(element)
-{
-	var children = [];
-	var child = element.firstChild;
-	while (child)
-	{
-		if (child.nodeType == 1 /* Node.ELEMENT_NODE */)
-			children.push(child);
-		child = child.nextSibling;
-	}
-	return children;
-};
-
-Spry.Widget.CollapsiblePanel.prototype.focus = function()
-{
-	if (this.focusElement && this.focusElement.focus)
-		this.focusElement.focus();
-};
-
-/////////////////////////////////////////////////////
-
-Spry.Widget.CollapsiblePanel.PanelAnimator = function(panel, doOpen, opts)
-{
-	this.timer = null;
-	this.interval = 0;
-
-	this.fps = 60;
-	this.duration = 500;
-	this.startTime = 0;
-
-	this.transition = Spry.Widget.CollapsiblePanel.PanelAnimator.defaultTransition;
-
-	this.onComplete = null;
-
-	this.panel = panel;
-	this.content = panel.getContent();
-	this.doOpen = doOpen;
-
-	Spry.Widget.CollapsiblePanel.setOptions(this, opts, true);
-
-	this.interval = Math.floor(1000 / this.fps);
-
-	var c = this.content;
-
-	var curHeight = c.offsetHeight ? c.offsetHeight : 0;
-	this.fromHeight = (doOpen && c.style.display == "none") ? 0 : curHeight;
-
-	if (!doOpen)
-		this.toHeight = 0;
-	else
-	{
-		if (c.style.display == "none")
-		{
-			// The content area is not displayed so in order to calculate the extent
-			// of the content inside it, we have to set its display to block.
-
-			c.style.visibility = "hidden";
-			c.style.display = "block";
-		}
-
-		// Clear the height property so we can calculate
-		// the full height of the content we are going to show.
-
-		c.style.height = "";
-		this.toHeight = c.offsetHeight;
-	}
-
-	this.distance = this.toHeight - this.fromHeight;
-	this.overflow = c.style.overflow;
-
-	c.style.height = this.fromHeight + "px";
-	c.style.visibility = "visible";
-	c.style.overflow = "hidden";
-	c.style.display = "block";
-};
-
-Spry.Widget.CollapsiblePanel.PanelAnimator.defaultTransition = function(time, begin, finish, duration) { time /= duration; return begin + ((2 - time) * time * finish); };
-
-Spry.Widget.CollapsiblePanel.PanelAnimator.prototype.start = function()
-{
-	var self = this;
-	this.startTime = (new Date).getTime();
-	this.timer = setTimeout(function() { self.stepAnimation(); }, this.interval);
-};
-
-Spry.Widget.CollapsiblePanel.PanelAnimator.prototype.stop = function()
-{
-	if (this.timer)
-	{
-		clearTimeout(this.timer);
-
-		// If we're killing the timer, restore the overflow property.
-
-		this.content.style.overflow = this.overflow;
-	}
-
-	this.timer = null;
-};
-
-Spry.Widget.CollapsiblePanel.PanelAnimator.prototype.stepAnimation = function()
-{
-	var curTime = (new Date).getTime();
-	var elapsedTime = curTime - this.startTime;
-
-	if (elapsedTime >= this.duration)
-	{
-		if (!this.doOpen)
-			this.content.style.display = "none";
-		this.content.style.overflow = this.overflow;
-		this.content.style.height = this.toHeight + "px";
-		if (this.onComplete)
-			this.onComplete();
-		return;
-	}
-
-	var ht = this.transition(elapsedTime, this.fromHeight, this.distance, this.duration);
-
-	this.content.style.height = ((ht < 0) ? 0 : ht) + "px";
-
-	var self = this;
-	this.timer = setTimeout(function() { self.stepAnimation(); }, this.interval);
-};
-
-Spry.Widget.CollapsiblePanelGroup = function(element, opts)
-{
-	this.element = this.getElement(element);
-	this.opts = opts;
-
-	this.attachBehaviors();
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.setOptions = Spry.Widget.CollapsiblePanel.prototype.setOptions;
-Spry.Widget.CollapsiblePanelGroup.prototype.getElement = Spry.Widget.CollapsiblePanel.prototype.getElement;
-Spry.Widget.CollapsiblePanelGroup.prototype.getElementChildren = Spry.Widget.CollapsiblePanel.prototype.getElementChildren;
-
-Spry.Widget.CollapsiblePanelGroup.prototype.setElementWidget = function(element, widget)
-{
-	if (!element || !widget)
-		return;
-	if (!element.spry)
-		element.spry = new Object;
-	element.spry.collapsiblePanel = widget;
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.getElementWidget = function(element)
-{
-	return (element && element.spry && element.spry.collapsiblePanel) ? element.spry.collapsiblePanel : null;
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.getPanels = function()
-{
-	if (!this.element)
-		return [];
-	return this.getElementChildren(this.element);
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.getPanel = function(panelIndex)
-{
-	return this.getPanels()[panelIndex];
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.attachBehaviors = function()
-{
-	if (!this.element)
-		return;
-
-	var cpanels = this.getPanels();
-	var numCPanels = cpanels.length;
-	for (var i = 0; i < numCPanels; i++)
-	{
-		var cpanel = cpanels[i];
-		this.setElementWidget(cpanel, new Spry.Widget.CollapsiblePanel(cpanel, this.opts));
-	}
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.openPanel = function(panelIndex)
-{
-	var w = this.getElementWidget(this.getPanel(panelIndex));
-	if (w && !w.isOpen())
-		w.open();
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.closePanel = function(panelIndex)
-{
-	var w = this.getElementWidget(this.getPanel(panelIndex));
-	if (w && w.isOpen())
-		w.close();
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.openAllPanels = function()
-{
-	var cpanels = this.getPanels();
-	var numCPanels = cpanels.length;
-	for (var i = 0; i < numCPanels; i++)
-	{
-		var w = this.getElementWidget(cpanels[i]);
-		if (w && !w.isOpen())
-			w.open();
-	}
-};
-
-Spry.Widget.CollapsiblePanelGroup.prototype.closeAllPanels = function()
-{
-	var cpanels = this.getPanels();
-	var numCPanels = cpanels.length;
-	for (var i = 0; i < numCPanels; i++)
-	{
-		var w = this.getElementWidget(cpanels[i]);
-		if (w && w.isOpen())
-			w.close();
-	}
-};
-
+})(jQuery);
+//////////////////////
+// The plugin can be invoked like this:
+/* ---------------------------------------------------------------------- 
+$(function(){
+  $('#rightcol').toggleSidebar(); // --- the sidebar is initially shown
+  //$('#rightcol').toggleSidebar({state:"hidden", event:"hover"}); // --- the sidebar is initially hidden, the animatioin is triggered whenever a 'hover' event occurs.
+});
+ ---------------------------------------------------------------------- */

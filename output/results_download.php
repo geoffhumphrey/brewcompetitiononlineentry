@@ -89,7 +89,7 @@ $html = '';
 if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].'</h1>';
 // loop through 'judging_tables' table
 do { 
-	$entry_count = get_table_info(1,"count_total",$row_tables['id']);
+	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 	
 	if ($entry_count > 0) {
 	$html .= '<br><br><strong>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</strong><br>';

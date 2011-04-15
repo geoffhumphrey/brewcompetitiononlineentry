@@ -87,14 +87,14 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
     <tbody>
     <?php do { 
 	$judge_info = explode("^",brewer_info($row_assignments['bid']));
-	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable']));
-	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1"));
+	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable));
+	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable));
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
     	<td class="data bdr1B_gray"><?php echo $judge_info['2']; ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $location_info['2']."<br>".dateconvert($location_info['0'], 3)."<br>".$location_info['1']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $location_info['2']."<br>".date_convert($location_info['0'], 3)."<br>".$location_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignRound']; ?></td>

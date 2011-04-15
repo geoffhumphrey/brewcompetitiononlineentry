@@ -153,14 +153,14 @@ $xml_output .= "<RECIPES>\n";
 			$xml_output .= "\t\t\t<NAME>".$replaced."</NAME>\n";
 			$xml_output .= "\t\t\t<VERSION>1</VERSION>\n";
 			if ($row_pref['measWeight2'] == "pounds") {
-			$xml_output .= "\t\t\t<BOIL_SIZE>".weightconvert($row_equip_profiles['equipBoilVolume'], "kilograms")."</BOIL_SIZE>\n";
-			$xml_output .= "\t\t\t<BATCH_SIZE>".weightconvert($row_equip_profiles['equipBatchSize'], "kilograms")."</BATCH_SIZE>\n";
-			$xml_output .= "\t\t\t<TUN_VOLUME>".weightconvert($row_equip_profiles['equipMashTunVolume'], "kilograms")."</TUN_VOLUME>\n";
-			$xml_output .= "\t\t\t<TUN_WEIGHT>".weightconvert($row_equip_profiles['equipMashTunWeight'], "kilograms")."</TUN_WEIGHT>\n";
-			$xml_output .= "\t\t\t<TOP_UP_WATER>".weightconvert($row_equip_profiles['equipTopUp'], "kilograms")."</TOP_UP_WATER>\n";
-			$xml_output .= "\t\t\t<LAUTER_DEADSPACE>".weightconvert($row_equip_profiles['equipMashTunDeadspace'], "kilograms")."</LAUTER_DEADSPACE>\n";
-			$xml_output .= "\t\t\t<TOP_UP_KETTLE>".weightconvert($row_equip_profiles['equipTopUpKettle'], "kilograms")."</TOP_UP_KETTLE>\n";
-			$xml_output .= "\t\t\t<TRUB_CHILLER_LOSS>".weightconvert($row_equip_profiles['equipLoss'], "kilograms")."</TRUB_CHILLER_LOSS>\n";
+			$xml_output .= "\t\t\t<BOIL_SIZE>".weight_convert($row_equip_profiles['equipBoilVolume'], "kilograms")."</BOIL_SIZE>\n";
+			$xml_output .= "\t\t\t<BATCH_SIZE>".weight_convert($row_equip_profiles['equipBatchSize'], "kilograms")."</BATCH_SIZE>\n";
+			$xml_output .= "\t\t\t<TUN_VOLUME>".weight_convert($row_equip_profiles['equipMashTunVolume'], "kilograms")."</TUN_VOLUME>\n";
+			$xml_output .= "\t\t\t<TUN_WEIGHT>".weight_convert($row_equip_profiles['equipMashTunWeight'], "kilograms")."</TUN_WEIGHT>\n";
+			$xml_output .= "\t\t\t<TOP_UP_WATER>".weight_convert($row_equip_profiles['equipTopUp'], "kilograms")."</TOP_UP_WATER>\n";
+			$xml_output .= "\t\t\t<LAUTER_DEADSPACE>".weight_convert($row_equip_profiles['equipMashTunDeadspace'], "kilograms")."</LAUTER_DEADSPACE>\n";
+			$xml_output .= "\t\t\t<TOP_UP_KETTLE>".weight_convert($row_equip_profiles['equipTopUpKettle'], "kilograms")."</TOP_UP_KETTLE>\n";
+			$xml_output .= "\t\t\t<TRUB_CHILLER_LOSS>".weight_convert($row_equip_profiles['equipLoss'], "kilograms")."</TRUB_CHILLER_LOSS>\n";
 			} else {
 			$xml_output .= "\t\t\t<BOIL_SIZE>".$row_equip_profiles['equipBoilVolume']."</BOIL_SIZE>\n";
 			$xml_output .= "\t\t\t<BATCH_SIZE>".$row_equip_profiles['equipBatchSize']."</BATCH_SIZE>\n";
@@ -662,8 +662,8 @@ $xml_output .= "<RECIPES>\n";
 			$xml_output .= "\t\t\t\t<PRODUCT_ID>" . $row_yeast_profiles['yeastProdID'] . "</PRODUCT_ID>\n";
 			if ($row_pref['measTemp'] == "F") {
 
-			$xml_output .= "\t\t\t\t<MIN_TEMPERATURE>" . tempconvert($row_yeast_profiles['yeastMinTemp'], "C") . "</MIN_TEMPERATURE>\n";
-			$xml_output .= "\t\t\t\t<MAX_TEMPERATURE>" . tempconvert($row_yeast_profiles['yeastMaxTemp'], "C") . "</MAX_TEMPERATURE>\n";
+			$xml_output .= "\t\t\t\t<MIN_TEMPERATURE>" . temp_convert($row_yeast_profiles['yeastMinTemp'], "C") . "</MIN_TEMPERATURE>\n";
+			$xml_output .= "\t\t\t\t<MAX_TEMPERATURE>" . temp_convert($row_yeast_profiles['yeastMaxTemp'], "C") . "</MAX_TEMPERATURE>\n";
 			} else {
 			$xml_output .= "\t\t\t\t<MIN_TEMPERATURE>" . $row_yeast_profiles['yeastMinTemp'] . "</MIN_TEMPERATURE>\n";
 			$xml_output .= "\t\t\t\t<MAX_TEMPERATURE>" . $row_yeast_profiles['yeastMaxTemp'] . "</MAX_TEMPERATURE>\n";
@@ -775,7 +775,7 @@ $xml_output .= "<RECIPES>\n";
 		$xml_output .= "\t\t<MASH>\n";
 			$xml_output .= "\t\t\t<NAME>" . $row_log['brewMashType'] . "</NAME>\n";
 			$xml_output .= "\t\t\t<VERSION>1</VERSION>\n";
-			if (($row_pref['measTemp'] == "F") && ($row_log['brewMashGrainTemp'] != ""))  { $xml_output .= "\t\t\t<GRAIN_TEMP>" . tempconvert($row_log['brewMashGrainTemp'], "C") . "</GRAIN_TEMP>\n";  } 
+			if (($row_pref['measTemp'] == "F") && ($row_log['brewMashGrainTemp'] != ""))  { $xml_output .= "\t\t\t<GRAIN_TEMP>" . temp_convert($row_log['brewMashGrainTemp'], "C") . "</GRAIN_TEMP>\n";  } 
 			elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashGrainTemp'] != "")) { $xml_output .= "\t\t\t<GRAIN_TEMP>" . $row_log['brewMashGrainTemp'] . "</GRAIN_TEMP>\n";	}
 			else { $xml_output .= "\t\t\t<GRAIN_TEMP></GRAIN_TEMP>\n"; }		
 				$xml_output .= "\t\t\t\t<MASH_STEPS>\n";
@@ -784,7 +784,7 @@ $xml_output .= "<RECIPES>\n";
 					$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_log['brewMashStep1Name'] . "</NAME>\n";
 					$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 					$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_log['brewMashStep1Desc'] . "</TYPE>\n";
-					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep1Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_log['brewMashStep1Temp'], "C") . "</STEP_TEMP>\n"; } 
+					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep1Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_log['brewMashStep1Temp'], "C") . "</STEP_TEMP>\n"; } 
 					elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashStep1Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_log['brewMashStep1Temp'] . "</STEP_TEMP>\n"; }
 					else { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP></STEP_TEMP>\n"; }
 					$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_log['brewMashStep1Time'] . "</STEP_TIME>\n";
@@ -795,7 +795,7 @@ $xml_output .= "<RECIPES>\n";
 					$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_log['brewMashStep2Name'] . "</NAME>\n";
 					$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 					$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_log['brewMashStep2Desc'] . "</TYPE>\n";
-					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep2Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_log['brewMashStep2Temp'], "C") . "</STEP_TEMP>\n"; } 
+					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep2Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_log['brewMashStep2Temp'], "C") . "</STEP_TEMP>\n"; } 
 					elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashStep2Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_log['brewMashStep2Temp'] . "</STEP_TEMP>\n"; }
 					else { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP></STEP_TEMP>\n"; }
 					$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_log['brewMashStep2Time'] . "</STEP_TIME>\n";
@@ -806,7 +806,7 @@ $xml_output .= "<RECIPES>\n";
 					$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_log['brewMashStep3Name'] . "</NAME>\n";
 					$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 					$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_log['brewMashStep3Desc'] . "</TYPE>\n";
-					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep3Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_log['brewMashStep3Temp'], "C") . "</STEP_TEMP>\n"; } 
+					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep3Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_log['brewMashStep3Temp'], "C") . "</STEP_TEMP>\n"; } 
 					elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashStep3Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_log['brewMashStep3Temp'] . "</STEP_TEMP>\n"; }
 					else { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP></STEP_TEMP>\n"; }
 					$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_log['brewMashStep3Time'] . "</STEP_TIME>\n";
@@ -817,7 +817,7 @@ $xml_output .= "<RECIPES>\n";
 					$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_log['brewMashStep4Name'] . "</NAME>\n";
 					$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 					$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_log['brewMashStep4Desc'] . "</TYPE>\n";
-					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep4Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_log['brewMashStep4Temp'], "C") . "</STEP_TEMP>\n"; } 
+					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep4Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_log['brewMashStep4Temp'], "C") . "</STEP_TEMP>\n"; } 
 					elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashStep4Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_log['brewMashStep4Temp'] . "</STEP_TEMP>\n"; }
 					else { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP></STEP_TEMP>\n"; }
 					$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_log['brewMashStep4Time'] . "</STEP_TIME>\n";
@@ -828,7 +828,7 @@ $xml_output .= "<RECIPES>\n";
 					$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_log['brewMashStep5Name'] . "</NAME>\n";
 					$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 					$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_log['brewMashStep5Desc'] . "</TYPE>\n";
-					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep5Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_log['brewMashStep5Temp'], "C") . "</STEP_TEMP>\n"; } 
+					if (($row_pref['measTemp'] == "F") && ($row_log['brewMashStep5Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_log['brewMashStep5Temp'], "C") . "</STEP_TEMP>\n"; } 
 					elseif (($row_pref['measTemp'] == "C") && ($row_log['brewMashStep5Temp'] != "")) { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_log['brewMashStep5Temp'] . "</STEP_TEMP>\n"; }
 					else { $xml_output .= "\t\t\t\t\t\t<STEP_TEMP></STEP_TEMP>\n"; }
 					$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_log['brewMashStep5Time'] . "</STEP_TIME>\n";
@@ -837,12 +837,12 @@ $xml_output .= "<RECIPES>\n";
 				$xml_output .= "\t\t\t\t</MASH_STEPS>\n";
 			if ($row_log['brewMashTunTemp'] == "") { $xml_output .= "\t\t\t<TUN_TEMP></TUN_TEMP>\n"; }
 			if ($row_log['brewMashTunTemp'] != "") { 
-				if ($row_pref['measTemp'] == "F") { $xml_output .= "\t\t\t<TUN_TEMP>" . tempconvert($row_log['brewMashTunTemp'], "C") . "</TUN_TEMP>\n"; }
+				if ($row_pref['measTemp'] == "F") { $xml_output .= "\t\t\t<TUN_TEMP>" . temp_convert($row_log['brewMashTunTemp'], "C") . "</TUN_TEMP>\n"; }
 				else { $xml_output .= "\t\t\t<TUN_TEMP>" . $row_log['brewMashTunTemp'] . "</TUN_TEMP>\n"; }
 			}
 			if ($row_log['brewMashSpargeTemp'] == "") { $xml_output .= "\t\t\t<SPARGE_TEMP></SPARGE_TEMP>\n"; }
 			if ($row_log['brewMashSpargeTemp'] != "") { 
-				if ($row_pref['measTemp'] == "F") { $xml_output .= "\t\t\t<SPARGE_TEMP>" . tempconvert($row_log['brewMashSpargeTemp'], "C") . "</SPARGE_TEMP>\n"; }
+				if ($row_pref['measTemp'] == "F") { $xml_output .= "\t\t\t<SPARGE_TEMP>" . temp_convert($row_log['brewMashSpargeTemp'], "C") . "</SPARGE_TEMP>\n"; }
 				else { $xml_output .= "\t\t\t<SPARGE_TEMP>" . $row_log['brewMashSpargeTemp'] . "</SPARGE_TEMP>\n"; }
 			}
 			if ($row_log['brewMashPH'] == "") { $xml_output .= "\t\t\t<PH></PH>\n"; }
@@ -857,11 +857,11 @@ $xml_output .= "<RECIPES>\n";
 		$replaced = strtr($row_mash_profiles['mashProfileName'],$html_remove);
 		$xml_output .= "\t\t\t<NAME>" . $replaced . "</NAME>\n";
 		$xml_output .= "\t\t\t<VERSION>1</VERSION>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashGrainTemp'] != "")) $xml_output .= "\t\t\t<GRAIN_TEMP>" . tempconvert($row_mash_profiles['mashGrainTemp'],"C") . "</GRAIN_TEMP>\n";
+		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashGrainTemp'] != "")) $xml_output .= "\t\t\t<GRAIN_TEMP>" . temp_convert($row_mash_profiles['mashGrainTemp'],"C") . "</GRAIN_TEMP>\n";
 		else $xml_output .= "\t\t\t<GRAIN_TEMP>" . $row_mash_profiles['mashGrainTemp'] . "</GRAIN_TEMP>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashTunTemp'] != "")) $xml_output .= "\t\t\t<TUN_TEMP>" . tempconvert($row_mash_profiles['mashTunTemp'], "C") . "</TUN_TEMP>\n";
+		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashTunTemp'] != "")) $xml_output .= "\t\t\t<TUN_TEMP>" . temp_convert($row_mash_profiles['mashTunTemp'], "C") . "</TUN_TEMP>\n";
 		else $xml_output .= "\t\t\t<TUN_TEMP>" . $row_mash_profiles['mashTunTemp'] . "</TUN_TEMP>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashSpargeTemp'] != "")) $xml_output .= "\t\t\t<SPARGE_TEMP>" . tempconvert($row_mash_profiles['mashSpargeTemp'], "C") . "</SPARGE_TEMP>\n";
+		if (($row_pref['measTemp'] == "F") && ($row_mash_profiles['mashSpargeTemp'] != "")) $xml_output .= "\t\t\t<SPARGE_TEMP>" . temp_convert($row_mash_profiles['mashSpargeTemp'], "C") . "</SPARGE_TEMP>\n";
 		else $xml_output .= "\t\t\t<SPARGE_TEMP>" . $row_mash_profiles['mashSpargeTemp'] . "</SPARGE_TEMP>\n";
 		$xml_output .= "\t\t\t<PH>" . $row_mash_profiles['mashPH'] . "</PH>\n";
 		$xml_output .= "\t\t\t<EQUIP_ADJUST>" . $row_mash_profiles['mashEquipAdjust'] . "</EQUIP_ADJUST>\n";
@@ -871,13 +871,13 @@ $xml_output .= "<RECIPES>\n";
 			$xml_output .= "\t\t\t\t\t\t<NAME>" . $row_mash_steps['stepName'] . "</NAME>\n";
 			$xml_output .= "\t\t\t\t\t\t<VERSION>1</VERSION>\n";
 			$xml_output .= "\t\t\t\t\t\t<TYPE>" . $row_mash_steps['stepType'] . "</TYPE>\n";
-			if (($row_pref['measTemp'] == "F") && ($row_mash_steps['stepTemp'] != "")) $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . tempconvert($row_mash_steps['stepTemp'], "C") . "</STEP_TEMP>\n";
+			if (($row_pref['measTemp'] == "F") && ($row_mash_steps['stepTemp'] != "")) $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . temp_convert($row_mash_steps['stepTemp'], "C") . "</STEP_TEMP>\n";
 			else $xml_output .= "\t\t\t\t\t\t<STEP_TEMP>" . $row_mash_steps['stepTemp']. "</STEP_TEMP>\n";
 			$xml_output .= "\t\t\t\t\t\t<STEP_TIME>" . $row_mash_steps['stepTime'] . "</STEP_TIME>\n";
 			$xml_output .= "\t\t\t\t\t\t<RAMP_TIME>" . $row_mash_steps['stepTime'] . "</RAMP_TIME>\n";
-			if (($row_pref['measTemp'] == "F") && ($row_mash_steps['stepEndTemp'] != "")) $xml_output .= "\t\t\t\t\t\t<END_TEMP>" . tempconvert($row_mash_steps['stepEndTemp'], "C") . "</END_TEMP>\n";
+			if (($row_pref['measTemp'] == "F") && ($row_mash_steps['stepEndTemp'] != "")) $xml_output .= "\t\t\t\t\t\t<END_TEMP>" . temp_convert($row_mash_steps['stepEndTemp'], "C") . "</END_TEMP>\n";
 			else $xml_output .= "\t\t\t\t\t\t<END_TEMP>" . $row_mash_steps['stepEndTemp'] . "</END_TEMP>\n";
-			if (($row_pref['measFluid2'] == "gallons") && ($row_mash_steps['stepInfuseAmt'] != "")) $xml_output .= "\t\t\t\t\t\t<INFUSE_AMT>" . volumeconvert($row_mash_steps['stepInfuseAmt'], "liters"). "</INFUSE_AMT>\n";
+			if (($row_pref['measFluid2'] == "gallons") && ($row_mash_steps['stepInfuseAmt'] != "")) $xml_output .= "\t\t\t\t\t\t<INFUSE_AMT>" . volume_convert($row_mash_steps['stepInfuseAmt'], "liters"). "</INFUSE_AMT>\n";
 			else $xml_output .= "\t\t\t\t\t\t<INFUSE_AMT>" . $row_mash_steps['stepInfuseAmt'] . "</INFUSE_AMT>\n";
 			$xml_output .= "\t\t\t\t\t</MASH_STEP>\n";
 			} while ($row_mash_steps =  mysql_fetch_assoc($mash_steps));
@@ -896,38 +896,38 @@ $xml_output .= "<RECIPES>\n";
 		$xml_output .= "\t\t<DISPLAY_OG>" . round($row_log['brewOG'], 3) . "</DISPLAY_OG>\n";
 		$xml_output .= "\t\t<DISPLAY_FG>" . round($row_log['brewFG'], 3) . "</DISPLAY_FG>\n";
 		$xml_output .= "\t\t<PRIMARY_AGE>" . $row_log['brewPrimary'] . "</PRIMARY_AGE>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<PRIMARY_TEMP>" .  tempconvert($row_log['brewPrimaryTemp'], "C") . "</PRIMARY_TEMP>\n"; } 
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<PRIMARY_TEMP>" .  temp_convert($row_log['brewPrimaryTemp'], "C") . "</PRIMARY_TEMP>\n"; } 
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<PRIMARY_TEMP>" . $row_log['brewPrimaryTemp'] . "</PRIMARY_TEMP>\n";	}
 		else { $xml_output .= "\t\t<PRIMARY_TEMP></PRIMARY_TEMP>\n"; }
 		
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_PRIMARY_TEMP>" .  tempconvert($row_log['brewPrimaryTemp'], "C") . "</DISPLAY_PRIMARY_TEMP>\n"; } 
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_PRIMARY_TEMP>" .  temp_convert($row_log['brewPrimaryTemp'], "C") . "</DISPLAY_PRIMARY_TEMP>\n"; } 
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewPrimaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_PRIMARY_TEMP>" . $row_log['brewPrimaryTemp'] . "</DISPLAY_PRIMARY_TEMP>\n";	}
 		else { $xml_output .= "\t\t<DISPLAY_PRIMARY_TEMP></DISPLAY_PRIMARY_TEMP>\n"; }
 		
 		$xml_output .= "\t\t<SECONDARY_AGE>" . $row_log['brewSecondary'] . "</SECONDARY_AGE>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<SECONDARY_TEMP>" . tempconvert($row_log['brewSecondaryTemp'], "C") . "</SECONDARY_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<SECONDARY_TEMP>" . temp_convert($row_log['brewSecondaryTemp'], "C") . "</SECONDARY_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<SECONDARY_TEMP>" . $row_log['brewSecondaryTemp'] . "</SECONDARY_TEMP>\n"; }
 		else { $xml_output .= "\t\t<SECONDARY_TEMP></SECONDARY_TEMP>\n"; }
 		
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_SECONDARY_TEMP>" . tempconvert($row_log['brewSecondaryTemp'], "C") . "</DISPLAY_SECONDARY_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_SECONDARY_TEMP>" . temp_convert($row_log['brewSecondaryTemp'], "C") . "</DISPLAY_SECONDARY_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewSecondaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_SECONDARY_TEMP>" . $row_log['brewSecondaryTemp'] . "</DISPLAY_SECONDARY_TEMP>\n"; }
 		else { $xml_output .= "\t\t<DISPLAY_SECONDARY_TEMP></DISPLAY_SECONDARY_TEMP>\n"; }
 		
 		$xml_output .= "\t\t<TERTIARY_AGE>" . $row_log['brewTertiary'] . "</TERTIARY_AGE>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<TERTIARY_TEMP>" . tempconvert($row_log['brewTertiaryTemp'], "C") . "</TERTIARY_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<TERTIARY_TEMP>" . temp_convert($row_log['brewTertiaryTemp'], "C") . "</TERTIARY_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<TERTIARY_TEMP>" . $row_log['brewTertiaryTemp'] . "</TERTIARY_TEMP>\n"; }
 		else $xml_output .= "\t\t<TERTIARY_TEMP></TERTIARY_TEMP>\n";
 		
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_TERTIARY_TEMP>" . tempconvert($row_log['brewTertiaryTemp'], "C") . "</DISPLAY_TERTIARY_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_TERTIARY_TEMP>" . temp_convert($row_log['brewTertiaryTemp'], "C") . "</DISPLAY_TERTIARY_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewTertiaryTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_TERTIARY_TEMP>" . $row_log['brewTertiaryTemp'] . "</DISPLAY_TERTIARY_TEMP>\n"; }
 		else $xml_output .= "\t\t<DISPLAY_TERTIARY_TEMP></DISPLAY_TERTIARY_TEMP>\n";
 		
 		$xml_output .= "\t\t<AGE>" . $row_log['brewAge'] .  "</AGE>\n";
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<AGE_TEMP>" . tempconvert($row_log['brewAgeTemp'], "C") .  "</AGE_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<AGE_TEMP>" . temp_convert($row_log['brewAgeTemp'], "C") .  "</AGE_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<AGE_TEMP>" . $row_log['brewAgeTemp'] . "</AGE_TEMP>\n"; }
 		else { $xml_output .= "\t\t<AGE_TEMP></AGE_TEMP>\n";  }
 	
-		if (($row_pref['measTemp'] == "F") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_AGE_TEMP>" . tempconvert($row_log['brewAgeTemp'], "C") .  "</DISPLAY_AGE_TEMP>\n"; }
+		if (($row_pref['measTemp'] == "F") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_AGE_TEMP>" . temp_convert($row_log['brewAgeTemp'], "C") .  "</DISPLAY_AGE_TEMP>\n"; }
 		elseif (($row_pref['measTemp'] == "C") && ($row_log['brewAgeTemp'] != "")) { $xml_output .= "\t\t<DISPLAY_AGE_TEMP>" . $row_log['brewAgeTemp'] . "</DISPLAY_AGE_TEMP>\n"; }
 		else { $xml_output .= "\t\t<DISPLAY_AGE_TEMP></DISPLAY_AGE_TEMP>\n";  }
 		

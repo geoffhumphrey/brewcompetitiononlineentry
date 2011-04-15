@@ -98,7 +98,7 @@ elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewa
 elseif (($section == "admin") && ($go == "make_admin")) {
 	$query_brewer = "SELECT * FROM brewer WHERE brewerEmail='$username'";
 	}
-else $query_brewer = $query_name;
+else $query_brewer = "SELECT * FROM brewer";
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);

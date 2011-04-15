@@ -1,12 +1,79 @@
-<?php include(DB.'winners.db.php'); ?>
+<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } ?></h2>
+<?php 
+// If using BCOE for comp organization, display winners by table
+if ($row_prefs['prefsCompOrg'] == "Y") { 
+// Display all winners ?>
 <?php
+	do { 
+	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
+	?>
+	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>
+    <?php if ($entry_count > 0) { ?>
+     <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				]
+			} );
+		} );
+	</script>
+    <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
+    <thead>
+	<tr>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
+        <th class="dataList bdr1B">Style</th>
+    </tr>
+</thead>
+    <tbody>
+    <?php 
+		$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $judging_scores, $row_tables['id']);
+		$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5')";	
+		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+		$row_scores = mysql_fetch_assoc($scores);
+		$totalRows_scores = mysql_num_rows($scores);
+		
+		do { 
+			$query_entries = sprintf("SELECT id,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM  $dbTable WHERE id='%s'", $row_scores['eid']);
+			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+			$row_entries = mysql_fetch_assoc($entries);
+			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
+		
+			$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+			$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+			$row_styles = mysql_fetch_assoc($styles);
+	?>
+    <tr>
+        <td class="data"><?php echo display_place($row_scores['scorePlace']); ?></td>
+        <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
+        <td class="data"><?php echo $row_entries['brewName']; ?></td>
+        <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
+    </tr>
+    <?php 
+			mysql_free_result($styles);
+			mysql_free_result($entries);
+		} while ($row_scores = mysql_fetch_assoc($scores)); ?>
+    </tbody>
+    </table>
+    <?php } ?>
+<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+<?php } 
 
-if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judging dates have past, if so, display 
-	if ($totalRows_log_winners > 0) { // if winners have been designated, display 	
+
+// if NOT using BCOE to organize comp and if winners have been designated, display using legacy code
+if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) { 
 ?>
-<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -37,7 +104,6 @@ if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judgi
 </thead>
 <tbody>
  <?php do { 
-    include ('includes/style_convert.inc.php');
 	mysql_select_db($database, $brewing);
 	//if ($row_log_winners['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log_winners['brewWinnerCat'], $row_log_winners['brewWinnerSubCat']);
@@ -53,10 +119,10 @@ if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judgi
 	$row_club = mysql_fetch_assoc($club);
 	?>
  <tr>
-  <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/<?php if ($row_log_winners['brewWinnerPlace'] == "1") echo "medal_gold_3"; elseif ($row_log_winners['brewWinnerPlace'] == "2") echo "medal_silver_3"; elseif ($row_log_winners['brewWinnerPlace'] == "3") echo "medal_bronze_3"; else echo "thumb_up"; ?>.png"  /></span><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
+  <td class="dataList" nowrap="nowrap"><?php echo $row_log_winners['brewWinnerPlace']; ?></td>
   <td class="dataList">
   <?php 
-  echo $row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory'];$styleConvert2; if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']; } 
+  echo style_convert($row_log_winners['brewWinnerCat'], 1);  if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")";  } 
   if ($row_log_winners['brewWinnerCat'] >= 29)
   {
 	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_log_winners['brewWinnerCat']);  
@@ -64,7 +130,8 @@ if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judgi
 	$row_style = mysql_fetch_assoc($style);
 	echo ": ".$row_style['brewStyle'];
   } 
-  ?></td>
+  ?>
+  </td>
   <td class="dataList"><?php echo $row_log_winners['brewBrewerLastName'].", ".$row_log_winners['brewBrewerFirstName'];  if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
@@ -74,6 +141,5 @@ if ((!judging_date_return()) || ($dbTable != "default")) { // check if all judgi
 </tbody>
 </table>
 <?php if ($row_contest_info['contestWinnersComplete'] != "") echo $row_contest_info['contestWinnersComplete'];  
-	} // end if winners are logged
-} // end of judging date check
+	} // end if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N"))	
 ?>

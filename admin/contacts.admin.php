@@ -16,7 +16,7 @@
    </span>
    <?php } ?>
 </div>
-<?php if (getContactCount() > 0) { ?>
+<?php if (get_contact_count() > 0) { ?>
 <?php if ($action == "default") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

@@ -1,8 +1,18 @@
 <?php
+/**
+ * Module:      default.sec.php
+ * Description: This module houses the intallation's landing page that includes
+ *              information about the competition, registration dates/info, and 
+ *              winner display after all judging dates have passed.
+ */
+
 include(DB.'sponsors.db.php');
-if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { ?>
-	<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />
-<?php } ?>
+if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { 
+	if (!judging_date_return()) { ?>
+<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />
+<?php } 
+}
+?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print General Information">Print This Page</a></p>
 <?php } ?>
@@ -11,13 +21,16 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 		if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 		if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
 	} 
-?>
-<p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="index.php?section=rules">full competition rules</a>.</p>
-<?php 
+if (judging_date_return()) { ?>
+<p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="index.php?section=rules">competition rules</a>.</p>
+<?php }
 if (!judging_date_return()) { 
 	include ('judge_closed.sec.php'); 
-	echo "<p>Judging has already taken place.</p>"; 
-	if ($row_prefs['prefsDisplayWinners'] == "Y") { 
+	if ($row_prefs['prefsDisplayWinners'] == "Y") {  ?>
+		<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
+	<?php
+		include (DB.'winners.db.php'); 
 		include (SECTIONS.'bos.sec.php');
 		include (SECTIONS.'winners.sec.php');  
 	} 
@@ -31,7 +44,9 @@ else
 	You can even pay your entry fees online if you wish.
 	<?php } ?></p>
 <?php } 
-if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) include('reg_open.sec.php'); // end registration end check
+if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) include('reg_closed.sec.php');
+else include('reg_open.sec.php'); 
+// end registration end check
 } 
 if ($row_prefs['prefsSponsors'] == "Y") {
 if ($totalRows_sponsors > 0) {

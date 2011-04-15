@@ -258,7 +258,7 @@ if ($totalRows_participant_count > 0) {
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo dateconvert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3).")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}

@@ -2,13 +2,19 @@
 if (($action == "edit") && ($id != "default")) echo "Edit Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
 elseif (($action == "add") && ($id != "default")) echo "Add Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
 else echo "Scores"; 
-if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewer_"); 
+if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_scores_"); 
 $totalRows_entry_count = total_paid_received($go,"default");
 ?></h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
 		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
   	</span>
+    <?php if  ($dbTable != "default") { ?>
+	<span class="adminSubNav">
+        <span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=archive">Back to Archives</a>
+     </span> 
+	<?php } ?>
+    <?php if ($dbTable == "default") { ?>
     <span class="adminSubNav">
 		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a>
     </span>
@@ -24,7 +30,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     		<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     			<?php do { 
-				$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables_edit_2['id']);
+				$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
 				$scores_1 = mysql_query($query_scores_1, $brewing) or die(mysql_error());
 				$row_scores_1 = mysql_fetch_assoc($scores_1);
 				$totalRows_scores_1 = $row_scores_1['count'];
@@ -38,10 +44,12 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <span class="adminSubNav">
 		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
+    <?php } // end if ($dbTable == "default") ?>
 </div>
+<?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
+	<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
 	<span class="adminSubNav">
 		<em>All</em> scores have not been entered for table(s):
 	</span>
@@ -49,18 +57,19 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <select name="table_choice_1" id="table_choice_1" onchange="jumpMenu('self',this,0)">
         <option>Choose Below</option>
        	<?php do { 
-		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables['id']);
+		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
 		$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
 		$row_scores_2 = mysql_fetch_assoc($scores_2);
 		if ($row_scores_2['count'] > 0) $a = "edit"; else $a = "add";
-		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'])) { ?>
+		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable)) { ?>
         <option value="index.php?section=admin&amp;&go=judging_scores&amp;action=<?php echo $a; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option> 
 		<?php } mysql_free_result($scores_2); ?>
 		<?php } while ($row_tables = mysql_fetch_assoc($tables));?>
         </select>
      </span>
-<?php } ?>
+	<?php } ?>
 </div>
+ <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -74,6 +83,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"bStateSave" : false,
 			<?php if ($filter == "category") { ?>
 			"aaSorting": [[3,'asc'],[4,'desc'],[5,'asc']],
+			<?php } elseif ($dbTable != "default") { ?>
+			"aaSorting": [[1,'asc'],[7,'desc'],[4,'asc']],
 			<?php } else { ?>
 			"aaSorting": [[1,'asc'],[4,'desc'],[5,'asc']],
 			<?php } ?>
@@ -84,7 +95,13 @@ $totalRows_entry_count = total_paid_received($go,"default");
 				null,
 				null,
 				null,
+				<?php if ($dbTable != "default") { ?>
+				null,
+				null,
+				<?php } ?>
+				null<?php if ($dbTable == "default") { ?>,
 				{ "asSorting": [  ] }
+				<?php } ?>
 				]
 			} );
 		} );
@@ -94,16 +111,22 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Table #</th>
-        <th class="dataList bdr1B" width="20%" nowrap="nowrap">Table Name</th>
+        <th class="dataList bdr1B" width="15%" nowrap="nowrap">Table Name</th>
         <th class="dataList bdr1B">Category</th>
+        <?php if ($dbTable != "default") { ?>
+        <th class="dataList bdr1B" width="15%" nowrap="nowrap">Brewer</th>
+        <th class="dataList bdr1B" width="15%" nowrap="nowrap">Entry Name</th>
+        <?php } ?>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Score</th>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
+        <?php if ($dbTable == "default") { ?>
         <th class="dataList bdr1B" width="30%">Actions</th>
+        <?php } ?>
     </tr>
 </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory FROM brewing WHERE id='%s'", $row_scores['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
@@ -112,7 +135,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	$styles_1 = mysql_query($query_styles_1, $brewing) or die(mysql_error());
 	$row_styles_1 = mysql_fetch_assoc($styles_1);
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM judging_tables WHERE id='%s'", $row_scores['scoreTable']);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
@@ -123,10 +146,16 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
+        <?php if ($dbTable != "default") { ?>
+        <td class="data"><?php echo $row_entries_1['brewBrewerLastName'].", ".$row_entries_1['brewBrewerFirstName']; ?></td>
+        <td class="data"><?php echo $row_entries_1['brewName'] ?></td>
+        <?php } ?>
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
         <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; else echo $row_scores['scorePlace']; ?></td>  
+        <?php if ($dbTable == "default") { ?>
         <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a class="thickbox" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800"><img src="images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
         </td>
+        <?php } ?>
     </tr>
     <?php 
 		//}
@@ -136,7 +165,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php } else echo "<p>No scores have been entered yet.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
-<?php if (($action == "add") || ($action == "edit")) { ?>
+<?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { ?>
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>">
 <script type="text/javascript" language="javascript">
@@ -177,7 +206,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -185,7 +214,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		do {
 
 			if ($action == "edit") {
-				$query_scores = sprintf("SELECT * FROM judging_scores WHERE eid='%s'", $row_entries['id']);
+				$query_scores = sprintf("SELECT * FROM $scores_db_table WHERE eid='%s'", $row_entries['id']);
 				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 				$row_scores = mysql_fetch_assoc($scores);
 				}
@@ -229,7 +258,7 @@ else { ?>
 	<select name="table_choice_1" id="table_choice_1" onchange="jumpMenu('self',this,0)">
         <option>Choose Below</option>
        	<?php do { 
-		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables['id']);
+		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
 		$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
 		$row_scores_2 = mysql_fetch_assoc($scores_2);
 		if ($row_scores_2['count'] > 0) $a = "edit"; else $a = "add";
