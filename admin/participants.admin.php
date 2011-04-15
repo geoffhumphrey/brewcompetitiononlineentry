@@ -153,17 +153,17 @@ if ($totalRows_participant_count > 0) {
 				<?php if ($filter == "default") { ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				null,
+				null
 				<?php } 
-				if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+				if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
     			{ "asSorting": [  ] },
   				<?php } if ($filter != "default") { ?>
     			<?php if ($filter == "judges") { ?>
     			null,
-    			null,
+    			null
     			<?php } ?>
 				<?php } ?>
-				<?php if ($dbTable == "default") { ?>
+				<?php if ($dbTable == "default") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
 			]

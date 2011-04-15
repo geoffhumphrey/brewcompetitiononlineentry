@@ -54,7 +54,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     	<span class="icon"><img src="images/application_form.png" alt="Define/Edit flights" title="Define/Edit flights" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
     	<div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
-			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
+			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $row_tables_edit['id']);
 			$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
 			$row_flights_2 = mysql_fetch_assoc($flights_2);
 			$totalRows_flights_2 = $row_flights_2['count'];
@@ -85,7 +85,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
    	 	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     	<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
-			$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
+			$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $row_tables_edit_2['id']);
 			$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
 			$row_scores_2 = mysql_fetch_assoc($scores_2);
 			$totalRows_scores_2 = $row_scores_2['count'];
@@ -144,11 +144,10 @@ if ($totalRows_tables > 0) { ?>
 				null,
 				null,
 				null,
-				null,
-				<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>
-				null,
+				null<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>,
+				null
 				<?php } ?>
-				<?php if (($action != "print") && ($dbTable == "default"))  { ?>
+				<?php if (($action != "print") && ($dbTable == "default"))  { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
 				]

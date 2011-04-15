@@ -59,6 +59,7 @@ function checkUncheckAll(theElement) {
 				null,
 				null,
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
