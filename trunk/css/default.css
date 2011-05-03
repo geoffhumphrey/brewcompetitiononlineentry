@@ -194,6 +194,15 @@ color: #37517B;
 border-bottom: 1px solid #37517B;
 }
 
+#content-inner li {
+	margin: 2px 0 2px 20px;
+}
+
+/* Default Admin Screen */
+#outer li {
+	margin: 2px 0 2px 0;
+}
+
 /* Nav */
 
 #nav {

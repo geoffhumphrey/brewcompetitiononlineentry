@@ -26,7 +26,7 @@
       <td class="data" colspan="2">
       	<table class="dataTableCompact">
         	<tr>
-            	<td colspan="3">Check all styles that you <em>prefer</em> to judge.</td>
+            	<td colspan="3">Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that your available to judge.</span></p></td>
             </tr>
         	<?php do { 	?>
             <tr>
@@ -43,7 +43,7 @@
       <td class="data" colspan="2">
       	<table class="dataTableCompact">
             <tr>
-            	<td colspan="3">Check all styles that you <em>do not wish</em> to judge.</td>
+            	<td colspan="3">Check all styles that you <em>do not wish</em> to judge.<p><span class="required">There is no need to mark those styles for which you have entries; the system will not allow you to judge any style where you have entries.</span></p></td>
             </tr>
         	<?php do { ?>
             <tr>

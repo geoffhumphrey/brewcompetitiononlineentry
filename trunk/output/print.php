@@ -1,13 +1,23 @@
 <?php 
-require('output.bootstrap.php');
+// Define site folders
+define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
+define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
+define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
+define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
+define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
+define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
+define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
+
+require(CONFIG.'config.php');
 require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-$today = date('Y-m-d');
-$deadline = $row_contest_info['contestRegistrationDeadline'];
+//$today = date('Y-m-d');
+//$deadline = $row_contest_info['contestRegistrationDeadline'];
 $tb = "default";
 if (isset($_GET['tb'])) {
   $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
@@ -30,39 +40,30 @@ if (isset($_GET['tb'])) {
 	</div>
     <?php 
 	} 
-	// Check if registration date has passed. If so, display "registration end" message.
-	if (greaterDate($today,$deadline)) {
-	if ($section != "admin") { ?><div class="closed">Registration has closed. Thanks to all the brewers who registered and participated in our competition.</div><?php }  
-	if ($section == "default") 	include (SECTIONS.'default.sec.php');
-	if ($section == "rules") 	include (SECTIONS.'rules.sec.php');
-	if ($section == "entry") 	include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
+	
+	//if ($section == "register") 	include (SECTIONS.'register.sec.php');
+	//if ($section == "login")		include (SECTIONS.'login.sec.php');
+	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
+	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
+	if ($section == "default") 		include (SECTIONS.'default.sec.php');
+	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "admin")	include (ADMIN.'default.admin.php');
-		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		}
-	} else {
-	if ($section == "rules") 	include (SECTIONS.'rules.sec.php');
-	if ($section == "entry") 	include (SECTIONS.'entry_info.sec.php');
-	if ($section == "default") 	include (SECTIONS.'default.sec.php');
-	if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
-	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
-	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "admin")	include (ADMIN.'default.admin.php');
+		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
+		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML")))  
-	echo "<div id=\"header\"><div id=\"header-inner\"><h1>Restricted Area</h1></div></div>
-	<div class=\"error\">Please register or log in to access this area.</div>";
+		//if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
+		//if ($section == "user") 	include (SECTIONS.'user.sec.php');
+		//if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 	}
-	} // End registration date check.
 	?>
     </div>
 </div>
 <div id="footer">
-	<div id="footer-inner">Printed <?php echo date("l, F j, Y"); ?></div>
+	<div id="footer-inner">Printed <?php echo date_convert(date("Y-m-d"), 2, $row_prefs['prefsDateFormat']) ; ?></div>
 </div>
 </body>
 </html>

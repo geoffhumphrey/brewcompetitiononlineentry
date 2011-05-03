@@ -12,11 +12,8 @@
     	<td class="dataLabel">Password:</td>
     	<td class="data"><input name="loginPassword" type="password" class="submit" size="25"></td>
   	</tr>
-  	<tr>
-    	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" class="button" value="Login"></td>
-  	</tr>
 </table>
+<p><input type="submit" class="button" value="Login"></p>
 </form>
 <?php if (lesserDate($today,$row_contest_info['contestRegistrationDeadline']) && (!lesserDate($today,$row_contest_info['contestRegistrationOpen']))) {
  if ($msg != "default") { ?><p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p>

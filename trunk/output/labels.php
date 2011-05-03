@@ -126,7 +126,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 			$row_entries = mysql_fetch_assoc($entries);
 			if ($row_bos['scorePlace'] != "") { 
 				$text = sprintf("\n%s\n%s\n%s\n%s",
-				display_place($row_bos['scorePlace'])." - BEST IN SHOW",
+				display_place($row_bos['scorePlace'],1)." - BEST IN SHOW",
 				style_type($row_bos['scoreType'],"3","default"),
 				$row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName'], 
 				strtr($row_entries['brewName'],$html_remove)." - ".$row_entries['brewStyle']
@@ -150,7 +150,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 			$row_entries = mysql_fetch_assoc($entries);
 			
 			$text = sprintf("\n%s%s\n%s\n%s",
-			display_place($row_scores['scorePlace'])." - ",
+			display_place($row_scores['scorePlace'],1)." - ",
 			$row_tables['tableName'],
 			$row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName'], 
 			strtr($row_entries['brewName'],$html_remove)

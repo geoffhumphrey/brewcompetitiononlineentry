@@ -26,7 +26,11 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 <input name="uid" type="hidden" value="<?php echo $row_brewerID['id']; ?>" />
 <?php } else { ?>
 <form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=brewer&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<?php } ?>
+<?php } 
+$query_countries = "SELECT * FROM countries ORDER BY id ASC";
+$countries = mysql_query($query_countries, $brewing) or die(mysql_error());
+$row_countries = mysql_fetch_assoc($countries);
+?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
@@ -55,16 +59,28 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
-      <td class="dataLabel">State/Country:</td>
+      <td class="dataLabel">State or Province:</td>
       <td class="data"><input type="text" name="brewerState" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
-      <td class="dataLabel">Zip/Postal Code:</td>
+      <td class="dataLabel">Zip or Postal Code:</td>
       <td class="data"><input type="text" name="brewerZip" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
+</tr>
+<tr>
+  	<td class="dataLabel">Country:</td>
+  	<td class="data">
+    <select name="brewerCountry">
+    	<?php do { ?>
+        <option value="<?php echo $row_countries['name']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $row_countries['name'])) echo "selected"; ?>><?php echo $row_countries['name']; ?></option>
+        <?php } while ($row_countries = mysql_fetch_assoc($countries)); ?>
+    </select>
+    </td>
+  	<td nowrap="nowrap" class="data"><span class="required">Required</span></td>
+  	<td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 1:</td>
@@ -88,9 +104,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
   <td class="dataLabel">AHA Member Number:</td>
   <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
   <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
-  </tr>
-
-
+</tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
@@ -111,7 +125,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                 </select>
             </td>
-            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo date_convert($row_stewarding['judgingDate'], 3)." - ".$row_stewarding['judgingTime'].")"; ?></td>
+            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo date_convert($row_stewarding['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_stewarding['judgingTime'].")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
@@ -137,7 +151,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 				<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
       		</select>
             </td>
-            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo date_convert($row_judging3['judgingDate'], 3)." - ".$row_judging3['judgingTime'].")"; ?></td>
+            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo date_convert($row_judging3['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_judging3['judgingTime'].")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>

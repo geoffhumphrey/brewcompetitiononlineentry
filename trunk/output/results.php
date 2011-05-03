@@ -88,7 +88,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 			$row_styles = mysql_fetch_assoc($styles);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php echo display_place($row_scores['scorePlace']); ?></td>
+        <td class="data bdr1B_gray"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
@@ -164,7 +164,7 @@ foreach ($a as $type) {
 	
 	?>
 	<tr>
-        <td class="data bdr1B_gray"><?php echo display_place($row_bos['scorePlace']); ?></td>
+        <td class="data bdr1B_gray"><?php echo display_place($row_bos['scorePlace'],1); ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>   

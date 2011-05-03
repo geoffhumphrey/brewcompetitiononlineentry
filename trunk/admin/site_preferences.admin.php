@@ -1,12 +1,20 @@
+<?php 
+$query_themes = "SELECT * FROM themes";
+$themes = mysql_query($query_themes, $brewing) or die(mysql_error());
+$row_themes = mysql_fetch_assoc($themes);
+$totalRows_themes = mysql_num_rows($themes);
+?>
+
 <form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
-<h2>Preferences</h2>
+<h2>Site Preferences</h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
 		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
 	</span>
 </div>
 <?php } ?>
+<p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
 <h3>Competition Organization</h3>
 <table>
   <tr>
@@ -53,6 +61,17 @@
     </td>
   	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
   </tr>
+  <tr>
+    <td class="dataLabel">Site Theme:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsTheme">
+    <?php do { ?>
+    <option value="<?php echo $row_themes['themeFileName']; ?>" <?php if ($row_prefs['prefsTheme'] ==  $row_themes['themeFileName']) echo " SELECTED"; ?> /><?php echo  $row_themes['themeTitle']; ?></option>
+    <?php } while ($row_themes = mysql_fetch_assoc($themes)); ?>
+    </select>
+    </td>
+  	<td class="data">&nbsp;</td>
+  </tr>
 </table>
 <h3>Performance</h3>
 <table>
@@ -67,7 +86,7 @@
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
-<h3>Measurements</h3>
+<h3>Measurements and Dates</h3>
 <table>
   <tr>
   	<td class="dataLabel">Temperature:</td>
@@ -107,6 +126,16 @@
     <option value="litres" <?php if ($row_prefs['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>litres</option>
     </select>    </td>
     </tr>
+  <tr>
+    <td class="dataLabel">Date Format:</td>
+    <td class="data">
+    <select name="prefsDateFormat">
+    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year</option>
+    <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; ?>>Month Day Year</option>
+    <option value="3" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "SELECTED"; ?>>Year Month Day</option>
+    </select>
+    </td>
+  </tr>
 </table>
 <h3>Currency and Payment</h3>
 <table>

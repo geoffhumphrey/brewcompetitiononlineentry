@@ -27,7 +27,7 @@ include(DB.'styles.db.php');
     </span>
 <?php } ?>
 </div>
-<?php if ($filter == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo date_convert($row_judging['judgingDate'], 2); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
+<?php if ($filter == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo date_convert($row_judging['judgingDate'], 2, $row_prefs['prefsDateFormat']); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
 <?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
 <script language="javascript" type="text/javascript">
 //Custom JavaScript Functions by Shawn Olson
@@ -202,7 +202,7 @@ function checkUncheckAll(theElement) {
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
-	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3).")"; ?></option>
+	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
     <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
   </select>
   </td>

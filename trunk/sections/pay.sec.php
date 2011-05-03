@@ -1,4 +1,5 @@
-<?php 
+<?php
+$bid = $row_user['id'];
 if ($msg == "1") {
 	$a = explode('-', $view);
 	foreach (array_unique($a) as $value) {
@@ -7,25 +8,54 @@ if ($msg == "1") {
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
 }
-$total_not_paid = total_not_paid_brewer($row_brewer['uid']);
+
 include(DB.'brewer.db.php');
+include(DB.'entries.db.php');
 if ($msg != "default") echo $msg_output; 
-$total_entry_fees = total_fees($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
-if ($total_entry_fees > 0) { 
-$total_paid_entry_fees = total_fees_paid($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
+
+$total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
+$total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
+$total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
+$total_not_paid = total_not_paid_brewer($row_user['id']);
+/*
+$total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
+$total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
+*/
+if ($total_entry_fees > 0) { 
 ?>
-<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?>
-Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
-<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are: <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
+<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are:</p>
+<ul style="margin-bottom: 15px;">
+	<li><?php if ($row_brewer['brewerDiscount'] == "Y") echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']." per entry (discounted)."; else echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']." per entry."; ?></li>
+	<?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") { ?>
+    <li><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee2']." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries.	"; ?></li>   
+    <?php } if ($row_contest_info['contestEntryCap'] != "") { ?>
+    <li><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryCap']." for unlimited entries.</li>"; ?></li>
+    <?php } ?>
+</ul>
 <?php } ?>
 <?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
 <?php if ($total_entry_fees == 0) echo "You have not logged any entries yet."; ?>
+
+<?php if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "")) { ?>
+<h2>Discounted Entry Fee</h2>
+<p>Enter the code supplied by the competition organizers for a discounted entry fee.</p>
+<form action="includes/process.inc.php?action=check_discount&amp;dbTable=brewer&amp;id=<?php echo $bid; ?>" method="POST" name="form1" id="form1">
+<table class="dataTable">
+	<tr>
+    	<td class="dataLabel" width="5%">Discount Code:</td>
+    	<td class="data"><input name="brewerDiscount" type="text" class="submit" size="20"></td>
+  	</tr>
+</table>
+<p><input type="submit" class="button" value="Submit Code"></p>
+<?php } ?>
+
 <?php if (($total_to_pay > 0) && ($view == "default")) { ?>
 	<?php if ($row_prefs['prefsCash'] == "Y") { ?>
 		<h2>Cash</h2>
 		<p>Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.</p>
-		<p><span class="required"> Your returned scoresheets will serve as your entry receipt.</span></p>
+		<p><span class="required"> Your returned score sheets will serve as your entry receipt.</span></p>
 	<?php } ?>
 	<?php if ($row_prefs['prefsCheck'] == "Y") { ?>
 		<h2>Checks</h2>
@@ -47,16 +77,16 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 <h2>Pay Online</h2>
 <p><span class="required"> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</span></p>
 <p>You are paying for the following entries:</p>
-	<ol>
+	<ul>
     <?php 
-	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=1&view=";
+	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
 	do { ?>
     	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
     <?php 
 	$return .= $row_log['id']."-";
 	} while ($row_log = mysql_fetch_assoc($log)); 
 	?>
-    </ol>
+    </ul>
 <?php } ?>
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format(($total_to_pay * .029), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
@@ -75,7 +105,7 @@ Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fe
 			<input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 			<input type="hidden" name="rm" value="1">
 			<input type="hidden" name="return" value="<?php echo rtrim($return, "-"); ?>">
-			<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=2"; ?>">
+			<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=11"; ?>">
 			<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_LG.gif:NonHosted">
 			</td>
    		</tr>

@@ -31,7 +31,7 @@ require(INCLUDES.'headers.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Entry Site</title>
 <link href="css/html_elements.css" rel="stylesheet" type="text/css" />
-<link href="css/default.css" rel="stylesheet" type="text/css" />
+<link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>

@@ -52,7 +52,7 @@ require(INCLUDES.'headers.inc.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." | ".$header_output; ?></title>
-<link href="css/bruxellensis.css" rel="stylesheet" type="text/css" />
+<link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
@@ -92,7 +92,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
   	if ($section != "admin") {
   	?>
-    <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2); ?>.</div>
+    <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?>.</div>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
@@ -116,7 +116,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   }
   // Check if registration close date has passed. If so, display "registration end" message.
   elseif (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) {
-	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (!judging_date_return())) { ?>
+	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Registration has closed.</div>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
