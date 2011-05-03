@@ -1,4 +1,4 @@
-<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } ?></h2>
+<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } ?></h2>
 <?php 
 // If using BCOE for comp organization, display winners by table
 if ($row_prefs['prefsCompOrg'] == "Y") { 
@@ -6,6 +6,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 <?php
 	do { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
+	if  (score_count($row_tables['id'],"1")) {
 	?>
 	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>
     <?php if ($entry_count > 0) { ?>
@@ -63,7 +64,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			$row_styles = mysql_fetch_assoc($styles);
 	?>
     <tr>
-        <td class="data"><?php echo display_place($row_scores['scorePlace']); ?></td>
+        <td class="data"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
         <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
@@ -75,7 +76,9 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		} while ($row_scores = mysql_fetch_assoc($scores)); ?>
     </tbody>
     </table>
-    <?php } ?>
+    <?php } 
+	}
+	?>
 <?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
 <?php } 
 
@@ -151,4 +154,5 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
 </table>
 <?php if ($row_contest_info['contestWinnersComplete'] != "") echo $row_contest_info['contestWinnersComplete'];  
 	} // end if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N"))	
+} else echo "</h2><p>No winners have been entered yet. Please check back later.</p>";
 ?>

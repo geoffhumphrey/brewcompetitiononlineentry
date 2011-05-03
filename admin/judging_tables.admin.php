@@ -16,30 +16,14 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
 		<span class="adminSubNav">
         	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=archive">Back to Archives</a>
      	</span> 
-<?php } ?>
-<?php if ((($action == "assign") && ($id != "default"))  && ($dbTable == "default")) { ?>
-		<span class="adminSubNav">
-        	<span class="icon"><img src="images/user_add.png" alt="Assign Judges/Stewards to Tables"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
-     	</span> 
-<?php } ?>
-        
+<?php } ?>   
 <?php if ($filter == "orphans") { ?>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/application.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables">View Tables List</a>
     </span>
 <?php } ?>
-<?php if ((($action == "default") || ($action == "edit"))  && ($dbTable == "default")) { ?>
-	<span class="adminSubNav">
-    	<span class="icon"><img src="images/application_add.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a>
-    </span>
-<?php } ?>
-<?php if (($action == "default")  && ($dbTable == "default")) { ?>
-	<?php if ($filter != "orphans") { ?>
-	<span class="adminSubNav">
-  		<span class="icon"><img src="images/application_view_list.png" alt="Orphans" title="Styles Not Assigned to Tables" /></span><a href="index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">View Styles Not Assigned to Tables</a>
-    </span>
-	<?php } ?>
-	<span class="adminSubNav">
+<?php if ($action == "default") { ?>
+<span class="adminSubNav">
   		<span class="icon"><img src="images/printer.png" alt="Print" title="Print..." /></span>
   		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_tables');">Print...</a></div>
   		<div id="printMenu_tables" class="menu" onmouseover="menuMouseover(event)">
@@ -47,11 +31,41 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     		<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800">Pullsheets by Table</a>
 		</div>
 	</span>
+<?php } ?>
 </div>
-<?php if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N") && ($dbTable == "default")) { ?>
+
+<?php if ((($action == "default") || ($action == "edit"))  && ($dbTable == "default")) { ?>
 <div class="adminSubNavContainer">
+	<span class="adminSubNav">Step 1</span>
 	<span class="adminSubNav">
-    	<span class="icon"><img src="images/application_form.png" alt="Define/Edit flights" title="Define/Edit flights" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
+    	<span class="icon"><img src="images/user_add.png" alt="Back"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Particpants as Judges</a>
+    </span>
+    <span class="adminSubNav">
+        <span class="icon"><img src="images/user_add.png" alt="Back"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Particpants as Stewards</a>
+    </span>
+</div>
+<div class="adminSubNavContainer">  
+	<span class="adminSubNav">Step 2</span>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/application_add.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a>
+    </span>
+    <?php if ($filter != "orphans") { ?>
+	<span class="adminSubNav">
+  		<span class="icon"><img src="images/application_view_list.png" alt="Orphans" title="Styles Not Assigned to Tables" /></span><a href="index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">View Styles Not Assigned to Tables</a>
+    </span>
+	<?php } ?>
+</div>
+<?php } ?>
+<?php if (($action == "default")  && ($dbTable == "default")) { ?>
+	
+
+<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">Step 3</span>
+	<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+	<span class="adminSubNav">
+    	<span class="icon"><img src="images/application_form_add.png" alt="Define/Edit flights" title="Define/Edit flights" /></span>
+    	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
     	<div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
 			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $row_tables_edit['id']);
@@ -65,12 +79,22 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     		<?php } mysql_free_result($flights_2); } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
 	</span>
+    <?php } ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/application_form_magnify.png" alt="Assign Flights to Rounds" title="Assign Flights to Rounds" /></span><a href="index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;&filter=rounds">Assign Flights to Rounds</a>
+    	<span class="icon"><img src="images/application_form_add.png" alt="<?php echo "Assign ".$assign_to." to Rounds"; ?>" /></span><a href="index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;&filter=rounds"><?php echo "Assign ".$assign_to." to Rounds"; ?></a>
     </span>
 </div>
-<?php } // end if (($totalRows_tables > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) ?>
 <div class="adminSubNavContainer">
+	<span class="adminSubNav">Step 4</span>
+<?php if ((($action == "assign")  && ($id != "default")) || (($action == "default") && ($dbTable == "default"))) { ?>
+		<span class="adminSubNav">
+        	<span class="icon"><img src="images/user_add.png" alt="Assign Judges/Stewards to Tables"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
+     	</span> 
+	<?php } ?>
+</div>
+<?php } // end if ($totalRows_tables > 0) ?>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">Step 5</span>
 	<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/rosette.png" alt="View Scores"></span>
@@ -94,12 +118,15 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     		<?php mysql_free_result($scores_2);	} while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
 		</div>
 	</span>
+</div>
+<div class="adminSubNavContainer">
+	<span class="adminSubNav">Step 6</span>
     <span class="adminSubNav">
 		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
+</div>
   	<?php } // end if (($totalRows_tables > 0) && ($dbTable == "default")) ?>
 <?php } // end if ($action == "default")?>
-</div>
 <?php if ($action != "print") { ?>
 <?php if (($action == "default") && ($filter == "default") && ($dbTable == "default")) { ?>
 <p>To ensure accuracy, verify that all paid and received entries have been marked as so via the <a href="index.php?section=admin&amp;go=entries">Manage Entries</a> screen.</p>
@@ -119,7 +146,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
         <td>A Best of Show round is enabled for the following <a href="index.php?section=admin&amp;go=style_types">Style Types</a>:<br />
         	<ul>
             	<?php do { ?>
-            	<li><?php echo $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each Table go to BOS)."; ?></li>
+            	<li><?php echo $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each Table to BOS)."; ?></li>
                 <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
         	</ul>
         </td>
@@ -240,7 +267,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     <select name="tableLocation" id="tableLocation">
           <option value=""></option>
           <?php do { ?>
-          <option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo date_convert($row_judging1['judgingDate'], 3).")"; ?></option>
+          <option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo date_convert($row_judging1['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
           <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
     </select>
     </td>
@@ -458,7 +485,7 @@ function unassign($bid,$location,$round,$table_id) {
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);	
 	}
-	$r = '<br><input type="checkbox" name="unassign'.$bid.'" id="unassign'.$bid.'" value="'.$row_assignments['id'].'"/><span style="vertical-align:middle;"> Unassign and Assign to:</span><br>';
+	$r = '<input type="checkbox" name="'.$round.'-unassign'.$bid.'" id="'.$round.'-unassign'.$bid.'" value="'.$row_assignments['id'].'"/><span style="vertical-align:middle;"> Unassign and...</span>';
 	//$r = $query_assignments;
 	return $r;
 }
@@ -467,7 +494,7 @@ function unassign($bid,$location,$round,$table_id) {
         
 
 <h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></h3>
-<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?></p>
+<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at ".$row_table_location['judgingTime']; ?></p>
 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
 <p><strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>
 <ul>
@@ -497,11 +524,9 @@ function unassign($bid,$location,$round,$table_id) {
 				null,
 				<?php if ($filter == "judges") { ?>
 				null,
-				null,
-				<?php } ?>
-				<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) { ?>
-				null,
-				<?php } ?>
+				null<?php } for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
+			    if  (table_round($row_tables_edit['id'],$i)) { 
+				?>, null<?php } } ?>
 				]
 			} );
 		} );
@@ -539,14 +564,12 @@ function unassign($bid,$location,$round,$table_id) {
 <table class="dataTable" id="sortable">
 <thead>
  	<tr>
-  		<th class="dataHeading bdr1B" width="25%">Name</th>
+  		<th class="dataHeading bdr1B" width="20%">Name</th>
         <?php if ($filter == "judges") { ?>
         <th class="dataHeading bdr1B" width="8%">BJCP Rank</th>
         <th class="dataHeading bdr1B" width="8%">BJCP #</th>
         <?php } 
-		if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-        	<?php 
-			for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
+   			for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
 			    if  (table_round($row_tables_edit['id'],$i)) { 
 			?>
   		<th class="dataHeading bdr1B">Round <?php echo $i; ?></th>
@@ -554,15 +577,12 @@ function unassign($bid,$location,$round,$table_id) {
 			   } 
 			} 
 			?>
-        <?php } else { ?>
-        <th class="dataHeading bdr1B" width="15%">Assign?</th>
-        <?php } ?>
 	</tr>
 </thead>
 <tbody>
 <?php do { ?>
 	<tr> 
-    	<td nowrap="nowrap"><?php echo $row_brewer['id']." - "; ?><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
+    	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; // echo " - ".$row_brewer['id']; ?></td>
         <?php if ($filter == "judges") { ?>
         <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); ?></td>
         <td nowrap="nowrap"><?php if (($row_brewer['brewerJudgeID'] != "") && ($row_brewer['brewerJudgeID'] != "0")) echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
@@ -571,8 +591,7 @@ function unassign($bid,$location,$round,$table_id) {
         <input type="hidden" name="assignTable<?php echo $row_brewer['id']; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="assignment<?php echo $row_brewer['id']; ?>" value="<?php if ($filter == "stewards") echo "S"; else echo "J"; ?>" />
         <input type="hidden" name="assignLocation<?php echo $row_brewer['id']; ?>" value="<?php echo $row_tables_edit['tableLocation']; ?>" />
-		<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-		<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) { 
+		<?php 	for($i=1; $i<$row_flights['flightRound']+1; $i++) { 
 		        if (table_round($row_tables_edit['id'],$i)) {
 			    $un = unavailable($row_brewer['id'],$row_tables_edit['tableLocation'],$i,$id);
 				$entry_conflict = entry_conflict($row_brewer['id'],$row_tables_edit['tableStyles']);
@@ -581,16 +600,18 @@ function unassign($bid,$location,$round,$table_id) {
 				else $ld = like_dislike($row_brewer['brewerJudgeLikes'],$row_brewer['brewerJudgeDislikes'],$row_tables_edit['tableStyles']);
 		?>
         <?php if ($un == FALSE) { ?>
-        <input type="hidden" name="unassign<?php echo $row_brewer['id']; ?>" value="N" />
-        <?php } ?>
+        <input type="hidden" name="<?php echo $i; ?>-unassign<?php echo $row_brewer['id']; ?>" value="N" />
+        <?php } ?> 
         <td class="data"<?php echo $ld; ?>>
         <?php if ($un == TRUE) { ?>
-        <strong>** Already Assigned to This Round **</strong>
+        <strong>** Already Assigned to This Round **</strong><br />
         <?php
 		if ($entry_conflict == FALSE) echo unassign($row_brewer['id'],$row_tables_edit['tableLocation'],$i,$id);
-		}  ?>       
+		} 
+		
+		if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>      
             <select name="<?php echo $i."-assignFlight".$row_brewer['id']; ?>" id="<?php echo $i."-assignFlight".$row_brewer['id']; ?>" <?php if ($entry_conflict == TRUE) echo "DISABLED"; ?> />
-            <option value="D-<?php echo $i; ?>"><?php if ($entry_conflict == TRUE) echo "Participant Has an Entry At This Table"; else echo "Do Not Assign to a Flight"; ?></option>
+            <option value="D-<?php echo $i; ?>"><?php if ($entry_conflict == TRUE) echo "Participant Has an Entry at this Table"; else echo "Do Not Assign to a Flight"; ?></option>
         	<?php 
 			for($f=1; $f<$row_flights['flightNumber']+1; $f++) {
 				if (flight_round($row_tables_edit['id'],$f,$i)) { 
@@ -598,15 +619,19 @@ function unassign($bid,$location,$round,$table_id) {
 				?>
 			    <option value="<?php echo $i."-".$f; if ($a == TRUE) echo "-Y"; else echo "-N" ?>" <?php if ($a == TRUE) echo 'selected="selected"'; ?>/>Assign<?php if ($a == TRUE) echo "ed"; ?> to Flight <?php echo $f; ?></option>
 			<?php 
-				} 
+				}
+			  }
 			} 
 			?>
+        <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
+        <select name="<?php echo $i."-assignTable".$row_brewer['id']; ?>" id="<?php echo $i."-assignTable".$row_brewer['id']; ?>" <?php if ($entry_conflict == TRUE) echo "DISABLED"; ?> />
+            <option value="D-<?php echo $i; ?>"><?php if ($entry_conflict == TRUE) echo "Participant Has an Entry at this Table"; else echo "Do Not Assign to this Round"; ?></option>
+        	<?php $a = already_assigned($row_brewer['id'],$row_tables_edit['id'],"1",$i); ?>
+			    <option  value="<?php echo $i."-1"; if ($a == TRUE) echo "-Y"; else echo "-N" ?>" <?php if ($a == TRUE) echo 'selected="selected"'; ?>/>Assign<?php if ($a == TRUE) echo "ed"; ?> to This Round</option>
+        	<?php } ?>
         </td> 
         <?php }  
 		} ?>
-        <?php } else { ?>
-        	 <td class="data"><input type="checkbox" name="assignTable<?php echo $row_brewer['id']; ?>"/></td>
-        <?php } ?>
     </tr> 
 <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>	
 </tbody>

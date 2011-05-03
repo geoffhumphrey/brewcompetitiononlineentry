@@ -142,7 +142,7 @@ function brewer_assignment_checked($a,$b) {
  <?php do { ?>
  <tr>
   <td width="25%" class="dataList"><?php echo $row_judging_locs['judgingLocName']; ?></td>
-  <td width="15%" class="dataList"><?php echo date_convert($row_judging_locs['judgingDate'], 2); ?></td>
+  <td width="15%" class="dataList"><?php echo date_convert($row_judging_locs['judgingDate'], 2, $row_prefs['prefsDateFormat']); ?></td>
   <td width="15%" class="dataList"><?php echo $row_judging_locs['judgingTime']; ?></td>
   <td width="30%" class="dataList"><?php echo $row_judging_locs['judgingLocation']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_judging_locs['judgingRounds']; ?></td>
@@ -310,7 +310,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat']).")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}
@@ -340,7 +340,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				if (substr($value, 0, 1) == "Y") { 
 					echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-					echo date_convert($row_judging_loc3['judgingDate'], 3).")</td>\n";
+					echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat']).")</td>\n";
 					echo "</td>\n</tr>";
 				}
 				}
@@ -372,7 +372,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
-	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3).")"; ?></option>
+	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
     <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
    </select>
   </td>

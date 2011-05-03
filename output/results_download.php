@@ -65,7 +65,7 @@ if ($totalRows_bos > 0) {
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
 			$html .= '<tr>';
-			$html .= '<td width="50">'.display_place($row_bos['scorePlace']).'</td>';
+			$html .= '<td width="50">'.display_place($row_bos['scorePlace'],1).'</td>';
 			$html .= '<td width="175">'.$row_entries['brewBrewerFirstName'].' '.$row_entries['brewBrewerLastName'];
 			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
 			$html .= '</td>';
@@ -125,7 +125,7 @@ do {
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
 			$html .= '<tr>';
-			$html .= '<td width="50">'.display_place($row_scores['scorePlace']).'</td>';
+			$html .= '<td width="50">'.display_place($row_scores['scorePlace'],1).'</td>';
 			$html .= '<td width="175">'.$row_entries['brewBrewerFirstName'].' '.$row_entries['brewBrewerLastName'];
 			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
 			$html .= '</td>';

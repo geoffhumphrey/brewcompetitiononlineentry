@@ -1,4 +1,4 @@
-<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
+<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
 <?php if ($row_prefs['prefsCompOrg'] == "Y") { 
 	// Display BOS winners for each applicable style type
 	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
@@ -18,7 +18,7 @@
 			$random = random_generator(6,2);
 			
 ?>        
-<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h2>
+<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h3>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -62,7 +62,7 @@
 	
 	?>
 	<tr>
-        <td class="data"><?php echo display_place($row_bos['scorePlace']); ?></td>
+        <td class="data"><?php echo display_place($row_bos['scorePlace'],1); ?></td>
         <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
@@ -239,5 +239,6 @@ if ($totalRows_bos > 0) {
 </tbody>
 </table>
 <?php } 
-}
-// end if BOS cider ?>
+  } // end if BOS cider
+} else echo "</h2><p>No BOS scores have been entered yet. Please check back later.</p>";
+?>

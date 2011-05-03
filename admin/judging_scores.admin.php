@@ -51,22 +51,9 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
 	<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
 	<span class="adminSubNav">
-		<em>All</em> scores have not been entered for table(s):
+		<?php if ($id != "default") echo "<em>All</em> scores have not been entered for table(s):"; else echo "Add/Edit Scores for:"; ?>
 	</span>
-    <span class="adminSubNav">
-        <select name="table_choice_1" id="table_choice_1" onchange="jumpMenu('self',this,0)">
-        <option>Choose Below</option>
-       	<?php do { 
-		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
-		$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
-		$row_scores_2 = mysql_fetch_assoc($scores_2);
-		if ($row_scores_2['count'] > 0) $a = "edit"; else $a = "add";
-		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable)) { ?>
-        <option value="index.php?section=admin&amp;&go=judging_scores&amp;action=<?php echo $a; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option> 
-		<?php } mysql_free_result($scores_2); ?>
-		<?php } while ($row_tables = mysql_fetch_assoc($tables));?>
-        </select>
-     </span>
+    <span class="adminSubNav"><?php echo score_table_choose($dbTable,$tables_db_table,$scores_db_table); ?></span>
 	<?php } ?>
 </div>
  <?php } // end if ($dbTable == "default") ?>
@@ -231,7 +218,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
         <td><?php echo $row_entries['id']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
-    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
+    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
@@ -253,21 +240,5 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } // end if ($id != "default"); 
-else { ?>
-<p><strong>Add/Edit Scores for:</strong><span class="data">
-	<select name="table_choice_1" id="table_choice_1" onchange="jumpMenu('self',this,0)">
-        <option>Choose Below</option>
-       	<?php do { 
-		$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
-		$scores_2 = mysql_query($query_scores_2, $brewing) or die(mysql_error());
-		$row_scores_2 = mysql_fetch_assoc($scores_2);
-		if ($row_scores_2['count'] > 0) $a = "edit"; else $a = "add";
-		 ?>
-        <option value="index.php?section=admin&amp;&go=judging_scores&amp;action=<?php echo $a; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option> 
-		<?php  mysql_free_result($scores_2); ?>
-		<?php } while ($row_tables = mysql_fetch_assoc($tables));?>
-    </select>
-</span>
-</p>
-<?php } ?>
-<?php } ?>
+
+} ?>

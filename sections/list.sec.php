@@ -3,16 +3,17 @@
 <?php } 
 else 
 { 
-$total_not_paid = total_not_paid_brewer($row_brewer['uid']);
+$total_not_paid = total_not_paid_brewer($row_user['id']);
 include(DB.'brewer.db.php');
 include(DB.'entries.db.php');
+include(INCLUDES.'db_tables.inc.php');
 
-
-$entry_total_final = unpaid_fees($total_not_paid, $row_contest_info['contestEntryFeeDiscount'],$row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2']);
-
+//$entry_total_final = unpaid_fees($total_not_paid, $row_contest_info['contestEntryFeeDiscount'],$row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_brewer['brewerDiscount'], $row_contest_info['contestEntryFeePasswordNum ']);
+/*
 if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
 	$discount = discount_display($total_not_paid,$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryCap']);
 }
+*/
 if ($msg != "default") echo $msg_output;
 ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
@@ -43,8 +44,24 @@ if ($msg != "default") echo $msg_output;
   	</tr>
   	<tr>
     	<td class="dataLabel">Address:</td>
-    	<td class="data"><?php if ($row_brewer['brewerAddress'] != "") echo $row_brewer['brewerAddress']."<br>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']." ".$row_brewer['brewerZip']." ".$row_brewer['brewerCountry']; else echo "None entered"; ?></td>
+    	<td class="data"><?php if ($row_brewer['brewerAddress'] != "") echo $row_brewer['brewerAddress']; else echo "None entered"; ?></td>
   	</tr>
+  	<tr>
+  	  <td class="dataLabel">City:</td>
+  	  <td class="data"><?php if ($row_brewer['brewerCity'] != "") echo $row_brewer['brewerCity']; else echo "None entered"; ?></td>
+  </tr>
+  	<tr>
+  	  <td class="dataLabel">State or Province:</td>
+  	  <td class="data"><?php if ($row_brewer['brewerState'] != "") echo $row_brewer['brewerState']; else echo "None entered"; ?></td>
+  </tr>
+  	<tr>
+  	  <td class="dataLabel">Zip or Postal Code:</td>
+  	  <td class="data"><?php if ($row_brewer['brewerZip'] != "") echo $row_brewer['brewerZip']; else echo "None entered"; ?></td>
+  </tr>
+  	<tr>
+  	  <td class="dataLabel">Country:</td>
+  	  <td class="data"><?php if ($row_brewer['brewerCountry'] != "") echo $row_brewer['brewerCountry']; else echo "None entered"; ?></td>
+  </tr>
   	<tr>
     	<td class="dataLabel">Phone Number(s):</td>
     	<td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1) ";  if ($row_brewer['brewerPhone2'] != "") echo "<br>".$row_brewer['brewerPhone2']." (2)"; ?></td>
@@ -53,6 +70,12 @@ if ($msg != "default") echo $msg_output;
     	<td class="dataLabel">Club:</td>
     	<td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
   	</tr>
+    <?php if ($row_brewer['brewerDiscount'] == "Y") { ?>
+    <tr>
+    	<td class="dataLabel">Entry Fee Discount:</td>
+    	<td class="data">Yes (<?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']; ?> per entry)</td>
+  	</tr>
+    <?php } ?>
   	<tr>
     	<td class="dataLabel">AHA Member Number:</td>
     	<td class="data"><?php if ($row_brewer['brewerAHA'] != "") echo $row_brewer['brewerAHA']; else echo "Not provided"; ?></td>
@@ -79,7 +102,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
@@ -97,7 +120,7 @@ if ($msg != "default") echo $msg_output;
     <?php if ($row_brewer['brewerAssignment'] == "J") /* only works in Firefox as of now */ { ?>
     <tr>
     	<td class="dataLabel">&nbsp;</td>
-		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><span class="data"><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
+		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><span class="data"><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
   	</tr>
   	<?php } ?>
 	<?php if ($totalRows_judging3 > 1) { ?>
@@ -116,7 +139,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			}
@@ -177,7 +200,7 @@ if ($msg != "default") echo $msg_output;
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3)." - ".$row_judging_loc3['judgingTime'].")</td>\n";
+				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_judging_loc3['judgingTime'].")</td>\n";
 				echo "</td>\n</tr>";
 				}
 			else echo "";
@@ -192,10 +215,10 @@ if ($msg != "default") echo $msg_output;
 <?php } ?>
 <h2>Entries</h2>
 <?php if ($totalRows_log > 0) { ?>
-<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry"; else echo " entries"; ?>. Each is listed below. <?php if (judging_date_return()) echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
+<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry"; else echo " entries"; ?>, listed below. <?php if (judging_date_return() > 0) echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
 <?php } ?>
 <?php if ($action != "print") { ?>
-<?php if (!greaterDate($today,$deadline)) { ?>
+<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
         <span class="icon"><img src="images/book_add.png"  /></span><a href="index.php?section=brew&amp;action=add">Add an Entry</a>
@@ -210,25 +233,61 @@ if ($msg != "default") echo $msg_output;
         <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
 	</span>
 </div>
-<?php if ((judging_date_return()) && ($totalRows_log > 0)) { 
+<?php if ((judging_date_return() >0) && ($totalRows_log > 0)) { 
 
-$total_entry_fees = total_fees($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
-$total_paid_entry_fees = total_fees_paid($row_brewer['uid'], $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
+$total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
+$total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
-
 ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
 		<span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?>
 	</span>
+    <?php if ($row_brewer['brewerDiscount'] == "Y") { ?>
+	<span class="adminSubNav">
+		<span class="icon"><img src="images/star.png"  border="0" alt="Discounted!" title="Discounted Entry Fees"></span>Your fees have been discounted to <?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']; ?> per entry.
+	</span>
+<?php } ?>
    	<span class="adminSubNav">
         <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="index.php?section=pay">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
     </span>
 </div>
-<?php } // end if ((judging_date_return()) && ($totalRows_log > 0)) ?>
+<?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
 <?php } // end if (!greaterDate($today,$deadline)) ?>
 <?php } // end if ($action != "print")
 if ($totalRows_log > 0) { 
+
+function score_check($id,$scores_db_table) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	$r = "<td class=\"dataList\">".$row_scores['scoreEntry']."</td>"; 
+	return $r;
+}
+
+
+function winner_check($id,$scores_db_table,$tables_db_table) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	if ($row_scores['scorePlace'] >= "1") {
+		$query_table = sprintf("SELECT tableName FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+		$table = mysql_query($query_table, $brewing) or die(mysql_error());
+		$row_table = mysql_fetch_assoc($table);
+		$r = "<td class=\"dataList\">".display_place($row_scores['scorePlace'],2).": ".$row_table['tableName']."</td>";
+	} 
+	else $r = "<td class=\"dataList\">&nbsp;</td>";
+	
+	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
+	return $r;
+}
 ?>
 <?php if ($action != "print") {?>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
@@ -244,10 +303,9 @@ if ($totalRows_log > 0) {
 				null,
 				null,
 				null,
-				<?php if ($action != "print") { ?>
-				<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+				null<?php if ($action != "print") { ?>,
+				<?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>null,<?php } ?>
 				{ "asSorting": [  ] }
-				<?php } ?>
   				<?php } ?>
 				]
 			} );
@@ -257,11 +315,12 @@ if ($totalRows_log > 0) {
 <table class="dataTable" id="sortable" width="100%">
 <thead>
  <tr>
+  <th class="dataHeading bdr1B" width="5%">Entry #</th>
   <th class="dataHeading bdr1B" width="20%">Entry Name</th>
   <th class="dataHeading bdr1B" width="20%">Style</th>
   <th class="dataHeading bdr1B" width="5%">Paid?</th> 
   <?php if ($action != "print") { ?>
-  <?php if (greaterDate($today,$deadline)) echo "<th>&nbsp;</th>"; else { ?>
+  <?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<th class=\"dataHeading bdr1B\">Score</th><th class=\"dataHeading bdr1B\">Winner?</th>"; else { ?>
   <th class="dataHeading bdr1B">Actions</th>
   <?php } ?>
   <?php } ?>
@@ -277,16 +336,17 @@ if ($totalRows_log > 0) {
 	$totalRows_style = mysql_num_rows($style);
 	?>
  <tr>
-  <td class="dataList"><?php echo $row_log['brewName']; if ($row_log['brewCoBrewer'] != "") echo "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>"; ?></td>
-  <td class="dataList" <?php if (judging_date_return()) echo "width=\"25%\""; ?>><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
-  <td class="dataList" width="5%"><?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?>
+ 	<td class="dataList"><?php echo $row_log['id']; ?></td>
+  	<td class="dataList"><?php echo $row_log['brewName']; if ($row_log['brewCoBrewer'] != "") echo "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>"; ?></td>
+  	<td class="dataList"><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
+  	<td class="dataList"><?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?></td>
   <?php if ($action != "print") { ?>
-  		<?php if (greaterDate($today,$deadline)) echo "<td>&nbsp;</td>"; else { ?>
+  		<?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo score_check($row_log['id'],$scores_db_table).winner_check($row_log['id'],$scores_db_table,$tables_db_table); else { ?>
   <td class="dataList">
   <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>
   <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
   	<?php } 
-  if (greaterDate($today,$deadline)) echo ""; else { ?>
+  if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo ""; else { ?>
   <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   <?php } ?>
   </td>

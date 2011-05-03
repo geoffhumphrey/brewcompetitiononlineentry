@@ -33,9 +33,9 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 </ul>
 <?php } ?>
 <a name="window"></a><h2>Entry Window</h2>
-<p><?php echo date_convert($row_contest_info['contestEntryOpen'], 2)." through "; echo date_convert($row_contest_info['contestEntryDeadline'], 2); ?>.</p>
+<p><?php echo date_convert($row_contest_info['contestEntryOpen'], 2, $row_prefs['prefsDateFormat'])." through "; echo date_convert($row_contest_info['contestEntryDeadline'], 2, $row_prefs['prefsDateFormat']); ?>.</p>
 <a name="entry"></a><h2>Entry Fees</h2>
-<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'], 2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <a name="payment"></a><h2>Payment</h2>
 <p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
     <ul>
@@ -48,7 +48,7 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
   do { ?>
   <p>
   <?php 
-	if ($row_judging['judgingDate'] != "") echo date_convert($row_judging['judgingDate'], 2)." at "; echo $row_judging['judgingLocName']; 
+	if ($row_judging['judgingDate'] != "") echo date_convert($row_judging['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at "; echo $row_judging['judgingLocName']; 
 	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
 	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
     <?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
@@ -121,7 +121,7 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 <a name="ceremony"></a><h2>Award Ceremony</h2>
 <p>
 	<?php 
-	if ($row_contest_info['contestAwardsLocDate'] != "") echo date_convert($row_contest_info['contestAwardsLocDate'], 2)." at "; echo $row_contest_info['contestAwardsLocName'];
+	if ($row_contest_info['contestAwardsLocDate'] != "") echo date_convert($row_contest_info['contestAwardsLocDate'], 2, $row_prefs['prefsDateFormat'])." at "; echo $row_contest_info['contestAwardsLocName'];
 	if ($row_contest_info['contestAwardsLocTime'] != "") echo ", ".$row_contest_info['contestAwardsLocTime'];
 	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="http://maps.google.com/maps/api/staticmap?center=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;zoom=13&amp;size=600x400&amp;markers=color:red|<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;sensor=false&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
 	<span class="icon"><a class="thickbox" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span><?php } ?>

@@ -7,6 +7,8 @@
  * 
  */
 
+if ($row_judging_prefs['jPrefsQueued'] == "N") $assign_to = "Flights"; $assign_to = "Tables";
+
 switch($section) {
 	
 	case "default":
@@ -39,8 +41,10 @@ switch($section) {
 
 	case "pay":
 	$header_output = "Pay My Fees";
-	if     ($msg == "1") $output = "Your online payment has been received. Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
-	elseif ($msg == "2") $output = "Your online payment has been cancelled.";
+	if     ($msg == "10") $output = "Your online payment has been received. Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
+	elseif ($msg == "11") $output = "Your online payment has been cancelled.";
+	elseif ($msg == "12") $output = "The code has been verified.";
+	elseif ($msg == "13") $output = "Sorry, the code you entered was incorrect.";
 	else $output = "";
 	break;
 	
@@ -212,7 +216,7 @@ switch($section) {
 			break;
 			
 			case "judging_flights":
-			$header_output .= ": Flights";
+			$header_output .= ": ".$assign_to;
 			break;
 			
 			case "judging_scores":
@@ -257,4 +261,3 @@ switch($section) {
 }
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
 ?>
-

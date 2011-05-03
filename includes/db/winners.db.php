@@ -44,6 +44,15 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 	$query_style_types = "SELECT * FROM $style_type_db_table";
 	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
 	$row_style_types = mysql_fetch_assoc($style_types);
+	
+	$query_scores = "SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5')";
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	$query_bos_scores = "SELECT COUNT(*) as 'count' FROM $scores_bos_db_table WHERE (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5')";
+	$bos_scores = mysql_query($query_bos_scores, $brewing) or die(mysql_error());
+	$row_bos_scores = mysql_fetch_assoc($bos_scores);
+
 }
 
 // Use legacy code to display winners if admin chooses not to use BCOE for competition organization

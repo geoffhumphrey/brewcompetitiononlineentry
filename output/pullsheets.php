@@ -76,7 +76,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
@@ -171,7 +171,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
@@ -269,7 +269,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>
@@ -350,7 +350,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2)."  ".$row_location['judgingTime']; ?></h2>
+            <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>

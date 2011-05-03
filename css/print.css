@@ -329,6 +329,14 @@ height: 30px;
 width: 50px;
 }
 
+.box_small {
+border: 1px solid #000000;
+height: 15px;
+width: 15px;
+margin: 0;
+padding: 0;
+}
+
 .admin {
 background-color:#ffffff;
 }
@@ -368,6 +376,8 @@ padding: .5em .5em .5em .5em;
 
 #closed {
 }
+
+/* New in Version 1.2 */
 
 .table_card {
 	width: 600px;

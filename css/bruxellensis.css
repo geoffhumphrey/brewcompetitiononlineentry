@@ -1,11 +1,15 @@
 @charset "utf-8";
-/* CSS Document */
+/* CSS Document 
+*        Document Name: buxellensis.css
+*        Description:   This is a custom theme that is based upon the elements from default.css theme
+*/
 
 @import url("html_elements.css");
 @import url("menus.css");
 @import url("sorting.css");
 @import url("thickbox.css");
 @import url("calendar.css");
+
 
 /* Links */
 
@@ -263,7 +267,7 @@ border-bottom: 1px solid #394a59;
 #content-inner .menu {
 border: 1px solid #acc0c7;
 background-color: #eeeeee;
-
+padding: 0;
 }
 
 

@@ -3,7 +3,7 @@
 <?php 
 if (($action == "edit") && ($id != "default") && ($filter == "default")) echo "Edit Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
 elseif (($action == "add") && ($id != "default") && ($filter == "default")) echo "Define Flights for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; 
-elseif (($action == "assign") && ($filter == "rounds"))  echo "Assign Flights to Rounds"; 
+elseif (($action == "assign") && ($filter == "rounds"))  echo "Assign $assign_to to Rounds"; 
 else echo "Define/Edit Flights"; ?></h2>
 <div class="adminSubNavContainer">
  	<span class="adminSubNav">
@@ -12,7 +12,7 @@ else echo "Define/Edit Flights"; ?></h2>
    	<span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>
     </span>
-    <?php if ($action != "default") { ?>
+    <?php if (($action != "default") && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/application_form_add.png" alt="Define Another Flight"></span><a href="index.php?section=admin&go=judging_flights">Define/Edit Flights</a>
     </span>
@@ -199,7 +199,8 @@ if (($action == "assign") && ($filter == "rounds")) {
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
-		foreach ($a as $flight_table){
+		
+		foreach (array_unique($a) as $flight_table){
 			$query_flights = sprintf("SELECT * FROM judging_flights WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
@@ -216,8 +217,8 @@ if (($action == "assign") && ($filter == "rounds")) {
 			
 ?>
 	
-	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if ($totalRows_flights > 0) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php } else { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'],2)." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if (($totalRows_flights > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php }  if (($totalRows_flights == 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		for($i=1; $i<$row_flights['flightNumber']+1; $i++) { 
@@ -232,12 +233,13 @@ if (($action == "assign") && ($filter == "rounds")) {
 		
 		$random = random_generator(7,2);
 		?>
-		<p>Assign Flight <?php echo $i; ?> to:
+		<p>Assign <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "Flight $i"; else echo "Table"; ?> to:
         <span class="data">
         <input type="hidden" name="id[]" value="<?php echo $random ?>" />
         <input type="hidden" name="flightTable<?php echo $random ?>" value="<?php echo $row_tables['id']; ?>" />
         <input type="hidden" name="flightNumber<?php echo $random ?>" value="<?php echo $i; ?>" />
         <select name="flightRound<?php echo $random ?>">
+        <option value="">Choose Below:</option>
         <?php for($r=1; $r<$row_table_location['judgingRounds']+1; $r++) { ?>
 		<option value="<?php echo $r; ?>" <?php if ($row_round_no['flightRound'] == $r) echo "selected"; ?>>Round <?php echo $r; ?></option>
 		<?php } ?>
