@@ -74,22 +74,22 @@ function judging_date_return() {
 
 function greaterDate($start_date,$end_date)
 {
-  $start = new Datetime($start_date);
-  $end = new Datetime($end_date);
+  $start = strtotime($start_date);
+  $end = strtotime($end_date);
   if ($start > $end)
-   return 1;
+   return TRUE;
   else
-   return 0;
+   return FALSE;
 }
 
 function lesserDate($start_date,$end_date)
 {
-  $start = new Datetime($start_date);
-  $end = new Datetime($end_date);
+  $start = strtotime($start_date);
+  $end = strtotime($end_date);
   if ($start < $end)
-   return 1;
+   return TRUE;
   else
-   return 0;
+   return FALSE;
 }
 
 $color = "#eeeeee";

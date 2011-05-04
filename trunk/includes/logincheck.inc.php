@@ -1,5 +1,6 @@
 <?php
-require '../Connections/config.php';
+require('../paths.php');
+require(CONFIG.'config.php');
 //require 'authentication.inc.php';
 //require 'login_check.inc.php';
 /* Debug

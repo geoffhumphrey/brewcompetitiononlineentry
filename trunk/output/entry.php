@@ -1,6 +1,6 @@
 <?php 
 session_start(); 
-require('output.bootstrap.php');
+require('../paths.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');

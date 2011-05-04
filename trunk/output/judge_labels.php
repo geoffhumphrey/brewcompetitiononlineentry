@@ -1,5 +1,6 @@
 <?php 
-require('output.bootstrap.php');
+session_start(); 
+require('../paths.php'); 
 
 $query_brewer = "SELECT * FROM brewer WHERE id='$id'";
 mysql_select_db($database, $brewing);
