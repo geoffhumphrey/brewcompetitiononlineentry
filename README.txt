@@ -1,20 +1,20 @@
 **********************************************************************
 **********************************************************************
 **                                                                  **
-** Brew Contest Online Signup by Geoff Humphrey - zkdigital.com     **
-** Release 1.1.6 Dec 2010                                           **
+** Brew Competition Online Entry & Management                       **
+** Developed by Geoff Humphrey - zkdigital.com                      **
+** Release 1.2.0 BETA May 2011                                      **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** As such, you are permitted to download the full source code of   **
 ** the software for your own use. Feel free to customize it for     **
 ** your own purposes.                                               **
+** http://www.brewcompetition.com                                   **
+** http://help.brewcompetition.com                                  **
 ** Direct inquiries to prost@brewcompetition.com                    **
 **                                                                  **
 **********************************************************************
 **********************************************************************
-
-
-Thanks for downloading the Brew Contest Online Signup application. 
 
 Please read this entire document before attempting to install or use the application.
 
@@ -27,13 +27,23 @@ Contact your web hosting provider if you have any questions.
 
 **********************************************************************
 
+Help
+
+**********************************************************************
+
+Online documentation and help is available at http://help.brewcompetition.com
+
+
+
+**********************************************************************
+
 Hosting
 
 **********************************************************************
 
 If you are unable to set up your installation, HOSTING IS AVAILABLE!
-Go to http://www.brewcompetition.com and click "Hosting" for
-more information.
+Go to http://www.brewcompetition.com and click "Hosting" for more information.
+
 
 
 **********************************************************************
@@ -42,17 +52,14 @@ About
 
 **********************************************************************
 
-The Brew Competition Online Entry (BCOE) system is an online application to assist homebrew contest hosts (of the beer variety) to collect, store, and output participant and entry data.
+The Brew Competition Online Entry and Management (BCOE&M) system is an online application to assist homebrew competition hosts (of the beer variety) to collect, store, and manage their competition entry and scoring data.
 
-One of the biggest challenges of organizing a homebrewing contest is knowing who has entered what and how many come contest day. BCOE provides an online interface to collect this information beforehand and output it to compliant software for use on contest day.
+The biggest challenges of organizing a homebrewing competition is knowing who has entered what and how many, organizing judging efficiently, and reporting the results of the competition in a timely manner. BCOE&M provides a single online interface to collect entry and participant data, organize judging tables and assignments, collect scores, and report the results.
 
-BCOE collects contest participant information including name, address, phone, and email address. It also collects and associates entries for each participant based upon 2008 BJCP styles. Participants can have the option to enter their recipes by hand or import them using BeerXML-compliant files.
-
-Once the participant enters their brews, they can print the necessary documentation consisting of BJCP style entry forms and bottle labels.
-
-Administrators can output participant and entry information to interface with Homebrew Competition Coordination Program (HCCP - http://www.folsoms.net/hccp/) - a Windows-based program - or CSV files.
+BCOE&M is free and open-source.
 
 Requires a web server with PHP 5 and MySQL 4+.
+
 
 
 **********************************************************************
@@ -64,27 +71,56 @@ Please Note
 You will need to perform the necessary database updates by importing the each of the necessary upgrade documents document via phpMyAdmin or shell access.
 
 
+
 **********************************************************************
 
 Installation: Initial Setup
 
 **********************************************************************
 
-1. Create a database on your webserver. The methodology for creating a database varies from hosting provider to hosting provider. Check your provider's online documentation.
+- Create a database on your web server. The methodology for creating a database varies from hosting provider to hosting provider. Check your provider's online documentation.
 
-2. Add a user to the database you just created. This is typically done via your webserver's control panel.
+- Add a user to the database you just created. This is typically done via your web server's control panel.
 
-3. Access your new database and import the database schema. The database schema is contained within the bcoev1.1.4.sql document, located in the sql folder of the release package. Typically, you can import the entire document using PhpMyAdmin.
+- Access your new database and import the database schema. The database schema is contained within the bcoev1.X.X.sql document (use the latest version number's file), located in the sql folder of the release package. Typically, you can import the entire document using a tool like PhpMyAdmin.
 
-4. Edit the username, password, and database variables the config.php file located in the competition/Connections/ directory.
+- Edit the username, password, and database variables the config.php file located in the competition/Connections/ directory.
 
-4. Edit line 55 of the config.php file with the correct path to BCOE's root installation (this is for the ability to upload pictures).
+- If necessary for your environment, edit line 55 of the config.php file with the correct path to BCOE&M's root installation (this is for the ability to upload pictures).
 
-5. Upload the entire contents of the "bcoe" folder to your webserver via FTP or other method (upload only the *contents* of the folder, not the folder itself).
+- Upload the entire contents of the "bcoem" folder to your webserver via FTP or other method (upload only the *contents* of the folder, not the folder itself).
 
-6. Using your ftp program, change the CHMOD (permissions) of the [root]/user_images folder to 755. This enables you to upload files to that directory using BCOE.
+- Using your ftp program, change the CHMOD (permissions) of the [root]/user_images folder to 755. This enables you to upload files to that directory using BCOE&M.
 
-7. Once that is done, you can now set up your installation.
+- Once that is done, you can now set up your installation.
+
+
+
+**********************************************************************
+
+Installation: Upgrading
+
+**********************************************************************
+
+1. Upgrade The Database
+
+IF you are upgrading from a version previous to the current version, you must install all previous SQL upgrades FIRST. These are included in the sql folder in the download package.
+- Access your installation's BCOE&M database (via phpMyAdmin or shell access).
+- Import or copy/paste the information contained in each of the upgrade documents up to and including the 1.X.X_upgrade.sql (current version) document. All can be found in the sql folder. This will update your database's structure and insert relevant data.
+
+2. Upload the New Files
+
+Most versions add and make changes to multiple files. Therefore you should replace all of the folders/files on your web server.
+If you have made changes to any code, be sure to back up the affected files and compare with the files in the latest BCOE&M version.
+
+3. Update Your Preferences (optional)
+
+Most versions add new features. As such, you may need to set preferences for them.
+- Log in.
+- Roll over Admin in the top navigation bar.
+- Choose Edit from the list and then choose Preferences.
+- Adjust your preferences.
+
 
 
 **********************************************************************
@@ -93,11 +129,21 @@ Setup
 
 **********************************************************************
 
-1. Browse to your installation's web address (e.g., http://www.yoursite.com/competition/ or http://competition.yoursite.com or http://www.yoursite.com if you're feeling fancy).
+After you have created the needed database, uploaded BCOE&M's files to your web server, and edited the config.php file, you can now set up your installation.
 
-2. You'll be taken through a series of steps to customize the setup of your installation. DO NOT SKIP THESE STEPS. Vital information is collected that optimize the installation's behavior and display of data.
+- Browse to your installation's web address (e.g., http://www.yoursite.com/competition/ or http://competition.yoursite.com or http://www.yoursite.com if you're feeling fancy).
+-- If you are using the hosted option, you will receive an email with instructions and a web address.
 
-3. That's it! You can now browse to your installation's address, further customize it, and/or distribute the web address to begin collecting participants and their associated entries.
+- You'll be taken through a series of steps to customize the setup of your installation. Do not skip these steps. Vital information is collected that optimize the installation's behavior and display of data. During the set up process you will:
+-- Create the administrator's user file and credentials.
+-- Define the site's preferences.
+-- Input information about your competition (e.g., rules, award structure, etc.)
+-- Input drop-off locations.
+-- Input judging locations.
+-- Define the BJCP styles accepted.
+-- Define judging preferences (e.g., whether to use queued judging, flight size, maximum number of rounds, etc.).
 
-4. Enjoy your favorite malted beverage.
+- That's it! After set up, you can browse to your installation's address, further customize it, and/or distribute the web address to begin collecting participant data and their associated entries.
+
+- Enjoy your favorite fermented beverage.
 
