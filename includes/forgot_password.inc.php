@@ -1,5 +1,5 @@
 <?php
-include('../output/output.bootstrap.php')
+include('../paths.php')
 // Based upon a script from www.plus2net.com 
 require(CONFIG.'config.php');
 require(INCLUDES.'functions.inc.php'); 

@@ -1,6 +1,7 @@
 <?php
 // script courtesy of http://www.wlscripting.com/tutorial/37 (modified to accomodate TAB delimited files)
-require('output.bootstrap.php');
+session_start(); 
+require('../paths.php'); 
 require(INCLUDES.'url_variables.inc.php'); 
 require(DB.'common.db.php');
 

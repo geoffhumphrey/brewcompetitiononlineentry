@@ -45,7 +45,7 @@ class InputBeerXML {
 	
 	//{{{ convertUnit()
     function convertUnit($value,$type){
-	    include('Connections/config.php');
+	    require(CONFIG.'config.php');
 		mysql_select_db($database_brewing, $brewing);
 		$query_pref_xml = "SELECT prefsWeight1,prefsTemp,prefsLiquid2,prefsWeight2 FROM preferences";
 		$pref_xml = mysql_query($query_pref_xml, $brewing) or die(mysql_error());
@@ -83,7 +83,7 @@ class InputBeerXML {
 
     //{{{ insertRecipe
     function insertRecipe($recipe){  // inserts into `recipes` DB table 
-	include ('includes/scrubber.inc.php');
+	include(INCLUDES.'scrubber.inc.php');
 	
         $brewing = $connection;
         $sqlQuery = "INSERT INTO brewing ";
@@ -223,7 +223,7 @@ class InputBeerXML {
 		//if ($recipe->ibu != "") { $vf["brewBitterness"] = $recipe->ibu; }
         //if ($recipe->estimatedColor != "") { $vf["brewLovibond"] = 0 . rtrim($recipe->estimatedColor," SRM"); }
          $vf["brewBrewerID"] = $_POST["brewBrewerID"];	
-		 require ('Connections/config.php');
+		 require(CONFIG.'config.php');
 		 mysql_select_db($database, $brewing);
 		 $query_style_name = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
 		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
@@ -238,7 +238,7 @@ class InputBeerXML {
         $fields .= ")";
         $values .= ")";
         $sqlQuery .= $fields . $values;
-		require ('Connections/config.php');
+		require(CONFIG.'config.php');
         mysql_select_db($database, $brewing) or die(mysql_error());
         $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());
 

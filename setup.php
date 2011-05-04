@@ -1,14 +1,5 @@
 <?php
-define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
-define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
-define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
-define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
-define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
-define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
-define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
-define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
-
-require(CONFIG.'config.php');
+require('paths.php');
 require(INCLUDES.'functions.inc.php'); 
 
 // Check to see if initial setup has taken place 
@@ -31,7 +22,7 @@ require(INCLUDES.'headers.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Entry Site</title>
 <link href="css/html_elements.css" rel="stylesheet" type="text/css" />
-<link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link href="css/default.css" rel="stylesheet" type="text/css" />
 <link href="css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="js_includes/tinymce.init.js"></script>

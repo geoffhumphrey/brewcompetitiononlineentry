@@ -4,7 +4,8 @@
  * Description: This module calculates the BJCP points for staff, judges, and stewards
  *	            using the guidelines provided by the BJCP at http://www.bjcp.org/rules.php.
  */
-require('output.bootstrap.php');
+session_start(); 
+require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
@@ -71,7 +72,8 @@ function total_points($total_entries,$method) {
 
 // calculate a Judge's points
 function judge_points($bid,$bos) { 
-	require('output.bootstrap.php');
+	session_start(); 
+require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 1.0 points per competition	
@@ -95,7 +97,8 @@ function judge_points($bid,$bos) {
 	
 // calculate a Steward's points
 function steward_points($bid) {
-	require('output.bootstrap.php');
+	session_start(); 
+require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 0.5 points per day	

@@ -1,15 +1,5 @@
 <?php 
-
-// Define site folders
-define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
-define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
-define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
-define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
-define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
-define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
-define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
-
-require(CONFIG.'config.php');
+require('paths.php');
 require(INCLUDES.'functions.inc.php');
 
 // Check to see if initial setup has taken place 
@@ -159,9 +149,11 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	}
   } // End registration date check.
   if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
+  <?php if ($section == "admin") { ?>
   <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   </div>
+  <?php } ?>
   <div class="error">Please register or log in to access this area.</div>
   <?php } ?>
   </div>

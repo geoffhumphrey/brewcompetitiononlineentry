@@ -1,5 +1,7 @@
 <?php 
-require('output.bootstrap.php'); 
+session_start(); 
+require('../paths.php'); 
+require(CONFIG.'config.php');
 include(INCLUDES.'functions.inc.php');
 include(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');

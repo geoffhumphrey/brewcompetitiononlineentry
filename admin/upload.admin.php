@@ -1,5 +1,5 @@
 <?php 
-include('../output/output.bootstrap.php');
+include('../paths.php');
 require(CONFIG.'config.php');
 require(INCLUDES.'functions.inc.php'); 
 require(INCLUDES.'url_variables.inc.php');

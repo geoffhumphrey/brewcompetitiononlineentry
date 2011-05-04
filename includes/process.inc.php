@@ -5,14 +5,7 @@
  *              new users, organization, etc.
  */
 
-define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
-define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
-define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
-define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
-define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
-define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
-define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
-require(CONFIG.'config.php'); 
+require('../paths.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 
@@ -2258,7 +2251,7 @@ $updateSQL = sprintf("UPDATE contacts SET
 
 if ($action == "email") { 
 // CAPCHA check
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/captcha/securimage.php';
+include_once  (ROOT.'captcha/securimage.php');
 $securimage = new Securimage();
 
 if ($securimage->check($_POST['captcha_code']) == false) {
