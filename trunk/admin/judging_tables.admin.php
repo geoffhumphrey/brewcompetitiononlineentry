@@ -256,7 +256,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 		$row_last_table_number = mysql_fetch_assoc($last_table_number);
 		for($i=1; $i<150+1; $i++) { 
 		?>
-    	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_tables_edit['tableNumber'] == $i)) echo "selected"; elseif ($i <= $row_last_table_number['tableNumber']) echo "disabled"; else echo ""; ?>><?php echo $i; ?></option>
+    	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_tables_edit['tableNumber'] == $i)) echo "selected"; elseif ($i <= $row_last_table_number['tableNumber']) echo "disabled"; elseif (($row_last_table_number['tableNumber'] + 1) == $i) echo "selected"; else echo ""; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
     </td>
@@ -273,6 +273,8 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     </select>
     </td>
   </tr>
+  <?php } else { ?>
+  <input type="hidden" name="tableLocation"  value="<?php echo $row_judging1['id']; ?>" />
   <?php } ?>
   <tr>
     <td class="dataLabel">Style(s):</td>

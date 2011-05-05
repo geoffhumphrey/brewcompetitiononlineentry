@@ -6,10 +6,7 @@
  *              for archiving purposes so that data is still available.
  */
 
-define('ROOT',$_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
-define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
-define('CONFIG',ROOT.'Connections'.DIRECTORY_SEPARATOR);
-require(CONFIG.'config.php'); 
+require('../paths.php');
 require(INCLUDES.'scrubber.inc.php');
 
 session_start();

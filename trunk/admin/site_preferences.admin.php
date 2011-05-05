@@ -82,7 +82,7 @@ $totalRows_themes = mysql_num_rows($themes);
   </tr>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "30"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "50"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
