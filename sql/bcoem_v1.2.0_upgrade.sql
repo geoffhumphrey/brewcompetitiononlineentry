@@ -362,3 +362,5 @@ ALTER TABLE `brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this
 ALTER TABLE `brewer` DROP `brewerJudgeLocation2` ; 
 ALTER TABLE `brewer` DROP `brewerStewardLocation2` ;
 ALTER TABLE `brewer` ADD `brewerJudgeBOS` CHAR ( 1 ) NULL COMMENT 'Y if judged in BOS round';
+ALTER TABLE `styles` CHANGE  `brewStyleGroup`  `brewStyleGroup` VARCHAR( 3 ) NULL DEFAULT NULL;
+ALTER TABLE `styles` CHANGE  `brewStyleNum`  `brewStyleNum` VARCHAR( 3 ) NULL DEFAULT NULL;

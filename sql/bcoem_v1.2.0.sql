@@ -16,7 +16,7 @@
 
 CREATE TABLE IF NOT EXISTS `styles` (
   `id` int(8) NOT NULL auto_increment,
-  `brewStyleNum` char(3)  default NULL,
+  `brewStyleNum` varchar(3)  default NULL,
   `brewStyle` varchar(250)  default NULL,
   `brewStyleOG` varchar(20)  default NULL,
   `brewStyleOGMax` varchar(25)  default NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `styles` (
   `brewStyleType` varchar(25)  default NULL,
   `brewStyleInfo` text ,
   `brewStyleLink` varchar(200)  default NULL,
-  `brewStyleGroup` INT(11)  default NULL,
+  `brewStyleGroup` varchar(3)  default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 

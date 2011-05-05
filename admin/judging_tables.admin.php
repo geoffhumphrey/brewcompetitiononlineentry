@@ -93,9 +93,10 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
 	<?php } ?>
 </div>
 <?php } // end if ($totalRows_tables > 0) ?>
+
+	<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">Step 5</span>
-	<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/rosette.png" alt="View Scores"></span>
     	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoreMenu');">View Scores...</a></div>
