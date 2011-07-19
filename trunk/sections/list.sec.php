@@ -1,10 +1,20 @@
-<?php if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
+<?php 
+/**
+ * Module:      list.sec.php 
+ * Description: This module displays user-related data including personal information,
+ *              judging/stewarding information, and the participant's associated entries. 
+ * 
+ */
+
+
+
+if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
 <p>Please <a href="index.php?section=login">log in</a> or <a href="index.php?section=register">register</a> to view your list of brews entered into the <?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?>, <?php echo $row_contest_info['contestHostLocation']; ?>.</p> 
 <?php } 
 else 
 { 
 $total_not_paid = total_not_paid_brewer($row_user['id']);
-include(DB.'brewer.db.php');
+require(DB.'brewer.db.php');
 include(DB.'entries.db.php');
 include(INCLUDES.'db_tables.inc.php');
 
@@ -19,7 +29,7 @@ if ($msg != "default") echo $msg_output;
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
-<?php if (greaterDate($today,$deadline)) echo ""; else { ?>
+<?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo ""; else { ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
         <span class="icon"><img src="images/user_edit.png" /></span><a href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
@@ -32,7 +42,9 @@ if ($msg != "default") echo $msg_output;
     </span>
 </div>
 <?php } ?>
-<?php } ?>
+<?php } 
+//echo "Query: ".$query_brewer;
+?>
 <table class="dataTable">
   	<tr>
     	<td class="dataLabel" width="5%">Name:</td>
@@ -253,7 +265,7 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
     </span>
 </div>
 <?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
-<?php } // end if (!greaterDate($today,$deadline)) ?>
+<?php } // end if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) ?>
 <?php } // end if ($action != "print")
 if ($totalRows_log > 0) { 
 

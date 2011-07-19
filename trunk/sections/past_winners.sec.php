@@ -1,5 +1,13 @@
-<?php if ($section == "past_winners") { ?>
-<?php if ($action != "print") { ?>
+<?php 
+/**
+ * Module:      past_winners.sec.php 
+ * Description: This module displays winners from archived database tables. 
+ * 
+ */
+
+if ($section == "past_winners") {
+if ($action != "print") { 
+?>
 <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a href="#" onClick="window.open('output/print.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $dbTable; ?>&amp;action=print','','height=600,width=800,toolbar=no,resizable=yes,scrollbars=yes'); return false;">Print This Page</a></p>
 <?php }  
 }

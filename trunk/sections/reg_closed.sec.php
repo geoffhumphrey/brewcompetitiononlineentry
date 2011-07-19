@@ -5,6 +5,7 @@
  *              after registration has closed but before judging ends.
  *
  */
+ 
 include(DB.'judging_locations.db.php'); 
 ?>
 <h2>Thanks and Good Luck To All Who Entered the <?php echo $row_contest_info['contestName']; ?>!</h2>

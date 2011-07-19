@@ -1,4 +1,13 @@
-<?php if (strstr($section,"step")) { ?>
+<?php
+/**
+ * Module:      nav.sec.php 
+ * Description: This module houses the main navigation. 
+ * 
+ */
+
+
+include(DB.'sponsors.db.php');
+if (strstr($section,"step")) { ?>
 <div class="setupTitle">Set Up Your Brew Competition Online Entry and Managment Site</div>
 <?php } else { ?>
 <ul id="nav">
@@ -186,7 +195,6 @@
 	<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
 	<a class="menuItem" href="index.php?section=admin&go=judging_tables&filter=orphans">Styles Not Assigned to Tables</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
-	<a class="menuItem" href="index.php?section=admin&amp;go=assign_tables">Judging Assignments</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
 </div>
@@ -205,8 +213,7 @@
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
 <?php } ?>
-	<a class="menuItem" href="index.php?section=admin&amp;action=add&amp;go=assign_tables&amp;filter=judges">Judges to a Table</a>
-	<a class="menuItem" href="index.php?section=admin&amp;action=add&amp;go=assign_tables&amp;filter=stewards">Stewards to a Table</a>
+	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=assign">Judges/Stewards to a Table</a>
 </div>
 
 <div id="adminMenu_Scoring_Manage" class="menu">

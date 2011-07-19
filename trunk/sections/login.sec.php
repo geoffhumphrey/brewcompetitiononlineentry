@@ -1,4 +1,13 @@
-<?php if (($action == "default") || ($action == "login") || ($action == "logout")) {  
+<?php 
+/**
+ * Module:      login.sec.php 
+ * Description: This module houses the functionality for users to log into the
+ *              site using their username and password (encrypted in the db). 
+ * 
+ */
+
+
+if (($action == "default") || ($action == "login") || ($action == "logout")) {  
 	if ($msg != "default") echo $msg_output;  
 	if (!isset($_SESSION['loginUsername'])) { 
 ?>

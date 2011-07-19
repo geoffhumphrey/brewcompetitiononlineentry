@@ -19,6 +19,12 @@ $judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error(
 $row_judging_prefs = mysql_fetch_assoc($judging_prefs);
 $totalRows_judging_prefs = mysql_num_rows($judging_prefs);
 
+$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+$result = mysql_query($query_participant_count, $brewing) or die(mysql_error());
+$row = mysql_fetch_assoc($result);
+$totalRows_participant_count = $row["count"];
+mysql_free_result($result);
+
 # Set global pagination variables 
 $display = $row_prefs['prefsRecordPaging']; 
 $pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;

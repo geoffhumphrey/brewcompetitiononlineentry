@@ -2,6 +2,38 @@
  **** Universal HTML ELEMENT STYLING
  ****/
 
+.red {
+	background-color: #C00;
+}
+
+.green {
+	background-color: #393;
+}
+
+.yellow {
+	background-color: #FC3;
+}
+
+.orange {
+	background-color: #F60;
+}
+
+.blue { 
+	background-color: #09F;
+}
+
+
+.judge-alert {
+	color:#ffffff;
+	font-size: 1.1em;
+	font-weight: bold;
+	text-align: center;
+	padding:5px; 
+	margin:3px 0 3px 0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
 body  {
 font-size: 100%; /* Fixes exaggerated text resizing in IE6 and IE7 */
 }

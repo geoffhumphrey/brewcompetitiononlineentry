@@ -1,6 +1,15 @@
 <?php
+/**
+ * Module:      pay.sec.php 
+ * Description: This module dispays payment information based upon the competition-
+                specific payment preferences. 
+ * 
+ */
+
+
 $bid = $row_user['id'];
 if ($msg == "1") {
+	// If redirected from PayPal, update the brewer table to mark entries as paid
 	$a = explode('-', $view);
 	foreach (array_unique($a) as $value) {
 		$updateSQL = "UPDATE brewing SET brewPaid='Y' WHERE id='".$value."';";
@@ -9,7 +18,6 @@ if ($msg == "1") {
 	}
 }
 
-include(DB.'brewer.db.php');
 include(DB.'entries.db.php');
 if ($msg != "default") echo $msg_output; 
 

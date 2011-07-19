@@ -39,7 +39,7 @@ if ($totalRows_tables > 0) {
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
-			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
+			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 			?>
             <?php if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { ?>
           	<option value="index.php?section=admin&amp;go=judging_flights&amp;&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #:".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
@@ -56,7 +56,7 @@ if ($totalRows_tables > 0) {
 } 
 if ($id !="default") { 
 // get variables
-$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
+$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 $flight_count = ceil($entry_count/$row_judging_prefs['jPrefsFlightEntries']);
 $round_count = $row_tables_edit['tableRound']; 
 ?>
@@ -195,7 +195,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 if (($action == "assign") && ($filter == "rounds")) { 
 	if ($totalRows_tables > 0) { 
 ?>
-<form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
@@ -238,6 +238,7 @@ if (($action == "assign") && ($filter == "rounds")) {
         <input type="hidden" name="id[]" value="<?php echo $random ?>" />
         <input type="hidden" name="flightTable<?php echo $random ?>" value="<?php echo $row_tables['id']; ?>" />
         <input type="hidden" name="flightNumber<?php echo $random ?>" value="<?php echo $i; ?>" />
+        <input type="hidden" name="flightRoundPrevious<?php echo $random ?>" value="<?php echo $row_round_no['flightRound']; ?>" />
         <select name="flightRound<?php echo $random ?>">
         <option value="">Choose Below:</option>
         <?php for($r=1; $r<$row_table_location['judgingRounds']+1; $r++) { ?>

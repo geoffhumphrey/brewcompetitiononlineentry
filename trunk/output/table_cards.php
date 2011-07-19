@@ -32,7 +32,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables['id']); ?></h4>
+    <h4><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -67,7 +67,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
         	<td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
         	<td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php echo $flight; ?></td>
+            <td class="data"><?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo $flight; ?></td>
 		</tr>
    		<?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
@@ -89,7 +89,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables['id']); ?></h4>
+    <h4><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -124,7 +124,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
         	<td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
         	<td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php echo $flight; ?></td>
+            <td class="data"><?php if ($row_judging_prefs['jPrefsQueued'] == "N")  echo $flight; ?></td>
 		</tr>
    		<?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>

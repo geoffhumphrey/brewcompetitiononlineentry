@@ -1,4 +1,4 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step4") { ?>
 <h2>Competition Info</h2>
 <div class="adminSubNavContainer">
@@ -7,22 +7,26 @@
     </span>
 </div>
 <?php } ?>
-<?php if ($section == "step4") { ?>
+<?php if ($section == "step4") { 
+$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM brewer WHERE uid='1'";
+$name = mysql_query($query_name, $brewing) or die(mysql_error());
+$row_name = mysql_fetch_assoc($name);
+?>
 <h3>Contact</h3>
 <table>
   <tr>
     <td class="dataLabel">Competition Coordinator's First Name:</td>
-    <td class="data"><input name="contactLastName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="data"><input name="contactFirstName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerFirstName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Competition Coordinator's Last Name:</td>
-    <td class="data"><input name="contactFirstName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactName']; ?>"></td>
+    <td class="data"><input name="contactLastName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerLastName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Contact Email:</td>
-    <td class="data"><input name="contactEmail" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestContactEmail']; ?>"></td>
+    <td class="data"><input name="contactEmail" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerEmail']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
@@ -89,15 +93,31 @@
   <tr>
     <td class="dataLabel">Registration Close:</td>
     <td class="data"><input name="contestRegistrationDeadline" type="text" class="submit" size="20" onfocus="showCalendarControl(this);" value="<?php echo $row_contest_info['contestRegistrationDeadline']; ?>"></td>
-    <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations. For example, if you want to accept registrations through January 1, 2011, the registration deadline should be January 2, 2011 (closes at midnight).</em></td>
+    <td class="data"><span class="required">Required </span><em>The date the system will automatically close registrations. For example, if you want to accept registrations through January 1, 2012, the registration deadline should be January 2, 2012 (closes at midnight).</em></td>
   </tr>
 </table>
 <h3>Rules</h3>
 <table>
   <tr>
     <td class="dataLabel">Competition Rules:</td>
-    <td class="data"><textarea name="contestRules" cols="70" rows="25"><?php echo $row_contest_info['contestRules']; ?></textarea></td>
-    <td class="data"><em>Copy and paste if needed.</em></td>
+    <td class="data">
+    	<textarea name="contestRules" cols="70" rows="25">
+		<?php if ($section != "step4") echo $row_contest_info['contestRules']; else { ?>
+        <p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>
+		<p>All mailed entries must <strong>received </strong>at the mailing location by the entry deadline - please allow for shipping time.</p>
+		<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>
+		<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>
+		<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>
+		<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>
+		<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>
+		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once. For example, participants may enter a Belgian Pale (16B) and Belgian Saison (16C), but may not enter two Saisons, even if they are different brews.</p>
+		<p>Categories with a small number of entries may be combined at the discretion of the competition organizers. The Competition Coordinator or other qualified person will review elements of beer categories and styles with each panel prior to judging.</p>
+		<p>The Best of Show judging will be determined by a Blue Ribbon Panel based on a second judging of the top winners.</p>
+		<p>Bottles will not be returned to entrants.</p>
+        <?php } ?>
+        </textarea>
+    </td>
+    <td class="data"><em>Edit the provided general rules text as needed.</em></td>
   </tr>
 </table>
 <h3>Entries</h3>
@@ -145,8 +165,18 @@
 <table class="dataTable">
   <tr>
     <td class="dataLabel bdr1B_dashed">Bottle Acceptance Rules:</td>
-    <td class="data bdr1B_dashed"><textarea name="contestBottles" cols="70" rows="25"><?php  echo $row_contest_info['contestBottles']; ?></textarea></td>
-    <td class="data bdr1B_dashed"><em>Indicate the number of bottles, size, color, etc. Copy and paste if needed.</em></td>
+    <td class="data bdr1B_dashed">
+    	<textarea name="contestBottles" cols="70" rows="25"><?php if ($section != "step4") echo $row_contest_info['contestBottles']; else { ?>
+        <p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>
+		<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>
+		<p>Bottles will not be returned to contest entrants.</p>
+		<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottles with a rubber band only; glue and/or tape are unacceptable.</p>
+		<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified per the 2008 BJCP Style Guidelines. Failure to note such ingredients may impact the judges' scoring of your entry.</p>
+		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>
+		<?php } ?>
+        </textarea>
+    </td>
+    <td class="data bdr1B_dashed"><em>Indicate the number of bottles, size, color, etc. Edit default text as needed.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Name of Shipping Location:</td>
@@ -185,8 +215,17 @@
 <table>
   <tr>
     <td class="dataLabel">Awards Structure:</td>
-    <td class="data"><textarea name="contestAwards" class="submit" cols="70" rows="25"><?php echo $row_contest_info['contestAwards']; ?></textarea></td>
-    <td class="data"><em>Indicate places for each category, BOS procedure, qualifying criteria, etc.</em></td>
+    <td class="data">
+    <textarea name="contestAwards" class="submit" cols="70" rows="25">
+		<?php if ($section != "step4") echo $row_contest_info['contestAwards']; else { ?>
+        <p>The awards ceremony will take place once judging is completed.</p>
+		<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>
+		<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>
+		<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>
+        <?php } ?>
+    </textarea>
+    </td>
+    <td class="data"><em>Indicate places for each category, BOS procedure, qualifying criteria, etc. Edit default text as needed.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Best of Show Award:</td>

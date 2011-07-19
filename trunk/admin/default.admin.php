@@ -7,6 +7,7 @@
 include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
+include(DB.'dropoff.db.php'); 
 ?>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
@@ -20,7 +21,7 @@ if ($row_user['userLevel'] == "1") {
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
 if ($go == "default") { 
-if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
+if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
 
 ?>
 <div id="menu_container">
@@ -46,7 +47,7 @@ if (greaterDate($today,$deadline)) echo "<div class='info'>Now that registration
     		</ul>
             <ul class="admin_default">
 				<li><a href="http://help.brewcompetition.com/files/scoring.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Help" class="thickbox">How Do I Enter Scores?</a></li>
-                <li><a href="http://help.brewcompetition.com/files/archives.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Help" class="thickbox">What are Archives?</a></li>		
+                <li><a href="http://help.brewcompetition.com/files/archiving.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Help" class="thickbox">What are Archives?</a></li>		
             </ul>
             <p class="admin_default_header">More Help</p>
             <ul class="admin_default">

@@ -9,6 +9,10 @@
 
 if ($row_judging_prefs['jPrefsQueued'] == "N") $assign_to = "Flights"; $assign_to = "Tables";
 
+$header_output = "";
+$output = "";
+$output_extend = "";
+
 switch($section) {
 	
 	case "default":
@@ -255,6 +259,7 @@ switch($section) {
 		$output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; 
 		if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; 
 		}
+	elseif ($msg == "13") $output = "The table that was just defined does not have any associated styles.";
 	else $output = "";
 	break;
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Module:      beerxml.sec.php 
+ * Description: This module houses and calls the upload mechanism for parsing Beer XML files
+ *              and inserting the data into the brewing database table.
+ * 
+ */
+
+
 if ($php_version >= "5") { 
 
 include (INCLUDES.'beerXML/input_beer_xml.inc.php');

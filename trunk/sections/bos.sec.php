@@ -1,3 +1,11 @@
+<?php 
+/**
+ * Module:      bos.sec.php 
+ * Description: This module houses public-facing display of the BEST of
+ *              show results.
+ * 
+ */
+?>
 <h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
 <?php if ($row_prefs['prefsCompOrg'] == "Y") { 
 	// Display BOS winners for each applicable style type
@@ -50,7 +58,6 @@
 </thead>
 <tbody>
 	<?php do {
-	
 	$query_entries = sprintf("SELECT brewBrewerID,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 	$row_entries = mysql_fetch_assoc($entries);
@@ -81,14 +88,11 @@
 //if ($row_contest_info['contestBOSAward'] != "") echo "<h3>Best of Show Award(s)</h3>".$row_contest_info['contestBOSAward']; 
 } // end if ($row_prefs['prefsCompOrg'] == "Y") 
 
-
-
 if ($row_prefs['prefsCompOrg'] == "N") { 
 include(DB.'entries.db.php');
 if ($totalRows_bos > 0) { 
-?>
-<?php if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "<h3>Beer Categories</h3>"; ?>
-<?php if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestBOSAward']; ?>
+if (($row_prefs['prefsBOSCider'] == "Y") || ($row_prefs['prefsBOSMead'] == "Y")) echo "<h3>Beer Categories</h3>"; 
+if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestBOSAward']; ?>
 <table class="dataTable">
 <thead>
  <tr>
@@ -125,7 +129,6 @@ if ($totalRows_bos > 0) {
   		} 
 	 ?>
   </td>
-  
   <td class="dataList"><?php echo $row_bos['brewBrewerFirstName']." ".$row_bos['brewBrewerLastName']; if ($row_log['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_log['brewCoBrewer']; ?></td>
   <td class="dataList"><?php echo $row_bos['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
@@ -137,9 +140,8 @@ if ($totalRows_bos > 0) {
   </tr>
 </tbody>
 </table>
-<?php } ?>
-
-<?php if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
+<?php } 
+if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
 <h3>Mead Categories</h3>
 <table class="dataTable">
 <thead>
@@ -240,5 +242,5 @@ if ($totalRows_bos > 0) {
 </table>
 <?php } 
   } // end if BOS cider
-} else echo "</h2><p>No BOS scores have been entered yet. Please check back later.</p>";
+} else echo "</h2><p>No BOS places have been entered yet. Please check back later.</p>";
 ?>

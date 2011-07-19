@@ -1,3 +1,11 @@
+<?php
+/**
+ * Module:      winners.sec.php 
+ * Description: This module displays the winners entered into the database.
+ * 
+ */
+
+?>
 <h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } ?></h2>
 <?php 
 // If using BCOE for comp organization, display winners by table
@@ -5,7 +13,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 // Display all winners ?>
 <?php
 	do { 
-	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
+	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 	if  (score_count($row_tables['id'],"1")) {
 	?>
 	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>

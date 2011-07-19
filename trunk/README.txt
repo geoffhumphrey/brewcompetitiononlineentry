@@ -3,12 +3,12 @@
 **                                                                  **
 ** Brew Competition Online Entry & Management                       **
 ** Developed by Geoff Humphrey - zkdigital.com                      **
-** Release 1.2.0 BETA May 2011                                      **
+** Release 1.2.0 June 2011                                          **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
-** As such, you are permitted to download the full source code of   **
-** the software for your own use. Feel free to customize it for     **
-** your own purposes.                                               **
+**  As such, you are permitted to download the full source code of  **
+**  the software for your own use. Feel free to customize it for    **
+**  your own purposes.                                              **
 ** http://www.brewcompetition.com                                   **
 ** http://help.brewcompetition.com                                  **
 ** Direct inquiries to prost@brewcompetition.com                    **
@@ -84,7 +84,7 @@ Installation: Initial Setup
 
 - Access your new database and import the database schema. The database schema is contained within the bcoev1.X.X.sql document (use the latest version number's file), located in the sql folder of the release package. Typically, you can import the entire document using a tool like PhpMyAdmin.
 
-- Edit the username, password, and database variables the config.php file located in the competition/Connections/ directory.
+- Edit the username, password, and database variables the config.php file located in the competition/sites/ directory.
 
 - If necessary for your environment, edit line 55 of the config.php file with the correct path to BCOE&M's root installation (this is for the ability to upload pictures).
 

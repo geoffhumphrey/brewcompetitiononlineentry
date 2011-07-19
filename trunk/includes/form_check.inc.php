@@ -24,10 +24,14 @@ return true;
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
-if(WithoutContent(document.form1.contestContactName.value))
-	{ errormessage += "\nThe competition contact name"; }
-if(WithoutContent(document.form1.contestContactEmail.value))
+<?php if ($section == "step4") { ?>
+if(WithoutContent(document.form1.contactFirstName.value))
+	{ errormessage += "\nThe competition contact's first name"; }
+if(WithoutContent(document.form1.contactLastName.value))
+	{ errormessage += "\nThe competition contact's last name"; }
+if(WithoutContent(document.form1.contactEmail.value))
 	{ errormessage += "\nThe competition contact email"; }
+<?php } ?>
 if(WithoutContent(document.form1.contestName.value))
 	{ errormessage += "\nThe competition name"; }
 if(WithoutContent(document.form1.contestHost.value))
@@ -44,7 +48,7 @@ if(WithoutContent(document.form1.contestShippingAddress.value))
 	{ errormessage += "\nThe shipping address"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up your site preferences:\n' + errormessage);
+	alert('The following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -66,7 +70,7 @@ if(WithoutContent(document.form1.judgingRounds.value))
 	{ errormessage += "\nThe number of rounds at this location"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up your site preferences:\n' + errormessage);
+	alert('The following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -85,7 +89,7 @@ if(WithoutContent(document.form1.dropLocation.value))
 	
 // Put field checks above this point.// Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to set up a drop-off location:\n' + errormessage);
+	alert('The following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -221,7 +225,7 @@ if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nNew Password"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('To process, the following fields cannot be empty:\n' + errormessage);
+	alert('To process, the following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -241,7 +245,7 @@ if(WithoutContent(document.form1.message.value))
 	{ errormessage += "\nYour message"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to contact the competition representative:\n' + errormessage);
+	alert('To process, the following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -257,7 +261,7 @@ if(WithoutContent(document.form1.brewStyleType.value))
 	{ errormessage += "\nThe style type"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to add or edit your custom style:\n' + errormessage);
+	alert('To process, the following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -273,9 +277,11 @@ if(WithoutContent(document.form1.tableName.value))
 	{ errormessage += "\nThe table name"; }
 if(WithoutContent(document.form1.tableNumber.value))
 	{ errormessage += "\nThe table number"; }
+if(NoneWithCheck(document.form1.tableStyles))
+	{ errormessage += "\nAt least one style"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required to add or edit table:\n' + errormessage);
+	alert('To process, the following information is required:\n' + errormessage);
 	return false;
 	}
 return true;
@@ -293,7 +299,7 @@ if(WithoutContent(document.form1.jPrefsRounds.value))
 if(WithoutContent(document.form1.jPrefsMaxBOS.value))
 	{ errormessage += "\nThe Maximum Places in BOS Round"; }// Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('The following information is required:\n' + errormessage);
+	alert('To process, the following information is required:\n' + errormessage);
 	return false;
 	}
 return true;

@@ -1,6 +1,6 @@
 <?php
 include(DB.'entries.db.php');
-if (greaterDate($today,$deadline)) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
+if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
 ?>
 <h2>Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if ($action != "print") { ?>
@@ -141,20 +141,19 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
-			"bLengthChange" : false,
+			"bLengthChange" : true,
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>
 			<?php if ($psort == "category") { ?>"aaSorting": [[2,'asc']],<?php } ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[3,'asc']],<?php } ?>
 			<?php if ($psort == "entry_name") { ?>"aaSorting": [[1,'asc']],<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-			<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
+				null,
+				null,
+				null,
+				null,
+				null,
+				{ "asSorting": [  ] }<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },

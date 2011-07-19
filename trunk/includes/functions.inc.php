@@ -6,10 +6,6 @@
  *
  */
  
-$php_version = phpversion();
-$today = date('Y-m-d');
-$current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
-
 $pg = "default";
 if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
@@ -63,6 +59,7 @@ function judging_date_return() {
 	$query_check = "SELECT judgingDate FROM judging_locations";
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
+	$today = date('Y-m-d');
 	do {
  		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
  		else $newDate[] = 0;
@@ -1433,14 +1430,15 @@ function style_convert($number,$type) {
 	return $style_convert;
 }
 
-function get_table_info($input,$method,$id,$dbTable) {	
+function get_table_info($input,$method,$id,$dbTable,$param) {	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
 	include(INCLUDES.'db_tables.inc.php');
 	
 	$query_table = "SELECT * FROM $tables_db_table";
-	if ($id != "default") $query_table .= " WHERE id='$id'"; 
+	if ($id != "default") $query_table .= " WHERE id='$id'";
+	if ($param != "default") $query_table .= " WHERE tableLocation='$param'";
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
 	
@@ -1521,7 +1519,7 @@ function get_table_info($input,$method,$id,$dbTable) {
 	return $d;
   	}
 	
-	if ($method == "count_total") {
+	if (($method == "count_total") && ($param == "default")) {
 		
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
@@ -1541,6 +1539,29 @@ function get_table_info($input,$method,$id,$dbTable) {
 	return $d; 
   	}
 	
+	if (($method == "count_total") && ($param != "default")) {
+	
+	do {	
+		$a = explode(",", $row_table['tableStyles']);
+			foreach ($a as $value) {
+				include(CONFIG.'config.php');
+				mysql_select_db($database, $brewing);
+				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				$row_styles = mysql_fetch_assoc($styles);
+				
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
+				$row_style_count = mysql_fetch_assoc($style_count);
+				$totalRows_style_count = $row_style_count['count'];
+				$c[] = $totalRows_style_count ;
+			}
+	} while ($row_table = mysql_fetch_assoc($table));
+	$d = array_sum($c);
+	return $d; 
+  	}
+	
+	
 	if ($method == "count") {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -1549,12 +1570,12 @@ function get_table_info($input,$method,$id,$dbTable) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
 	//$num_rows = mysql_num_rows($result);
-	return $num_rows[0];
+	return $num_rows['count'];
 	}
 	
 	if ($method == "count_scores") {
@@ -1770,7 +1791,7 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	return $style_choose;   			
 }
 
-function table_location($table_id) { 
+function table_location($table_id,$date_format) { 
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_table = sprintf("SELECT tableLocation FROM judging_tables WHERE id='%s'", $table_id);
@@ -1783,7 +1804,7 @@ function table_location($table_id) {
 	$totalRows_location = mysql_num_rows($location);
 	
 	if ($totalRows_location == 1) {
-    $table_location = $row_location['judgingLocName'].", ".date_convert($row_location['judgingDate'], 3, $row_prefs['prefsDateFormat'])." - ".$row_location['judgingTime'];
+    $table_location = $row_location['judgingLocName'].", ".date_convert($row_location['judgingDate'], 2, $date_format)." - ".$row_location['judgingTime'];
 	}
 	else $table_location = ""; 
 	mysql_free_result($table);
@@ -2054,7 +2075,7 @@ function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable)) { 
+		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable,"default")) { 
         	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>";
 		 	} 
 		    mysql_free_result($scores);

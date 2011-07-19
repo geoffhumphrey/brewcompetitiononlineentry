@@ -7,7 +7,6 @@
  *
  */
 
-include(DB.'brewer.db.php');
 include(DB.'judging_locations.db.php'); 
 
 // Page specific functions
