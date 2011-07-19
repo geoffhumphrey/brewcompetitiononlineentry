@@ -166,10 +166,12 @@ if ($action == "delete") {
   if ($go == "judging_tables") {
 	mysql_select_db($database, $brewing);
 	
-	$query_delete_assign = sprintf("SELECT id FROM judging_scores WHERE assignTable='%s'", $id);
+	$query_delete_assign = sprintf("SELECT id FROM judging_scores WHERE scoreTable='%s'", $id);
   	$delete_assign = mysql_query($query_delete_assign, $brewing) or die(mysql_error()); 
   	$row_delete_assign = mysql_fetch_assoc($delete_assign);
+	$totalRows_delete_assign = mysql_num_rows($delete_assign);
 	
+	if ($totalRows_delete_assign > 0) {
 	do { $z[] = $row_delete_assign['id']; } while (mysql_fetch_assoc($delete_judge_assign));
 	
 	foreach ($z as $aid) {
@@ -187,19 +189,22 @@ if ($action == "delete") {
 		$deleteScore = sprintf("DELETE FROM judging_scores WHERE id='%s'", $sid);
 		$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 		}
-
+	}
 	$query_delete_flights = sprintf("SELECT id,flightTable FROM judging_flights WHERE flightTable='%s'", $id);
   	$delete_flights = mysql_query($query_delete_flights, $brewing) or die(mysql_error()); 
   	$row_delete_flights = mysql_fetch_assoc($delete_flights);
+	$totalRows_delete_flights = mysql_num_rows($delete_flights);
 	
+	if ($totalRows_delete_flights > 0) {
 	do { $b[] = $row_delete_flights['id']; } while ($row_delete_flights = mysql_fetch_assoc($delete_flights));
 	
 	foreach ($b as $fid) {
 		$deleteFlight = sprintf("DELETE FROM judging_flights WHERE id='%s'", $fid);
 		$Result = mysql_query($deleteFlight, $brewing) or die(mysql_error());
 		}
-	
+	if ($c != "") {
 	foreach ($c as $eid) {
+		
 		$query_delete_bos = sprintf("SELECT id,eid FROM judging_scores_bos WHERE eid='%s'", $eid);
   		$delete_bos = mysql_query($query_delete_bos, $brewing) or die(mysql_error()); 
   		$row_delete_bos = mysql_fetch_assoc($delete_bos);
@@ -207,9 +212,10 @@ if ($action == "delete") {
 			$deleteBOS = sprintf("DELETE FROM judging_scores_bos WHERE id='%s'", $row_delete_bos['id']);
 			$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 			}
+		  }
 		}
-  }
-  
+	 }
+  } 
   
   $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
   $Result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
@@ -752,7 +758,6 @@ brewCoBrewer) VALUES
 	$query_brew_id = "SELECT id FROM brewing WHERE brewBrewerID='$brewBrewerID' ORDER BY id DESC LIMIT 1";
 	$brew_id = mysql_query($query_brew_id, $brewing) or die(mysql_error());
 	$row_brew_id = mysql_fetch_assoc($brew_id);
-	
 	$id = $row_brew_id['id'];
 	}
   
@@ -763,7 +768,7 @@ brewCoBrewer) VALUES
   }
   //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
  else $insertGoTo = "../index.php?section=list";
- // header(sprintf("Location: %s", $insertGoTo));
+ header(sprintf("Location: %s", $insertGoTo));
 }
 
 // --------------------------- If Editing an Entry ------------------------------- //
@@ -1377,7 +1382,7 @@ if ($go == "judge") {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
-if (($_POST['register'] == "Y") || ($totalRows_judging < 2)) {  
+if (($_POST['register'] == "Y") || ($totalRows_judging > 1)) {  
 $location_pref1 = $_POST['brewerJudgeLocation'];
 $location_pref2 = $_POST['brewerStewardLocation'];
 } else { 
@@ -1442,7 +1447,7 @@ WHERE id=%s",
   elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
   else $updateSQL2 = "UPDATE brewer SET brewerNickname=NULL WHERE id='".$id."'"; 
 
-  //echo $updateSQL."<br>";
+  // echo $updateSQL."<br>";
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   $Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
@@ -1459,7 +1464,7 @@ WHERE id=%s",
   elseif ($go == "default") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=2";
   else $updateGoTo = $updateGoTo;
 
-  header(sprintf("Location: %s", $updateGoTo));
+ header(sprintf("Location: %s", $updateGoTo));
 }
 
 // --------------------------- SETUP: Adding General Contest Info ------------------------------- // 
@@ -2331,7 +2336,7 @@ WHERE id=%s",
 
 if (($action == "add") && ($dbTable == "judging_tables")) {
 
-$table_styles = implode(",",$_POST['tableStyles']);
+if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
 
 $insertSQL = sprintf("INSERT INTO judging_tables (
 tableName, 
@@ -2391,7 +2396,7 @@ tableLocation
 			
 		} while ($row_entries = mysql_fetch_assoc($entries));
 	}
-	
+	if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
@@ -2632,19 +2637,40 @@ if (($action == "edit") && ($dbTable == "judging_flights")) {
 if (($action == "assign") && ($dbTable == "judging_flights")) { 
 
 foreach (array_unique($_POST['id']) as $a) {
-	$query_flights = sprintf("SELECT id FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
-	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
-	$row_flights = mysql_fetch_assoc($flights);
-	//echo $query_flights."<br>";
-	do {
-	$updateSQL = sprintf("UPDATE judging_flights SET flightRound=%s WHERE id=%s", 
-		GetSQLValueString($_POST['flightRound'.$a], "text"), 
-		GetSQLValueString($row_flights['id'], "int")
-		);
-	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	//echo $updateSQL.";<br>";
-	} while ($row_flights = mysql_fetch_assoc($flights));
+	
+	// Check to see if round has changed for the table/flight.
+	if ($_POST['flightRound'.$a] != $_POST['flightRoundPrevious'.$a]) {
+	
+	// If so, delete all judging/steward assignments for the "old" round
+		$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE assignTable='%s' AND assignFlight='%s' AND assignRound='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a],$_POST['flightRoundPrevious'.$a]);
+		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+		$row_assignments = mysql_fetch_assoc($assignments);
+		$totalRows_assignments = mysql_num_rows($assignments);
+		//echo $query_assignments."<br>";
+		if ($totalRows_assignments > 0) {
+			do {	
+		 		$deleteAssignment = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $row_assignments['id']);
+  				$Result = mysql_query($deleteAssignment, $brewing) or die(mysql_error());
+				//echo $deleteAssignment.";<br>";
+			} while ($row_assignments = mysql_fetch_assoc($assignments)); 
+		}
+		
+		// Change the rounds for all affected table/flight assignments.	
+	
+		$query_flights = sprintf("SELECT id FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
+		$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+		$row_flights = mysql_fetch_assoc($flights);
+		//echo $query_flights."<br>";
+		do {
+		$updateSQL = sprintf("UPDATE judging_flights SET flightRound=%s WHERE id=%s", 
+			GetSQLValueString($_POST['flightRound'.$a], "text"), 
+			GetSQLValueString($row_flights['id'], "int")
+			);
+		mysql_select_db($database, $brewing);
+  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		//echo $updateSQL.";<br>";
+		} while ($row_flights = mysql_fetch_assoc($flights));
+	}
  }
 header(sprintf("Location: %s", $updateGoTo));
 }
@@ -2747,7 +2773,7 @@ foreach($_POST['score_id'] as $score_id)	{
 					   GetSQLValueString($_POST['id'.$score_id], "text")
 					   );
 
-	#echo $updateSQL."<br>";
+	//echo $updateSQL."<br>";
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
@@ -2766,7 +2792,7 @@ foreach($_POST['score_id'] as $score_id)	{
 					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
 					   );
 
-	#echo $insertSQL."<br>";
+	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
 		}
@@ -2816,28 +2842,31 @@ $updateSQL = sprintf("UPDATE style_types SET
 
 if (($action == "update") && ($dbTable == "judging_assignments")) {
 
-if ($filter == "stewards") $assignment = "S"; else $assignment = "J";
+/*
 $table_id = $id;
+
 foreach ($_POST['bid'] as $bid) { 
+
+
 		for($i=1; $i<$limit+1; $i++) { // loop through the rounds
 		
 		if ($view == "N") $assign_data = $_POST[$i.'-assignFlight'.$bid];
 		if ($view == "Y") $assign_data = $_POST[$i.'-assignTable'.$bid];
 		$unassign = $_POST[$i.'-unassign'.$bid];
 		
-		//echo "---------------<br>";
-		//echo $bid."<br>";
-		//echo $assign_data."<br>";
-		//echo $unassign."<br>";
+		echo "---------------<br>";
+		echo $bid."<br>";
+		echo $assign_data."<br>";
+		echo $unassign."<br>";
 	
 		
 			if (($unassign == "N") && (($assign_data != "D-".$i) && ($assign_data != ""))) {
 				$parts = explode("-",$assign_data);
-				//echo "<p>";
-				//echo $unassign." - ";
-				//echo $parts[0]."<br>";
-				//echo $parts[1]."<br>";
-				//echo $parts[2]."<br>";
+				echo "<p>";
+				echo $unassign." - ";
+				echo $parts[0]."<br>";
+				echo $parts[1]."<br>";
+				echo $parts[2]."<br>";
 				
 				
 				// Check to see if already assigned to this table, round, and flight
@@ -2930,8 +2959,126 @@ foreach ($_POST['bid'] as $bid) {
 				}
 			}
 		} // end for loop
+//header(sprintf("Location: %s", $updateGoTo));
+  }
+*/
+if ($row_judging_prefs['jPrefsQueued'] == "N") {
+	foreach ($_POST['random'] as $random) {
+		// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
+		if (($_POST['unassign'.$random] == 0) && ($_POST['assignFlight'.$random] > 0)) {
+			
+			//Perform check to see if a record is in the DB. If not, insert a new record.
+			// If so, see will update
+			$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE (bid='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
+			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+			$row_flights = mysql_fetch_assoc($flights);
+			//echo $query_flights."<br>";
+			if ($row_flights['count'] == 0) {
+			$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) VALUES (%s, %s, %s, %s, %s, %s)",
+           		GetSQLValueString($_POST['bid'.$random], "text"),
+           		GetSQLValueString($_POST['assignment'.$random], "text"),
+                GetSQLValueString($_POST['assignTable'.$random], "text"),
+				GetSQLValueString($_POST['assignFlight'.$random], "text"),
+				GetSQLValueString($_POST['assignRound'.$random], "text"),
+				GetSQLValueString($_POST['assignLocation'.$random], "text"));
+			//echo $insertSQL.";<br>";
+			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			}
+		}
+		
+		
+		if (($_POST['unassign'.$random] > 0) && ($_POST['assignFlight'.$random] > 0)) {
+			$updateSQL = sprintf("UPDATE judging_assignments SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s", 
+				GetSQLValueString($_POST['bid'.$random], "text"),
+           		GetSQLValueString($_POST['assignment'.$random], "text"),
+                GetSQLValueString($_POST['assignTable'.$random], "text"),
+				GetSQLValueString($_POST['assignFlight'.$random], "text"),
+				GetSQLValueString($_POST['assignRound'.$random], "text"),
+				GetSQLValueString($_POST['assignLocation'.$random], "text"),
+				GetSQLValueString($_POST['unassign'.$random], "text")
+				);		   
+  			//echo $updateSQL.";<br>";
+			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			}
+		
+		if (($_POST['unassign'.$random] > 0) && ($_POST['assignFlight'.$random] == 0)) {
+			$query_flights = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignRound='%s' and assignLocation='%s'", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignLocation'.$random]);
+			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+			$row_flights = mysql_fetch_assoc($flights);
+			$totalRows_flights = mysql_num_rows($flights);
+			//echo $query_flights."<br>";
+			
+			if ($totalRows_flights > 0) {
+				$deleteSQL = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $row_flights['id']);
+ 				//echo $deleteSQL.";<br>"; 
+				mysql_select_db($database, $brewing);
+ 				$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+				}	
+			}
+		} // end foreach
+  } // end if ($row_judging_prefs['jPrefsQueued'] == "N")
+  
+  if ($row_judging_prefs['jPrefsQueued'] == "Y") {
+		foreach ($_POST['random'] as $random) {
+			// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
+			if (($_POST['unassign'.$random] == 0) && ($_POST['assignRound'.$random] > 0))  {
+			//Perform check to see if a record is in the DB. If not, insert a new record.
+			// If so, will update
+			$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE (bid='%s' AND assignRound='%s' AND assignLocation='%s')", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignLocation'.$random]);
+			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+			$row_flights = mysql_fetch_assoc($flights);
+			//echo $query_flights."<br>";
+				if ($row_flights['count'] == 0) {
+				$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) VALUES (%s, %s, %s, %s, %s, %s)",
+           		GetSQLValueString($_POST['bid'.$random], "text"),
+           		GetSQLValueString($_POST['assignment'.$random], "text"),
+                GetSQLValueString($id, "text"),
+				GetSQLValueString("1", "text"),
+				GetSQLValueString($_POST['assignRound'.$random], "text"),
+				GetSQLValueString($_POST['assignLocation'.$random], "text"));
+				//echo $insertSQL.";<br>";
+				mysql_select_db($database, $brewing);
+  				$Result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				}
+			}
+		
+		
+		if (($_POST['unassign'.$random] > 0) && ($_POST['assignRound'.$random] > 0)) {
+			$updateSQL = sprintf("UPDATE judging_assignments SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s", 
+				GetSQLValueString($_POST['bid'.$random], "text"),
+           		GetSQLValueString($_POST['assignment'.$random], "text"),
+                GetSQLValueString($id, "text"),
+				GetSQLValueString("1", "text"),
+				GetSQLValueString($_POST['assignRound'.$random], "text"),
+				GetSQLValueString($_POST['assignLocation'.$random], "text"),
+				GetSQLValueString($_POST['unassign'.$random], "text")
+				);		   
+  			//echo $updateSQL.";<br>";
+			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			}
+		
+		if (($_POST['unassign'.$random] > 0) && ($_POST['assignRound'.$random] == 0)) {
+			/*
+			$query_flights = sprintf("SELECT id FROM judging_assignments WHERE id='%s'", $_POST['unassign'.$random]);
+			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+			$row_flights = mysql_fetch_assoc($flights);
+			$totalRows_flights = mysql_num_rows($flights);
+			echo $query_flights.";<br>";
+			*/
+			//if ($totalRows_flights > 0) {
+				$deleteSQL = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $_POST['unassign'.$random]);
+ 				//echo $deleteSQL.";<br>"; 
+				mysql_select_db($database, $brewing);
+ 				$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+			//	}	
+			}
+		} // end foreach	  
+ }  // end if ($row_judging_prefs['jPrefsQueued'] == "Y")
+
 header(sprintf("Location: %s", $updateGoTo));
-  }	
 } // end if (($action == "update") && ($dbTable == "judging_assignments"))
 
 

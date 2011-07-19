@@ -1,7 +1,7 @@
 <?php 
 /**
  * Module:      brew.sec.php
- * Description: This module the functionality for users to add/edit individual competition
+ * Description: This module houses the functionality for users to add/edit individual competition
  *              entries - references the "brewing" database table.
  *
  */

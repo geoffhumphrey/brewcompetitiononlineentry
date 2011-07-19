@@ -130,8 +130,8 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="dataLabel">Date Format:</td>
     <td class="data">
     <select name="prefsDateFormat">
-    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year</option>
-    <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; ?>>Month Day Year</option>
+    <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year</option>
+    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; ?>>Month Day Year</option>
     <option value="3" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "SELECTED"; ?>>Year Month Day</option>
     </select>
     </td>

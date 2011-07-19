@@ -1,4 +1,11 @@
 <?php 
+/**
+ * Module:      index.php 
+ * Description: This module is the delivery vehicle for all functions.
+ * 
+ */
+
+
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 
@@ -33,6 +40,7 @@ else
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
+require(DB.'brewer.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 ?>
@@ -41,7 +49,7 @@ require(INCLUDES.'headers.inc.php');
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." | ".$header_output; ?></title>
+<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js_includes/jquery.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
@@ -65,21 +73,21 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
 </div>
 <div id="content">
-  <div id="content-inner">
-  <?php 
+ 	 <div id="content-inner">
+ 	<?php 
 	//echo "<p>Registration Open: ".$row_contest_info['contestRegistrationOpen']."</p>";
 	//echo "<p>Registration Deadline: ".$row_contest_info['contestRegistrationDeadline']."</p>";
 	//if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<p>Yes.</p>"; else echo "<p>No.</p>"
-?>
+	?>
   
   <?php if ($section != "admin") { ?>
-  <div id="header">	
-	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-  </div>
+ 	<div id="header">	
+		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+  	</div>
   <?php }
   
   // Check if registration open date has passed. If so, display "registration not open yet" message.
-  if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
+  if (greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
   	if ($section != "admin") {
   	?>
     <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?>.</div>

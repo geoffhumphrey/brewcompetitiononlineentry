@@ -1,6 +1,11 @@
 <?php 
-// Define site folders
-session_start(); 
+/**
+ * Module:      print.php 
+ * Description: This module is the gateway for printing information from
+ *              the site.
+ * 
+ */
+
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
@@ -9,8 +14,6 @@ require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-//$today = date('Y-m-d');
-//$deadline = $row_contest_info['contestRegistrationDeadline'];
 $tb = "default";
 if (isset($_GET['tb'])) {
   $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);

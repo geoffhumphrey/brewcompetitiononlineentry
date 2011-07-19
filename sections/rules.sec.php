@@ -1,4 +1,12 @@
-<?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
+<?php 
+/**
+ * Module:      rules.sec.php 
+ * Description: This module displays the public-facing competition rules
+ *              specified in the contest_info database table. 
+ * 
+ */
+
+if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
 <?php if ($action != "print") { ?>

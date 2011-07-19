@@ -127,7 +127,8 @@ $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 $query_assignments = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerAssignment='X'";
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
-$staff_points = number_format(floor(floor(($staff_points/$row_assignments['count'])) * 10 + 5) * .1, 1);
+if ($row_assignments['count'] > 0) $staff_points = number_format(floor(floor(($staff_points/$row_assignments['count'])) * 10 + 5) * .1, 1);
+else $staff_points = 0;
 
 // Staff
 $query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM brewer WHERE brewerAssignment='O'";

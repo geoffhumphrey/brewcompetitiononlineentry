@@ -12,6 +12,7 @@ include(INCLUDES.'headers.inc.php');
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
 $query_assignments = sprintf("SELECT * FROM judging_assignments WHERE assignment='%s'", $filter);
+if ($id != "default") $query_assignments .= " AND assignTable='$id'";
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 $totalRows_assignments = mysql_num_rows($assignments);
@@ -40,15 +41,15 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($view == "name") { ?>
-			"aaSorting": [[0,'asc'],[3,'asc'],[6,'asc'],[7,'asc']],
+			"aaSorting": [[0,'asc'],[3,'asc'],[5,'asc'],[6,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "table") { ?>
-			"aaSorting": [[5,'asc'],[6,'asc'],[3,'asc'],[0,'asc']],
+			"aaSorting": [[4,'asc'],[5,'asc'],[3,'asc'],[0,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "location") { ?>
-			"aaSorting": [[3,'asc'],[6,'asc'],[5,'asc'],[0,'asc']],
+			"aaSorting": [[3,'asc'],[5,'asc'],[6,'asc'],[0,'asc']],
 			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
@@ -58,8 +59,8 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
+				{ "asSorting": [  ] }<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>,
+				{ "asSorting": [  ] }<?php } ?>
 				]
 			} );
 		} );
@@ -79,29 +80,31 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
         <th class="dataHeading bdr1B" width="10%">Phone</th>
         <th class="dataHeading bdr1B" width="10%">Rank</th>
         <th class="dataHeading bdr1B">Location</th>
-        <th class="dataHeading bdr1B" width="20%">Table Name</th>
         <th class="dataHeading bdr1B" width="5%">Table #</th>
-        <th class="dataHeading bdr1B" width="5%">Round #</th> 
+        <th class="dataHeading bdr1B" width="20%">Table Name</th>
+        <th class="dataHeading bdr1B" width="5%">Round #</th>
+        <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
         <th class="dataHeading bdr1B" width="5%">Flight #</th>
-        
+        <?php } ?>
     </tr>
     </thead>
     <tbody>
     <?php do { 
 	$judge_info = explode("^",brewer_info($row_assignments['bid']));
-	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable));
-	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable));
+	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
+	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
     	<td class="data bdr1B_gray"><?php echo $judge_info['2']; ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
         <td class="data bdr1B_gray"><?php echo $location_info['2']."<br>".date_convert($location_info['0'], 3, $row_prefs['prefsDateFormat'])."<br>".$location_info['1']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignRound']; ?></td>
+        <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignFlight']; ?></td>
-		
+		<?php } ?>
     </tr>
     <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
@@ -167,10 +170,10 @@ if ($totalRows_brewer > 0) { ?>
     <tr>
     	<td class="bdr1B_gray" nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
         <?php if ($filter == "J") { ?>
-    	<td class="data bdr1B_gray"><?php echo $row_brewer['brewerJudgeID']; ?></td>
-        <td class="data bdr1B_gray">Yes / No</td>
+    	<td class="data bdr1B_gray bdr1L_gray"><?php echo $row_brewer['brewerJudgeID']; ?></td>
+        <td class="data bdr1B_gray bdr1L_gray">Yes / No</td>
         <?php } ?>
-        <td class="data bdr1B_gray">&nbsp;</td>
+        <td class="data bdr1B_gray bdr1L_gray">&nbsp;</td>
     </tr>
     <?php } while ($row_brewer = mysql_fetch_assoc($brewer));	?>
     </tbody>
@@ -221,10 +224,10 @@ if ($totalRows_brewer > 0) { ?>
 	<tr>
     	<td class="bdr1B_gray" nowrap="nowrap" width="30%"></td>
         <?php if ($filter == "J") { ?>
-    	<td class="data bdr1B_gray" width="20%">&nbsp;</td>
-        <td class="data bdr1B_gray" width="10%">Yes / No</td>
+    	<td class="data bdr1B_gray bdr1L_gray" width="20%">&nbsp;</td>
+        <td class="data bdr1B_gray bdr1L_gray" width="10%">Yes / No</td>
         <?php } ?>
-        <td class="data bdr1B_gray">&nbsp;</td>
+        <td class="data bdr1B_gray bdr1L_gray">&nbsp;</td>
     </tr>
 	<?php } ?>
     </tbody>

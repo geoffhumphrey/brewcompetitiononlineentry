@@ -1,11 +1,20 @@
+<?php 
+/**
+ * Module:      register.sec.php 
+ * Description: This module houses the functionality for new users to set
+ *              up their account. 
+ * 
+ */
+?>
 <script type="text/javascript" src="js_includes/email_check.js"></script>
 <?php if ($msg != "default") echo $msg_output; ?>
-<p>Our competition entry system is completely electronic.<ul>
-   	  <li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
+<p>Our competition entry system is completely electronic.
+	<ul>
+		<li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>
     	<li>Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct. </li>
-    	<li>Once you have registered, you'll be stepped through our entry process. </li>
-  	    <li>Each brew you enter will automatically be assigned a number  by the system.</li>
+    	<li>Once you have registered, you can proceed through the entry process. </li>
+  	    <li>Each brew you enter will automatically be assigned a number by the system.</li>
 	</ul>
 <?php if ($go == "default") { ?>
 <form name="judgeChoice" id="judgeChoice">

@@ -5,6 +5,7 @@
  *              judging dates, etc. Shown while the registration window is open.
  *
  */
+ 
 include(DB.'judging_locations.db.php'); 
 ?>
 <h2>Registration</h2>

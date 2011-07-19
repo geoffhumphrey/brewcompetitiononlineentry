@@ -1,4 +1,13 @@
-<?php if ((($_SESSION["loginUsername"] == $row_user['user_name'])) || ($row_user['userLevel'] == "1"))
+<?php
+/**
+ * Module:      user.sec.php 
+ * Description: This module houses the functionality for users to add/update enter their
+ *              user name and password information. 
+ * 
+ */
+
+
+if ((($_SESSION["loginUsername"] == $row_user['user_name'])) || ($row_user['userLevel'] == "1"))
 {
 if ($action == "username") { ?><script type="text/javascript" src="js_includes/email_check.js"></script><?php } 
 if ($msg != "default") echo $msg_output; 

@@ -78,7 +78,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$row_location = mysql_fetch_assoc($location);
 			?>
             <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
+            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
 	</div>
@@ -173,7 +173,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$row_location = mysql_fetch_assoc($location);
 			?>
             <h2><?php echo $row_location['judgingLocName']." - ".date_convert($row_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])."  ".$row_location['judgingTime']; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable)."<br>Flights: ".$flights; ?></p>
+            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
 	</div>
@@ -258,7 +258,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
 <?php if (($go == "judging_tables") && ($id == "default"))  
 do { 
-$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
+$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
 <div id="content">
 	<div id="content-inner">
@@ -339,7 +339,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable);
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
 if (($go == "judging_tables") && ($id != "default")) { 
-$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
+$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 ?>
 <div id="content">
 	<div id="content-inner">
@@ -501,7 +501,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><?php echo $row_bos['eid']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_tables_1['tableNumber']; ?></td>
-        <td class="data bdr1B_gray"><?php echo "<em>".$row_entries_1['brewCategorySort']."</em>".$style." ".$row_entries_1['brewStyle']; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style:</strong><br>".$row_entries_1['brewInfo']."</p>"; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style:</strong><br>".$row_entries_1['brewInfo']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -597,7 +597,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><?php echo $row_bos['eid']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_tables_1['tableNumber']; ?></td>
-        <td class="data bdr1B_gray"><?php echo "<em>".style_convert($row_entries_1['brewCategorySort'],1)."</em>".$style." ".$row_entries_1['brewStyle']; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style:</strong><br>".$row_entries_1['brewInfo']."</p>"; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style:</strong><br>".$row_entries_1['brewInfo']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>

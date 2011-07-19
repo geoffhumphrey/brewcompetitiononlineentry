@@ -1,8 +1,15 @@
 <?php 
-include(DB.'brewer.db.php');
+/**
+ * Module:      brewer.sec.php 
+ * Description: This module houses the functionality for users to add/edit their personal 
+ *              information - references the "brewer" database table.
+ * 
+ */
+
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
+include(DB.'brewer.db.php');
 if ($section != "step2") {
 mysql_select_db($database, $brewing);
 $query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $id); 
@@ -173,7 +180,7 @@ $row_countries = mysql_fetch_assoc($countries);
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

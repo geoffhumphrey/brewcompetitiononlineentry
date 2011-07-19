@@ -6,7 +6,8 @@
  *              winner display after all judging dates have passed.
  */
 
-include(DB.'sponsors.db.php');
+
+include(DB.'dropoff.db.php');
 if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { 
 	if (judging_date_return() > 0) { ?>
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />

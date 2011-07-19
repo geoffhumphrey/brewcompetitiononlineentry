@@ -1,7 +1,15 @@
-<?php if ($msg != "default") echo $msg_output; 
+<?php 
+/**
+ * Module:      contact.sec.php 
+ * Description: This module displays the contact mechanism for user feedback.
+ *              When processed, the request uses the sendmail function.
+ * 
+ */
+
+if ($msg != "default") echo $msg_output; 
 include(DB.'contacts.db.php');
 if ($msg != "1") {
-if (!isset($_SESSION["loginUsername"])) { session_start(); }
+//if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
 <form name="form1" method="post" action="includes/process.inc.php?section=contact&action=email" onSubmit="return CheckRequiredFields()">
