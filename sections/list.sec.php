@@ -29,7 +29,7 @@ if ($msg != "default") echo $msg_output;
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
-<?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo ""; else { ?>
+<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
         <span class="icon"><img src="images/user_edit.png" /></span><a href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
@@ -357,8 +357,6 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
   <td class="dataList">
   <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>
   <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
-  	<?php } 
-  if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo ""; else { ?>
   <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   <?php } ?>
   </td>

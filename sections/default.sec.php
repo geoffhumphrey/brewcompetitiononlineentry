@@ -47,11 +47,13 @@ else
 	<?php } ?></p>
 <?php } 
 if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) include('reg_closed.sec.php');
-else include('reg_open.sec.php'); 
+else include('reg_open.sec.php');
+// echo "Today: ".strtotime($today)."<br>";
+// echo "Deadline: ".strtotime($row_contest_info['contestRegistrationDeadline'])."<br>";
 // end registration end check
 } 
 if ($row_prefs['prefsSponsors'] == "Y") {
-if ($totalRows_sponsors > 0) {
+	if ($totalRows_sponsors > 0) {
 ?>
 <h2>Sponsors</h2>
 <p><?php echo $row_contest_info['contestHost']; ?> is proud to have the following <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "<a href=\"index.php?section=sponsors\">sponsors</a>"; else echo "sponsors"; ?> for the <?php echo $row_contest_info['contestName']; ?>:

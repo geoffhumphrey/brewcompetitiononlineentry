@@ -8,6 +8,9 @@
 
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
+$php_version = phpversion();
+$today = date('Y-m-d');
+$current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 
 // Check to see if initial setup has taken place 
 function check_setup() {
@@ -87,7 +90,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   <?php }
   
   // Check if registration open date has passed. If so, display "registration not open yet" message.
-  if (greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
+  if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
   	if ($section != "admin") {
   	?>
     <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?>.</div>
