@@ -18,9 +18,4 @@ define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');
 
 
-// Set up some global variables
-$php_version = phpversion();
-$today = date('Y-m-d');
-$current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
-
 ?>

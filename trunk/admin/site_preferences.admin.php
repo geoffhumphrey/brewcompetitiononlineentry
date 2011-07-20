@@ -33,7 +33,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <option value="150" <?php if ($row_prefs['prefsCompLogoSize'] == "150") echo "SELECTED"; ?>>150</option>
     <option value="200" <?php if ($row_prefs['prefsCompLogoSize'] == "200") echo "SELECTED"; ?>>200</option>
     <option value="250" <?php if ($row_prefs['prefsCompLogoSize'] == "250") echo "SELECTED"; ?>>250</option>
-    <option value="300" <?php if ($row_prefs['prefsCompLogoSize'] == "300") echo "SELECTED"; ?>>300</option>
+    <option value="300" <?php if (($section == "step3") || ($row_prefs['prefsCompLogoSize'] == "300")) echo "SELECTED"; ?>>300</option>
     <option value="350" <?php if ($row_prefs['prefsCompLogoSize'] == "350") echo "SELECTED"; ?>>350</option>
     <option value="400" <?php if ($row_prefs['prefsCompLogoSize'] == "400") echo "SELECTED"; ?>>400</option>
     </select> pixels    </td>

@@ -79,16 +79,6 @@ function greaterDate($start_date,$end_date)
    return FALSE;
 }
 
-function lesserDate($start_date,$end_date)
-{
-  $start = strtotime($start_date);
-  $end = strtotime($end_date);
-  if ($start < $end)
-   return TRUE;
-  else
-   return FALSE;
-}
-
 $color = "#eeeeee";
 $color1 = "#e0e0e0";
 $color2 = "#eeeeee";

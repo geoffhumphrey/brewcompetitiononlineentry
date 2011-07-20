@@ -18,7 +18,7 @@ if (strstr($section,"step")) { ?>
   <?php if (get_contact_count() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="index.php?section=contact">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
-  <?php if (lesserDate($today,$row_contest_info['contestRegistrationDeadline']) && (!lesserDate($today,$row_contest_info['contestRegistrationOpen'])))  { ?>
+  <?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline']) && (greaterDate($today,$row_contest_info['contestRegistrationOpen'])))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="index.php?section=register">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_contest_info['contestEntryFee'] > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <?php } ?>
