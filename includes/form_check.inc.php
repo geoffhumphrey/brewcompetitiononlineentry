@@ -275,10 +275,6 @@ var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.tableName.value))
 	{ errormessage += "\nThe table name"; }
-if(WithoutContent(document.form1.tableNumber.value))
-	{ errormessage += "\nThe table number"; }
-if(NoneWithCheck(document.form1.tableStyles))
-	{ errormessage += "\nAt least one style"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To process, the following information is required:\n' + errormessage);

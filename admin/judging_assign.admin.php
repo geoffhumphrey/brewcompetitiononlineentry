@@ -331,7 +331,7 @@ if ($filter == "stewards") $locations = explode(",",$row_brewer['brewerStewardLo
 if (in_array($table_location,$locations)) {
 ?>
 	<tr> 
-    	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; echo " - ".$row_brewer['id']; ?></td>
+    	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; //echo " - ".$row_brewer['id']; ?></td>
         <?php if ($filter == "judges") { ?>
         <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); ?></td>
         <td nowrap="nowrap"><?php if (($row_brewer['brewerJudgeID'] != "") && ($row_brewer['brewerJudgeID'] != "0")) echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
