@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>400 Bad Request</title>
+<meta http-equiv="refresh" content="1;URL=index.php">
+<link href="css/default.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="container">
+	<div id="content">
+    	<div id="content-inner">
+			<h1>400 Bad Request</h1>
+			<p>Invalid request has been received.</p>
+			<p>Redirecting now to the home page.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
