@@ -172,7 +172,7 @@ if ($action == "delete") {
 	$totalRows_delete_assign = mysql_num_rows($delete_assign);
 	
 	if ($totalRows_delete_assign > 0) {
-	do { $z[] = $row_delete_assign['id']; } while (mysql_fetch_assoc($delete_judge_assign));
+	do { $z[] = $row_delete_assign['id']; } while (mysql_fetch_assoc($delete_assign));
 	
 	foreach ($z as $aid) {
 		$deleteAssign = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $aid);
@@ -1382,12 +1382,14 @@ if ($go == "judge") {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
-if (($_POST['register'] == "Y") || ($totalRows_judging > 1)) {  
-$location_pref1 = $_POST['brewerJudgeLocation'];
-$location_pref2 = $_POST['brewerStewardLocation'];
-} else { 
+if ($totalRows_judging > 1) {  
 $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
 $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+} 
+else
+{ 
+$location_pref1 = $_POST['brewerJudgeLocation'];
+$location_pref2 = $_POST['brewerStewardLocation'];
 }
 if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
 if ($_POST['brewerJudgeDislikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";

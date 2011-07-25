@@ -269,7 +269,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 			} );
 		} );
 	</script>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=judging_tables&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=judging_tables&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update Table"; else echo "Add Table"; ?>"></p>
 <table summary="Define a judging table and its associated name, number, style(s), and location.">
   <tbody>
@@ -351,7 +351,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 			$a[] = 0;
 			if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
 				$a[] = $row_styles['id'];
- 				echo "<p>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']."&nbsp;".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (Entries: ".get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default").")</p>";  
+ 				echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default")." entries)</li></ul>";  
 			}
 	 	} 
 	} while ($row_styles = mysql_fetch_assoc($styles));
