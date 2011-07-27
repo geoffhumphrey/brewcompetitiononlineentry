@@ -89,7 +89,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
 			$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
 			$row_flights_2 = mysql_fetch_assoc($flights_2);
 			$totalRows_flights_2 = $row_flights_2['count'];
-			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable);
+			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 			if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { 
 			?>
     		<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>

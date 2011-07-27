@@ -11,6 +11,7 @@ require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
+require(DB.'brewer.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 

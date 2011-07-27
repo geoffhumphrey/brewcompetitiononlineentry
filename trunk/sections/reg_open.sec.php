@@ -30,7 +30,7 @@ include(DB.'judging_locations.db.php');
 <h2>Entries</h2>
 <p>Entries will be accepted <?php echo date_convert($row_contest_info['contestEntryOpen'], 2, $row_prefs['prefsDateFormat'])." through "; echo date_convert($row_contest_info['contestEntryDeadline'], 2, $row_prefs['prefsDateFormat']); ?>. All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php $date = $row_contest_info['contestEntryDeadline']; echo date_convert($date, 2, $row_prefs['prefsDateFormat']); ?>. Entries will not be accepted beyond this date. For details, see the <a href="index.php?section=entry">Entry Information</a> page.</p> 
 <?php if (greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { ?>
-	<h3>Enter Your Brews</h3>
+	<h2>Enter Your Brews</h2>
 	<p>To enter your brews,  <?php if (!isset($_SESSION['loginUsername'])) { ?>please proceed through the <a href="index.php?section=register">registration process</a><?php } else { ?>use the <a href="index.php?section=brew&action=add">add an entry form</a><?php } ?>.</p>
 <?php } ?>
 
