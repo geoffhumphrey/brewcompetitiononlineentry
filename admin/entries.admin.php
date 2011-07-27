@@ -84,7 +84,9 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 <?php } ?>
 <?php if ($totalRows_log > 0) { ?>
 	<?php if ($action != "print") { ?>
-  	<?php if ($dbTable == "default") { ?><p><input type="submit" name="Submit" class="button" value="Update Entries" />&nbsp;<span class="required">Click "Update Entries" <em>before</em> paging through records.</span></p><?php } ?>
+  	<?php if ($dbTable == "default") { ?>
+    <p><input type="submit" name="Submit" class="button" value="Update Entries" />&nbsp;<span class="required">Click "Update Entries" <em>before</em> paging through records.</span></p>
+	<?php } ?>
     	<?php 
 		if (($dbTable == "default") && ($totalRows_entry_count > $row_prefs['prefsRecordLimit']))	{ 
 			$of = $start + $totalRows_log;
@@ -141,19 +143,20 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
-			"bLengthChange" : true,
+			"bLengthChange" : false,
+			
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>
+			<?php if ($psort == "entry_name") { ?>"aaSorting": [[1,'asc']],<?php } ?>
 			<?php if ($psort == "category") { ?>"aaSorting": [[2,'asc']],<?php } ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[3,'asc']],<?php } ?>
-			<?php if ($psort == "entry_name") { ?>"aaSorting": [[1,'asc']],<?php } ?>
-			"bProcessing" : false,
+			
 			"aoColumns": [
 				null,
 				null,
 				null,
 				null,
 				null,
-				{ "asSorting": [  ] }<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
+				null<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
@@ -161,6 +164,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 			<?php } ?>
+				
 				]
 			} );
 		} );
@@ -182,7 +186,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
   <th width="3%" class="dataHeading bdr1B">Place</th>
   <th width="3%" class="dataHeading bdr1B">BOS?</th>
   <th width="3%" class="dataHeading bdr1B">BOS Place</th>
-<?php } ?>
+  <?php } ?>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <th class="dataHeading bdr1B">Actions</th>
   <?php } ?>
@@ -217,11 +221,11 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_log['brewBrewerLastName'].", ".$row_log['brewBrewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if (($row_log['brewPaid'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewReceived'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "Y") echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "Y") echo "X"; } ?></td>
   
 <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; else ""; ?> /><?php } else { if (($row_log['brewWinner'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; ?> /><?php } else { if (($row_log['brewWinner'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if (($action != "print") && ($dbTable == "default")) { ?>   
   <input type="text" name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat" size="3" value="<?php echo $row_log['brewWinnerCat']; ?>" />

@@ -140,28 +140,65 @@ if ($totalRows_participant_count > 0) {
 		<?php } ?>
 		"aaSorting": [[0,'asc']],
 		"bProcessing" : true,
+		
+		<?php if ($filter == "default") { ?>
 		"aoColumns": [
 				null,
 				null,
 				{ "asSorting": [  ] },
 				null,
-				<?php if ($filter == "default") { ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				null
-				<?php } 
-				if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
+				null,
+				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
     			{ "asSorting": [  ] },
-  				<?php } if ($filter != "default") { ?>
-    			<?php if ($filter == "judges") { ?>
-    			null,
-    			null
     			<?php } ?>
-				<?php } ?>
-				<?php if ($dbTable == "default") { ?>,
 				{ "asSorting": [  ] }
-				<?php } ?>
 			]
+		<?php } ?>
+		
+		<?php if ($filter == "judges") { ?>
+		"aoColumns": [
+				null,
+				null,
+				{ "asSorting": [  ] },
+				null,
+				null,
+				null,
+				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+    			{ "asSorting": [  ] },
+    			<?php } ?>
+				{ "asSorting": [  ] }
+			]
+		<?php } ?>
+		
+		
+		<?php if ($filter == "stewards") { ?>
+		"aoColumns": [
+				null,
+				null,
+				{ "asSorting": [  ] },
+				null,
+				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+    			{ "asSorting": [  ] },
+    			<?php } ?>
+				{ "asSorting": [  ] }
+			]
+		<?php } ?>
+		
+		
+		<?php if (($filter == "assignJudges") || ($filter == "assignStewards")) { ?>
+		"aoColumns": [
+				null,
+				null,
+				{ "asSorting": [  ] },
+				null,
+				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+    			{ "asSorting": [  ] },
+    			<?php } ?>
+				{ "asSorting": [  ] }
+			]
+		<?php } ?>
 		} );
 	} );
 	</script>
@@ -174,23 +211,64 @@ if ($totalRows_participant_count > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			<?php if (($filter == "judges") && ($psort == "judge_rank")) { ?>"aaSorting": [[6,'asc']],<?php } ?>
-			<?php if (($filter == "judges") && ($psort == "judge_id")) { ?>"aaSorting": [[5,'asc']],<?php } ?>
-			<?php if (($filter == "judges") && ($psort == "club")) { ?>"aaSorting": [[3,'asc']],<?php } ?>
-			<?php if ($psort == "entry_name") { ?>"aaSorting": [[1,'asc']],<?php } ?>
+			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[6,'asc']],<?php } ?>
+			<?php if ($psort == "judge_id") { ?>"aaSorting": [[5,'asc']],<?php } ?>
+			<?php if ($psort == "club") { ?>"aaSorting": [[3,'asc']],<?php } ?>
 			<?php if ($psort == "default") { ?>"aaSorting": [[0,'asc']],<?php } ?>
 			"bProcessing" : false,
+			
+		<?php if ($filter == "default") { ?>
 			"aoColumns": [
+				null,
+				null,
 				{ "asSorting": [  ] },
+				null,
+				null,
+				null,
+				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
+    			null,
+    			<?php } ?>
+			]
+		<?php } ?>
+		
+		<?php if ($filter == "judges") { ?>
+		"aoColumns": [
+				null,
+				null,
 				{ "asSorting": [  ] },
+				null,
+				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+    			null,
+    			<?php } ?>
+				null,
+				null
+			]
+		<?php } ?>
+		
+		
+		<?php if ($filter == "stewards") { ?>
+		"aoColumns": [
+				null,
+				null,
 				{ "asSorting": [  ] },
+				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
+    			null
+    			<?php } ?>
+
+			]
+		<?php } ?>
+		
+		
+		<?php if (($filter == "assignJudges") || ($filter == "assignStewards")) { ?>
+		"aoColumns": [
+				null,
+				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-				<?php if ($filter == "judges"){ ?>
-				,{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-				<?php } ?>
-				]
+				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
+    			null
+    			<?php } ?>
+			]
+		<?php } ?>
 			} );
 		} );
 	</script>

@@ -19,7 +19,7 @@ switch($section) {
 	$header_output = $row_contest_info['contestName'];
 	if ($msg == "success") { 
 		$output = "Setup was successful.";
-		$output_extend = "<p class='info'>Log in using the admin user you just created and go to the <em>Admin</em> menu in the navigation bar above to further customize your competition's site.</p>"; 
+		$output_extend = "<p class='info'>You are now logged in and ready to further customize your competition's site.</p>"; 
 	}
 	if ($msg == "2") $output = "Info edited successfully."; 
 	break;

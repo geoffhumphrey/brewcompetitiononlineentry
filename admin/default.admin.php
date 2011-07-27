@@ -9,9 +9,12 @@ include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
 ?>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
-<?php if (($section == "admin") && ($go == "default")) { ?><script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script><?php } ?>
+<?php if ($action == "print") { ?>
+<script type="text/javascript" src="../js_includes/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
+<?php } else { ?>
+<script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
+<?php } if (($section == "admin") && ($go == "default")) { ?><script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script><?php } ?>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
