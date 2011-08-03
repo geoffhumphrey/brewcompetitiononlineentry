@@ -156,6 +156,7 @@ switch($section) {
 	break;
 
 	case "beerxml":
+	include(DB.'styles.db.php');
 	$header_output = "Import an Entry Using BeerXML";
 	if ($msg != "default") { 
 	if ($totalRows_styles < 98) $output_extend = "<div class='info'>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles. To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 

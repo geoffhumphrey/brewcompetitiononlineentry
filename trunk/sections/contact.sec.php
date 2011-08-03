@@ -5,9 +5,10 @@
  *              When processed, the request uses the sendmail function.
  * 
  */
-
-if ($msg != "default") echo $msg_output; 
 include(DB.'contacts.db.php');
+if ($row_prefs['prefsContact'] == "Y") {
+if ($msg != "default") echo $msg_output; 
+
 if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
@@ -19,12 +20,11 @@ if ($msg != "1") {
 	<td class="data bdr1T" width="25%">
     <select name="to">
     	<?php 
-    		$contacts = get_contacts();
-    		 while ($row_contact = mysql_fetch_assoc($contacts)) 
-    		 { 
+    		 $contacts = get_contacts();
+    		 while ($row_contact = mysql_fetch_assoc($contacts)) { 
     		?>
     	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
-        <?php }; ?>
+        <?php } ; ?>
     </select>
     </td>
     <td class="data bdr1T"><span class="required">Required</span></td>
@@ -78,4 +78,13 @@ if ($msg == "1")
  { ?>
 <p>Additionally, a copy has been sent to the email address you provided.</p>
 <p>Would you like to send <a href="index.php?section=contact">another message</a>?</p>
+<?php } 
+} else {
+?>
+<p>Use the links below to contact individuals involved with coordinating this competition:</p>
+<ul>
+<?php do { ?>
+	<li><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].' &ndash; <a href="mailto:'.$row_contact['contactEmail'].'">'.$row_contact['contactEmail'].'</a>'; ?></li>
+<?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
+</ul>
 <?php } ?>

@@ -1318,7 +1318,7 @@ if (($action == "add") && ($dbTable == "users") && ($section == "setup")) {
 // --------------------------- Adding Participant's or Admin's Info ------------------------------- //
 
 if (($action == "add") && ($dbTable == "brewer")) {
-
+require(DB.'judging_locations.db.php');
 if ($totalRows_judging < 2) {  
 $location_pref1 = $_POST['brewerJudgeLocation'];
 $location_pref2 = $_POST['brewerStewardLocation'];
@@ -1345,11 +1345,13 @@ if ($go == "judge") {
   brewerEmail, 
   
   brewerSteward, 
-  brewerJudge, 
+  brewerJudge,
+  brewerJudgeID,
+  brewerJudgeRank,
   brewerJudgeLocation,
   brewerStewardLocation,
   brewerAHA
-  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['uid'], "int"),
 					   GetSQLValueString($_POST['brewerFirstName'], "text"),
                        GetSQLValueString($_POST['brewerLastName'], "text"),
@@ -1364,6 +1366,8 @@ if ($go == "judge") {
                        GetSQLValueString($_POST['brewerEmail'], "text"),
 					   GetSQLValueString($_POST['brewerSteward'], "text"),
 					   GetSQLValueString($_POST['brewerJudge'], "text"),
+					   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+					   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 					   GetSQLValueString($location_pref1, "text"),
 					   GetSQLValueString($location_pref2, "text"),
 					   GetSQLValueString($_POST['brewerAHA'], "int")
@@ -1382,9 +1386,14 @@ if ($go == "judge") {
 // --------------------------- If Editing a Participant's Information ------------------------------- //
 
 if (($action == "edit") && ($dbTable == "brewer")) {
+require(DB.'judging_locations.db.php');
 if ($totalRows_judging > 1) {  
-$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+	if (($_POST['brewerJudgeLocation'] != "") && (!strstr($_POST['brewerJudgeLocation'],","))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']); 
+	elseif (($_POST['brewerJudgeLocation'] != "") && (strstr($_POST['brewerJudgeLocation'],","))) $location_pref1 = $_POST['brewerJudgeLocation']; 
+	else $location_pref1 = "";
+	if (($_POST['brewerStewardLocation'] != "") && (!strstr($_POST['brewerStewardLocation'],","))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']); 
+	elseif (($_POST['brewerJudgeLocation'] != "") && (strstr($_POST['brewerStewardLocation'],","))) $location_pref2 = $_POST['brewerStewardLocation'];
+	else $location_pref2 = "";
 } 
 else
 { 
@@ -1449,24 +1458,17 @@ WHERE id=%s",
   elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
   else $updateSQL2 = "UPDATE brewer SET brewerNickname=NULL WHERE id='".$id."'"; 
 
-  // echo $updateSQL."<br>";
+ //echo $updateSQL."<br>";
   mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   $Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
   
-  /*if (($_POST['brewerAssignment'] != "") && (($_POST['brewerSteward'] == "N") || ($_POST['brewerJudge'] == "N"))) {
-  $updateSQL3 = "UPDATE brewer SET brewerAssignment=NULL WHERE id='".$id."'"; ;
-  $Result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());
-  }
-  */
-
-
   if ($go == "register") $updateGoTo = "../index.php?section=brew&msg=2";	
   elseif ($go == "judge") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=7";
   elseif ($go == "default") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=2";
   else $updateGoTo = $updateGoTo;
 
- header(sprintf("Location: %s", $updateGoTo));
+header(sprintf("Location: %s", $updateGoTo));
 }
 
 // --------------------------- SETUP: Adding General Contest Info ------------------------------- // 
@@ -1683,6 +1685,7 @@ prefsRecordLimit,
 prefsRecordPaging,
 prefsTheme,
 prefsDateFormat,
+prefsContact
 id) VALUES (
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
@@ -1713,6 +1716,7 @@ id) VALUES (
 					   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
 					   GetSQLValueString($_POST['prefsTheme'], "text"),
 					   GetSQLValueString($_POST['prefsDateFormat'], "text"),
+					   GetSQLValueString($_POST['prefsContact'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -1751,7 +1755,8 @@ prefsEntryForm=%s,
 prefsRecordLimit=%s,
 prefsRecordPaging=%s,
 prefsTheme=%s,
-prefsDateFormat=%s
+prefsDateFormat=%s,
+prefsContact=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
@@ -1777,6 +1782,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
 					   GetSQLValueString($_POST['prefsTheme'], "text"),
 					   GetSQLValueString($_POST['prefsDateFormat'], "text"),
+					   GetSQLValueString($_POST['prefsContact'], "text"),
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -1813,7 +1819,7 @@ if($result1){
 
 // --------------------------- If updating records in the brewer table en masse ------------------------------- //
 
-if (($action == "update") && ($dbTable == "brewer")) {
+if (($action == "update") && ($dbTable == "brewer") && ($row_prefs['prefsCompOrg'] == "N")) {
 
 	if ($filter == "staff") {
 	$query_organizer = "SELECT uid FROM brewer WHERE brewerAssignment='O'";
@@ -1913,9 +1919,126 @@ if (($action == "update") && ($dbTable == "brewer")) {
 		$result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());	
 		}
 		// Debug
-		//echo "<p>".$updateSQL."<br>";
+		echo "<p>".$updateSQL."<br>";
+		echo $updateSQL2."<br>";
+		echo $updateSQL3."</p>";
+	} 
+if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
+}
+
+
+
+// --------------------------- If updating records in the brewer table en masse ------------------------------- //
+
+if (($action == "update") && ($dbTable == "brewer") && ($row_prefs['prefsCompOrg'] == "Y")) {
+
+	if ($filter == "staff") {
+	$query_organizer = "SELECT uid FROM brewer WHERE brewerAssignment='O'";
+	$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
+	$row_organizer = mysql_fetch_assoc($organizer);
+	
+	if ($row_organizer['uid'] != $_POST['Organizer']) {
+		$updateSQL = sprintf("UPDATE brewer SET brewerAssignment='' WHERE uid='%s'", $row_organizer['uid']);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = sprintf("UPDATE brewer SET brewerAssignment='O' WHERE uid='%s'", $_POST['Organizer']);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		}
+	}
+
+	foreach($_POST['id'] as $id){ 
+		mysql_select_db($database, $brewing);		
+		if (($_POST["brewerAssignment".$id] != "") && ($filter != "bos")) {
+		$updateSQL = "UPDATE brewer SET brewerAssignment='";
+		$updateSQL .= $_POST["brewerAssignment".$id];
+		$updateSQL .= "' WHERE id='".$id."';";
+		}
+		elseif (($_POST["brewerAssignment".$id] != "") && ($filter == "bos")) {
+		$updateSQL = "UPDATE brewer SET brewerJudgeBOS='";
+		$updateSQL .= $_POST["brewerAssignment".$id];
+		$updateSQL .= "' WHERE id='".$id."';";
+		}
+		else {
+		$updateSQL = "UPDATE brewer SET brewerAssignment='";
+		$updateSQL .= $_POST["brewerAssignment".$id];
+		$updateSQL .= "' WHERE id='".$id."';";
+		}
+		/*
+		if ($bid != "default") { 
+			$query_update = "SELECT brewerStewardLocation, brewerJudgeLocation FROM brewer WHERE id='$id'";
+			$update = mysql_query($query_update, $brewing) or die(mysql_error());
+			$row_update = mysql_fetch_assoc($update);
+		
+			if ($row_update['brewerStewardLocation'] != "") { 
+			$trimmed = rtrim($row_update['brewerStewardLocation'], ",");
+					if  (!strstr($trimmed, $bid)) $sal = $trimmed.", "; 
+					elseif (strstr($trimmed, $bid)) { 
+						$sal = str_replace($bid,"",$trimmed).", "; 
+						}
+					else $sal = ""; 
+					}
+			if ($row_update['brewerJudgeLocation'] != "") { 
+			$trimmed = rtrim($row_update['brewerJudgeLocation'], ",");
+					if  (!strstr($trimmed, $bid)) $jal = $trimmed.", "; 
+					elseif (strstr($trimmed, $bid)) { 
+						$jal = str_replace($bid,"",$trimmed).", "; 
+						}
+					else $jal = ""; 
+					}
+																																				  
+			if ($filter == "stewards") {  
+			$sal = str_replace(" ,","",$sal); // clean up
+			if (substr($sal, 0, 2) == ", ") $sal = substr_replace($sal, "", 0, 2); else $sal = $sal;
+			$updateSQL = "UPDATE brewer SET brewerStewardLocation='";
+			$updateSQL .= $sal.$_POST["brewerStewardLocation".$id];
+			$updateSQL .= "' WHERE id='".$id."';"; 
+			}
+			elseif ($filter == "judges") {
+			$jal = str_replace(" ,","",$jal); // clean up
+			if (substr($jal, 0, 2) == ", ") $jal = substr_replace($jal, "", 0, 2); else $jal = $jal;
+			$updateSQL = "UPDATE brewer SET brewerJudgeLocation='";
+			$updateSQL .= $jal.$_POST["brewerJudgeLocation".$id];
+			$updateSQL .= "' WHERE id='".$id."';";
+			}
+			else $updateSQL = "SELECT id FROM brewer WHERE id='$id'";
+		}
+		
+		if ($_POST["brewerAssignment".$id] == "J") $updateSQL2 = "UPDATE brewer SET brewerNickname='judge' WHERE id='".$id."'"; 
+  		elseif ($_POST["brewerAssignment".$id] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
+  		else $updateSQL2 = "SELECT id FROM brewer WHERE id='$id'";
+		
+		if ($filter == "stewards") $field = "brewerStewardLocation";
+		elseif ($filter == "judges") $field = "brewerJudgeLocation";
+		else $field = "brewerJudgeLocation";
+		
+		
+		$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
+		
+		if (($filter == "judges") || ($filter == "stewards")) {
+			$query_clean = "SELECT $field FROM brewer WHERE id = '$id'";
+			$clean = mysql_query($query_clean, $brewing) or die(mysql_error());
+			$row_clean = mysql_fetch_assoc($clean);
+		
+			if ($filter == "stewards") { 
+				if (substr($row_clean['brewerStewardLocation'], 0, 2) == ", ")  $cleaned = substr_replace($row_clean['brewerStewardLocation'], "", 0, 2); else $cleaned = $row_clean['brewerStewardLocation']; 
+				} 
+			if ($filter == "judges") { 
+				if  (substr($row_clean['brewerJudgeLocation'], 0, 2) == ", ") $cleaned = substr_replace($row_clean['brewerJudgeLocation'], "", 0, 2); else $cleaned = $row_clean['brewerJudgeLocation']; 
+			}
+			$cleaned = rtrim($cleaned, " ");
+			$cleaned = rtrim($cleaned, ",");
+			$updateSQL3 = "UPDATE brewer SET ";
+			$updateSQL3 .= $field."=";
+			$updateSQL3 .= "'".$cleaned."' ";
+			$updateSQL3 .= " WHERE id='".$id."';";
+		$result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());	
+		}
+		 Debug
+		 */
+		//echo "<p>".$updateSQL;//"<br>";
 		//echo $updateSQL2."<br>";
 		//echo $updateSQL3."</p>";
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	} 
 if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
 }

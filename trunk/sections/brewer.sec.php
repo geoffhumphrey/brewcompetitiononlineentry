@@ -172,17 +172,16 @@ $row_countries = mysql_fetch_assoc($countries);
 </table>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <?php if ($section != "step2") { ?>
-<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
+	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
 	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] == "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />
-    <input name="brewerAssignment" type="hidden" value="<?php echo $row_brewer['brewerAssignment'];?>" />
-	<?php if ($go == "entrant") { ?>
+    <?php if ($go == "entrant") { ?>
 	<input name="brewerJudge" type="hidden" value="N" />
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
-<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

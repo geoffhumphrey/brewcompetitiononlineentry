@@ -1,8 +1,8 @@
 @charset "utf-8";
 /* CSS Document 
-*        Document Name: default.css
-*        Description:   BCOE&M default theme
-*		 Color scheme:  #394a59 (dark blue); #acc0c7 (medium-light blue); #bec8d8 (light blue);
+*        Document Name: claussenii.css
+*        Description:   A custom theme that expands upon default.css
+*		 Color scheme:  #1A2A00 (dark green); #3A6907 (medium green); #BFCAB2 (light green);
 */
 
 @import url("html_elements.css");
@@ -25,19 +25,19 @@
 */
 
 html, body {
-	font-size: 11px;
+	font-size: 12px;
 	background-color: #eeeeee;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 option {
 }
 
 th, td {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 pre, code {
@@ -50,30 +50,38 @@ p {
 /* Links */
 
 a:link {
+	color: #900;
 }
 
 a:visited {
+	color: #900;
 }
 
 a:hover, a:focus {
+	color: #3A6907;
+	text-decoration: none;
 }
 
 a:active {
+	color:#FC3;
 }
 
 /** headings **/
 h1 {
-	color: #37517B;
+	font-size: 1.9em;
+	color: #1A2A00;
 	margin: 1em 0 1.5em 0;
 }
 
 h2 {
-	color: #37517B;
+	font-size: 1.5em;
+	color: #1A2A00;
 	margin: 1em 0 1em 0;
 }
 
 h3 {
-	color: #37517B;
+	font-size: 1.3em;
+	color: #1A2A00;
 	margin: 1em 0 1em 0;
 }
 
@@ -129,6 +137,8 @@ td {
 th {
 	padding: 1em .5em 1em .5em;
 	text-align: left;
+	background-color: #3A6907;
+	color:  #1A2A00;
 }
 
 /** images **/
@@ -144,9 +154,10 @@ form {
 }
 
 button, menu, textarea, label, submit, .submit, select, input {
-	font-size: 1em;
-	border: 1px solid #c0c0c0;
-	background-color: #eeeeee;
+	border: 1px solid #aaaaaa;
+	background-color: #dedede;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 }
 
 select, optgroup, option  {
@@ -169,49 +180,44 @@ textarea {
 
 /* ------------------------------- Content ------------------------------- */
 
-#container {
-	position: relative;
-	min-height: 95%;
-	background-color: #ffffff;
-}
-
 #content {
 }
 
 #content-inner {
-	padding: 15px 1em;
+
 }
 
 #content-inner-no-nav {
 	padding: 1em;
 }
 
-#content-inner h2 {
-	font-size: 1.25em;
-	font-weight: bold;
-	color: #37517B;
-	padding: 1em 0 .5em 0;
+#content-inner h2 { 
 }
 
 #content-inner-no-nav h2 {
-	color: #37517B;
-	border-bottom: 1px solid #37517B;
+	border-bottom: 1px solid #1A2A00;
 }
 
 #content-inner .menu {
-	border: 1px solid #acc0c7;
-	background-color: #eeeeee;
+	border: 1px solid #3A6907;
+	background-color: #BFCAB2;
 }
 
 
 #content-inner .menu a {
-	color: #394a59;
+	color: #1A2A00;
 }
 
 #content-inner .menu a.menuItem:hover, 
 #content-inner .menu a.menuItemHighlight {
-	background-color: #acc0c7;
-	color: #1C242C;
+	background-color: #7B9959;
+	color: #fff;
+}
+
+#container {
+	position: relative;
+	min-height: 95%;
+	background-color: #ffffff;
 }
 
 /* ------------------------------- Nav ------------------------------- */
@@ -219,41 +225,49 @@ textarea {
 #navigation { 
 	width: 100%;
 	position: relative;
-	margin-bottom: 0;
+	height: 35px;
+	background-image: url(../images/claussenii/nav.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:#1A2A00;
+	border-bottom: 1px solid #1A2A00;
 }
 
 #navigation-inner
 {
-	background-color: #eeeeee;
-	border-bottom: 1px solid #000000;
-	padding: 0 1em 0 1em;
-	min-height: 30px;
+	padding: .75em;
+	vertical-align:middle;
+	font-weight: bold;
+	color: #BFCAB2;
 }
 
-#navigation-inner a {
-	color: #1C242C;
-	font-weight: normal;
+#navigation-inner a,
+#navigation-inner a:visited,
+#navigation-inner a:hover,
+#navigation-inner a:focus,
+#navigation-inner a:active{
+	
 }
 
 #navigation-inner .menu {
-	border: 1px solid #394a59;
-	background-color: #acc0c7;
+	border: 1px solid #1A2A00;
+	background-color: #BFCAB2;
 }
 
 #navigation-inner .menu a {
-	color: #394a59;
+	color: #1A2A00;
 	font-weight: normal;
 }
 
 #navigation-inner .menu a.menuItem:hover, 
 #navigation-inner .menu a.menuItemHighlight {
-	background-color: #394a59;
+	background-color: #7B9959;
 	color: #FFF;
 }
 
 #nav {
 	margin: 0;
-	padding: 1em 0 0;
+	padding: 0;
 }
 
 #nav ul {
@@ -263,13 +277,38 @@ textarea {
 #nav li {
 	display: inline;
 	list-style-type: none;
-	padding: 0 8px 0 0;
+	padding: 0 1em 0 0;
 	margin: 0;
 }
 
+#nav li a {
+	color: #fff;
+	font-weight: normal;
+}
+
+#nav li a:visited {
+	color: #fff;
+}
+
+#nav li a:hover,
+#nav li a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#nav li a:active,{
+	color: #FC3;
+	text-decoration: none;
+}
+
+
 #break {
-	display: block;
-	margin: .5em 0 0 0;		
+	display: inline;
+	vertical-align: middle;
+	float: right;
+	font-weight:normal;
+	font-style: italic;
+	font-size: .8em;
 }
 
 /* ------------------------------- Header ------------------------------- */
@@ -279,32 +318,46 @@ textarea {
 }
 
 #header-inner {
-	margin: 1em 0 1em 0;
-	padding: 0;
 }
 
 #header-inner h1 {
-	color: #37517B;
-	border-bottom: 1px dashed #37517B;
+	border-bottom: 1px dashed #1A2A00;
 }
 
 
 /* ------------------------------- Footer ------------------------------- */
 #footer {
-	width: 100%;
+	background-color: #3A6907;
+	border-top: 1px solid #1A2A00;
+	background-image: url(../images/claussenii/footer.png);
+	background-position: center;
+	color: #BFCAB2;
+	height: auto;
+	padding: .5px;
 }
 
 #footer-inner {
-	background-color: #eeeeee;
-	border-top: 1px solid #000000;
-	padding: 1em;
-	font-size: .8em;
-	color: #666666;
-	min-height: 15px;
+	vertical-align: middle;
+	text-align: center;
 }
 
 #footer-inner a {
 	color:#FFF;
+}
+
+#footer-inner a:visited {
+	color: #fff;
+}
+
+#footer-inner a:hover,
+#footer-inner a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#footer-inner a:active,{
+	color: #FC3;
+	text-decoration: none;
 }
 
 /* ------------------------------- Data Display ------------------------------- */
@@ -313,7 +366,7 @@ textarea {
 }
 
 .dataTable th {
-	background-color: #bec8d8;
+	background-color: #BFCAB2;
 }
 
 .dataTable td {
@@ -344,19 +397,17 @@ textarea {
 }
 
 .dataTableCompact th {
-	background-color: #bec8d8;
+	background-color: #3A6907;
 }
 
 /* ------------------------------- Forms ------------------------------- */
 
 .button { 
-	border: 1px solid #aaaaaa;
 	font-weight: bold;
 } 
 
 .button:hover {
-	border: 1px solid #aaaaaa;
-	background-color: #bec8d8;
+	background-color: #BFCAB2;
 }
 
 .paypal {
@@ -365,7 +416,7 @@ textarea {
 /* ------------------------------- Collapse jquery ------------------------------- */
 
 .trigger {
-	color: #394a59;
+	color: #1A2A00;
 }
 
 .trigger a {
@@ -485,15 +536,15 @@ textarea {
 /* ------------------------------- Borders ------------------------------- */
 
 .bdr1 {
-	border: 1px solid #37517B;
+	border: 1px solid #1A2A00;
 }
 
 .bdr1T {
-	border-top: 1px solid #37517B;
+	border-top: 1px solid #1A2A00;
 }
 
 .bdr1B {
-	border-bottom: 1px solid #37517B;
+	border-bottom: 1px solid #1A2A00;
 }
 
 .bdr1B_dashed {
@@ -541,6 +592,17 @@ textarea {
    **************************************************************
 */
 
+#menu_container .trigger a:link,
+#menu_container .trigger a:hover, 
+#menu_container .trigger a:active, 
+#menu_container .trigger a:focus {
+	background-color: $fff;
+}
+
+#menu_container .trigger.open a:link, 
+#menu_container .trigger.open a:visited {
+	background-color: #fff;
+}
 
 
 
@@ -556,6 +618,20 @@ textarea {
    **************************************************************
 */
 
+.paging_full_numbers {
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+
+}
+
+.paging_full_numbers span.paginate_button {
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #BFCAB2;
+}
 
 
 

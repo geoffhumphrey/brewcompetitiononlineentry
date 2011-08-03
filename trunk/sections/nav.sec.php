@@ -144,8 +144,8 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=contest_info">Competition Info</a>
 </div>
 <div id="adminMenu_Preparing_Upload" class="menu">
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
 </div>
 
 <div id="adminMenu_Entry_Manage" class="menu">
@@ -185,7 +185,7 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
-	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">Sorting Sheets - All Categories</a>
+	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Sorting Sheets - All Categories</a>
     <a class="menuItem" href="http://test.brewcompetition.com/output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">Bottle Labels - All Categories</a>
 </div>
 
@@ -231,23 +231,23 @@ if (strstr($section,"step")) { ?>
 </div>
 
 <div id="adminMenu_Printing_Before" class="menu">
-	<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Print Pullsheets for All Tables">Pullsheets for All Tables</a>
-	<a class="menuItem thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Print Table Cards for All Tables">Table Cards for All Tables</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-    <a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
+	<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Pullsheets for All Tables">Pullsheets for All Tables</a>
+	<a class="menuItem thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Table Cards for All Tables">Table Cards for All Tables</a>
+	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
+    <a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
+	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
+	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
 </div>
 <div id="adminMenu_Printing_During" class="menu">
-	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">All BOS Pullsheets</a>
+	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All BOS Pullsheets</a>
 </div>
 <div id="adminMenu_Printing_After" class="menu">
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">Results by Table With Scores (All)</a>
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">Results by Table With Scores (Winners Only)</a>
-    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">Results by Table Without Scores (All)</a>
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">Results by Table Without Scores (Winners Only)</a>
-    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">BOS Round(s) Results Report</a>
-	<a class="menuItem" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900">BJCP Judge/Steward/Staff Points Report</a>
+	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table With Scores (All)</a>
+	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table With Scores (Winners Only)</a>
+    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table Without Scores (All)</a>
+	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table Without Scores (Winners Only)</a>
+    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">BOS Round(s) Results Report</a>
+	<a class="menuItem" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">BJCP Judge/Steward/Staff Points Report</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Award Labels</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Participant Address Labels</a>
 </div>

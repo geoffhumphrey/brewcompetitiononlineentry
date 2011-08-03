@@ -34,5 +34,11 @@ include(DB.'styles.db.php');
 <input type="hidden" name="brewerSteward"  value="<?php echo $row_brewer['brewerSteward']; ?>" />
 <input type="hidden" name="brewerJudgeLocation"  value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
 <input type="hidden" name="brewerStewardLocation"  value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
+<input type="hidden" name="brewerAHA"  value="<?php echo $row_brewer['brewerAHA']; ?>" />
+<?php if ($go != "judge") { ?>
+<input type="hidden" name="brewerJudgeID"  value="<?php echo $row_brewer['brewerJudgeID']; ?>" />
+<input type="hidden" name="brewerJudgeRank"  value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />
+<?php } ?>
+<input type="hidden" name="brewerCountry"  value="<?php echo $row_brewer['brewerCountry']; ?>" />
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
