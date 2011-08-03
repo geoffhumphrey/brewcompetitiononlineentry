@@ -15,6 +15,7 @@ require(DB.'brewer.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
+
 $tb = "default";
 if (isset($_GET['tb'])) {
   $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
@@ -27,6 +28,9 @@ if (isset($_GET['tb'])) {
 <?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="../js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="../js_includes/thickbox.js"></script>
 </head>
 <body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
 <div id="content">

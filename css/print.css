@@ -1,324 +1,552 @@
 @charset "utf-8";
-/* CSS Document */
+/* CSS Document 
+*        Document Name: print.css
+*        Description:   Styles designed for printing clearly on paper
+*		 
+*/
+
+@import url("html_elements.css");
+@import url("common.css");
+@import url("messages.css");
+@import url("menus.css");
+@import url("sorting.css");
+@import url("thickbox.css");
+@import url("calendar.css");
+
+/* --------------------- html_elements.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in  
+   html_lements.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+html, body {
+	font-size: 12px;
+	background-color: #fff;
+}
+
+body, caption, input, textarea, select, option, legend, fieldset  {
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
+option {
+}
+
+th, td {
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
+pre, code {
+}
+
+p {
+	margin: 1.25em 0 1.25em 0;
+}
 
 /* Links */
 
-a:link
-{
-color: #000000;
-text-decoration: none;
+a:link {
+	color: #000;
 }
 
-
-a:visited
-{
-color: #000000;
-text-decoration: none;
+a:visited {
+	color: #000;
 }
 
-
-a:hover,
-a:focus
-{
-color: #000000;
-text-decoration: none;
+a:hover, a:focus {
+	color: #000;
+	text-decoration: none;
 }
 
-
-a:active
-{
-color: #000000;
-text-decoration: none; 
+a:active {
+	color:#000;
 }
 
-
-/** body **/
-html, body
-{
-font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
-font-size: 12px;
-margin: 0;
-padding: 0;
-height: 100%;
-background-color: #ffffff;
-}
-
-
-/** HTML elements **/ 
-
+/** headings **/
 h1 {
-
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.9em;
+	margin: 1em 0 1.5em 0;
 }
 
 h2 {
-font-family: Georgia, "Times New Roman", Times, serif;
-padding: 0 0 1.5em 0;
-font-size: 1.75em;
-font-weight: bold;
-color: #000000;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.5em;
+	margin: 1em 0 1em 0;
 }
 
 h3 {
-font-family: Georgia, "Times New Roman", Times, serif;
-padding: 1em 0 .5em 0;
-font-size: 1.3em;
-font-weight: bold;
-color: #000000;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.3em;
+	margin: 1em 0 1em 0;
 }
 
-input, textarea, submit, select {
-font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
-font-size: .9em;
+h4, h5, h6 {
+	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-ul
-{
-margin: 0 0 1em 2em;
-list-style-type: circle;
+/** lists **/
+ul, ol {
 }
 
-ol
-{
-margin: 0 0 1em 2.3em;
+ul ul, ul ol, ol ol, ol ul {
 }
 
-ul li
-{
-padding: 0 0 .5em .7em;
+li {
 }
 
-ol li
-{
-padding: 0 0 .5em .4em;
+ul { 
 }
 
-p 
-{
-margin: 0 0 1.25em 0;
+ul ul { 
 }
 
-table 
-{
-border-collapse: collapse;
-font-size: inherit;
+ul ul ul { 
 }
 
-td
-{
-vertical-align: top;
-padding: .5em 2em .5em .5em;
+ul ul ul ul { 
 }
 
-th
-{
-vertical-align: top;
-padding: 1em .5em 1em .5em;
-background-color: #dddddd;
-text-align: left;
-font-size: 1.1em;
+ol { 
 }
 
-#container {
-background-color: #ffffff;
+ol ol { 
+}
+
+ol ol ol { 
+}
+
+dt  {
+}
+
+dd {
 }
 
 
-/** header **/
-#navigation 
-{ 
-
+/** tables **/
+table {
 }
 
-#navigation-inner
-{
-
+td {
+	padding: .5em 2em .5em .5em;
 }
 
-#header
-{
-width: auto;
-height: auto;
+th {
+	padding: 1em .5em 1em .5em;
+	font-size: 1.1em;
+	text-align: left;
+	background-color: #dddddd;
 }
 
-#header-inner
-{
-margin: 0em 0 2em 0;
+/** images **/
+img  {
 }
 
-#header-inner h1
-{
-font-family: Georgia, "Times New Roman", Times, serif;
-font-size: 1.9em;
-padding: 0 0 .25em 0;
-font-weight: bold;
+/** horizontal rules **/
+hr  {
 }
 
-/** Footer **/
-#footer
-{
-bottom: 15px;
-width: 100%;  /* Height of the footer */
+/** forms **/
+form {
 }
 
-#footer-inner {
-padding: 1em;
-font-size: .8em;
+button, menu, textarea, label, submit, .submit, select, input {
+	border: 1px solid #aaaaaa;
+	background-color: #dedede;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 }
 
+select, optgroup, option  {
+}
 
-/** content **/
-#content
-{
+textarea {
 }
 
 
-#content-inner
-{
-padding: 1em;
+/* --------------------- common.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in common.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+/* ------------------------------- Content ------------------------------- */
+
+#content {
 }
 
-#content-inner-no-nav
-{
-padding: 1em;
+#content-inner {
+
 }
 
-#content-inner h2
-{
-font-family: Georgia, "Times New Roman", Times, serif;
-font-size: 1.5em;
-font-weight: bold;
-padding: 1em 0 .5em 0;
+#content-inner-no-nav {
+	padding: 1em;
+}
+
+#content-inner h2 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 1em 0 .5em 0;
 }
 
 #content-inner-no-nav h2 {
-font-family: Georgia, "Times New Roman", Times, serif;
-padding: 1.5em 0 .25em 0;
-font-size: 1.5em;
-font-weight: bold;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 1.5em 0 .25em 0;
 }
 
-/** Nav **/
+#content-inner .menu {
+	border: 1px solid #ddd;
+	background-color: #eee;
+}
+
+
+#content-inner .menu a {
+	color: #aaa;
+}
+
+#content-inner .menu a.menuItem:hover, 
+#content-inner .menu a.menuItemHighlight {
+	background-color: #ddd;
+	color: #fff;
+}
+
+#container {
+	position: relative;
+	min-height: 95%;
+	background-color: #fff;
+}
+
+/* ------------------------------- Nav ------------------------------- */
+
+#navigation { 
+
+}
+
+#navigation-inner {
+}
+
+#navigation-inner a,
+#navigation-inner a:visited,
+#navigation-inner a:hover,
+#navigation-inner a:focus,
+#navigation-inner a:active{
+	
+}
+
+#navigation-inner .menu {
+	border: 1px solid #aaa;
+	background-color: #eee;
+}
+
+#navigation-inner .menu a {
+	color: #aaa;
+	font-weight: normal;
+}
+
+#navigation-inner .menu a.menuItem:hover, 
+#navigation-inner .menu a.menuItemHighlight {
+	background-color: #aaa;
+	color: #FFF;
+}
 
 #nav {
-margin: 0 0 0 0;
-padding: 1em 0 1em 0;
-font-size: .9em;
+	margin: 0;
+	padding: 0;
 }
 
-#nav li
-{
-display: inline;
-list-style-type: none;
-padding: 0 8px 0 0;
-margin: 0;
+#nav ul {
+	padding-left: 0;	
 }
+
+#nav li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1em 0 0;
+	margin: 0;
+}
+
+#nav li a {
+	color: #fff;
+	font-weight: normal;
+}
+
+#nav li a:visited {
+	color: #fff;
+}
+
+#nav li a:hover,
+#nav li a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#nav li a:active,{
+	color: #FC3;
+	text-decoration: none;
+}
+
 
 #break {
-display: block;
-margin: .5em 0 0 0;
+	display: inline;
+	vertical-align: middle;
+	float: right;
+	font-weight:normal;
+	font-style: italic;
+	font-size: .8em;
 }
 
-/** Special Classes **/
-
-.colorTable {
-width: 30px;
-text-align: center;
-vertical-align:middle;
-height: 1.4em;
-border: 1px solid #000000;
+/* ------------------------------- Header ------------------------------- */
+#header {
+	width: auto;
+	height: auto;
 }
 
-.colorTable td { 
-vertical-align: middle;
+#header-inner {
+	margin: 0em 0 2em 0;
 }
 
-.error 
-{
-color: #FF0000;
-font-size: 1.2em;
-font-weight: bold;
-margin: 0 0 1em 0;
-padding: .5em .5em .5em 1.5em;
+#header-inner h1 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 1.9em;
+	padding: 0 0 .25em 0;
+	font-weight: bold;
 }
 
-.required {
+
+/* ------------------------------- Footer ------------------------------- */
+#footer {
+	bottom: 15px;
+	width: 100%;
 }
 
-.setupTitle {
-padding: 5px 0 0 0;
-font-size: 1.2em;
-font-weight: bold;
+#footer-inner {
+	padding: 1em;
+	font-size: .8em;
 }
 
-.dataTable { 
-width: 100%;
+#footer-inner a {
+	color:#FFF;
+}
+
+#footer-inner a:visited {
+	color: #fff;
+}
+
+#footer-inner a:hover,
+#footer-inner a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#footer-inner a:active,{
+	color: #FC3;
+	text-decoration: none;
+}
+
+/* ------------------------------- Data Display ------------------------------- */
+
+.dataTable {
+}
+
+.dataTable th {
+	background-color: #bbb;
+}
+
+.dataTable td {
+}
+
+.dataHeading {
+}
+
+.dataList {
+}
+
+.dataLabel {
+}
+
+.data {
+}
+
+.data-left {
+}
+
+.icon {
 }
 
 .dataTableCompact  { 
-
 }
 
 .dataTableCompact td { 
-vertical-align: top;
-padding: 2px;
 }
 
-.dataTableCompact th
-{
-vertical-align: top;
-padding: 1em .5em 1em .5em;
-background-color: #dddddd;
-text-align: left;
-font-size: 1.1em;
+.dataTableCompact th {
+	background-color: #ddd;
 }
 
-.dataHeading 
-{
-font-weight: bold;
-padding: .5em 0 .5em .5em;
-white-space: nowrap;
+/* ------------------------------- Forms ------------------------------- */
+
+.button { 
+	font-weight: bold;
+} 
+
+.button:hover {
+	background-color: #eee;
 }
 
-.dataList
-{
-padding: .5em 2em .5em .5em;
+.paypal {
 }
 
-.dataLabel
-{
-font-weight: bold;
-padding: .5em .5em .5em 0;
-white-space: nowrap;
+/* ------------------------------- Collapse jquery ------------------------------- */
+
+.trigger {
+	color: #aaa;
 }
 
-.data
-{
-padding: .5em 1em .5em .5em;
+.trigger a {
 }
 
-.data-left
-{
-padding: .5em 1em .5em 0;
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
 }
 
-.icon
-{
-padding: 0;
-display: none;
+.toggle_container {
+/* Use the following for accordian */
+/* display: none */
+}
+
+.toggle_container a {
+/* Use the following for accordian */
+/* display: block */
+}
+
+
+/* ------------------------------- Admin ------------------------------- */
+
+.admin {
+}
+
+.admin_default {
+	margin: 0 0 1.5em 0;
+	padding: 0 .5em 0 0;
+}
+
+.admin_default ul {
+	display: inline;
+}
+
+.admin_default li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default li li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default_header {
+	font-size: 1em;
+	font-weight: bold;
+	margin: 1.5em 0 .5em 0;
+	padding: 0 0 .5em 0;
+}
+
+/* -- Admin Menu -- */
+
+.menu {	
+}
+
+/* -- Admin Sub-Navigation -- */
+
+.adminSubNavContainer {
+}
+
+.adminSubNav {
+}
+
+/* ------------------------------- Sponsor Display ------------------------------- */
+
+#sponsor {
+}
+
+#sponsor li {
+}
+
+.looper {
+}
+
+.looper_large {
+}
+
+.looper_large th {
+}
+
+.looper_large .location {
+}
+
+.looper_large .logo {
+}
+
+.looper_large .info {
+}
+
+
+/* ------------------------------- Setup ------------------------------- */
+
+.setupTitle {
+}
+
+/* ------------------------------- Colors ------------------------------- */
+
+.red {
+}
+
+.green {
+}
+
+.yellow {
+}
+
+.orange {
+}
+
+.blue { 
+}
+
+/* ------------------------------- Borders ------------------------------- */
+
+.bdr1 {
+	border: 1px solid #000;
 }
 
 .bdr1T {
-border-top: 1px solid #000000;
+	border-top: 1px solid #000;
 }
 
 .bdr1B {
-border-bottom: 1px solid #000000;
+	border-bottom: 1px solid #000;
 }
 
-.bdr1L {
-border-left: 1px solid #000000;
+.bdr1B_dashed {
 }
 
+.bdr1T_dashed {
+}
 
 .bdr1B_gray {
 border-bottom: 1px solid #cccccc;
@@ -328,65 +556,117 @@ border-bottom: 1px solid #cccccc;
 border-left: 1px solid #cccccc;
 }
 
-.bdr1 {
-border: 1px solid #000000;
+/* --------------------- messages.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in messages.css - 
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.info {
 }
 
-.box {
-border: 1px solid #000000;
-height: 30px;
-width: 50px;
+.closed {
 }
 
-.box_small {
-border: 1px solid #000000;
-height: 15px;
-width: 15px;
-margin: 0;
-padding: 0;
+.error {
 }
 
-.admin {
-background-color:#ffffff;
+.required {
 }
 
-
-/* New in Version 1.1 */
-
-.looper {
-width: 120px;
-text-align: center;
-padding: 1em .5em 1em .5em;
-}
-
-.looper_large {
-width: 25%;
-min-height: 150px;
-text-align: center;
-padding: 1em .5em 1em .5em;
-}
-
-#sponsor {
-margin: 0 0 0 1em;
-padding: 0;
-list-style: disc;
-}
-
-#sponsor li {
-padding: 0 0 1em 1.75em;
+.judge-alert {
 }
 
 .bos {
-font-size: 1.2em;
-font-weight: bold;
-margin: 1em 0 1em 0;
-padding: .5em .5em .5em .5em;
 }
 
-#closed {
+
+/* --------------------- menus.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the menus.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+#menu_container .trigger a:link,
+#menu_container .trigger a:hover, 
+#menu_container .trigger a:active, 
+#menu_container .trigger a:focus {
+	background-color: $fff;
 }
 
-/* New in Version 1.2 */
+#menu_container .trigger.open a:link, 
+#menu_container .trigger.open a:visited {
+	background-color: #fff;
+}
+
+
+
+
+/* --------------------- sorting.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the sorting.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.paging_full_numbers {
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+
+}
+
+.paging_full_numbers span.paginate_button {
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #eee;
+}
+
+
+
+
+/* --------------------- thickbox.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the thickbox.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+
+
+
+/* --------------------- calendar.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the calendar.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+/* --------------------- Custom/Print Specific Styles -------------------- */
 
 .table_card {
 	width: 600px;
@@ -453,3 +733,4 @@ padding: .5em .5em .5em .5em;
 	width: 100%;
 	margin: 2.25em 0 2.25em 0;
 }
+

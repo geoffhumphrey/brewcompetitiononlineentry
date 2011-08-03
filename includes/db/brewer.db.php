@@ -104,7 +104,7 @@ elseif (($section == "list") || ($section == "judge") || ($section == "steward")
 	}
 
 else $query_brewer = "SELECT * FROM brewer";
-// echo $query_brewer;
+//echo $query_brewer;
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);

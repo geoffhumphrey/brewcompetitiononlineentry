@@ -68,7 +68,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
     <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
-    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
+    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>
@@ -159,7 +159,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel bdr1B_dashed">Member Discount Fee:</td>
     <td class="data bdr1B_dashed"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
-    <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
+    <td class="data bdr1B_dashed"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $row_prefs['prefsCurrency']; ?>). If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</em></td>
   </tr>
 </table>
 <table class="dataTable">

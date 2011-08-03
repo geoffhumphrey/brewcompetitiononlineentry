@@ -215,13 +215,13 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
 ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon data"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=900" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
+        	<span class="icon data"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
 <div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.</div>
@@ -267,15 +267,24 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
 			"bStateSave" : false,
 			"aaSorting": [[1,'desc']],
 			"bProcessing" : false,
+			<?php if ($filter == "judges") { ?>
 			"aoColumns": [
 				null,
-				<?php if ($filter == "judges") { ?>
 				null,
-				null<?php } for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
+				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
 			    if  (table_round($row_tables_edit['id'],$i)) { 
 				?>, null<?php } } ?>
 				]
 			} );
+			<?php } ?>
+			<?php if ($filter == "stewards") { ?>
+			"aoColumns": [
+				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
+			    if  (table_round($row_tables_edit['id'],$i)) { 
+				?>, null<?php } } ?>
+				]
+			} );
+	 		<?php } ?>
 		} );
 	</script>
 <form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $row_judging_prefs['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">

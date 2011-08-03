@@ -211,8 +211,8 @@ if ($totalRows_participant_count > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[6,'asc']],<?php } ?>
-			<?php if ($psort == "judge_id") { ?>"aaSorting": [[5,'asc']],<?php } ?>
+			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[5,'asc']],<?php } ?>
+			<?php if ($psort == "judge_id") { ?>"aaSorting": [[4,'asc']],<?php } ?>
 			<?php if ($psort == "club") { ?>"aaSorting": [[3,'asc']],<?php } ?>
 			<?php if ($psort == "default") { ?>"aaSorting": [[0,'asc']],<?php } ?>
 			"bProcessing" : false,
@@ -314,8 +314,8 @@ if ($totalRows_participant_count > 0) {
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><a href="mailto:<?php echo $row_brewer['brewerEmail']; ?>?Subject=<?php if ($filter == "judges") echo "Judging at ".$row_contest_info['contestName']; elseif ($filter == "stewards") echo "Stewarding at ".$row_contest_info['contestName']; else echo $row_contest_info['contestName'];  ?>"><?php echo $row_brewer['brewerEmail']; ?></a><br /><?php if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1)<br>";  if ($row_brewer['brewerPhone2'] != "") echo $row_brewer['brewerPhone2']." (2)"; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerClubs']; ?></td>
   	<?php if ($filter == "default") { ?>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerSteward'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>"; ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerJudge'] == "Y") echo "<img src='images/tick.png'>"; else echo "<img src='images/cross.png'>"; ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerSteward'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerSteward'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerJudge'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerJudge'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"<?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
   	<?php } if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")){ ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">

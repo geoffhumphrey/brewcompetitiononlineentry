@@ -8,7 +8,7 @@
 
 include(DB.'sponsors.db.php');
 if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=750" title="Print Sponsors">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Sponsors">Print This Page</a></p>
 <?php } ?>
 <table>
   <tr>

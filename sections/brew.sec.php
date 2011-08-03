@@ -62,7 +62,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
     <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
    </select>
    </td>
-   <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=600&amp;width=800">View Accepted Styles</a></td>
+   <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="images/information.png" /></span><a class="thickbox" href="output/styles.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">View Accepted Styles</a></td>
 </tr>
 </table>
 <table>

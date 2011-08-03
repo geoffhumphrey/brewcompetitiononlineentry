@@ -62,6 +62,11 @@ $totalRows_themes = mysql_num_rows($themes);
   	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
   </tr>
   <tr>
+      <td class="dataLabel">Contact Form:</td>
+      <td nowrap="nowrap" class="data"><input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> No</td>
+      <td class="data">Enable or disable your installation's contact form. This may be necessary if your site's server does not support PHP's <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option.</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Site Theme:</td>
     <td nowrap="nowrap" class="data">
     <select name="prefsTheme">
@@ -131,7 +136,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="data">
     <select name="prefsDateFormat">
     <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year</option>
-    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; ?>>Month Day Year</option>
+    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; if ($section == "step3") echo "SELECTED"; ?>>Month Day Year</option>
     <option value="3" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "SELECTED"; ?>>Year Month Day</option>
     </select>
     </td>

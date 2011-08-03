@@ -729,7 +729,11 @@ CREATE TABLE `themes` (
 PRIMARY KEY ( `id` )
 ) ENGINE = MYISAM ;
 
-INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'BCOE&amp;M Default', 'default'), (NULL, 'Bruxellensis', 'bruxellensis');
+INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'BCOE&amp;M Default', 'default');
+INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Bruxellensis', 'bruxellensis');
+INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Claussenii', 'claussenii'); 
+INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Lambicus', 'lambicus');
+
 
 CREATE TABLE `countries` (
 `id` INT( 11 ) NULL ,
@@ -994,10 +998,12 @@ ALTER TABLE `contest_info` ADD `contestID` VARCHAR( 11 ) NULL ;
 
 ALTER TABLE `preferences` ADD `prefsCompOrg` CHAR( 1 ) NULL;
 ALTER TABLE `preferences` ADD `prefsTheme` VARCHAR( 255 ) NULL;
-ALTER TABLE `preferences` ADD `prefsDateFormat` CHAR( 1 ) NULL; 
+ALTER TABLE `preferences` ADD `prefsDateFormat` CHAR( 1 ) NULL;
+ALTER TABLE `preferences` ADD `prefsContact` CHAR( 1 ) NULL DEFAULT NULL 
 UPDATE `preferences` SET `prefsCompOrg` = 'Y' WHERE `preferences`.`id` =1;
 UPDATE `preferences` SET `prefsTheme` = 'default' WHERE `preferences`.`id` =1;
 UPDATE `preferences` SET `prefsDateFormat` = '1' WHERE `preferences`.`id` =1;
+UPDATE `preferences` SET `prefsContact` = 'Y' WHERE `preferences`.`id` =1;
 
 ALTER TABLE `brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this participant receives a discount';
 ALTER TABLE `brewer` DROP `brewerJudgeLocation2` ; 
