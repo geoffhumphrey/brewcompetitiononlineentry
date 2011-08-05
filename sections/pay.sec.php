@@ -32,11 +32,12 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 */
 if ($total_entry_fees > 0) { 
 ?>
+<p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/pay_my_fees.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are:</p>
 <ul style="margin-bottom: 15px;">
 	<li><?php if ($row_brewer['brewerDiscount'] == "Y") echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']." per entry (discounted)."; else echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']." per entry."; ?></li>
-	<?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") { ?>
+	<?php if (($row_contest_info['contestEntryFeeDiscount'] == "Y") && (($row_brewer['brewerDiscount'] == "Y") && ($row_contest_info['contestEntryFeePasswordNum'] > $row_contest_info['contestEntryFee2']))) { ?>
     <li><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee2']." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries.	"; ?></li>   
     <?php } if ($row_contest_info['contestEntryCap'] != "") { ?>
     <li><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryCap']." for unlimited entries.</li>"; ?></li>

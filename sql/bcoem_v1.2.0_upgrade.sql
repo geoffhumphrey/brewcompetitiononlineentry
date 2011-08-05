@@ -91,7 +91,7 @@ PRIMARY KEY ( `id` )
 INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'BCOE&amp;M Default', 'default');
 INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Bruxellensis', 'bruxellensis');
 INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Claussenii', 'claussenii'); 
-INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Lambicus', 'lambicus');
+-- INSERT INTO `themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Lambicus', 'lambicus');
 
 CREATE TABLE `countries` (
 `id` INT( 11 ) NULL ,
@@ -100,11 +100,11 @@ PRIMARY KEY ( `id` )
 ) ENGINE = MYISAM ;
 
 INSERT INTO `countries` (`id`, `name`) VALUES
-(1, 'Australia'),
-(2, 'Canada'),
-(3, 'Ireland'),
-(4, 'United Kingdom'),
-(5, 'United States'),
+(1, 'United States'),
+(2, 'Australia'),
+(3, 'Canada'),
+(4, 'Ireland'),
+(5, 'United Kingdom'),
 (101, 'Afghanistan'),
 (102, 'Albania'),
 (103, 'Algeria'),

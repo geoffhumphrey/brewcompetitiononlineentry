@@ -96,7 +96,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     		<?php } mysql_free_result($flights_2); } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
 	</span>
-    <?php } ?>
+    <?php } else echo "Skipped. Defining flights is disabled for queued judging...less work for you!"; ?>
 </div>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">Step 4</span>

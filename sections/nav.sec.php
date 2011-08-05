@@ -207,13 +207,14 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&go=judging_scores">Scores by Table</a>
 </div>
 <div id="adminMenu_Organizing_Assign" class="menu">
-	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Judges (Final Assignments)</a>
-	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewardss">Stewards (Final Assignments)</a>
-<?php if ($totalRows_judging > 1) { ?>
+	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a>
+	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewardss">Participants as Stewards</a>
+    <a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a>
+<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
 <?php } ?>
-	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=assign">Judges/Stewards to a Table</a>
+	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=assign">Judges or Stewards to a Table</a>
 </div>
 
 <div id="adminMenu_Scoring_Manage" class="menu">

@@ -42,8 +42,6 @@ function checkUncheckAll(theElement) {
      }
     }
 	</script>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {

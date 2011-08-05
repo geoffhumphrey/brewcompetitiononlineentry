@@ -21,7 +21,9 @@ switch($section) {
 		$output = "Setup was successful.";
 		$output_extend = "<p class='info'>You are now logged in and ready to further customize your competition's site.</p>"; 
 	}
-	if ($msg == "2") $output = "Info edited successfully."; 
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	break;
 
 	case "user":
@@ -45,7 +47,10 @@ switch($section) {
 
 	case "pay":
 	$header_output = "Pay My Fees";
-	if     ($msg == "10") $output = "Your online payment has been received. Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	elseif     ($msg == "10") $output = "Your online payment has been received. Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
 	elseif ($msg == "11") $output = "Your online payment has been cancelled.";
 	elseif ($msg == "12") $output = "The code has been verified.";
 	elseif ($msg == "13") $output = "Sorry, the code you entered was incorrect.";
@@ -64,18 +69,34 @@ switch($section) {
 	break;
 	
 	case "entry":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	$header_output = $row_contest_info['contestName']." Entry Info";
 	break;
 	
 	case "sponsors":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	$header_output = $row_contest_info['contestName']." Sponsors";
 	break;
 	
 	case "rules":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	$header_output = $row_contest_info['contestName']." Rules";
 	break;
 	
 	case "past_winners":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	$header_output = "Past Winners";
 	break;
 	
@@ -96,18 +117,26 @@ switch($section) {
 	if ($action == "add") $header_output = "Add an Entry"; 
 	else $header_output = "Edit an Entry";
 	if ($msg == "1") $output = "This entry's style requires more information. Please specify its special ingredients or classic style.";
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
 	break;
 	
 	case "brewer":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	if ($action == "add") $header_output = "Step 2: Registrant Info"; 
 	else $header_output = "Edit Registrant Info";
-	if ($msg == "1") $output = "Info added successfully."; 
 	break;
 	
 	case "judge":
 	$header_output = "Judge Info"; 
 	if ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
 	break;
 
 	case "list":
