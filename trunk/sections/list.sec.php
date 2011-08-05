@@ -27,6 +27,7 @@ if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
 */
 if ($msg != "default") echo $msg_output;
 ?>
+<p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/my_info.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
@@ -134,7 +135,7 @@ if ($msg != "default") echo $msg_output;
     <?php if ($row_brewer['brewerAssignment'] == "J") /* only works in Firefox as of now */ { ?>
     <tr>
     	<td class="dataLabel">&nbsp;</td>
-		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><span class="data"><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
+		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</td>
   	</tr>
   	<?php } ?>
 	<?php if ($totalRows_judging3 > 1) { ?>
@@ -241,10 +242,7 @@ if ($msg != "default") echo $msg_output;
         <span class="icon"><img src="images/page_code.png"  /></span><a href="index.php?section=beerxml">Import Entries Using BeerXML</a>
    	</span>
     <span class="adminSubNav">
-        <span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://www.brewcompetition.com/help/beerXML_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Get Help">BeerXML Export/Upload Help</a>
-   	</span>
-    <span class="adminSubNav">
-        <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
+        <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="thickbox" href="output/print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
 	</span>
 </div>
 <?php if ((judging_date_return() >0) && ($totalRows_log > 0)) { 

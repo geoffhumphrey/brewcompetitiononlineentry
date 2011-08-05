@@ -123,7 +123,7 @@ function do_upload($upload_dir, $upload_url) {
 <title>Upload Image</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
 <link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="../js_includes/jquery.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" src="../js_includes/thickbox.js"></script>
 <style type="text/css">
 #content-inner a:link {

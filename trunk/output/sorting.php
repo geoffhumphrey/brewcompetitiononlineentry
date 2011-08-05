@@ -23,7 +23,7 @@ sort($s);
 <?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
 
 <style type="text/css">

@@ -28,7 +28,7 @@ if (judging_date_return() > 0) { ?>
 if (judging_date_return() == 0) { 
 	include ('judge_closed.sec.php'); 
 	if ($row_prefs['prefsDisplayWinners'] == "Y") {  ?>
-		<script type="text/javascript" language="javascript" src="js_includes/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
 	<?php
 		include (INCLUDES.'db_tables.inc.php');
