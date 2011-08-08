@@ -41,8 +41,10 @@ $brewing = $connection;
 Set up your images directory path.  This is used for label image uploading.
 The predefined variable below will be fine for most installations.
 
+!!!!
 ONLY change this line to your installation's home directory on the server 
 if the predefined variable doesn't work.
+!!!!
 
 If not, use absolute paths (exemplified below).Generally something like 
 /home/[account_name]/public_html/folder_name (do NOT put a forward slash [/] 

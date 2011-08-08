@@ -46,6 +46,7 @@
 /* ------------------------------- Nav ------------------------------- */
 
 #navigation { 
+	
 }
 
 #navigation-inner {
@@ -68,14 +69,26 @@ cursor: pointer;
 #nav {
 }
 
-#nav ul {
+#nav li {
 }
 
-#nav li {
+#nav li a {
+}
+
+#nav li a:visited {
+}
+
+#nav li a:hover,
+#nav li a:focus {
+}
+
+#nav li a:active,{
 }
 
 /* ------------------------------- Header ------------------------------- */
 #header {
+	width: auto;
+	height: auto;
 }
 
 #header-inner {
@@ -89,8 +102,6 @@ cursor: pointer;
 }
 
 #footer-inner {
-padding: 1em;
-font-size: .9em;
 }
 
 /* ------------------------------- Data Display ------------------------------- */
