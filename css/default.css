@@ -2,7 +2,7 @@
 /* CSS Document 
 *        Document Name: default.css
 *        Description:   BCOE&M default theme
-*		 Color scheme:  #394a59 (dark blue); #acc0c7 (medium-light blue); #bec8d8 (light blue);
+*		 Color scheme:  #37517B (dark blue); #acc0c7 (medium-light blue); #bec8d8 (light blue);
 */
 
 @import url("html_elements.css");
@@ -26,18 +26,19 @@
 
 html, body {
 	font-size: 11px;
+	margin: 0;
+	padding: 0;
+	height: 100%;
 	background-color: #eeeeee;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
 }
 
 option {
 }
 
 th, td {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
 }
 
 pre, code {
@@ -50,34 +51,48 @@ p {
 /* Links */
 
 a:link {
+	color: #990000;
+	text-decoration: none;
 }
 
 a:visited {
+	color: #990000;
+	text-decoration: none;
 }
 
 a:hover, a:focus {
+	color: #0000CC;
+	text-decoration: underline;
 }
 
 a:active {
+	color: #0000CC;
+	text-decoration: underline;
 }
 
 /** headings **/
 h1 {
+	font-weight: bold;
 	color: #37517B;
 	margin: 1em 0 1.5em 0;
 }
 
 h2 {
+	font-weight: bold;
 	color: #37517B;
 	margin: 1em 0 1em 0;
 }
 
 h3 {
+	font-weight: bold;
 	color: #37517B;
 	margin: 1em 0 1em 0;
 }
 
 h4, h5, h6 {
+	font-weight: bold;
+	color: #37517B;
+	margin: 1em 0 1em 0;
 }
 
 /** lists **/
@@ -145,8 +160,8 @@ form {
 
 button, menu, textarea, label, submit, .submit, select, input {
 	font-size: 1em;
-	border: 1px solid #c0c0c0;
-	background-color: #eeeeee;
+	border: 1px solid #aaa;
+	background-color: #eee;
 }
 
 select, optgroup, option  {
@@ -194,13 +209,16 @@ textarea {
 }
 
 #content-inner-no-nav h2 {
+	padding: 1.5em 0 .25em 0;
+	font-size: 1.25em;
+	font-weight: bold;
 	color: #37517B;
 	border-bottom: 1px solid #37517B;
 }
 
 #content-inner .menu {
 	border: 1px solid #acc0c7;
-	background-color: #eeeeee;
+	background-color: #ddd;
 }
 
 
@@ -222,42 +240,35 @@ textarea {
 	margin-bottom: 0;
 }
 
-#navigation-inner
-{
-	background-color: #eeeeee;
-	border-bottom: 1px solid #000000;
+#navigation-inner {
+	background-color: #ddd;
+	border-bottom: 1px solid #37517B;
 	padding: 0 1em 0 1em;
 	min-height: 30px;
 }
 
 #navigation-inner a {
-	color: #1C242C;
-	font-weight: normal;
 }
 
 #navigation-inner .menu {
-	border: 1px solid #394a59;
-	background-color: #acc0c7;
 }
 
 #navigation-inner .menu a {
-	color: #394a59;
-	font-weight: normal;
+
 }
 
 #navigation-inner .menu a.menuItem:hover, 
 #navigation-inner .menu a.menuItemHighlight {
-	background-color: #394a59;
-	color: #FFF;
 }
 
 #nav {
-	margin: 0;
+	margin: 0 0 0 0;
 	padding: 1em 0 0;
+	font-size: .9em;
 }
 
 #nav ul {
-	padding-left: 0;	
+
 }
 
 #nav li {
@@ -268,14 +279,16 @@ textarea {
 }
 
 #break {
-	display: block;
-	margin: .5em 0 0 0;		
+	display: inline;
+	vertical-align: middle;
+	float: right;
+	font-weight: normal;
+	font-style: italic;
+	font-size: .9em;
 }
 
 /* ------------------------------- Header ------------------------------- */
 #header {
-	width: auto;
-	height: auto;
 }
 
 #header-inner {
@@ -284,6 +297,9 @@ textarea {
 }
 
 #header-inner h1 {
+	font-size: 1.6em;
+	padding: 0 0 .25em 0;
+	font-weight: bold;
 	color: #37517B;
 	border-bottom: 1px dashed #37517B;
 }
@@ -295,16 +311,15 @@ textarea {
 }
 
 #footer-inner {
-	background-color: #eeeeee;
-	border-top: 1px solid #000000;
+	background-color: #ddd;
+	border-top: 1px solid #37517B;
 	padding: 1em;
 	font-size: .8em;
-	color: #666666;
+	color: #000;
 	min-height: 15px;
 }
 
 #footer-inner a {
-	color:#FFF;
 }
 
 /* ------------------------------- Data Display ------------------------------- */
@@ -365,7 +380,6 @@ textarea {
 /* ------------------------------- Collapse jquery ------------------------------- */
 
 .trigger {
-	color: #394a59;
 }
 
 .trigger a {
@@ -485,15 +499,15 @@ textarea {
 /* ------------------------------- Borders ------------------------------- */
 
 .bdr1 {
-	border: 1px solid #37517B;
+	border: 1px solid #394a59;
 }
 
 .bdr1T {
-	border-top: 1px solid #37517B;
+	border-top: 1px solid #394a59;
 }
 
 .bdr1B {
-	border-bottom: 1px solid #37517B;
+	border-bottom: 1px solid #394a59;
 }
 
 .bdr1B_dashed {
