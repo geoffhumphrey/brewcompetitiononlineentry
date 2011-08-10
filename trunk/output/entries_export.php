@@ -36,7 +36,7 @@ mysql_select_db($database, $brewing);
 // Note: the order of the columns is set to the specifications set by HCCP for import
 
 if ($filter != "winners") {
-$query_sql = "SELECT brewBrewerFirstName, brewBrewerLastName,";
+$query_sql = "SELECT DISTINCT brewBrewerFirstName, brewBrewerLastName,";
 if (($action == "default") || ($action == "hccp")) $query_sql .= " brewCategory, brewSubCategory, id, brewName, brewInfo, brewMead2, brewMead1 ";
 if ($action == "default") $query_sql .= ", brewMead3"; 
 if ($action == "email") $query_sql .= " brewBrewerID";
