@@ -18,7 +18,7 @@ elseif ($filter == "stewards") $type = "steward";
 else $type = "all_participant";
 if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
 else $loc = "";
-$date = date("m-d-Y");
+$date = date("Y-m-d");
 
 $contest = str_replace(' ', '_', $row_contest_info['contestName']);
 
@@ -36,9 +36,9 @@ mysql_select_db($database, $brewing);
 $query_sql = "SELECT brewerFirstName, brewerLastName, brewerEmail"; 
 if ($filter == "judges") $query_sql .= ", brewerJudgeLikes, brewerJudgeDislikes";
 $query_sql .= " FROM brewer";
-if (($filter == "judges") && ($section == "default"))   $query_sql .= " WHERE brewerAssignment='J'";
+if (($filter == "judges") && ($section == "admin"))   $query_sql .= " WHERE brewerAssignment='J'";
 if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
-if (($filter == "stewards") && ($section == "default")) $query_sql .= " WHERE brewerAssignment='S'";
+if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignment='S'";
 if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $numberFields = mysql_num_fields($sql); // Find out how many fields we are fetching
@@ -68,5 +68,6 @@ if($numberFields) { // Check if we need to output anything
 	// Nothing needed to be output. Put an error message here or something.
 	echo 'No data available.';
 }
+
 
 ?>

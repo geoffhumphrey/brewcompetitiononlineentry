@@ -8,7 +8,7 @@
 
 include(DB.'sponsors.db.php');
 if (strstr($section,"step")) { ?>
-<div class="setupTitle">Set Up Your Brew Competition Online Entry and Managment Site</div>
+<div class="setupTitle">Set Up Your Brew Competition Online Entry and Management Site</div>
 <?php } else { ?>
 <ul id="nav">
   <li><?php if ($section != "default") { ?><a href="index.php"><?php echo $row_contest_info['contestName']; ?> Home</a><?php } else { echo $row_contest_info['contestName']; ?> Home<?php } ?></li>
