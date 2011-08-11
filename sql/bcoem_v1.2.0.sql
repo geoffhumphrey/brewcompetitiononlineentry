@@ -390,7 +390,6 @@ CREATE TABLE IF NOT EXISTS `preferences` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-
 -- --------------------------------------------------------
 
 --
@@ -1016,3 +1015,4 @@ ALTER TABLE `brewer` CHANGE `brewerStewardAssignedLocation` `brewerStewardAssign
 
 ALTER TABLE `styles` CHANGE  `brewStyleGroup`  `brewStyleGroup` VARCHAR( 3 ) NULL DEFAULT NULL;
 ALTER TABLE `styles` CHANGE  `brewStyleNum`  `brewStyleNum` VARCHAR( 3 ) NULL DEFAULT NULL;
+
