@@ -1679,39 +1679,43 @@ prefsCompLogoSize,
 prefsDisplayWinners,
 prefsDisplaySpecial,
 prefsCompOrg,
-
 prefsEntryForm,
+
 prefsRecordLimit,
 prefsRecordPaging,
 prefsTheme,
 prefsDateFormat,
-prefsContact
+prefsContact,
 id) VALUES (
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
 %s, %s, %s, %s, %s, 
-%s, %s, %s, %s, %s)",
+%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['prefsTemp'], "text"),
 					   GetSQLValueString($_POST['prefsWeight1'], "text"),
                        GetSQLValueString($_POST['prefsWeight2'], "text"),
                        GetSQLValueString($_POST['prefsLiquid1'], "text"),
                        GetSQLValueString($_POST['prefsLiquid2'], "text"),
+					   
                        GetSQLValueString($_POST['prefsPaypal'], "text"),
                        GetSQLValueString($_POST['prefsPaypalAccount'], "text"),
 					   GetSQLValueString($_POST['prefsCurrency'], "text"),
                        GetSQLValueString($_POST['prefsCash'], "text"),
 					   GetSQLValueString($_POST['prefsCheck'], "text"),
+					   
 					   GetSQLValueString($_POST['prefsCheckPayee'], "text"),
 					   GetSQLValueString($_POST['prefsTransFee'], "text"),
 					   GetSQLValueString($_POST['prefsSponsors'], "text"),
 					   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
 					   GetSQLValueString($_POST['prefsSponsorLogoSize'], "int"),
+					   
 					   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 					   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 					   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 					   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 					   GetSQLValueString($_POST['prefsEntryForm'], "text"),
+					   
 					   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 					   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
 					   GetSQLValueString($_POST['prefsTheme'], "text"),
@@ -1719,6 +1723,7 @@ id) VALUES (
 					   GetSQLValueString($_POST['prefsContact'], "text"),
                        GetSQLValueString($id, "int"));
 					   
+	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
