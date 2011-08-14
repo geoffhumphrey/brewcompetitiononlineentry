@@ -11,6 +11,7 @@ require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
 $today = date('Y-m-d');
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
+$images_dir = dirname( __FILE__ );
 
 // Check to see if initial setup has taken place 
 function check_setup() {

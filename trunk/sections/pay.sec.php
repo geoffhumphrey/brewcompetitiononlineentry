@@ -7,12 +7,13 @@
  */
 
 
-$bid = $row_user['id'];
-if ($msg == "1") {
+$bid = $row_name['uid'];
+if ($msg == "10") {
 	// If redirected from PayPal, update the brewer table to mark entries as paid
 	$a = explode('-', $view);
 	foreach (array_unique($a) as $value) {
 		$updateSQL = "UPDATE brewing SET brewPaid='Y' WHERE id='".$value."';";
+		//echo $updateSQL;
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}

@@ -34,31 +34,4 @@ Do not change the following line.
 */
 $brewing = $connection; 
 
-/******End MySQL Connections*******
-
-
-/*
-Set up your images directory path.  This is used for label image uploading.
-The predefined variable below will be fine for most installations.
-
-!!!!
-ONLY change this line to your installation's home directory on the server 
-if the predefined variable doesn't work.
-!!!!
-
-If not, use absolute paths (exemplified below).Generally something like 
-/home/[account_name]/public_html/folder_name (do NOT put a forward slash [/] 
-at the end).
-
-******************************************************************************
-CORRECT example if installation is in the web root folder:
-$images_dir = "/home/[account_name]/public_html";
-
-CORRECT example installation is in a sub-folder on your site:
-$images_dir = "/home/[account_folder]/public_html/bcoe";
-******************************************************************************
-*/
-
-$images_dir = dirname( __FILE__ );
-
 ?>
