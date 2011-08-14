@@ -8,7 +8,7 @@ require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
 
-$imageSrc = "../images/";
+$imageSrc = (IMAGES);
 
 $fileCornfirm = "default";
 if (isset($_GET['fileConfirm'])) {
@@ -27,7 +27,7 @@ $FILE_EXTS  = array('.jpg','.png','.gif');
 $site_name = $_SERVER['HTTP_HOST'];
 $url_dir = "http://".$_SERVER['HTTP_HOST'];
 $url_this =  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-$upload_dir = $images_dir."/user_images/";
+$upload_dir = (USER_IMAGES);
 $upload_url = $url_dir."/user_images/";
 
 $message ="";
@@ -165,7 +165,7 @@ background-color: #eeeeee;
 <body>
 <div id="container">
 <div id="content">
-	<div id="content-inner"> 
+	<div id="content-inner">
 	<h2>Upload Images</h2>
 	<?php if ($section == "default") { ?>
 	<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
