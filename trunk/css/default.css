@@ -12,6 +12,7 @@
 @import url("sorting.css");
 @import url("thickbox.css");
 @import url("calendar.css");
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
 
 /* --------------------- html_elements.css Overrides -------------------- */
 
@@ -33,6 +34,8 @@ html, body {
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+	font-size: 12px;
 }
 
 option {
@@ -72,25 +75,29 @@ a:active {
 
 /** headings **/
 h1 {
-	font-weight: bold;
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+	font-weight: 800;
 	color: #37517B;
 	margin: 1em 0 1.5em 0;
 }
 
 h2 {
-	font-weight: bold;
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+	font-weight: 800;
 	color: #37517B;
 	margin: 1em 0 1em 0;
 }
 
 h3 {
-	font-weight: bold;
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+	font-weight: 800;
 	color: #37517B;
 	margin: 1em 0 1em 0;
 }
 
 h4, h5, h6 {
-	font-weight: bold;
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+	font-weight: 800;
 	color: #37517B;
 	margin: 1em 0 1em 0;
 }
@@ -243,8 +250,8 @@ textarea {
 #navigation-inner {
 	background-color: #ddd;
 	border-bottom: 1px solid #37517B;
-	padding: 0 1em 0 1em;
-	min-height: 30px;
+	min-height: 20px;
+	padding: 8px;
 }
 
 #navigation-inner a {
@@ -262,8 +269,8 @@ textarea {
 }
 
 #nav {
-	margin: 0 0 0 0;
-	padding: 1em 0 0;
+	margin: 0;
+	padding: 0;
 	font-size: .9em;
 }
 
@@ -299,7 +306,6 @@ textarea {
 #header-inner h1 {
 	font-size: 1.6em;
 	padding: 0 0 .25em 0;
-	font-weight: bold;
 	color: #37517B;
 	border-bottom: 1px dashed #37517B;
 }
@@ -311,10 +317,11 @@ textarea {
 }
 
 #footer-inner {
+	text-align: center;
 	background-color: #ddd;
 	border-top: 1px solid #37517B;
 	padding: 1em;
-	font-size: .8em;
+	font-size: .9em;
 	color: #000;
 	min-height: 15px;
 }

@@ -15,12 +15,12 @@
     <td class="data">Indicate whether you would like to use the Queued Judging methodology (employed by the American Homebrewers Association for judging the National Hombrewers Competition). If &quot;Yes,&quot; there is no need for competition organizers to define flights. More information can be downloaded on the <a href="http://www.bjcp.org/docs/Queued_Judging_organizer.pdf" target="_blank">BJCP's website</a>.</td>
   </tr>
   <tr rel="queued_no">
-    <td class="dataLabel">Entries per Flight:</td>
+    <td class="dataLabel">Maximum Entries per Flight:</td>
     <td nowrap="nowrap" class="data"><input name="jPrefsFlightEntries" type="text" value="<?php echo $row_judging_prefs['jPrefsFlightEntries']; ?>" size="5" maxlength="5" /></td>
   	<td class="data">Indicate the maximum amount of entries per judging flight for all judging locations.</td>
   </tr>
   <tr>
-    <td class="dataLabel">Maximum Rounds Per Location:</td>
+    <td class="dataLabel">Maximum Rounds per Location:</td>
     <td nowrap="nowrap" class="data"><input name="jPrefsRounds" type="text" value="<?php echo $row_judging_prefs['jPrefsRounds']; ?>" size="5" maxlength="5" /></td>
   	<td class="data">Indicate the maximum amount of rounds for each of the competition's locations. This <em>does not</em> include the Best of Show (BOS) round(s).</td>
   </tr>

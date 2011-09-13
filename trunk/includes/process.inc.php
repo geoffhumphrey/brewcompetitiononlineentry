@@ -8,6 +8,12 @@ require('../paths.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 
+function capitalize($string) {
+	$lowercase = strtolower($string);
+	$capitalize = ucwords($lowercase);
+	return $capitalize;
+}
+
 function relocate($referer,$page) {
 	// determine if referrer has any msg=X or id=X variables attached and remove
 	if (strstr($referer,"&msg")) { 
@@ -20,6 +26,7 @@ function relocate($referer,$page) {
 		$referer = preg_replace($pattern, "", $referer); 
 		$referer .= "&pg=".$page; 
 		}
+	if (strpos($referer,"?")===false) $referer = $referer."?";
 	}
 	return $referer;
 }
@@ -54,9 +61,18 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 
 // Global Variables
 
-$insertGoTo = $_POST['relocate']."&msg=1";
-$updateGoTo = $_POST['relocate']."&msg=2";
-$massUpdateGoTo = $_POST['relocate']."&msg=9";
+if (strpos($_POST['relocate'],"?") === false) { 
+	$insertGoTo = $_POST['relocate']."?msg=1"; 
+	$updateGoTo = $_POST['relocate']."?msg=2";
+	$massUpdateGoTo = $_POST['relocate']."?msg=9";
+}
+
+else { 
+	$insertGoTo = $_POST['relocate']."&msg=1";
+	$updateGoTo = $_POST['relocate']."&msg=2";
+	$massUpdateGoTo = $_POST['relocate']."&msg=9";
+}
+
 $deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=5";
 
 session_start(); 
@@ -561,7 +577,7 @@ brewAddition9Use,
 brewJudgingLocation, 
 brewCoBrewer) VALUES 
 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['brewName'], "scrubbed"),
+                       GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
                        GetSQLValueString($row_style_name['brewStyle'], "text"),
 					   GetSQLValueString($styleTrim, "text"),
 					   GetSQLValueString($styleFix, "text"),
@@ -885,7 +901,7 @@ if ($row_prefs['prefsDisplaySpecial'] == "Y") {
 } else $custom = "2";
 
 $updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory=%s, brewCategorySort=%s, brewSubCategory=%s, brewBottleDate=%s, brewDate=%s, brewYield=%s, brewInfo=%s, brewMead1=%s, brewMead2=%s, brewMead3=%s, brewExtract1=%s, brewExtract1Weight=%s, brewExtract2=%s, brewExtract2Weight=%s, brewExtract3=%s, brewExtract3Weight=%s, brewExtract4=%s, brewExtract4Weight=%s, brewExtract5=%s, brewExtract5Weight=%s, brewGrain1=%s, brewGrain1Weight=%s, brewGrain2=%s, brewGrain2Weight=%s, brewGrain3=%s, brewGrain3Weight=%s, brewGrain4=%s, brewGrain4Weight=%s, brewGrain5=%s, brewGrain5Weight=%s, brewGrain6=%s, brewGrain6Weight=%s, brewGrain7=%s, brewGrain7Weight=%s, brewGrain8=%s, brewGrain8Weight=%s, brewGrain9=%s, brewGrain9Weight=%s, brewAddition1=%s, brewAddition1Amt=%s, brewAddition2=%s, brewAddition2Amt=%s, brewAddition3=%s, brewAddition3Amt=%s, brewAddition4=%s, brewAddition4Amt=%s, brewAddition5=%s, brewAddition5Amt=%s, brewAddition6=%s, brewAddition6Amt=%s, brewAddition7=%s, brewAddition7Amt=%s, brewAddition8=%s, brewAddition8Amt=%s, brewAddition9=%s, brewAddition9Amt=%s, brewHops1=%s, brewHops1Weight=%s, brewHops1IBU=%s, brewHops1Time=%s, brewHops2=%s, brewHops2Weight=%s, brewHops2IBU=%s, brewHops2Time=%s, brewHops3=%s, brewHops3Weight=%s, brewHops3IBU=%s, brewHops3Time=%s, brewHops4=%s, brewHops4Weight=%s, brewHops4IBU=%s, brewHops4Time=%s, brewHops5=%s, brewHops5Weight=%s, brewHops5IBU=%s, brewHops5Time=%s, brewHops6=%s, brewHops6Weight=%s, brewHops6IBU=%s, brewHops6Time=%s, brewHops7=%s, brewHops7Weight=%s, brewHops7IBU=%s, brewHops7Time=%s, brewHops8=%s, brewHops8Weight=%s, brewHops8IBU=%s, brewHops8Time=%s, brewHops9=%s, brewHops9Weight=%s, brewHops9IBU=%s, brewHops9Time=%s, brewHops1Use=%s, brewHops2Use=%s, brewHops3Use=%s, brewHops4Use=%s, brewHops5Use=%s, brewHops6Use=%s, brewHops7Use=%s, brewHops8Use=%s, brewHops9Use=%s, brewHops1Type=%s, brewHops2Type=%s, brewHops3Type=%s, brewHops4Type=%s, brewHops5Type=%s, brewHops6Type=%s, brewHops7Type=%s, brewHops8Type=%s, brewHops9Type=%s, brewHops1Form=%s, brewHops2Form=%s, brewHops3Form=%s, brewHops4Form=%s, brewHops5Form=%s, brewHops6Form=%s, brewHops7Form=%s, brewHops8Form=%s, brewHops9Form=%s, brewYeast=%s, brewYeastMan=%s, brewYeastForm=%s, brewYeastType=%s, brewYeastAmount=%s, brewYeastStarter=%s, brewYeastNutrients=%s, brewOG=%s, brewFG=%s, brewPrimary=%s, brewPrimaryTemp=%s, brewSecondary=%s, brewSecondaryTemp=%s, brewOther=%s, brewOtherTemp=%s, brewComments=%s, brewMashStep1Name=%s, brewMashStep1Temp=%s, brewMashStep1Time=%s, brewMashStep2Name=%s, brewMashStep2Temp=%s, brewMashStep2Time=%s, brewMashStep3Name=%s, brewMashStep3Temp=%s, brewMashStep3Time=%s, brewMashStep4Name=%s, brewMashStep4Temp=%s, brewMashStep4Time=%s, brewMashStep5Name=%s, brewMashStep5Temp=%s, brewMashStep5Time=%s, brewFinings=%s, brewWaterNotes=%s, brewBrewerID=%s, brewCarbonationMethod=%s, brewCarbonationVol=%s, brewCarbonationNotes=%s, brewBoilHours=%s, brewBoilMins=%s, brewBrewerFirstName=%s, brewBrewerLastName=%s, brewExtract1Use=%s, brewExtract2Use=%s, brewExtract3Use=%s, brewExtract4Use=%s, brewExtract5Use=%s, brewGrain1Use=%s, brewGrain2Use=%s, brewGrain3Use=%s, brewGrain4Use=%s, brewGrain5Use=%s, brewGrain6Use=%s, brewGrain7Use=%s, brewGrain8Use=%s, brewGrain9Use=%s, brewAddition1Use=%s, brewAddition2Use=%s, brewAddition3Use=%s, brewAddition4Use=%s, brewAddition5Use=%s, brewAddition6Use=%s, brewAddition7Use=%s, brewAddition8Use=%s, brewAddition9Use=%s, brewJudgingLocation=%s, brewCoBrewer=%s WHERE id=%s",
-                       GetSQLValueString($_POST['brewName'], "scrubbed"),
+                       GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
                        GetSQLValueString($row_style_name['brewStyle'], "text"),
 					   GetSQLValueString($styleTrim, "text"),
 					   GetSQLValueString($styleFix, "text"),
@@ -1353,16 +1369,16 @@ if ($go == "judge") {
   brewerAHA
   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['uid'], "int"),
-					   GetSQLValueString($_POST['brewerFirstName'], "text"),
-                       GetSQLValueString($_POST['brewerLastName'], "text"),
-                       GetSQLValueString($_POST['brewerAddress'], "text"),
-                       GetSQLValueString($_POST['brewerCity'], "text"),
+					   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
                        GetSQLValueString($_POST['brewerState'], "text"),
                        GetSQLValueString($_POST['brewerZip'], "text"),
                        GetSQLValueString($_POST['brewerCountry'], "text"),
 					   GetSQLValueString($_POST['brewerPhone1'], "text"),
                        GetSQLValueString($_POST['brewerPhone2'], "text"),
-                       GetSQLValueString($_POST['brewerClubs'], "text"),
+                       GetSQLValueString(capitalize($_POST['brewerClubs']), "text"),
                        GetSQLValueString($_POST['brewerEmail'], "text"),
 					   GetSQLValueString($_POST['brewerSteward'], "text"),
 					   GetSQLValueString($_POST['brewerJudge'], "text"),
@@ -1431,16 +1447,16 @@ brewerAssignment=%s,
 brewerAHA=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['uid'], "int"),
-					   GetSQLValueString($_POST['brewerFirstName'], "text"),
-                       GetSQLValueString($_POST['brewerLastName'], "text"),
-                       GetSQLValueString($_POST['brewerAddress'], "text"),
-                       GetSQLValueString($_POST['brewerCity'], "text"),
+					   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+                       GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
                        GetSQLValueString($_POST['brewerState'], "text"),
                        GetSQLValueString($_POST['brewerZip'], "text"),
                        GetSQLValueString($_POST['brewerCountry'], "text"),
 					   GetSQLValueString($_POST['brewerPhone1'], "text"),
                        GetSQLValueString($_POST['brewerPhone2'], "text"),
-                       GetSQLValueString($_POST['brewerClubs'], "text"),
+                       GetSQLValueString(capitalize($_POST['brewerClubs']), "text"),
                        GetSQLValueString($_POST['brewerEmail'], "text"),
                        GetSQLValueString($_POST['brewerSteward'], "text"),
                        GetSQLValueString($_POST['brewerJudge'], "text"),
@@ -1474,6 +1490,9 @@ header(sprintf("Location: %s", $updateGoTo));
 // --------------------------- SETUP: Adding General Contest Info ------------------------------- // 
 
 if (($action == "add") && ($dbTable == "contest_info")) {
+
+if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
+if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 
 $insertSQL = sprintf("INSERT INTO contest_info (
 contestName,
@@ -1520,31 +1539,31 @@ VALUES
 %s, %s, %s, %s, %s,
 %s, %s, %s, %s, %s,
 %s)",
-                       GetSQLValueString($_POST['contestName'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestName']), "text"),
 					   GetSQLValueString($_POST['contestID'], "text"),
-                       GetSQLValueString($_POST['contestHost'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestHost']), "text"),
                        GetSQLValueString($_POST['contestHostWebsite'], "text"),
-                       GetSQLValueString($_POST['contestHostLocation'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
                        GetSQLValueString($_POST['contestRegistrationOpen'], "date"),
 					   GetSQLValueString($_POST['contestRegistrationDeadline'], "date"),
 					   GetSQLValueString($_POST['contestEntryOpen'], "date"),
 					   GetSQLValueString($_POST['contestEntryDeadline'], "date"),
                        GetSQLValueString($_POST['contestRules'], "text"),
-                       GetSQLValueString($_POST['contestAwardsLocation'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
                        GetSQLValueString($_POST['contestContactName'], "text"),
                        GetSQLValueString($_POST['contestContactEmail'], "text"),
                        GetSQLValueString($_POST['contestEntryFee'], "text"),
                        GetSQLValueString($_POST['contestBottles'], "text"),
                        GetSQLValueString($_POST['contestShippingAddress'], "text"),
-                       GetSQLValueString($_POST['contestShippingName'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestShippingName']), "text"),
                        GetSQLValueString($_POST['contestAwards'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 					   GetSQLValueString($_POST['contestEntryCap'], "text"),
-					   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
+					   GetSQLValueString(capitalize($_POST['contestAwardsLocName']), "text"),
 					   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
 					   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
 					   GetSQLValueString($_POST['contestEntryFee2'], "text"),
-					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
+					   GetSQLValueString($contestEntryFeeDiscount, "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
 					   GetSQLValueString($_POST['contestBOSAward'], "text"),
@@ -1578,6 +1597,9 @@ VALUES
 // --------------------------- If Editing General Contest Info ------------------------------- // 
 
 if (($action == "edit") && ($dbTable == "contest_info")) {
+	
+if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
+if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 
 $updateSQL = sprintf("UPDATE contest_info SET 
 contestName=%s,
@@ -1614,31 +1636,31 @@ contestBOSAward=%s,
 contestEntryFeePassword=%s,
 contestEntryFeePasswordNum=%s
 WHERE id=%s",
-                       GetSQLValueString($_POST['contestName'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestName']), "text"),
 					   GetSQLValueString($_POST['contestID'], "text"),
-                       GetSQLValueString($_POST['contestHost'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestHost']), "text"),
                        GetSQLValueString($_POST['contestHostWebsite'], "text"),
-                       GetSQLValueString($_POST['contestHostLocation'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
                        GetSQLValueString($_POST['contestRegistrationOpen'], "date"),
 					   GetSQLValueString($_POST['contestRegistrationDeadline'], "date"),
 					   GetSQLValueString($_POST['contestEntryOpen'], "date"),
 					   GetSQLValueString($_POST['contestEntryDeadline'], "date"),
                        GetSQLValueString($_POST['contestRules'], "text"),
-                       GetSQLValueString($_POST['contestAwardsLocation'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
                        GetSQLValueString($_POST['contestContactName'], "text"),
                        GetSQLValueString($_POST['contestContactEmail'], "text"),
                        GetSQLValueString($_POST['contestEntryFee'], "text"),
                        GetSQLValueString($_POST['contestBottles'], "text"),
                        GetSQLValueString($_POST['contestShippingAddress'], "text"),
-                       GetSQLValueString($_POST['contestShippingName'], "text"),
+                       GetSQLValueString(capitalize($_POST['contestShippingName']), "text"),
                        GetSQLValueString($_POST['contestAwards'], "text"),
 					   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 					   GetSQLValueString($_POST['contestEntryCap'], "text"),
-					   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
+					   GetSQLValueString(capitalize($_POST['contestAwardsLocName']), "text"),
 					   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
 					   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
 					   GetSQLValueString($_POST['contestEntryFee2'], "text"),
-					   GetSQLValueString($_POST['contestEntryFeeDiscount'], "text"),
+					   GetSQLValueString($contestEntryFeeDiscount, "text"),
 					   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
 					   GetSQLValueString($_POST['contestLogo'], "text"),
 					   GetSQLValueString($_POST['contestBOSAward'], "text"),
@@ -1954,95 +1976,20 @@ if (($action == "update") && ($dbTable == "brewer") && ($row_prefs['prefsCompOrg
 	foreach($_POST['id'] as $id){ 
 		mysql_select_db($database, $brewing);		
 		if (($_POST["brewerAssignment".$id] != "") && ($filter != "bos")) {
-		$updateSQL = "UPDATE brewer SET brewerAssignment='";
-		$updateSQL .= $_POST["brewerAssignment".$id];
-		$updateSQL .= "' WHERE id='".$id."';";
+			$updateSQL = "UPDATE brewer SET brewerAssignment='";
+			$updateSQL .= $_POST["brewerAssignment".$id];
+			$updateSQL .= "' WHERE id='".$id."';";
 		}
 		elseif (($_POST["brewerAssignment".$id] != "") && ($filter == "bos")) {
-		$updateSQL = "UPDATE brewer SET brewerJudgeBOS='";
-		$updateSQL .= $_POST["brewerAssignment".$id];
-		$updateSQL .= "' WHERE id='".$id."';";
+			$updateSQL = "UPDATE brewer SET brewerJudgeBOS='";
+			$updateSQL .= $_POST["brewerAssignment".$id];
+			$updateSQL .= "' WHERE id='".$id."';";
 		}
 		else {
-		$updateSQL = "UPDATE brewer SET brewerAssignment='";
-		$updateSQL .= $_POST["brewerAssignment".$id];
-		$updateSQL .= "' WHERE id='".$id."';";
-		}
-		/*
-		if ($bid != "default") { 
-			$query_update = "SELECT brewerStewardLocation, brewerJudgeLocation FROM brewer WHERE id='$id'";
-			$update = mysql_query($query_update, $brewing) or die(mysql_error());
-			$row_update = mysql_fetch_assoc($update);
-		
-			if ($row_update['brewerStewardLocation'] != "") { 
-			$trimmed = rtrim($row_update['brewerStewardLocation'], ",");
-					if  (!strstr($trimmed, $bid)) $sal = $trimmed.", "; 
-					elseif (strstr($trimmed, $bid)) { 
-						$sal = str_replace($bid,"",$trimmed).", "; 
-						}
-					else $sal = ""; 
-					}
-			if ($row_update['brewerJudgeLocation'] != "") { 
-			$trimmed = rtrim($row_update['brewerJudgeLocation'], ",");
-					if  (!strstr($trimmed, $bid)) $jal = $trimmed.", "; 
-					elseif (strstr($trimmed, $bid)) { 
-						$jal = str_replace($bid,"",$trimmed).", "; 
-						}
-					else $jal = ""; 
-					}
-																																				  
-			if ($filter == "stewards") {  
-			$sal = str_replace(" ,","",$sal); // clean up
-			if (substr($sal, 0, 2) == ", ") $sal = substr_replace($sal, "", 0, 2); else $sal = $sal;
-			$updateSQL = "UPDATE brewer SET brewerStewardLocation='";
-			$updateSQL .= $sal.$_POST["brewerStewardLocation".$id];
-			$updateSQL .= "' WHERE id='".$id."';"; 
-			}
-			elseif ($filter == "judges") {
-			$jal = str_replace(" ,","",$jal); // clean up
-			if (substr($jal, 0, 2) == ", ") $jal = substr_replace($jal, "", 0, 2); else $jal = $jal;
-			$updateSQL = "UPDATE brewer SET brewerJudgeLocation='";
-			$updateSQL .= $jal.$_POST["brewerJudgeLocation".$id];
+			$updateSQL = "UPDATE brewer SET brewerAssignment='";
+			$updateSQL .= $_POST["brewerAssignment".$id];
 			$updateSQL .= "' WHERE id='".$id."';";
-			}
-			else $updateSQL = "SELECT id FROM brewer WHERE id='$id'";
 		}
-		
-		if ($_POST["brewerAssignment".$id] == "J") $updateSQL2 = "UPDATE brewer SET brewerNickname='judge' WHERE id='".$id."'"; 
-  		elseif ($_POST["brewerAssignment".$id] == "S") $updateSQL2 = "UPDATE brewer SET brewerNickname='steward' WHERE id='".$id."'"; 
-  		else $updateSQL2 = "SELECT id FROM brewer WHERE id='$id'";
-		
-		if ($filter == "stewards") $field = "brewerStewardLocation";
-		elseif ($filter == "judges") $field = "brewerJudgeLocation";
-		else $field = "brewerJudgeLocation";
-		
-		
-		$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
-		
-		if (($filter == "judges") || ($filter == "stewards")) {
-			$query_clean = "SELECT $field FROM brewer WHERE id = '$id'";
-			$clean = mysql_query($query_clean, $brewing) or die(mysql_error());
-			$row_clean = mysql_fetch_assoc($clean);
-		
-			if ($filter == "stewards") { 
-				if (substr($row_clean['brewerStewardLocation'], 0, 2) == ", ")  $cleaned = substr_replace($row_clean['brewerStewardLocation'], "", 0, 2); else $cleaned = $row_clean['brewerStewardLocation']; 
-				} 
-			if ($filter == "judges") { 
-				if  (substr($row_clean['brewerJudgeLocation'], 0, 2) == ", ") $cleaned = substr_replace($row_clean['brewerJudgeLocation'], "", 0, 2); else $cleaned = $row_clean['brewerJudgeLocation']; 
-			}
-			$cleaned = rtrim($cleaned, " ");
-			$cleaned = rtrim($cleaned, ",");
-			$updateSQL3 = "UPDATE brewer SET ";
-			$updateSQL3 .= $field."=";
-			$updateSQL3 .= "'".$cleaned."' ";
-			$updateSQL3 .= " WHERE id='".$id."';";
-		$result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());	
-		}
-		 Debug
-		 */
-		//echo "<p>".$updateSQL;//"<br>";
-		//echo $updateSQL2."<br>";
-		//echo $updateSQL3."</p>";
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	} 
 if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
@@ -2107,7 +2054,7 @@ if($result1){
 if (($action == "edit") && ($dbTable == "sponsors")) {
 
   $updateSQL = sprintf("UPDATE sponsors SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
-                       GetSQLValueString($_POST['sponsorName'], "text"),
+                       GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
                        GetSQLValueString($_POST['sponsorURL'], "text"),
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
@@ -2125,7 +2072,7 @@ if (($action == "edit") && ($dbTable == "sponsors")) {
 if (($action == "add") && ($dbTable == "sponsors")) {
 
   $insertSQL = sprintf("INSERT INTO sponsors (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['sponsorName'], "text"),
+                       GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
                        GetSQLValueString($_POST['sponsorURL'], "text"),
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
@@ -2145,8 +2092,8 @@ if (($action == "add") && ($dbTable == "judging_locations")) {
   $insertSQL = sprintf("INSERT INTO judging_locations (judgingDate, judgingTime, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['judgingDate'], "text"),
                        GetSQLValueString($_POST['judgingTime'], "text"),
-                       GetSQLValueString($_POST['judgingLocation'], "text"),
-                       GetSQLValueString($_POST['judgingLocName'], "text"),
+                       GetSQLValueString(capitalize($_POST['judgingLocation']), "text"),
+                       GetSQLValueString(capitalize($_POST['judgingLocName']), "text"),
 					   GetSQLValueString($_POST['judgingRounds'], "text")
 					   );
 
@@ -2164,8 +2111,8 @@ if (($action == "edit") && ($dbTable == "judging_locations")) {
   $updateSQL = sprintf("UPDATE judging_locations SET judgingDate=%s, judgingTime=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
                        GetSQLValueString($_POST['judgingDate'], "text"),
                        GetSQLValueString($_POST['judgingTime'], "text"),
-                       GetSQLValueString($_POST['judgingLocation'], "text"),
-                       GetSQLValueString($_POST['judgingLocName'], "text"),
+                       GetSQLValueString(capitalize($_POST['judgingLocation']), "text"),
+                       GetSQLValueString(capitalize($_POST['judgingLocName']), "text"),
 					   GetSQLValueString($_POST['judgingRounds'], "text"),
 					   GetSQLValueString($id, "int"));   
 					   
@@ -2180,7 +2127,7 @@ if (($action == "edit") && ($dbTable == "judging_locations")) {
 if (($action == "add") && ($dbTable == "drop_off")) {
 
   $insertSQL = sprintf("INSERT INTO drop_off (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['dropLocationName'], "text"),
+                       GetSQLValueString(capitalize($_POST['dropLocationName']), "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
 					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
@@ -2198,7 +2145,7 @@ if (($action == "add") && ($dbTable == "drop_off")) {
 if (($action == "edit") && ($dbTable == "drop_off")) {
 
   $updateSQL = sprintf("UPDATE drop_off SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
-                       GetSQLValueString($_POST['dropLocationName'], "text"),
+                       GetSQLValueString(capitalize($_POST['dropLocationName']), "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
 					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
@@ -2249,7 +2196,7 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
   %s, %s, %s, %s, %s, 
   %s, %s, %s)",
                        GetSQLValueString("A", "text"),
-                       GetSQLValueString($_POST['brewStyle'], "scrubbed"),
+                       GetSQLValueString(captialize($_POST['brewStyle']), "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),
                        GetSQLValueString($_POST['brewStyleFG'], "text"),
@@ -2304,7 +2251,7 @@ if (($action == "edit") && ($dbTable == "styles")) {
   
   WHERE id=%s",
                        GetSQLValueString($_POST['brewStyleNum'], "text"),
-                       GetSQLValueString($_POST['brewStyle'], "scrubbed"),
+                       GetSQLValueString(capitalize($_POST['brewStyle']), "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),
                        GetSQLValueString($_POST['brewStyleFG'], "text"),
@@ -2351,9 +2298,9 @@ $insertSQL = sprintf("INSERT INTO contacts (
 	) 
 	VALUES 
 	(%s, %s, %s, %s)",
-                       GetSQLValueString($_POST['contactFirstName'], "text"),
-                       GetSQLValueString($_POST['contactLastName'], "text"),
-                       GetSQLValueString($_POST['contactPosition'], "text"),
+                       GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
+                       GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
+                       GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
 					   GetSQLValueString($_POST['contactEmail'], "text"));
 	//echo $insertSQL;				   
 	mysql_select_db($database, $brewing);
@@ -2372,9 +2319,9 @@ $updateSQL = sprintf("UPDATE contacts SET
 	contactPosition=%s, 
 	contactEmail=%s
 	WHERE id=%s",
-                       GetSQLValueString($_POST['contactFirstName'], "text"),
-                       GetSQLValueString($_POST['contactLastName'], "text"),
-                       GetSQLValueString($_POST['contactPosition'], "text"),
+                       GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
+                       GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
+                       GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
 					   GetSQLValueString($_POST['contactEmail'], "text"),
 					   GetSQLValueString($id, "int"));
 					   
@@ -2388,52 +2335,50 @@ if ($action == "email") {
 include_once  (ROOT.'captcha/securimage.php');
 $securimage = new Securimage();
 
-if ($securimage->check($_POST['captcha_code']) == false) {
-setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
-setcookie("from_email", $_POST['from_email'], 0, "/");
-setcookie("from_name", $_POST['from_name'], 0, "/");
-setcookie("subject", $_POST['subject'], 0, "/");
-setcookie("message", $_POST['message'], 0, "/");
-header("Location: ../index.php?section=".$section."&action=email&msg=2");
+	if ($securimage->check($_POST['captcha_code']) == false) {
+		setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
+		setcookie("from_email", $_POST['from_email'], 0, "/");
+		setcookie("from_name", $_POST['from_name'], 0, "/");
+		setcookie("subject", $_POST['subject'], 0, "/");
+		setcookie("message", $_POST['message'], 0, "/");
+		header("Location: ../index.php?section=".$section."&action=email&msg=2");
 	}
 
-else 
+	else {
 
-	{
-
-mysql_select_db($database, $brewing);
-$query_contact = sprintf("SELECT * FROM contacts WHERE id='%s'", $_POST['to']);
-$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-$row_contact = mysql_fetch_assoc($contact);
-
-// Gather the variables from the form
-$to_email = $row_contact['contactEmail'];
-$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
-$from_email = $_POST['from_email'];
-$from_name = $_POST['from_name'];
-$subject = $_POST['subject'];
-$message_post = $_POST['message'];
-
-// Build the message
-$message = "<html>" . "\r\n";
-//$message .= "<head>" . $subject."</head>" . "\r\n";
-$message .= "<body>" . $message_post. "\r\n". "</body>" . "\r\n";
-$message .= "</html>";
-
-$headers  = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
-$headers .= "To: ".$to_name." <".$to_email.">, " . "\r\n";
-$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
-$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
-
-// Debug
-//echo $to_email."<br>";
-//echo $to_name."<br>";
-//echo $headers."<br>";
-//echo $message;
-
-mail($to_email, $subject, $message, $headers);
-header("Location: ../index.php?section=".$section."&action=email&msg=1&id=".$row_contact['id']);
+		mysql_select_db($database, $brewing);
+		$query_contact = sprintf("SELECT * FROM contacts WHERE id='%s'", $_POST['to']);
+		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+		$row_contact = mysql_fetch_assoc($contact);
+		
+		// Gather the variables from the form
+		$to_email = $row_contact['contactEmail'];
+		$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
+		$from_email = $_POST['from_email'];
+		$from_name = $_POST['from_name'];
+		$subject = $_POST['subject'];
+		$message_post = $_POST['message'];
+		
+		// Build the message
+		$message = "<html>" . "\r\n";
+		//$message .= "<head>" . $subject."</head>" . "\r\n";
+		$message .= "<body>" . $message_post. "\r\n". "</body>" . "\r\n";
+		$message .= "</html>";
+		
+		$headers  = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+		$headers .= "To: ".$to_name." <".$to_email.">, " . "\r\n";
+		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
+		$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
+		
+		// Debug
+		//echo $to_email."<br>";
+		//echo $to_name."<br>";
+		//echo $headers."<br>";
+		//echo $message;
+		
+		mail($to_email, $subject, $message, $headers);
+		header("Location: ../index.php?section=".$section."&action=email&msg=1&id=".$row_contact['id']);
 	}
 }
 
@@ -2474,7 +2419,7 @@ tableStyles,
 tableNumber,
 tableLocation
   ) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString($_POST['tableName'], "text"),
+                       GetSQLValueString(capitalize($_POST['tableName']), "text"),
 					   GetSQLValueString($table_styles, "text"),
 					   GetSQLValueString($_POST['tableNumber'], "text"),
 					   GetSQLValueString($_POST['tableLocation'], "text")
@@ -2543,7 +2488,7 @@ if (($action == "edit") && ($dbTable == "judging_tables")) {
 	tableLocation=%s
 	WHERE id=%s",
                     
-	GetSQLValueString($_POST['tableName'], "text"),
+	GetSQLValueString(capitalize($_POST['tableName']), "text"),
 	GetSQLValueString($table_styles, "text"),
 	GetSQLValueString($_POST['tableNumber'], "text"),
 	GetSQLValueString($_POST['tableLocation'], "text"),
@@ -2940,7 +2885,7 @@ $insertSQL = sprintf("INSERT INTO style_types (
 	) 
 	VALUES 
 	(%s, %s, %s, %s)",
-                       GetSQLValueString($_POST['styleTypeName'], "text"),
+                       GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
                        GetSQLValueString($_POST['styleTypeOwn'], "text"),
                        GetSQLValueString($_POST['styleTypeBOS'], "text"),
 					   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"));
@@ -2958,7 +2903,7 @@ $updateSQL = sprintf("UPDATE style_types SET
 	styleTypeBOS=%s, 
 	styleTypeBOSMethod=%s
 	WHERE id=%s",
-                       GetSQLValueString($_POST['styleTypeName'], "text"),
+                       GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
                        GetSQLValueString($_POST['styleTypeOwn'], "text"),
                        GetSQLValueString($_POST['styleTypeBOS'], "text"),
 					   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),

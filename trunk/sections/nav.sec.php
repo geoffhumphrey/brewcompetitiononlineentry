@@ -186,7 +186,7 @@ if (strstr($section,"step")) { ?>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Sorting Sheets - All Categories</a>
-    <a class="menuItem" href="http://test.brewcompetition.com/output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">Bottle Labels - All Categories</a>
+    <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">Bottle Labels - All Categories</a>
 </div>
 
 <div id="adminMenu_Organizing_Manage" class="menu" onmouseover="menuMouseover(event)">

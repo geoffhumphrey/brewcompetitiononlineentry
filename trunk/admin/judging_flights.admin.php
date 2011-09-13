@@ -221,7 +221,9 @@ if (($action == "assign") && ($filter == "rounds")) {
 	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
-		for($i=1; $i<$row_flights['flightNumber']+1; $i++) { 
+		if ($row_judging_prefs['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
+		
+		for($i=1; $i<$flight_no_total+1; $i++) { 
 		
 		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
 		$round_no = mysql_query($query_round_no, $brewing) or die(mysql_error());

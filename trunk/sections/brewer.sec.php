@@ -11,20 +11,21 @@ include(DB.'stewarding.db.php');
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
 if ($section != "step2") {
-mysql_select_db($database, $brewing);
-$query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $id); 
-$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
-$row_brewerID = mysql_fetch_assoc($brewerID);
-$totalRows_brewerID = mysql_num_rows($brewerID);
+	mysql_select_db($database, $brewing);
+	$query_brewerID = sprintf("SELECT * FROM brewer WHERE id = '%s'", $id); 
+	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
+	$row_brewerID = mysql_fetch_assoc($brewerID);
+	$totalRows_brewerID = mysql_num_rows($brewerID);
 } 
 if ($section == "step2")  {
-$query_brewerID = sprintf("SELECT * FROM users WHERE user_name = '%s'", $go); 
-$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
-$row_brewerID = mysql_fetch_assoc($brewerID);
-$totalRows_brewerID = mysql_num_rows($brewerID);
+	mysql_select_db($database, $brewing);
+	$query_brewerID = sprintf("SELECT * FROM users WHERE user_name = '%s'", $go); 
+	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
+	$row_brewerID = mysql_fetch_assoc($brewerID);
+	$totalRows_brewerID = mysql_num_rows($brewerID);
 }
 if ($msg != "default") echo $msg_output; 
-if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewer['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
 <?php if ($section == "step2") { ?>
 <form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="brewerSteward" type="hidden" value="N" />
