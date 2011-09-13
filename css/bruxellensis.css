@@ -12,6 +12,7 @@
 @import url("sorting.css");
 @import url("thickbox.css");
 @import url("calendar.css");
+@import url(http://fonts.googleapis.com/css?family=Istok+Web|Tienne:900);
 
 /* --------------------- html_elements.css Overrides -------------------- */
 
@@ -25,19 +26,25 @@
 */
 
 html, body {
-	font-size: 13px;
 	background-color: #eeeeee;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: 'Istok Web', Tahoma, Geneva, sans-serif;
+	font-size: 13px;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0em;
+	word-spacing: 0.004em;
+	line-height: 1.5;
 }
 
 option {
 }
 
 th, td {
-	font-family: Tahoma, Geneva, sans-serif; /* "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: inherit;
+	font-size: inherit;
 }
 
 pre, code {
@@ -63,24 +70,30 @@ a:active {
 
 /** headings **/
 h1 {
+	font-family: 'Tienne', Georgia, serif;
 	font-size: 1.9em;
 	color: #394a59;
 	margin: 1em 0 1.5em 0;
 }
 
 h2 {
+	font-family: 'Tienne', Georgia, serif;
 	font-size: 1.5em;
 	color: #394a59;
 	margin: 1em 0 1em 0;
+	
 }
 
 h3 {
+	font-family: 'Tienne', Georgia, serif;
 	font-size: 1.3em;
 	color: #394a59;
 	margin: 1em 0 1em 0;
 }
 
 h4, h5, h6 {
+	font-family: 'Tienne', Georgia, serif;
+	margin: 1em 0 1em 0;
 }
 
 /** lists **/
@@ -297,12 +310,15 @@ textarea {
 /* ------------------------------- Footer ------------------------------- */
 #footer {
 	width: 100%;
-}
-
-#footer-inner {
 	background-color: #eeeeee;
 	border-top: 1px solid #000000;
 	background-image: url(../images/bruxellensis/footer.png);
+}
+
+#footer-inner {
+	vertical-align: middle;
+	text-align: center;
+	padding: 1em;
 }
 
 #footer-inner a {
@@ -416,6 +432,7 @@ textarea {
 }
 
 .admin_default_header {
+	font-family: 'Tienne', Georgia, serif;
 	font-size: 1em;
 	font-weight: bold;
 	margin: 1.5em 0 .5em 0;

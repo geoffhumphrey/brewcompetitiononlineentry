@@ -6,6 +6,7 @@
  */
 
 
+
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
@@ -14,28 +15,6 @@ $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SE
 $images_dir = dirname( __FILE__ );
 
 // Check to see if initial setup has taken place 
-function check_setup() {
-	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
-	$setup = mysql_query($query_setup, $brewing);
-	$row_setup = mysql_fetch_assoc($setup);
-	$totalRows_setup = $row_setup['count'];
-
-	$query_setup1 = "SELECT COUNT(*) as 'count' FROM contest_info";
-	$setup1 = mysql_query($query_setup1, $brewing);
-	$row_setup1 = mysql_fetch_assoc($setup1);
-	$totalRows_setup1 = $row_setup1['count'];
-
-	$query_setup2 = "SELECT COUNT(*) as 'count' FROM preferences";
-	$setup2 = mysql_query($query_setup2, $brewing);
-	$row_setup2 = mysql_fetch_assoc($setup2);
-	$totalRows_setup2 = $row_setup2['count'];
-
-	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
-	else return false;
-}
-
 if (check_setup()) { header ("Location: setup.php?section=step1"); } 
 
 // If all setup has taken place, run normally

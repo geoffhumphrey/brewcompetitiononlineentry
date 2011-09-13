@@ -12,6 +12,7 @@
 @import url("sorting.css");
 @import url("thickbox.css");
 @import url("calendar.css");
+@import url(http://fonts.googleapis.com/css?family=Cabin|Droid+Serif:700);
 
 /* --------------------- html_elements.css Overrides -------------------- */
 
@@ -25,19 +26,26 @@
 */
 
 html, body {
-	font-size: 12px;
 	background-color: #eeeeee;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	/* font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: 'Cabin', "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 13px;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0em;
+	word-spacing: 0.004em;
+	line-height: 1.5;
 }
 
 option {
 }
 
 th, td {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-family: inherit;
+	font-size: inherit;
 }
 
 pre, code {
@@ -68,24 +76,30 @@ a:active {
 
 /** headings **/
 h1 {
+	font-family: Droid Serif;
 	font-size: 1.9em;
 	color: #1A2A00;
 	margin: 1em 0 1.5em 0;
 }
 
 h2 {
+	font-family: Droid Serif;
 	font-size: 1.5em;
 	color: #1A2A00;
 	margin: 1em 0 1em 0;
 }
 
 h3 {
+	font-family: Droid Serif;
 	font-size: 1.3em;
 	color: #1A2A00;
 	margin: 1em 0 1em 0;
 }
 
 h4, h5, h6 {
+	font-family: Droid Serif;
+	color: #1A2A00;
+	margin: 1em 0 1em 0;
 }
 
 /** lists **/
@@ -333,12 +347,12 @@ textarea {
 	background-position: center;
 	color: #BFCAB2;
 	height: auto;
-	padding: .5px;
 }
 
 #footer-inner {
 	vertical-align: middle;
 	text-align: center;
+	padding: .75em;
 }
 
 #footer-inner a {

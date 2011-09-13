@@ -25,19 +25,19 @@
 */
 
 html, body {
-	font-size: 12px;
 	background-color: #fff;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 12px;
+	font-family: Helvetica, Geneva, sans-serif;
 }
 
 option {
 }
 
 th, td {
-	font-family: Tahoma, Geneva, sans-serif;
+	font-family: inherit;
 }
 
 pre, code {
@@ -70,7 +70,7 @@ a:active {
 h1 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.9em;
-	margin: 1em 0 1.5em 0;
+	margin: 1em 0 1.25em 0;
 }
 
 h2 {
@@ -637,6 +637,31 @@ border-left: 1px solid #cccccc;
 }
 
 
+.sorting_asc {
+	cursor: pointer;
+}
+
+.sorting_desc {
+	background: url('../images/spacer.gif') no-repeat center right;
+	cursor: pointer;
+}
+
+.sorting {
+	background: url('../images/spacer.gif') no-repeat center right;
+	cursor: pointer;
+}
+
+.sorting_asc_disabled {
+	background: url('../images/spacer.gif') no-repeat center right;
+	cursor: pointer;
+}
+
+.sorting_desc_disabled {
+	background: url('../images/spacer.gif') no-repeat center right;
+	cursor: pointer;
+}
+
+
 
 
 /* --------------------- thickbox.css Overrides -------------------- */
@@ -734,3 +759,9 @@ border-left: 1px solid #cccccc;
 	margin: 2.25em 0 2.25em 0;
 }
 
+.box {
+	border: 1px solid #000;
+	min-height: 50px;
+	vertical-align: text-top;
+	margin: 0;
+}

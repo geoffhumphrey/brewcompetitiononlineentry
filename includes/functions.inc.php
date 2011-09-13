@@ -11,6 +11,31 @@ if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
 }
 
+
+
+function check_setup() {
+	include(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
+	$setup = mysql_query($query_setup, $brewing);
+	$row_setup = mysql_fetch_assoc($setup);
+	$totalRows_setup = $row_setup['count'];
+
+	$query_setup1 = "SELECT COUNT(*) as 'count' FROM contest_info";
+	$setup1 = mysql_query($query_setup1, $brewing);
+	$row_setup1 = mysql_fetch_assoc($setup1);
+	$totalRows_setup1 = $row_setup1['count'];
+
+	$query_setup2 = "SELECT COUNT(*) as 'count' FROM preferences";
+	$setup2 = mysql_query($query_setup2, $brewing);
+	$row_setup2 = mysql_fetch_assoc($setup2);
+	$totalRows_setup2 = $row_setup2['count'];
+
+	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
+	else return false;
+}
+
+
 // function to generate random number
 function random_generator($digits,$method){
 	srand ((double) microtime() * 10000000);
@@ -335,7 +360,8 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_array($entries);
 		$totalRows_entries = $row_entries['count'];
-			
+		//echo $totalRows_entries."<br>";
+		
 		$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$bid);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_array($brewer);
@@ -352,6 +378,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;	
 					} // end if ($entry_discount == "Y")
 					else $total = $totalRows_entries * $special_discount_number;
+					//echo $total."<br>";
 				} // end if ($row_brewer['brewerDiscount'] == "Y")
 				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 					if ($entry_discount == "Y") {
@@ -853,6 +880,7 @@ function total_paid_received($go,$id) {
 
 function style_convert($number,$type) {
 	switch ($type) {
+		
 		case "1": 
 		switch ($number) {
 			case "01": $style_convert = "Light Lager"; break;
@@ -886,6 +914,7 @@ function style_convert($number,$type) {
 			default: $style_convert = "Custom Style"; break;
 		}
 		break;
+		
 		case "2":
 		switch ($number) {
 			case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
@@ -922,7 +951,7 @@ function style_convert($number,$type) {
 		
 		case "3":
 		$n = ereg_replace('[^0-9]+', '', $number);
-		if ($n > 23) $style_convert = TRUE;
+		if ($n >= 23) $style_convert = TRUE;
 		else {
 		switch ($number) {
 			case "06D": $style_convert = TRUE; break;
@@ -956,6 +985,11 @@ function style_convert($number,$type) {
 			$row_style = mysql_fetch_assoc($style);
 			$style_convert[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
 		}
+		break;
+		
+		case "5":
+		$n = ereg_replace('[^0-9]+', '', $number);
+		if ($n >= 24) $style_convert = TRUE;
 		break;
 	}
 	return $style_convert;

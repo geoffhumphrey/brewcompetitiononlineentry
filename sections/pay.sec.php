@@ -8,6 +8,8 @@
 
 
 $bid = $row_name['uid'];
+//echo $bid."<br>";
+
 if ($msg == "10") {
 	// If redirected from PayPal, update the brewer table to mark entries as paid
 	$a = explode('-', $view);
@@ -20,6 +22,9 @@ if ($msg == "10") {
 }
 
 include(DB.'entries.db.php');
+//echo $totalRows_entry_count."<br>";
+//echo $query_log."<br>";
+//echo $query_log_paid."<br>";
 if ($msg != "default") echo $msg_output; 
 
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
@@ -31,6 +36,9 @@ $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contes
 $total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 */
+
+//echo $total_entry_fees."<br>";
+//echo $total_paid_entry_fees."<br>";
 if ($total_entry_fees > 0) { 
 ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/pay_my_fees.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
@@ -59,8 +67,8 @@ if ($total_entry_fees > 0) {
   	</tr>
 </table>
 <p><input type="submit" class="button" value="Submit Code"></p>
+</form>
 <?php } ?>
-
 <?php if (($total_to_pay > 0) && ($view == "default")) { ?>
 	<?php if ($row_prefs['prefsCash'] == "Y") { ?>
 		<h2>Cash</h2>
@@ -101,25 +109,22 @@ if ($total_entry_fees > 0) {
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format(($total_to_pay * .029), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
 <p class="error"> To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_contest_info['contestHost']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-	<table class="dataTable">
-		<tr>
-    		<td>
-			<input align="left" type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" value="" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal"></p>
-			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
-			<input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$total_not_paid." Entries)"; ?>">
-			<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
-			<input type="hidden" name="cn" value="Message to the organizers:">
-			<input type="hidden" name="no_shipping" value="1">
-			<input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
-			<input type="hidden" name="rm" value="1">
-			<input type="hidden" name="return" value="<?php echo rtrim($return, "-"); ?>">
-			<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=11"; ?>">
-			<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_LG.gif:NonHosted">
-			</td>
-   		</tr>
-	</table>
+
+<form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
+<input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$total_not_paid." Entries)"; ?>">
+<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
+<input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
+<input type="hidden" name="button_subtype" value="services">
+<input type="hidden" name="no_note" value="0">
+<input type="hidden" name="cn" value="Add special instructions">
+<input type="hidden" name="no_shipping" value="1">
+<input type="hidden" name="rm" value="1">
+<input type="hidden" name="return" value="<?php echo rtrim($return, "-"); ?>">
+<input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=11"; ?>">
+<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal">
 </form>
 <?php } ?>
 <?php } ?>

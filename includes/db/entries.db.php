@@ -6,7 +6,7 @@ if ($section == "list") {
 	}
 		
 elseif ($section == "pay") { 
-	$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']); 
+	$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID = '%s' AND NOT brewPaid='Y' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $bid); 
 	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 	}
 	

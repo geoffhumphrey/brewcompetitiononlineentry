@@ -173,7 +173,7 @@ var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.brewName.value))
 	{ errormessage += "\nThe name of the brew"; }
-if(NoneWithContent(document.form1.brewStyle.value))
+if(WithoutSelectionValue(document.form1.brewStyle))
 	{ errormessage += "\nA style from the drop-down list."; }
 // Put field checks above this point.
 if(errormessage.length > 2) {

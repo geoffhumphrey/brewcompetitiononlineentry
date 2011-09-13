@@ -149,11 +149,11 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				null,
-				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			{ "asSorting": [  ] },
-    			<?php } ?>
-				{ "asSorting": [  ] }
+				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+    			, { "asSorting": [  ] }
+    			<?php } if ($dbTable == "default") { ?>
+				, { "asSorting": [  ] }
+				<?php } ?>
 			]
 		<?php } ?>
 		
