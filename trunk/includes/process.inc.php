@@ -3165,9 +3165,11 @@ if ($action == "check_discount") {
 	$row_contest_info = mysql_fetch_assoc($contest_info);
 					
 	if ($_POST['brewerDiscount'] == $row_contest_info['contestEntryFeePassword']) {
-		$updateSQL = sprintf("UPDATE brewer SET brewerDiscount=%s WHERE id=%s", 
+		$updateSQL = sprintf("UPDATE brewer SET brewerDiscount=%s WHERE uid=%s", 
 					   GetSQLValueString("Y", "text"),
-                       GetSQLValueString($id, "text"));			   
+                       GetSQLValueString($id, "text"));	
+		
+		//echo $updateSQL;
   		mysql_select_db($database, $brewing);
   		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
   		header(sprintf("Location: %s", "../index.php?section=pay&bid=".$id."&msg=12"));
