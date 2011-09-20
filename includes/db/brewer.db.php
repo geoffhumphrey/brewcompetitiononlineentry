@@ -6,7 +6,7 @@
 
 // Editing a single participant query
 if (($section == "brewer") && ($action == "edit")) $query_brewer = "SELECT * FROM brewer WHERE id = '$id'";
-elseif ($section == "pay") $query_brewer = sprintf("SELECT * FROM brewer WHERE id = '%s'", $row_name['uid']);
+elseif ($section == "pay") $query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_name['uid']);
 
 // Viweing all participants in current comp DB query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) {

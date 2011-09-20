@@ -40,6 +40,8 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 //echo $total_entry_fees."<br>";
 //echo $total_paid_entry_fees."<br>";
 if ($total_entry_fees > 0) { 
+//echo $query_brewer;
+//echo $query_name;
 ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/pay_my_fees.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
@@ -59,7 +61,7 @@ if ($total_entry_fees > 0) {
 <?php if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "")) { ?>
 <h2>Discounted Entry Fee</h2>
 <p>Enter the code supplied by the competition organizers for a discounted entry fee.</p>
-<form action="includes/process.inc.php?action=check_discount&amp;dbTable=brewer&amp;id=<?php echo $bid; ?>" method="POST" name="form1" id="form1">
+<form action="includes/process.inc.php?action=check_discount&amp;dbTable=brewer&amp;id=<?php echo $row_brewer['uid']; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Discount Code:</td>
