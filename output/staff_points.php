@@ -14,7 +14,6 @@ mysql_select_db($database, $brewing);
 
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
-
 function round_down_to_hundred($number) {
     if (strlen($number)<3) { $number = $number;	} 
 	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
@@ -72,7 +71,7 @@ function total_points($total_entries,$method) {
 // calculate a Judge's points
 function judge_points($bid,$bos) { 
 	session_start(); 
-require('../paths.php'); 
+	require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 1.0 points per competition	
@@ -89,7 +88,7 @@ require('../paths.php');
 	}
 	
 	$points = array_sum($b);
-	if (($bos == "Y") && ($bos_elegible == "Y")) $points = $points + 0.5; else $points = $points;
+	if ($bos == "Y") $points = $points + 0.5; else $points = $points;
 	return number_format($points,1);
 	
 }
@@ -97,7 +96,7 @@ require('../paths.php');
 // calculate a Steward's points
 function steward_points($bid) {
 	session_start(); 
-require('../paths.php'); 
+	require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 0.5 points per day	
@@ -120,7 +119,7 @@ require('../paths.php');
 
 // Get maximum point values based upon number of entries
 $organ_points = number_format(total_points($total_entries,"Organizer"), 1);
-$staff_points = total_points($total_entries,"Staff");
+$staff_points = number_format(total_points($total_entries,"Staff"), 1);
 $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
@@ -138,6 +137,11 @@ $totalRows_organizer = mysql_num_rows($organizer);
 
 // Judges
 $query_judges = "SELECT bid FROM judging_assignments WHERE assignment='J'";
+$judges = mysql_query($query_judges, $brewing) or die(mysql_error());
+$row_judges = mysql_fetch_assoc($judges);
+$totalRows_judges = mysql_num_rows($judges);
+
+$query_bos_judges = "SELECT id FROM brewer WHERE brewerJudgeBOS='Y'";
 $judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_judges = mysql_fetch_assoc($judges);
 $totalRows_judges = mysql_num_rows($judges);
