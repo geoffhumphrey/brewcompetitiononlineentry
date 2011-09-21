@@ -44,6 +44,9 @@ function brewer_assignment_checked($a,$b) {
 	elseif (($a == "staff") && ($b == "X")) $r = "CHECKED";
 	elseif (($a == "bos") && ($b == "Y")) $r = "CHECKED"; 
 	elseif (($a == "staff") && ($b == "O")) $r = "DISABLED";
+	elseif (($a == "stewards") && ($b == "O")) $r = "DISABLED";
+	elseif (($a == "judges") && ($b == "O")) $r = "DISABLED";
+	elseif (($a == "bos") && ($b == "O")) $r = "DISABLED";
 	else $r = "";
 	return $r;
 }
@@ -190,19 +193,6 @@ function brewer_assignment_checked($a,$b) {
 
 <?php if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) { ?>
 <?php if ($totalRows_brewer > 0) { ?>
-<script language="javascript" type="text/javascript">
-//Custom JavaScript Functions by Shawn Olson
-//Copyright 2006-2008
-//http://www.shawnolson.net
-function checkUncheckAll(theElement) {
-     var theForm = theElement.form, z = 0;
-	 for(z=0; z<theForm.length;z++){
-      if(theForm[z].type == 'checkbox' && theForm[z].name != 'checkall'){
-	  theForm[z].checked = theElement.checked;
-	  }
-     }
-    }
-</script>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -262,7 +252,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
-  <th class="dataHeading bdr1B"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></th>
+  <th class="dataHeading bdr1B">&nbsp;</th>
   <th class="dataHeading bdr1B">Name</th>
   <th class="dataHeading bdr1B">Assigned As</th>
   <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
