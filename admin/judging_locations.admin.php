@@ -309,7 +309,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
   </td>
   <?php } if (($filter == "judges") || ($filter == "bos")) { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
-  <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; ?></td>
+  <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; if ($row_brewer['brewerJudgeMead'] == "Y") echo "<div class='purple judge-alert' style='font-weight: normal; font-size: 1em;'>Certified Mead Judge</div>"; ?></td>
   <?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']) ?></td>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']) ?></td>

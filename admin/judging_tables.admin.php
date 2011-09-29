@@ -149,12 +149,15 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
 <?php } // end if ($action == "default")?>
 <?php if ($action != "print") { ?>
 <?php if ($totalRows_judging > 1) { ?>
-<p>Total Entries by Location:</p>
-	<ul style="margin-bottom: 2em;">
-       <?php do { ?>
-       <li><?php echo $row_judging['judgingLocName']." &ndash; "; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat'])." at ".$row_judging['judgingTime'].": ".get_table_info(1,"count_total","default","default",$row_judging['id']); ?></li>
-       <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
-    </ul>
+<table>
+	<td colspan="2" class="dataLabel">Total Entries by Location:</th>
+	<?php do { ?>
+	<tr>
+    	<td class="dataLeft" nowrap="nowrap" width="1%"><?php echo $row_judging['judgingLocName']." &ndash; "; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat'])." at ".$row_judging['judgingTime'].": "; ?></td>
+        <td class="data"><?php echo get_table_info(1,"count_total","default","default",$row_judging['id']); ?></td>
+     </tr>  
+	<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+</table>
 <?php } ?>
 <?php if (($action == "default") && ($filter == "default") && ($dbTable == "default")) { ?>
 <p>To ensure accuracy, verify that all paid and received entries have been marked as so via the <a href="index.php?section=admin&amp;go=entries">Manage Entries</a> screen.</p>
@@ -232,8 +235,8 @@ if ($totalRows_tables > 0) { ?>
     <?php do { ?>
     <tr>
     	<td <?php if ($action == "print") echo "class='bdr1B'"; ?>width="5%"><?php echo $row_tables['tableNumber']; ?></td>
-        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="20%"><?php echo $row_tables['tableName']; ?></td>
-        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="20%"><?php $a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); echo display_array_content($a,1); ?></td>
+        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="10%"><?php echo $row_tables['tableName']; ?></td>
+        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="15%"><?php $a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); echo display_array_content($a,1); ?></td>
         <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"); ?></td>
         <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo assigned_judges($row_tables['id']); ?></td>
         <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="8%"><?php echo assigned_stewards($row_tables['id']); ?></td>

@@ -172,8 +172,12 @@ if ($msg != "default") echo $msg_output;
     	<td class="dataLabel">BJCP Judge ID:</td>
     	<td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
 	</tr>
+    <tr>
+      <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
+      <td colspan="2" class="data"><?php echo $row_brewer['brewerJudgeMead']; ?></td>
+    </tr>
   	<tr>
-    	<td class="dataLabel">BJCP Rank:</td>
+    	<td class="dataLabel">BJCP Judge Rank:</td>
    	 <td class="data"><?php  if ($row_brewer['brewerJudgeRank'] != "") echo  $row_brewer['brewerJudgeRank']; else echo "N/A"; ?></td>
   	</tr>
   	<tr>

@@ -8,6 +8,20 @@ require('../paths.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 
+// Generate the Judging Number for the entry
+
+function generate_judging_num($style_cat_num) {
+	include(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM brewing WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $style_cat_num);
+	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
+	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
+	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
+	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $return = $style_cat_num."001";
+	else $return = $row_brewing_styles['brewJudgingNumber'] + 1;
+	return $return;
+}
+
 function capitalize($string) {
 	$lowercase = strtolower($string);
 	$capitalize = ucwords($lowercase);
@@ -575,8 +589,9 @@ brewAddition7Use,
 brewAddition8Use, 
 brewAddition9Use, 
 brewJudgingLocation, 
-brewCoBrewer) VALUES 
-(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+brewCoBrewer,
+brewJudgingNumber) VALUES 
+(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
                        GetSQLValueString($row_style_name['brewStyle'], "text"),
 					   GetSQLValueString($styleTrim, "text"),
@@ -763,7 +778,8 @@ brewCoBrewer) VALUES
 					   GetSQLValueString($_POST['brewAddition8Use'], "text"), 
 					   GetSQLValueString($_POST['brewAddition9Use'], "text"),
 					   GetSQLValueString($row_style_name['brewStyleJudgingLoc'], "int"),
-					   GetSQLValueString($_POST['brewCoBrewer'], "text")
+					   GetSQLValueString($_POST['brewCoBrewer'], "text"),
+					   GetSQLValueString(generate_judging_num($styleTrim), "text")
 					   );
 
   mysql_select_db($database, $brewing);
@@ -1363,11 +1379,12 @@ if ($go == "judge") {
   brewerSteward, 
   brewerJudge,
   brewerJudgeID,
+  brewerJudgeMead,
   brewerJudgeRank,
   brewerJudgeLocation,
   brewerStewardLocation,
   brewerAHA
-  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['uid'], "int"),
 					   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
                        GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -1383,6 +1400,7 @@ if ($go == "judge") {
 					   GetSQLValueString($_POST['brewerSteward'], "text"),
 					   GetSQLValueString($_POST['brewerJudge'], "text"),
 					   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+					   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
 					   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 					   GetSQLValueString($location_pref1, "text"),
 					   GetSQLValueString($location_pref2, "text"),
@@ -1437,13 +1455,13 @@ brewerEmail=%s,
 brewerSteward=%s, 
 brewerJudge=%s, 
 brewerJudgeID=%s, 
+brewerJudgeMead=%s, 
 brewerJudgeRank=%s, 
 brewerJudgeLikes=%s, 
-
 brewerJudgeDislikes=%s, 
 brewerJudgeLocation=%s, 
 brewerStewardLocation=%s,
-brewerAssignment=%s,
+
 brewerAHA=%s
 WHERE id=%s",
                        GetSQLValueString($_POST['uid'], "int"),
@@ -1461,12 +1479,14 @@ WHERE id=%s",
                        GetSQLValueString($_POST['brewerSteward'], "text"),
                        GetSQLValueString($_POST['brewerJudge'], "text"),
                        GetSQLValueString($_POST['brewerJudgeID'], "text"),
+					   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
                        GetSQLValueString($_POST['brewerJudgeRank'], "text"),
                        GetSQLValueString($likes, "text"),
                        GetSQLValueString($dislikes, "text"),
 					   GetSQLValueString($location_pref1, "text"),
 					   GetSQLValueString($location_pref2, "text"),
-					   GetSQLValueString($_POST['brewerAssignment'], "text"),
+					   //GetSQLValueString($_POST['brewerAssignment'], "text"),
+					   //GetSQLValueString($_POST['brewerAssignmentStaff'], "text"),
 					   GetSQLValueString($_POST['brewerAHA'], "text"),
                        GetSQLValueString($id, "int"));
   
@@ -1528,6 +1548,7 @@ contestLogo,
 contestBOSAward,
 contestEntryFeePassword,
 contestEntryFeePasswordNum,
+contestCircuit,
 id
 ) 
 VALUES 
@@ -1569,6 +1590,7 @@ VALUES
 					   GetSQLValueString($_POST['contestBOSAward'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
+					   GetSQLValueString($_POST['contestCircuit'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -1634,7 +1656,8 @@ contestEntryFeeDiscountNum=%s,
 contestLogo=%s,
 contestBOSAward=%s,
 contestEntryFeePassword=%s,
-contestEntryFeePasswordNum=%s
+contestEntryFeePasswordNum=%s,
+contestCircuit=%s
 WHERE id=%s",
                        GetSQLValueString(capitalize($_POST['contestName']), "text"),
 					   GetSQLValueString($_POST['contestID'], "text"),
@@ -1666,6 +1689,7 @@ WHERE id=%s",
 					   GetSQLValueString($_POST['contestBOSAward'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
 					   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
+					   GetSQLValueString($_POST['contestCircuit'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);
@@ -2944,127 +2968,7 @@ $updateSQL = sprintf("UPDATE style_types SET
 
 if (($action == "update") && ($dbTable == "judging_assignments")) {
 
-/*
-$table_id = $id;
-
-foreach ($_POST['bid'] as $bid) { 
-
-
-		for($i=1; $i<$limit+1; $i++) { // loop through the rounds
-		
-		if ($view == "N") $assign_data = $_POST[$i.'-assignFlight'.$bid];
-		if ($view == "Y") $assign_data = $_POST[$i.'-assignTable'.$bid];
-		$unassign = $_POST[$i.'-unassign'.$bid];
-		
-		echo "---------------<br>";
-		echo $bid."<br>";
-		echo $assign_data."<br>";
-		echo $unassign."<br>";
-	
-		
-			if (($unassign == "N") && (($assign_data != "D-".$i) && ($assign_data != ""))) {
-				$parts = explode("-",$assign_data);
-				echo "<p>";
-				echo $unassign." - ";
-				echo $parts[0]."<br>";
-				echo $parts[1]."<br>";
-				echo $parts[2]."<br>";
-				
-				
-				// Check to see if already assigned to this table, round, and flight
-				mysql_select_db($database, $brewing);
-				$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s'", $bid, $id, $parts[0], $parts[1]);
-				$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-				$row_assignments = mysql_fetch_assoc($assignments);	
-				$totalRows_assignments = mysql_num_rows($assignments);
-				
-				//echo $query_assignments."<br>";
-				//echo $totalRows_assignments."<br>";
-			
-				// If not, add a new record.
-				if ($totalRows_assignments == 0) {
-					$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) 
-					VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($bid, "text"),
-                       GetSQLValueString($assignment, "text"),
-                       GetSQLValueString($id, "text"),
-					   GetSQLValueString($parts[1], "text"),
-					   GetSQLValueString($parts[0], "text"),
-					   GetSQLValueString($_POST['assignLocation'.$bid], "text"));
-					//echo $bid."<br>";
-					//echo $assign_data."<br>";
-					//echo $insertSQL.";<br>";				   
-					
-					mysql_select_db($database, $brewing);
-  					$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-				}
-				
-				// If so, get id and update the record with the new information. 
-				if ($totalRows_assignments > 0) {
-						$updateSQL = sprintf("UPDATE judging_assignments SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s",
-                       	GetSQLValueString($bid, "text"),
-                      	GetSQLValueString($assignment, "text"),
-                       	GetSQLValueString($table_id, "text"),
-					   	GetSQLValueString($parts[1], "text"),
-					   	GetSQLValueString($parts[0], "text"),
-						GetSQLValueString($_POST['assignLocation'.$bid], "text"),
-					   	GetSQLValueString($row_assignments['id'], "text")
-					   );
-					//echo $updateSQL.";</br>";		
-					mysql_select_db($database, $brewing);
-  					$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
-				}
-			
-			}
-			// if assigned to another round and the "unassigned" checkbox is selected
-			
-			if ((($unassign != "N") && ($unassign != "")) && (($assign_data != "D-".$i) && ($assign_data != ""))) {
-				
-				$delete = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $unassign);
-				mysql_select_db($database, $brewing);
-  				$Result = mysql_query($delete , $brewing) or die(mysql_error());
-				//echo "First Delete: ".$delete."<br>";
-				$parts = explode("-",$assign_data);
-				//echo "<p>";
-				$insertSQL = sprintf("INSERT INTO judging_assignments (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) 
-					VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString($bid, "text"),
-                       GetSQLValueString($assignment, "text"),
-                       GetSQLValueString($id, "text"),
-					   GetSQLValueString($parts[1], "text"),
-					   GetSQLValueString($parts[0], "text"),
-					   GetSQLValueString($_POST['assignLocation'.$bid], "text"));
-				//echo $insertSQL.";<br>";
-				mysql_select_db($database, $brewing);
-  				$Result = mysql_query($insertSQL , $brewing) or die(mysql_error());
-			
-			
-			// if already assigned to table, round and flight, but are "unassigned"
-			if (($unassign == "N") && (($assign_data != "D-".$i) && ($assign_data != ""))) {
-				$parts = explode("-",$assign_data);
-				//echo $assign_data."<br>";
-					mysql_select_db($database, $brewing);
-					$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignFlight='%s'", $bid, $_POST['assignLocation'.$bid], $parts[1]);
-					$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-					$row_assignments = mysql_fetch_assoc($assignments);
-					$totalRows_assignments = mysql_num_rows($assignments);
-					
-					if ($totalRows_assignments > 0) {
-						$delete = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $row_assignments['id']);
-						//echo "Second Deltete: ".$delete."<br>";
-						//echo $parts[0]."<br>";
-						//echo $parts[1]."<br>";
-						//echo "</p>";
-					mysql_select_db($database, $brewing);
-  					$Result = mysql_query($delete , $brewing) or die(mysql_error());	
-					}
-				}
-			}
-		} // end for loop
-//header(sprintf("Location: %s", $updateGoTo));
-  }
-*/
-if ($row_judging_prefs['jPrefsQueued'] == "N") {
+	if ($row_judging_prefs['jPrefsQueued'] == "N") {
 	foreach ($_POST['random'] as $random) {
 		// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 		if (($_POST['unassign'.$random] == 0) && ($_POST['assignFlight'.$random] > 0)) {
@@ -3202,6 +3106,45 @@ if ($action == "check_discount") {
   		header(sprintf("Location: %s", "../index.php?section=pay&bid=".$id."&msg=12"));
 	}
 	else header(sprintf("Location: %s", "../index.php?section=pay&bid=".$id."&msg=13"));
+}
+
+
+if ($action == "generate_judging_numbers") {
+	
+	if ($filter == "default") {
+		$query_judging_numbers = "SELECT id FROM brewing ORDER BY id ASC";
+		$judging_numbers = mysql_query($query_judging_numbers, $brewing) or die(mysql_error());
+		$row_judging_numbers = mysql_fetch_assoc($judging_numbers);
+		
+		// Clear out all current judging numbers
+		do { 
+			$updateSQL = sprintf("UPDATE brewing SET brewJudgingNumber=%s WHERE id='%s'", "NULL", $row_judging_numbers['id']);
+			
+  			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			//echo $updateSQL."<br>";
+		
+		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
+		
+		$query_judging_numbers = "SELECT id,brewCategory FROM brewing ORDER BY id DESC";
+		$judging_numbers = mysql_query($query_judging_numbers, $brewing) or die(mysql_error());
+		$row_judging_numbers = mysql_fetch_assoc($judging_numbers);
+		
+		// Generate and insert new judging numbers
+		do { 	
+			$updateSQL = sprintf("UPDATE brewing SET brewJudgingNumber=%s WHERE id=%s", 
+					   GetSQLValueString(generate_judging_num($row_judging_numbers['brewCategory']), "text"),
+                       GetSQLValueString($row_judging_numbers['id'], "text"));	
+  			mysql_select_db($database, $brewing);
+  			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			//echo $updateSQL."<br>";
+		
+		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
+		
+	}
+	
+header(sprintf("Location: %s", "../index.php?section=admin&msg=2"));		
 }
 
 ?>

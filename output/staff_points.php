@@ -14,6 +14,7 @@ mysql_select_db($database, $brewing);
 
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
+//$total_entries = 88;
 function round_down_to_hundred($number) {
     if (strlen($number)<3) { $number = $number;	} 
 	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
@@ -38,11 +39,14 @@ function total_points($total_entries,$method) {
 		
 		case "Staff":
 			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 1;
-			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
-			elseif (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
-			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 4;
-			
-			else {
+			if (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
+			if (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
+			if (($total_entries >= 150) && ($total_entries <= 199)) $points = 4;
+			if (($total_entries >= 200) && ($total_entries <= 299)) $points = 5;
+			if (($total_entries >= 300) && ($total_entries <= 399)) $points = 6;
+			if (($total_entries >= 400) && ($total_entries <= 499)) $points = 7;
+			if (($total_entries >= 500) && ($total_entries <= 599)) $points = 8;
+			if ($total_entries > 599) {
 				$total = round_down_to_hundred($total_entries)/100;
 				//$points = $total;
 				if ($total >= 2) {
@@ -60,7 +64,7 @@ function total_points($total_entries,$method) {
 			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 3;
 			elseif (($total_entries >= 200) && ($total_entries <= 299)) $points = 3.5;
 			elseif (($total_entries >= 300) && ($total_entries <= 399)) $points = 4;
-			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 4.55;
+			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 4.5;
 			elseif ($total_entries >= 500) $points = 5.5;
 			else $points = 0;
 		break;
@@ -75,16 +79,15 @@ function judge_points($bid,$bos) {
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 1.0 points per competition	
-	// *maximum* of 1.5 points per day 
+	// *maximum* of 1.5 points per day  (includes BOS round, I'm assuming)
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
-		
-		if ($row_assignments['count'] >= 3) $b[] = 1.5;
-		else $b[] = 1.0;
+		if ($row_assignments['count'] > 1) $b[] = 1.0; 
+		else $b[] = $row_assignments['count'];
 	}
 	
 	$points = array_sum($b);
@@ -107,9 +110,8 @@ function steward_points($bid) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
-		
-		if ($row_assignments['count'] >= 2) $b[] = 1.0;
-		else $b[] = 0.5;
+		if ($row_assignments['count'] > 1) $b[] = 0.5; 
+		else $b[] = $row_assignments['count'] * 0.5;
 	}
 	
 	$points = array_sum($b);
@@ -126,7 +128,8 @@ $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 $query_assignments = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerAssignment='X'";
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
-if ($row_assignments['count'] > 0) $staff_points = number_format(floor(floor(($staff_points/$row_assignments['count'])) * 10 + 5) * .1, 1);
+if ($row_assignments['count'] >= 2) $staff_points = number_format(round(($staff_points/$row_assignments['count']) / 0.5) * 0.5, 1);
+elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_points,1);
 else $staff_points = 0;
 
 // Staff

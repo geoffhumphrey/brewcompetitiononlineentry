@@ -21,7 +21,7 @@ if ($msg == "10") {
 	}
 }
 
-include(DB.'entries.db.php');
+include (DB.'entries.db.php');
 //echo $totalRows_entry_count."<br>";
 //echo $query_log."<br>";
 //echo $query_log_paid."<br>";
@@ -100,10 +100,11 @@ if ($total_entry_fees > 0) {
 	<ul>
     <?php 
 	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
-	do { ?>
+	do { if ($row_log['brewPaid'] != "Y") { ?>
     	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
     <?php 
 	$return .= $row_log['id']."-";
+	  }
 	} while ($row_log = mysql_fetch_assoc($log)); 
 	?>
     </ul>

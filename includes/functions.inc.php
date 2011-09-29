@@ -11,7 +11,21 @@ if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
 }
 
-
+function display_array_content($arrayname,$method) {
+ 	$a = "";
+ 	while(list($key, $value) = each($arrayname)) {
+  		if (is_array($value)) {
+   		$a .= display_array_content($value,'');
+		
+   		}
+  	else $a .= "$value";
+	if ($method == "2") $a .= ", ";
+	if ($method == "1") $a .= "";
+	if ($method == "3") $a .= ",";
+  	}
+	$b = rtrim($a, ",&nbsp;");
+ 	return $b;
+}
 
 function check_setup() {
 	include(CONFIG.'config.php');	
@@ -991,6 +1005,19 @@ function style_convert($number,$type) {
 		$n = ereg_replace('[^0-9]+', '', $number);
 		if ($n >= 24) $style_convert = TRUE;
 		break;
+		
+		case "6":
+		$a = explode(",",$number);
+		include(CONFIG.'config.php');
+	    mysql_select_db($database, $brewing);
+		foreach ($a as $value) {
+			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
+			$style = mysql_query($query_style, $brewing) or die(mysql_error());
+			$row_style = mysql_fetch_assoc($style);
+			$style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+		}
+		$style_convert = rtrim(display_array_content($style_convert1,'3'),",");
+		break;
 	}
 	return $style_convert;
 }
@@ -1169,20 +1196,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
   	}
 }
 
-function display_array_content($arrayname,$method) {
- 	$a = "";
- 	while(list($key, $value) = each($arrayname)) {
-  		if (is_array($value)) {
-   		$a .= display_array_content($value,'');
-		
-   		}
-  	else $a .= "$value";
-	if ($method == "2") $a .= ", ";
-	if ($method == "1") $a .= "";
-  	}
-	$b = rtrim($a, ",&nbsp;");
- 	return $b;
-}
+
 
 function bos_place($eid) { 
 	include(CONFIG.'config.php');

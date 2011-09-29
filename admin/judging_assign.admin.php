@@ -342,7 +342,7 @@ if (in_array($table_location,$locations)) {
 	<tr> 
     	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; //echo " - ".$row_brewer['id']; ?></td>
         <?php if ($filter == "judges") { ?>
-        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); ?></td>
+        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<div class='purple judge-alert' style='font-weight: normal; font-size: 1em;'>Certified Mead Judge</div>"; ?></td>
         <td nowrap="nowrap"><?php if (($row_brewer['brewerJudgeID'] != "") && ($row_brewer['brewerJudgeID'] != "0")) echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
         <?php } ?>
 		<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  

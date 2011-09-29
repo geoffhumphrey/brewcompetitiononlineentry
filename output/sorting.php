@@ -38,7 +38,7 @@ body {
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID FROM brewing WHERE brewCategorySort='%s'", $style);
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM brewing WHERE brewCategorySort='%s'", $style);
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);
@@ -50,6 +50,7 @@ if ($totalRows_entries > 0) {
             <h3><?php echo $totalRows_entries." Entries"; ?></h2>
         </div>
 	</div>
+    <?php if ($go == "default") { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $style; ?>').dataTable( {
@@ -104,6 +105,54 @@ if ($totalRows_entries > 0) {
     </tbody>
     </table>
 <div style="page-break-after:always;"></div>
+	<?php } // end if ($go == "default") ?>
+    <?php if ($go == "cheat") { ?>
+    <h3>Entry Number / Judging Number Cheat Sheet</h3>
+     <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $style; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc'],[1,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				]
+			} );
+		} );
+	</script>
+    <table class="dataTable" id="sortable<?php echo $style; ?>">
+    <thead>
+    <tr>
+    	<th width="10%" class="dataHeading bdr1B">Entry #</th>
+        <th width="10%" class="dataHeading bdr1B">Judging #</th>
+        <th class="dataHeading bdr1B">Label Affixed?</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php do { 
+	$info = brewer_info($row_entries['brewBrewerID']);
+	$brewer_info = explode("^",$info);
+	?>
+    <tr>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
+    </tr>
+    <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
+    </tbody>
+    </table>
+	<div style="page-break-after:always;"></div>  
+    <?php } // end if ($go == "cheat") ?>
 <?php 
   } // end if ($totalRows_entries > 0)
 } // end foreach ?>

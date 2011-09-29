@@ -1,5 +1,4 @@
 <?php
-// script courtesy of http://www.wlscripting.com/tutorial/37 (modified to accomodate TAB delimited files)
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
@@ -82,36 +81,21 @@ FROM brewer
 ORDER BY brewerLastName ASC
 "; // Start our query of the database
 
-//echo $query_sql;
-
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
-$numberFields = mysql_num_fields($sql); // Find out how many fields we are fetching
+$row_sql = mysql_fetch_assoc($sql);
+$a[] = array('FirstName','LastName','Address','City','State','Zip','Country','Phone','Assignment','Email','JudgeID','JudgeRank','Clubs','Likes','Dislikes');
+do { 
+$a[] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerAddress'],$row_sql['brewerCity'],$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$row_sql['brewerNickname'],$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
+} while ($row_sql = mysql_fetch_assoc($sql));
 
-if($numberFields) { // Check if we need to output anything
-	for($i=0; $i<$numberFields; $i++) {
-		$head[] = mysql_field_name($sql, $i); // Create the headers for each column, this is the field name in the database
-	}
-	$headers = join($separator, $head)."\n"; // Make our first row in the CSV
-
-	while($info = mysql_fetch_object($sql)) {
-		foreach($head as $fieldName) { // Loop through the array of headers as we fetch the data
-			$row[] =  parseCSVComments($info->$fieldName);
-		} // End loop
-		if ($row[10] == "0") $row[10] = null;
-		$data .= join($separator, $row)."\n"; // Create a new row of data and append it to the last row
-		$row = ''; // Clear the contents of the $row variable to start a new row
-	}
-	
-	// Start our output
-	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment;  filename=".$contest."_participants_".$date.$loc.$extension);
-	header("Pragma: no-cache");
-	header("Expires: 0");
-	if ($go == "csv") echo $headers;
-	echo $data;
-} else {
-	// Nothing needed to be output. Put an error message here or something.
-	echo 'No data available for this file.';
+$filename = $contest."_participants_".$date.$loc.$extension;
+header('Content-type: application/x-msdownload');
+header('Content-Disposition: attachment;filename='.$filename);
+header('Pragma: no-cache');
+header('Expires: 0');
+$fp = fopen('php://output', 'w');
+foreach ($a as $fields) {
+    fputcsv($fp, $fields,$separator);
 }
-
+fclose($fp);
 ?>
