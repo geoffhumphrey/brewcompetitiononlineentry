@@ -161,6 +161,12 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			    <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
 			    <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
+            <p class="admin_default_header">Generate/Regenerate</p>
+			<ul class="admin_default">
+			    <li><a onclick="return confirm('Are you sure you want generate or regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers">Entry Judging Numbers</a></li>
+			    <!-- <li>Entry Judging Numbers for Category:</li>
+                <li><?php //echo style_choose($section,"entries","generate_judging_numbers",$filter,"includes/process.inc.php","none"); ?></li> -->
+			</ul>
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
@@ -168,11 +174,23 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"default",$action,$filter,"output/sorting.php","thickbox"); ?></li>
             </ul>
+            <ul class="admin_default">
+            	<li>Entry Number / Judging Number Cheat Sheets:</li>
+				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Sorting Sheets by Category">All Categories</a></li>
+                <li>For Category:</li>
+				<li><?php echo style_choose($section,"cheat",$action,$filter,"output/sorting.php","thickbox"); ?></li>
+            </ul>
 			<ul class="admin_default">
-				<li>Bottle Labels (Avery 5160) - Download PDF:</li>
-			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">All Categories</a></li>
+				<li>Bottle Labels (Using Entry Numbers - Avery 5160):</li>
+			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">All Categories</a></li>
 				<li>For Category:</li>
-				<li><?php echo style_choose($section,"entries","bottle",$filter,"output/labels.php","none"); ?></li>
+				<li><?php echo style_choose($section,"entries","bottle-entry",$filter,"output/labels.php","none"); ?></li>
+			</ul>
+            <ul class="admin_default">
+				<li>Bottle Labels (Using Judging Numbers - Avery 5160):</li>
+			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
+				<li>For Category:</li>
+				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,"output/labels.php","none"); ?></li>
 			</ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</h4>

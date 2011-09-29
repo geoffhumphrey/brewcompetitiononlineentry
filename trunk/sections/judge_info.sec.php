@@ -1,10 +1,21 @@
 
-<tr>
-      <td width="10%" class="dataLabel">BJCP ID:</td>
-      <td class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /><br />If you are not a BJCP recognized judge, please enter a zero (0).</td>
-</tr>
-<tr>
-      <td width="10%" class="dataLabel">Judge Rank:</td>
+	<tr>
+      <td width="10%" class="dataLabel">BJCP Judge ID:</td>
+      <td class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
+	</tr>
+	<tr>
+      <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
+      <td class="data">Have you taken and passed the BJCP Mead Exam?</td>
+      <td class="data">
+      <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; ?>/> No</td>
+    </tr>
+    <tr>
+      <td width="10%" class="dataLabel">BJCP Judge Rank:</td>
+      <td colspan="2" class="data">If you have taken the BJCP beer exam, the Mead Judge designation is an <em>endorsement</em> - indicate below your judge rank. If you have not taken the BJCP beer exam, choose BJCP - Mead Judge.
+      </td>
+    </tr>
+	<tr>
+      <td width="10%" class="dataLabel">&nbsp;</td>
       <td colspan="2" class="data"><select name="brewerJudgeRank">
         <option value=""></option>
         <option value="None" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "None")) echo "SELECTED"; ?>>None</option>
@@ -18,10 +29,11 @@
         <option value="Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Grand Master")) echo "SELECTED"; ?>>BJCP - Grand Master</option>
         <option value="Honorary Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Master")) echo "SELECTED"; ?>>BJCP - Honorary Master</option>
         <option value="Honorary Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Grand Master")) echo "SELECTED"; ?>>BJCP - Honorary Grand Master</option>
+        <option value="Mead Judge" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Mead Judge")) echo "SELECTED"; ?>>BJCP - Mead Judge (ONLY if no Beer Judge Rank)</option>
       </select>
       </td>
-</tr>
-<tr>
+	</tr>
+	<tr>
       <td width="10%" class="dataLabel">Preferred:</td>
       <td class="data" colspan="2">
       	<table class="dataTableCompact">
@@ -37,8 +49,8 @@
             <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
         </table>
       </td>
-</tr>
-<tr>
+	</tr>
+	<tr>
       <td width="10%" class="dataLabel">Not Preferred:</td> 
       <td class="data" colspan="2">
       	<table class="dataTableCompact">
@@ -54,4 +66,4 @@
             <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>
         </table>
       </td>
-</tr>
+	</tr>

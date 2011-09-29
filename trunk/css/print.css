@@ -765,3 +765,11 @@ border-left: 1px solid #cccccc;
 	vertical-align: text-top;
 	margin: 0;
 }
+
+.box_small {
+	border: 1px solid #000;
+	height: 20px;
+	width: 20px;
+	vertical-align: text-top;
+	margin: 0;
+}

@@ -1,9 +1,9 @@
 <?php
-// script courtesy of http://www.wlscripting.com/tutorial/37 (modified to accomodate TAB delimited files)
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'url_variables.inc.php'); 
 require(DB.'common.db.php');
+require(INCLUDES.'functions.inc.php');
 
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM judging_locations WHERE id='$bid'";
@@ -41,33 +41,26 @@ if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewer
 if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignment='S'";
 if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
-$numberFields = mysql_num_fields($sql); // Find out how many fields we are fetching
-//echo $query_sql;
+$row_sql = mysql_fetch_assoc($sql);
 
-if($numberFields) { // Check if we need to output anything
-	for($i=0; $i<$numberFields; $i++) {
-		$head[] = mysql_field_name($sql, $i); // Create the headers for each column, this is the field name in the database
-	}
-	$headers = join($separator, $head)."\n"; // Make our first row in the CSV
+if ($filter == "judges") $a [] = array('FirstName','LastName','Email','Likes','Dislikes');
+else $a [] = array('FirstName','LastName','Email');
 
-	while($info = mysql_fetch_object($sql)) {
-		foreach($head as $fieldName) { // Loop through the array of headers as we fetch the data
-			$row[] =  parseCSVComments($info->$fieldName);
-		} // End loop
-		$data .= join($separator, $row)."\n"; // Create a new row of data and append it to the last row
-		$row = ''; // Clear the contents of the $row variable to start a new row
-	}
-	// Start our output of the CSV
-	header("Content-type: application/x-msdownload");
-	header("Content-Disposition: attachment; filename=".$contest."_".$type."_emails_".$date.$loc.$extension);
-	header("Pragma: no-cache");
-	header("Expires: 0");
-	echo $headers;
-	echo $data;
-} else {
-	// Nothing needed to be output. Put an error message here or something.
-	echo 'No data available.';
+do {
+	if ($filter == "judges") $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLlikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
+	else $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail']);
+} while ($row_sql = mysql_fetch_assoc($sql)); 
+
+
+$filename = $contest."_email_addresses_".$filter."_".$date.$loc.$extension;
+header('Content-type: application/x-msdownload');
+header('Content-Disposition: attachment;filename='.$filename);
+header('Pragma: no-cache');
+header('Expires: 0');
+$fp = fopen('php://output', 'w');
+
+foreach ($a as $fields) {
+    fputcsv($fp,$fields,$separator);
 }
-
-
+fclose($fp);
 ?>

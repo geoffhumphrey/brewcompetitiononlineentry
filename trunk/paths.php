@@ -18,5 +18,4 @@ define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
 define('IMAGES',ROOT.'images'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');
-
 ?>

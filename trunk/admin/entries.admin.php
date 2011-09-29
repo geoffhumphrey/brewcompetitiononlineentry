@@ -111,9 +111,10 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php } ?>
-			"aaSorting": [[2,'asc']],
+			"aaSorting": [[3,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -146,11 +147,13 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			"bLengthChange" : false,
 			
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>
-			<?php if ($psort == "entry_name") { ?>"aaSorting": [[1,'asc']],<?php } ?>
-			<?php if ($psort == "category") { ?>"aaSorting": [[2,'asc']],<?php } ?>
-			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[3,'asc']],<?php } ?>
+			<?php if ($psort == "judging_number") { ?>"aaSorting": [[1,'asc']],<?php } ?>
+			<?php if ($psort == "entry_name") { ?>"aaSorting": [[2,'asc']],<?php } ?>
+			<?php if ($psort == "category") { ?>"aaSorting": [[3,'asc']],<?php } ?>
+			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[4,'asc']],<?php } ?>
 			
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -173,7 +176,8 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
-  <th width="3%" class="dataHeading bdr1B">Ent. #</th>
+  <th width="7%" class="dataHeading bdr1B">Entry #</th>
+  <th width="7%" class="dataHeading bdr1B">Judging #</th>
   <th width="15%" class="dataHeading bdr1B">Name</th>
   <th width="15%" class="dataHeading bdr1B">Category</th>
   <th width="15%" class="dataHeading bdr1B">Brewer</th>
@@ -218,6 +222,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['id']; ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewJudgingNumber']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_log['brewBrewerLastName'].", ".$row_log['brewBrewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
