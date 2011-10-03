@@ -7,7 +7,7 @@
  * 
  */
 
-if ($row_judging_prefs['jPrefsQueued'] == "N") $assign_to = "Flights"; $assign_to = "Tables";
+if ($row_judging_prefs['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 
 $header_output = "";
 $output = "";
