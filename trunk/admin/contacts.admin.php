@@ -26,7 +26,7 @@
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [

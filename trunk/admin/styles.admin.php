@@ -50,7 +50,7 @@ function checkUncheckAll(theElement) {
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo $limit; ?>,
 			"sDom": 'irtip',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"aaSorting": [[2,'asc']],
 			"aoColumns": [
 				{ "asSorting": [  ] },

@@ -39,7 +39,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -96,7 +96,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,

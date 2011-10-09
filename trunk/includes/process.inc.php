@@ -3127,7 +3127,7 @@ if ($action == "generate_judging_numbers") {
 		
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
-		$query_judging_numbers = "SELECT id,brewCategory FROM brewing ORDER BY id DESC";
+		$query_judging_numbers = "SELECT id,brewCategory,brewName FROM brewing ORDER BY $sort $dir";
 		$judging_numbers = mysql_query($query_judging_numbers, $brewing) or die(mysql_error());
 		$row_judging_numbers = mysql_fetch_assoc($judging_numbers);
 		

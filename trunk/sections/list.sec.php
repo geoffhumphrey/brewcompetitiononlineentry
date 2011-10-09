@@ -310,7 +310,7 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc']],
 			"aoColumns": [

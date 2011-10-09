@@ -42,7 +42,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc'],[1,'asc'],[2,'asc']],
 			"bProcessing" : false,
@@ -133,7 +133,7 @@ foreach ($a as $type) {
 		$('#sortable<?php echo $type; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,

@@ -104,11 +104,11 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'ifrtip',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			<?php } else { ?>
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			<?php } ?>
 			"aaSorting": [[3,'asc']],
@@ -143,7 +143,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>

@@ -3,7 +3,7 @@
 **                                                                  **
 ** Brew Competition Online Entry & Management                       **
 ** Developed by Geoff Humphrey - zkdigital.com                      **
-** Release 1.2.0.2 June 2011                                        **
+** Release 1.2.0.3 October 2011                                     **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** As such, you are permitted to download the full source code of   **
@@ -68,7 +68,7 @@ Please Note
 
 **********************************************************************
 
-You will need to perform the necessary database updates by importing the each of the necessary upgrade documents document via phpMyAdmin or shell access.
+Run the update script by browsing to [yoursite]/update.php.
 
 
 
@@ -78,16 +78,18 @@ Changes in This Version
 
 **********************************************************************
 
-This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between August 18, 2011 and September 13, 2011.
+This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between September 16, 2011 and September 28, 2011.
 
-- Fixed PayPal connection error (Issue 92 on Google Code)
-- Added a missing javascript file (Issue 94)
-- Fixed Archive data display bug (Issue 95)
-- Fixed bug preventing PayPal payments on installations that have discount codes (Issue 96)
-- Fixed minor bug that allowed entries to be added without a Entry Name (Issue 97)
-- Added reported strength, carbonation, and dryness levels for Cider and Mead styles to pullsheets
-- Added coding to convert entry name and brewer name entry text to show proper capitalization
-- Added Google Web Fonts API fonts to the css files of all themes
+- Fixed PayPal connection error (Issue 96)
+- Fixed pullsheet issue (Issue 98)
+- Fixed forgot password function error (Issue 99)
+- Fixed display of scores and places on participant list of entries (Issue 100)
+- Fixed calculations of BJCP judge, steward, organizer, and staff points (Issue 101)
+- Fixed bug in exporting of participant data, specifically judge likes and dislikes (Issue 102 and Issue 105)
+- Added the ability of particpants to enter a mead judge designation
+- Added a judging number to each entry that only administrators see
+- Added the ability of admins to regenerate judging numbers if the need arises
+- Added the ability for admins to designate any circuit that their competition qualifies for (MCAB, etc.)
 
 
 
@@ -111,7 +113,7 @@ Installation: Initial Setup
 
 - Using your ftp program, change the CHMOD (permissions) of the [root]/user_images folder to 755. This enables you to upload files to that directory using BCOE&M.
 
-- Once that is done, you can now set up your installation.
+- Once that is done, access your installation via your browser of choice to set up your site.
 
 
 

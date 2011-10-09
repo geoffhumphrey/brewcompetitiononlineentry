@@ -67,7 +67,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'ipfrtip',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			<?php if ($filter == "category") { ?>
 			"aaSorting": [[3,'asc'],[4,'desc'],[5,'asc']],
 			<?php } elseif ($dbTable != "default") { ?>
@@ -160,7 +160,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,
@@ -193,7 +193,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -216,7 +216,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php echo $row_entries['id']; ?></td>
+        <td><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>

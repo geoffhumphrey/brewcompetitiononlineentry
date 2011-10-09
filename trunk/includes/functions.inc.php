@@ -888,7 +888,6 @@ function total_paid_received($go,$id) {
 	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
-	mysql_free_result($result);
 	return $row['count'];
 }
 
