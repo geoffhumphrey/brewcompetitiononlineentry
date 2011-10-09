@@ -90,7 +90,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$('#sortable<?php echo $row_tables['id']."-".$i; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -109,7 +109,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -125,7 +125,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -135,7 +135,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -185,7 +185,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$('#sortable<?php echo $row_tables_edit['id']."-".$i; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -204,7 +204,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -220,7 +220,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -230,7 +230,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -281,7 +281,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -299,7 +299,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -313,7 +313,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -321,7 +321,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -362,7 +362,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 		$('#sortable<?php echo $row_tables_edit['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -380,7 +380,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -395,7 +395,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -403,7 +403,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -459,7 +459,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable<?php echo $type; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -478,7 +478,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B" width="10%">From Table #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -487,7 +487,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE id='%s'", $row_bos['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE id='%s'", $row_bos['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
@@ -555,7 +555,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,
@@ -574,7 +574,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry No.</th>
+        <th class="dataHeading bdr1B" width="10%">#</th>
         <th class="dataHeading bdr1B" width="10%">From Table #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -583,7 +583,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3 FROM brewing WHERE id='%s'", $row_bos['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE id='%s'", $row_bos['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];

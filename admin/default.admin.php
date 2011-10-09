@@ -161,22 +161,44 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			    <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
 			    <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
-            <p class="admin_default_header">Generate/Regenerate</p>
+            <p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
-			    <li><a onclick="return confirm('Are you sure you want generate or regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers">Entry Judging Numbers</a></li>
+            	<li>Entry Judging Numbers:</li>
+                <!--
+                <li>
+                <select name="generate_choice_1" id="generate_choice_1" onchange="jumpMenu('self',this,0)" >
+				<option>Choose Below:</option>
+                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Key Off Entry Number (Ascending)</option>
+                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Key Off Entry Number (Descending)</option>
+                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Key Off Entry Name (Ascending)</option>
+                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Key Off Entry Name (Descending)</option>
+                </select>
+                                -->
+                <li>
+                <div class="menuBar">
+                <a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'menu_generate');">Key Off Of... (Select One)</a>
+                <div id="menu_generate" class="menu" onmouseover="menuMouseover(event)">
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
+                </div>
+                </div>
+                </li>
+
 			    <!-- <li>Entry Judging Numbers for Category:</li>
                 <li><?php //echo style_choose($section,"entries","generate_judging_numbers",$filter,"includes/process.inc.php","none"); ?></li> -->
 			</ul>
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
-				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Sorting Sheets by Category">All Categories</a></li>
+				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All Categories</a></li>
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"default",$action,$filter,"output/sorting.php","thickbox"); ?></li>
             </ul>
             <ul class="admin_default">
             	<li>Entry Number / Judging Number Cheat Sheets:</li>
-				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Sorting Sheets by Category">All Categories</a></li>
+				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All Categories</a></li>
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"cheat",$action,$filter,"output/sorting.php","thickbox"); ?></li>
             </ul>

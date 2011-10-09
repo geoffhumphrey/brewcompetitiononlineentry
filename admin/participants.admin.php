@@ -131,11 +131,11 @@ if ($totalRows_participant_count > 0) {
 		"bLengthChange" : true,
 		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 		"sDom": 'ifrtip',
-		"bStateSave" : false,
+		"bStateSave" : true,
 		<?php } else { ?>
 		"bPaginate" : false,
 		"sDom": 'rt',
-		"bStateSave" : false,
+		"bStateSave" : true,
 		"bLengthChange" : false,
 		<?php } ?>
 		"aaSorting": [[0,'asc']],
@@ -209,7 +209,7 @@ if ($totalRows_participant_count > 0) {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[5,'asc']],<?php } ?>
 			<?php if ($psort == "judge_id") { ?>"aaSorting": [[4,'asc']],<?php } ?>

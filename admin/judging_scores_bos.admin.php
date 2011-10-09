@@ -108,7 +108,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irti',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"aaSorting": [[1,'asc'],[5,'asc'],[7,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
@@ -145,7 +145,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
@@ -200,7 +200,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,
@@ -225,7 +225,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <tbody>
 	<?php 
 	do {	
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo FROM brewing WHERE id='%s'", $row_enter_bos['eid']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE id='%s'", $row_enter_bos['eid']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];

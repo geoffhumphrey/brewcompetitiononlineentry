@@ -84,6 +84,7 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenuCat_Sorting" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Manage');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Add');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+    <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Regenerate');"><span class="menuItemText">Regenerate</span><span class="menuItemArrow">&#9654;</span></a>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Print');"><span class="menuItemText">Print</span><span class="menuItemArrow">&#9654;</span></a>
 </div>
 
@@ -180,13 +181,17 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
 </div>
+<div id="adminMenu_Sorting_Regenerate" class="menu" onmouseover="menuMouseover(event)">
+	<a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Judging Numbers</a>
+</div>
 <div id="adminMenu_Sorting_Add" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
 	<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Sorting Sheets - All Categories</a>
-    <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle&amp;filter=default">Bottle Labels - All Categories</a>
+    <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">Bottle Labels Using Entry Numbers - All Categories</a>
+    <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">Bottle Labels Using Judging Numbers - All Categories</a>
 </div>
 
 <div id="adminMenu_Organizing_Manage" class="menu" onmouseover="menuMouseover(event)">
@@ -255,27 +260,27 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenu_Exporting_Email" class="menu">
 	<a class="menuItem" href="output/email_export.php">All Participants</a>
-	<a class="menuItem" href="output/email_export.php?filter=judges">All Judges</a>
-	<a class="menuItem" href="output/email_export.php?filter=stewards">All Stewards</a>
+	<a class="menuItem" href="output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Judges</a>
+	<a class="menuItem" href="output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Stewards</a>
     <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a>
-	<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
-	<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
 </div>
 <div id="adminMenu_Exporting_Tab" class="menu">
-	<a class="menuItem" href="output/participants_export.php?go=tab">All Participants</a>
-	<a class="menuItem" href="output/entries_export.php?go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
-	<a class="menuItem" href="output/entries_export.php?go=tab">All Entries</a>
+	<a class="menuItem" href="output/participants_export.php?section=admin&amp;go=tab">All Participants</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=tab">All Entries</a>
 </div>
 <div id="adminMenu_Exporting_CSV" class="menu">
-	<a class="menuItem" href="output/entries_export.php?go=csv">All Entries</a>
-	<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
-	<a class="menuItem" href="output/entries_export.php?go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
-    <a class="menuItem" href="output/participants_export.php?go=csv">All Participants</a>
-	<a class="menuItem" href="output/participants_export.php?go=csv&amp;filter=winners">Winners</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
+    <a class="menuItem" href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a>
+	<a class="menuItem" href="output/participants_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>
 </div>
 <div id="adminMenu_Exporting_Promo" class="menu">
-	<a class="menuItem" href="output/promo_export.php?action=html">HTML</a>
-	<a class="menuItem" href="output/promo_export.php?action=word">Word</a>
+	<a class="menuItem" href="output/promo_export.php?section=admin&amp;action=html">HTML</a>
+	<a class="menuItem" href="output/promo_export.php?section=admin&amp;action=word">Word</a>
 </div>
 
 <div id="adminMenu_Archiving_Manage" class="menu">

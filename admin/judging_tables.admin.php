@@ -194,7 +194,7 @@ if ($totalRows_tables > 0) { ?>
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -261,7 +261,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : false,
+			"bStateSave" : true,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,
@@ -316,6 +316,12 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
   <tr>
     <td class="dataLabel">Style(s):</td>
     <td class="data">
+    <?php 
+    $query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_array($result);
+
+    if ($row['count'] > 0) { ?>
     	<table class="dataTable" id="sortable">
         	<thead>
             <tr>
@@ -340,6 +346,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
             <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
         	</tbody>
         </table>
+    <?php } else echo "There are no styles available with entries marked as both paid and received."; ?>
     </td>
   </tr>
   </tbody>

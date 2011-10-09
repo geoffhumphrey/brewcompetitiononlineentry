@@ -52,6 +52,13 @@ else include('reg_open.sec.php');
 // echo "Deadline: ".strtotime($row_contest_info['contestRegistrationDeadline'])."<br>";
 // end registration end check
 } 
+
+if ($row_contest_info['contestCircuit'] != "") { ?>
+<h2>Circuit Qualification</h2>
+<?php 
+echo $row_contest_info['contestCircuit'];
+} 
+
 if ($row_prefs['prefsSponsors'] == "Y") {
 	if ($totalRows_sponsors > 0) {
 ?>
