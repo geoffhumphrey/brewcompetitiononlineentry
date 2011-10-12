@@ -31,6 +31,8 @@ if (strstr($section,"step")) { ?>
 <?php } ?>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
+<!-- Admin Main Link -->
+	<a class="menuItem" href="index.php?section=admin">Admin Main Menu</a>
 
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
@@ -134,24 +136,24 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="index.php?section=admin&amp;go=sponsors">Sponsors</a>
 </div>
 <div id="adminMenu_Preparing_Add" class="menu">
-	<a class="menuItem" href="index.php?section=admin&amp;go=style_types&amp;action=add">Style Types</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">Accepted Style Types</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">Judging Locations</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=contacts&amp;action=add">Competition Contacts</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">Drop-Off Locations</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">Sponsors</a>
+	<a class="menuItem" href="index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Type</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
 </div>
 <div id="adminMenu_Preparing_Edit" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;go=contest_info">Competition Info</a>
 </div>
 <div id="adminMenu_Preparing_Upload" class="menu">
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image">Competition Logo</a>
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image">Sponsor Logos</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image">A Competition Logo</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image">A Sponsor Logo</a>
 </div>
 
 <div id="adminMenu_Entry_Manage" class="menu">
-	<a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
-	<a class="menuItem" href="index.php?section=admin&go=styles&filter=judging">Style Categories for Judging Locations</a>
+	<a class="menuItem" href="index.php?section=admin&amp;go=style_types">Style Types</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=entries">Entries</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations</a>		
@@ -198,8 +200,11 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="index.php?section=admin&go=entries">Entries</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=judging_tables">Tables</a>
+    <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
+    <?php } ?>
+    <a class="menuItem" href="index.php?section=admin&go=styles&filter=orphans">Styles Without a Valid Style Type</a>
 	<a class="menuItem" href="index.php?section=admin&go=judging_tables&filter=orphans">Styles Not Assigned to Tables</a>
-	<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights">Flights</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
 </div>
@@ -207,19 +212,24 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
 	<a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
 	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=add">A Table</a>
-	<a class="menuItem" href="index.php?section=admin&go=judging_flights">Flights to Tables</a>
-	<a class="menuItem" href="index.php?section=admin&go=judging_flights&action=rounds">Flights to Rounds</a>
-	<a class="menuItem" href="index.php?section=admin&go=judging_scores">Scores by Table</a>
+    <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+    <a class="menuItem" href="index.php?section=admin&go=judging_tables&action=add">Flights to Tables</a>
+    <?php } ?>
 </div>
 <div id="adminMenu_Organizing_Assign" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a>
 	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewardss">Participants as Stewards</a>
     <a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a>
-<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
+	<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
 	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
-<?php } ?>
-	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=assign">Judges or Stewards to a Table</a>
+	<?php } if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
+	<a class="menuItem" href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Tables to Rounds</a>
+	<?php } if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=rounds">Flights to Rounds</a>
+	<?php } ?>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judging_tables&amp;action=assign">Judges or Stewards to a Table</a>
+    <a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a>
 </div>
 
 <div id="adminMenu_Scoring_Manage" class="menu">
@@ -243,17 +253,18 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
 	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
 	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
+    <a class="menuItem" href="output/labels.php?section=admin&go=participants&action=judging_labels">Judge Scoresheet Labels (All)</a>
 </div>
 <div id="adminMenu_Printing_During" class="menu">
 	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All BOS Pullsheets</a>
 </div>
 <div id="adminMenu_Printing_After" class="menu">
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table With Scores (All)</a>
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table With Scores (Winners Only)</a>
-    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table Without Scores (All)</a>
-	<a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Results by Table Without Scores (Winners Only)</a>
-    <a class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">BOS Round(s) Results Report</a>
-	<a class="menuItem" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">BJCP Judge/Steward/Staff Points Report</a>
+	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table With Scores (All)">Results by Table With Scores (All)</a>
+	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table With Scores (Winners Only)">Results by Table With Scores (Winners Only)</a>
+    <a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table Without Scores (All)">Results by Table Without Scores (All)</a>
+	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table Without Scores (Winners Only)">Results by Table Without Scores (Winners Only)</a>
+    <a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print BOS Round(s) Results Report">BOS Round(s) Results Report</a>
+	<a class="menuItem thickbox" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print BJCP Judge/Steward/Staff Points Report">BJCP Judge/Steward/Staff Points Report</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Award Labels</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Participant Address Labels</a>
 </div>

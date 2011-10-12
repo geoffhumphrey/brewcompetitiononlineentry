@@ -5,10 +5,11 @@
  */
 
 // Editing a single participant query
-if (($section == "brewer") && ($action == "edit")) $query_brewer = "SELECT * FROM brewer WHERE id = '$id'";
-elseif ($section == "pay") $query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_name['uid']);
+if (($section == "brewer") && ($action == "edit") && ($id == "default")) $query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'",  $row_user['id']);
+elseif (($section == "brewer") && ($action == "edit") && ($id != "default")) $query_brewer = sprintf("SELECT * FROM brewer WHERE id = '%s'",  $id);
+elseif ($section == "pay") $query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'",  $row_user['id']);
 
-// Viweing all participants in current comp DB query
+// Viewing all participants in current comp DB query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) {
 	$query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
@@ -102,7 +103,7 @@ elseif (($section == "admin") && ($go == "make_admin")) {
 	}
 
 elseif (($section == "list") || ($section == "judge") || ($section == "steward")) {
-	$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerEmail='%s'", $_SESSION['loginUsername']);
+	$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_user['id']);
 	}
 
 else $query_brewer = "SELECT * FROM brewer";

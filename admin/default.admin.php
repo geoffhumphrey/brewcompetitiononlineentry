@@ -351,6 +351,10 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print a Judge Sign-in Sheet">Judges</a></li>   
 				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
 			</ul>
+            <ul class="admin_default">
+				<li>Judge Scoresheet Labels (Avery 5150):</li>
+            	<li><a href="output/labels.php?section=admin&go=participants&action=judging_labels">Download PDF</a> (All Assigned Judges, 30 Labels per Judge)</li>
+            </ul>
 <p class="admin_default_header">During Judging</p>
 			<ul class="admin_default">
 				<li>Print BOS Pullsheets:

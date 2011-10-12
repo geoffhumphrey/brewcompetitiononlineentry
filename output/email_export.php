@@ -47,7 +47,7 @@ if ($filter == "judges") $a [] = array('FirstName','LastName','Email','Likes','D
 else $a [] = array('FirstName','LastName','Email');
 
 do {
-	if ($filter == "judges") $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLlikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
+	if ($filter == "judges") $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
 	else $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail']);
 } while ($row_sql = mysql_fetch_assoc($sql)); 
 

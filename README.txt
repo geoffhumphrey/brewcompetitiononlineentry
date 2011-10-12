@@ -61,17 +61,6 @@ BCOE&M is free and open-source.
 Requires a web server with PHP 5 and MySQL 4+.
 
 
-
-**********************************************************************
-
-Please Note
-
-**********************************************************************
-
-Run the update script by browsing to [yoursite]/update.php.
-
-
-
 **********************************************************************
 
 Changes in This Version
@@ -90,6 +79,7 @@ This release address several small bugs and feature enhancements that were repor
 - Added a judging number to each entry that only administrators see
 - Added the ability of admins to regenerate judging numbers if the need arises
 - Added the ability for admins to designate any circuit that their competition qualifies for (MCAB, etc.)
+- Updated to the latest version of TinyMCE
 
 
 
