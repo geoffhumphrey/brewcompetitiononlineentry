@@ -84,7 +84,7 @@ if (($go == "entries") && ($action == "bottle-judging")) {
 	$pdf->Output($filename,D);
 }
 
-if (($go == "participants") && ($action == "judging_labels")) {
+if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
 	$pdf = new PDF_Label('5160'); 
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
@@ -94,7 +94,7 @@ if (($go == "participants") && ($action == "judging_labels")) {
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);
 	
-	$filename .= $row_brewer['brewerFirstName']."_".$row_brewer['brewerLastName']."_Judging_Labels.pdf";
+	$filename .= $row_brewer['brewerFirstName']."_".$row_brewer['brewerLastName']."_Judge_Scoresheet_Labels.pdf";
 	
 	$rank = bjcp_rank($row_brewer['brewerJudgeRank'],2);
 	$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
@@ -116,6 +116,40 @@ if (($go == "participants") && ($action == "judging_labels")) {
 	$pdf->Output($filename,D);
 }
 
+if (($go == "participants") && ($action == "judging_labels") && ($id == "default")) {
+	$pdf = new PDF_Label('5160'); 
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','',9);
+	
+	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName ASC";
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
+	
+	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_All_Judge_Scoresheet_Labels.pdf";
+	
+	do {
+		$rank = bjcp_rank($row_brewer['brewerJudgeRank'],2);
+		$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
+		//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
+		if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
+		else $judge_id = "";
+		for($i=0; $i<30; $i++) {
+			
+			$text = sprintf("\n%s\n%s %s\n%s",
+			$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
+			$rank,
+			$judge_id,
+			$row_brewer['brewerEmail']
+			);
+			
+			$pdf->Add_Label($text);
+		}
+	} while ($row_brewer = mysql_fetch_assoc($brewer));
+	
+	$pdf->Output($filename,D);
+}
+
 if (($go == "participants") && ($action == "address_labels")) {
 	$pdf = new PDF_Label('5160'); 
 	$pdf->AddPage();
@@ -125,16 +159,17 @@ if (($go == "participants") && ($action == "address_labels")) {
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	
-	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_Participant_Address_Labels.pdf";
+	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_All_Participant_Address_Labels.pdf";
 	
 	do {
 		if (total_paid_received("default",$row_brewer['id']) > 0) {
-			$text = sprintf("\n%s\n%s\n%s, %s %s",
+			$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
 			$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
 			$row_brewer['brewerAddress'],
 			$row_brewer['brewerCity'],
 			$row_brewer['brewerState'],
-			$row_brewer['brewerZip']
+			$row_brewer['brewerZip'],
+			$row_brewer['brewerCountry']
 			);
 		
 			$pdf->Add_Label($text);

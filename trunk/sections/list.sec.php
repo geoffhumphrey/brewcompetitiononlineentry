@@ -167,7 +167,7 @@ if ($msg != "default") echo $msg_output;
   	</tr>
   	<?php } ?>
   	<?php } ?>
-  	<?php if ((($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "") || ($row_brewer['brewerJudge'] == "Y") && ($row_brewer['brewerAssignment'] == "J"))) { ?>
+  	<?php if ($row_brewer['brewerJudge'] == "Y") { ?>
   	<tr>
     	<td class="dataLabel">BJCP Judge ID:</td>
     	<td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>

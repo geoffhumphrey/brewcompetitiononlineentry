@@ -176,7 +176,7 @@ function brewer_assignment_checked($a,$b) {
   </tr>
   <tr>
     <td class="dataLabel">Address:</td>
-    <td class="data"><textarea name="judgingLocation" cols="40" rows="7" class="mceNoEditor"><?php if ($action == "edit") echo $row_judging['judgingLocation']; ?></textarea></td>
+    <td class="data"><input name="judgingLocation" size="50" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>"></td>
     <td class="data"><span class="required">Required</span> <em>Provide the street address, city, and zip code.</em></td>
   </tr>
   <tr>

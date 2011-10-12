@@ -58,7 +58,7 @@ if ($total_entry_fees > 0) {
 <?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
 <?php if ($total_entry_fees == 0) echo "You have not logged any entries yet."; ?>
 
-<?php if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "")) { ?>
+<?php if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) { ?>
 <h2>Discounted Entry Fee</h2>
 <p>Enter the code supplied by the competition organizers for a discounted entry fee.</p>
 <form action="includes/process.inc.php?action=check_discount&amp;dbTable=brewer&amp;id=<?php echo $row_brewer['uid']; ?>" method="POST" name="form1" id="form1">
