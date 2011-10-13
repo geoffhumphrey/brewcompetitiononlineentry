@@ -8,7 +8,6 @@
 
 
 $bid = $row_name['uid'];
-//echo $bid."<br>";
 
 if ($msg == "10") {
 	// If redirected from PayPal, update the brewer table to mark entries as paid
@@ -22,26 +21,16 @@ if ($msg == "10") {
 }
 
 include (DB.'entries.db.php');
-//echo $totalRows_entry_count."<br>";
-//echo $query_log."<br>";
-//echo $query_log_paid."<br>";
+
 if ($msg != "default") echo $msg_output; 
 
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 $total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
 $total_not_paid = total_not_paid_brewer($row_user['id']);
-/*
-$total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
-$total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
-$total_to_pay = $total_entry_fees - $total_paid_entry_fees;
-*/
 
-//echo $total_entry_fees."<br>";
-//echo $total_paid_entry_fees."<br>";
 if ($total_entry_fees > 0) { 
-//echo $query_brewer;
-//echo $query_name;
+
 ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/pay_my_fees.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
@@ -116,7 +105,7 @@ if ($total_entry_fees > 0) {
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
-<input type="hidden" name="item_name" value="<?php echo $row_contest_info['contestName']; ?> Payment for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$total_not_paid." Entries)"; ?>">
+<input type="hidden" name="item_name" value="Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".substr($row_brewer['brewerFirstName'],0,1).". - ".$row_contest_info['contestName'];?>">
 <input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="button_subtype" value="services">

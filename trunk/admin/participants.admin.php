@@ -128,14 +128,14 @@ if ($totalRows_participant_count > 0) {
 		<?php if ($totalRows_participant_count <= $row_prefs['prefsRecordLimit']) { ?>
 		"bPaginate" : true,
 		"sPaginationType" : "full_numbers",
-		"bLengthChange" : true,
+		"bLengthChange" : false,
 		"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 		"sDom": 'ifrtip',
-		"bStateSave" : true,
+		"bStateSave" : false,
 		<?php } else { ?>
 		"bPaginate" : false,
 		"sDom": 'rt',
-		"bStateSave" : true,
+		"bStateSave" : false,
 		"bLengthChange" : false,
 		<?php } ?>
 		"aaSorting": [[0,'asc']],
@@ -149,10 +149,9 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			, { "asSorting": [  ] }
-    			<?php } if ($dbTable == "default") { ?>
-				, { "asSorting": [  ] }
+				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>, 
+				{ "asSorting": [  ] }<?php } if ($dbTable == "default") { ?>, 
+				{ "asSorting": [  ] }
 				<?php } ?>
 			]
 		<?php } ?>
@@ -209,7 +208,7 @@ if ($totalRows_participant_count > 0) {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[5,'asc']],<?php } ?>
 			<?php if ($psort == "judge_id") { ?>"aaSorting": [[4,'asc']],<?php } ?>

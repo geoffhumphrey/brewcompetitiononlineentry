@@ -5,8 +5,6 @@
  * 
  */
 
-
-
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
@@ -15,17 +13,21 @@ $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SE
 $images_dir = dirname( __FILE__ );
 
 // Check to see if initial setup has taken place 
-if (check_setup()) { header ("Location: setup.php?section=step1"); } 
+if (check_setup()) header ("Location: setup.php?section=step1"); 
+
 
 // If all setup has taken place, run normally
 else 
 {
+// check to see if all judging numbers have been generated. If not, generate
+if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

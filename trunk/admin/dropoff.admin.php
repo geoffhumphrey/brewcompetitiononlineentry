@@ -69,7 +69,7 @@ if ($totalRows_dropoff > 0) { ?>
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [

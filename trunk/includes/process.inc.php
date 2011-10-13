@@ -40,8 +40,9 @@ function relocate($referer,$page) {
 		$referer = preg_replace($pattern, "", $referer); 
 		$referer .= "&pg=".$page; 
 		}
-	if (strpos($referer,"?")===false) $referer = $referer."?";
 	}
+	$string = strpos($referer,"?");
+	if ($string === false) $referer = $referer."?";
 	return $referer;
 }
 
@@ -1390,7 +1391,7 @@ if ($go == "judge") {
                        GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
                        GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
                        GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-                       GetSQLValueString($_POST['brewerState'], "text"),
+                       GetSQLValueString(capitalize($_POST['brewerState']), "text"),
                        GetSQLValueString($_POST['brewerZip'], "text"),
                        GetSQLValueString($_POST['brewerCountry'], "text"),
 					   GetSQLValueString($_POST['brewerPhone1'], "text"),
@@ -1469,7 +1470,7 @@ WHERE id=%s",
                        GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
                        GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
                        GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-                       GetSQLValueString($_POST['brewerState'], "text"),
+                       GetSQLValueString(capitalize($_POST['brewerState']), "text"),
                        GetSQLValueString($_POST['brewerZip'], "text"),
                        GetSQLValueString($_POST['brewerCountry'], "text"),
 					   GetSQLValueString($_POST['brewerPhone1'], "text"),
@@ -3110,7 +3111,6 @@ if ($action == "check_discount") {
 
 
 if ($action == "generate_judging_numbers") {
-	
 	if ($filter == "default") {
 		$query_judging_numbers = "SELECT id FROM brewing ORDER BY id ASC";
 		$judging_numbers = mysql_query($query_judging_numbers, $brewing) or die(mysql_error());
@@ -3143,8 +3143,9 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-	
-header(sprintf("Location: %s", "../index.php?section=admin&msg=2"));		
+if ($go == "hidden") $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default"); else $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=14";
+//echo $updateGoTo;
+header(sprintf("Location: %s", $updateGoTo));		
 }
 
 ?>

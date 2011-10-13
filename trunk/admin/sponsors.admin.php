@@ -28,7 +28,7 @@
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo $limit; ?>,
 			"sDom": 'irtip',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"aaSorting": [[0,'asc']],
 			"aoColumns": [
 				null,

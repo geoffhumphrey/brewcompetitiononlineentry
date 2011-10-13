@@ -310,7 +310,7 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc']],
 			"aoColumns": [
@@ -318,24 +318,25 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
 				null,
 				null,
 				null<?php if ($action != "print") { ?>,
-				<?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>null,<?php } ?>
+				<?php if (judging_date_return() > 0)  { ?>null,<?php } ?>
 				{ "asSorting": [  ] }
   				<?php } ?>
 				]
 			} );
 		} );
 </script>
-<table class="dataTable" id="sortable" width="100%">
+<table class="dataTable" id="sortable">
 <thead>
  <tr>
-  <th class="dataHeading bdr1B" width="5%">Entry #</th>
-  <th class="dataHeading bdr1B" width="20%">Entry Name</th>
-  <th class="dataHeading bdr1B" width="20%">Style</th>
-  <th class="dataHeading bdr1B" width="5%">Paid?</th> 
+  	<th class="dataHeading bdr1B" width="5%">Entry #</th>
+  	<th class="dataHeading bdr1B" width="20%">Entry Name</th>
+  	<th class="dataHeading bdr1B" width="20%">Style</th>
+  	<th class="dataHeading bdr1B" width="5%">Paid?</th> 
   <?php if ($action != "print") { ?>
-  <?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<th class=\"dataHeading bdr1B\">Score</th><th class=\"dataHeading bdr1B\">Winner?</th>"; else { ?>
-  <th class="dataHeading bdr1B">Actions</th>
-  <?php } ?>
+  <?php if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<th class=\"dataHeading bdr1B\" width=\"8%\">Score</th><th class=\"dataHeading bdr1B\" width=\"8%\">Winner?</th>"; ?>
+  	<?php if (judging_date_return() > 0) { ?>
+  	<th <?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "colspan=\"3\""; ?> class="dataHeading bdr1B">Actions</th>
+  	<?php } ?>
   <?php } ?>
  </tr>
 </thead>
@@ -354,12 +355,16 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
   	<td class="dataList"><?php if ($row_style['brewStyleActive'] == "Y") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else echo "<span class='required'>Style entered NOT accepted - Please change</span>"; ?></td>
   	<td class="dataList"><?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?></td>
   <?php if ($action != "print") { ?>
-  		<?php if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsDisplayWinners'] == "Y")) echo score_check($row_log['id'],$scores_db_table).winner_check($row_log['id'],$scores_db_table,$tables_db_table); elseif ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsDisplayWinners'] == "N")) echo "<td>&nbsp;</td><td>&nbsp;"; else { ?>
+  
+  <?php if ((judging_date_return() > 0) && ($row_prefs['prefsDisplayWinners'] == "Y")) echo score_check($row_log['id'],$scores_db_table).winner_check($row_log['id'],$scores_db_table,$tables_db_table); elseif ((judging_date_return() > 0) && ($row_prefs['prefsDisplayWinners'] == "N")) echo "<td>&nbsp;</td><td>&nbsp;</td>"; else echo "<td>&nbsp;</td>"; ?>
   <td class="dataList">
+  <?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
   <span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>
   <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>
-  <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   <?php } ?>
+  	<?php if (judging_date_return() > 0) { ?>
+  	<span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
+    <?php } ?>
   </td>
   <?php  } ?>
  </tr>
