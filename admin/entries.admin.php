@@ -101,14 +101,14 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 			<?php if (($totalRows_entry_count <= $row_prefs['prefsRecordLimit']) || ((($section == "admin") && ($go == "entries") && ($filter == "default")  && ($dbTable != "default")))) { ?>
 			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
-			"bLengthChange" : true,
+			"bLengthChange" : false,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'ifrtip',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			<?php } else { ?>
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php } ?>
 			"aaSorting": [[3,'asc']],
@@ -143,7 +143,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>

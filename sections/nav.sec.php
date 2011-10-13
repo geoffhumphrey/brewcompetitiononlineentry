@@ -4,8 +4,6 @@
  * Description: This module houses the main navigation. 
  * 
  */
-
-
 include(DB.'sponsors.db.php');
 if (strstr($section,"step")) { ?>
 <div class="setupTitle">Set Up Your Brew Competition Online Entry and Management Site</div>
@@ -23,8 +21,9 @@ if (strstr($section,"step")) { ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_contest_info['contestEntryFee'] > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <?php } ?>
   <?php if (isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "list") { ?><a href="index.php?section=list">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li><?php } ?>
-  <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?><li><div class="menuBar"><a class="menuButton" href="index.php?section=admin" onclick="index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a>
-</div><?php } ?>
+  <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
+  <li><div class="menuBar"><a class="menuButton" href="index.php?section=admin" onclick="index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a></div></li>
+<?php } ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">Help</a></li>
   <li><?php sessionAuthenticateNav(); ?></li>
 </ul>

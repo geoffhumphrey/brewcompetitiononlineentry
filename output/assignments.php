@@ -38,7 +38,7 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($view == "name") { ?>
 			"aaSorting": [[0,'asc'],[3,'asc'],[5,'asc'],[6,'asc']],
@@ -126,7 +126,7 @@ if ($totalRows_brewer > 0) { ?>
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -192,7 +192,7 @@ if ($totalRows_brewer > 0) { ?>
 		$('#sortable2').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,

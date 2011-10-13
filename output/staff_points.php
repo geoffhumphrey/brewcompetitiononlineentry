@@ -371,7 +371,7 @@ if ($view == "default") { // printing from browser ?>
 		$('#sortable0').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -407,7 +407,7 @@ if ($view == "default") { // printing from browser ?>
 		$('#sortable1').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -449,7 +449,7 @@ if ($view == "default") { // printing from browser ?>
 		$('#sortable2').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
@@ -491,7 +491,7 @@ if ($view == "default") { // printing from browser ?>
 		$('#sortable99').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,

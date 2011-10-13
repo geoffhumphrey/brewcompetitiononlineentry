@@ -56,7 +56,7 @@ if ($totalRows_entries > 0) {
 		$('#sortable<?php echo $style; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[4,'asc'],[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -113,7 +113,7 @@ if ($totalRows_entries > 0) {
 		$('#sortable<?php echo $style; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,

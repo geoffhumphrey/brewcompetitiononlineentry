@@ -1,11 +1,11 @@
 
 	<tr>
       <td width="10%" class="dataLabel">BJCP Judge ID:</td>
-      <td class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
+      <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
 	</tr>
 	<tr>
       <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
-      <td class="data">Have you taken and passed the BJCP Mead Exam?</td>
+      <td width="15%" class="data">Have you taken and passed the BJCP Mead Exam?</td>
       <td class="data">
       <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; ?>/> No</td>
     </tr>

@@ -90,7 +90,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$('#sortable<?php echo $row_tables['id']."-".$i; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -185,7 +185,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$('#sortable<?php echo $row_tables_edit['id']."-".$i; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -281,7 +281,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -362,7 +362,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 		$('#sortable<?php echo $row_tables_edit['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -459,7 +459,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable<?php echo $type; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
@@ -555,7 +555,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,

@@ -292,7 +292,10 @@ switch($section) {
 	elseif ($msg == "13") $output = "The table that was just defined does not have any associated styles.";
 	else $output = "";
 	break;
+	
+	
 
 }
+if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
 ?>

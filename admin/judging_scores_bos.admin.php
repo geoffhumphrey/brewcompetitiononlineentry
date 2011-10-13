@@ -108,7 +108,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irti',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"aaSorting": [[1,'asc'],[5,'asc'],[7,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
@@ -200,7 +200,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,

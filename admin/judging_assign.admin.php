@@ -264,7 +264,7 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"aaSorting": [[1,'desc']],
 			"bProcessing" : false,
 			<?php if ($filter == "judges") { ?>

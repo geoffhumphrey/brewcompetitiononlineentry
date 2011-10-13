@@ -67,7 +67,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"bLengthChange" : true,
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'ipfrtip',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			<?php if ($filter == "category") { ?>
 			"aaSorting": [[3,'asc'],[4,'desc'],[5,'asc']],
 			<?php } elseif ($dbTable != "default") { ?>
@@ -160,7 +160,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave" : true,
+			"bStateSave" : false,
 			"bLengthChange" : false,
 			"aaSorting": [[1,'asc']],
 			"bProcessing" : false,

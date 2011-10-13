@@ -90,7 +90,14 @@ function relocate($referer,$page) {
 	return $referer;
 }
 
-
+function check_judging_numbers() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_check = "SELECT COUNT(*) as count FROM brewing WHERE brewJudgingNumber=''";
+	$check = mysql_query($query_check, $brewing) or die(mysql_error());
+	$row_check = mysql_fetch_assoc($check);
+	if ($row_check['count'] == 0) return true; else return false;
+}
 
 function judging_date_return() {
 	include(CONFIG.'config.php');
