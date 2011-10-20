@@ -370,7 +370,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 	} while ($row_styles = mysql_fetch_assoc($styles));
 	$b = array_sum($a);
 	if ($b == 0) echo "<p>All style categories with entries have been assigned to tables.</p>";
-	}  else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a></p>";
+	else { echo "<p>No tables have been defined."; if ($dbTable == "judging_tables") echo "<a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a></p>"; } }
 }// end if (($action == "default") && ($filter == "orphans"))
 ?>
 

@@ -105,7 +105,7 @@ if ($total_entry_fees > 0) {
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
-<input type="hidden" name="item_name" value="Entry Payment for <?php echo $row_brewer['brewerLastName'].", ".substr($row_brewer['brewerFirstName'],0,1).". - ".$row_contest_info['contestName'];?>">
+<input type="hidden" name="item_name" value="<?php echo $row_name['brewerLastName'].", ".(substr($row_name['brewerFirstName'],0,1))." - ".$row_contest_info['contestName']." Payment";?>">
 <input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="button_subtype" value="services">

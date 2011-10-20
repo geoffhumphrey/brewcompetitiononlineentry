@@ -61,13 +61,14 @@ if ($totalRows_bos > 0) {
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
-		$query_brewer = sprintf("SELECT id,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
+		$query_brewer = sprintf("SELECT id,brewerClubs,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
+		
 			$html .= '<tr>';
 			$html .= '<td width="50">'.display_place($row_bos['scorePlace'],1).'</td>';
-			$html .= '<td width="175">'.$row_entries['brewBrewerFirstName'].' '.$row_entries['brewBrewerLastName'];
+			$html .= '<td width="175">'.$row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName'];
 			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
 			$html .= '</td>';
 			$html .= '<td width="275">'.strtr($row_entries['brewName'],$html_remove).'</td>';
@@ -121,13 +122,13 @@ do {
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		
-		$query_brewer = sprintf("SELECT id,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
+		$query_brewer = sprintf("SELECT id,brewerClubs,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
 			$html .= '<tr>';
 			$html .= '<td width="50">'.display_place($row_scores['scorePlace'],1).'</td>';
-			$html .= '<td width="175">'.$row_entries['brewBrewerFirstName'].' '.$row_entries['brewBrewerLastName'];
+			$html .= '<td width="175">'.$row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName'];
 			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
 			$html .= '</td>';
 			$html .= '<td width="275">'.strtr($row_entries['brewName'],$html_remove).'</td>';

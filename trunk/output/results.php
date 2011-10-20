@@ -79,7 +79,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$row_scores = mysql_fetch_assoc($scores);
 		$totalRows_scores = mysql_num_rows($scores);
 		do { 
-			$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewCoBrewer FROM brewing WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerID,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewCoBrewer FROM brewing WHERE id='%s'", $row_scores['eid']);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_assoc($entries);
 			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
@@ -90,7 +90,13 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
         <td class="data bdr1B_gray"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer'];  ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM brewer WHERE id='%s'", $row_entries['brewBrewerID']);
+			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+			$row_brewer = mysql_fetch_assoc($brewer);
+		echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?>
+        </td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
         <?php if ($filter == "scores") { ?>
@@ -158,7 +164,7 @@ foreach ($a as $type) {
 <tbody>
 	<?php do {
 	
-	$query_entries = sprintf("SELECT brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM brewing WHERE id='%s'", $row_bos['eid']);
+	$query_entries = sprintf("SELECT brewBrewerID,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM brewing WHERE id='%s'", $row_bos['eid']);
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 	$row_entries = mysql_fetch_assoc($entries);
 	$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
@@ -166,7 +172,13 @@ foreach ($a as $type) {
 	?>
 	<tr>
         <td class="data bdr1B_gray"><?php echo display_place($row_bos['scorePlace'],1); ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM brewer WHERE id='%s'", $row_entries['brewBrewerID']);
+			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+			$row_brewer = mysql_fetch_assoc($brewer);
+		echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?>
+        </td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>   
     </tr>

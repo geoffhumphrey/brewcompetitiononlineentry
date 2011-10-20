@@ -11,7 +11,8 @@ $php_version = phpversion();
 $today = date('Y-m-d');
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 $images_dir = dirname( __FILE__ );
-
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', '1');
 // Check to see if initial setup has taken place 
 if (check_setup()) header ("Location: setup.php?section=step1"); 
 
@@ -131,6 +132,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
+	// if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
@@ -142,7 +144,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 	}
   } // End registration date check.
-  if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brewer") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
+  if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
   <?php if ($section == "admin") { ?>
   <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>

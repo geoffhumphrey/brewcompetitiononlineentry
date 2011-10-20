@@ -33,7 +33,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 <input name="brewerEmail" type="hidden" value="<?php echo $go; ?>" />
 <input name="uid" type="hidden" value="<?php echo $row_brewerID['id']; ?>" />
 <?php } else { ?>
-<form action="includes/process.inc.php?section=<?php if ($go == "entrant") echo "list"; elseif ($go == "judge") echo "judge"; else echo "admin&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=brewer&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=<?php if ($section == "brewer") echo "list"; else echo "admin"; echo "&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=brewer<?php if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php } 
 $query_countries = "SELECT * FROM countries ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
@@ -141,6 +141,11 @@ $row_countries = mysql_fetch_assoc($countries);
 </td>
 </tr>
 <?php } ?>
+<?php if ($go == "judge") { ?>
+<tr>
+	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
+</tr>
+<?php } ?>
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
@@ -167,8 +172,8 @@ $row_countries = mysql_fetch_assoc($countries);
 </td>
 </tr>
 <?php } else { ?>
-<input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+    <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+    <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
 <?php } } ?>
 <?php if ($action == "edit") include ('judge_info.sec.php'); ?>
 </table>

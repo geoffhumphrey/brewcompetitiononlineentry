@@ -58,10 +58,10 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[4,'asc'],[0,'asc'],[1,'asc']],
+			"aaSorting": [[4,'asc'],[3,'asc'],[0,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
+				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
@@ -92,7 +92,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php if ($row_entries['id'] < 100) echo "0"; echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>

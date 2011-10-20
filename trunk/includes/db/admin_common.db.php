@@ -11,6 +11,7 @@ $row_style_type = mysql_fetch_assoc($style_type);
 
 $query_tables = "SELECT * FROM $tables_db_table";
 if (($id == "default") || ($go == "judging_scores")) $query_tables .= " ORDER BY tableNumber ASC";
+//if ($id != "default") $query_tables .= " WHERE id='$id'";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables);
