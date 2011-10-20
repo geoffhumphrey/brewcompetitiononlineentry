@@ -5,6 +5,11 @@ if (isset($_GET['id'])) {
   $id = (get_magic_quotes_gpc()) ? $_GET['id'] : addslashes($_GET['id']);
 }
 
+$uid = "default";
+if (isset($_GET['uid'])) {
+  $uid = (get_magic_quotes_gpc()) ? $_GET['uid'] : addslashes($_GET['uid']);
+}
+
 $section = "default";
 if (isset($_GET['section'])) {
   $section = (get_magic_quotes_gpc()) ? $_GET['section'] : addslashes($_GET['section']);

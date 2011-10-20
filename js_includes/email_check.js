@@ -30,7 +30,7 @@ function stateck()
 {
 if(httpxml.readyState==4)
 {
-document.getElementById("msg").innerHTML=httpxml.responseText;
+document.getElementById("msg_email").innerHTML=httpxml.responseText;
 
 }
 }

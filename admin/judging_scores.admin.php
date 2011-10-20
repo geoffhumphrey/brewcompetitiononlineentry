@@ -96,7 +96,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <table class="dataTable" id="sortable">
 <thead>
 	<tr>
-    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Judging #</th>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Table #</th>
         <th class="dataList bdr1B" width="15%" nowrap="nowrap">Table Name</th>
         <th class="dataList bdr1B">Category</th>
@@ -113,7 +113,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
@@ -129,12 +129,16 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		//if ($row_tables_1['id'] != "") { // if table is erased.
 	?>
 	<tr>
-    	<td><?php echo $row_scores['eid']; ?></td>
+    	<td><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
-        <?php if ($dbTable != "default") { ?>
-        <td class="data"><?php echo $row_entries_1['brewBrewerLastName'].", ".$row_entries_1['brewBrewerFirstName']; ?></td>
+        <?php if ($dbTable != "default") { 
+			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE id='%s'", $row_entries_1['brewBrewerID']);
+			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+			$row_brewer = mysql_fetch_assoc($brewer);
+		?>
+        <td class="data"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
         <td class="data"><?php echo $row_entries_1['brewName'] ?></td>
         <?php } ?>
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
@@ -149,7 +153,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	} while ($row_scores = mysql_fetch_assoc($scores)); ?>
 </tbody>
 </table>
-<?php } else echo "<p>No scores have been entered yet.</p>"; ?>
+<?php } else echo "<p>No scores have been entered.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
 <?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { ?>

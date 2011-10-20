@@ -150,15 +150,15 @@ if(WithoutContent(document.form1.brewerFirstName.value))
 if(WithoutContent(document.form1.brewerLastName.value))
 	{ errormessage += "\nLast name"; }
 if(WithoutContent(document.form1.brewerAddress.value))
-	{ errormessage += "\nAddress"; }
+	{ errormessage += "\nStree address"; }
 if(WithoutContent(document.form1.brewerCity.value))
-	{ errormessage += "\nCityity"; }
+	{ errormessage += "\nCity"; }
 if(WithoutContent(document.form1.brewerState.value))
-	{ errormessage += "\nState or country"; }
+	{ errormessage += "\nState or province"; }
 if(WithoutContent(document.form1.brewerZip.value))
 	{ errormessage += "\nZip or postal code"; }
 if(WithoutContent(document.form1.brewerPhone1.value))
-	{ errormessage += "\nA phone number"; }
+	{ errormessage += "\nAt least one phone number"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To process, the following information is required:\n' + errormessage);
@@ -193,6 +193,22 @@ if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nA password"; }
 if(WithoutContent(document.form1.userQuestionAnswer.value))
 	{ errormessage += "\nAn answer to your security question"; }
+if(WithoutContent(document.form1.brewerFirstName.value))
+	{ errormessage += "\nFirst name"; }
+if(WithoutContent(document.form1.brewerLastName.value))
+	{ errormessage += "\nLast name"; }
+if(WithoutContent(document.form1.brewerAddress.value))
+	{ errormessage += "\nStreet address"; }
+if(WithoutContent(document.form1.brewerCity.value))
+	{ errormessage += "\nCity"; }
+if(WithoutContent(document.form1.brewerState.value))
+	{ errormessage += "\nState or province"; }
+if(WithoutContent(document.form1.brewerZip.value))
+	{ errormessage += "\nZip or postal code"; }
+if(WithoutContent(document.form1.brewerPhone1.value))
+	{ errormessage += "\nAt least one phone number"; }
+if(WithoutContent(document.form1.captcha_code.value))
+	{ errormessage += "\nThe CAPTCHA code"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To register, the following information is required:\n' + errormessage);

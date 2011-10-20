@@ -185,7 +185,7 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
   <tr>
     <td class="dataLabel">Shipping Address:</td>
-    <td class="data"><textarea name="contestShippingAddress" cols="40" rows="7" class="submit mceNoEditor"><?php echo $row_contest_info['contestShippingAddress']; ?></textarea></td>
+    <td class="data"><input name="contestShippingAddress" type="text" class="submit mceNoEditor" value="<?php echo $row_contest_info['contestShippingAddress']; ?>" size="50" /></td>
     <td class="data">&nbsp;</td>
   </tr>
 </table>
@@ -208,7 +208,7 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
   <tr>
     <td class="dataLabel">Awards Location Address:</td>
-    <td class="data"><textarea name="contestAwardsLocation" cols="40" rows="7" class="submit mceNoEditor"><?php echo $row_contest_info['contestAwardsLocation']; ?></textarea></td>
+    <td class="data"><input name="contestAwardsLocation" type="text" class="submit mceNoEditor" value="<?php echo $row_contest_info['contestAwardsLocation']; ?>" size="50" /></td>
     <td class="data"><em>Provide the address of the award location. The more complete (e.g., street address, city, state, zip) the better.</em></td>
   </tr> 
 </table>

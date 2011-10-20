@@ -224,7 +224,11 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
         	<span class="icon data"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
-<div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.</div>
+<div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
+<?php if ($totalRows_judging > 1) { ?>
+<br />
+If no judges are listed below, no judge indicated that they are available for this table's location. To make judges available, you will need to edit their preferences via the <a href="index.php?section=admin&amp;go=participants">participants list</a>.<?php } ?>
+</div>
 <h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table</h3>
 <table>
  <tr>

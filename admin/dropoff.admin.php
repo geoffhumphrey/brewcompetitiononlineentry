@@ -36,7 +36,7 @@
   </tr>
   <tr>
     <td class="dataLabel">Address:</td>
-    <td class="data"><textarea name="dropLocation" cols="40" rows="7" class="mceNoEditor"><?php if ($action == "edit") echo $row_dropoff['dropLocation']; ?></textarea></td>
+    <td class="data"><input name="dropLocation" type="text" class="mceNoEditor" value="<?php if ($action == "edit") echo $row_dropoff['dropLocation']; ?>" size="40" /></td>
     <td class="data"><span class="required">Required</span> <em>Provide the street address, city, and zip code</em></td>
   </tr>
   <tr>

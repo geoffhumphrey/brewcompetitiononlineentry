@@ -61,7 +61,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			$row_entries = mysql_fetch_assoc($entries);
 			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 			
-			$query_brewer = sprintf("SELECT id,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
+			$query_brewer = sprintf("SELECT id,brewerClubs,brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
 			
@@ -73,7 +73,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 	?>
     <tr>
         <td class="data"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
+        <td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
         <td class="data"><?php echo $row_brewer['brewerClubs']; ?></td>
