@@ -93,7 +93,7 @@ function relocate($referer,$page) {
 function check_judging_numbers() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_check = "SELECT COUNT(*) as count FROM brewing WHERE brewJudgingNumber=''";
+	$query_check = "SELECT COUNT(*) as count FROM brewing WHERE brewJudgingNumber IS NULL";
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
 	if ($row_check['count'] == 0) return true; else return false;
