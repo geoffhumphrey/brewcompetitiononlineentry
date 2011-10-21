@@ -17,34 +17,37 @@ if ($action == "add") {
 	contestHost, 
 	contestHostWebsite, 
 	contestHostLocation,
+	
 	contestRegistrationOpen,
 	contestRegistrationDeadline, 
 	contestEntryOpen,
 	contestEntryDeadline, 
-	contestRules, 
+	contestRules,
+	
 	contestAwardsLocation, 
 	contestContactName, 
 	contestContactEmail, 
-	
 	contestEntryFee, 
 	contestBottles, 
+	
 	contestShippingAddress, 
 	contestShippingName, 
 	contestAwards,
-	
 	contestWinnersComplete,
 	contestEntryCap,
+	
 	contestAwardsLocName,
 	contestAwardsLocDate,
 	contestAwardsLocTime,
-	
 	contestEntryFee2,
 	contestEntryFeeDiscount,
+	
 	contestEntryFeeDiscountNum,
 	contestLogo,
 	contestBOSAward,
 	contestEntryFeePassword,
 	contestEntryFeePasswordNum,
+	
 	contestCircuit,
 	id
 	) 
@@ -56,7 +59,7 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s)",
+	%s, %s)",
 						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),

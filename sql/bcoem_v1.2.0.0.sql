@@ -1,7 +1,7 @@
--- Brew Contest Online Signup
+-- Brew Competition Online Entry & Management
 -- http://www.brewcompetition.com
 -- Direct inquiries to prost@brewcompetition.com
--- Release 1.2.0 Jan 2011
+-- Release 1.2.0.0 August 2011
 -- This software is free, open source and is covered under the 
 -- General Public License (GPL) from the Open Source Initiative.
 -- As such, you are permitted to download the full source code of 

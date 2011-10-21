@@ -826,7 +826,7 @@ if ($action == "edit") {
 			if ($section == "admin") $updateGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
 			else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
 	  }
-	  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $updateGoTo = "../index.php?section=admin&go=entries&msg=2";
+	  elseif ($section == "admin") $updateGoTo = $updateGoTo;
 	  else  $updateGoTo = "../index.php?section=list";
 	 /*
 	 echo $special."<br>";

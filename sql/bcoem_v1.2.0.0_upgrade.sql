@@ -1,3 +1,15 @@
+-- Brew Competition Online Entry and Management
+-- http://www.brewcompetition.com
+-- Direct inquiries to prost@brewcompetition.com
+-- Release 1.2.0.0 August 2011
+-- This software is free, open source and is covered under the 
+-- General Public License (GPL) from the Open Source Initiative.
+-- As such, you are permitted to download the full source code of 
+-- the software for your own use. Feel free to customize it for 
+-- your own purposes.
+
+-- --------------------------------------------------------
+
 RENAME TABLE `judging` TO `judging_locations`;
 
 CREATE TABLE IF NOT EXISTS `judging_preferences` (
