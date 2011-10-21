@@ -8,7 +8,7 @@
 
 
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
-	if ($msg != "default") echo $msg_output;  
+	if (($action != "print") && ($msg != "default")) echo $msg_output;  
 	if (!isset($_SESSION['loginUsername'])) { 
 ?>
 <form action="includes/logincheck.inc.php" method="POST" name="form1" id="form1">
@@ -33,7 +33,7 @@ if (($action == "default") || ($action == "login") || ($action == "logout")) {
 if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are already logged in.</div>";
  } 
 if ($action == "forgot") { 
-	if ($msg != "default") echo $msg_output; 
+	if (($action != "print") && ($msg != "default")) echo $msg_output; 
 	if ($go == "default") {  ?>
 <p>To reset your password, enter your email address below.</p>
 <form action="index.php?section=login&amp;action=forgot&amp;go=verify" method="POST" name="form1" id="form1">
@@ -56,7 +56,7 @@ if ($go == "verify") {
 	$row_userCheck = mysql_fetch_assoc($userCheck);
 	$totalRows_userCheck = mysql_num_rows($userCheck);
 	
-	if ($msg != "default") echo $msg_output;
+	if (($action != "print") && ($msg != "default")) echo $msg_output;
 	
 	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
 		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";

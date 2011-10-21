@@ -68,7 +68,7 @@ else
 
 //-->
 </script>
-<?php if ($msg != "default") echo $msg_output; ?>
+<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
 		<li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>

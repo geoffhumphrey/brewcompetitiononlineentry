@@ -15,7 +15,7 @@ if (($section == "admin") && ($go == "default")) { ?>
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
 <?php 
-if ($msg != "default") echo $msg_output; 
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if ($row_user['userLevel'] == "1") {
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 

@@ -24,7 +24,7 @@ if ($section == "step2")  {
 	$row_brewerID = mysql_fetch_assoc($brewerID);
 	$totalRows_brewerID = mysql_num_rows($brewerID);
 }
-if ($msg != "default") echo $msg_output; 
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
 <?php if ($section == "step2") { ?>
 <form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=brewer" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">

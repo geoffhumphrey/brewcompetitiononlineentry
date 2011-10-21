@@ -73,7 +73,7 @@ else
 	$message = "Invalid file specified.";
 
 ?>
-<?php if ($msg != "default") echo $msg_output; ?>
+<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/beerxml_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">

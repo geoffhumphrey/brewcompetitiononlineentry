@@ -15,7 +15,7 @@ $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
 $row_brewers = mysql_fetch_assoc($brewers);
 $totalRows_brewers = mysql_num_rows($brewers);
 
-if ($msg != "default") echo $msg_output; 
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log['brewBrewerID']) || ($row_user['userLevel'] == 1)))) {
 	if ($filter == "default") { ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/add_edit_entries.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Add/Edit an Entry">Add/Edit an Entry Help</a></p>

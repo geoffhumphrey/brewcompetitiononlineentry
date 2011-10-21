@@ -269,7 +269,12 @@ If no judges are listed below, no judge indicated that they are available for th
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
 			"bStateSave" : false,
+			<?php if ($filter == "judges") { ?>
 			"aaSorting": [[1,'desc']],
+			<?php } ?>
+			<?php if ($filter == "stewards") { ?>
+			"aaSorting": [[0,'asc']],
+			<?php } ?>
 			"bProcessing" : false,
 			<?php if ($filter == "judges") { ?>
 			"aoColumns": [
@@ -353,8 +358,8 @@ if (in_array($table_location,$locations)) {
 			    if  (table_round($row_tables_edit['id'],$i)) {  
 		?>
         <td class="data">
-        <?php echo judge_alert($i,$row_brewer['id'],$row_tables_edit['id'],$location,$row_brewer['brewerJudgeLikes'],$row_brewer['brewerJudgeDislikes'],$row_tables_edit['tableStyles']); ?>
-        <?php echo assign_to_table($id,$row_brewer['id'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
+        <?php echo judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$row_brewer['brewerJudgeLikes'],$row_brewer['brewerJudgeDislikes'],$row_tables_edit['tableStyles']); ?>
+        <?php echo assign_to_table($id,$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
         </td>
 		<?php }
 		} // end for loop ?>

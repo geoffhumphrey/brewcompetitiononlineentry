@@ -10,7 +10,7 @@
 if ((($_SESSION["loginUsername"] == $row_user['user_name'])) || ($row_user['userLevel'] == "1"))
 {
 if ($action == "username") { ?><script type="text/javascript" src="js_includes/email_check.js"></script><?php } 
-if ($msg != "default") echo $msg_output; 
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if ($action == "username") { ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/change_email_address.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Change Email Address">Change Email Address Help</a></p>
 <?php } if ($action == "password") { ?>

@@ -1,5 +1,5 @@
 <script type="text/javascript" src="js_includes/email_check.js"></script>
-<?php if ($msg != "default") echo $msg_output; ?>
+<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p class="info">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions. The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</p>
 <form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=users" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="userLevel" type="hidden" value="1" />
