@@ -67,7 +67,7 @@ Changes in This Version
 
 **********************************************************************
 
-This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between September 16, 2011 and September 28, 2011.
+This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between September 16, 2011 and October 21, 2011.
 
 - Fixed PayPal connection error (Issue 96)
 - Fixed pullsheet issue (Issue 98)
@@ -75,12 +75,13 @@ This release address several small bugs and feature enhancements that were repor
 - Fixed display of scores and places on participant list of entries (Issue 100)
 - Fixed calculations of BJCP judge, steward, organizer, and staff points (Issue 101)
 - Fixed bug in exporting of participant data, specifically judge likes and dislikes (Issue 102 and Issue 105)
+- Fixed bug in judge/steward assignment (Issue 107)
+- Fixed bug in judge/steward assignment print outs (Issue 108)
 - Added the ability of particpants to enter a mead judge designation
 - Added a judging number to each entry that only administrators see
-- Added the ability of admins to regenerate judging numbers if the need arises
+- Added the ability for admins to regenerate judging numbers if the need arises
 - Added the ability for admins to designate any circuit that their competition qualifies for (MCAB, etc.)
 - Updated to the latest version of TinyMCE
-
 
 
 **********************************************************************
