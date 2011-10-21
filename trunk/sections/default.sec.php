@@ -17,7 +17,7 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print General Information">Print This Page</a></p>
 <?php } ?>
-<?php if ($msg != "default") echo $msg_output; ?>
+<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($section == "admin")) { 
 		if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 		if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";

@@ -315,7 +315,7 @@ if ($totalRows_participant_count > 0) {
   	<?php if ($filter == "default") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerSteward'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerSteward'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerJudge'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerJudge'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"<?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?>"></td>
+    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Set";?></td>
   	<?php } if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")){ ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">
 		<?php if ((($row_brewer['brewerAssignment'] == "J") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignment'] == "S") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>

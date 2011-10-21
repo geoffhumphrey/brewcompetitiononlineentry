@@ -30,8 +30,8 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 		$totalRows_assignments = mysql_num_rows($assignments);
 	?>
 <div class="table_card">
-    <h1>Table <?php echo $row_tables_edit['tableNumber']; ?></h1>
-    <h2><?php echo $row_tables_edit['tableName']; ?></h2>
+    <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
+    <h2><?php echo $row_tables['tableName']; ?></h2>
     <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">

@@ -25,7 +25,7 @@ if ($row_contest_info['contestEntryFeeDiscount'] == "Y") {
 	$discount = discount_display($total_not_paid,$row_contest_info['contestEntryFeeDiscountNum'],$row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryCap']);
 }
 */
-if ($msg != "default") echo $msg_output;
+if (($action != "print") && ($msg != "default")) echo $msg_output;
 ?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/my_info.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>

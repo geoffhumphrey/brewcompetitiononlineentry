@@ -7,7 +7,7 @@
  */
 include(DB.'contacts.db.php');
 if ($row_prefs['prefsContact'] == "Y") {
-if ($msg != "default") echo $msg_output; 
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 
 if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
