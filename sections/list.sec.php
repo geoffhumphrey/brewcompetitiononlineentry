@@ -134,7 +134,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
     	<td class="dataLabel">Assigned As:</td>
 		<td class="data"><?php if ($row_brewer['brewerAssignment'] == "J") echo "Judge"; elseif ($row_brewer['brewerAssignment'] == "S") echo "Steward"; else echo "Not Assigned"; ?></td>
   	</tr>
-    <?php if ($row_brewer['brewerAssignment'] == "J") { ?>
+    <?php if (($row_brewer['brewerAssignment'] == "J") && ($action != "print")) { ?>
     <tr>
     	<td class="dataLabel">&nbsp;</td>
 		<td class="data"><span class="icon"><img src="images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><a href="output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</td>

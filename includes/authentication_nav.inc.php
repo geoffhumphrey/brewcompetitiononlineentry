@@ -1,5 +1,6 @@
 <?php
 
+$username = strtolower($username);
 function authenticateUserNav($connection, $username, $password)
 {
   // Test the username and password parameters

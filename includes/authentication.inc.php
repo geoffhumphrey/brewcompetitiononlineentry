@@ -1,6 +1,6 @@
 <?php
 
-function authenticateUser($connection, $username, $password)
+function authenticateUser($connection, strtolower($username), $password)
 {
   // Test the username and password parameters
   if (!isset($username) || !isset($password))

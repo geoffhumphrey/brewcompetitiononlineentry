@@ -1,14 +1,15 @@
 <?php 
 include('../paths.php');
 require(CONFIG.'config.php');
+require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'functions.inc.php'); 
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
+session_start(); 
 
-
-$imageSrc = (IMAGES);
+$imageSrc = "../images/";
 
 $fileCornfirm = "default";
 if (isset($_GET['fileConfirm'])) {
@@ -167,6 +168,7 @@ background-color: #eeeeee;
 <div id="content">
 	<div id="content-inner">
 	<h2>Upload Images</h2>
+    <?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1")) { ?>
 	<?php if ($section == "default") { ?>
 	<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 	<table class="dataTable">
@@ -213,6 +215,7 @@ background-color: #eeeeee;
 	</td>
 	</table>
 	<?php } ?>
+    <?php } else echo "<div class='error'>Only Admin users can upload images.</div>"; ?>
 	</div>
 </div>
 </div>

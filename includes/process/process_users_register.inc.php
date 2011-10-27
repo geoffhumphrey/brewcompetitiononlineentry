@@ -33,7 +33,7 @@ if ($securimage->check($_POST['captcha_code']) == false) {
 else {
 
 // Check to see if email address is already in the system. If so, redirect.
-$username = $_POST['user_name'];
+$username = strtolower($_POST['user_name']);
 
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	

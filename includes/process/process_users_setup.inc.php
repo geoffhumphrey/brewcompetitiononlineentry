@@ -4,11 +4,11 @@
  * Description: This module does all the heavy lifting for adding an admin user to the DB (Setup ONLY)
  */
 
-$username = $_POST['user_name'];
+$username = strtolower($_POST['user_name']);
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	$password = md5($_POST['password']);
 	$insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer) VALUES (%s, %s, %s, %s, %s)", 
-					   GetSQLValueString($_POST['user_name'], "text"),
+					   GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
 					   GetSQLValueString($password, "text"), 
 					   GetSQLValueString($_POST['userQuestion'], "text"),

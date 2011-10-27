@@ -5,6 +5,7 @@
  */
 
 if ($action == "add") {
+	include(DB.'common.db.php');
 	mysql_select_db($database, $brewing);
 	$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
 	$user = mysql_query($query_user, $brewing) or die(mysql_error());
@@ -458,7 +459,7 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['brewMashStep5Time'], "text"),
 						   GetSQLValueString($_POST['brewFinings'], "scrubbed"),
 						   GetSQLValueString($_POST['brewWaterNotes'], "scrubbed"),
-						   GetSQLValueString($brewBrewerID, "text"),
+						   GetSQLValueString($brewBrewerID, "int"),
 						   GetSQLValueString($_POST['brewCarbonationMethod'], "text"),
 						   GetSQLValueString($_POST['brewCarbonationVol'], "text"),
 						   GetSQLValueString($_POST['brewCarbonationNotes'], "scrubbed"),

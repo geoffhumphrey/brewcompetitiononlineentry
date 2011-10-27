@@ -16,7 +16,7 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 
 if (($action == "add") && ($section == "admin")) {
 // Check to see if email address is already in the system. If so, redirect.
-$username = $_POST['user_name'];
+$username = strtolower($_POST['user_name']);
 
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 mysql_select_db($database, $brewing);
@@ -87,8 +87,8 @@ if ($totalRows_userCheck > 0) {
 if ($action == "edit") {
 
 // Check to see if email address is already in the system. If so, redirect.
-$username = $_POST['user_name'];
-$usernameOld = $_POST['user_name_old'];
+$username = strtolower($_POST['user_name']);
+$usernameOld = strtolower($_POST['user_name_old']);
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 
 mysql_select_db($database, $brewing);

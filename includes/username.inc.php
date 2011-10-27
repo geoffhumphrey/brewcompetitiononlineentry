@@ -1,6 +1,6 @@
 <?php
 if(isSet($_POST['user_name'])) {
-	$user_name = $_POST['user_name'];
+	$user_name = strtolower($_POST['user_name']);
 	include('../paths.php');
 	include(CONFIG.'config.php'); 
 	mysql_select_db($database, $brewing);
