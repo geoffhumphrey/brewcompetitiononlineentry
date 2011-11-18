@@ -7,9 +7,10 @@
  */
  
 include(DB.'judging_locations.db.php'); 
+include(DB.'entries.db.php');
 ?>
 <h2>Thanks and Good Luck To All Who Entered the <?php echo $row_contest_info['contestName']; ?>!</h2>
-<p>There are <strong><?php echo get_entry_count(); ?></strong> entries and <strong><?php echo get_participant_count(); ?></strong> registered participants, judges, and stewards.</p>
+<p>There are <strong><?php echo $totalRows_log; ?></strong> entries (<strong><?php echo get_entry_count(); ?></strong> paid and received) from <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
 <h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
 <?php 
 if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; 

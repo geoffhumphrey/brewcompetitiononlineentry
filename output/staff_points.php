@@ -200,6 +200,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
     $html .= '<td width="150" align="center"  bgcolor="#cccccc">Points</td>';
 	$html .= '</tr>';
 	do { $j[] = $row_judges['bid']; } while ($row_judges = mysql_fetch_assoc($judges));
+	sort($j);
 	foreach (array_unique($j) as $bid) { 
 		$judge_info = explode("^",brewer_info($bid));
 

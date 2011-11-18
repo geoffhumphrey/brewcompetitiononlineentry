@@ -14,7 +14,7 @@ include(DB.'judging_locations.db.php'); ?>
     <p>If you have already registered, please <a href="index.php?section=login">log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or  steward.</p>
     <?php } ?>
 <?php } else { ?>
-	<p>Registration for the <?php echo $row_contest_info['contestName']; ?> will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?> and will close on <?php echo date_convert($row_contest_info['contestEntryDeadline'], 2, $row_prefs['prefsDateFormat']); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after the registration close date.</p>
+	<p>Registration for the <?php echo $row_contest_info['contestName']; ?> will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?> and will close on <?php echo date_convert($row_contest_info['contestRegistrationDeadline'], 2, $row_prefs['prefsDateFormat']); ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after the registration close date.</p>
 <?php } ?>
 <h2>Judging and Stewarding</h2>
 <?php if ((greaterDate($today,$row_contest_info['contestRegistrationOpen'])) && (!isset($_SESSION['loginUsername']))) { ?>

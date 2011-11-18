@@ -8,15 +8,38 @@ include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
+include(DB.'entries.db.php'); 
+include(DB.'brewer.db.php'); 
 if (($section == "admin") && ($go == "default")) { ?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
-<?php 
-if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if ($row_user['userLevel'] == "1") {
+<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+<?php if (($section == "admin") && ($go == "default")) { ?>
+<div class="at-a-glance">
+<h3>Numbers at a Glance</h3>
+<table>
+	<tr>
+		<td class="dataLabel">Entries:</td>
+        <td class="data"><?php echo $totalRows_entry_count; ?></td>
+		<td class="dataLabel">Total Fees:</td>
+        <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
+        <td class="dataLabel">Participants:</td>
+        <td class="data"><?php echo get_participant_count('default'); ?></td>
+	</tr>
+    <tr>
+    	<td class="dataLabel">Paid/Rec'd Entries:</td>
+        <td class="data"><?php echo get_entry_count(); ?></td>
+		<td class="dataLabel">Paid Fees:</td>
+        <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees_paid; ?></td>
+        <td class="dataLabel">Avail. Judges:</td>
+        <td class="data"><?php echo get_participant_count('judge'); ?></td>
+	</tr>
+</table>
+</div>
+<?php } if ($row_user['userLevel'] == "1") {
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
 if ($go == "default") { 

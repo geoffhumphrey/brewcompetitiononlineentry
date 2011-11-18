@@ -13,7 +13,7 @@ if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
-<form name="form1" method="post" action="includes/process.inc.php?section=contact&action=email" onSubmit="return CheckRequiredFields()">
+<form name="form1" method="post" action="includes/process.inc.php?dbTable=contacts&action=email" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <tr style="background-color: <?php echo $color2; ?>">
 	<td class="dataLabel bdr1T" width="5%">Contact:</td>

@@ -109,9 +109,10 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irti',
 			"bStateSave" : false,
-			"aaSorting": [[1,'asc'],[5,'asc'],[7,'asc']],
+			"aaSorting": [[2,'asc'],[6,'asc'],[7,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -128,6 +129,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
+        <th class="dataList bdr1B" width="1%" nowrap="nowrap">Judging #</th>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Table #</th>
         <th class="dataList bdr1B" width="15%" nowrap="nowrap">Table Name</th>
         <th class="dataList bdr1B">Category</th>
@@ -162,6 +164,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	?>
 	<tr>
     	<td><?php echo $row_bos['eid']; ?></td>
+        <td class="data"><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_entries_1['brewStyle']; ?></td>
@@ -202,9 +205,10 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
+			"aaSorting": [[2,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
+				null,
 				null,
 				null,
 				{ "asSorting": [  ] },
@@ -217,6 +221,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
+        <th class="dataList bdr1B" width="1%" nowrap="nowrap">Judging #</th>
         <th class="dataList bdr1B" width="35%">Category</th>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Score</th>
         <th class="dataList bdr1B">Place</th>
@@ -245,6 +250,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $row_scores['id']; ?>" />
         <?php } ?>
         <td><?php echo $row_enter_bos['eid'];  ?></td>
+        <td class="data"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $row_scores['scoreEntry']; ?>" /></td>
         <td>

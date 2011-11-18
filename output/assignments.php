@@ -41,19 +41,18 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($view == "name") { ?>
-			"aaSorting": [[0,'asc'],[3,'asc'],[5,'asc'],[6,'asc']],
+			"aaSorting": [[0,'asc'],[2,'asc'],[4,'asc'],[5,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "table") { ?>
-			"aaSorting": [[4,'asc'],[5,'asc'],[3,'asc'],[0,'asc']],
+			"aaSorting": [[3,'asc'],[4,'asc'],[2,'asc'],[0,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "location") { ?>
-			"aaSorting": [[3,'asc'],[5,'asc'],[6,'asc'],[0,'asc']],
+			"aaSorting": [[2,'asc'],[4,'asc'],[5,'asc'],[0,'asc']],
 			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
@@ -77,7 +76,6 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="15%">Name</th>
-        <th class="dataHeading bdr1B" width="10%">Phone</th>
         <th class="dataHeading bdr1B" width="10%">Rank</th>
         <th class="dataHeading bdr1B">Location</th>
         <th class="dataHeading bdr1B" width="5%">Table #</th>
@@ -96,7 +94,6 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
-    	<td class="data bdr1B_gray"><?php echo $judge_info['2']; ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
         <td class="data bdr1B_gray"><?php echo $location_info['2']."<br>".date_convert($location_info['0'], 3, $row_prefs['prefsDateFormat'])."<br>".$location_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
@@ -130,14 +127,6 @@ if ($totalRows_brewer > 0) { ?>
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
-			"aoColumns": [
-				{ "asSorting": [  ] },
-				<?php if ($filter == "J") { ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				<?php } ?>
-				{ "asSorting": [  ] }
-				]
 			} );
 		} );
 	</script>

@@ -273,40 +273,7 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 <?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
 <?php } // end if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) ?>
 <?php } // end if ($action != "print")
-if ($totalRows_log > 0) { 
-
-function score_check($id,$scores_db_table) {
-	include(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$scores_db_table,$id);
-	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-	$row_scores = mysql_fetch_assoc($scores);
-	
-	$r = "<td class=\"dataList\">".$row_scores['scoreEntry']."</td>"; 
-	return $r;
-}
-
-
-function winner_check($id,$scores_db_table,$tables_db_table) {
-	include(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$scores_db_table,$id);
-	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-	$row_scores = mysql_fetch_assoc($scores);
-	
-	if ($row_scores['scorePlace'] >= "1") {
-		$query_table = sprintf("SELECT tableName FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
-		$table = mysql_query($query_table, $brewing) or die(mysql_error());
-		$row_table = mysql_fetch_assoc($table);
-		$r = "<td class=\"dataList\">".display_place($row_scores['scorePlace'],2).": ".$row_table['tableName']."</td>";
-	} 
-	else $r = "<td class=\"dataList\">&nbsp;</td>";
-	
-	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
-	return $r;
-}
-?>
+if ($totalRows_log > 0) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -339,15 +306,15 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
   	<th class="dataHeading bdr1B" width="20%">Entry Name</th>
   	<th class="dataHeading bdr1B" width="20%">Style</th>
   	<th class="dataHeading bdr1B" width="5%">Paid?</th> 
-  <?php if ($action != "print") { ?>
   	<?php if (judging_date_return() == 0) { ?>
   	<th class="dataHeading bdr1B" width="8%">Score</th>
   	<th class="dataHeading bdr1B" width="8%">Winner?</th>
   	<?php } ?>
+    <?php if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
   	<th class="dataHeading bdr1B">Actions</th>
     <?php } ?>
-  <?php } ?>
+  	<?php } ?>
  </tr>
 </thead>
 <tbody>
@@ -372,10 +339,15 @@ function winner_check($id,$scores_db_table,$tables_db_table) {
   	<td class="dataList">
 		<?php if ($row_log['brewPaid'] == "Y")  { if ($action != "print") echo "<img src='images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='images/cross.png'>"; else echo "N"; } ?>
     </td>
-  <?php if ($action != "print") { ?>
-  <?php 
-	if ((judging_date_return() == 0) && ($row_prefs['prefsDisplayWinners'] == "Y")) echo score_check($row_log['id'],$scores_db_table).winner_check($row_log['id'],$scores_db_table,$tables_db_table);
-	if ((judging_date_return() == 0) && ($row_prefs['prefsDisplayWinners'] == "N")) echo "<td>&nbsp;</td><td>&nbsp;</td>"; ?>
+    
+  <?php if (judging_date_return() == 0) { ?>
+  <td class="dataList">
+  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo score_check($row_log['id'],$scores_db_table);
+	else echo "&nbsp;"; ?>
+    </td>
+    <td class="dataList"><?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo winner_check($row_log['id'],$scores_db_table,$tables_db_table,1); else echo "&nbsp;"; ?>
+    </td>
+    <?php } if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
   <td class="dataList">
   	<span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>

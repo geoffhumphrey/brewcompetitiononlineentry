@@ -1589,10 +1589,12 @@ function get_entry_count() {
 	mysql_free_result($row_paid);
 }
 
-function get_participant_count() {
+function get_participant_count($type) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+	if ($type == 'default') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
+	if ($type == 'judge') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerJudge='Y'";
+	if ($type == 'steward') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerSteward='Y'";
 	$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 	$row_participant_count = mysql_fetch_assoc($participant_count);
 	
@@ -1615,7 +1617,7 @@ function display_place($place,$method) {
 			break;
 			case "5": $place = "HM";
 			break;
-		default: $place = "N/A";
+		default: $place = "None";
 		}
 	}
 	if ($method == "2") { 
@@ -1633,6 +1635,7 @@ function display_place($place,$method) {
 			default: $place = "N/A";
 			}
 	}
+	
 	return $place;
 }
 
@@ -1670,4 +1673,34 @@ function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 	 return $r;
 }
 
+function score_check($id,$scores_db_table) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	$r = $row_scores['scoreEntry']; 
+	return $r;
+}
+
+function winner_check($id,$scores_db_table,$tables_db_table,$method) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	if ($row_scores['scorePlace'] >= "1") {
+		$query_table = sprintf("SELECT tableName FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+		$table = mysql_query($query_table, $brewing) or die(mysql_error());
+		$row_table = mysql_fetch_assoc($table);
+		$r = display_place($row_scores['scorePlace'],$method).": ".$row_table['tableName'];
+	} 
+	else $r = "-";
+	
+	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
+	return $r;
+}
 ?>

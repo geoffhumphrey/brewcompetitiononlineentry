@@ -50,6 +50,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
@@ -61,9 +62,10 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <thead>
     <tr>
     	<th width="1%" class="dataHeading bdr1B">Place</th>
-        <th width="25%" class="dataHeading bdr1B">Brewer(s)</th>
+        <th width="20%" class="dataHeading bdr1B">Brewer(s)</th>
         <th class="dataHeading bdr1B">Entry Name</th>
-        <th width="40%" class="dataHeading bdr1B">Style</th>
+        <th width="25%" class="dataHeading bdr1B">Style</th>
+        <th width="25%" class="dataHeading bdr1B">Club</th>
         <?php if ($filter == "scores") { ?>
         <th width="1%" class="dataHeading bdr1B">Score</th>
         <?php } ?>
@@ -92,13 +94,14 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
         <td class="data bdr1B_gray"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
         <td class="data bdr1B_gray">
 		<?php 
-			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM brewer WHERE id='%s'", $row_entries['brewBrewerID']);
+			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerClubs FROM brewer WHERE uid='%s'", $row_entries['brewBrewerID']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
 		echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?>
         </td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_brewer['brewerClubs']; ?></td>
         <?php if ($filter == "scores") { ?>
         <td class="data bdr1B_gray"><?php echo $row_scores['scoreEntry']; ?></td>
         <?php } ?>
@@ -147,6 +150,7 @@ foreach ($a as $type) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -156,8 +160,9 @@ foreach ($a as $type) {
 <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
+        <th class="dataList bdr1B" width="20%" nowrap="nowrap">Brewer(s)</th>
         <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Club</th>
         <th class="dataList bdr1B">Style</th>
     </tr>
 </thead>
@@ -174,13 +179,14 @@ foreach ($a as $type) {
         <td class="data bdr1B_gray"><?php echo display_place($row_bos['scorePlace'],1); ?></td>
         <td class="data bdr1B_gray">
 		<?php 
-			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM brewer WHERE id='%s'", $row_entries['brewBrewerID']);
+			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerClubs FROM brewer WHERE uid='%s'", $row_entries['brewBrewerID']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
 		echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?>
         </td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>   
+        <td class="data bdr1B_gray"><?php echo $row_entries['brewerClubs']; ?></td>
+		<td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>   
     </tr>
     <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
 	mysql_free_result($bos);

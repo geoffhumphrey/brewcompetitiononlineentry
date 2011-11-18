@@ -99,14 +99,14 @@ if ($total_entry_fees > 0) {
     </ul>
 <?php } ?>
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
-<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a PayPal transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format(($total_to_pay * .029), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
-<p class="error"> To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_contest_info['contestHost']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
+<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that PayPal transaction fees of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .029) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<p class="error">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_contest_info['contestHost']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
 
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
 <input type="hidden" name="item_name" value="<?php echo $row_name['brewerLastName'].", ".(substr($row_name['brewerFirstName'],0,1))." - ".$row_contest_info['contestName']." Payment";?>">
-<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format(($total_to_pay * .029), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
+<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format((($total_to_pay * .029) + .30), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="button_subtype" value="services">
 <input type="hidden" name="no_note" value="0">
