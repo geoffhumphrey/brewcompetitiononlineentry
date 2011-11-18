@@ -26,7 +26,7 @@ mysql_select_db($database, $brewing);
 if ($filter != "winners") {
 //$query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewJudgingNumber, brewName, brewInfo, brewMead2, brewMead1, brewMead3, brewBrewerID FROM brewing";
 
-$query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewMead2, brewMead1, brewMead3, brewBrewerID FROM brewing";
+$query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber FROM brewing";
 
 if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
 if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y' AND brewJudgingLocation = '$bid'"; 
@@ -61,7 +61,7 @@ if (($go == "csv") && ($action == "default") && ($filter == "winners") && ($row_
 do {
 	//if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1']);
 	
-	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1']);
+	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1']);
 	
 	if (($go == "csv") && ($action == "email") && ($filter != "winners")) {
 		
@@ -71,14 +71,14 @@ do {
 		
 		//$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
 		
-		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
+		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
 		
 	}
 	 
 	if (($row_prefs['prefsCompOrg'] == "N") && ($action == "default") && ($filter == "winners")) $a[] = array($row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$row_sql['brewBrewerLastName'],$row_sql['brewBrewerFirstName'],$row_sql['brewName'],$row_sql['brewWinner'],$row_sql['brewWinnerPlace'],$row_sql['brewBOSRound'],$row_sql['brewBOSPlace']);
 	
 	if (($row_prefs['prefsCompOrg'] == "Y") && ($action == "default") && ($filter == "winners")) {
-		$query_scores = sprintf("SELECT eid,scorePlace FROM judging_scores WHERE scoreTable='%s'", $row_sql['id']);
+		$query_scores = sprintf("SELECT eid,scorePlace FROM judging_scores WHERE scoreTable='%s'", $row_sql['brewJudgingNumber']);
 		$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";	
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
@@ -88,7 +88,7 @@ do {
 		if ($totalRows_scores > 0) {
 		do { 
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM brewing WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber FROM brewing WHERE id='%s'", $row_scores['eid']);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_assoc($entries);
 			//echo $query_entries."<br>";

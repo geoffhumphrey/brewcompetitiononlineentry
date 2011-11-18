@@ -11,7 +11,9 @@ if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');
 	$pdf=new PDF();
 	$pdf->AddPage();
+	
 }
+
 
 if ($view == "html") {
 	$header .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
@@ -27,7 +29,7 @@ if ($go == "judging_scores_bos") {
 if ($view == "pdf") {
 	$pdf->SetFont('Arial','B',16);
 	$pdf->Write(5,'Best of Show Results - '.$row_contest_info['contestName']);
-	$pdf->SetFont('Arial','',8);	
+	$pdf->SetFont('Arial','',7);	
 }
 $filename = str_replace(" ","_",$row_contest_info['contestName']).'_BOS_Results.'.$view;
 
@@ -50,10 +52,11 @@ if ($totalRows_bos > 0) {
 	$html .= '<br><br><strong>'.$row_style_type['styleTypeName'].'</strong><br>';
 	$html .= '<table border="1">';
 	$html .= '<tr>';
-	$html .= '<td width="50" align="center"  bgcolor="#cccccc"><strong>Place</strong></td>';
-	$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
-	$html .= '<td width="275" align="center" bgcolor="#cccccc"><strong>Entry Name</strong></td>';
-	$html .= '<td width="250" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
+	$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Place</strong></td>';
+	$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
+	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Entry Name</strong></td>';
+	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Style</strong></td>';
+	$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
 	$html .= '</tr>';
 	do {
 		$query_entries = sprintf("SELECT brewBrewerID,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM brewing WHERE id='%s'", $row_bos['eid']);
@@ -67,12 +70,13 @@ if ($totalRows_bos > 0) {
 		
 		
 			$html .= '<tr>';
-			$html .= '<td width="50">'.display_place($row_bos['scorePlace'],1).'</td>';
-			$html .= '<td width="175">'.$row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName'];
+			$html .= '<td width="35" nowrap="nowrap">'.display_place($row_bos['scorePlace'],1).'</td>';
+			$html .= '<td width="150">'.$row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName'];
 			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
 			$html .= '</td>';
-			$html .= '<td width="275">'.strtr($row_entries['brewName'],$html_remove).'</td>';
-			$html .= '<td width="250">';
+			$html .= '<td width="200">'.strtr($row_entries['brewName'],$html_remove).'</td>';
+			$html .= '<td width="200">'.$style.': '.$row_entries['brewStyle'].'</td>';
+			$html .= '<td width="175">';
 			if ($row_brewer['brewerClubs'] != "") $html .=strtr($row_brewer['brewerClubs'],$html_remove);
 			else $html .= "&nbsp;";
 			$html .= '</td>';
@@ -93,7 +97,7 @@ if ($go == "judging_scores") {
 if ($view == "pdf") {
 	$pdf->SetFont('Arial','B',16);
 	$pdf->Write(5,'Results - '.$row_contest_info['contestName']);
-	$pdf->SetFont('Arial','',9);	
+	$pdf->SetFont('Arial','',7);	
 }
 $filename = str_replace(" ","_",$row_contest_info['contestName']).'_Results.'.$view;
 $html = '';
@@ -106,10 +110,11 @@ do {
 	$html .= '<br><br><strong>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</strong><br>';
 	$html .= '<table border="1">';
 	$html .= '<tr>';
-	$html .= '<td width="50" align="center"  bgcolor="#cccccc"><strong>Place</strong></td>';
-	$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
-	$html .= '<td width="275" align="center" bgcolor="#cccccc"><strong>Entry Name</strong></td>';
-	$html .= '<td width="250" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
+	$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Pl.</strong></td>';
+	$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
+	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Entry Name</strong></td>';
+	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Style</strong></td>';
+	$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
 	$html .= '</tr>';
 	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $go, $row_tables['id']);
 	$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";	
@@ -118,21 +123,27 @@ do {
 	
 	// loop through 'scores' table
 	do { 
-		$query_entries = sprintf("SELECT brewBrewerID,id,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM brewing WHERE id='%s'", $row_scores['eid']);
+		$query_entries = sprintf("SELECT brewBrewerID,id,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewCoBrewer FROM brewing WHERE id='%s'", $row_scores['eid']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
+		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
 		$query_brewer = sprintf("SELECT id,brewerClubs,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
+		if (($row_brewer['brewerFirstName'] != '') && ($row_brewer['brewerLastName'] != '')) $brewer = $row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName']; else $brewer = "&nbsp;";
+		
 		
 			$html .= '<tr>';
-			$html .= '<td width="50">'.display_place($row_scores['scorePlace'],1).'</td>';
-			$html .= '<td width="175">'.$row_brewer['brewerFirstName'].' '.$row_brewer['brewerLastName'];
-			if ($row_entries['brewCoBrewer'] != "") $html .=', '.$row_entries['brewCoBrewer'];
+			$html .= '<td width="35">'.display_place($row_scores['scorePlace'],1).'</td>';
+			$html .= '<td width="150">'.$brewer.'</td>';
+			$html .= '<td width="200">';
+			if ($row_entries['brewName'] != '') $html .= strtr($row_entries['brewName'],$html_remove); else $html .= '&nbsp;';
 			$html .= '</td>';
-			$html .= '<td width="275">'.strtr($row_entries['brewName'],$html_remove).'</td>';
-			$html .= '<td width="250">';
+			$html .= '<td width="200">';
+			if ($row_entries['brewStyle'] != '') $html .= $row_entries['brewStyle']; else $html .= "&nbsp;";
+			$html .= '</td>';
+			$html .= '<td width="175">';
 			if ($row_brewer['brewerClubs'] != "") $html .=strtr($row_brewer['brewerClubs'],$html_remove);
 			else $html .= "&nbsp;";
 			$html .= '</td>';

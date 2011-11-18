@@ -100,6 +100,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -109,7 +110,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -135,6 +137,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
@@ -195,6 +198,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -204,7 +208,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -230,6 +235,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
@@ -290,6 +296,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -299,7 +306,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -321,6 +329,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -371,6 +380,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -380,7 +390,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -403,6 +414,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -478,8 +490,8 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
-        <th class="dataHeading bdr1B" width="10%">From Table #</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -500,7 +512,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><?php echo $row_bos['eid']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_tables_1['tableNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -557,7 +569,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
+			"aaSorting": [[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -574,8 +586,8 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
-        <th class="dataHeading bdr1B" width="10%">From Table #</th>
+        <th class="dataHeading bdr1B" width="10%">Entry #</th>
+        <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
         <th class="dataHeading bdr1B" width="10%">Place</th>
@@ -596,7 +608,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><?php echo $row_bos['eid']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_tables_1['tableNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>

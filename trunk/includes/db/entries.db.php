@@ -41,8 +41,7 @@ elseif (($section == "admin") && ($go == "entries") && ($filter == "default") &&
 	$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; 
 	}
 else { 
-	$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
-	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
+	$query_log = "SELECT * FROM brewing";
 	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 	}
 $log = mysql_query($query_log, $brewing) or die(mysql_error());

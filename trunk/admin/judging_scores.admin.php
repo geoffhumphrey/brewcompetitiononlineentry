@@ -69,14 +69,15 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"sDom": 'ipfrtip',
 			"bStateSave" : false,
 			<?php if ($filter == "category") { ?>
-			"aaSorting": [[3,'asc'],[4,'desc'],[5,'asc']],
+			"aaSorting": [[4,'asc'],[5,'desc'],[6,'asc']],
 			<?php } elseif ($dbTable != "default") { ?>
-			"aaSorting": [[1,'asc'],[7,'desc'],[4,'asc']],
+			"aaSorting": [[2,'asc'],[8,'desc'],[5,'asc']],
 			<?php } else { ?>
-			"aaSorting": [[1,'asc'],[4,'desc'],[5,'asc']],
+			"aaSorting": [[2,'asc'],[5,'desc'],[6,'asc']],
 			<?php } ?>
 			"bProcessing" : true,
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -96,6 +97,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <table class="dataTable" id="sortable">
 <thead>
 	<tr>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Judging #</th>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Table #</th>
         <th class="dataList bdr1B" width="15%" nowrap="nowrap">Table Name</th>
@@ -113,7 +115,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+	$query_entries_1 = sprintf("SELECT id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
@@ -129,7 +131,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		//if ($row_tables_1['id'] != "") { // if table is erased.
 	?>
 	<tr>
-    	<td><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
+    	<td><?php echo $row_entries_1['id']; ?></td>
+        <td class="data"><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
@@ -166,9 +169,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
+			"aaSorting": [[2,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
+				null,
 				null,
 				null,
 				{ "asSorting": [  ] },
@@ -180,7 +184,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <table class="dataTable" id="sortable">
 <thead>
 	<tr>
-    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">#</th>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Entry #</th>
+        <th class="dataList bdr1B" width="1%" nowrap="nowrap">Judging #</th>
         <th class="dataList bdr1B" width="35%">Category</th>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Score</th>
         <th class="dataList bdr1B">Place</th>
@@ -220,7 +225,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td><?php echo $row_entries['id']; ?></td>
+        <td class="data"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>

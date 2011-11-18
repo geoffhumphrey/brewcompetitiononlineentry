@@ -106,7 +106,7 @@ elseif (($section == "list") || ($section == "judge") || ($section == "steward")
 	$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $row_user['id']);
 	}
 
-else $query_brewer = "SELECT * FROM brewer";
+else $query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName ASC";
 //echo $query_brewer;
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
