@@ -22,11 +22,11 @@ if (($section == "admin") && ($go == "default")) { ?>
 <h3>Numbers at a Glance</h3>
 <table>
 	<tr>
-		<td class="dataLabel">Entries:</td>
+		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a>:</td>
         <td class="data"><?php echo $totalRows_entry_count; ?></td>
 		<td class="dataLabel">Total Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
-        <td class="dataLabel">Participants:</td>
+        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants">Participants</a>:</td>
         <td class="data"><?php echo get_participant_count('default'); ?></td>
 	</tr>
     <tr>
@@ -34,7 +34,7 @@ if (($section == "admin") && ($go == "default")) { ?>
         <td class="data"><?php echo get_entry_count(); ?></td>
 		<td class="dataLabel">Paid Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees_paid; ?></td>
-        <td class="dataLabel">Avail. Judges:</td>
+        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants&amp;filter=judges">Avail. Judges</a>:</td>
         <td class="data"><?php echo get_participant_count('judge'); ?></td>
 	</tr>
 </table>
