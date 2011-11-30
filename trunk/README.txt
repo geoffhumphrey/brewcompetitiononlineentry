@@ -3,7 +3,7 @@
 **                                                                  **
 ** Brew Competition Online Entry & Management                       **
 ** Developed by Geoff Humphrey - zkdigital.com                      **
-** Release 1.2.0.3 October 2011                                     **
+** Release 1.2.0.4 November 30, 2011                                **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** As such, you are permitted to download the full source code of   **
@@ -32,7 +32,6 @@ Help
 **********************************************************************
 
 Online documentation and help is available at http://help.brewcompetition.com
-
 
 
 **********************************************************************
@@ -67,21 +66,21 @@ Changes in This Version
 
 **********************************************************************
 
-This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between September 16, 2011 and October 21, 2011.
+This release address several small bugs and feature enhancements that were reported to Google Code and SourceForge between October 21, 2011 and November 30, 2011.
 
-- Fixed PayPal connection error (Issue 96)
-- Fixed pullsheet issue (Issue 98)
-- Fixed forgot password function error (Issue 99)
-- Fixed display of scores and places on participant list of entries (Issue 100)
-- Fixed calculations of BJCP judge, steward, organizer, and staff points (Issue 101)
-- Fixed bug in exporting of participant data, specifically judge likes and dislikes (Issue 102 and Issue 105)
-- Fixed bug in judge/steward assignment (Issue 107)
-- Fixed bug in judge/steward assignment print outs (Issue 108)
-- Added the ability of particpants to enter a mead judge designation
-- Added a judging number to each entry that only administrators see
-- Added the ability for admins to regenerate judging numbers if the need arises
-- Added the ability for admins to designate any circuit that their competition qualifies for (MCAB, etc.)
-- Updated to the latest version of TinyMCE
+Bugs:
+- Issue 109: Admin Add/Edit of Entries
+- Issue 111: Upload Image Function Allowing Non Admins to Upload
+- Issue 112: Users Not Seeing Entries (Case Sensitivity of User Names)
+- Issue 113: Registration Section shows Entry Window Closed Date
+- Issue 114: Competition Contacts Not Working
+- Issue 115: Incorrect Name on Results List
+- Issue 116: Inconsistent Display of Entry and Judging Numbers
+
+Enhancements:
+- Judges and stewards are now able to register as either/both after the designated entry window has closed.
+- Admins now have a "Numbers at a Glance" box on the main admin page to quickly get the number of entries, participants, etc.
+- Rusults sheets now have a "club" column.
 
 
 **********************************************************************
@@ -98,14 +97,11 @@ Installation: Initial Setup
 
 - Edit the username, password, and database variables the config.php file located in the competition/sites/ directory.
 
-- If necessary for your environment, edit line 55 of the config.php file with the correct path to BCOE&M's root installation (this is for the ability to upload pictures).
-
 - Upload the entire contents of the "bcoem" folder to your webserver via FTP or other method (upload only the *contents* of the folder, not the folder itself).
 
 - Using your ftp program, change the CHMOD (permissions) of the [root]/user_images folder to 755. This enables you to upload files to that directory using BCOE&M.
 
 - Once that is done, access your installation via your browser of choice to set up your site.
-
 
 
 **********************************************************************
@@ -144,18 +140,17 @@ Setup
 After you have created the needed database, uploaded BCOE&M's files to your web server, and edited the config.php file, you can now set up your installation.
 
 - Browse to your installation's web address (e.g., http://www.yoursite.com/competition/ or http://competition.yoursite.com or http://www.yoursite.com if you're feeling fancy).
--- If you are using the hosted option, you will receive an email with instructions and a web address.
+  -- If you are using the hosted option, you will receive an email with instructions and a web address.
 
 - You'll be taken through a series of steps to customize the setup of your installation. Do not skip these steps. Vital information is collected that optimize the installation's behavior and display of data. During the set up process you will:
--- Create the administrator's user file and credentials.
--- Define the site's preferences.
--- Input information about your competition (e.g., rules, award structure, etc.)
--- Input drop-off locations.
--- Input judging locations.
--- Define the BJCP styles accepted.
--- Define judging preferences (e.g., whether to use queued judging, flight size, maximum number of rounds, etc.).
+  -- Create the administrator's user file and credentials.
+  -- Define the site's preferences.
+  -- Input information about your competition (e.g., rules, award structure, etc.)
+  -- Input drop-off locations.
+  -- Input judging locations.
+  -- Define the BJCP styles accepted.
+  -- Define judging preferences (e.g., whether to use queued judging, flight size, maximum number of rounds, etc.).
 
 - That's it! After set up, you can browse to your installation's address, further customize it, and/or distribute the web address to begin collecting participant data and their associated entries.
 
 - Enjoy your favorite fermented beverage.
-
