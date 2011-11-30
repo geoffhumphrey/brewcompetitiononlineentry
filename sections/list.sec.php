@@ -33,7 +33,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <h2>Info</h2>
 <?php if ($action != "print") { ?>
-<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
+
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
         <span class="icon"><img src="images/user_edit.png" /></span><a href="index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
@@ -45,7 +45,6 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
         <span class="icon"><img src="images/key.png" /></span><a href="index.php?section=user&amp;action=password&amp;id=<?php echo $row_user['id']; ?>">Change Your Password</a>
     </span>
 </div>
-<?php } ?>
 <?php } 
 //echo "Query: ".$query_brewer;
 ?>

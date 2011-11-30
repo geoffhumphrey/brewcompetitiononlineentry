@@ -73,7 +73,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	</div>
   <?php }
   
-  // Check if registration open date has passed. If so, display "registration not open yet" message.
+  // Check if registration open date has not passed. If so, display "registration not open yet" message.
   if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
   	if ($section != "admin") {
   	?>
@@ -102,9 +102,11 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   // Check if registration close date has passed. If so, display "registration end" message.
   elseif (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
-    <div class="closed">Registration has closed.</div>
+    <div class="closed">Entry registration has closed.</div>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="error">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
+	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
@@ -114,9 +116,10 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
+			
 		if ($row_user['userLevel'] == "1") {
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
-			if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "user") 	include (SECTIONS.'user.sec.php');

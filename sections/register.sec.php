@@ -69,6 +69,7 @@ else
 //-->
 </script>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
 		<li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
@@ -78,7 +79,7 @@ else
   	    <li>Each brew you enter will automatically be assigned a number by the system.</li>
 	</ul>
 </p>
-<?php if ($go == "default") { ?>
+<?php } if ($go == "default") { ?>
 <form name="judgeChoice" id="judgeChoice">
 <table>
 	<tr>
