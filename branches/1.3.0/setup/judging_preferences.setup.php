@@ -1,0 +1,2 @@
+<p class="info">Previously, you indicated that you will be using your installation organize your competition. Please indicate below your preferences.</p>
+<?php include (ADMIN.'judging_preferences.admin.php'); ?>

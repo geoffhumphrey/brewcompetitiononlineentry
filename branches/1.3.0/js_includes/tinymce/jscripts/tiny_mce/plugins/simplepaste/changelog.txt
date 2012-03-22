@@ -1,0 +1,39 @@
+Yes, versions are missing in this list. Those are development snapshots,
+changes in those are listed in the next published version.
+
+2008-09-01 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.15
+	* Bugfix: now removing Word comments and meta tags (thanks peet)
+
+2008-06-03 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.14
+	* Feature: cleaning is now also done when using the Paste action from the Edit menu in your browser and when using the contextmenu plugin.
+
+2008-05-14 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.13
+	* Feature: new "paste_as_plain_text" option added (currently in beta)
+	* Bugfix: the call to the external css file has been removed (unnecessary since version 1.8)
+	* Bugfix: Opera can now paste too, although it always pastes as plain text for some reason
+
+2008-04-18 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.12
+	* Bugfix: Safari has all kinds of problems, which have been fixed by using the browsers onPaste event
+
+2008-03-04 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.11
+	* Bugfix: paste_convert_middot_lists did not work in IE when pasting from Word
+
+2008-03-03 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.8
+	* Bugfix: the extra hidden editor is now actually hidden in IE 6.0
+
+2008-02-29 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.7
+	* Feature: the required CSS styles are now automatically included
+
+2008-02-27 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Version 1.5
+	* First published version
+
+2008-02-22 Kevin Renskers [InGoedeBanen.nl] <kevin@ingoedebanen.nl>
+	* Started working on SimplePaste
