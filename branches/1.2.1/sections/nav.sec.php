@@ -146,8 +146,8 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=contest_info">Competition Info</a>
 </div>
 <div id="adminMenu_Preparing_Upload" class="menu">
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image">A Competition Logo</a>
-	<a class="menuItem thickbox" href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image">A Sponsor Logo</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php" title="Upload Competition Logo Image">A Competition Logo</a>
+	<a class="menuItem thickbox" href="admin/upload.admin.php" title="Upload Sponsor Logo Image">A Sponsor Logo</a>
 </div>
 
 <div id="adminMenu_Entry_Manage" class="menu">

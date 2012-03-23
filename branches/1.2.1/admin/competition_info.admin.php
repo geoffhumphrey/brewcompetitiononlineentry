@@ -68,7 +68,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
     <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
-    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
+    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>

@@ -9,7 +9,7 @@
    		<?php } ?>
     </span>
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image" class="data thickbox"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
+    	<span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link" class="data"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
 	</span>
 </div>
 <?php if ($totalRows_sponsors > 0) { ?>
@@ -59,7 +59,7 @@
  <tr>
   <td width="20%" class="dataList"><?php echo $row_sponsors['sponsorName']; ?></td>
   <td width="15%" class="dataList"><?php echo $row_sponsors['sponsorLocation']; ?></td>
-  <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" class="thickbox"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
+  <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>" id="modal_window_link"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
   <td width="5%" class="dataList"><?php echo $row_sponsors['sponsorLevel']; ?></td>
   <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="images/tick.png"  alt="Yes"><?php } else { ?><img src="images/cross.png"  alt="No"><?php } ?></td>
   <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
@@ -106,7 +106,7 @@
   <tr>
     <td class="dataLabel">Logo Image Name:</td>
     <td class="data"><input name="sponsorImage" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorImage']; ?>"></td>
-    <td class="data">Be sure to enter the <em>exact name</em> of the file (e.g., sponsor_logo.jpg) that has been <a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image" class="thickbox">uploaded</a>.</td>
+    <td class="data">Be sure to enter the <em>exact name</em> of the file (e.g., sponsor_logo.jpg) that has been <a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link">uploaded</a>.</td>
   </tr>
   <tr>
     <td class="dataLabel">Description:</td>

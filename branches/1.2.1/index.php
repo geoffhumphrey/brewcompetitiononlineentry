@@ -37,7 +37,34 @@ require(INCLUDES.'headers.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#modal_window_link").fancybox({
+				'width'				: '75%',
+				'height'			: '75%',
+				'fitToView'			: false,
+				'scrolling'         : 'auto',
+				'openEffect'		: 'elastic',
+				'closeEffect'		: 'elastic',
+				//'openEasing'     	: 'easeOutBack',
+				//'closeEasing'   	: 'easeInBack',
+				'openSpeed'         : 'normal',
+				'closeSpeed'        : 'normal',
+				'type'				: 'iframe',
+				'helpers' 			: {	title : { type : 'inside' } },
+				<?php if ($modal_window == "false") { ?>
+				'afterClose': 		function() { parent.location.reload(true); }
+				<?php } ?>
+			});
+
+		});
+	</script>
 <script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
