@@ -35,12 +35,16 @@ if ($action == "add") {
 	prefsTheme,
 	prefsDateFormat,
 	prefsContact,
+	prefsTimeZone,
+	prefsEntryLimit,
+	prefsTimeFormat
 	id) VALUES (
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
-	%s, %s, %s, %s, %s, %s)",
+	%s, %s, %s, %s, %s, 
+	%s, %s, %s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -70,6 +74,10 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['prefsTheme'], "text"),
 						   GetSQLValueString($_POST['prefsDateFormat'], "text"),
 						   GetSQLValueString($_POST['prefsContact'], "text"),
+						   
+						   GetSQLValueString($_POST['prefsTimeZone'], "text"),
+						   GetSQLValueString($_POST['prefsEntryLimit'], "text"),
+						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		//echo $insertSQL;
@@ -107,7 +115,10 @@ if ($action == "edit") {
 	prefsRecordPaging=%s,
 	prefsTheme=%s,
 	prefsDateFormat=%s,
-	prefsContact=%s
+	prefsContact=%s,
+	prefsTimeZone=%s,
+	prefsEntryLimit=%s,
+	prefsTimeFormat=%s
 	WHERE id=%s",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
@@ -134,11 +145,13 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsTheme'], "text"),
 						   GetSQLValueString($_POST['prefsDateFormat'], "text"),
 						   GetSQLValueString($_POST['prefsContact'], "text"),
+						   GetSQLValueString($_POST['prefsTimeZone'], "text"),
+						   GetSQLValueString($_POST['prefsEntryLimit'], "text"),
+						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		header(sprintf("Location: %s", $updateGoTo));
-	
 }
 ?>

@@ -105,9 +105,9 @@ function judging_date_return() {
 	$query_check = "SELECT judgingDate FROM judging_locations";
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
-	$today = date('Y-m-d');
+	$today = strtotime("now");
 	do {
- 		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
+ 		if (strtotime($row_check['judgingDate']) > $today) $newDate[] = 1; 
  		else $newDate[] = 0;
 	} while ($row_check = mysql_fetch_assoc($check));
 	$r = array_sum($newDate);
@@ -1703,4 +1703,73 @@ function winner_check($id,$scores_db_table,$tables_db_table,$method) {
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
+
+
+function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $display_format, $return_format) { 
+    $timezones = array( 
+        '-12'=>'Pacific/Kwajalein', 
+        '-11'=>'Pacific/Midway', 
+        '-10'=>'Pacific/Honolulu', 
+        '-9'=>'America/Anchorage', 
+        '-8'=>'America/Los_Angeles', 
+        '-7'=>'America/Denver', 
+        '-6'=>'America/Mexico_City', 
+        '-5'=>'America/New_York', 
+        '-4'=>'America/Caracas', 
+        '-3.5'=>'America/St_Johns', 
+        '-3'=>'America/Argentina/Buenos_Aires', 
+        '-2'=>'Atlantic/South_Georgia',// no cities here so just picking an hour ahead 
+        '-1'=>'Atlantic/Azores', 
+        '0'=>'Europe/London', 
+        '1'=>'Europe/Paris', 
+        '2'=>'Europe/Helsinki', 
+        '3'=>'Europe/Moscow', 
+        '3.5'=>'Asia/Tehran', 
+        '4'=>'Asia/Baku', 
+        '4.5'=>'Asia/Kabul', 
+        '5'=>'Asia/Karachi', 
+        '5.5'=>'Asia/Calcutta', 
+        '6'=>'Asia/Colombo', 
+        '7'=>'Asia/Bangkok', 
+        '8'=>'Asia/Singapore', 
+        '9'=>'Asia/Tokyo', 
+        '9.5'=>'Australia/Darwin', 
+        '10'=>'Pacific/Guam', 
+        '11'=>'Asia/Magadan', 
+        '12'=>'Asia/Kamchatka',
+		'13'=>'Pacific/Tongatapu',
+    ); 
+    date_default_timezone_set($timezones[$GMT]); //ensures that whenever I return this date, I will get central time 
+    //if ($GMT == -2) $timestamp -= 3600; //since i set that an hour ahead, im subtracting the extra hour now 
+	switch($display_format) {
+		case "long": // Long Format
+			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
+			else $date = date('l j F, Y', $timestamp);
+		break;
+		case "short": // Short Format
+			if ($date_format == "1") $date = date('m/d/Y', $timestamp);
+			elseif ($date_format = "2") $date = date('d/m/Y',$timestamp);
+			else $date = date('Y/m/d', $timestamp);
+		break;
+		
+		case "system": // MySQL Format
+			$date = date('Y-m-d', $timestamp);
+		break;
+	}
+	
+	if ($time_format == "1") $time = date('H:i',$timestamp);
+	else $time = date('g:i A',$timestamp);
+	
+	switch($return_format) {
+		case "date-time":
+			$return = $date." at ".$time;
+		break;
+		case "time":
+			$return = $time;
+		break;
+		default: $return = $date;
+	}
+	return $return;
+}
+
 ?>

@@ -16,11 +16,13 @@ if (strstr($section,"step")) { ?>
   <?php if (get_contact_count() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="index.php?section=contact">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
-  <?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline']) && (greaterDate($today,$row_contest_info['contestRegistrationOpen'])))  { ?>
+  <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="index.php?section=register">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
-  <?php if ((isset($_SESSION["loginUsername"])) && ($row_contest_info['contestEntryFee'] > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <?php } ?>
-  <?php if (isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "list") { ?><a href="index.php?section=list">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li><?php } ?>
+  <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?>
+  <?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
+  <li><?php if ($section != "list") { ?><a href="index.php?section=list">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li>
+  <?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="index.php?section=admin" onclick="index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a></div></li>
 <?php } ?>
@@ -146,8 +148,8 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=contest_info">Competition Info</a>
 </div>
 <div id="adminMenu_Preparing_Upload" class="menu">
-	<a class="menuItem thickbox" href="admin/upload.admin.php" title="Upload Competition Logo Image">A Competition Logo</a>
-	<a class="menuItem thickbox" href="admin/upload.admin.php" title="Upload Sponsor Logo Image">A Sponsor Logo</a>
+	<a id="modal_window_link" class="menuItem" href="admin/upload.admin.php" title="Upload Competition Logo Image">A Competition Logo</a>
+	<a id="modal_window_link" class="menuItem" href="admin/upload.admin.php" title="Upload Sponsor Logo Image">A Sponsor Logo</a>
 </div>
 
 <div id="adminMenu_Entry_Manage" class="menu">
@@ -190,7 +192,7 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
-	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Sorting Sheets - All Categories</a>
+	<a class="menuItem" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default">Sorting Sheets - All Categories</a>
     <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">Bottle Labels Using Entry Numbers - All Categories</a>
     <a class="menuItem" href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">Bottle Labels Using Judging Numbers - All Categories</a>
 </div>
@@ -246,24 +248,24 @@ if (strstr($section,"step")) { ?>
 </div>
 
 <div id="adminMenu_Printing_Before" class="menu">
-	<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Pullsheets for All Tables">Pullsheets for All Tables</a>
-	<a class="menuItem thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Table Cards for All Tables">Table Cards for All Tables</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-    <a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
-	<a class="menuItem thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
+	<a id="modal_window_link" class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Pullsheets for All Tables">Pullsheets for All Tables</a>
+	<a id="modal_window_link" class="menuItem" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards for All Tables">Table Cards for All Tables</a>
+	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
+    <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
+	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
+	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
     <a class="menuItem" href="output/labels.php?section=admin&go=participants&action=judging_labels">Judge Scoresheet Labels (All)</a>
 </div>
 <div id="adminMenu_Printing_During" class="menu">
-	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All BOS Pullsheets</a>
+	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos">All BOS Pullsheets</a>
 </div>
 <div id="adminMenu_Printing_After" class="menu">
-	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table With Scores (All)">Results by Table With Scores (All)</a>
-	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table With Scores (Winners Only)">Results by Table With Scores (Winners Only)</a>
-    <a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table Without Scores (All)">Results by Table Without Scores (All)</a>
-	<a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Results by Table Without Scores (Winners Only)">Results by Table Without Scores (Winners Only)</a>
-    <a class="menuItem thickbox" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print BOS Round(s) Results Report">BOS Round(s) Results Report</a>
-	<a class="menuItem thickbox" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print BJCP Judge/Steward/Staff Points Report">BJCP Judge/Steward/Staff Points Report</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default" title="Print Results by Table With Scores (All)">Results by Table With Scores (All)</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners" title="Print Results by Table With Scores (Winners Only)">Results by Table With Scores (Winners Only)</a>
+    <a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default" title="Print Results by Table Without Scores (All)">Results by Table Without Scores (All)</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners" title="Print Results by Table Without Scores (Winners Only)">Results by Table Without Scores (Winners Only)</a>
+    <a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default" title="Print BOS Round(s) Results Report">BOS Round(s) Results Report</a>
+	<a id="modal_window_link" class="menuItem" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" title="Print BJCP Judge/Steward/Staff Points Report">BJCP Judge/Steward/Staff Points Report</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Award Labels</a>
 	<a class="menuItem" href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Participant Address Labels</a>
 </div>

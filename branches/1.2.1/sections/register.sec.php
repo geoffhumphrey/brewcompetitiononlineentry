@@ -69,7 +69,7 @@ else
 //-->
 </script>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
-<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
+<?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
 		<li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>

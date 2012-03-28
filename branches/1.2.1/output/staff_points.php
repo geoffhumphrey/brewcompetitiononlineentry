@@ -10,156 +10,7 @@ require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(DB.'admin_common.db.php');
-mysql_select_db($database, $brewing);
-
-// Get total amount of paid and received entries
-$total_entries = total_paid_received("judging_scores","default");
-//$total_entries = 88;
-function round_down_to_hundred($number) {
-    if (strlen($number)<3) { $number = $number;	} 
-	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
-    return $number;
-}
-
-// Get possible organizer points
-
-function total_points($total_entries,$method) {
-	switch ($method) {
-		case "Organizer":
-			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 2;
-			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2.5;
-			elseif (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
-			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 3.5;
-			elseif (($total_entries >= 200) && ($total_entries <= 299)) $points = 4;
-			elseif (($total_entries >= 300) && ($total_entries <= 399)) $points = 4.5;
-			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 5;
-			elseif ($total_entries >= 500) $points = 6;
-			else $points = 0;
-		break;
-		
-		case "Staff":
-			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 1;
-			if (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
-			if (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
-			if (($total_entries >= 150) && ($total_entries <= 199)) $points = 4;
-			if (($total_entries >= 200) && ($total_entries <= 299)) $points = 5;
-			if (($total_entries >= 300) && ($total_entries <= 399)) $points = 6;
-			if (($total_entries >= 400) && ($total_entries <= 499)) $points = 7;
-			if (($total_entries >= 500) && ($total_entries <= 599)) $points = 8;
-			if ($total_entries > 599) {
-				$total = round_down_to_hundred($total_entries)/100;
-				//$points = $total;
-				if ($total >= 2) {
-					for($i=1; $i<$total+1; $i++) {
-						$points = $i+3;
-					}
-				}
-			}
-		break;
-		
-		case "Judge":
-			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 1.5;
-			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
-			elseif (($total_entries >= 100) && ($total_entries <= 149)) $points = 2.5;
-			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 3;
-			elseif (($total_entries >= 200) && ($total_entries <= 299)) $points = 3.5;
-			elseif (($total_entries >= 300) && ($total_entries <= 399)) $points = 4;
-			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 4.5;
-			elseif ($total_entries >= 500) $points = 5.5;
-			else $points = 0;
-		break;
-	}
-	return number_format($points,1);
-}
-
-// calculate a Judge's points
-function judge_points($bid,$bos) { 
-	session_start(); 
-	require('../paths.php'); 
-	require(DB.'judging_locations.db.php');
-	
-	// *minimum* of 1.0 points per competition	
-	// *maximum* of 1.5 points per day  (includes BOS round, I'm assuming)
-	
-	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
-	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
-		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-		$row_assignments = mysql_fetch_assoc($assignments);
-		if ($row_assignments['count'] > 1) $b[] = 1.0; 
-		else $b[] = $row_assignments['count'];
-	}
-	
-	$points = array_sum($b);
-	if ($bos == "Y") $points = $points + 0.5; else $points = $points;
-	return number_format($points,1);
-	
-}
-	
-// calculate a Steward's points
-function steward_points($bid) {
-	session_start(); 
-	require('../paths.php'); 
-	require(DB.'judging_locations.db.php');
-	
-	// *minimum* of 0.5 points per day	
-	// *maximum* of 1.0 points per competition
-	
-	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
-	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
-		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-		$row_assignments = mysql_fetch_assoc($assignments);
-		if ($row_assignments['count'] > 1) $b[] = 0.5; 
-		else $b[] = $row_assignments['count'] * 0.5;
-	}
-	
-	$points = array_sum($b);
-	if ($points >= 1.0) $points = 1.0; else $points = $points;
-	return number_format($points,1);
-}
-
-// Get maximum point values based upon number of entries
-$organ_points = number_format(total_points($total_entries,"Organizer"), 1);
-$staff_points = number_format(total_points($total_entries,"Staff"), 1);
-$judge_points = number_format(total_points($total_entries,"Judge"), 1);
-
-// Divide total staff point pool by amount of staff, round down
-$query_assignments = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerAssignment='X'";
-$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-$row_assignments = mysql_fetch_assoc($assignments);
-if ($row_assignments['count'] >= 2) $staff_points = number_format(round(($staff_points/$row_assignments['count']) / 0.5) * 0.5, 1);
-elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_points,1);
-else $staff_points = 0;
-
-// Staff
-$query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM brewer WHERE brewerAssignment='O'";
-$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
-$row_organizer = mysql_fetch_assoc($organizer);
-$totalRows_organizer = mysql_num_rows($organizer);
-
-// Judges
-$query_judges = "SELECT bid FROM judging_assignments WHERE assignment='J'";
-$judges = mysql_query($query_judges, $brewing) or die(mysql_error());
-$row_judges = mysql_fetch_assoc($judges);
-$totalRows_judges = mysql_num_rows($judges);
-
-$query_bos_judges = "SELECT id FROM brewer WHERE brewerJudgeBOS='Y'";
-$judges = mysql_query($query_judges, $brewing) or die(mysql_error());
-$row_judges = mysql_fetch_assoc($judges);
-$totalRows_judges = mysql_num_rows($judges);
-
-// Stewards
-$query_stewards = "SELECT bid FROM judging_assignments WHERE assignment='S'";
-$stewards = mysql_query($query_stewards, $brewing) or die(mysql_error());
-$row_stewards = mysql_fetch_assoc($stewards);
-$totalRows_stewards = mysql_num_rows($stewards);
-
-// Staff
-$query_staff = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM brewer WHERE brewerAssignment='X'";
-$staff = mysql_query($query_staff, $brewing) or die(mysql_error());
-$row_staff = mysql_fetch_assoc($staff);
-$totalRows_staff = mysql_num_rows($staff);
+require(INCLUDES.'staff_points.inc.php');
 
 if ($view == "pdf") {
 $filename = str_replace(" ","_",$row_contest_info['contestName']).'_BJCP_Points_Report.'.$view;
@@ -174,7 +25,7 @@ $html = '<br><br><strong>BJCP Competition ID</strong>: '.$row_contest_info['cont
 $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>'; 
 
 	if ($totalRows_organizer > 0) { 
-	$html .= '<br><br><strong>Organizer</strong><br>';
+	$html .= '<br><br><strong>Organizer</strong><br><br>';
 	$html .= '<table border="1">';
     $html .= '<tr>';
     $html .= '<td width="300" align="center" bgcolor="#cccccc">Name</td>';
@@ -192,7 +43,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 	}
 	
 	if ($totalRows_judges > 0) { 
-	$html .= '<br><br><strong>Judges</strong><br>';
+	$html .= '<br><br><strong>Judges</strong><br><br>';
     $html .= '<table border="1">';
     $html .= '<tr>';
     $html .= '<td width="300" align="center"  bgcolor="#cccccc">Name</td>';
@@ -209,13 +60,16 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
     	$html .= '<td width="150">';
 			if ($judge_info['4'] != "") $html .= $judge_info['4']; else $html .= '&nbsp;';
 		$html .= '</td>';
-    	$html .= '<td width="150">'.judge_points($bid,$judge_info['5']).'</td>';
+    	$html .= '<td width="150">'.judge_points($bid,$judge_info['5']);
+			if ($judge_info['5'] == "1") $html .= '*';
+		$html .= '</td>';
     	$html .= '</tr>';
     	}  
     $html .= '</table>';
+	$html .= '<br><em>* denotes BOS Judge</em>';
     }  
 	if ($totalRows_stewards > 0) { 
-	$html .= '<br><br><strong>Stewards</strong><br>';
+	$html .= '<br><br><strong>Stewards</strong><br><br>';
 	$html .= '<table border="1">';
     $html .= '<tr>';
     $html .= '<td width="300" align="center" bgcolor="#cccccc">Name</td>';
@@ -237,7 +91,8 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 	}
 	
 	if ($totalRows_staff > 0) { 
-	$html .= '<br><br><strong>Staff</strong><br>';
+	$html .= '<br><br><strong>Staff</strong>';
+	$html .= '<br>Total Possible Staff Points: '.total_points($total_entries,"Staff").'. Staff Points are calculated by dividing the number of staff members into the total possible points, rounded down to the nearest half (the BJCP requirement is for half-point increments). The organizer can distribute staff points however they wish when reporting to the BJCP. The calcuations reflected below are based upon the assumption that all staff members performed equal amounts of work.<br><br>';
 	$html .= '<table border="1">';
     $html .= '<tr>';
     $html .= '<td width="300" align="center" bgcolor="#cccccc">Name</td>';
@@ -437,7 +292,7 @@ if ($view == "default") { // printing from browser ?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
     	<td class="data bdr1B_gray"><?php echo $judge_info['4']; ?></td>
-        <td class="data bdr1B_gray"><?php echo judge_points($bid,$judge_info['5']); ?></td>
+        <td class="data bdr1B_gray"><?php echo judge_points($bid,$judge_info['5']); if ($judge_info['5'] == "1") echo "* <em>BOS Judge</em>"; ?></td>
     </tr>
     <?php }  ?>
     </tbody>
@@ -487,6 +342,7 @@ if ($view == "default") { // printing from browser ?>
     <?php } 
 	if ($totalRows_staff > 0) { ?>
     <h2>Staff</h2>
+    <p>Total Possible Staff Points: <?php echo total_points($total_entries,"Staff") ?>. Staff Points are calculated by dividing the number of staff members into the total possible points, rounded down to the nearest half (the BJCP requirement is for half-point increments). The organizer can distribute staff points however they wish when reporting to the BJCP. BCOE&amp;M's calcuations reflected below are based upon the assumption that all staff members performed equal amounts of work.</p>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable99').dataTable( {

@@ -8,7 +8,6 @@
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
-$today = date('Y-m-d');
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 $images_dir = dirname( __FILE__ );
 error_reporting(E_ALL ^ E_NOTICE);
@@ -26,9 +25,10 @@ require(INCLUDES.'authentication_nav.inc.php');  session_start();
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
+include(DB.'entries.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-
+require(INCLUDES.'constants.inc.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,8 +52,8 @@ require(INCLUDES.'headers.inc.php');
 				'scrolling'         : 'auto',
 				'openEffect'		: 'elastic',
 				'closeEffect'		: 'elastic',
-				//'openEasing'     	: 'easeOutBack',
-				//'closeEasing'   	: 'easeInBack',
+				'openEasing'     	: 'easeOutBack',
+				'closeEasing'   	: 'easeInBack',
 				'openSpeed'         : 'normal',
 				'closeSpeed'        : 'normal',
 				'type'				: 'iframe',
@@ -87,13 +87,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
 </div>
 <div id="content">
- 	 <div id="content-inner">
- 	<?php 
-	//echo "<p>Registration Open: ".$row_contest_info['contestRegistrationOpen']."</p>";
-	//echo "<p>Registration Deadline: ".$row_contest_info['contestRegistrationDeadline']."</p>";
-	//if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<p>Yes.</p>"; else echo "<p>No.</p>"
-	?>
-  
+ 	 <div id="content-inner"> 
   <?php if ($section != "admin") { ?>
  	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
@@ -101,10 +95,10 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   <?php }
   
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
-  if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
+  if ($registration_open == "0") { 
   	if ($section != "admin") {
   	?>
-    <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?>.</div>
+    <div class="closed">Registration will open <?php echo $reg_open; ?>.</div>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
@@ -127,9 +121,9 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   }
   // Check if registration close date has passed. If so, display "registration end" message.
-  elseif (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) {
+  if ($registration_open == "2") {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
-    <div class="closed">Entry registration has closed.</div>
+    <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
     <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="error">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
@@ -153,7 +147,9 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 			}
 		}
-  } else { // If registration is not closed
+  } 
+  if ($registration_open == "1") { // If registration is currently open
+  	if ((!isset($_SESSION['loginUsername'])) && ($action != "print") && ($section != "register") && (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries has been reached. Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted..</div>";
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');

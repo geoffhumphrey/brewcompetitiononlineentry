@@ -1,6 +1,6 @@
 <?php
 include(DB.'entries.db.php');
-if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
+if (($registration_open == "1")) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
 ?>
 <h2>Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if ($action != "print") { ?>

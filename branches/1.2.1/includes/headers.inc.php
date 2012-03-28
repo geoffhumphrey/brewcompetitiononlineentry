@@ -299,4 +299,6 @@ switch($section) {
 }
 if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
+
+
 ?>

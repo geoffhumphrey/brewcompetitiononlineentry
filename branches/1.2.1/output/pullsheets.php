@@ -8,9 +8,6 @@ include_once(DB.'admin_common.db.php');
 require_once(INCLUDES.'version.inc.php');
 require_once(INCLUDES.'headers.inc.php');
 
-$today = date('Y-m-d');
-$deadline = $row_contest_info['contestRegistrationDeadline'];
-
 $query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);

@@ -12,14 +12,10 @@ require(INCLUDES.'authentication_nav.inc.php');  session_start();
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
+require(DB.'entries.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-
-
-$tb = "default";
-if (isset($_GET['tb'])) {
-  $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
-}
+require(INCLUDES.'constants.inc.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -63,7 +59,7 @@ if (isset($_GET['tb'])) {
     </div>
 </div>
 <div id="footer">
-	<div id="footer-inner">Printed <?php echo date_convert(date("Y-m-d"), 2, $row_prefs['prefsDateFormat']) ; ?></div>
+	<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?>.</div>
 </div>
 </body>
 </html>

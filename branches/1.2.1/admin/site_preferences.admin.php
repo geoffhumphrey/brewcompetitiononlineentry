@@ -4,7 +4,6 @@ $themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 $row_themes = mysql_fetch_assoc($themes);
 $totalRows_themes = mysql_num_rows($themes);
 ?>
-
 <form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
 <h2>Site Preferences</h2>
@@ -21,6 +20,11 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="dataLabel">Use for Competition Organization:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsCompOrg" value="Y" id="prefsCompOrg_0"  <?php if ($row_prefs['prefsCompOrg'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsCompOrg" value="N" id="prefsCompOrg_1" <?php if ($row_prefs['prefsCompOrg'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate if your installation will be used to organize the competition (e.g., defining tables, defining flights, assigning judges to tables, printing pull sheets, etc.). If Yes, there will be no need to utilize a thrid party tool such as HCCP.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entry Limit:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_prefs['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
   </tr>
 </table>
 <h3>General</h3>
@@ -82,16 +86,76 @@ $totalRows_themes = mysql_num_rows($themes);
 <table>
   <tr>
   	<td class="dataLabel">DataTables Record Threshold:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "300"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "500"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
   </tr>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "50"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "100"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
-<h3>Measurements and Dates</h3>
+<h3>Localization</h3>
+<table>
+  <tr>
+    <td class="dataLabel">Date Format:</td>
+    <td class="data">
+    <select name="prefsDateFormat">
+    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; if ($section == "step3") echo "SELECTED"; ?>>Month Day Year (MM/DD/YYYY)</option>
+    <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year (DD/MM/YYYY)</option>
+    <option value="3" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "SELECTED"; ?>>Year Month Day (YYYY/MM/DD)</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Time Format:</td>
+    <td class="data">
+    <select name="prefsTimeFormat">
+    <option value="0" <?php if ($row_prefs['prefsTimeFormat'] == "0") echo "SELECTED"; if ($section == "step3") echo "SELECTED"; ?>>12 Hour</option>
+    <option value="1" <?php if ($row_prefs['prefsTimeFormat'] == "1") echo "SELECTED"; ?>>24 Hour</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Time Zone:</td>
+    <td class="data">
+    <select name="prefsTimeZone">
+      <option value="-12" <?php if ($row_prefs['prefsTimeZone'] == "-12") echo "SELECTED"; ?>>(GMT -12:00) Eniwetok, Kwajalein</option>
+      <option value="-11" <?php if ($row_prefs['prefsTimeZone'] == "-11") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
+      <option value="-10" <?php if ($row_prefs['prefsTimeZone'] == "-10") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
+      <option value="-9" <?php if ($row_prefs['prefsTimeZone'] == "-9") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
+      <option value="-8" <?php if ($row_prefs['prefsTimeZone'] == "-8") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+      <option value="-7" <?php if ($row_prefs['prefsTimeZone'] == "-7") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+      <option value="-6" <?php if ($row_prefs['prefsTimeZone'] == "-6") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
+      <option value="-5" <?php if ($row_prefs['prefsTimeZone'] == "-5") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+      <option value="-4" <?php if ($row_prefs['prefsTimeZone'] == "-4") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+      <option value="-3.5" <?php if ($row_prefs['prefsTimeZone'] == "-3.5") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
+      <option value="-3" <?php if ($row_prefs['prefsTimeZone'] == "-3") echo "SELECTED"; ?>>(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+      <option value="-2" <?php if ($row_prefs['prefsTimeZone'] == "-2") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
+      <option value="-1" <?php if ($row_prefs['prefsTimeZone'] == "-1") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+      <option value="0" <?php if ($row_prefs['prefsTimeZone'] == "0") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+      <option value="1" <?php if ($row_prefs['prefsTimeZone'] == "1") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+      <option value="2" <?php if ($row_prefs['prefsTimeZone'] == "2") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, South Africa</option>
+      <option value="3" <?php if ($row_prefs['prefsTimeZone'] == "3") echo "SELECTED"; ?>>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+      <option value="3.5" <?php if ($row_prefs['prefsTimeZone'] == "3.5") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
+      <option value="4" <?php if ($row_prefs['prefsTimeZone'] == "4") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+      <option value="4.5" <?php if ($row_prefs['prefsTimeZone'] == "4.5") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
+      <option value="5" <?php if ($row_prefs['prefsTimeZone'] == "5") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+      <option value="5.5" <?php if ($row_prefs['prefsTimeZone'] == "5.5") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+      <option value="6" <?php if ($row_prefs['prefsTimeZone'] == "6") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo</option>
+      <option value="7" <?php if ($row_prefs['prefsTimeZone'] == "7") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>-12
+      <option value="8" <?php if ($row_prefs['prefsTimeZone'] == "8") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+      <option value="9" <?php if ($row_prefs['prefsTimeZone'] == "9") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+      <option value="9.5" <?php if ($row_prefs['prefsTimeZone'] == "9.5") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin</option>
+      <option value="10" <?php if ($row_prefs['prefsTimeZone'] == "10") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+      <option value="11" <?php if ($row_prefs['prefsTimeZone'] == "11") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+      <option value="12" <?php if ($row_prefs['prefsTimeZone'] == "12") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+    </select>
+    </td>
+    </tr>
+</table>
+
+<h3>Measurements</h3>
 <table>
   <tr>
   	<td class="dataLabel">Temperature:</td>
@@ -99,8 +163,10 @@ $totalRows_themes = mysql_num_rows($themes);
     <select name="prefsTemp">
     <option value="Fahrenheit" <?php if ($row_prefs['prefsTemp'] == "Fahrenheit") echo "SELECTED"; ?>>Fahrenheit</option>
     <option value="Celsius" <?php if ($row_prefs['prefsTemp'] == "Celsius") echo "SELECTED"; ?>>Celsius</option>
-    </select>    </td>
-    </tr><tr>
+    </select>
+    </td>
+    </tr>
+    <tr>
     <td class="dataLabel">Weight (Small):</td>
     <td class="data">
     <select name="prefsWeight1">
@@ -131,16 +197,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <option value="litres" <?php if ($row_prefs['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>litres</option>
     </select>    </td>
     </tr>
-  <tr>
-    <td class="dataLabel">Date Format:</td>
-    <td class="data">
-    <select name="prefsDateFormat">
-    <option value="2" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "SELECTED"; ?>>Day Month Year</option>
-    <option value="1" <?php if ($row_prefs['prefsDateFormat'] == "1") echo "SELECTED"; if ($section == "step3") echo "SELECTED"; ?>>Month Day Year</option>
-    <option value="3" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "SELECTED"; ?>>Year Month Day</option>
-    </select>
-    </td>
-  </tr>
+  
 </table>
 <h3>Currency and Payment</h3>
 <table>

@@ -22,6 +22,9 @@ if (($section == "admin") && ($go == "default")) { ?>
 <h3>Numbers at a Glance</h3>
 <table>
 	<tr>
+    	<td colspan="6">As of <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
+	</tr>
+    <tr>
 		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a>:</td>
         <td class="data"><?php echo $totalRows_entry_count; ?></td>
 		<td class="dataLabel">Total Fees:</td>
@@ -43,7 +46,7 @@ if (($section == "admin") && ($go == "default")) { ?>
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
 if ($go == "default") { 
-if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
+if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
 
 ?>
 <div id="menu_container">

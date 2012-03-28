@@ -14,8 +14,6 @@ if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
 else 
 { 
 $total_not_paid = total_not_paid_brewer($row_user['id']);
-require(DB.'brewer.db.php');
-include(DB.'entries.db.php');
 include(DB.'judging_locations.db.php');
 include(INCLUDES.'db_tables.inc.php');
 
@@ -238,18 +236,21 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 <p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo $totalRows_log; if ($totalRows_log <= 1) echo " entry"; else echo " entries"; ?>, listed below. <?php if (judging_date_return() > 0) echo "Be sure to print entry forms and bottle labels for each."; else echo "Judging has taken place."; ?></p>
 <?php } ?>
 <?php if ($action != "print") { ?>
-<?php if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) { ?>
+
 <div class="adminSubNavContainer">
+<?php if (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) { ?>
    	<span class="adminSubNav">
         <span class="icon"><img src="images/book_add.png"  /></span><a href="index.php?section=brew&amp;action=add">Add an Entry</a>
    	</span>
     <span class="adminSubNav">
         <span class="icon"><img src="images/page_code.png"  /></span><a href="index.php?section=beerxml">Import Entries Using BeerXML</a>
    	</span>
+<?php } ?>
     <span class="adminSubNav">
-        <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="output/print.php?section=list&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
+        <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="output/print.php?section=list&amp;action=print" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
 	</span>
 </div>
+
 <?php if ((judging_date_return() >0) && ($totalRows_log > 0)) { 
 
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
@@ -270,7 +271,6 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
     </span>
 </div>
 <?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
-<?php } // end if (!greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) ?>
 <?php } // end if ($action != "print")
 if ($totalRows_log > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -349,9 +349,11 @@ if ($totalRows_log > 0) { ?>
     <?php } if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
   <td class="dataList">
+    <?php if ($entry_open < "2") { ?>
   	<span class="icon"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>
-  <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a> 	
-  	<span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
+    <span class="icon"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a> 	
+  	<?php } ?>
+    <span class="icon"><img src="images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
   </td>
   <?php } ?>
   <?php } ?>
