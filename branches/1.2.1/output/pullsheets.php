@@ -18,13 +18,12 @@ $totalRows_tables = mysql_num_rows($tables);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
 </head>
-<body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
+<body onload="javascript:window.print()">
 <?php 
 
 // Use the following if not using queued judging - delinieates by flight and round
@@ -97,7 +96,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -107,7 +105,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
@@ -134,7 +131,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
@@ -149,11 +145,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	} // end foreach ?>
     </tbody>
     </table>
-    <div style="page-break-after:always;"></div>
+    <?php if ($flights > 0) { ?><div style="page-break-after:always;"></div><?php } ?>
     <?php } ?>
     </div>
 </div>
-<div style="page-break-after:always;"></div>
+<?php if ($flights == 0) { ?><div style="page-break-after:always;"></div><?php } ?>
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
 
@@ -195,7 +191,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -205,7 +200,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Round</th>
@@ -232,7 +226,6 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
@@ -247,10 +240,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	} // end foreach ?>
     </tbody>
     </table>
-    <div style="page-break-after:always;"></div>
+
     <?php } ?>
     </div>
 </div>
+<div style="page-break-after:always;"></div>
 <?php 	
 	} // end if (($go == "judging_tables") && ($id != "default")) 
 } // end if ($row_judging_prefs['jPrefsQueued'] == "N") 
@@ -293,7 +287,6 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -303,7 +296,6 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -326,7 +318,6 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
         <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -377,7 +368,6 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -387,7 +377,6 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -477,7 +466,6 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -487,7 +475,6 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -522,13 +509,13 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	?>
 </tbody>
 </table>
-<div style="page-break-after:always;"></div>
 <?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>"; 
 } 
 ?>
 <?php } ?>
 	</div>
 </div>
+<div style="page-break-after:always;"></div>
 <?php } // end if (($go == "judging_scores_bos") && ($id != "default")) ?>
 
 <?php 
@@ -573,7 +560,6 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -583,7 +569,6 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">Entry #</th>
         <th class="dataHeading bdr1B" width="10%">Judging #</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
         <th class="dataHeading bdr1B" width="10%">Score</th>
@@ -618,11 +603,12 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	?>
 </tbody>
 </table>
-<div style="page-break-after:always;"></div>
+
 <?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>"; ?>
 <?php } ?>
 	</div>
 </div>
+<div style="page-break-after:always;"></div>
 <?php } // end if (($go == "judging_scores_bos") && ($id != "default")) ?>
 
 </body>

@@ -157,11 +157,16 @@ function brewer_assignment_checked($a,$b) {
 	<?php } else echo "<p>No judging dates/locations have been specified.</p>"; ?>
     <?php } // end if (($action == "default") && ($section != "step5")) ?>
     <?php if ((($action == "add") || ($action == "edit")) || ($section == "step5")) { ?>
+    <script>
+	$(function() {
+		$( "#judgingDate" ).datepicker({ dateFormat: 'yy-mm-dd' });	
+	});
+	</script>
 	<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=judging_locations&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>
-    <td class="data"><input name="judgingDate" type="text" size="20" onfocus="showCalendarControl(this);" value="<?php if ($action == "edit") echo $row_judging['judgingDate']; ?>"></td>
+    <td class="data"><input id="judgingDate" name="judgingDate" type="text" size="20" value="<?php if ($action == "edit") echo $row_judging['judgingDate']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>

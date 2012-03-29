@@ -1652,7 +1652,7 @@ function get_suffix($dbTable) {
 function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_tables = "SELECT id,tableNumber,tableName FROM $tables_db_table";
+	$query_tables = "SELECT id,tableNumber,tableName FROM $tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	

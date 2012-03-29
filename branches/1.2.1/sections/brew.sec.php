@@ -18,7 +18,12 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <?php if ($action == "add") { ?>
 <p><span class="icon"><img src="images/page_code.png"  /></span>You can also <a  href="index.php?section=beerxml">import your entry's BeerXML document</a>.</p>
 <?php } } ?>
-
+ <script>
+	$(function() {
+		$( "#brewDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+	});
+	</script>
 <form action="includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=brewing&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($row_user['userLevel'] != 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
@@ -116,11 +121,11 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <table>
 <tr>
   <td class="dataLabel">Brewing Date:</td>
-  <td class="data"><input type="text" onfocus="showCalendarControl(this);" name="brewDate" value="<?php if ($action == "edit") echo $row_log['brewDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
+  <td class="data"><input type="text" id="brewDate"  name="brewDate" value="<?php if ($action == "edit") echo $row_log['brewDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
 </tr>
 <tr>
   <td class="dataLabel">Bottling Date:</td>
-  <td class="data"><input type="text" onfocus="showCalendarControl(this);" name="brewBottleDate" value="<?php if ($action == "edit") echo $row_log['brewBottleDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
+  <td class="data"><input type="text" id="brewBottleDate" name="brewBottleDate" value="<?php if ($action == "edit") echo $row_log['brewBottleDate']; ?>" size="20">&nbsp;YYYY-MM-DD</td>
 </tr>
 </table>
 </div>

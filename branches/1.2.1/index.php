@@ -37,7 +37,14 @@ require(INCLUDES.'constants.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/jquery-ui-1.8.18.custom.css" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+
+<script type="text/javascript" src="js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.position.min.js"></script>
 <script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
 <link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />

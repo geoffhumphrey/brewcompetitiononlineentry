@@ -1034,12 +1034,14 @@ ALTER TABLE  `contest_info` ADD  `contestCircuit` TEXT NULL ;
 -- ********************************************************************************
 
 ALTER TABLE  `preferences` 
-ADD  `prefsTimeZone` FLOAT( 11 ) NULL , 
-ADD  `prefsEntryLimit` INT( 11 ) NULL , 
-ADD  `prefsTimeFormat` TINYINT( 1 ) NULL ;
+ADD  `prefsTimeZone` FLOAT(11) NULL , 
+ADD  `prefsEntryLimit` INT(11) NULL , 
+ADD  `prefsTimeFormat` TINYINT(1) NULL ;
 
 ALTER TABLE  `contest_info` 
-CHANGE  `contestRegistrationOpen`  `contestRegistrationOpen` DATETIME NULL DEFAULT NULL ,
-CHANGE  `contestRegistrationDeadline`  `contestRegistrationDeadline` DATETIME NULL DEFAULT NULL ,
-CHANGE  `contestEntryOpen`  `contestEntryOpen` DATETIME NULL DEFAULT NULL ,
-CHANGE  `contestEntryDeadline`  `contestEntryDeadline` DATETIME NULL DEFAULT NULL ;
+CHANGE  `contestRegistrationOpen`  `contestRegistrationOpen` INT(11) NULL DEFAULT NULL ,
+CHANGE  `contestRegistrationDeadline`  `contestRegistrationDeadline` INT(11) NULL DEFAULT NULL ,
+CHANGE  `contestEntryOpen`  `contestEntryOpen` INT(11) NULL DEFAULT NULL ,
+CHANGE  `contestEntryDeadline`  `contestEntryDeadline` INT(11) NULL DEFAULT NULL ,
+ADD  `contestJudgeOpen` INT(11) NULL AFTER  `contestEntryDeadline` ,
+ADD  `contestJudgeDeadline` INT(11) NULL AFTER  `contestJudgeOpen ;
