@@ -7,7 +7,7 @@
  */
 ?>
 <h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
-<?php if ($row_prefs['prefsCompOrg'] == "Y") { 
+<?php if ($row_prefs['prefsCompOrg'] == "Y")  { 
 	// Display BOS winners for each applicable style type
 	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 	sort($a);
@@ -50,9 +50,9 @@
 <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Style</th>
+        <th class="dataList bdr1B" width="25%">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%">Entry Name</th>
+        <th class="dataList bdr1B" width="25%">Style</th>
         <th class="dataList bdr1B">Club</th>
     </tr>
 </thead>
@@ -69,7 +69,7 @@
 	
 	?>
 	<tr>
-        <td class="data"><?php echo display_place($row_bos['scorePlace'],1); ?></td>
+        <td class="data"><?php if ($action != "print") echo display_place($row_bos['scorePlace'],2); else echo display_place($row_bos['scorePlace'],1); ?></td>
         <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>

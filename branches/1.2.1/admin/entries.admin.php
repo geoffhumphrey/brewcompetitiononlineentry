@@ -1,6 +1,6 @@
 <?php
 include(DB.'entries.db.php');
-if (($registration_open == "1")) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
+if (($registration_open == "1") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
 ?>
 <h2>Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if ($action != "print") { ?>
@@ -116,6 +116,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 				null,
 				null,
 				null,
+				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
@@ -156,6 +157,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 				null,
 				null,
 				null,
+				null,
 				null<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
@@ -178,6 +180,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
   <th width="15%" class="dataHeading bdr1B">Name</th>
   <th width="15%" class="dataHeading bdr1B">Category</th>
   <th width="15%" class="dataHeading bdr1B">Brewer</th>
+  <th width="12%" class="dataHeading bdr1B">Updated</th>
   <th width="3%" class="dataHeading bdr1B">Paid?</th>
   <th width="3%" class="dataHeading bdr1B">Rec'd?</th>
   <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
@@ -223,6 +226,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
+  <td class="dataList"><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time"); else echo "&nbsp;"; ?></td>
   <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "Y") echo "X"; } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "Y") echo "X"; } ?></td>
   

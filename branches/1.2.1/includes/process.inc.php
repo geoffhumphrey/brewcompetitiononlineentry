@@ -99,11 +99,11 @@ $deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=5";
 
 // --------------------------- Entries -------------------------------- //
 
-if ($dbTable == "brewing")				include (PROCESS.'process_brewing.inc.php');
+if ($dbTable == "brewing")				include_once (PROCESS.'process_brewing.inc.php');
 
 // --------------------------- Users ------------------------------- //
 
-if ($dbTable == "users") 			include_once (PROCESS.'process_users.inc.php');
+if ($dbTable == "users") 				include_once (PROCESS.'process_users.inc.php');
 
 // --------------------------- Participant or Admin's Info ------------------------------- //
 
@@ -168,6 +168,8 @@ if ($dbTable == "style_types") 			include_once (PROCESS.'process_style_types.inc
 // --------------------------- Various Actions ------------------------------- //
 
 if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php'); 
+
+if ($action == "beerxml")				include_once (PROCESS.'process_beerxml.inc.php');
 
 if ($action == "check_discount") {
 	

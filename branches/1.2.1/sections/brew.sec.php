@@ -20,8 +20,8 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <?php } } ?>
  <script>
 	$(function() {
-		$( "#brewDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		$( "#brewDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
 	});
 	</script>
 <form action="includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=brewing&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">

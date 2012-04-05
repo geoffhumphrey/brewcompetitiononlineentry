@@ -1029,19 +1029,27 @@ ALTER TABLE  `contest_info` ADD  `contestCircuit` TEXT NULL ;
 
 -- ********************************************************************************
 --
--- Version 1.2.1 Updates Follow
+-- Version 1.2.1.0 Updates Follow
 -- 
 -- ********************************************************************************
 
 ALTER TABLE  `preferences` 
-ADD  `prefsTimeZone` FLOAT(11) NULL , 
+ADD  `prefsTimeZone` INT(11) NULL , 
 ADD  `prefsEntryLimit` INT(11) NULL , 
-ADD  `prefsTimeFormat` TINYINT(1) NULL ;
+ADD  `prefsTimeFormat` TINYINT(1) NULL,
+ADD  `prefsGoogle` CHAR( 1 ) NULL DEFAULT NULL AFTER  `prefsTransFee` ,
+ADD  `prefsGoogleAccount` INT( 20 ) NULL DEFAULT NULL COMMENT  'Google Merchant ID' AFTER  `prefsGoogle`,
+ADD  `prefsWinnerDelay` INT( 11 ) NULL DEFAULT NULL COMMENT  'Hours after last judging date beginning time to delay displaying winners' AFTER `prefsDisplayWinners`;
 
 ALTER TABLE  `contest_info` 
-CHANGE  `contestRegistrationOpen`  `contestRegistrationOpen` INT(11) NULL DEFAULT NULL ,
-CHANGE  `contestRegistrationDeadline`  `contestRegistrationDeadline` INT(11) NULL DEFAULT NULL ,
-CHANGE  `contestEntryOpen`  `contestEntryOpen` INT(11) NULL DEFAULT NULL ,
-CHANGE  `contestEntryDeadline`  `contestEntryDeadline` INT(11) NULL DEFAULT NULL ,
-ADD  `contestJudgeOpen` INT(11) NULL AFTER  `contestEntryDeadline` ,
-ADD  `contestJudgeDeadline` INT(11) NULL AFTER  `contestJudgeOpen ;
+CHANGE  `contestRegistrationOpen`  `contestRegistrationOpen` VARCHAR(255) NULL DEFAULT NULL ,
+CHANGE  `contestRegistrationDeadline`  `contestRegistrationDeadline` VARCHAR(255) NULL DEFAULT NULL ,
+CHANGE  `contestEntryOpen`  `contestEntryOpen` VARCHAR(255) NULL DEFAULT NULL ,
+CHANGE  `contestEntryDeadline`  `contestEntryDeadline` VARCHAR(255) NULL DEFAULT NULL ,
+ADD  `contestJudgeOpen` VARCHAR(255) NULL AFTER  `contestEntryDeadline` ,
+ADD  `contestJudgeDeadline` VARCHAR(255) NULL AFTER  `contestJudgeOpen ;
+
+ALTER TABLE  `brewing` CHANGE  `brewScore`  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated.';
+ALTER TABLE  `users` ADD  `userCreated` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.';
+
+ALTER TABLE  `judging_locations` CHANGE  `judgingDate`  `judgingDate` VARCHAR( 255 ) NOT NULL ;

@@ -40,7 +40,6 @@ require(INCLUDES.'constants.inc.php');
 <link rel="stylesheet" href="css/jquery-ui-1.8.18.custom.css" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <script type="text/javascript" src="js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-
 <script type="text/javascript" src="js_includes/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="js_includes/jquery.ui.widget.min.js"></script>
 <script type="text/javascript" src="js_includes/jquery.ui.tabs.min.js"></script>
@@ -51,7 +50,6 @@ require(INCLUDES.'constants.inc.php');
 <script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-
 			$("#modal_window_link").fancybox({
 				'width'				: '75%',
 				'height'			: '75%',
@@ -105,18 +103,24 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   if ($registration_open == "0") { 
   	if ($section != "admin") {
   	?>
-    <div class="closed">Registration will open <?php echo $reg_open; ?>.</div>
+    <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?></div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
+	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
+		if ($section == "list") 	include (SECTIONS.'list.sec.php');
+		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
+		
 		if ($row_user['userLevel'] == "1") {
-			if ($section == "list") 	include (SECTIONS.'list.sec.php');
 			if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
@@ -131,7 +135,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   if ($registration_open == "2") {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="error">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
@@ -156,7 +160,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   } 
   if ($registration_open == "1") { // If registration is currently open
-  	if ((!isset($_SESSION['loginUsername'])) && ($action != "print") && ($section != "register") && (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries has been reached. Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted..</div>";
+  	if (($action != "print") && ($section != "register") && (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) {  echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries has been reached. No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; }
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');

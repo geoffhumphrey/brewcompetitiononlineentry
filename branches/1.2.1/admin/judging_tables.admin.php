@@ -317,7 +317,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     <td class="dataLabel">Style(s):</td>
     <td class="data">
     <?php 
-    $query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+    $query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewReceived='Y'"; // Changed to only "brewReceived" by request as of 1.2.1.0
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 

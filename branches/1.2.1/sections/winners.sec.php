@@ -41,9 +41,9 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
     <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Style</th>
+        <th class="dataList bdr1B" width="25%">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%">Entry Name</th>
+        <th class="dataList bdr1B" width="25%">Style</th>
         <th class="dataList bdr1B">Club</th>
     </tr>
 </thead>
@@ -72,7 +72,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			$row_styles = mysql_fetch_assoc($styles);
 	?>
     <tr>
-        <td class="data"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
+        <td class="data"><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
         <td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
         <td class="data"><?php echo $row_entries['brewName']; ?></td>
         <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
@@ -156,7 +156,6 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log_winners = mysql_fetch_assoc($log_winners)); ?>
 </tbody>
 </table>

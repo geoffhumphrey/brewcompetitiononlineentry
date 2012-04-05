@@ -73,17 +73,15 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
 </table>
 <h3>Entry and Registration</h3>
-<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <script>
 	$(function() {
-		$( "#contestEntryOpen" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestEntryDeadline" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestRegistrationOpen" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestRegistrationDeadline" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestJudgeOpen" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestJudgeDeadline" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		$( "#contestAwardsLocDate" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		$( "#contestEntryOpen" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestEntryDeadline" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestRegistrationOpen" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestRegistrationDeadline" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestJudgeOpen" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestJudgeDeadline" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
+		$( "#contestAwardsLocDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
 		
 		$('#contestEntryOpenTime').timepicker({ showPeriod: true, showLeadingZero: true });
 		$('#contestEntryDeadlineTime').timepicker({ showPeriod: true, showLeadingZero: true });

@@ -4,10 +4,11 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
 
+$judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
+
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO judging_locations (judgingDate, judgingTime, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['judgingDate'], "text"),
-                       GetSQLValueString($_POST['judgingTime'], "text"),
+	$insertSQL = sprintf("INSERT INTO judging_locations (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s)",
+                       GetSQLValueString($judgingDate, "text"),
                        GetSQLValueString(capitalize($_POST['judgingLocation']), "scrubbed"),
                        GetSQLValueString(capitalize($_POST['judgingLocName']), "scrubbed"),
 					   GetSQLValueString($_POST['judgingRounds'], "text")
@@ -22,9 +23,8 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE judging_locations SET judgingDate=%s, judgingTime=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
-                       GetSQLValueString($_POST['judgingDate'], "text"),
-                       GetSQLValueString($_POST['judgingTime'], "text"),
+	$updateSQL = sprintf("UPDATE judging_locations SET judgingDate=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
+                       GetSQLValueString($judgingDate, "text"),
                        GetSQLValueString(capitalize($_POST['judgingLocation']), "scrubbed"),
                        GetSQLValueString(capitalize($_POST['judgingLocName']), "scrubbed"),
 					   GetSQLValueString($_POST['judgingRounds'], "text"),

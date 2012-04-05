@@ -13,6 +13,8 @@ include(DB.'brewer.db.php');
 if (($section == "admin") && ($go == "default")) { ?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
+<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>

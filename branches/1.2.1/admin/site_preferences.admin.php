@@ -49,6 +49,12 @@ $totalRows_themes = mysql_num_rows($themes);
   	<td class="data">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</td>
   </tr>
   <tr>
+  	<td class="dataLabel">Winner Display Delay:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo "8"; else echo $row_prefs['prefsWinnerDelay']; ?>" size="3" maxlength="11" /> 
+    hours</td>
+    <td class="data">Hours to delay displaying winners after the <em>start</em> time of the final judging session.</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Require Special Ingredients<br />
       or Classic Style:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
@@ -241,10 +247,20 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="data"><input name="prefsPaypalAccount" type="text" size="35" maxlength="255" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>"></td>
     <td class="data">Indicate the email address associated with your PayPal account.<br />Please note that you need to have a verified bank account with PayPal to accept credit cards for payment. More information is contained in the &quot;Merchant Services&quot; area of your PayPal account.</td>
   </tr>
+   <tr>
+  	<td class="dataLabel">Google Wallet for Payment:</td>
+   	<td class="data"><input type="radio" name="prefsGoogle" value="Y" id="prefsGoogle_0"  <?php if ($row_prefs['prefsGoogle'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsGoogle" value="N" id="prefsGoogle_1" <?php if ($row_prefs['prefsPaypal'] == "N") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Do you want to accept credit card payments via PayPal?</td>
+  </tr>
   <tr>
-  	<td class="dataLabel">Entrant Pays PayPal Fees:</td>
+    <td class="dataLabel">Google Merchant ID:</td>
+    <td class="data"><input name="prefsGoogleAccount" type="text" size="35" maxlength="255" value="<?php echo $row_prefs['prefsGoogleAccount']; ?>"></td>
+    <td class="data">Indicate your Google Merchant ID.<br />Please note that a <a href="https://checkout.google.com/sell/" target="_blank">Google Wallet/Checkout</a> account is required to accept payments through Google. To function properly, your account must be <a href="https://support.google.com/checkout/sell/bin/answer.py?hl=en&amp;ctx=cartwizard_acceptunsigned&amp;answer=113366" target="_blank">set up to accept unsigned carts</a>.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entrant Pays Checkout Fees:</td>
    	<td class="data"><input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Do you want participants paying via PayPal to also pay the transaction fees?<br />PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</td>
+  	<td class="data">Do you want participants paying via PayPal and/or Google to also pay the transaction fees?<br />PayPal and Google each charge 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</td>
   </tr>
 </table>
 <h3>Sponsors</h3>

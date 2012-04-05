@@ -107,13 +107,12 @@ function judging_date_return() {
 	$row_check = mysql_fetch_assoc($check);
 	$today = strtotime("now");
 	do {
- 		if (strtotime($row_check['judgingDate']) > $today) $newDate[] = 1; 
+ 		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
  		else $newDate[] = 0;
 	} while ($row_check = mysql_fetch_assoc($check));
 	$r = array_sum($newDate);
 	return $r;
 }
-
 
 function greaterDate($start_date,$end_date)
 {
@@ -1127,7 +1126,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1148,7 +1147,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1168,7 +1167,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -1185,7 +1184,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1581,7 +1580,7 @@ function get_entry_count() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewReceived='Y'";
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1704,6 +1703,74 @@ function winner_check($id,$scores_db_table,$tables_db_table,$method) {
 	return $r;
 }
 
+function timezone_name($GMT) {
+	switch($GMT) {
+		case "-12": $timezone_name = "Niue Time";
+		break;
+		case "-11": $timezone_name = "Somoa Time";
+		break;
+        case "-10": $timezone_name = "Hawaii-Aleutian Time";
+		break;
+        case "-9": $timezone_name = "Alaska Time";
+		break; 
+        case "-8": $timezone_name = "Pacific Time";
+		break; 
+        case "-7": $timezone_name = "Mountain Time";
+		break; 
+        case "-6": $timezone_name = "Central Time";
+		break; 
+        case "-5": $timezone_name = "Eastern Time";
+		break;
+        case "-4": $timezone_name = "Atlantic Time";
+		break; 
+       	case "-3.5": $timezone_name = "Newfoundland Time";
+		break; 
+        case "-3": $timezone_name = "Western Greenland Time";
+		break; 
+        case "-2": $timezone_name = "South Sandwich Islands Time";
+		break;
+        case "-1": $timezone_name = "Somoa Standard Time";
+		break; 
+        case "0": $timezone_name = "Western European Time";
+		break;
+        case "1": $timezone_name = "Central European Time";
+		break;
+        case "2": $timezone_name = "Eastern European Time";
+		break;
+        case "3": $timezone_name = "East Africa Time";
+		break; 
+        case "3.5": $timezone_name = "Iran Standard Time";
+		break; 
+        case "4": $timezone_name = "Gulf Standard Time";
+		break;
+        case "4.5": $timezone_name = "Afghanistan Time";
+		break; 
+        case "5": $timezone_name = "Pakistan Standard Time";
+		break; 
+        case "5.5": $timezone_name = "Indian Standard Time";
+		break; 
+        case "6": $timezone_name = "British Indian Ocean Time";
+		break; 
+        case "7": $timezone_name = "Indochina Time";
+		break; 
+        case "8": $timezone_name = "ASEAN Common Time";
+		break;
+        case "9": $timezone_name = "Australian Western Standard Time";
+		break;
+        case "9.5": $timezone_name = "Australian Central Standard Time";
+		break;
+        case "10": $timezone_name = "Australian Eastern Standard Time";
+		break;
+        case "11": $timezone_name = "Solomon Islands Time";
+		break;
+        case "12": $timezone_name = "New Zeland Standard Time";
+		break;
+		case "13": $timezone_name = "Phoenix Island Time";
+		break;
+	}
+	return $timezone_name;
+}
+
 
 function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $display_format, $return_format) { 
     $timezones = array( 
@@ -1718,7 +1785,7 @@ function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $disp
         '-4'=>'America/Caracas', 
         '-3.5'=>'America/St_Johns', 
         '-3'=>'America/Argentina/Buenos_Aires', 
-        '-2'=>'Atlantic/South_Georgia',// no cities here so just picking an hour ahead 
+        '-2'=>'Atlantic/South_Georgia',
         '-1'=>'Atlantic/Azores', 
         '0'=>'Europe/London', 
         '1'=>'Europe/Paris', 
@@ -1738,9 +1805,9 @@ function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $disp
         '11'=>'Asia/Magadan', 
         '12'=>'Asia/Kamchatka',
 		'13'=>'Pacific/Tongatapu',
-    ); 
-    date_default_timezone_set($timezones[$GMT]); //ensures that whenever I return this date, I will get central time 
-    //if ($GMT == -2) $timestamp -= 3600; //since i set that an hour ahead, im subtracting the extra hour now 
+    );
+	
+    date_default_timezone_set($timezones[$GMT]);
 	switch($display_format) {
 		case "long": // Long Format
 			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
@@ -1762,7 +1829,13 @@ function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $disp
 	
 	switch($return_format) {
 		case "date-time":
-			$return = $date." at ".$time;
+			$return = $date." at ".$time.", ".timezone_name($GMT);
+		break;
+		case "date-time-no-gmt":
+			$return = $date." ".$time;
+		break;
+		case "time-gmt":
+			$return = $time.", ".timezone_name($GMT);
 		break;
 		case "time":
 			$return = $time;
@@ -1770,6 +1843,34 @@ function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $disp
 		default: $return = $date;
 	}
 	return $return;
+}
+
+
+function brewer_assignment($a,$method){ 
+	switch($method) {
+	case "1": // 
+		if ($a == "J") $r = "Judge"; 
+		elseif ($a == "S") $r = "Steward"; 
+		elseif ($a == "X") $r = "Staff";
+		elseif ($a == "O") $r = "Organizer"; 
+		else $r = "";
+	break;
+	case "2": // for $filter URL variable
+		if ($a == "judges") $r = "J"; 
+		elseif ($a == "stewards") $r = "S"; 
+		elseif ($a == "staff") $r = "X";
+		elseif ($a == "bos") $r = "Y";
+		else $r = "";
+	break;
+	case "3": // for $filter URL variable
+		if ($a == "judges") $r = "Judges"; 
+		elseif ($a == "stewards") $r = "Stewards"; 
+		elseif ($a == "staff") $r = "Staff";
+		elseif ($a == "bos") $r = "BOS Judges";
+		else $r = "";
+	break;
+	}
+return $r;
 }
 
 ?>

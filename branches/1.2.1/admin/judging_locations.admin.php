@@ -11,33 +11,6 @@ include(DB.'judging_locations.db.php');
 
 // Page specific functions
 
-function brewer_assignment($a,$method){ 
-	switch($method) {
-	case "1": // 
-		if ($a == "J") $r = "Judge"; 
-		elseif ($a == "S") $r = "Steward"; 
-		elseif ($a == "X") $r = "Staff";
-		elseif ($a == "O") $r = "Organizer"; 
-		else $r = "Not Set";
-	break;
-	case "2": // for $filter URL variable
-		if ($a == "judges") $r = "J"; 
-		elseif ($a == "stewards") $r = "S"; 
-		elseif ($a == "staff") $r = "X";
-		elseif ($a == "bos") $r = "Y";
-		else $r = "";
-	break;
-	case "3": // for $filter URL variable
-		if ($a == "judges") $r = "Judges"; 
-		elseif ($a == "stewards") $r = "Stewards"; 
-		elseif ($a == "staff") $r = "Staff";
-		elseif ($a == "bos") $r = "BOS Judges";
-		else $r = "";
-	break;
-	}
-return $r;
-}
-
 function brewer_assignment_checked($a,$b) {
 	if (($a == "judges") && ($b == "J")) $r = "CHECKED"; 
 	elseif (($a == "stewards") && ($b == "S")) $r = "CHECKED";
@@ -144,8 +117,8 @@ function brewer_assignment_checked($a,$b) {
  <?php do { ?>
  <tr>
   <td width="25%" class="dataList"><?php echo $row_judging_locs['judgingLocName']; ?></td>
-  <td width="15%" class="dataList"><?php echo date_convert($row_judging_locs['judgingDate'], 2, $row_prefs['prefsDateFormat']); ?></td>
-  <td width="15%" class="dataList"><?php echo $row_judging_locs['judgingTime']; ?></td>
+  <td width="15%" class="dataList"><?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_locs['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date"); ?></td>
+  <td width="15%" class="dataList"><?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_locs['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "time-gmt"); ?></td>
   <td width="30%" class="dataList"><?php echo $row_judging_locs['judgingLocation']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_judging_locs['judgingRounds']; ?></td>
   <td class="dataList" nowrap="nowrap">
@@ -159,14 +132,21 @@ function brewer_assignment_checked($a,$b) {
     <?php if ((($action == "add") || ($action == "edit")) || ($section == "step5")) { ?>
     <script>
 	$(function() {
-		$( "#judgingDate" ).datepicker({ dateFormat: 'yy-mm-dd' });	
+		$('#judgingDate').datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
+		$('#judgingTime').timepicker({ showPeriod: true, showLeadingZero: true });
+		
 	});
 	</script>
 	<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=judging_locations&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>
-    <td class="data"><input id="judgingDate" name="judgingDate" type="text" size="20" value="<?php if ($action == "edit") echo $row_judging['judgingDate']; ?>"></td>
+    <td class="data"><input id="judgingDate" name="judgingDate" type="text" size="20" value="<?php if ($action == "edit") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+    <td class="data"><span class="required">Required</span></td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Start Time:</td>
+    <td class="data"><input id="judgingTime" name="judgingTime" size="10" value="<?php if ($action == "edit") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
@@ -174,11 +154,7 @@ function brewer_assignment_checked($a,$b) {
     <td class="data"><input name="judgingLocName" size="30" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>"></td>
     <td class="data"><span class="required">Required</span> <em>Provide the name of the judging location.</em></td>
   </tr>
-  <tr>
-    <td class="dataLabel">Start Time:</td>
-    <td class="data"><input name="judgingTime" size="30" value="<?php if ($action == "edit") echo $row_judging['judgingTime']; ?>"></td>
-    <td class="data"><span class="required">Required</span></td>
-  </tr>
+  
   <tr>
     <td class="dataLabel">Address:</td>
     <td class="data"><input name="judgingLocation" size="50" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>"></td>
