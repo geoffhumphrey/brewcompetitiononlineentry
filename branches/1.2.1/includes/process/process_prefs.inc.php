@@ -11,13 +11,11 @@ if ($action == "add") {
 	prefsWeight2, 
 	prefsLiquid1, 
 	prefsLiquid2,
-	
 	prefsPaypal, 
 	prefsPaypalAccount, 
 	prefsCurrency, 
 	prefsCash, 
 	prefsCheck,
-	
 	prefsCheckPayee,
 	prefsGoogle,
 	prefsGoogleAccount,
@@ -25,14 +23,13 @@ if ($action == "add") {
 	prefsSponsors,
 	prefsSponsorLogos,
 	prefsSponsorLogoSize,
-	
 	prefsCompLogoSize,
 	prefsDisplayWinners,
 	prefsWinnerDelay,
+	prefsWinnerMethod,
 	prefsDisplaySpecial,
 	prefsCompOrg,
 	prefsEntryForm,
-	
 	prefsRecordLimit,
 	prefsRecordPaging,
 	prefsTheme,
@@ -48,7 +45,7 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
-	%s)",
+	%s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -64,26 +61,27 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['prefsCheckPayee'], "text"),
 						   GetSQLValueString($_POST['prefsGoogle'], "text"),
 						   GetSQLValueString($_POST['prefsGoogleAccount'], "text"),
-						   
 						   GetSQLValueString($_POST['prefsTransFee'], "text"),
 						   GetSQLValueString($_POST['prefsSponsors'], "text"),
+						   
 						   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
 						   GetSQLValueString($_POST['prefsSponsorLogoSize'], "int"),
-						   
 						   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 						   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 						   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
+						   
+						   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
 						   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 						   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 						   GetSQLValueString($_POST['prefsEntryForm'], "text"),
-						   
 						   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
+						   
 						   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
 						   GetSQLValueString($_POST['prefsTheme'], "text"),
 						   GetSQLValueString($_POST['prefsDateFormat'], "text"),
 						   GetSQLValueString($_POST['prefsContact'], "text"),
-						   
 						   GetSQLValueString($_POST['prefsTimeZone'], "text"),
+						   
 						   GetSQLValueString($_POST['prefsEntryLimit'], "text"),
 						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
 						   GetSQLValueString($id, "int"));
@@ -119,6 +117,7 @@ if ($action == "edit") {
 	prefsCompLogoSize=%s, 
 	prefsDisplayWinners=%s, 
 	prefsWinnerDelay=%s,
+	prefsWinnerMethod=%s,
 	prefsDisplaySpecial=%s, 
 	prefsCompOrg=%s, 
 	prefsEntryForm=%s,
@@ -151,6 +150,7 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 						   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 						   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
+						   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
 						   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 						   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 						   GetSQLValueString($_POST['prefsEntryForm'], "text"),

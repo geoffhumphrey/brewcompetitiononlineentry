@@ -6,7 +6,7 @@
  * 
  */
 ?>
-<h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } ?></h2>
+
 <?php if ($row_prefs['prefsCompOrg'] == "Y")  { 
 	// Display BOS winners for each applicable style type
 	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
@@ -17,16 +17,28 @@
 		$row_style_type = mysql_fetch_assoc($style_type);
 		
 		if ($row_style_type['styleTypeBOS'] == "Y") { 
-			$query_bos = "SELECT * FROM $scores_bos_db_table WHERE (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') AND scoreType='$type' ORDER BY scorePlace ASC";
+			$query_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID AND scoreType='%s' ORDER BY a.scorePlace", $scores_bos_db_table, $brewing_db_table, $brewer_db_table, $type);
 			$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
+			//echo $query_bos;
 			$row_bos = mysql_fetch_assoc($bos);
 			$totalRows_bos = mysql_num_rows($bos);
+			
 			if ($totalRows_bos > 0) { 
 			
 			$random = random_generator(6,2);
 			
-?>        
-<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h3>
+if ($action == "print") { 
+	?>
+	<div id="header">	
+		<div id="header-inner">
+    	<?php } ?>        
+		<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h3>
+        <?php 
+		if ($action == "print") { 
+		?>
+        </div>
+	</div>
+    	<?php } ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -57,37 +69,24 @@
     </tr>
 </thead>
 <tbody>
-	<?php do {
-	$query_entries = sprintf("SELECT brewBrewerID,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewCoBrewer FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
-	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-	$row_entries = mysql_fetch_assoc($entries);
-	$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
-	
-	$query_brewer = sprintf("SELECT id,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_assoc($brewer);
-	
-	?>
+	<?php do { 	?>
 	<tr>
         <td class="data"><?php if ($action != "print") echo display_place($row_bos['scorePlace'],2); else echo display_place($row_bos['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
-        <td class="data"><?php echo $row_entries['brewName']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
-        <td class="data"><?php echo $row_brewer['brewerClubs']; ?></td>
+        <td class="data"><?php echo $row_bos['brewerFirstName']." ".$row_bos['brewerLastName']; if ($row_bos['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_bos['brewCoBrewer']; ?></td>
+        <td class="data"><?php echo $row_bos['brewName']; ?></td>
+        <td class="data"><?php echo $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle']; ?></td>
+        <td class="data"><?php echo $row_bos['brewerClubs']; ?></td>
     </tr>
-    <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
-	mysql_free_result($bos);
-	mysql_free_result($entries);
-	?>
+    <?php } while ($row_bos = mysql_fetch_assoc($bos)); ?>
 </tbody>
 </table>
 <?php 	} 
-	else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
+	else echo "<h3>BOS - ".$row_style_type['styleTypeName']."</h3><p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
     } 
   }
 //if ($row_contest_info['contestBOSAward'] != "") echo "<h3>Best of Show Award(s)</h3>".$row_contest_info['contestBOSAward']; 
 } // end if ($row_prefs['prefsCompOrg'] == "Y") 
-
+/*
 if ($row_prefs['prefsCompOrg'] == "N") { 
 include(DB.'entries.db.php');
 if ($totalRows_bos > 0) { 
@@ -243,4 +242,5 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
 <?php } 
   } // end if BOS cider
 } else echo "</h2><p>No BOS places have been entered yet. Please check back later.</p>";
+*/
 ?>

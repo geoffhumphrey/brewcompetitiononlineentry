@@ -1337,9 +1337,9 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	if ($method == "thickbox") { $suffix = '&KeepThis=true&TB_iframe=true&height=450&width=900'; $class = 'class="menuItem thickbox"'; }
+	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
 	
-	if ($method == "none") { $suffix = "";  $class = 'class="menuItem"'; }
+	if ($method == "none") { $suffix = '';  $class = 'class="menuItem"'; }
 	
 	$random = random_generator(7,2);
 	

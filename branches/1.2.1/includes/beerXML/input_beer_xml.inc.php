@@ -80,9 +80,7 @@ class InputBeerXML {
         return $this->insertedRecipes;
     }
     //}}}
-
-    //{{{ insertRecipe
-    function insertRecipe($recipe){  // inserts into `recipes` DB table 
+    function insertRecipe($recipe){ 
 	include(INCLUDES.'scrubber.inc.php');
 	
         $brewing = $connection;
@@ -93,15 +91,11 @@ class InputBeerXML {
         $counter = array();
 		$vf["brewBrewerFirstName"] = $_POST["brewBrewerFirstName"];
 		$vf["brewBrewerLastName"] = $_POST["brewBrewerLastName"];
-        //$vf["brewName"] = $this->strtr($recipe->name, $string);
         $vf["brewStyle"] = strtr($recipe->style->name, $html_string);
 		$vf["brewCategory"] = ltrim($recipe->style->categoryNumber, "0");
 		$vf["brewCategorySort"] = $recipe->style->categoryNumber;
 		$vf["brewSubCategory"] = $recipe->style->styleLetter;
-        //$vf["brewSource"] = $recipe->brewer;
         $vf["brewYield"] = $this->convertUnit($recipe->batchSize, "volume");
-        //$vf["brewNotes"] = strtr($recipe->notes, $string);
-        //$vf["brewMethod"] = $recipe->type; 
         $counter["grain"] = 0;
         $counter["extract"] = 0;
         $counter["adjunct"] = 0;
@@ -146,14 +140,13 @@ class InputBeerXML {
                     break;
             }
         }
-		
-		/*
         $counter["misc"] = 0;
+		/*
         foreach($recipe->miscs->miscs as $misc){
             $counter["misc"]++;
             if($counter["misc"] <= 4){
                 $vf["brewMisc" . $counter["misc"] . "Name"] = $misc->name;
-                $vf["brewMisc" . $counter["misc"] . "Type"] = $misc->type;  // BeerXML differntiates between liquid and volume - BB 2.2 does not - item for future release
+                $vf["brewMisc" . $counter["misc"] . "Type"] = $misc->type;  // BeerXML differntiates between liquid and volume 
                 $vf["brewMisc" . $counter["misc"] . "Use"] = $misc->useFor;
                 $vf["brewMisc" . $counter["misc"] . "Time"] = round($misc->time, 0);
                 $vf["brewMisc" . $counter["misc"] . "Amount"] = round($misc->amount, 2);  // Beer XML standard is kg or liters - will need to address in subsequent release
@@ -188,47 +181,33 @@ class InputBeerXML {
 		}
 		
 		$counter["mash"] = 0;
-        //$vf["brewMashGrainWeight"] = $recipe->mash->
-        //$vf["brewMashGrainTemp"] = $this->convertUnit($recipe->mash->grainTemp,"temperature");
-        //$vf["brewMashTunTemp"] = $this->convertUnit($recipe->mash->tunTemp,"temperature");
-        //$vf["brewMashPH"] = $recipe->mash->ph;
-        //$vf["brewMashGrainWeight"] = $totalGrainWeight;
-        //$vf["brewMashType"] = "Infusion"; // this is hard coded because it is the most common and the beerXML spec does not mention it
-        //$vf["brewMashEquipAdjust"] = $recipe->mash->equipAdjust;  // FIELDS TO COMPLETE: spargeAmt
-        //$vf["brewMashSpargeTemp"] = $this->convertUnit($recipe->mash->spargeTemp,"temperature");
-       // $totalSpargeAmount = 0;
+        
         foreach($recipe->mash->mashSteps as $mashStep){
             $counter["mash"]++;
             if($counter["mash"] <= 5){
                 $vf["brewMashStep" . $counter["mash"] . "Name"] = strtr($mashStep->name, $html_string);
                 $vf["brewMashStep" . $counter["mash"] . "Temp"] = $this->convertUnit($mashStep->stepTemp,"temperature");
                 $vf["brewMashStep" . $counter["mash"] . "Time"] = $mashStep->stepTime;
-                //$vf["brewMashStep" . $counter["mash"] . "Desc"] = $mashStep->type;
-                //$totalSpargeAmount += $mashStep->infuseAmount;
             }
         }
-        //$vf["brewMashSpargAmt"] = round($this->convertUnit($totalSpargeAmount,"volume"),3);
-
         $vf["brewOG"] = $recipe->og; // changed_GH
         $vf["brewFG"] = $recipe->fg; // changed_GH
-        // $vf["brewProcedure"] = $recipe->notes;
         if ($recipe->primaryAge != "") { $vf["brewPrimary"] = round($recipe->primaryAge, 0); }
         if ($recipe->primaryTemp != "") { $vf["brewPrimaryTemp"] = $this->convertUnit($recipe->primaryTemp,"temperature"); }
         if ($recipe->secondaryAge != "") { $vf["brewSecondary"] = round($recipe->secondaryAge, 0); }
 		if ($recipe->secondaryTemp != "") { $vf["brewSecondaryTemp"] = $this->convertUnit($recipe->secondaryTemp,"temperature"); }
 		if ($recipe->tertiaryAge != "") { $vf["brewOther"] = round($recipe->tertiaryAge, 0); }
         if ($recipe->tertiaryTemp != "") { $vf["brewOtherTemp"] = $this->convertUnit($recipe->tertiaryTemp,"temperature"); }
-		//if ($recipe->age != "") { $vf["brewAge"] = round($recipe->age, 0); }
-        //if ($recipe->ageTemp != "") { $vf["brewAgeTemp"] = $this->convertUnit($recipe->ageTemp,"temperature"); }
-		//if ($recipe->ibu != "") { $vf["brewBitterness"] = $recipe->ibu; }
-        //if ($recipe->estimatedColor != "") { $vf["brewLovibond"] = 0 . rtrim($recipe->estimatedColor," SRM"); }
-         $vf["brewBrewerID"] = $_POST["brewBrewerID"];	
-		 require(CONFIG.'config.php');
-		 mysql_select_db($database, $brewing);
-		 $query_style_name = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
-		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
-		 $row_style_name = mysql_fetch_assoc($style_name);														// changed_GH to accomodate club edition
-		 $vf["brewJudgingLocation"] = $row_style_name['brewStyleJudgingLoc'];
+		
+		$vf["brewBrewerID"] = $_POST["brewBrewerID"];	
+		
+			require(CONFIG.'config.php');
+			mysql_select_db($database, $brewing);
+			$query_style_name = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
+			$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
+			$row_style_name = mysql_fetch_assoc($style_name);
+			
+		$vf["brewJudgingLocation"] = $row_style_name['brewStyleJudgingLoc'];
 		 	
         foreach($vf as $field=>$value){
             $fields .= "," . $field;
@@ -238,11 +217,10 @@ class InputBeerXML {
         $fields .= ")";
         $values .= ")";
         $sqlQuery .= $fields . $values;
+		
 		require(CONFIG.'config.php');
         mysql_select_db($database, $brewing) or die(mysql_error());
         $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());
-
-        $this->insertedRecipes[mysql_insert_id()] = $recipe->name;
         }
     //}}}
 
@@ -252,18 +230,6 @@ class InputBeerXML {
             $this->insertBlog($recipe);
         }
         return $this->insertedRecipes;
-    }
-
-//}
-//}}}
-
-
-    
+    } 
   }
-
-//}}}
-//}}}
-//}}}
-//}}}
-
 ?>

@@ -222,5 +222,4 @@ class Equipments extends Parser{
 
 }
 //}}}
-
 ?>

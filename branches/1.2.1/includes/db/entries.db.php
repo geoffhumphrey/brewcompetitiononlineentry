@@ -15,27 +15,35 @@ elseif (($section == "brew") && ($action == "edit")) {
 	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 	}
 	
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default")) { 
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM brewing ORDER BY $sort $dir";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
 	}
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default")) { 
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "paid")) { 
+	$query_log = "SELECT * FROM brewing WHERE brewPaid='Y'";
+	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
+	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='Y'"; 
+	}
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "unpaid")) { 
+	$query_log = "SELECT * FROM brewing WHERE brewPaid='' OR brewPaid='N'";
+	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
+	$query_log_paid = "SELECT * FROM brewing WHERE brewPaid='' OR brewPaid='N'";
+	}
+elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM brewing WHERE brewCategorySort='$filter' ORDER BY $sort $dir";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 	$query_log_paid = "SELECT * FROM brewing WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
 	}
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default")) { 
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable != "default") && ($bid == "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM $dbTable ORDER BY $sort $dir";
-	//if ($view == "default") $query_log .= " LIMIT $start, $display";
 	$query_log_paid = "SELECT * FROM $dbTable WHERE brewPaid='Y'"; 
 	}
-elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default")) { 
+elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable != "default") && ($bid == "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' ORDER BY $sort $dir"; 
-	//if ($view == "default") $query_log .= " LIMIT $start, $display";
 	$query_log_paid = "SELECT * FROM $dbTable WHERE brewCategorySort='$filter' AND brewPaid='Y'"; 
 	}
-elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default")) { 
+elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM brewing WHERE brewBrewerID='$bid' ORDER BY $sort $dir";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
 	$query_log_paid = "SELECT * FROM brewing WHERE brewBrewerID='$bid' AND brewPaid='Y'"; 

@@ -341,7 +341,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
     	<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { ?>
-			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
+			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
     		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
     	</div>
     </li>
@@ -353,7 +353,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
     	<div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { ?>
-			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
     		<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
     </li>
@@ -397,19 +397,19 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			<p class="admin_default_header">After Judging</p>
 			<ul class="admin_default">
 				<li>Results Report by Table (with Scores):</li>
-				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
-				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>Results Report by Table (without Scores):</li>
-				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
-				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html">Download HTML (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>BOS Round(s) Results Report:</li>
-				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BOS Round(s) Results Report">Print</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">Download HTML</a></li>	
 			</ul>

@@ -16,7 +16,8 @@ ADD  `prefsEntryLimit` INT(11) NULL ,
 ADD  `prefsTimeFormat` TINYINT(1) NULL,
 ADD  `prefsGoogle` CHAR( 1 ) NULL DEFAULT NULL AFTER  `prefsTransFee` ,
 ADD  `prefsGoogleAccount` INT( 20 ) NULL DEFAULT NULL COMMENT  'Google Merchant ID' AFTER  `prefsGoogle`,
-ADD  `prefsWinnerDelay` INT( 11 ) NULL DEFAULT NULL COMMENT  'Hours after last judging date beginning time to delay displaying winners' AFTER `prefsDisplayWinners`;
+ADD  `prefsWinnerDelay` INT( 11 ) NULL DEFAULT NULL COMMENT  'Hours after last judging date beginning time to delay displaying winners' AFTER `prefsDisplayWinners`,
+ADD `prefsWinnerMethod` INT NULL DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category' AFTER `prefsWinnerDelay` ;
 
 UPDATE  `preferences` SET  `prefsTimeZone` =  '0', `prefsEntryLimit` =  '500', `prefsTimeFormat` =  '0', `prefsGoogle` = 'N' WHERE `id` = '1';
 

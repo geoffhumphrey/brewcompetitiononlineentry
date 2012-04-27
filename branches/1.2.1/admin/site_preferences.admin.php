@@ -55,6 +55,18 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="data">Hours to delay displaying winners after the <em>start</em> time of the final judging session.</td>
   </tr>
   <tr>
+    <td class="dataLabel">Winner Place Distribution Method:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsWinnerMethod">
+    <option value="0" <?php if (($section == "step3") || ($row_prefs['prefsWinnerMethod'] == "0")) echo "SELECTED"; ?>>By Table</option>
+    <option value="1" <?php if ($row_prefs['prefsWinnerMethod'] == "1") echo "SELECTED"; ?>>By Style Category</option>
+    <option value="2" <?php if ($row_prefs['prefsWinnerMethod'] == "2") echo "SELECTED"; ?>>By Style Sub-Category</option>
+    </select>
+    </td>
+    </td>
+    <td class="data">How the competition will award places for winning entries.</td>
+  </tr>
+  <tr>
     <td class="dataLabel">Require Special Ingredients<br />
       or Classic Style:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>

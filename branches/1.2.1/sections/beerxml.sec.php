@@ -7,7 +7,7 @@
  */
 
 if ($php_version >= "5") { 
-
+$return = "";
 include (INCLUDES.'beerXML/input_beer_xml.inc.php');
 //Mmaximum file size.
 $MAX_SIZE = 2000000;
@@ -73,8 +73,17 @@ else
 	$message = "Invalid file specified.";
 
 ?>
+
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
-<p><span class="icon"><img src="images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
+<?php if ($return != "") {
+		$query_entry_check = "SELECT id FROM brewing ORDER BY id DESC LIMIT 1";
+		$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
+		$row_entry_check = mysql_fetch_assoc($entry_check);
+		$return = "index.php?section=brew&action=edit&id=".$row_entry_check['id']."&msg=10";
+		echo $return;	
+}
+?>
+<p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/beerxml_import.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>
