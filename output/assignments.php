@@ -95,7 +95,7 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $location_info['2']."<br>".date_convert($location_info['0'], 3, $row_prefs['prefsDateFormat'])."<br>".$location_info['1']; ?></td>
+        <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignRound']; ?></td>

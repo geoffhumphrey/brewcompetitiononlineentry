@@ -36,6 +36,7 @@ include("fermentables.php");
 include("yeast.php");
 include("mash.php");
 include("recipe.php");
+
 //}}}
 
 //{{{ BeerXMLParser
@@ -69,7 +70,7 @@ class BeerXMLParser {
 	function BeerXMLParser($filename)
 	{
 		$xml_parser = xml_parser_create();
-		xml_set_object($xml_parser,$this);
+		xml_set_object($xml_parser,&$this);
 		xml_set_element_handler($xml_parser, "startElement", "endElement");
 		xml_set_character_data_handler($xml_parser, "nodeData");
         xml_parser_set_option($xml_parser,XML_OPTION_TARGET_ENCODING,"UTF-8");

@@ -39,7 +39,7 @@ $query_countries = "SELECT * FROM countries ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
 ?>
-<p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/my_info.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
+<p><span class="icon"><img src="images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">

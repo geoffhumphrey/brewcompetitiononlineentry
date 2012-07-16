@@ -28,6 +28,7 @@ function display_array_content($arrayname,$method) {
 }
 
 function check_setup() {
+	
 	include(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);
 	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
@@ -48,7 +49,6 @@ function check_setup() {
 	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
 	else return false;
 }
-
 
 // function to generate random number
 function random_generator($digits,$method){
@@ -105,7 +105,7 @@ function judging_date_return() {
 	$query_check = "SELECT judgingDate FROM judging_locations";
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
-	$today = date('Y-m-d');
+	$today = strtotime("now");
 	do {
  		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
  		else $newDate[] = 0;
@@ -113,7 +113,6 @@ function judging_date_return() {
 	$r = array_sum($newDate);
 	return $r;
 }
-
 
 function greaterDate($start_date,$end_date)
 {
@@ -190,6 +189,83 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 }
 
 // ---------------------------- Date Conversion -----------------------------------------
+
+function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $display_format, $return_format) { 
+    $timezones = array( 
+        '-12'=>'Pacific/Kwajalein', 
+        '-11'=>'Pacific/Midway', 
+        '-10'=>'Pacific/Honolulu', 
+        '-9'=>'America/Anchorage', 
+        '-8'=>'America/Los_Angeles', 
+        '-7'=>'America/Denver', 
+        '-6'=>'America/Mexico_City', 
+        '-5'=>'America/New_York', 
+        '-4'=>'America/Caracas', 
+        '-3.5'=>'America/St_Johns', 
+        '-3'=>'America/Argentina/Buenos_Aires', 
+        '-2'=>'Atlantic/South_Georgia',
+        '-1'=>'Atlantic/Azores', 
+        '0'=>'Europe/London', 
+        '1'=>'Europe/Paris', 
+        '2'=>'Europe/Helsinki', 
+        '3'=>'Europe/Moscow', 
+        '3.5'=>'Asia/Tehran', 
+        '4'=>'Asia/Baku', 
+        '4.5'=>'Asia/Kabul', 
+        '5'=>'Asia/Karachi', 
+        '5.5'=>'Asia/Calcutta', 
+        '6'=>'Asia/Colombo', 
+        '7'=>'Asia/Bangkok', 
+        '8'=>'Asia/Singapore', 
+        '9'=>'Asia/Tokyo', 
+        '9.5'=>'Australia/Darwin', 
+        '10'=>'Pacific/Guam', 
+        '11'=>'Asia/Magadan', 
+        '12'=>'Asia/Kamchatka',
+		'13'=>'Pacific/Tongatapu',
+    );
+	
+    date_default_timezone_set($timezones[$GMT]);
+	switch($display_format) {
+		case "long": // Long Format
+			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
+			else $date = date('l j F, Y', $timestamp);
+		break;
+		case "short": // Short Format
+			if ($date_format == "1") $date = date('m/d/Y', $timestamp);
+			elseif ($date_format = "2") $date = date('d/m/Y',$timestamp);
+			else $date = date('Y/m/d', $timestamp);
+		break;
+		
+		case "system": // MySQL Format
+			$date = date('Y-m-d', $timestamp);
+		break;
+	}
+	
+	if ($time_format == "1") $time = date('H:i',$timestamp);
+	else $time = date('g:i A',$timestamp);
+	
+	switch($return_format) {
+		case "date-time":
+			$return = $date." at ".$time.", ".timezone_name($GMT);
+		break;
+		case "date-time-no-gmt":
+			$return = $date." ".$time;
+		break;
+		case "time-gmt":
+			$return = $time.", ".timezone_name($GMT);
+		break;
+		case "time":
+			$return = $time;
+		break;
+		default: $return = $date;
+	}
+	return $return;
+}
+
+
+
+
 // http://www.phpbuilder.com/annotate/message.php3?id=1031006
 function date_convert($date,$func,$format) {
 if ($func == 1)	{ //insert conversion
@@ -1034,7 +1110,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	
 	include(INCLUDES.'db_tables.inc.php');
 	
-	$query_table = "SELECT * FROM $tables_db_table";
+	$query_table = "SELECT * FROM $judging_tables_db_table";
 	if ($id != "default") $query_table .= " WHERE id='$id'";
 	if ($param != "default") $query_table .= " WHERE tableLocation='$param'";
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
@@ -1127,7 +1203,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1148,7 +1224,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1168,7 +1244,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -1185,7 +1261,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1338,9 +1414,9 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	if ($method == "thickbox") { $suffix = '&KeepThis=true&TB_iframe=true&height=450&width=900'; $class = 'class="menuItem thickbox"'; }
+	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
 	
-	if ($method == "none") { $suffix = "";  $class = 'class="menuItem"'; }
+	if ($method == "none") { $suffix = '';  $class = 'class="menuItem"'; }
 	
 	$random = random_generator(7,2);
 	
@@ -1376,7 +1452,7 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	return $style_choose;   			
 }
 
-function table_location($table_id,$date_format) { 
+function table_location($table_id,$date_format,$time_zone,$time_format) { 
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_table = sprintf("SELECT tableLocation FROM judging_tables WHERE id='%s'", $table_id);
@@ -1389,7 +1465,7 @@ function table_location($table_id,$date_format) {
 	$totalRows_location = mysql_num_rows($location);
 	
 	if ($totalRows_location == 1) {
-    $table_location = $row_location['judgingLocName'].", ".date_convert($row_location['judgingDate'], 2, $date_format)." - ".$row_location['judgingTime'];
+    $table_location = $row_location['judgingLocName']." - ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
 	}
 	else $table_location = ""; 
 	mysql_free_result($table);
@@ -1581,7 +1657,7 @@ function get_entry_count() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewReceived='Y'";
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1639,27 +1715,40 @@ function display_place($place,$method) {
 	return $place;
 }
 
+function entry_info($id) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_entry_info = sprintf("SELECT brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle,brewCoBrewer,brewJudgingNumber FROM brewing WHERE id='%s'", $id);
+	$entry_info = mysql_query($query_entry_info, $brewing) or die(mysql_error());
+	$row_entry_info = mysql_fetch_assoc($entry_info);
+	$r = $row_entry_info['brewName']."^".$row_entry_info['brewCategorySort']."^".$row_entry_info['brewSubCategory']."^".$row_entry_info['brewStyle']."^".$row_entry_info['brewCoBrewer']."^".$row_entry_info['brewCategory']."^".$row_entry_info['brewJudgingNumber'];
+	return $r;
+}
+
 function get_suffix($dbTable) {
-	if (strstr($dbTable,"judging_tables_")) $suffix = ltrim($dbTable,"judging_tables_");
-	if (strstr($dbTable,"judging_flights_")) $suffix = ltrim($dbTable,"judging_flights_");
-	if (strstr($dbTable,"judging_scores_")) $suffix = ltrim($dbTable,"judging_scores_");
+	if (strstr($dbTable,"judging_tables")) $suffix = ltrim($dbTable,"judging_tables");
+	if (strstr($dbTable,"judging_flights")) $suffix = ltrim($dbTable,"judging_flights");
+	if (strstr($dbTable,"judging_scores")) $suffix = ltrim($dbTable,"judging_scores");
 	if (strstr($dbTable,"judging_scores_bos")) $suffix = ltrim($dbTable,"judging_scores_bos");
-	if (strstr($dbTable,"brewing_"))  $suffix = ltrim($dbTable,"brewing_");
-	if (strstr($dbTable,"brewer_"))  $suffix = ltrim($dbTable,"brewer_");
+	if (strstr($dbTable,"brewing"))  $suffix = ltrim($dbTable,"brewing");
+	if (strstr($dbTable,"brewer"))  $suffix = ltrim($dbTable,"brewer");
+	if (strstr($dbTable,"style_types"))  $suffix = ltrim($dbTable,"style_types");
+	if (strstr($dbTable,"special_best_data"))  $suffix = ltrim($dbTable,"special_best_data");
+	if (strstr($dbTable,"special_best_info"))  $suffix = ltrim($dbTable,"special_best_info");
 	return $suffix;
 }
 
-function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
+function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_tables = "SELECT id,tableNumber,tableName FROM $tables_db_table";
+	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	
 	$r = "<select name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
 	$r .= "<option>Choose Below:</option>";
 		do { 
-		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
+		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
@@ -1673,10 +1762,10 @@ function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 	 return $r;
 }
 
-function score_check($id,$scores_db_table) {
+function score_check($id,$judging_scores_db_table) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	
@@ -1684,16 +1773,16 @@ function score_check($id,$scores_db_table) {
 	return $r;
 }
 
-function winner_check($id,$scores_db_table,$tables_db_table,$method) {
+function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$method) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$scores_db_table,$id);
+	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	
 	if ($row_scores['scorePlace'] >= "1") {
-		$query_table = sprintf("SELECT tableName FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+		$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
 		$table = mysql_query($query_table, $brewing) or die(mysql_error());
 		$row_table = mysql_fetch_assoc($table);
 		$r = display_place($row_scores['scorePlace'],$method).": ".$row_table['tableName'];
@@ -1703,4 +1792,102 @@ function winner_check($id,$scores_db_table,$tables_db_table,$method) {
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
+
+function timezone_name($GMT) {
+	switch($GMT) {
+		case "-12": $timezone_name = "Niue Time";
+		break;
+		case "-11": $timezone_name = "Somoa Time";
+		break;
+        case "-10": $timezone_name = "Hawaii-Aleutian Time";
+		break;
+        case "-9": $timezone_name = "Alaska Time";
+		break; 
+        case "-8": $timezone_name = "Pacific Time";
+		break; 
+        case "-7": $timezone_name = "Mountain Time";
+		break; 
+        case "-6": $timezone_name = "Central Time";
+		break; 
+        case "-5": $timezone_name = "Eastern Time";
+		break;
+        case "-4": $timezone_name = "Atlantic Time";
+		break; 
+       	case "-3.5": $timezone_name = "Newfoundland Time";
+		break; 
+        case "-3": $timezone_name = "Western Greenland Time";
+		break; 
+        case "-2": $timezone_name = "South Sandwich Islands Time";
+		break;
+        case "-1": $timezone_name = "Somoa Standard Time";
+		break; 
+        case "0": $timezone_name = "Western European Time";
+		break;
+        case "1": $timezone_name = "Central European Time";
+		break;
+        case "2": $timezone_name = "Eastern European Time";
+		break;
+        case "3": $timezone_name = "East Africa Time";
+		break; 
+        case "3.5": $timezone_name = "Iran Standard Time";
+		break; 
+        case "4": $timezone_name = "Gulf Standard Time";
+		break;
+        case "4.5": $timezone_name = "Afghanistan Time";
+		break; 
+        case "5": $timezone_name = "Pakistan Standard Time";
+		break; 
+        case "5.5": $timezone_name = "Indian Standard Time";
+		break; 
+        case "6": $timezone_name = "British Indian Ocean Time";
+		break; 
+        case "7": $timezone_name = "Indochina Time";
+		break; 
+        case "8": $timezone_name = "ASEAN Common Time";
+		break;
+        case "9": $timezone_name = "Australian Western Standard Time";
+		break;
+        case "9.5": $timezone_name = "Australian Central Standard Time";
+		break;
+        case "10": $timezone_name = "Australian Eastern Standard Time";
+		break;
+        case "11": $timezone_name = "Solomon Islands Time";
+		break;
+        case "12": $timezone_name = "New Zeland Standard Time";
+		break;
+		case "13": $timezone_name = "Phoenix Island Time";
+		break;
+	}
+	return $timezone_name;
+}
+
+
+
+function brewer_assignment($a,$method){ 
+	switch($method) {
+	case "1": // 
+		if ($a == "J") $r = "Judge"; 
+		elseif ($a == "S") $r = "Steward"; 
+		elseif ($a == "X") $r = "Staff";
+		elseif ($a == "O") $r = "Organizer"; 
+		else $r = "";
+	break;
+	case "2": // for $filter URL variable
+		if ($a == "judges") $r = "J"; 
+		elseif ($a == "stewards") $r = "S"; 
+		elseif ($a == "staff") $r = "X";
+		elseif ($a == "bos") $r = "Y";
+		else $r = "";
+	break;
+	case "3": // for $filter URL variable
+		if ($a == "judges") $r = "Judges"; 
+		elseif ($a == "stewards") $r = "Stewards"; 
+		elseif ($a == "staff") $r = "Staff";
+		elseif ($a == "bos") $r = "BOS Judges";
+		else $r = "";
+	break;
+	}
+return $r;
+}
+
 ?>

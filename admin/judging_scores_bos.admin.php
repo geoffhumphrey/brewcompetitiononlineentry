@@ -74,13 +74,13 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 <?php } if ($action == "default") { 
 sort($a);
 foreach ($a as $type) {
-	$query_style_type = "SELECT * FROM $style_type_db_table WHERE id='$type'";
+	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 	$row_style_type = mysql_fetch_assoc($style_type);
 
 if ($row_style_type['styleTypeBOS'] == "Y") { 
 
-	$query_bos = "SELECT * FROM $scores_db_table";
+	$query_bos = "SELECT * FROM $judging_scores_db_table";
 	if ($row_style_type['styleTypeBOSMethod'] == "1") $query_bos .= " WHERE scoreType='$type' AND scorePlace='1'";
 	if ($row_style_type['styleTypeBOSMethod'] == "2") $query_bos .= " WHERE scoreType='$type' AND (scorePlace='1' OR scorePlace='2')";
 	if ($row_style_type['styleTypeBOSMethod'] == "3") $query_bos .= " WHERE (scoreType='$type' AND scorePlace='1') OR (scoreType='$type' AND scorePlace='2') OR (scoreType='$type' AND scorePlace='3')";
@@ -152,12 +152,12 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $tables_db_table WHERE id='%s'", $row_bos['scoreTable']);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_bos['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
 	
-	$query_bos_place_1 = sprintf("SELECT scorePlace,scoreEntry FROM $scores_bos_db_table WHERE eid='%s'", $row_bos['eid']);
+	$query_bos_place_1 = sprintf("SELECT scorePlace,scoreEntry FROM $judging_scores_bos_db_table WHERE eid='%s'", $row_bos['eid']);
 	$bos_place_1 = mysql_query($query_bos_place_1, $brewing) or die(mysql_error());
 	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);
 	

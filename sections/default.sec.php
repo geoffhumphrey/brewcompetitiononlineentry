@@ -15,7 +15,7 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 }
 ?>
 <?php if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print General Information">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print General Information">Print This Page</a></p>
 <?php } ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($section == "admin")) { 
@@ -27,15 +27,43 @@ if (judging_date_return() > 0) { ?>
 <?php }
 if (judging_date_return() == 0) { 
 	include ('judge_closed.sec.php'); 
-	if ($row_prefs['prefsDisplayWinners'] == "Y") {  ?>
-		<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-		<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
-	<?php
+	if ($row_prefs['prefsDisplayWinners'] == "Y") {  
+		$delay = $row_prefs['prefsWinnerDelay'] * 3600;
+		function judging_winner_display($delay) {
+			include(CONFIG.'config.php');
+			mysql_select_db($database, $brewing);
+			$query_check = "SELECT judgingDate FROM judging_locations";
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			$today = strtotime("now");
+			$delay = $delay * 3600;
+			do {
+				if (($row_check['judgingDate']+$delay) > $today) $newDate[] = 1; 
+				else $newDate[] = 0;
+			} while ($row_check = mysql_fetch_assoc($check));
+			$r = array_sum($newDate);
+			return $r;
+		}
+		if (judging_winner_display($row_prefs['prefsWinnerDelay']) == "0") {
 		include (INCLUDES.'db_tables.inc.php');
-		include (DB.'winners.db.php'); 
-		include (SECTIONS.'bos.sec.php');
-		include (SECTIONS.'winners.sec.php');  
+		include (DB.'winners.db.php'); ?>
+        <h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } } ?></h2>
+        <?php include (SECTIONS.'bos.sec.php'); ?>
+		<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } } ?></h2>
+        <?php 
+		if ($row_prefs['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php'); 
+		elseif ($row_prefs['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php'); 
+		else include (SECTIONS.'winners.sec.php'); 
+		}
+		
+		else {
+		$query_check = "SELECT judgingDate FROM judging_locations ORDER BY judgingDate DESC LIMIT 1";
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+		echo "<h2>Winning Entries</h2><p>Winners will be posted on or after ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], ($row_check['judgingDate']+$delay), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").".</p>";
+		}
 	} 
+	
 }
 else 
 { 
@@ -46,9 +74,9 @@ else
 	You can even pay your entry fees online if you wish.
 	<?php } ?></p>
 <?php } 
-if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) include('reg_closed.sec.php');
+if (($registration_open == "2") || (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) include('reg_closed.sec.php');
 else include('reg_open.sec.php');
-// echo "Today: ".strtotime($today)."<br>";
+// echo "Today: ".strtotime("now")."<br>"; 
 // echo "Deadline: ".strtotime($row_contest_info['contestRegistrationDeadline'])."<br>";
 // end registration end check
 } 

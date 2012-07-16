@@ -1,7 +1,7 @@
 <?php
 // Determine if current or archive
 include(INCLUDES.'db_tables.inc.php');
-$query_style_type = "SELECT * FROM $style_type_db_table"; 
+$query_style_type = "SELECT * FROM $style_types_db_table"; 
 if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
@@ -9,7 +9,7 @@ if (($go == "judging_tables") && ($action == "default") && ($id == "default")) $
 $style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 $row_style_type = mysql_fetch_assoc($style_type);
 
-$query_tables = "SELECT * FROM $tables_db_table";
+$query_tables = "SELECT * FROM $judging_tables_db_table";
 if (($id == "default") || ($go == "judging_scores")) $query_tables .= " ORDER BY tableNumber ASC";
 //if ($id != "default") $query_tables .= " WHERE id='$id'";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
@@ -18,7 +18,7 @@ $totalRows_tables = mysql_num_rows($tables);
 
 //echo $query_tables."<br>";
 
-$query_tables_edit = "SELECT * FROM $tables_db_table";
+$query_tables_edit = "SELECT * FROM $judging_tables_db_table";
 if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
 if (($id == "default") || ($go == "judging_scores") || ($go == "judging_flights"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
 $tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
@@ -27,7 +27,7 @@ $tables_edit_2 = mysql_query($query_tables_edit, $brewing) or die(mysql_error())
 $row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2);
 
 if ($go == "judging_scores") {
-	$query_scores = "SELECT * FROM $scores_db_table ORDER BY eid ASC";
+	$query_scores = "SELECT * FROM $judging_scores_db_table ORDER BY eid ASC";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	$totalRows_scores = mysql_num_rows($scores);
@@ -35,21 +35,21 @@ if ($go == "judging_scores") {
 
 if ($go == "judging_scores_bos") {
 	if ($action == "default") { 
-		$query_style_types = "SELECT * FROM $style_type_db_table";
+		$query_style_types = "SELECT * FROM $style_types_db_table";
 		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
 		$row_style_types = mysql_fetch_assoc($style_types);
 	
-		$query_style_types_2 = "SELECT * FROM $style_type_db_table";
+		$query_style_types_2 = "SELECT * FROM $style_types_db_table";
 		$style_types_2 = mysql_query($query_style_types_2, $brewing) or die(mysql_error());
 		$row_style_types_2 = mysql_fetch_assoc($style_types_2);
 		} // end if ($action == "default);
 	
 	if ($action != "default") {
-		$query_style_types = "SELECT * FROM $style_type_db_table";
+		$query_style_types = "SELECT * FROM $style_types_db_table";
 		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
 		$row_style_types = mysql_fetch_assoc($style_types);
 		
-		$query_enter_bos = "SELECT * FROM $scores_db_table";
+		$query_enter_bos = "SELECT * FROM $judging_scores_db_table";
 		if ($row_style_type['styleTypeBOSMethod'] == "1") $query_enter_bos .= " WHERE scoreType='$filter' AND scorePlace='1'";
 		if ($row_style_type['styleTypeBOSMethod'] == "2") $query_enter_bos .= " WHERE scoreType='$filter' AND (scorePlace='1' OR scorePlace='2')";
 		if ($row_style_type['styleTypeBOSMethod'] == "3") $query_enter_bos .= " WHERE (scoreType='$filter' AND scorePlace='1') OR (scoreType='$filter' AND scorePlace='2') OR (scoreType='$filter' AND scorePlace='3')";

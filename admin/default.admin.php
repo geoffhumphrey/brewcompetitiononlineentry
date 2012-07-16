@@ -13,6 +13,8 @@ include(DB.'brewer.db.php');
 if (($section == "admin") && ($go == "default")) { ?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
+<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
@@ -22,6 +24,9 @@ if (($section == "admin") && ($go == "default")) { ?>
 <h3>Numbers at a Glance</h3>
 <table>
 	<tr>
+    	<td colspan="6">As of <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
+	</tr>
+    <tr>
 		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a>:</td>
         <td class="data"><?php echo $totalRows_entry_count; ?></td>
 		<td class="dataLabel">Total Fees:</td>
@@ -43,7 +48,7 @@ if (($section == "admin") && ($go == "default")) { ?>
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
 if ($go == "default") { 
-if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
+if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
 
 ?>
 <div id="menu_container">
@@ -54,22 +59,22 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
         <div class="toggle_container">
         	<p class="admin_default_header">Quick Links</p>
         	<ul class="admin_default">
-				<li><a href="http://help.brewcompetition.com/files/gone_through.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">I've Gone Through Set Up, What Do I Do Now?</a></li>
-    			<li><a href="http://help.brewcompetition.com/files/comp_contacts.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Add More Contacts?</a></li>
-                <li><a href="http://help.brewcompetition.com/files/drop_off.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Add More Drop Off Locations?</a></li>
-    			<li><a href="http://help.brewcompetition.com/files/sponsors.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Display Sponsors?</a></li>			
+				<li><a href="http://help.brewcompetition.com/files/gone_through.html" title="Help" id="modal_window_link">I've Gone Through Set Up, What Do I Do Now?</a></li>
+    			<li><a href="http://help.brewcompetition.com/files/comp_contacts.html" title="Help" id="modal_window_link">How Do I Add More Contacts?</a></li>
+                <li><a href="http://help.brewcompetition.com/files/drop_off.html" title="Help" id="modal_window_link">How Do I Add More Drop Off Locations?</a></li>
+    			<li><a href="http://help.brewcompetition.com/files/sponsors.html" title="Help" id="modal_window_link">How Do I Display Sponsors?</a></li>			
             </ul>
             <ul class="admin_default">
-				<li><a href="http://help.brewcompetition.com/files/style_types.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">What Are Style Types?</a></li>
-    			<li><a href="http://help.brewcompetition.com/files/tables.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Set Up Tables?</a></li>
+				<li><a href="http://help.brewcompetition.com/files/style_types.html" title="Help" id="modal_window_link">What Are Style Types?</a></li>
+    			<li><a href="http://help.brewcompetition.com/files/tables.html" title="Help" id="modal_window_link">How Do I Set Up Tables?</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-                <li><a href="http://help.brewcompetition.com/files/flights.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Define Flights?</a></li>			
+                <li><a href="http://help.brewcompetition.com/files/flights.html" title="Help" id="modal_window_link">How Do I Define Flights?</a></li>			
             	<?php } ?>
-                <li><a href="http://help.brewcompetition.com/files/judges.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Assign Judges/Stewards to Tables?</a></li>
+                <li><a href="http://help.brewcompetition.com/files/judges.html" title="Help" id="modal_window_link">How Do I Assign Judges/Stewards to Tables?</a></li>
     		</ul>
             <ul class="admin_default">
-				<li><a href="http://help.brewcompetition.com/files/scoring.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">How Do I Enter Scores?</a></li>
-                <li><a href="http://help.brewcompetition.com/files/archiving.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Help" class="thickbox">What are Archives?</a></li>		
+				<li><a href="http://help.brewcompetition.com/files/scoring.html" title="Help" id="modal_window_link">How Do I Enter Scores?</a></li>
+                <li><a href="http://help.brewcompetition.com/files/archiving.html" title="Help" id="modal_window_link">What are Archives?</a></li>		
             </ul>
             <p class="admin_default_header">More Help</p>
             <ul class="admin_default">
@@ -92,6 +97,9 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			    <li><a href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>   
 			</ul>
             <ul class="admin_default">
+            	<li><a href="index.php?section=admin&amp;go=special_best">Custom Winner Categories</a></li>
+			</ul>
+            <ul class="admin_default">
     			<li><a href="index.php?section=admin&amp;go=judging">Judging Locations</a></li>
     			<li><a href="index.php?section=admin&amp;go=contacts">Competition Contacts</a></li>
     			<li><a href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
@@ -101,6 +109,9 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			<ul class="admin_default">
    			 	<li><a href="index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
                 <li><a href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
+			</ul>
+            <ul class="admin_default">
+            	<li><a href="index.php?section=admin&amp;go=special_best&amp;action=add">A Custom Winner Category</a></li>
 			</ul>
 			<ul class="admin_default">
 			    <li><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
@@ -114,8 +125,8 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			</ul>
 			<p class="admin_default_header">Upload</p>
 			<ul class="admin_default">
-				<li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image" class="thickbox">A Competition Logo</a></li>
-			    <li><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Sponsor Logo Image" class="thickbox">Sponsor Logos</a></li>
+				<li><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">A Competition Logo</a></li>
+			    <li><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link">Sponsor Logos</a></li>
 			</ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="images/note.png"  /></span>Entry and Data Gathering</h4>
@@ -215,13 +226,13 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
-				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All Categories</a></li>
+				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"default",$action,$filter,"output/sorting.php","thickbox"); ?></li>
             </ul>
             <ul class="admin_default">
             	<li>Entry Number / Judging Number Cheat Sheets:</li>
-				<li><a class="thickbox" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">All Categories</a></li>
+				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default">All Categories</a></li>
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"cheat",$action,$filter,"output/sorting.php","thickbox"); ?></li>
             </ul>
@@ -323,7 +334,7 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
 				<li>Scores For:</li>
-				<li><?php echo score_table_choose($dbTable,$tables_db_table,$scores_db_table); ?></li>
+				<li><?php echo score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table); ?></li>
             </ul>
 </div>
 <h4 class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</h4>
@@ -331,48 +342,48 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 <p class="admin_default_header">Before Judging</p>
 			<ul class="admin_default">
 	<li>Print Pullsheets:</li>
-				<li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print All Table Pullsheets">All Tables</a></li>
+				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
 				<li>
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
     	<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { ?>
-			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
+			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
     		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
     	</div>
     </li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Table Cards:</li>
-				<li><a class="thickbox" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Pullsheets by Table">All Tables</a></li>
+				<li><a id="modal_window_link" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
 				<li>
     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
     	<div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { ?>
-			<a class="menuItem thickbox" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
     		<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
     </li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Judge Assignments:</li>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Judge Assignments by Table">By Table</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">By Table</a></li>
     <?php if ($totalRows_judging > 1) { ?>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Judge Assignments by Location">By Location</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location" title="Print Judge Assignments by Location">By Location</a></li>
     <?php } ?>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Steward Assignments:</li>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Steward Assignments by Table">By Table</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" title="Print Steward Assignments by Table">By Table</a></li>
     <?php if ($totalRows_judging > 1) { ?>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Steward Assignments by Location">By Location</a></li>
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" title="Print Steward Assignments by Location">By Location</a></li>
 	<?php } ?>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Sign-in Sheets:</li>
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print a Judge Sign-in Sheet">Judges</a></li>   
-				<li><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Print a Judge Sign-in Sheet">Judges</a></li>   
+				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
 			</ul>
             <ul class="admin_default">
 				<li>Judge Scoresheet Labels (Avery 5150):</li>
@@ -382,9 +393,9 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			<ul class="admin_default">
 				<li>Print BOS Pullsheets:
     			<ul>
-        			<li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print All BOS Pullsheets">All</a></li>
+        			<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>
     	  <?php do { ?>
-          <?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a class="thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
+          <?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
           <?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
         		</ul>
     			</li>
@@ -392,25 +403,25 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
 			<p class="admin_default_header">After Judging</p>
 			<ul class="admin_default">
 				<li>Results Report by Table (with Scores):</li>
-				<li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
-				<li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>Results Report by Table (without Scores):</li>
-				<li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (All with Scores)">Print (All)</a></li>
-				<li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html">Download HTML (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>BOS Round(s) Results Report:</li>
-				<li><a class="thickbox" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BOS Round(s) Results Report">Print</a></li>
+				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">Download HTML</a></li>	
 			</ul>
 			<ul class="admin_default">
 				<li>BJCP Judge/Steward/Staff Points Report:</li>
-				<li><a class="thickbox" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BJCP Judge/Steward/Staff Points Report">Print</a></li>
+				<li><a id="modal_window_link" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" title="BJCP Judge/Steward/Staff Points Report">Print</a></li>
 				<li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
 				<li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Download XML</a></li>
 			</ul>
@@ -542,7 +553,8 @@ if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
 if ($go == "styles") 	    			include (ADMIN.'styles.admin.php');
 if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
-
+if ($go == "special_best") 	    		include (ADMIN.'special_best.admin.php');
+if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php');
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

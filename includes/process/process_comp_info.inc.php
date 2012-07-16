@@ -4,12 +4,20 @@
  * Description: This module does all the heavy lifting for adding/editing information in the 
  *              "contest_info" table.
  */
- 
+
+$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']." ".$_POST['contestRegistrationOpenTime']);
+$contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']." ".$_POST['contestRegistrationDeadlineTime']);
+$contestEntryOpen = strtotime($_POST['contestEntryOpen']." ".$_POST['contestEntryOpenTime']);
+$contestEntryDeadline = strtotime($_POST['contestEntryDeadline']." ".$_POST['contestEntryDeadlineTime']);
+$contestJudgeOpen = strtotime($_POST['contestJudgeOpen']." ".$_POST['contestJudgeOpenTime']);
+$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
+
 // --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
 
 if ($action == "add") {
 	if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
 	if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
+	
 	
 	$insertSQL = sprintf("INSERT INTO contest_info (
 	contestName,
@@ -22,6 +30,8 @@ if ($action == "add") {
 	contestRegistrationDeadline, 
 	contestEntryOpen,
 	contestEntryDeadline, 
+	contestJudgeOpen,
+	contestJudgeDeadline,
 	contestRules,
 	
 	contestAwardsLocation, 
@@ -49,6 +59,7 @@ if ($action == "add") {
 	contestEntryFeePasswordNum,
 	
 	contestCircuit,
+	contestVolunteers,
 	id
 	) 
 	VALUES 
@@ -59,16 +70,18 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s)",
+	%s, %s, %s)",
 						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),
 						   GetSQLValueString($_POST['contestHostWebsite'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
-						   GetSQLValueString($_POST['contestRegistrationOpen'], "date"),
-						   GetSQLValueString($_POST['contestRegistrationDeadline'], "date"),
-						   GetSQLValueString($_POST['contestEntryOpen'], "date"),
-						   GetSQLValueString($_POST['contestEntryDeadline'], "date"),
+						   GetSQLValueString($contestRegistrationOpen, "text"),
+						   GetSQLValueString($contestRegistrationDeadline, "text"),
+						   GetSQLValueString($contestEntryOpen, "text"),
+						   GetSQLValueString($contestEntryDeadline, "text"),
+						   GetSQLValueString($contestJudgeOpen, "text"),
+						   GetSQLValueString($contestJudgeDeadline, "text"),
 						   GetSQLValueString($_POST['contestRules'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
 						   GetSQLValueString($_POST['contestContactName'], "text"),
@@ -91,6 +104,7 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
 						   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
 						   GetSQLValueString($_POST['contestCircuit'], "text"),
+						   GetSQLValueString($_POST['contestVolunteers'], "text"),
 						   GetSQLValueString($id, "int"));
 	
 	  mysql_select_db($database, $brewing);
@@ -130,6 +144,8 @@ if ($action == "edit") {
 	contestRegistrationDeadline=%s, 
 	contestEntryOpen=%s,
 	contestEntryDeadline=%s, 
+	contestJudgeOpen=%s,
+	contestJudgeDeadline=%s, 
 	contestRules=%s, 
 	contestAwardsLocation=%s, 
 	contestContactName=%s, 
@@ -154,17 +170,20 @@ if ($action == "edit") {
 	contestBOSAward=%s,
 	contestEntryFeePassword=%s,
 	contestEntryFeePasswordNum=%s,
-	contestCircuit=%s
+	contestCircuit=%s,
+	contestVolunteers=%s
 	WHERE id=%s",
 						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),
 						   GetSQLValueString($_POST['contestHostWebsite'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
-						   GetSQLValueString($_POST['contestRegistrationOpen'], "date"),
-						   GetSQLValueString($_POST['contestRegistrationDeadline'], "date"),
-						   GetSQLValueString($_POST['contestEntryOpen'], "date"),
-						   GetSQLValueString($_POST['contestEntryDeadline'], "date"),
+						   GetSQLValueString($contestRegistrationOpen, "text"),
+						   GetSQLValueString($contestRegistrationDeadline, "text"),
+						   GetSQLValueString($contestEntryOpen, "text"),
+						   GetSQLValueString($contestEntryDeadline, "text"),
+						   GetSQLValueString($contestJudgeOpen, "text"),
+						   GetSQLValueString($contestJudgeDeadline, "text"),
 						   GetSQLValueString($_POST['contestRules'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
 						   GetSQLValueString($_POST['contestContactName'], "text"),
@@ -187,7 +206,10 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
 						   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
 						   GetSQLValueString($_POST['contestCircuit'], "text"),
+						   GetSQLValueString($_POST['contestVolunteers'], "text"),
 						   GetSQLValueString($id, "int"));
+	
+	//echo $updateSQL;
 	
 	mysql_select_db($database, $brewing);
 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());

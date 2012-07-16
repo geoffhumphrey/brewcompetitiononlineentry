@@ -6,7 +6,7 @@
 
 if ($action == "add") {
 	foreach($_POST['score_id'] as $score_id)	{
-	if ($_POST['scoreEntry'.$score_id] != "") {
+	if (($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) {
 	$insertSQL = sprintf("INSERT INTO judging_scores (
 	eid, 
 	bid, 
@@ -28,13 +28,12 @@ if ($action == "add") {
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
 	}
-	
 	header(sprintf("Location: %s", $insertGoTo));	
 }
 
 if ($action == "edit") {
 	foreach($_POST['score_id'] as $score_id)	{
-	if (($_POST['scoreEntry'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "Y")) {
+	if ((($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 	$updateSQL = sprintf("UPDATE judging_scores SET
 	eid=%s,
 	bid=%s,
@@ -56,7 +55,7 @@ if ($action == "edit") {
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
-	if (($_POST['scoreEntry'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
+	if ((($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) && ($_POST['scorePrevious'.$score_id] == "N")) {
 	$insertSQL = sprintf("INSERT INTO judging_scores (
 	eid, 
 	bid, 
@@ -77,6 +76,12 @@ if ($action == "edit") {
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
 		}
+	
+	if ((($_POST['scoreEntry'.$score_id] == "") && ($_POST['scorePlace'.$score_id] == "")) && ($_POST['scorePrevious'.$score_id] == "Y")) {
+		$deleteScore = sprintf("DELETE FROM judging_scores WHERE id='%s'", $score_id);
+		$Result1 = mysql_query($deleteScore, $brewing) or die(mysql_error());
+	}
+	
 	}
 	header(sprintf("Location: %s", $updateGoTo));
 }

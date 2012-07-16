@@ -99,11 +99,11 @@ $deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=5";
 
 // --------------------------- Entries -------------------------------- //
 
-if ($dbTable == "brewing")				include (PROCESS.'process_brewing.inc.php');
+if ($dbTable == "brewing")				include_once (PROCESS.'process_brewing.inc.php');
 
 // --------------------------- Users ------------------------------- //
 
-if ($dbTable == "users") 			include_once (PROCESS.'process_users.inc.php');
+if ($dbTable == "users") 				include_once (PROCESS.'process_users.inc.php');
 
 // --------------------------- Participant or Admin's Info ------------------------------- //
 
@@ -165,9 +165,19 @@ if ($dbTable == "judging_scores_bos") 	include_once (PROCESS.'process_judging_sc
 
 if ($dbTable == "style_types") 			include_once (PROCESS.'process_style_types.inc.php');
 
+// --------------------------- Custom Winner Category Info ------------------------------- //
+
+if ($dbTable == "special_best_info") 	include_once (PROCESS.'process_special_best_info.inc.php');
+
+// --------------------------- Custom Winner Category Entries ------------------------------- //
+
+if ($dbTable == "special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
+
 // --------------------------- Various Actions ------------------------------- //
 
 if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php'); 
+
+if ($action == "beerxml")				include_once (PROCESS.'process_beerxml.inc.php');
 
 if ($action == "check_discount") {
 	

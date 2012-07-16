@@ -8,7 +8,6 @@
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
-$today = date('Y-m-d');
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 $images_dir = dirname( __FILE__ );
 error_reporting(E_ALL ^ E_NOTICE);
@@ -26,9 +25,10 @@ require(INCLUDES.'authentication_nav.inc.php');  session_start();
 require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
+include(DB.'entries.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-
+require(INCLUDES.'constants.inc.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,7 +37,39 @@ require(INCLUDES.'headers.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="css/jquery-ui-1.8.18.custom.css" type="text/css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="js_includes/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#modal_window_link").fancybox({
+				'width'				: '75%',
+				'height'			: '75%',
+				'fitToView'			: false,
+				'scrolling'         : 'auto',
+				'openEffect'		: 'elastic',
+				'closeEffect'		: 'elastic',
+				'openEasing'     	: 'easeOutBack',
+				'closeEasing'   	: 'easeInBack',
+				'openSpeed'         : 'normal',
+				'closeSpeed'        : 'normal',
+				'type'				: 'iframe',
+				'helpers' 			: {	title : { type : 'inside' } },
+				<?php if ($modal_window == "false") { ?>
+				'afterClose': 		function() { parent.location.reload(true); }
+				<?php } ?>
+			});
+
+		});
+	</script>
 <script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
@@ -60,13 +92,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
 </div>
 <div id="content">
- 	 <div id="content-inner">
- 	<?php 
-	//echo "<p>Registration Open: ".$row_contest_info['contestRegistrationOpen']."</p>";
-	//echo "<p>Registration Deadline: ".$row_contest_info['contestRegistrationDeadline']."</p>";
-	//if (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) echo "<p>Yes.</p>"; else echo "<p>No.</p>"
-	?>
-  
+ 	 <div id="content-inner"> 
   <?php if ($section != "admin") { ?>
  	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
@@ -74,21 +100,28 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   <?php }
   
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
-  if (!greaterDate($today,$row_contest_info['contestRegistrationOpen'])) { 
+  if ($registration_open == "0") { 
   	if ($section != "admin") {
   	?>
-    <div class="closed">Registration will open <?php echo date_convert($row_contest_info['contestRegistrationOpen'], 2, $row_prefs['prefsDateFormat']); ?>.</div>
+    <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?></div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
+	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
+	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
+		if ($section == "list") 	include (SECTIONS.'list.sec.php');
+		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
+		
 		if ($row_user['userLevel'] == "1") {
-			if ($section == "list") 	include (SECTIONS.'list.sec.php');
 			if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
@@ -100,10 +133,10 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   }
   // Check if registration close date has passed. If so, display "registration end" message.
-  elseif (greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) {
+  if ($registration_open == "2") {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
-    <div class="closed">Entry registration has closed.</div>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="error">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
+    <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
@@ -113,6 +146,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
+	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
@@ -126,7 +160,9 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 			}
 		}
-  } else { // If registration is not closed
+  } 
+  if ($registration_open == "1") { // If registration is currently open
+  	if (($action != "print") && ($section != "register") && (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) {  echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries has been reached. No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; }
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
@@ -136,6 +172,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	// if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
+	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
