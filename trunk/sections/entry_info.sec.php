@@ -16,10 +16,12 @@ if ($action != "print") { ?>
 <?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 <img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print Entry Information">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Entry Information">Print This Page</a></p>
 <?php $contact_count= get_contact_count();
 if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($contact_count > 1) echo "s"; ?></a><br /><?php } ?>
-<a href="#window">Entry Window</a><br />
+<a href="#reg_window">Registration Window</a><br />
+<a href="#entry_window">Entry Window</a><br />
+<?php if ($row_prefs['prefsEntryLimit'] != "") { ?><a href="#entry_limit">Entry Limit</a><br /><?php } ?>
 <a href="#entry">Entry Fees</a><br />
 <a href="#payment">Payment</a><br />
 <a href="#judging">Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></a><br />
@@ -40,10 +42,16 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
 </ul>
 <?php } ?>
-<a name="window"></a><h2>Entry Window</h2>
-<p><?php echo date_convert($row_contest_info['contestEntryOpen'], 2, $row_prefs['prefsDateFormat'])." through "; echo date_convert($row_contest_info['contestEntryDeadline'], 2, $row_prefs['prefsDateFormat']); ?>.</p>
+<a name="reg_window"></a><h2>Registration Window</h2>
+<p>You will be able to register your entries beginning <?php echo $reg_open." through ".$reg_closed; ?>.</p>
+<a name="entry_window"></a><h2>Entry Window</h2>
+<p>Entries will be accepted at our shipping and drop-off location<?php if ($totalRows_dropoff > 1) echo "s"; ?> beginning <?php echo $entry_open." through ".$entry_closed; ?>.</p>
 <a name="entry"></a><h2>Entry Fees</h2>
 <p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<?php if ($row_prefs['prefsEntryLimit'] != "") { ?>
+<a name="entry_limit"></a><h2>Entry Limit</h2>
+<p>There is a limit of <?php echo $row_prefs['prefsEntryLimit']; ?> entries for this competition.</p>
+<?php } ?>
 <a name="payment"></a><h2>Payment</h2>
 <p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
     <ul>
@@ -56,8 +64,8 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
   do { ?>
   <p>
   <?php 
-	if ($row_judging['judgingDate'] != "") echo date_convert($row_judging['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at "; echo $row_judging['judgingLocName']; 
-	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime']; if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+	if ($row_judging['judgingDate'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date")." at "; echo $row_judging['judgingLocName']; 
+	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime'].", ".timezone_name($row_prefs['prefsTimeZone']); if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
 	<span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
     <?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
   <?php } ?>
@@ -107,7 +115,7 @@ if ($totalRows_dropoff > 0) { ?>
 <?php do { ?>
 <p><?php if ($row_dropoff['dropLocationWebsite'] != "") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>"; echo $row_dropoff['dropLocationName']; if ($row_dropoff['dropLocationWebsite'] != "") echo "</a>"; ?><br />
 <?php echo $row_dropoff['dropLocation']; ?>
-<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
+<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
 <?php } ?>
 <br />
 <?php echo $row_dropoff['dropLocationPhone']; ?>
@@ -130,7 +138,7 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 	<?php 
 	if ($row_contest_info['contestAwardsLocDate'] != "") echo date_convert($row_contest_info['contestAwardsLocDate'], 2, $row_prefs['prefsDateFormat'])." at "; echo $row_contest_info['contestAwardsLocName'];
 	if ($row_contest_info['contestAwardsLocTime'] != "") echo ", ".$row_contest_info['contestAwardsLocTime'];
-	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a class="thickbox" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
+	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
 	<span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
 	<?php } ?>
     <?php if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation']; ?>

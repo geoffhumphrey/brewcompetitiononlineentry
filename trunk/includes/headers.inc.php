@@ -93,6 +93,14 @@ switch($section) {
 	$header_output = $row_contest_info['contestName']." Rules";
 	break;
 	
+	case "volunteers":
+	if     ($msg == "1") $output = "Info added successfully."; 
+	elseif ($msg == "2") $output = "Info edited successfully.";
+	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	else $output = "";
+	$header_output = $row_contest_info['contestName']." Volunteer Info";
+	break;	
+	
 	case "past_winners":
 	if     ($msg == "1") $output = "Info added successfully."; 
 	elseif ($msg == "2") $output = "Info edited successfully.";
@@ -117,7 +125,7 @@ switch($section) {
 	case "brew":
 	if ($action == "add") $header_output = "Add an Entry"; 
 	else $header_output = "Edit an Entry";
-	if ($msg == "1") $output = "This entry's style requires more information. Please specify its special ingredients or classic style.";
+	if ($msg == "1") $output = "This entry's style requires more information. Please specify its special ingredients or classic style. If you do not provide this information, your entry will be deleted from the system after 24 hours.";
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
@@ -188,10 +196,10 @@ switch($section) {
 	case "beerxml":
 	include(DB.'styles.db.php');
 	$header_output = "Import an Entry Using BeerXML";
-	if ($msg != "default") { 
+	if ($msg == "default") { 
 	if ($totalRows_styles < 98) $output_extend = "<div class='info'>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles. To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
-	$output = $msg.". You should verify each of your entries for accuracy and to add additional information."; $output_extend .= "<p>To verify your entires, <a href='index.php?section=list&amp;msg=6'>view your list of entries</a> and click edit for each that was imported.";
 	}
+	if ($msg == "2") $output = "Your entry has been confirmed.";
 	break;
 
 	case "admin":
@@ -265,6 +273,14 @@ switch($section) {
 			case "style_types":
 			$header_output .= ": Style Types";
 			break;
+			
+			case "special_best":
+			$header_output .= ": Custom Winning Categories";
+			break;
+			
+			case "special_best_data":
+			$header_output .= ": Custom Winning Categories";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "Info added successfully."; 
@@ -291,6 +307,7 @@ switch($section) {
 		if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; 
 		}
 	elseif ($msg == "13") $output = "The table that was just defined does not have any associated styles.";
+	elseif ($msg == "15") $output = "One or more pieces of required data are missing - outlined in red below. Please check your data and enter again.";
 	else $output = "";
 	break;
 	
@@ -299,4 +316,6 @@ switch($section) {
 }
 if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
+
+
 ?>

@@ -215,13 +215,13 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
 ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view" title="View Assignments by Table">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon data"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
+        	<span class="icon data"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>" title="View Assignments for this Table">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
 <div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
@@ -244,7 +244,7 @@ If no judges are listed below, no judge indicated that they are available for th
 </tr>
 </table>
 <h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$id,$dbTable,"default"); echo " (".$entry_count." entries)"; ?></h3>
-<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at ".$row_table_location['judgingTime']; ?></p>
+<p><strong>Location:</strong> <?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></p>
 <?php if ($row_rounds['flightRound'] != "") { ?>
 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
 <p><strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>

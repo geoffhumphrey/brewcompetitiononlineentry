@@ -337,6 +337,7 @@ $html_remove = array(
 "&deg;" => "",
 "&copy;" => "",
 "&reg;" => "",
+"<p>" => "",
 "“" => "\"",   // left side double smart quote
 "”" => "\"",  // right side double smart quote
 "‘" => "'",  // left side single smart quote

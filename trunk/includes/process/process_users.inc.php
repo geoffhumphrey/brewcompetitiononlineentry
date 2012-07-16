@@ -32,12 +32,14 @@ if ($totalRows_userCheck > 0) {
   else 
   {
   $password = md5($_POST['password']);
-  $insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer) VALUES (%s, %s, %s, %s, %s)", 
+  $insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
                        GetSQLValueString($password, "text"),
 					   GetSQLValueString($_POST['userQuestion'], "text"),
-					   GetSQLValueString($_POST['userQuestionAnswer'], "text"));
+					   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
+					   "NOW( )"					   
+					   );
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
@@ -70,8 +72,7 @@ if ($totalRows_userCheck > 0) {
 	}
 	
 	if ($section == "admin") {
-	header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".$username);
-	
+	header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username));
 	}
 	
 /*

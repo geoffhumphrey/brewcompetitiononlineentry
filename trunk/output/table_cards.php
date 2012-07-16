@@ -20,7 +20,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
 </head>
-<body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
+<body onload="javascript:window.print()">
 <?php if ($id == "default") { ?>
 
     <?php do { 
@@ -32,7 +32,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat']); ?></h4>
+    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -89,7 +89,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
 <div class="table_card">
     <h1>Table <?php echo $row_tables_edit['tableNumber']; ?></h1>
     <h2><?php echo $row_tables_edit['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat']); ?></h4>
+    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

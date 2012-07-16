@@ -10,7 +10,7 @@ require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 
 if (($go == "entries") && ($action == "bottle-entry")) {
-	$query_log = "SELECT * FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_log = "SELECT * FROM brewing WHERE brewReceived='Y'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -48,7 +48,7 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 }
 
 if (($go == "entries") && ($action == "bottle-judging")) {
-	$query_log = "SELECT * FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_log = "SELECT * FROM brewing WHERE brewReceived='Y'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());

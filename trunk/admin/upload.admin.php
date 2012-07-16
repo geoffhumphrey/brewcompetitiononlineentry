@@ -194,7 +194,7 @@ background-color: #eeeeee;
 	<h3>Delete Image</h3>
 	<table>
   	<tr>
-		<td width="5%" rowspan="2" nowrap><a href="../user_images/<?php echo $fileConfirm; ?>" class="thickbox"><img src="../user_images/<?php echo $fileConfirm; ?>" border="0" width="100"></a></td>
+		<td width="5%" rowspan="2" nowrap><a href="../user_images/<?php echo $fileConfirm; ?>" id="modal_window_link"><img src="../user_images/<?php echo $fileConfirm; ?>" border="0" width="100"></a></td>
 		<td width="5%" nowrap class="data">Are you sure you want to delete <?php echo $fileConfirm; ?>?</td>
    		<td width="5%" nowrap class="data"><a href="?action=upload&amp;section=delete&fileConfirm=<?php echo $fileConfirm; ?>">Yes</a></td>
     	<td class="data"><a href="?action=upload">No</a></td>

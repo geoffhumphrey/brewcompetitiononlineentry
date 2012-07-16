@@ -32,8 +32,23 @@ $total_not_paid = total_not_paid_brewer($row_user['id']);
 if ($total_entry_fees > 0) { 
 
 ?>
-<p><span class="icon"><img src="images/help.png"  /></span><a class="thickbox" href="http://help.brewcompetition.com/files/pay_my_fees.html?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
-<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
+<p><span class="icon"><img src="images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/pay_my_fees.html" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
+<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
+<p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo $total_not_paid; ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry:"; else echo "entries:"; ?></p>
+<ul>
+    <?php 
+	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
+	$entries = "";
+	do { if ($row_log['brewPaid'] != "Y") { ?>
+    	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
+        
+    <?php 
+	$entries .= $row_log['id'].", ";
+	$return .= $row_log['id']."-";
+	  }
+	} while ($row_log = mysql_fetch_assoc($log)); 
+	?>
+    </ul>
 <p><span class="icon"><img src="images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are:</p>
 <ul style="margin-bottom: 15px;">
 	<li><?php if ($row_brewer['brewerDiscount'] == "Y") echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']." per entry (discounted)."; else echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']." per entry."; ?></li>
@@ -85,21 +100,10 @@ if ($total_entry_fees > 0) {
 ?>
 <h2>Pay Online</h2>
 <p><span class="required"> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</span></p>
-<p>You are paying for the following entries:</p>
-	<ul>
-    <?php 
-	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
-	do { if ($row_log['brewPaid'] != "Y") { ?>
-    	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
-    <?php 
-	$return .= $row_log['id']."-";
-	  }
-	} while ($row_log = mysql_fetch_assoc($log)); 
-	?>
-    </ul>
 <?php } ?>
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
-<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that PayPal transaction fees of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<h3>PayPal</h3>
+<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
 <p class="error">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to <?php echo $row_contest_info['contestHost']; ?>" link on PayPal's confirmation screen after you have sent your payment.</p>
 
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
@@ -117,6 +121,19 @@ if ($total_entry_fees > 0) {
 <input type="hidden" name="cancel_return" value="<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=11"; ?>">
 <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted">
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal">
+</form>
+<?php } ?>
+<?php if ($row_prefs['prefsGoogle'] == "Y") { ?>
+<h3>Google Wallet</h3>
+<p>Click the "Buy Now" button below to pay for your entries using Google Wallet (formerly Google Checkout).  <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<form action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $row_prefs['prefsGoogleAccount']; ?>" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
+    <input name="item_name_1" type="hidden" value="<?php echo $row_name['brewerLastName'].", ".(substr($row_name['brewerFirstName'],0,1))." - ".$row_contest_info['contestName']." Payment";?>"/>
+    <input name="item_description_1" type="hidden" value="<?php echo "Entry #: ".rtrim($entries,", "); ?>"/>
+    <input name="item_quantity_1" type="hidden" value="1"/>
+    <input name="item_price_1" type="hidden" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>"/>
+    <input name="item_currency_1" type="hidden" value="<?php echo $currency_code; ?>"/>
+    <input name="_charset_" type="hidden" value="utf-8"/>
+    <input alt="" src="https://checkout.google.com/buttons/buy.gif?merchant_id=<?php echo $row_prefs['prefsGoogleAccount']; ?>&amp;w=117&amp;h=48&amp;style=white&amp;variant=text&amp;loc=en_US" type="image"/>
 </form>
 <?php } ?>
 <?php } ?>

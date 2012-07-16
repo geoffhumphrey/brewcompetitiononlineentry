@@ -118,7 +118,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 // document.getElementById('summary').innerHTML = butSummary;
 }
 </script>
-<?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id,$row_prefs['prefsDateFormat'])."</p>"; ?>
+<?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id,$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'])."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo $flight_count; ?> flights. For each entry below, designate the flight in which it will be judged.</p>
 <form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
@@ -142,7 +142,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];

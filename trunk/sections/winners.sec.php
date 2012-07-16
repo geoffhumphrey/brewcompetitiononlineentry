@@ -2,22 +2,30 @@
 /**
  * Module:      winners.sec.php 
  * Description: This module displays the winners entered into the database.
+ *              Displays by table.
  * 
  */
 
-?>
-<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } ?></h2>
-<?php 
 // If using BCOE for comp organization, display winners by table
 if ($row_prefs['prefsCompOrg'] == "Y") { 
-// Display all winners ?>
-<?php
 	do { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-	if  (score_count($row_tables['id'],"1")) {
+	if (score_count($row_tables['id'],"1")) {
+		if ($action == "print") { 
 	?>
-	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>
-    <?php if ($entry_count > 0) { ?>
+	<div id="header">	
+		<div id="header-inner">
+    	<?php } ?>
+        	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>
+    <?php 
+		if ($action == "print") { 
+		?>
+        </div>
+	</div>
+    	<?php } 
+	if ($entry_count > 0) { ?>
+    
+    
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
@@ -25,14 +33,16 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[0,'asc']<?php if ($filter == "scores") { ?>,[5,'desc']<?php } ?>],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
 				{ "asSorting": [  ] }
+				<?php } ?>
 				]
 			} );
 		} );
@@ -41,56 +51,47 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
     <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
-        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Style</th>
-        <th class="dataList bdr1B">Club</th>
+        <th class="dataList bdr1B" width="25%">Brewer(s)</th>
+        <th class="dataList bdr1B">Entry Name</th>
+        <th class="dataList bdr1B" width="25%">Style</th>
+        <th class="dataList bdr1B" width="25%">Club</th>
+        <?php if ($filter == "scores") { ?>
+        <th width="1%" class="dataHeading bdr1B">Score</th>
+        <?php } ?>
     </tr>
 </thead>
     <tbody>
     <?php 
-		$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $scores_db_table, $row_tables['id']);
-		$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5')";	
+		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.id = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $row_tables['id']);
+		if (($action == "print") && ($view == "winners")) $query_scores .= " AND a.scorePlace IS NOT NULL";
+		if (($action == "default") && ($view == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
+		$query_scores .= " ORDER BY a.scorePlace";
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		$totalRows_scores = mysql_num_rows($scores);
-		
+				
 		do { 
-			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName FROM  $brewing_db_table WHERE id='%s'", $row_scores['eid']);
-			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-			$row_entries = mysql_fetch_assoc($entries);
-			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
-			
-			$query_brewer = sprintf("SELECT id,brewerClubs,brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
-			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-			$row_brewer = mysql_fetch_assoc($brewer);
-			
-			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
-		
-			$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
-			$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-			$row_styles = mysql_fetch_assoc($styles);
+		$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 	?>
     <tr>
-        <td class="data"><?php echo display_place($row_scores['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_entries['brewCoBrewer']; ?></td>
-        <td class="data"><?php echo $row_entries['brewName']; ?></td>
-        <td class="data"><?php echo $style.": ".$row_entries['brewStyle']; ?></td>
-        <td class="data"><?php echo $row_brewer['brewerClubs']; ?></td>
+        <td class="data"><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
+        <td class="data"><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
+        <td class="data"><?php echo $row_scores['brewName']; ?></td>
+        <td class="data"><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
+        <td class="data"><?php echo $row_scores['brewerClubs']; ?></td>
+        <?php if ($filter == "scores") { ?>
+        <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
+        <?php } ?>
     </tr>
-    <?php 
-			mysql_free_result($styles);
-			mysql_free_result($entries);
-		} while ($row_scores = mysql_fetch_assoc($scores)); ?>
+    <?php } while ($row_scores = mysql_fetch_assoc($scores)); ?>
     </tbody>
     </table>
-    <?php } 
-	}
-	?>
-<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
-<?php } 
-
-
+    <?php 
+			} // end if ($entry_count > 0);
+		} else echo "<p>No winners have been entered yet. Please check back later.</p>";
+ 	} while ($row_tables = mysql_fetch_assoc($tables));
+} 
+/*
 // if NOT using BCOE to organize comp and if winners have been designated, display using legacy code
 if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) { 
 ?>
@@ -156,11 +157,14 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
   <td class="dataList"><?php echo $row_log_winners['brewName']; ?></td>
   <td class="dataList"><?php echo $row_club['brewerClubs']; ?></td>
  </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_log_winners = mysql_fetch_assoc($log_winners)); ?>
 </tbody>
 </table>
+<?php if ($action == "print") { ?>
+    <div <?php if ($view == "winners") echo "style='margin-bottom: 4em;'"; else echo "style='page-break-after:always;'"; ?>></div>
+    <?php } ?>
 <?php if ($row_contest_info['contestWinnersComplete'] != "") echo $row_contest_info['contestWinnersComplete'];  
 	} // end if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N"))	
-} else echo "</h2><p>No winners have been entered yet. Please check back later.</p>";
+} 
+*/
 ?>
