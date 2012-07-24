@@ -57,7 +57,7 @@
         <td class="data">
         <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_style_type['styleTypeName']; ?>" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"></a></span>
   		<?php if ($row_style_type['styleTypeOwn'] != "bcoe") { ?>
-  		<span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=style_types&amp;action=delete','id',<?php echo $row_style_type['id']; ?>,'Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style_type['styleTypeName']; ?>" title="Delete <?php echo $row_style_type['styleTypeName']; ?>"></a></span></td>
+  		<span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete','id',<?php echo $row_style_type['id']; ?>,'Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style_type['styleTypeName']; ?>" title="Delete <?php echo $row_style_type['styleTypeName']; ?>"></a></span></td>
   		<?php } else { ?>
  		<span class="icon"><img src="images/bin_closed_fade.png"  border="0" /></span>
   		<?php } ?>
@@ -68,7 +68,7 @@
 </table>
 <?php } // END if ($action == "default")?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form name="scores" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; if ($action == "edit") echo "&id=".$id; ?>">
+<form name="scores" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>">
 <table>
 <tbody>
 	<tr>

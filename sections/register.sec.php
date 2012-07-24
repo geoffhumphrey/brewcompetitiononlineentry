@@ -97,13 +97,13 @@ else
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
 </form>
 <?php } else { 
-$query_countries = "SELECT * FROM countries ORDER BY id ASC";
+$query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
 ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
   
-<form action="includes/process.inc.php?action=add&amp;dbTable=users&amp;section=register&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>

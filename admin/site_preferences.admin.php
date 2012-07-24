@@ -1,10 +1,10 @@
 <?php 
-$query_themes = "SELECT * FROM themes";
+$query_themes = "SELECT * FROM $themes_db_table";
 $themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 $row_themes = mysql_fetch_assoc($themes);
 $totalRows_themes = mysql_num_rows($themes);
 ?>
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=preferences&amp;id=1" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
 <h2>Site Preferences</h2>
 <div class="adminSubNavContainer">

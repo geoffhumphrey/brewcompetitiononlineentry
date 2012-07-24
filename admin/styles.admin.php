@@ -63,7 +63,7 @@ function checkUncheckAll(theElement) {
 			} );
 		} );
 	</script>
-<form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=update&amp;dbTable=styles&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></p>
 <table class="dataTable" id="sortable">
 <thead>
@@ -79,7 +79,7 @@ function checkUncheckAll(theElement) {
  <tbody>
  <?php do { 
     	if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
- 		$query_judging2 = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
+ 		$query_judging2 = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
 		$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 		$row_judging2 = mysql_fetch_assoc($judging2);
 		$totalRows_judging2 = mysql_num_rows($judging2);
@@ -100,7 +100,7 @@ function checkUncheckAll(theElement) {
   <td class="dataList">
   <?php if ($row_styles['brewStyleOwn'] != "bcoe") { ?>
   <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_styles['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_styles['brewStyle']; ?>" title="Edit <?php echo $row_styles['brewStyle']; ?>"></a></span>
-  <span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=styles&amp;action=delete','id',<?php echo $row_styles['id']; ?>,'Are you sure you want to delete <?php echo $row_styles['brewStyle']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style['brewStyle']; ?>" title="Delete <?php echo $row_style['brewStyle']; ?>"></a></span></td>
+  <span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;action=delete','id',<?php echo $row_styles['id']; ?>,'Are you sure you want to delete <?php echo $row_styles['brewStyle']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style['brewStyle']; ?>" title="Delete <?php echo $row_style['brewStyle']; ?>"></a></span></td>
   <?php } else { ?>
   <span class="icon"><img src="images/pencil_fade.png"  border="0" /></span>
   <span class="icon"><img src="images/bin_closed_fade.png"  border="0" /></span>
@@ -115,7 +115,7 @@ function checkUncheckAll(theElement) {
 <?php } ?>
 
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=styles&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
 <tr>
     <td class="dataLabel" >Style Name:</td>

@@ -39,7 +39,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	
 	// Sanity check from AJAX widget
 	mysql_select_db($database, $brewing);
-	$query_userCheck = "SELECT user_name FROM users WHERE user_name = '$username'";
+	$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
 	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
 	$row_userCheck = mysql_fetch_assoc($userCheck);
 	$totalRows_userCheck = mysql_num_rows($userCheck);
@@ -50,7 +50,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	else  {
 	// Add the user's creds to the "users" table
 		$password = md5($_POST['password']);
-		$insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
+		$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
                        GetSQLValueString($password, "text"),
@@ -62,12 +62,12 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	// Get the id from the "users" table to insert as the uid in the "brewer" table
-		$query_user= "SELECT id FROM users WHERE user_name = '$username'";
+		$query_user= "SELECT id FROM $users_db_table WHERE user_name = '$username'";
 		$user = mysql_query($query_user, $brewing) or die(mysql_error());
 		$row_user = mysql_fetch_assoc($user);
 	
 	// Add the user's info to the "brewer" table
-	  	$insertSQL = sprintf("INSERT INTO brewer (
+	  	$insertSQL = sprintf("INSERT INTO $brewer_db_table (
 		  uid,
 		  brewerFirstName, 
 		  brewerLastName, 
@@ -122,7 +122,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
-			$query_brewer= sprintf("SELECT id FROM brewer WHERE uid = '%s'", $row_user['id']);
+			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
 			header("Location: ../index.php?section=brewer&action=edit&go=judge&id=".$row_brewer['id']."#judge");

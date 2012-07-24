@@ -28,7 +28,12 @@ if (isset($_GET['msg'])) {
 $go = "default";
 if (isset($_GET['go'])) {
   $go = (get_magic_quotes_gpc()) ? $_GET['go'] : addslashes($_GET['go']);
-}
+} 
+
+$inserted = "default";
+if (isset($_GET['inserted'])) {
+  $inserted = (get_magic_quotes_gpc()) ? $_GET['inserted'] : addslashes($_GET['inserted']);
+} 
 
 $username = "default";
 if (isset($_GET['username'])) {

@@ -3,6 +3,7 @@ session_start();
 require('../paths.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
@@ -12,27 +13,27 @@ include_once(INCLUDES.'tbs_class_php5.php');
 
 mysql_select_db($database, $brewing);
 
-$query_contest_info = "SELECT * FROM contest_info WHERE id=1";
+$query_contest_info = "SELECT * FROM $contest_info_db_table WHERE id=1";
 $row_contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
 $contest_info = mysql_fetch_assoc($row_contest_info);
 
-$query_brewing = sprintf("SELECT * FROM brewing WHERE id = '%s'", $id);
+$query_brewing = sprintf("SELECT * FROM $brewing_db_table WHERE id = '%s'", $id);
 $log = mysql_query($query_brewing, $brewing) or die(mysql_error());
 $brewing_info = mysql_fetch_assoc($log);
 
-$query_brewer_user = sprintf("SELECT * FROM users WHERE id = '%s'", $bid);
+$query_brewer_user = sprintf("SELECT * FROM $users_db_table WHERE id = '%s'", $bid);
 $user = mysql_query($query_brewer_user, $brewing) or die(mysql_error());
 $row_brewer_user_info = mysql_fetch_assoc($user);
 
-$query_logged_in = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION['loginUsername']);
+$query_logged_in = sprintf("SELECT * FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 $logged_in_user = mysql_query($query_logged_in, $brewing) or die(mysql_error());
 $row_logged_in_user = mysql_fetch_assoc($logged_in_user);
 
-$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $bid);
+$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $bid);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $brewer_info = mysql_fetch_assoc($brewer);
 
-$query_prefs = "SELECT * FROM preferences WHERE id=1";
+$query_prefs = "SELECT * FROM $preferences_db_table WHERE id=1";
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
 

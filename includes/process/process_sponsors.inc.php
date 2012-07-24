@@ -3,11 +3,12 @@
  * Module:      process_styles_edit.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table
  */
+$sponsorURL = check_http($_POST['sponsorURL']);
 
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO sponsors (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
+	$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
                        GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
-                       GetSQLValueString($_POST['sponsorURL'], "text"),
+                       GetSQLValueString($sponsorURL, "text"), 
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
 					   GetSQLValueString($_POST['sponsorLocation'], "text"),
@@ -20,9 +21,9 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE sponsors SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
+	$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
                        GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
-                       GetSQLValueString($_POST['sponsorURL'], "text"),
+                       GetSQLValueString($sponsorURL, "text"),
                        GetSQLValueString($_POST['sponsorImage'], "text"),
                        GetSQLValueString($_POST['sponsorText'], "text"),
 					   GetSQLValueString($_POST['sponsorLocation'], "text"),

@@ -5,47 +5,54 @@
  *              "preferences" table.
  */
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO preferences (
+	$insertSQL = sprintf("INSERT INTO $preferences_db_table (
 	prefsTemp, 
 	prefsWeight1, 
 	prefsWeight2, 
 	prefsLiquid1, 
 	prefsLiquid2,
+	
 	prefsPaypal, 
 	prefsPaypalAccount, 
 	prefsCurrency, 
 	prefsCash, 
 	prefsCheck,
+	
 	prefsCheckPayee,
 	prefsGoogle,
 	prefsGoogleAccount,
 	prefsTransFee,
 	prefsSponsors,
+	
 	prefsSponsorLogos,
 	prefsSponsorLogoSize,
 	prefsCompLogoSize,
 	prefsDisplayWinners,
 	prefsWinnerDelay,
+	
 	prefsWinnerMethod,
 	prefsDisplaySpecial,
 	prefsCompOrg,
 	prefsEntryForm,
 	prefsRecordLimit,
+	
 	prefsRecordPaging,
 	prefsTheme,
 	prefsDateFormat,
 	prefsContact,
 	prefsTimeZone,
+	
 	prefsEntryLimit,
-	prefsTimeFormat
-	id) VALUES (
+	prefsTimeFormat,
+	id
+	) VALUES (
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
-	%s, %s)",
+	%s, %s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -96,7 +103,7 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	
-	$updateSQL = sprintf("UPDATE preferences SET 
+	$updateSQL = sprintf("UPDATE $preferences_db_table SET 
 	prefsTemp=%s, 
 	prefsWeight1=%s, 
 	prefsWeight2=%s, 

@@ -51,7 +51,7 @@ if ($action == "forgot") {
 if ($go == "verify") {
 	if ($msg == "default") $username = $_POST['loginUsername'];
 	mysql_select_db($database, $brewing);
-	$query_userCheck = "SELECT * FROM users WHERE user_name = '$username'";
+	$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
 	$row_userCheck = mysql_fetch_assoc($userCheck);
 	$totalRows_userCheck = mysql_num_rows($userCheck);

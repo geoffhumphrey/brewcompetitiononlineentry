@@ -5,18 +5,13 @@
 	</tr>
 	<tr>
       <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
-      <td width="15%" class="data">Have you taken and passed the BJCP Mead Exam?</td>
+      <td width="15%" class="data">Have you taken <strong>and passed</strong> the BJCP Mead Exam?</td>
       <td class="data">
       <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; elseif (($section == "register") && ($go == "judge")) echo "CHECKED"; ?>/> No</td>
     </tr>
     <tr>
       <td width="10%" class="dataLabel">BJCP Judge Rank:</td>
-      <td colspan="2" class="data">If you have taken the BJCP beer exam, the Mead Judge designation is an <em>endorsement</em> - indicate below your judge rank. If you have not taken the BJCP beer exam, choose BJCP - Mead Judge.
-      </td>
-    </tr>
-	<tr>
-      <td width="10%" class="dataLabel">&nbsp;</td>
-      <td colspan="2" class="data"><select name="brewerJudgeRank">
+      <td class="data"><select name="brewerJudgeRank">
         <option value=""></option>
         <option value="None" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "None")) echo "SELECTED"; ?>>None</option>
         <option value="Experienced" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Experienced")) echo "SELECTED"; ?>>Experienced</option>

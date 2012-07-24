@@ -3,10 +3,11 @@ session_start();
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 
-$query_styles = "SELECT * FROM styles";
+$query_styles = "SELECT * FROM $styles_db_table";
 if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 else $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());

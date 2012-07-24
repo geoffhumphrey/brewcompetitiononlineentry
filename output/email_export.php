@@ -2,11 +2,12 @@
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'url_variables.inc.php'); 
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'functions.inc.php');
 
 if ($bid != "") {
-$query_judging = "SELECT judgingLocName FROM judging_locations WHERE id='$bid'";
+$query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
 }
@@ -35,7 +36,7 @@ function parseCSVComments($comments) {
 mysql_select_db($database, $brewing);
 $query_sql = "SELECT brewerFirstName, brewerLastName, brewerEmail"; 
 if ($filter == "judges") $query_sql .= ", brewerJudgeLikes, brewerJudgeDislikes";
-$query_sql .= " FROM brewer";
+$query_sql .= " FROM $brewer_db_table";
 if (($filter == "judges") && ($section == "admin"))   $query_sql .= " WHERE brewerAssignment='J'";
 if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
 if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignment='S'";

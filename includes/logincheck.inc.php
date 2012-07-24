@@ -1,6 +1,8 @@
 <?php
 require('../paths.php');
 require(CONFIG.'config.php');
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 //require 'authentication.inc.php';
 //require 'login_check.inc.php';
 /* Debug
@@ -30,7 +32,7 @@ $loginPassword = $_POST['loginPassword'];
 
 mysql_select_db($database, $brewing);
 $password = md5($loginPassword);
-$query_login = "SELECT * FROM users WHERE user_name = '$loginUsername' AND password = '$password'";
+$query_login = "SELECT * FROM $users_db_table WHERE user_name = '$loginUsername' AND password = '$password'";
 $login = mysql_query($query_login, $brewing) or die(mysql_error());
 $row_login = mysql_fetch_assoc($login);
 $totalRows_login = mysql_num_rows($login);
@@ -42,14 +44,14 @@ session_start();
 	if ($totalRows_login == 1)
 	{
   		// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
-		$updateSQL = sprintf("UPDATE users SET user_name='%s' WHERE id='%s'",$loginUsername, $row_login['id']);
+		$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",$loginUsername, $row_login['id']);
 		
 		mysql_select_db($database, $brewing);
 		//echo $updateSQL."<br>";
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
 		// Convert email address in the user's accociate record in the "brewer" table
-		$updateSQL = sprintf("UPDATE brewer SET brewerEmail='%s' WHERE uid='%s'",$loginUsername, $row_login['id']);
+		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail='%s' WHERE uid='%s'",$loginUsername, $row_login['id']);
 		//echo $updateSQL."<br>";
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		

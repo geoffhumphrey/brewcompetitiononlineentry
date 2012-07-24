@@ -18,7 +18,7 @@ function display_array_content($arrayname,$method) {
    		$a .= display_array_content($value,'');
 		
    		}
-  	else $a .= "$value";
+  	else $a .= "$value"; 
 	if ($method == "2") $a .= ", ";
 	if ($method == "1") $a .= "";
 	if ($method == "3") $a .= ",";
@@ -26,29 +26,37 @@ function display_array_content($arrayname,$method) {
 	$b = rtrim($a, ",&nbsp;");
  	return $b;
 }
+/*
 
 function check_setup() {
 	
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);
-	$query_setup = "SELECT COUNT(*) as 'count' FROM users WHERE NOT id='0'";
+	
+	
+	$query_setup = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE NOT id='0'", $prefix."users");
 	$setup = mysql_query($query_setup, $brewing);
 	$row_setup = mysql_fetch_assoc($setup);
 	$totalRows_setup = $row_setup['count'];
+	
+	echo $query_setup;
 
-	$query_setup1 = "SELECT COUNT(*) as 'count' FROM contest_info";
+	$query_setup1 = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."contest_info");
 	$setup1 = mysql_query($query_setup1, $brewing);
 	$row_setup1 = mysql_fetch_assoc($setup1);
 	$totalRows_setup1 = $row_setup1['count'];
 
-	$query_setup2 = "SELECT COUNT(*) as 'count' FROM preferences";
+	$query_setup2 = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."preferences");
 	$setup2 = mysql_query($query_setup2, $brewing);
 	$row_setup2 = mysql_fetch_assoc($setup2);
 	$totalRows_setup2 = $row_setup2['count'];
 
 	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
-	else return false;
+	else return false;	
+	
 }
+
+*/
 
 // function to generate random number
 function random_generator($digits,$method){
@@ -91,18 +99,18 @@ function relocate($referer,$page) {
 }
 
 function check_judging_numbers() {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_check = "SELECT COUNT(*) as count FROM brewing WHERE brewJudgingNumber IS NULL";
+	$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewJudgingNumber IS NULL", $prefix."brewing");
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
 	if ($row_check['count'] == 0) return true; else return false;
 }
 
 function judging_date_return() {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_check = "SELECT judgingDate FROM judging_locations";
+	$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
 	$today = strtotime("now");
@@ -384,12 +392,12 @@ function paginate($display, $pg, $total) {
 }
 	
 function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	
 	// ----------------------------------------------------------------------
 	if (($bid == "default") && ($filter == "default")) { 
 		mysql_select_db($database, $brewing);
-		$query_users = "SELECT id,user_name FROM users";
+		$query_users = sprintf("SELECT id,user_name FROM %s",$prefix."users");
 		$users = mysql_query($query_users, $brewing) or die(mysql_error());
 		$row_users = mysql_fetch_assoc($users);
 		$totalRows_users = mysql_num_rows($users);
@@ -400,12 +408,12 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		foreach ($user_id_1 as $id_1) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$id_1);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'",$prefix."brewing", $id_1);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$id_1);
+			$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'",$prefix."brewer", $id_1);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_array($brewer);
 			
@@ -453,13 +461,13 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	if (($bid != "default") && ($filter == "default")) { 
 	// Get each entrant's number of entries
 	mysql_select_db($database, $brewing);
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$bid);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_array($entries);
 		$totalRows_entries = $row_entries['count'];
 		//echo $totalRows_entries."<br>";
 		
-		$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$bid);
+		$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_array($brewer);
 			
@@ -509,7 +517,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	if (($bid == "default") && ($filter != "default")) { 
 	
 	mysql_select_db($database, $brewing);
-		$query_users = "SELECT id,user_name FROM users";
+		$query_users = sprintf("SELECT id,user_name FROM %s",$prefix."users");
 		$users = mysql_query($query_users, $brewing) or die(mysql_error());
 		$row_users = mysql_fetch_assoc($users);
 		$totalRows_users = mysql_num_rows($users);
@@ -520,12 +528,12 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		foreach ($user_id_1 as $id_1) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s'",$id_1,$filter);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$id_1,$filter);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$id_1);
+			$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'",$prefix."brewer", $id_1);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_array($brewer);
 			
@@ -574,12 +582,12 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 }
 
 function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
+ 	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
 	// ----------------------------------------------------------------------
 	if (($bid == "default") && ($filter == "default")) { 
-		$query_users = "SELECT id,user_name FROM users";
+		$query_users = sprintf("SELECT id,user_name FROM %s", $prefix."users");
 		$users = mysql_query($query_users, $brewing) or die(mysql_error());
 		$row_users = mysql_fetch_assoc($users);
 		$totalRows_users = mysql_num_rows($users);
@@ -590,19 +598,19 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		foreach ($user_id_2 as $id_2) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'",$id_2);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $id_2);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$id_2);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'",$prefix."brewing", $id_2);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
 			
 			$totalRows_not_paid = ($row_entries['count'] - $row_paid['count']);
 			
-			$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$id_2);
+			$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'",$prefix."brewer", $id_2);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_array($brewer);
 
@@ -687,12 +695,12 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	
 	// Get the entrant's number of entries
 	mysql_select_db($database, $brewing);
-	$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'", $bid);
+	$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 	$row_entries = mysql_fetch_array($entries);
 	$totalRows_entries = $row_entries['count'];
 			
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_array($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -702,7 +710,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	//echo "Paid: ".$totalRows_paid."<br>";
 	//echo "Not Paid: ".$totalRows_not_paid."<br>";	
 	
-	$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'", $bid);
+	$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_array($brewer);
 	//echo "Discount? ".$row_brewer['brewerDiscount']."<br>";
@@ -783,7 +791,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	
 	if (($bid == "default") && ($filter != "default")) { 
 	
-	$query_users = "SELECT id,user_name FROM users";
+		$query_users = sprintf("SELECT id,user_name FROM %s", $prefix."users");
 		$users = mysql_query($query_users, $brewing) or die(mysql_error());
 		$row_users = mysql_fetch_assoc($users);
 		$totalRows_users = mysql_num_rows($users);
@@ -794,19 +802,19 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		foreach ($user_id_2 as $id_2) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s'",$id_2,$filter);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing", $id_2, $filter);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewCategorySort='%s'",$id_2,$filter);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing", $id_2, $filter);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
 			
 			$totalRows_not_paid = ($row_entries['count'] - $row_paid['count']);
 			
-			$query_brewer = sprintf("SELECT brewerDiscount FROM brewer WHERE uid='%s'",$id_2);
+			$query_brewer = sprintf("SELECT brewerDiscount FROM %s WHERE uid='%s'", $prefix."brewer", $id_2);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_array($brewer);
 
@@ -945,15 +953,15 @@ function discount_display($total_not_paid, $discount_amt, $entry_fee, $entry_fee
 } // end funtion
 
 function total_not_paid_brewer($bid) { 
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 
-	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s'", $bid);
+	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$all = mysql_query($query_all, $brewing) or die(mysql_error());
 	$row_all = mysql_fetch_assoc($all);
 	$totalRows_all = $row_all['count'];
 
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -963,18 +971,20 @@ function total_not_paid_brewer($bid) {
 }
 
 function total_paid_received($go,$id) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
-	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
-	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y'";
+	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewConfirmed='1'", $prefix."brewing");
+	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y' AND brewConfirmed='1'";
+	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y' AND brewConfirmed='1'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	return $row['count'];
 }
 
 function style_convert($number,$type) {
+	
+	$styles_db_table = $prefix."styles";
 	switch ($type) {
 		
 		case "1": 
@@ -1073,10 +1083,11 @@ function style_convert($number,$type) {
 		
 		case "4":
 		$a = explode(",",$number);
-		include(CONFIG.'config.php');
+		require(CONFIG.'config.php');
 	    mysql_select_db($database, $brewing);
 		foreach ($a as $value) {
-			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
+			$styles_db_table = $prefix."styles";
+			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='$value'"; 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$style_convert[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
@@ -1090,10 +1101,11 @@ function style_convert($number,$type) {
 		
 		case "6":
 		$a = explode(",",$number);
-		include(CONFIG.'config.php');
+		require(CONFIG.'config.php');
 	    mysql_select_db($database, $brewing);
 		foreach ($a as $value) {
-			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
+			$styles_db_table = $prefix."styles";
+			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='$value'"; 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
@@ -1105,10 +1117,30 @@ function style_convert($number,$type) {
 }
 
 function get_table_info($input,$method,$id,$dbTable,$param) {	
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	include(INCLUDES.'db_tables.inc.php');
+	if ($dbTable == "default") {
+		$judging_tables_db_table = $prefix."judging_tables";
+		$judging_locations_db_table = $prefix."judging_locations";
+		$judging_scores_db_table = $prefix."judging_scores";
+		$judging_scores_bos_db_table = $prefix."judging_scores_bos";
+		$styles_db_table = $prefix."styles";
+		$brewing_db_table = $prefix."brewing";
+	}
+	
+	else {
+		$suffix = ltrim(get_suffix($dbTable), "_");
+		$suffix = "_".$suffix;
+		$judging_tables_db_table = $prefix."judging_tables".$suffix;
+		$judging_locations_db_table = $prefix."judging_locations";
+		$judging_scores_db_table = $prefix."judging_scores";
+		$judging_scores_bos_db_table = $prefix."judging_scores_bos";
+		$styles_db_table = $prefix."styles";
+		$brewing_db_table = $prefix."brewing";
+
+		
+	}
 	
 	$query_table = "SELECT * FROM $judging_tables_db_table";
 	if ($id != "default") $query_table .= " WHERE id='$id'";
@@ -1122,7 +1154,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	}
 	
 	if ($method == "location") { // used in output/assignments.php and output/pullsheets.php
-		$query_judging_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'", $input);
+		$query_judging_location = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'", $input);
 		$judging_location = mysql_query($query_judging_location, $brewing) or die(mysql_error());
 		$row_judging_location = mysql_fetch_assoc($judging_location);
 		
@@ -1132,7 +1164,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	
 	if ($method == "unassigned") {
 		$return = "";
-		$query_styles = "SELECT id,brewStyle FROM styles";
+		$query_styles = "SELECT id,brewStyle FROM $styles_db_table";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
@@ -1146,7 +1178,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			//echo "<p>-".$value."-</p>";
 			if (in_array($value,$b)) { 
 				echo "Yes. The style ID is $value.<br>";
-				//$query_styles1 = "SELECT brewStyle FROM styles WHERE id='$value'";
+				//$query_styles1 = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
 				//$styles1 = mysql_query($query_styles1, $brewing) or die(mysql_error());
 				//$row_styles1 = mysql_fetch_assoc($styles1);
 				//echo "<p>".$row_styles1['brewStyle']."</p>";
@@ -1181,9 +1213,9 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	if ($method == "list") {
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include(CONFIG.'config.php');
+				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT * FROM styles WHERE id='$value'";
+				$query_styles = "SELECT * FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
@@ -1197,9 +1229,9 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 		
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include(CONFIG.'config.php');
+				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$query_styles = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
@@ -1218,9 +1250,9 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	do {	
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include(CONFIG.'config.php');
+				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$query_styles = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
@@ -1237,9 +1269,9 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	
 	
 	if ($method == "count") {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_style = "SELECT brewStyle FROM styles WHERE brewStyle='$input'";
+	$query_style = "SELECT brewStyle FROM $styles_db_table WHERE brewStyle='$input'";
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
@@ -1255,13 +1287,13 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	if ($method == "count_scores") {
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
-				include(CONFIG.'config.php');
+				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$query_styles = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1269,7 +1301,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$c[] = $totalRows_style_count;
 				
 			}
-	$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $input);
+	$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $input);
 	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 	$row_score_count = mysql_fetch_assoc($score_count);
 	$totalRows_score_count = $row_score_count['count'];
@@ -1281,9 +1313,9 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 
 
 function bos_place($eid) { 
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_bos_place = "SELECT scorePlace,scoreEntry FROM judging_scores_bos WHERE eid='$eid'";
+	$query_bos_place = sprintf("SELECT scorePlace,scoreEntry FROM %s WHERE eid='$eid'", $prefix."judging_scores_bos");
 	$bos_place = mysql_query($query_bos_place, $brewing) or die(mysql_error());
 	$row_bos_place = mysql_fetch_assoc($bos_place);
 	$value = $row_bos_place['scorePlace']."-".$row_bos_place['scoreEntry'];
@@ -1339,20 +1371,20 @@ function style_type($type,$method,$source) {
 	}
 	
 	if (($method == "2") && ($source == "custom")) { 
-		include(CONFIG.'config.php');
+		require(CONFIG.'config.php');
 		mysql_select_db($database, $brewing);
 		
-		$query_style_type = "SELECT styleTypeName FROM style_types WHERE id='$type'"; 
+		$query_style_type = sprintf("SELECT styleTypeName FROM %s WHERE id='%s'", $prefix."style_types", $type); 
 		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 		$row_style_type = mysql_fetch_assoc($style_type);
 		$type = $row_style_type['styleTypeName'];
 	}
 	
 	if ($method == "3") { 
-		include(CONFIG.'config.php');
+		require(CONFIG.'config.php');
 		mysql_select_db($database, $brewing);
 		
-		$query_style_type = "SELECT styleTypeName FROM style_types WHERE id='$type'"; 
+		$query_style_type = sprintf("SELECT styleTypeName FROM %s WHERE id='%s'", $prefix."style_types", $type); 
 		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 		$row_style_type = mysql_fetch_assoc($style_type);
 		$type = $row_style_type['styleTypeName'];
@@ -1361,8 +1393,8 @@ function style_type($type,$method,$source) {
 }
 
 function check_bos_loc($id) { 
-	include(CONFIG.'config.php');
-	$query_judging = "SELECT judgingLocName,judgingDate FROM judging_locations WHERE id='$id'";
+	require(CONFIG.'config.php');
+	$query_judging = sprintf("SELECT judgingLocName,judgingDate FROM %s WHERE id='$id'", $prefix."judging_locations");
 	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 	$row_judging = mysql_fetch_assoc($judging);
 	$totalRows_judging = mysql_num_rows($judging);
@@ -1411,7 +1443,7 @@ function text_number($n) {
 }
 
 function style_choose($section,$go,$action,$filter,$script_name,$method) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
 	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
@@ -1424,7 +1456,7 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	$style_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
 	for($i=1; $i<29; $i++) { 
 		if ($i <= 9) $num = "0".$i; else $num = $i;
-		$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategory='$i'";
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategory='%s'", $prefix."brewing", $i);
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
 		//if ($num == $filter) $selected = ' "selected"'; else $selected = '';
@@ -1432,13 +1464,13 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 		mysql_free_result($result);
 	}
 	
-	$query_styles = "SELECT brewStyle,brewStyleGroup FROM styles WHERE brewStyleGroup >= 29";
+	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
 	
 	do {  
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategorySort='%s'",$row_styles['brewStyleGroup']);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $row_styles['brewStyleGroup']);
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
 		//if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
@@ -1453,13 +1485,13 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 }
 
 function table_location($table_id,$date_format,$time_zone,$time_format) { 
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_table = sprintf("SELECT tableLocation FROM judging_tables WHERE id='%s'", $table_id);
+	$query_table = sprintf("SELECT tableLocation FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
 	
-	$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_table['tableLocation']);
+	$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
 	$location = mysql_query($query_location, $brewing) or die(mysql_error());
 	$row_location = mysql_fetch_assoc($location);
 	$totalRows_location = mysql_num_rows($location);
@@ -1474,9 +1506,9 @@ function table_location($table_id,$date_format,$time_zone,$time_format) {
 }
 
 function flight_count($table_id,$method) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s'", $table_id);
+	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $table_id);
 	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 	$row_flights = mysql_fetch_assoc($flights);
 	
@@ -1487,13 +1519,12 @@ function flight_count($table_id,$method) {
 		case "2": return $row_flights['count'];
 		break;
 	}
-	
 }
 
 function score_count($table_id,$method) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM judging_scores WHERE scoreTable='%s'", $table_id);
+	$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $table_id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	
@@ -1512,13 +1543,13 @@ function score_count($table_id,$method) {
 
 	
 function orphan_styles() { 
-	include(CONFIG.'config.php');
-	$query_styles = "SELECT id,brewStyle,brewStyleType FROM styles WHERE brewStyleGroup >= 29";
+	require(CONFIG.'config.php');
+	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
 	
-	$query_style_types = "SELECT id FROM style_types WHERE styleTypeOwn = 'custom'";
+	$query_style_types = sprintf("SELECT id FROM %s WHERE styleTypeOwn = 'custom'", $prefix."style_types");
 	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
 	$row_style_types = mysql_fetch_assoc($style_types);
 	$totalRows_style_types = mysql_num_rows($style_types);
@@ -1623,10 +1654,9 @@ return $return;
 }
 
 function get_contact_count() {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	
-	$query_contact_count = "SELECT COUNT(*) as 'count' FROM contacts";
+	$query_contact_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."contacts");
 	$result = mysql_query($query_contact_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
 	$contactCount = $row["count"];
@@ -1634,19 +1664,10 @@ function get_contact_count() {
 	return $contactCount;
 }
 
-function get_contacts() {
-	include(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	$query_contacts = "SELECT * FROM contacts ORDER BY contactLastName, contactPosition";
-	$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
-	return $contacts;
-}
-
 function brewer_info($bid) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail FROM brewer WHERE uid='%s'", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail'];
@@ -1654,10 +1675,10 @@ function brewer_info($bid) {
 }
 
 function get_entry_count() {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewReceived='Y'";
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewReceived='Y'",$prefix."brewing");
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1666,11 +1687,11 @@ function get_entry_count() {
 }
 
 function get_participant_count($type) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	if ($type == 'default') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
-	if ($type == 'judge') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerJudge='Y'";
-	if ($type == 'steward') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerSteward='Y'";
+	if ($type == 'default') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewer");
+	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
+	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
 	$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 	$row_participant_count = mysql_fetch_assoc($participant_count);
 	
@@ -1716,9 +1737,9 @@ function display_place($place,$method) {
 }
 
 function entry_info($id) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_entry_info = sprintf("SELECT brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle,brewCoBrewer,brewJudgingNumber FROM brewing WHERE id='%s'", $id);
+	$query_entry_info = sprintf("SELECT brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle,brewCoBrewer,brewJudgingNumber FROM %s WHERE id='%s'", $prefix."brewing", $id);
 	$entry_info = mysql_query($query_entry_info, $brewing) or die(mysql_error());
 	$row_entry_info = mysql_fetch_assoc($entry_info);
 	$r = $row_entry_info['brewName']."^".$row_entry_info['brewCategorySort']."^".$row_entry_info['brewSubCategory']."^".$row_entry_info['brewStyle']."^".$row_entry_info['brewCoBrewer']."^".$row_entry_info['brewCategory']."^".$row_entry_info['brewJudgingNumber'];
@@ -1739,11 +1760,12 @@ function get_suffix($dbTable) {
 }
 
 function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
+	//echo $query_tables;
 	
 	$r = "<select name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
 	$r .= "<option>Choose Below:</option>";
@@ -1763,7 +1785,7 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 }
 
 function score_check($id,$judging_scores_db_table) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
@@ -1774,7 +1796,7 @@ function score_check($id,$judging_scores_db_table) {
 }
 
 function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$method) {
-	include(CONFIG.'config.php');
+	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
 	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
@@ -1888,6 +1910,17 @@ function brewer_assignment($a,$method){
 	break;
 	}
 return $r;
+}
+
+function entries_unconfirmed($user_id) {
+require(CONFIG.'config.php');
+mysql_select_db($database, $brewing);	
+$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='0'", $prefix."brewing", $user_id);
+$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
+$row_entry_check = mysql_fetch_assoc($entry_check);
+$totalRows_entry_check = mysql_num_rows($entry_check); 
+
+if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
 }
 
 ?>

@@ -127,7 +127,7 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
  <?php do { 
 	mysql_select_db($database, $brewing);
 	//if ($row_log_winners['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log_winners['brewWinnerCat'], $row_log_winners['brewWinnerSubCat']);
+	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log_winners['brewWinnerCat'], $row_log_winners['brewWinnerSubCat']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -146,7 +146,7 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
   echo style_convert($row_log_winners['brewWinnerCat'], 1);  if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")";  } 
   if ($row_log_winners['brewWinnerCat'] >= 29)
   {
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_log_winners['brewWinnerCat']);  
+	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup='%s'", $row_log_winners['brewWinnerCat']);  
     $style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	echo ": ".$row_style['brewStyle'];

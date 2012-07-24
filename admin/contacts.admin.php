@@ -54,7 +54,7 @@
   <td width="15%" class="dataList"><?php echo $row_contact['contactPosition']; ?></td>
   <td width="25%" class="dataList"><?php echo $row_contact['contactEmail']; ?></td>
   <td class="dataList">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit Contact" title="Edit Contact"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=contacts&amp;action=delete','id',<?php echo $row_contact['id']; ?>,'Are you sure you want to delete this contact? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span></td>
+  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit Contact" title="Edit Contact"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete','id',<?php echo $row_contact['id']; ?>,'Are you sure you want to delete this contact? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span></td>
  </tr>
   <?php } while($row_contact = mysql_fetch_assoc($contact)) ?>
 </tbody>
@@ -63,7 +63,7 @@
 <p>There are no contacts in the database.</p>
 <?php } ?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=contacts<?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $contacts_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">First Name:</td>

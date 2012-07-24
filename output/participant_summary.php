@@ -5,12 +5,13 @@ require('../paths.php');
 require(CONFIG.'config.php');
 include(INCLUDES.'functions.inc.php');
 include(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
 include(DB.'brewer.db.php');
-$query_organizer = "SELECT * FROM brewer WHERE brewerAssignmentOrganizer='1'";
+$query_organizer = "SELECT * FROM $brewer_db_table WHERE brewerAssignmentOrganizer='1'";
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
@@ -35,7 +36,7 @@ $total_entries_judged = get_entry_count();
 <div id="content">
 <?php do { 
 // Check for Entries
-$query_log = sprintf("SELECT * FROM brewing WHERE brewBrewerID='%s' AND brewReceived='1' AND brewPaid='1'", $row_brewer['uid']);
+$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID='%s' AND brewReceived='1' AND brewPaid='1'", $row_brewer['uid']);
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log);
@@ -85,8 +86,8 @@ if ($totalRows_log > 0) { ?>
     	<td class="bdr1B_gray"><?php echo $row_log['id']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'] ?></td>
-        <td class="data bdr1B_gray"><?php echo score_check($row_log['id'],$scores_db_table,1); ?></td>
-        <td class="data bdr1B_gray"><?php echo winner_check($row_log['id'],$scores_db_table,$tables_db_table,1); ?></td>
+        <td class="data bdr1B_gray"><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
+        <td class="data bdr1B_gray"><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,1); ?></td>
     </tr>
     <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
     </tbody>

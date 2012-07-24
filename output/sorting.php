@@ -3,12 +3,13 @@ session_start();
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-$query_style = "SELECT brewStyleGroup FROM styles WHERE brewStyleActive='Y'";
+$query_style = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y'";
 if ($filter !="default") $query_style .= " AND brewStyleGroup='$filter'";
 $style = mysql_query($query_style, $brewing) or die(mysql_error());
 $row_style = mysql_fetch_assoc($style);
@@ -38,7 +39,7 @@ body {
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM brewing WHERE brewCategorySort='%s'", $style);
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);

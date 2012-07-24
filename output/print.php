@@ -10,6 +10,7 @@ require('../paths.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(DB.'entries.db.php');

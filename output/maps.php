@@ -2,7 +2,7 @@
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 $address = rtrim($id,"&amp;KeepThis=true");
-$address = str_replace(' ', '+', $address);
+$address1 = str_replace(' ', '+', $address);
 
 if ($section == "map") {
 ?>
@@ -11,14 +11,18 @@ if ($section == "map") {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Maps</title>
+<link href="../css/default.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-<img src="http://maps.google.com/maps/api/staticmap?center=<?php echo $address; ?>&zoom=13&size=600x400&markers=color:red|<?php echo $address; ?>&sensor=false" />
+<body style="background-color:#fff;">
+<div align="center">
+<img style="border:1px solid #999;" src="http://maps.google.com/maps/api/staticmap?center=<?php echo $address1; ?>&zoom=13&size=900x500&markers=color:red|<?php echo $address1; ?>&sensor=false" />
+</div>
+<p align="center"><?php echo $address; ?></p>
 </body>
 </html>
 <?php } 
 if ($section == "driving") {
-$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address1;
 //echo $driving;
 header(sprintf("Location: %s", $driving));
 }

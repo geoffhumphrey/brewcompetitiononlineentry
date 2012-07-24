@@ -5,7 +5,7 @@
  */
 
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO style_types (
+	$insertSQL = sprintf("INSERT INTO $style_types_db_table (
 	styleTypeName, 
 	styleTypeOwn, 
 	styleTypeBOS, 
@@ -25,7 +25,7 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE style_types SET
+	$updateSQL = sprintf("UPDATE $style_types_db_table SET
 	styleTypeName=%s, 
 	styleTypeOwn=%s, 
 	styleTypeBOS=%s, 

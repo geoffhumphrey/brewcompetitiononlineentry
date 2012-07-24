@@ -2,44 +2,50 @@
 $queued = $row_judging_prefs['jPrefsQueued'];
 $location = $row_tables_edit['tableLocation'];
 
-$query_table_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'",$location);
+$query_table_location = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE id='%s'",$location);
 $table_location = mysql_query($query_table_location, $brewing) or die(mysql_error());
 $row_table_location = mysql_fetch_assoc($table_location);
 
-$query_rounds = sprintf("SELECT flightRound FROM judging_flights WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $row_tables_edit['id']);
+$query_rounds = sprintf("SELECT flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $row_tables_edit['id']);
 $rounds = mysql_query($query_rounds, $brewing) or die(mysql_error());
 $row_rounds = mysql_fetch_assoc($rounds);
 
-$query_flights = sprintf("SELECT * FROM judging_flights WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $row_tables_edit['id']);
+$query_flights = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $row_tables_edit['id']);
 $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 $row_flights = mysql_fetch_assoc($flights);
 $total_flights = $row_flights['flightNumber'];
 
 
 function table_round($tid,$round) {
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php'); 	
 	mysql_select_db($database, $brewing);
 	// get the round where the flight is assigned to
-	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $tid, $round);
+	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $tid, $round);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
 	$row_flight_round = mysql_fetch_assoc($flight_round);
 	if ($row_flight_round['count'] > 0) return TRUE; else return FALSE;
     }
 
 function flight_round($tid,$flight,$round) {
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
 	// get the round where the flight is assigned to
-	$query_flight_round = sprintf("SELECT flightRound FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $tid, $flight);
+	$query_flight_round = sprintf("SELECT flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $tid, $flight);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
 	$row_flight_round = mysql_fetch_assoc($flight_round);
 	if ($row_flight_round['flightRound'] == $round) return TRUE; else return FALSE;
     }
 
 function already_assigned($bid,$tid,$flight,$round) {
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $bid, $tid, $flight, $round);
+	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $bid, $tid, $flight, $round);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	if ($row_assignments['count'] == 1) return TRUE; 
@@ -48,15 +54,17 @@ function already_assigned($bid,$tid,$flight,$round) {
 
 function unavailable($bid,$location,$round,$tid) { 
     // returns true a person is unavailable if they are already assigned to a table/flight in the same round at the same location
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM judging_assignments WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
+	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	//$totalRows_assignments = mysql_num_rows($assignments);
 	
 	if ($row_assignments['count'] > 0) {
-		/*$query_table_location = sprintf("SELECT * FROM judging_tables WHERE id='%s'",$row_assignments['assignTable']);
+		/*$query_table_location = sprintf("SELECT * FROM $judging_tables_db_table WHERE id='%s'",$row_assignments['assignTable']);
 		$table_location = mysql_query($query_table_location, $brewing) or die(mysql_error());
         $row_table_location = mysql_fetch_assoc($table_location);
 		if ($row_table_location['tableLocation'] == $location) 
@@ -70,7 +78,9 @@ function unavailable($bid,$location,$round,$tid) {
 function like_dislike($likes,$dislikes,$styles) { 
     // if a judge in the returned list listed one or more of the substyles
 	// included in the table in their "likes" or "dislikes"
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
 	
 	// get the table's associated styles from the "tables" table
@@ -105,18 +115,20 @@ function like_dislike($likes,$dislikes,$styles) {
 	}
 
 function entry_conflict($bid,$table_styles) {
-	include(CONFIG.'config.php');	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php');
 	mysql_select_db($database, $brewing);
 	
 	$b = explode(",",$table_styles);
 	
 	foreach ($b as $style) {
 		
-		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='%s'", $style);
+		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='%s'", $style);
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM $brewer_db_table WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		
@@ -129,9 +141,11 @@ function entry_conflict($bid,$table_styles) {
 
 function unassign($bid,$location,$round,$tid) {
 	//if (unavailable($bid,$location,$round,$tid)) {
-		include(CONFIG.'config.php');	
+		require(CONFIG.'config.php');
+		require(INCLUDES.'url_variables.inc.php');
+		require(INCLUDES.'db_tables.inc.php'); 
 		mysql_select_db($database, $brewing);
-		$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
+		$query_assignments = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);	
 		$r = $row_assignments['id'];
@@ -251,7 +265,7 @@ If no judges are listed below, no judge indicated that they are available for th
 <ul>
 <?php 
 	for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
-	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
+	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
 	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row_entry_count = mysql_fetch_assoc($entry_count);
 	echo "<li>Flight $c: ".$row_entry_count['count']." entries.</li>";

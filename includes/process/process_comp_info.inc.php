@@ -12,6 +12,8 @@ $contestEntryDeadline = strtotime($_POST['contestEntryDeadline']." ".$_POST['con
 $contestJudgeOpen = strtotime($_POST['contestJudgeOpen']." ".$_POST['contestJudgeOpenTime']);
 $contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
 
+$contestHostWebsite = check_http($_POST['contestHostWebsite']);
+
 // --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
 
 if ($action == "add") {
@@ -19,7 +21,7 @@ if ($action == "add") {
 	if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 	
 	
-	$insertSQL = sprintf("INSERT INTO contest_info (
+	$insertSQL = sprintf("INSERT INTO $contest_info_db_table (
 	contestName,
 	contestID,
 	contestHost, 
@@ -31,33 +33,33 @@ if ($action == "add") {
 	contestEntryOpen,
 	contestEntryDeadline, 
 	contestJudgeOpen,
+	
 	contestJudgeDeadline,
 	contestRules,
-	
 	contestAwardsLocation, 
 	contestContactName, 
 	contestContactEmail, 
-	contestEntryFee, 
-	contestBottles, 
 	
+	contestEntryFee,
+	contestBottles, 
 	contestShippingAddress, 
 	contestShippingName, 
 	contestAwards,
+	
 	contestWinnersComplete,
 	contestEntryCap,
-	
 	contestAwardsLocName,
 	contestAwardsLocDate,
 	contestAwardsLocTime,
+	
 	contestEntryFee2,
 	contestEntryFeeDiscount,
-	
 	contestEntryFeeDiscountNum,
 	contestLogo,
 	contestBOSAward,
+	
 	contestEntryFeePassword,
 	contestEntryFeePasswordNum,
-	
 	contestCircuit,
 	contestVolunteers,
 	id
@@ -70,12 +72,12 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s, %s)",
+	%s, %s, %s, %s, %s)",
 						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),
-						   GetSQLValueString($_POST['contestHostWebsite'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
+						   GetSQLValueString($_POST['contestHost'], "text"),
+						   GetSQLValueString($contestHostWebsite, "text"),
+						   GetSQLValueString($_POST['contestHostLocation'], "text"),
 						   GetSQLValueString($contestRegistrationOpen, "text"),
 						   GetSQLValueString($contestRegistrationDeadline, "text"),
 						   GetSQLValueString($contestEntryOpen, "text"),
@@ -83,17 +85,17 @@ if ($action == "add") {
 						   GetSQLValueString($contestJudgeOpen, "text"),
 						   GetSQLValueString($contestJudgeDeadline, "text"),
 						   GetSQLValueString($_POST['contestRules'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
+						   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
 						   GetSQLValueString($_POST['contestContactName'], "text"),
 						   GetSQLValueString($_POST['contestContactEmail'], "text"),
 						   GetSQLValueString($_POST['contestEntryFee'], "text"),
 						   GetSQLValueString($_POST['contestBottles'], "text"),
 						   GetSQLValueString($_POST['contestShippingAddress'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestShippingName']), "text"),
+						   GetSQLValueString($_POST['contestShippingName'], "text"),
 						   GetSQLValueString($_POST['contestAwards'], "text"),
 						   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 						   GetSQLValueString($_POST['contestEntryCap'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestAwardsLocName']), "text"),
+						   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
 						   GetSQLValueString($_POST['contestEntryFee2'], "text"),
@@ -109,8 +111,8 @@ if ($action == "add") {
 	
 	  mysql_select_db($database, $brewing);
 	  $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	  
-	  $insertSQL = sprintf("INSERT INTO contacts (
+	  //echo $insertSQL."<br>";
+	  $insertSQL = sprintf("INSERT INTO $contacts_db_table (
 		contactFirstName, 
 		contactLastName, 
 		contactPosition, 
@@ -134,7 +136,7 @@ if ($action == "edit") {
 	if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
 	if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 	
-	$updateSQL = sprintf("UPDATE contest_info SET 
+	$updateSQL = sprintf("UPDATE $contest_info_db_table SET 
 	contestName=%s,
 	contestID=%s,
 	contestHost=%s, 
@@ -176,8 +178,8 @@ if ($action == "edit") {
 						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
 						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),
-						   GetSQLValueString($_POST['contestHostWebsite'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestHostLocation']), "text"),
+						   GetSQLValueString($contestHostWebsite, "text"),
+						   GetSQLValueString($_POST['contestHostLocation'], "text"),
 						   GetSQLValueString($contestRegistrationOpen, "text"),
 						   GetSQLValueString($contestRegistrationDeadline, "text"),
 						   GetSQLValueString($contestEntryOpen, "text"),
@@ -185,17 +187,17 @@ if ($action == "edit") {
 						   GetSQLValueString($contestJudgeOpen, "text"),
 						   GetSQLValueString($contestJudgeDeadline, "text"),
 						   GetSQLValueString($_POST['contestRules'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestAwardsLocation']), "text"),
+						   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
 						   GetSQLValueString($_POST['contestContactName'], "text"),
 						   GetSQLValueString($_POST['contestContactEmail'], "text"),
 						   GetSQLValueString($_POST['contestEntryFee'], "text"),
 						   GetSQLValueString($_POST['contestBottles'], "text"),
 						   GetSQLValueString($_POST['contestShippingAddress'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestShippingName']), "text"),
+						   GetSQLValueString($_POST['contestShippingName'], "text"),
 						   GetSQLValueString($_POST['contestAwards'], "text"),
 						   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 						   GetSQLValueString($_POST['contestEntryCap'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestAwardsLocName']), "text"),
+						   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
 						   GetSQLValueString($_POST['contestEntryFee2'], "text"),

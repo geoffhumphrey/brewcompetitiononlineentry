@@ -1052,12 +1052,11 @@ CHANGE  `contestEntryDeadline`  `contestEntryDeadline` VARCHAR(255) NULL DEFAULT
 ADD  `contestJudgeOpen` VARCHAR(255) NULL AFTER  `contestEntryDeadline` ,
 ADD  `contestJudgeDeadline` VARCHAR(255) NULL AFTER  `contestJudgeOpen ;
 
-ALTER TABLE  `brewing` CHANGE  `brewScore`  `brewUpdated` DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated.';
-ALTER TABLE  `brewing` ADD  `brewConfirmed` TINYINT( 1 ) NULL COMMENT  '0 = false; 1 = true';
+ALTER TABLE  `brewing` ADD  `brewConfirmed` TINYINT( 1 ) NULL COMMENT  '0 = false; 1 = true' ;
 
 ALTER TABLE  `users` ADD  `userCreated` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.';
 
-ALTER TABLE  `judging_locations` CHANGE  `judgingDate`  `judgingDate` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE  `judging_locations` CHANGE  `judgingDate` `judgingDate` VARCHAR( 255 ) NOT NULL ;
 
 ALTER TABLE  `contest_info` ADD  `contestVolunteers` TEXT NULL ;
 
@@ -1080,3 +1079,14 @@ CREATE TABLE IF NOT EXISTS `special_best_data` (
   `sbd_comments` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;
+
+ALTER TABLE  `brewing` CHANGE  `brewScore`  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT  'Timestamp of when the entry was last updated.';
+
+CREATE TABLE IF NOT EXISTS `system` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version` varchar(12) DEFAULT NULL,
+  `version_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+INSERT INTO `system` (`id`, `version`) VALUES (1, '1.2.1', '2012-08-01');

@@ -10,7 +10,7 @@
 include(DB.'brewer.db.php');
 include(DB.'styles.db.php'); 
 ?>
-<form action="includes/process.inc.php?action=edit&amp;dbTable=brewer&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
 <tr>

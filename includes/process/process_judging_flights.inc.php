@@ -7,7 +7,7 @@
 if ($action == "add") {
 	foreach($_POST['id'] as $id)	{
 		$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
-		$insertSQL = sprintf("INSERT INTO judging_flights (
+		$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
 		flightTable, 
 		flightNumber, 
 		flightEntryID
@@ -30,7 +30,7 @@ if ($action == "edit") {
 		$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
 	
 		if ($id <= "999999") {
-			$updateSQL = sprintf("UPDATE judging_flights SET
+			$updateSQL = sprintf("UPDATE $judging_flights_db_table SET
 			flightTable=%s,
 			flightNumber=%s
 			WHERE id=%s",
@@ -44,7 +44,7 @@ if ($action == "edit") {
   			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		if ($id > "999999"){
-			$insertSQL = sprintf("INSERT INTO judging_flights (
+			$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
 			flightTable, 
 			flightNumber, 
 			flightEntryID
@@ -69,14 +69,14 @@ if ($action == "assign") {
 	if ($_POST['flightRound'.$a] != $_POST['flightRoundPrevious'.$a]) {
 	
 	// If so, delete all judging/steward assignments for the "old" round
-		$query_assignments = sprintf("SELECT id FROM judging_assignments WHERE assignTable='%s' AND assignFlight='%s' AND assignRound='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a],$_POST['flightRoundPrevious'.$a]);
+		$query_assignments = sprintf("SELECT id FROM $judging_assignments_db_table WHERE assignTable='%s' AND assignFlight='%s' AND assignRound='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a],$_POST['flightRoundPrevious'.$a]);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		$totalRows_assignments = mysql_num_rows($assignments);
 		//echo $query_assignments."<br>";
 		if ($totalRows_assignments > 0) {
 			do {	
-		 		$deleteAssignment = sprintf("DELETE FROM judging_assignments WHERE id='%s'", $row_assignments['id']);
+		 		$deleteAssignment = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_assignments['id']);
   				$Result = mysql_query($deleteAssignment, $brewing) or die(mysql_error());
 				//echo $deleteAssignment.";<br>";
 			} while ($row_assignments = mysql_fetch_assoc($assignments)); 
@@ -84,12 +84,12 @@ if ($action == "assign") {
 		
 		// Change the rounds for all affected table/flight assignments.	
 	
-		$query_flights = sprintf("SELECT id FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
+		$query_flights = sprintf("SELECT id FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
 		$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 		$row_flights = mysql_fetch_assoc($flights);
 		//echo $query_flights."<br>";
 		do {
-		$updateSQL = sprintf("UPDATE judging_flights SET flightRound=%s WHERE id=%s", 
+		$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightRound=%s WHERE id=%s", 
 			GetSQLValueString($_POST['flightRound'.$a], "text"), 
 			GetSQLValueString($row_flights['id'], "int")
 			);

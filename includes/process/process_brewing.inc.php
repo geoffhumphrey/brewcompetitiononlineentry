@@ -8,14 +8,14 @@ session_start();
 include(DB.'common.db.php');
 mysql_select_db($database, $brewing);
 
-$query_user = sprintf("SELECT userLevel FROM users WHERE user_name = '%s'", $_SESSION['loginUsername']);
+$query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 $user = mysql_query($query_user, $brewing) or die(mysql_error());
 $row_user = mysql_fetch_assoc($user);
 
 if ($action == "add") {
 	
 	if ($row_user['userLevel'] == 1) { 
-		$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $_POST['brewBrewerID']);
+		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $_POST['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
@@ -104,7 +104,7 @@ if ($action == "add") {
 	
 	// Get style name from broken parts
 	mysql_select_db($database, $brewing);
-	$query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
+	$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
 	$check = $row_style_name['brewStyleOwn'];
@@ -122,7 +122,7 @@ if ($action == "add") {
 	} else $custom = "2";
 	
 	$insertSQL = sprintf("
-		INSERT INTO brewing (
+		INSERT INTO $brewing_db_table (
 		brewName,
 		brewStyle,
 		brewCategory, 
@@ -510,7 +510,7 @@ if ($action == "add") {
 	
 	  if (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1")) && ($id == "default")) {
 		mysql_select_db($database, $brewing);
-		$query_brew_id = "SELECT id FROM brewing WHERE brewBrewerID='$brewBrewerID' ORDER BY id DESC LIMIT 1";
+		$query_brew_id = "SELECT id FROM $brewing_db_table WHERE brewBrewerID='$brewBrewerID' ORDER BY id DESC LIMIT 1";
 		$brew_id = mysql_query($query_brew_id, $brewing) or die(mysql_error());
 		$row_brew_id = mysql_fetch_assoc($brew_id);
 		$id = $row_brew_id['id'];
@@ -522,7 +522,7 @@ if ($action == "add") {
 			else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
 	  }
 	  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
-	 else $insertGoTo = "../index.php?section=list";
+	 else $insertGoTo = "../index.php?section=list&msg=1";
 	 
 	 // Finally, relocate
 	 header(sprintf("Location: %s", $insertGoTo));
@@ -533,7 +533,7 @@ if ($action == "edit") {
 	if ($row_user['userLevel'] == 1) { 
 		$name = $_POST['brewBrewerID'];
 		
-		$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $name);
+		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $name);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
@@ -622,7 +622,7 @@ if ($action == "edit") {
 	
 	// Get style name from broken parts
 	mysql_select_db($database, $brewing);
-	$query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
+	$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
 	$check = $row_style_name['brewStyleOwn'];
@@ -639,7 +639,7 @@ if ($action == "edit") {
 		}
 	} else $custom = "2";
 	
-	$updateSQL = sprintf("UPDATE brewing SET brewName=%s, brewStyle=%s, brewCategory=%s, brewCategorySort=%s, brewSubCategory=%s, brewBottleDate=%s, brewDate=%s, brewYield=%s, brewInfo=%s, brewMead1=%s, brewMead2=%s, brewMead3=%s, brewExtract1=%s, brewExtract1Weight=%s, brewExtract2=%s, brewExtract2Weight=%s, brewExtract3=%s, brewExtract3Weight=%s, brewExtract4=%s, brewExtract4Weight=%s, brewExtract5=%s, brewExtract5Weight=%s, brewGrain1=%s, brewGrain1Weight=%s, brewGrain2=%s, brewGrain2Weight=%s, brewGrain3=%s, brewGrain3Weight=%s, brewGrain4=%s, brewGrain4Weight=%s, brewGrain5=%s, brewGrain5Weight=%s, brewGrain6=%s, brewGrain6Weight=%s, brewGrain7=%s, brewGrain7Weight=%s, brewGrain8=%s, brewGrain8Weight=%s, brewGrain9=%s, brewGrain9Weight=%s, brewAddition1=%s, brewAddition1Amt=%s, brewAddition2=%s, brewAddition2Amt=%s, brewAddition3=%s, brewAddition3Amt=%s, brewAddition4=%s, brewAddition4Amt=%s, brewAddition5=%s, brewAddition5Amt=%s, brewAddition6=%s, brewAddition6Amt=%s, brewAddition7=%s, brewAddition7Amt=%s, brewAddition8=%s, brewAddition8Amt=%s, brewAddition9=%s, brewAddition9Amt=%s, brewHops1=%s, brewHops1Weight=%s, brewHops1IBU=%s, brewHops1Time=%s, brewHops2=%s, brewHops2Weight=%s, brewHops2IBU=%s, brewHops2Time=%s, brewHops3=%s, brewHops3Weight=%s, brewHops3IBU=%s, brewHops3Time=%s, brewHops4=%s, brewHops4Weight=%s, brewHops4IBU=%s, brewHops4Time=%s, brewHops5=%s, brewHops5Weight=%s, brewHops5IBU=%s, brewHops5Time=%s, brewHops6=%s, brewHops6Weight=%s, brewHops6IBU=%s, brewHops6Time=%s, brewHops7=%s, brewHops7Weight=%s, brewHops7IBU=%s, brewHops7Time=%s, brewHops8=%s, brewHops8Weight=%s, brewHops8IBU=%s, brewHops8Time=%s, brewHops9=%s, brewHops9Weight=%s, brewHops9IBU=%s, brewHops9Time=%s, brewHops1Use=%s, brewHops2Use=%s, brewHops3Use=%s, brewHops4Use=%s, brewHops5Use=%s, brewHops6Use=%s, brewHops7Use=%s, brewHops8Use=%s, brewHops9Use=%s, brewHops1Type=%s, brewHops2Type=%s, brewHops3Type=%s, brewHops4Type=%s, brewHops5Type=%s, brewHops6Type=%s, brewHops7Type=%s, brewHops8Type=%s, brewHops9Type=%s, brewHops1Form=%s, brewHops2Form=%s, brewHops3Form=%s, brewHops4Form=%s, brewHops5Form=%s, brewHops6Form=%s, brewHops7Form=%s, brewHops8Form=%s, brewHops9Form=%s, brewYeast=%s, brewYeastMan=%s, brewYeastForm=%s, brewYeastType=%s, brewYeastAmount=%s, brewYeastStarter=%s, brewYeastNutrients=%s, brewOG=%s, brewFG=%s, brewPrimary=%s, brewPrimaryTemp=%s, brewSecondary=%s, brewSecondaryTemp=%s, brewOther=%s, brewOtherTemp=%s, brewComments=%s, brewMashStep1Name=%s, brewMashStep1Temp=%s, brewMashStep1Time=%s, brewMashStep2Name=%s, brewMashStep2Temp=%s, brewMashStep2Time=%s, brewMashStep3Name=%s, brewMashStep3Temp=%s, brewMashStep3Time=%s, brewMashStep4Name=%s, brewMashStep4Temp=%s, brewMashStep4Time=%s, brewMashStep5Name=%s, brewMashStep5Temp=%s, brewMashStep5Time=%s, brewFinings=%s, brewWaterNotes=%s, brewBrewerID=%s, brewCarbonationMethod=%s, brewCarbonationVol=%s, brewCarbonationNotes=%s, brewBoilHours=%s, brewBoilMins=%s, brewBrewerFirstName=%s, brewBrewerLastName=%s, brewExtract1Use=%s, brewExtract2Use=%s, brewExtract3Use=%s, brewExtract4Use=%s, brewExtract5Use=%s, brewGrain1Use=%s, brewGrain2Use=%s, brewGrain3Use=%s, brewGrain4Use=%s, brewGrain5Use=%s, brewGrain6Use=%s, brewGrain7Use=%s, brewGrain8Use=%s, brewGrain9Use=%s, brewAddition1Use=%s, brewAddition2Use=%s, brewAddition3Use=%s, brewAddition4Use=%s, brewAddition5Use=%s, brewAddition6Use=%s, brewAddition7Use=%s, brewAddition8Use=%s, brewAddition9Use=%s, brewJudgingLocation=%s, brewCoBrewer=%s, brewUpdated=%s, brewConfirmed=%s WHERE id=%s",
+	$updateSQL = sprintf("UPDATE $brewing_db_table SET brewName=%s, brewStyle=%s, brewCategory=%s, brewCategorySort=%s, brewSubCategory=%s, brewBottleDate=%s, brewDate=%s, brewYield=%s, brewInfo=%s, brewMead1=%s, brewMead2=%s, brewMead3=%s, brewExtract1=%s, brewExtract1Weight=%s, brewExtract2=%s, brewExtract2Weight=%s, brewExtract3=%s, brewExtract3Weight=%s, brewExtract4=%s, brewExtract4Weight=%s, brewExtract5=%s, brewExtract5Weight=%s, brewGrain1=%s, brewGrain1Weight=%s, brewGrain2=%s, brewGrain2Weight=%s, brewGrain3=%s, brewGrain3Weight=%s, brewGrain4=%s, brewGrain4Weight=%s, brewGrain5=%s, brewGrain5Weight=%s, brewGrain6=%s, brewGrain6Weight=%s, brewGrain7=%s, brewGrain7Weight=%s, brewGrain8=%s, brewGrain8Weight=%s, brewGrain9=%s, brewGrain9Weight=%s, brewAddition1=%s, brewAddition1Amt=%s, brewAddition2=%s, brewAddition2Amt=%s, brewAddition3=%s, brewAddition3Amt=%s, brewAddition4=%s, brewAddition4Amt=%s, brewAddition5=%s, brewAddition5Amt=%s, brewAddition6=%s, brewAddition6Amt=%s, brewAddition7=%s, brewAddition7Amt=%s, brewAddition8=%s, brewAddition8Amt=%s, brewAddition9=%s, brewAddition9Amt=%s, brewHops1=%s, brewHops1Weight=%s, brewHops1IBU=%s, brewHops1Time=%s, brewHops2=%s, brewHops2Weight=%s, brewHops2IBU=%s, brewHops2Time=%s, brewHops3=%s, brewHops3Weight=%s, brewHops3IBU=%s, brewHops3Time=%s, brewHops4=%s, brewHops4Weight=%s, brewHops4IBU=%s, brewHops4Time=%s, brewHops5=%s, brewHops5Weight=%s, brewHops5IBU=%s, brewHops5Time=%s, brewHops6=%s, brewHops6Weight=%s, brewHops6IBU=%s, brewHops6Time=%s, brewHops7=%s, brewHops7Weight=%s, brewHops7IBU=%s, brewHops7Time=%s, brewHops8=%s, brewHops8Weight=%s, brewHops8IBU=%s, brewHops8Time=%s, brewHops9=%s, brewHops9Weight=%s, brewHops9IBU=%s, brewHops9Time=%s, brewHops1Use=%s, brewHops2Use=%s, brewHops3Use=%s, brewHops4Use=%s, brewHops5Use=%s, brewHops6Use=%s, brewHops7Use=%s, brewHops8Use=%s, brewHops9Use=%s, brewHops1Type=%s, brewHops2Type=%s, brewHops3Type=%s, brewHops4Type=%s, brewHops5Type=%s, brewHops6Type=%s, brewHops7Type=%s, brewHops8Type=%s, brewHops9Type=%s, brewHops1Form=%s, brewHops2Form=%s, brewHops3Form=%s, brewHops4Form=%s, brewHops5Form=%s, brewHops6Form=%s, brewHops7Form=%s, brewHops8Form=%s, brewHops9Form=%s, brewYeast=%s, brewYeastMan=%s, brewYeastForm=%s, brewYeastType=%s, brewYeastAmount=%s, brewYeastStarter=%s, brewYeastNutrients=%s, brewOG=%s, brewFG=%s, brewPrimary=%s, brewPrimaryTemp=%s, brewSecondary=%s, brewSecondaryTemp=%s, brewOther=%s, brewOtherTemp=%s, brewComments=%s, brewMashStep1Name=%s, brewMashStep1Temp=%s, brewMashStep1Time=%s, brewMashStep2Name=%s, brewMashStep2Temp=%s, brewMashStep2Time=%s, brewMashStep3Name=%s, brewMashStep3Temp=%s, brewMashStep3Time=%s, brewMashStep4Name=%s, brewMashStep4Temp=%s, brewMashStep4Time=%s, brewMashStep5Name=%s, brewMashStep5Temp=%s, brewMashStep5Time=%s, brewFinings=%s, brewWaterNotes=%s, brewBrewerID=%s, brewCarbonationMethod=%s, brewCarbonationVol=%s, brewCarbonationNotes=%s, brewBoilHours=%s, brewBoilMins=%s, brewBrewerFirstName=%s, brewBrewerLastName=%s, brewExtract1Use=%s, brewExtract2Use=%s, brewExtract3Use=%s, brewExtract4Use=%s, brewExtract5Use=%s, brewGrain1Use=%s, brewGrain2Use=%s, brewGrain3Use=%s, brewGrain4Use=%s, brewGrain5Use=%s, brewGrain6Use=%s, brewGrain7Use=%s, brewGrain8Use=%s, brewGrain9Use=%s, brewAddition1Use=%s, brewAddition2Use=%s, brewAddition3Use=%s, brewAddition4Use=%s, brewAddition5Use=%s, brewAddition6Use=%s, brewAddition7Use=%s, brewAddition8Use=%s, brewAddition9Use=%s, brewJudgingLocation=%s, brewCoBrewer=%s, brewUpdated=%s, brewConfirmed=%s WHERE id=%s",
 						   GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
 						   GetSQLValueString($row_style_name['brewStyle'], "text"),
 						   GetSQLValueString($styleTrim, "text"),
@@ -838,7 +838,7 @@ if ($action == "edit") {
 	  //elseif ($go == "beerXML") $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&msg=3";
 	  elseif (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1"))) {
 		  	
-			$updateSQL = sprintf("UPDATE brewing SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 	  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			
@@ -846,7 +846,7 @@ if ($action == "edit") {
 			else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
 	  }
 	  elseif ((strstr($updateGoTo, "section=admin")) || (strstr($updateGoTo, "section=beerxml"))) $updateGoTo = $updateGoTo;
-	  else  $updateGoTo = "../index.php?section=list";
+	  else  $updateGoTo = "../index.php?section=list&msg=2";
 	 
 	 header(sprintf("Location: %s", $updateGoTo));
 
@@ -855,7 +855,7 @@ if ($action == "edit") {
 if ($action == "update") {
 	
 	foreach($_POST['id'] as $id) { 
-		$updateSQL = "UPDATE brewing SET 
+		$updateSQL = "UPDATE $brewing_db_table SET 
 		brewPaid='".$_POST["brewPaid".$id]."',
 		brewWinner='".$_POST["brewWinner".$id]."',
 		brewWinnerCat='".$_POST["brewWinnerCat".$id]."', 

@@ -35,7 +35,7 @@ if ($totalRows_tables > 0) {
         <select name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)">
           	<option value=""></option>
           	<?php do { 
-			$query_flights = sprintf("SELECT flightTable FROM judging_flights WHERE flightTable='%s'", $row_tables_edit['id']);
+			$query_flights = sprintf("SELECT flightTable FROM FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
@@ -138,11 +138,11 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
@@ -151,7 +151,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 		
 		do {	
 			if ($action == "edit") {
-				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM judging_flights WHERE flightEntryID='%s'", $row_entries['id']);
+				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM FROM $judging_flights_db_table WHERE flightEntryID='%s'", $row_entries['id']);
 				$flight_number = mysql_query($query_flight_number, $brewing) or die(mysql_error());
 				$row_flight_number = mysql_fetch_assoc($flight_number);	
 				$random = random_generator(7,2);
@@ -201,16 +201,16 @@ if (($action == "assign") && ($filter == "rounds")) {
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
 		
 		foreach (array_unique($a) as $flight_table){
-			$query_flights = sprintf("SELECT * FROM judging_flights WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
+			$query_flights = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
 	
-			$query_tables = sprintf("SELECT id,tableNumber,tableName,tableLocation FROM judging_tables WHERE id='%s'",$flight_table);
+			$query_tables = sprintf("SELECT id,tableNumber,tableName,tableLocation FROM $judging_tables_db_table WHERE id='%s'",$flight_table);
 			$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 			$row_tables = mysql_fetch_assoc($tables);
 			
-			$query_table_location = sprintf("SELECT * FROM judging_locations WHERE id='%s'",$row_tables['tableLocation']);
+			$query_table_location = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'",$row_tables['tableLocation']);
 			$table_location = mysql_query($query_table_location, $brewing) or die(mysql_error());
 			$row_table_location = mysql_fetch_assoc($table_location);
 	
@@ -225,11 +225,11 @@ if (($action == "assign") && ($filter == "rounds")) {
 		
 		for($i=1; $i<$flight_no_total+1; $i++) { 
 		
-		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
+		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
 		$round_no = mysql_query($query_round_no, $brewing) or die(mysql_error());
 		$row_round_no = mysql_fetch_assoc($round_no);
 		
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM judging_flights WHERE flightTable='%s' AND flightNumber='%s'", $flight_table, $i);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $flight_table, $i);
 		$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row_entry_count = mysql_fetch_assoc($entry_count);
 		

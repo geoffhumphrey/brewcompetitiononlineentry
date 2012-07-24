@@ -10,7 +10,7 @@ ini_set('display_errors', '1');
 require('../paths.php');
 require(INCLUDES.'scrubber.inc.php');
 require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'db_tables.inc.php');
+//require(INCLUDES.'db_tables.inc.php');
 
 
 session_start();
@@ -494,7 +494,7 @@ echo "<p>".$create_special_best_info."</p>";
 
 
 $create_style_types = "
-CREATE TABLE IF NOT EXISTS `style_types` (
+CREATE TABLE IF NOT EXISTS `$style_types_db_table` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `styleTypeName` varchar(255) DEFAULT NULL,
   `styleTypeOwn` varchar(255) DEFAULT NULL,
@@ -505,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `style_types` (
 //$result = mysql_query($create_style_types, $brewing) or die(mysql_error());
 
 $insert_style_types = "
-INSERT INTO style_types (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
+INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
 	(1, 'Beer', 'bcoe', 'Y', 1),
 	(2, 'Cider', 'bcoe', 'Y', 3),
 	(3, 'Mead', 'bcoe', 'Y', 3)
@@ -514,7 +514,7 @@ echo "<p>".$create_style_types."</p>";
 //$result = mysql_query($insert_style_types, $brewing) or die(mysql_error());
 
 // Insert current user's info into new "users" and "brewer" table
-$insert_users = "INSERT INTO users (
+$insert_users = "INSERT INTO $users_db_table (
 	id, 
 	user_name, 
 	password, 
@@ -536,7 +536,7 @@ echo "<p>".$insert_users."</p>";
 //$result = mysql_query($insert_users, $brewing) or die(mysql_error());
 
 $insert_brewer = "
-INSERT INTO brewer (
+INSERT INTO $brewer_db_table (
 	id,
 	uid,
 	brewerFirstName,
@@ -600,14 +600,14 @@ echo "<p>".$insert_brewer."</p>";
 //$result = mysql_query($insert_brewer, $brewing) or die(mysql_error());
 
 // Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-$insert_archive = sprintf("INSERT INTO archive (id, archiveSuffix) VALUES (%s, %s);", "''", "'".$suffix."'");
+$insert_archive = sprintf("INSERT INTO $archive_db_table (id, archiveSuffix) VALUES (%s, %s);", "''", "'".$suffix."'");
 echo "<p>".$insert_archive."</p>";
 //$result = mysql_query($insert_archive, $brewing) or die(mysql_error());
 /*
 // Last, log the user in and redirect 
 session_destroy();
 mysql_select_db($database, $brewing);
-$query_login = "SELECT COUNT(*) as 'count' FROM users WHERE user_name = '$user_name' AND password = '$password'";
+$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
 $login = mysql_query($query_login, $brewing) or die(mysql_error());
 $row_login = mysql_fetch_assoc($login);
 

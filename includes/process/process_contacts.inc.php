@@ -5,7 +5,7 @@
  */
 
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO contacts (
+	$insertSQL = sprintf("INSERT INTO $contacts_db_table (
 	contactFirstName, 
 	contactLastName, 
 	contactPosition, 
@@ -25,7 +25,7 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE contacts SET 
+	$updateSQL = sprintf("UPDATE $contacts_db_table SET 
 	contactFirstName=%s, 
 	contactLastName=%s, 
 	contactPosition=%s, 
@@ -61,7 +61,7 @@ $securimage = new Securimage();
 	else {
 
 		mysql_select_db($database, $brewing);
-		$query_contact = sprintf("SELECT * FROM contacts WHERE id='%s'", $_POST['to']);
+		$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
 		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
 		$row_contact = mysql_fetch_assoc($contact);
 		

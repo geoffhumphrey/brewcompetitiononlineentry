@@ -2,8 +2,9 @@
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'config.php');
-include(INCLUDES.'functions.inc.php');
-include(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 include(INCLUDES.'version.inc.php');
@@ -11,7 +12,7 @@ include(INCLUDES.'headers.inc.php');
 
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
-$query_assignments = sprintf("SELECT * FROM judging_assignments WHERE assignment='%s'", $filter);
+$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignment='%s'", $filter);
 if ($id != "default") $query_assignments .= " AND assignTable='$id'";
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
@@ -112,7 +113,7 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 <?php } // end if ($view != "sign-in") 
 else { 
 
-$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerAssignment='%s'", $filter);
+$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE brewerAssignment='%s'", $filter);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);

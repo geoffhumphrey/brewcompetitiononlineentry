@@ -3,12 +3,13 @@ session_start();
 require_once('../paths.php'); 
 require_once(INCLUDES.'functions.inc.php');
 require_once(INCLUDES.'url_variables.inc.php');
+require_once(INCLUDES.'db_tables.inc.php');
 require_once(DB.'common.db.php');
 include_once(DB.'admin_common.db.php');
 require_once(INCLUDES.'version.inc.php');
 require_once(INCLUDES.'headers.inc.php');
 
-$query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";
+$query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables);
@@ -33,7 +34,7 @@ function number_of_flights($table_id) {
     require(CONFIG.'config.php');
     mysql_select_db($database, $brewing);
 	
-	$query_flights = sprintf("SELECT flightNumber FROM judging_flights WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $table_id);
+	$query_flights = sprintf("SELECT flightNumber FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $table_id);
     $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
     $row_flights = mysql_fetch_assoc($flights);
 	
@@ -45,7 +46,7 @@ function check_flight_number($entry_id,$flight) {
 	require(CONFIG.'config.php');
     mysql_select_db($database, $brewing);
 	
-	$query_flights = sprintf("SELECT flightNumber,flightRound FROM judging_flights WHERE flightEntryID='%s'", $entry_id);
+	$query_flights = sprintf("SELECT flightNumber,flightRound FROM $judging_flights_db_table WHERE flightEntryID='%s'", $entry_id);
     $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
     $row_flights = mysql_fetch_assoc($flights);
 	
@@ -69,7 +70,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
             <?php 
 			if ($row_tables['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_tables['tableLocation']);
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $row_tables['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
@@ -117,11 +118,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$a = explode(",", $row_tables['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -164,7 +165,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		<div id="header-inner">
         	<h1><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></h1>
             <?php if ($row_tables_edit['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_tables_edit['tableLocation']);
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $row_tables_edit['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
@@ -212,11 +213,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -263,7 +264,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
             <?php if ($row_tables['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_tables['tableLocation']);
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $row_tables['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
@@ -306,11 +307,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <?php 
 	$a = explode(",", $row_tables['tableStyles']); 
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s'  AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s'  AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -344,7 +345,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></h1>
             <?php if ($row_tables_edit['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM judging_locations WHERE id='%s'", $row_tables_edit['tableLocation']);
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $row_tables_edit['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
@@ -388,11 +389,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -428,13 +429,13 @@ if (($go == "judging_scores_bos") && ($id == "default")) { ?>
 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 sort($a);
 foreach ($a as $type) {
-	$query_style_type = "SELECT * FROM style_types WHERE id='$type'";
+	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 	$row_style_type = mysql_fetch_assoc($style_type);
 
 if ($row_style_type['styleTypeBOS'] == "Y") { 
 
-	$query_bos = "SELECT * FROM judging_scores";
+	$query_bos = "SELECT * FROM $judging_scores_db_table";
 	if ($row_style_type['styleTypeBOSMethod'] == "1") $query_bos .= " WHERE scoreType='$type' AND scorePlace='1'";
 	if ($row_style_type['styleTypeBOSMethod'] == "2") $query_bos .= " WHERE scoreType='$type' AND (scorePlace='1' OR scorePlace='2')";
 	if ($row_style_type['styleTypeBOSMethod'] == "3") $query_bos .= " WHERE (scoreType='$type' AND scorePlace='1') OR (scoreType='$type' AND scorePlace='2') OR (scoreType='$type' AND scorePlace='3')";
@@ -482,12 +483,12 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE id='%s'", $row_bos['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM judging_tables WHERE id='%s'", $row_bos['scoreTable']);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_bos['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
@@ -522,13 +523,13 @@ if (($go == "judging_scores_bos") && ($id != "default")) { ?>
 <div id="content">
 	<div id="content-inner">
 <?php 
-	$query_style_type = "SELECT * FROM style_types WHERE id='$id'";
+	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$id'";
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 	$row_style_type = mysql_fetch_assoc($style_type);
 	
 if ($row_style_type['styleTypeBOS'] == "Y") { 
 
-	$query_bos = "SELECT * FROM judging_scores";
+	$query_bos = "SELECT * FROM $judging_scores_db_table";
 	if ($row_style_type['styleTypeBOSMethod'] == "1") $query_bos .= " WHERE scoreType='$id' AND scorePlace='1'";
 	if ($row_style_type['styleTypeBOSMethod'] == "2") $query_bos .= " WHERE scoreType='$id' AND (scorePlace='1' OR scorePlace='2')";
 	if ($row_style_type['styleTypeBOSMethod'] == "3") $query_bos .= " WHERE (scoreType='$id' AND scorePlace='1') OR (scoreType='$id' AND scorePlace='2') OR (scoreType='$id' AND scorePlace='3')";
@@ -575,12 +576,12 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE id='%s'", $row_bos['eid']);
+	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM judging_tables WHERE id='%s'", $row_bos['scoreTable']);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_bos['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
