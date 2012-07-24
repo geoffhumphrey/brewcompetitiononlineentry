@@ -2,15 +2,16 @@
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php'); 
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 
 if ($bid != "") {
-$query_judging = "SELECT judgingLocName FROM judging_locations WHERE id='$bid'";
+$query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 $row_judging = mysql_fetch_assoc($judging);
 
-$query_brewerID = "SELECT * FROM brewing WHERE brewJudgingLocation='$bid'";
+$query_brewerID = "SELECT * FROM $brewing_db_table WHERE brewJudgingLocation='$bid'";
 $brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
 $row_brewerID = mysql_fetch_assoc($brewerID);
 
@@ -54,7 +55,7 @@ brewer.brewerJudgeDislikes,
 brewer.id,
 brewing.brewBrewerID,
 brewing.brewJudgingLocation
-FROM brewer, brewing
+FROM $brewer_db_table, brewing
 WHERE brewer.uid = brewing.brewbrewerID
 AND brewing.brewJudgingLocation = '$bid'
 ORDER BY brewer.brewerLastName ASC
@@ -77,7 +78,7 @@ brewerJudgeRank,
 brewerClubs, 
 brewerJudgeLikes, 
 brewerJudgeDislikes 
-FROM brewer 
+FROM $brewer_db_table
 ORDER BY brewerLastName ASC
 "; // Start our query of the database
 

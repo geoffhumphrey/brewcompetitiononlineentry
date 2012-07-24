@@ -3,6 +3,7 @@ session_start();
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 //require(INCLUDES.'headers.inc.php');

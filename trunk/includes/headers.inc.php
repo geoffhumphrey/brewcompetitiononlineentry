@@ -21,6 +21,13 @@ switch($section) {
 		$output = "Setup was successful.";
 		$output_extend = "<p class='info'>You are now logged in and ready to further customize your competition's site.</p>"; 
 	}
+	
+	if ($msg == "chmod") { 
+		$output = "Setup was successful. However, your config.php permissions file could not be changed.";
+		$output_extend = "<div class='error'>It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
+		if ($setup_free_access == TRUE) $output_extend .= "<div class='error'>Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
+	}
+	
 	if     ($msg == "1") $output = "Info added successfully."; 
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
@@ -113,7 +120,7 @@ switch($section) {
 	$header_output = "Contact";
 	if ($msg == "1") {
 	mysql_select_db($database, $brewing);
-	$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM contacts WHERE id='%s'", $id);
+	$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
 	$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
 	$row_contact = mysql_fetch_assoc($contact);
 	$output = "Your message has been sent to ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".";
@@ -158,6 +165,10 @@ switch($section) {
 	elseif ($msg == "6") $output = "You should verify all your entries imported using BeerXML."; 
 	elseif ($msg == "7") $output = "You have registered as a judge or steward. Thank you."; 
 	else $output = "";
+	break;
+	
+	case "step0":
+	$header_output = "Set Up: Install Database";
 	break;
 
 	case "step1":

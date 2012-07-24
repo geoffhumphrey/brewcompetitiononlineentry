@@ -30,7 +30,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     		<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     			<?php do { 
-				$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM $scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
+				$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
 				$scores_1 = mysql_query($query_scores_1, $brewing) or die(mysql_error());
 				$row_scores_1 = mysql_fetch_assoc($scores_1);
 				$totalRows_scores_1 = $row_scores_1['count'];
@@ -49,12 +49,6 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-	<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
-	<span class="adminSubNav">
-		<?php if ($id != "default") echo "<em>All</em> scores have not been entered for table(s):"; else echo "Add/Edit Scores for:"; ?>
-	</span>
-    <span class="adminSubNav"><?php echo score_table_choose($dbTable,$tables_db_table,$scores_db_table); ?></span>
-	<?php } ?>
 </div>
  <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
@@ -120,11 +114,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
-	$query_styles_1 = sprintf("SELECT brewStyle FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
+	$query_styles_1 = sprintf("SELECT brewStyle FROM $styles_db_table WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
 	$styles_1 = mysql_query($query_styles_1, $brewing) or die(mysql_error());
 	$row_styles_1 = mysql_fetch_assoc($styles_1);
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
@@ -198,7 +192,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	
 	foreach (array_unique($a) as $value) {
 		
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
@@ -210,7 +204,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		do {
 
 			if ($action == "edit") {
-				$query_scores = sprintf("SELECT * FROM $scores_db_table WHERE eid='%s'", $row_entries['id']);
+				$query_scores = sprintf("SELECT * FROM $judging_scores_db_table WHERE eid='%s'", $row_entries['id']);
 				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 				$row_scores = mysql_fetch_assoc($scores);
 				}

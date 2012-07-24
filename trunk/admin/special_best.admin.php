@@ -66,7 +66,7 @@
       <td width="5%" class="dataList"><?php echo $row_sbi['sbi_places']; ?></td>
       <td width="25%" class="dataList"><?php echo $row_sbi['sbi_rank']; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=sponsors&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
+      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
       <?php if ($row_sbd['count'] > 0) { ?><span class="icon"><a href="index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
       </td>
      </tr>
@@ -76,7 +76,7 @@
     <?php } else echo "<p>There are no custom winner categories were found in the database.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=special_best_info<?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">Custom Winning<br />
@@ -85,7 +85,7 @@ if (($action == "add") || ($action == "edit")) { ?>
     </tr>
   <tr>
     <td class="dataLabel">Description:</td>
-    <td class="data" colspan="2"><textarea name="sbi_description" class="submit" cols="70" rows="15"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea><!-- <p><a href="javascript:toggleEditor('sbi_description');">Enable/Disable Rich Text</a></p>--></td>
+    <td class="data" colspan="2"><textarea name="sbi_description" class="submit mceNoEditor" cols="70" rows="15"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea><!-- <p><a href="javascript:toggleEditor('sbi_description');">Enable/Disable Rich Text</a></p>--></td>
   </tr>
   <tr>
     <td class="dataLabel">Places:</td>

@@ -13,18 +13,21 @@ if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
-<form name="form1" method="post" action="includes/process.inc.php?dbTable=contacts&action=email" onSubmit="return CheckRequiredFields()">
+<form name="form1" method="post" action="includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <tr style="background-color: <?php echo $color2; ?>">
 	<td class="dataLabel bdr1T" width="5%">Contact:</td>
 	<td class="data bdr1T" width="25%">
     <select name="to">
     	<?php 
-    		 $contacts = get_contacts();
-    		 while ($row_contact = mysql_fetch_assoc($contacts)) { 
-    		?>
+		mysql_select_db($database, $brewing);
+		$query_contacts = sprintf("SELECT * FROM %s ORDER BY contactLastName, contactPosition",$prefix."contacts");
+		$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
+		mysql_free_result($contacts);
+		do { 
+    	?>
     	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
-        <?php } ; ?>
+        <?php } while ($row_contact = mysql_fetch_assoc($contacts)) ; ?>
     </select>
     </td>
     <td class="data bdr1T"><span class="required">Required</span></td>

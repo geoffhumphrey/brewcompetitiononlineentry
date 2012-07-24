@@ -20,7 +20,7 @@ $username = strtolower($_POST['user_name']);
 
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 mysql_select_db($database, $brewing);
-$query_userCheck = "SELECT user_name FROM users WHERE user_name = '$username'";
+$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
 $userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
 $row_userCheck = mysql_fetch_assoc($userCheck);
 $totalRows_userCheck = mysql_num_rows($userCheck);
@@ -32,7 +32,7 @@ if ($totalRows_userCheck > 0) {
   else 
   {
   $password = md5($_POST['password']);
-  $insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
+  $insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
                        GetSQLValueString($password, "text"),
@@ -46,7 +46,7 @@ if ($totalRows_userCheck > 0) {
 	if ($section != "admin") {
 
 	mysql_select_db($database, $brewing);
-	$query_login = "SELECT password FROM users WHERE user_name = '$username' AND password = '$password'";
+	$query_login = "SELECT password FROM $users_db_table WHERE user_name = '$username' AND password = '$password'";
 	$login = mysql_query($query_login, $brewing) or die(mysql_error());
 	$row_login = mysql_fetch_assoc($login);
 	$totalRows_login = mysql_num_rows($login);
@@ -93,20 +93,20 @@ $usernameOld = strtolower($_POST['user_name_old']);
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 
 mysql_select_db($database, $brewing);
-$query_brewerCheck = "SELECT brewerEmail FROM brewer WHERE brewerEmail = '$usernameOld'";
+$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
 $brewerCheck = mysql_query($query_brewerCheck, $brewing) or die(mysql_error());
 $row_brewerCheck = mysql_fetch_assoc($brewerCheck);
 $totalRows_brewerCheck = mysql_num_rows($brewerCheck);
 
 mysql_select_db($database, $brewing);
-$query_userCheck = "SELECT * FROM users WHERE user_name = '$username'";
+$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 $userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
 $row_userCheck = mysql_fetch_assoc($userCheck);
 $totalRows_userCheck = mysql_num_rows($userCheck);
 
 	// --------------------------- If Changing a Participant's User Level ------------------------------- //
 	if ($go == "make_admin") {
-	$updateSQL = sprintf("UPDATE users SET userLevel=%s WHERE user_name=%s", 
+	$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s WHERE user_name=%s", 
 						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($_POST['user_name'], "text"));
 						   
@@ -122,7 +122,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	  }
 	  else 
 	  {  
-	  $updateSQL = sprintf("UPDATE users SET user_name=%s, userLevel=%s WHERE id=%s", 
+	  $updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s, userLevel=%s WHERE id=%s", 
 						   GetSQLValueString($_POST['user_name'], "text"),
 						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($id, "text")); 
@@ -130,7 +130,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	  mysql_select_db($database, $brewing);
 	  $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
-	  $update2SQL = sprintf("UPDATE brewer SET brewerEmail=%s WHERE brewerEmail=%s", 
+	  $update2SQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE brewerEmail=%s", 
 						   GetSQLValueString($_POST['user_name'], "text"),
 						   GetSQLValueString($usernameOld, "text")); 
 	
@@ -138,7 +138,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	  $Result2 = mysql_query($update2SQL, $brewing) or die(mysql_error());
 	
 		mysql_select_db($database, $brewing);
-		$query_login = "SELECT user_name FROM users WHERE user_name = '$username'";
+		$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
 		$login = mysql_query($query_login, $brewing) or die(mysql_error());
 		$row_login = mysql_fetch_assoc($login);
 		$totalRows_login = mysql_num_rows($login);
@@ -181,7 +181,7 @@ if ($go == "password") {
 	$passwordOld = md5($_POST['passwordOld']);
 	$passwordNew = md5($_POST['password']);
 	mysql_select_db($database, $brewing);
-	$query_userPass = "SELECT password FROM users WHERE password = '$passwordOld'";
+	$query_userPass = "SELECT password FROM $users_db_table WHERE password = '$passwordOld'";
 	$userPass = mysql_query($query_userPass, $brewing) or die(mysql_error());
 	$row_userPass = mysql_fetch_assoc($userPass);
 	$totalRows_userPass = mysql_num_rows($userPass);
@@ -189,7 +189,7 @@ if ($go == "password") {
 	if ($passwordOld != $row_userPass['password']) header("Location: ../index.php?section=user&action=password&msg=3&id=".$id);
 	
 	else {  
-  		$updateSQL = sprintf("UPDATE users SET password=%s WHERE id=%s", 
+  		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
                        GetSQLValueString($passwordNew, "text"),
                        GetSQLValueString($id, "text")); 
 		mysql_select_db($database, $brewing);

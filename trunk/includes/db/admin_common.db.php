@@ -1,6 +1,6 @@
 <?php
 // Determine if current or archive
-include(INCLUDES.'db_tables.inc.php');
+//include(INCLUDES.'db_tables.inc.php');
 $query_style_type = "SELECT * FROM $style_types_db_table"; 
 if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
@@ -14,7 +14,7 @@ if (($id == "default") || ($go == "judging_scores")) $query_tables .= " ORDER BY
 //if ($id != "default") $query_tables .= " WHERE id='$id'";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
+$totalRows_tables = mysql_num_rows($tables); 
 
 //echo $query_tables."<br>";
 

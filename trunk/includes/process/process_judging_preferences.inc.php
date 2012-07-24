@@ -10,7 +10,7 @@ if ($action == "add") {
 
 if (($action == "edit") || ($section == "step8")) {
 	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $row_judging_prefs['jPrefsFlightEntries'];
-$updateSQL = sprintf("UPDATE judging_preferences SET
+$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 					 
 jPrefsQueued=%s,
 jPrefsFlightEntries=%s,
@@ -25,7 +25,13 @@ WHERE id=%s",
 					   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	if ($section == "step8") header("location:../index.php?msg=success"); else header(sprintf("Location: %s", $updateGoTo));
+	if ($section == "step8") {
+		// Lock down the config file
+		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
+		header("location:../index.php?msg=$message"); 
+	}
+	
+	else header(sprintf("Location: %s", $updateGoTo));
 }
 
 

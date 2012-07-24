@@ -2,14 +2,19 @@
 
 function authenticateUser($connection, strtolower($username), $password)
 {
-  // Test the username and password parameters
-  if (!isset($username) || !isset($password))
+	
+	include('../paths.php');
+    require(CONFIG.'config.php');
+    require(INCLUDES.'url_variables.inc.php');
+	require(INCLUDES.'db_tables.inc.php');
+  	// Test the username and password parameters
+  	if (!isset($username) || !isset($password))
     return false;
 
-  // Formulate the SQL find the user
-  $password = md5($password);
-  $query = "SELECT password FROM users WHERE user_name = '{$username}' AND password = '{$password}'";
-  $result = mysql_query($query, $connection);
+  	// Formulate the SQL find the user
+  	$password = md5($password);
+  	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";
+  	$result = mysql_query($query, $connection);
 
 /*
    if(!$result || (mysql_numrows($result) < 1)){

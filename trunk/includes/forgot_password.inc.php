@@ -2,12 +2,14 @@
 include('../paths.php');
 // Based upon a script from www.plus2net.com 
 require(CONFIG.'config.php');
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'functions.inc.php'); 
 require(DB.'common.db.php');
 $username = $_POST['loginUsername'];
 
 mysql_select_db($database, $brewing);
-$query_forgot = "SELECT * FROM users WHERE user_name = '$username'";
+$query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 $forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
 $row_forgot = mysql_fetch_assoc($forgot);
 $totalRows_forgot = mysql_num_rows($forgot);
@@ -29,7 +31,7 @@ $em = $row->username;// email is stored to a variable
 $key = random_generator(10,1);
 
 $password = md5($key);
-$updateSQL = sprintf("UPDATE users SET password='%s' WHERE user_name='%s'", $password, $username);
+$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE user_name='%s'", $password, $username);
 					   
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());

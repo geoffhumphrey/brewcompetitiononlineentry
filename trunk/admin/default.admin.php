@@ -13,33 +13,33 @@ include(DB.'brewer.db.php');
 if (($section == "admin") && ($go == "default")) { ?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
-<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
-<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+<?php 
+if ($setup_free_access == TRUE) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
+if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php if (($section == "admin") && ($go == "default")) { ?>
 <div class="at-a-glance">
-<h3>Numbers at a Glance</h3>
+<h3>Numbers at a Glance</h3> 
 <table>
 	<tr>
     	<td colspan="6">As of <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
 	</tr>
     <tr>
-		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a>:</td>
+		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Confirmed Entries</a>:</td>
         <td class="data"><?php echo $totalRows_entry_count; ?></td>
 		<td class="dataLabel">Total Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
-        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants">Participants</a>:</td>
+        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants">Total Participants</a>:</td>
         <td class="data"><?php echo get_participant_count('default'); ?></td>
 	</tr>
     <tr>
-    	<td class="dataLabel">Paid/Rec'd Entries:</td>
+    	<td class="dataLabel">Paid, Rec'd &amp; Confirmed Entries:</td>
         <td class="data"><?php echo get_entry_count(); ?></td>
-		<td class="dataLabel">Paid Fees:</td>
+		<td class="dataLabel">Total Paid Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees_paid; ?></td>
-        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants&amp;filter=judges">Avail. Judges</a>:</td>
+        <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
         <td class="data"><?php echo get_participant_count('judge'); ?></td>
 	</tr>
 </table>

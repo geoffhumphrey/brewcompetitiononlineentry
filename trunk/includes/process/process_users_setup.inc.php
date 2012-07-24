@@ -7,7 +7,7 @@
 $username = strtolower($_POST['user_name']);
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	$password = md5($_POST['password']);
-	$insertSQL = sprintf("INSERT INTO users (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
+	$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
                        GetSQLValueString($password, "text"),

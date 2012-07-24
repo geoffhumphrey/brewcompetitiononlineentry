@@ -3,6 +3,7 @@ session_start();
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
@@ -24,7 +25,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <?php if ($id == "default") { ?>
 
     <?php do { 
-		$query_assignments = sprintf("SELECT * FROM judging_assignments WHERE assignTable='%s' ORDER BY assignRound,assignFlight ASC", $row_tables['id']);
+		$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='%s' ORDER BY assignRound,assignFlight ASC", $row_tables['id']);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		$totalRows_assignments = mysql_num_rows($assignments);
@@ -81,7 +82,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
 <?php } else { ?>
 <?php 
-$query_assignments = sprintf("SELECT * FROM judging_assignments WHERE assignTable='%s' ORDER BY assignRound,assignFlight ASC", $id);
+$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='%s' ORDER BY assignRound,assignFlight ASC", $id);
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 $totalRows_assignments = mysql_num_rows($assignments);

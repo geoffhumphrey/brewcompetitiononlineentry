@@ -70,7 +70,7 @@ function judge_points($bid,$bos) {
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 1.0; 
@@ -96,7 +96,7 @@ function steward_points($bid) {
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM judging_assignments WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 0.5; 
@@ -122,7 +122,7 @@ $staff_points = number_format(total_points($total_entries,"Staff"), 1);
 $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
-$query_assignments = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerAssignmentStaff='1'";
+$query_assignments = "SELECT COUNT(*) as 'count' FROM $brewer_db_table WHERE brewerAssignmentStaff='1'";
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 //echo $staff_points."<br>";
@@ -134,30 +134,30 @@ elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_poi
 else $staff_points = 0;
 
 // Organizer
-$query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM brewer WHERE brewerAssignmentOrganizer='1'";
+$query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignmentOrganizer='1'";
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
 
 // Judges
-$query_judges = "SELECT bid FROM judging_assignments WHERE assignment='J'";
+$query_judges = "SELECT bid FROM $judging_assignments_db_table WHERE assignment='J'";
 $judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_judges = mysql_fetch_assoc($judges);
 $totalRows_judges = mysql_num_rows($judges);
 
-$query_bos_judges = "SELECT id FROM brewer WHERE brewerJudgeBOS='1'";
+$query_bos_judges = "SELECT id FROM $brewer_db_table WHERE brewerJudgeBOS='1'";
 $bos_judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_bos_judges = mysql_fetch_assoc($bos_judges);
 $totalRows_bos_judges = mysql_num_rows($bos_judges);
 
 // Stewards
-$query_stewards = "SELECT bid FROM judging_assignments WHERE assignment='S'";
+$query_stewards = "SELECT bid FROM $judging_assignments_db_table WHERE assignment='S'";
 $stewards = mysql_query($query_stewards, $brewing) or die(mysql_error());
 $row_stewards = mysql_fetch_assoc($stewards);
 $totalRows_stewards = mysql_num_rows($stewards);
 
 // Staff
-$query_staff = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM brewer WHERE brewerAssignmentStaff='1'";
+$query_staff = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignmentStaff='1'";
 $staff = mysql_query($query_staff, $brewing) or die(mysql_error());
 $row_staff = mysql_fetch_assoc($staff);
 $totalRows_staff = mysql_num_rows($staff);

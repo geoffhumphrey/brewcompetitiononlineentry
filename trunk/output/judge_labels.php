@@ -2,7 +2,7 @@
 session_start(); 
 require('../paths.php'); 
 
-$query_brewer = "SELECT * FROM brewer WHERE id='$id'";
+$query_brewer = "SELECT * FROM $brewer_db_table WHERE id='$id'";
 mysql_select_db($database, $brewing);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);

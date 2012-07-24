@@ -1,5 +1,5 @@
 <script type="text/javascript" src="js_includes/usable_forms.js"></script>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=judging_preferences&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step8") { ?>
 <h2>Competition Organization Preferences</h2>
 <div class="adminSubNavContainer">

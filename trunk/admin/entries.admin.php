@@ -1,10 +1,10 @@
 <?php
-include(DB.'entries.db.php');
+//include(DB.'entries.db.php');
 if (($registration_open == "1") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
 ?>
-<h2>Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
+<h2><?php if ($view == "paid") echo "Paid "; if ($view == "unpaid") echo "Unpaid "; ?> Entries<?php if ($dbTable != "default") echo ": ".ltrim($dbTable, "brewing_"); ?></h2>
 <?php if ($action != "print") { ?>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=brewing&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $bid; ?>&amp;sort=<?php echo $sort; ?>&amp;dir=<?php echo $dir; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $bid; ?>&amp;sort=<?php echo $sort; ?>&amp;dir=<?php echo $dir; ?>">
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
@@ -62,20 +62,28 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 ?>
 <table class="dataTable">
 <tr>
-  <td class="dataHeading" width="5%">Total Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
-  <td class="data"><?php if (($filter == "default") && ($bid == "default")) echo $totalRows_entry_count; else  echo $totalRows_log; ?></td>
+  <td class="dataHeading" width="5%">Total Confirmed Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="data"><?php if (($filter == "default") && ($bid == "default")) echo $totalRows_entry_count; else  echo $totalRows_log_confirmed; ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Total Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="dataHeading">Total Confirmed Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
 </tr>
 <?php if ($view == "default") { ?>
 <tr>
-  <td class="dataHeading">Paid/Unpaid Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
-  <td class="data"><?php echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a><br><a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_entry_count - $totalRows_log_paid)." unpaid</a>"; ?></td>
+  <td class="dataHeading">Paid/Unpaid Confirmed Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="data"><?php 
+  if ($filter == "default") { 
+  	if ($totalRows_log_paid > 0) echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a>";
+ 	else echo $totalRows_log_paid." paid";
+	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo "<br><a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_entry_count - $totalRows_log_paid)." unpaid</a>"; 
+	else echo "<br>".($totalRows_log - $totalRows_log_paid)." unpaid";
+	}
+  else echo $totalRows_log_paid." paid<br>".($totalRows_log - $totalRows_log_paid)." unpaid";
+  ?></td>
 </tr>
 <tr>
-  <td class="dataHeading">Paid/Unpaid Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="dataHeading">Paid/Unpaid Confirmed Entry Fees<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees_paid." paid <br>".$row_prefs['prefsCurrency'].$total_fees_unpaid." unpaid"; ?></td>
 </tr>
 <?php } ?>
@@ -204,15 +212,15 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 	{  
 	mysql_select_db($database, $brewing);
 	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
+	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_brewer = sprintf("SELECT brewerDiscount,brewerLastName,brewerFirstName FROM brewer WHERE uid='%s'",$row_log['brewBrewerID']);
+	$query_brewer = sprintf("SELECT brewerDiscount,brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid='%s'",$row_log['brewBrewerID']);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_array($brewer);
 	
-	$query_styles_num = "SELECT DISTINCT brewStyleGroup FROM styles ORDER BY brewStyleGroup ASC";
+	$query_styles_num = "SELECT DISTINCT brewStyleGroup FROM $styles_db_table ORDER BY brewStyleGroup ASC";
 	$styles_num = mysql_query($query_styles_num, $brewing) or die(mysql_error());
 	$row_styles_num = mysql_fetch_assoc($styles_num);
 	$totalRows_styles_num = mysql_num_rows($styles_num);
@@ -258,7 +266,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 <?php } // end if ($row_prefs['prefsCompOrg'] == "N") ?>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a id="modal_window_link" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
+  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a id="modal_window_link" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
   </td>
   <?php } ?>
   </tr>

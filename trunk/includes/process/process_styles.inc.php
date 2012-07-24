@@ -8,23 +8,23 @@ if ($action == "update") {
 foreach($_POST['id'] as $id)	{ 
 
 		if ($filter == "default") {
-		 $updateSQL = "UPDATE styles SET brewStyleActive='".$_POST["brewStyleActive".$id]."' WHERE id='".$id."'";
+		 $updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$_POST["brewStyleActive".$id]."' WHERE id='".$id."'";
 		 mysql_select_db($database, $brewing);
 		 $result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 		 }
 		 
 		if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) { 
-		 $updateSQL = "UPDATE styles SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
+		 $updateSQL = "UPDATE $styles_db_table SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
 		 $result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		 //echo $updateSQL."<br>"; 
 		 
 		 // Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.		 
 		 mysql_select_db($database, $brewing);
-		 $query_style_name = "SELECT *FROM styles WHERE id='".$id."'";
+		 $query_style_name = "SELECT *FROM $styles_db_table WHERE id='".$id."'";
 		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 		 $row_style_name = mysql_fetch_assoc($style_name);
 		 
-		 $query_loc = sprintf("SELECT * FROM brewing WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
+		 $query_loc = sprintf("SELECT * FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
 		 $loc = mysql_query($query_loc, $brewing) or die(mysql_error());
 		 $row_loc = mysql_fetch_assoc($loc);
 		 $totalRows_loc = mysql_num_rows($loc);
@@ -32,7 +32,7 @@ foreach($_POST['id'] as $id)	{
 		 	if ($totalRows_loc > 0) {
 		 		do { 
 				if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
-				$updateSQL2 = sprintf("UPDATE brewing SET brewJudgingLocation='%s' WHERE id='%s';", $_POST["brewStyleJudgingLoc".$id], $row_loc['id']); 
+				$updateSQL2 = sprintf("UPDATE $brewing_db_table SET brewJudgingLocation='%s' WHERE id='%s';", $_POST["brewStyleJudgingLoc".$id], $row_loc['id']); 
 				$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 				//echo $updateSQL2."<br>"; 
 				}
@@ -58,7 +58,7 @@ $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 $row_style_name = mysql_fetch_assoc($style_name);
 $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 
-  $insertSQL = sprintf("INSERT INTO styles (
+  $insertSQL = sprintf("INSERT INTO $styles_db_table (
   brewStyleNum, 
   brewStyle, 
   brewStyleOG, 
@@ -114,7 +114,7 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE styles SET 
+	$updateSQL = sprintf("UPDATE $styles_db_table SET 
 	  brewStyleNum=%s, 
 	  brewStyle=%s, 
 	  brewStyleOG=%s, 
@@ -161,13 +161,13 @@ if ($action == "edit") {
   mysql_select_db($database_brewing, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
-  	$query_log = sprintf("SELECT id FROM brewing WHERE brewStyle = '%s'",$_POST['brewStyleOld']); 
+  	$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']); 
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
 	$totalRows_log = mysql_num_rows($log);
 	  
   do {
-	 $updateSQL = sprintf("UPDATE brewing SET brewStyle='%s' WHERE id='%s'", $_POST['brewStyle'],$row_log['id']);
+	 $updateSQL = sprintf("UPDATE $brewing_db_table SET brewStyle='%s' WHERE id='%s'", $_POST['brewStyle'],$row_log['id']);
 	 $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   } while ($row_log = mysql_fetch_assoc($log));
   

@@ -1,28 +1,45 @@
 <?php 
 /**
  * Module:      index.php 
- * Description: This module is the delivery vehicle for all functions.
+ * Description: This module is the delivery vehicle for all modules.
  * 
  */
 
 require('paths.php');
-require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
-$images_dir = dirname( __FILE__ );
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
-// Check to see if initial setup has taken place 
-if (check_setup()) header ("Location: setup.php?section=step1"); 
 
+function check_setup($tablename, $database) {
+
+    if(!$database) {
+        $res = mysql_query("SELECT DATABASE()");
+        $database = mysql_result($res, 0);
+    }
+
+    $res = mysql_query("
+        SELECT COUNT(*) AS count 
+        FROM information_schema.tables 
+        WHERE table_schema = '$database' 
+        AND table_name = '$tablename'
+    ");
+
+    return mysql_result($res, 0) == 1;
+
+}
+
+if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
 
 // If all setup has taken place, run normally
 else 
 {
+require(INCLUDES.'functions.inc.php');
 // check to see if all judging numbers have been generated. If not, generate
 if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php'); 
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 include(DB.'entries.db.php');
@@ -46,6 +63,8 @@ require(INCLUDES.'constants.inc.php');
 <script type="text/javascript" src="js_includes/jquery.ui.position.min.js"></script>
 <script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
 <script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
@@ -143,7 +162,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
+	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php'); 
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');

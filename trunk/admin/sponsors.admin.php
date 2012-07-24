@@ -64,7 +64,7 @@
   <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="images/tick.png"  alt="Yes"><?php } else { ?><img src="images/cross.png"  alt="No"><?php } ?></td>
   <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=sponsors&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
+  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
  </tr>
 <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
  </tbody>
@@ -73,7 +73,7 @@
 <p>There are no sponsors in the database.</p>
 <?php } ?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=sponsors<?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">Sponsor Name:</td>

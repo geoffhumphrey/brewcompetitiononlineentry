@@ -230,12 +230,12 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <tbody>
 	<?php 
 	do {	
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE id='%s'", $row_enter_bos['eid']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_enter_bos['eid']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		
-		$query_scores = sprintf("SELECT * FROM judging_scores_bos WHERE eid='%s'", $row_enter_bos['eid']);
+		$query_scores = sprintf("SELECT * FROM $judging_scores_bos_db_table WHERE eid='%s'", $row_enter_bos['eid']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 	?>

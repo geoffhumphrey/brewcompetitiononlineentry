@@ -1,4 +1,4 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $contest_info_db_table; ?>&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step4") { ?>
 <h2>Competition Info</h2>
 <div class="adminSubNavContainer">
@@ -8,7 +8,7 @@
 </div>
 <?php } ?>
 <?php if ($section == "step4") { 
-$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM brewer WHERE uid='1'";
+$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid='1'";
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 ?>
@@ -97,57 +97,57 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Entry Window Open Date:</td>
     <td class="data">
-    <input id="contestEntryOpen" name="contestEntryOpen" type="text" class="submit" size="20" value="<?php echo
+    <input id="contestEntryOpen" name="contestEntryOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" />
     
     </td>
     <td class="dataLabel">Time: </td>
-    <td class="data"><input id="contestEntryOpenTime" name="contestEntryOpenTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestEntryOpenTime" name="contestEntryOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required</span> <em>The date/time drop-off and mail-in locations will begin receiving entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Window Close Date:</td>
-    <td class="data"><input id="contestEntryDeadline" name="contestEntryDeadline" type="text" class="submit" size="20" value="<?php echo
+    <td class="data"><input id="contestEntryDeadline" name="contestEntryDeadline" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
-    <td class="data"><input id="contestEntryDeadlineTime" name="contestEntryDeadlineTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestEntryDeadlineTime" name="contestEntryDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required</span> <em>The final date/time drop-off and mail-in locations will receive entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Open Date:</td>
-    <td class="data"><input id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" class="submit" size="20" value="<?php echo
+    <td class="data"><input id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" /></td>
     <td class="dataLabel"> Time:</td>
-    <td class="data"><input id="contestRegistrationOpenTime" name="contestRegistrationOpenTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestRegistrationOpenTime" name="contestRegistrationOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Close Date:</td>
-    <td class="data"><input id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" class="submit" size="20"  value="<?php echo
+    <td class="data"><input id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" class="submit" size="20"  value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
-    <td class="data"><input id="contestRegistrationDeadlineTime" name="contestRegistrationDeadlineTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestRegistrationDeadlineTime" name="contestRegistrationDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Judge/Steward Registration Open Date:</td>
-    <td class="data"><input id="contestJudgeOpen" name="contestJudgeOpen" type="text" class="submit" size="20" value="<?php echo
+    <td class="data"><input id="contestJudgeOpen" name="contestJudgeOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" /></td>
     <td class="dataLabel">Time:</td>
-    <td class="data"><input id="contestJudgeOpenTime" name="contestJudgeOpenTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestJudgeOpenTime" name="contestJudgeOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open judge/steward registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Judge/Steward Registration Close Date:</td>
-    <td class="data"><input id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" class="submit" size="20"  value="<?php echo
+    <td class="data"><input id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" class="submit" size="20"  value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
-    <td class="data"><input id="contestJudgeDeadlineTime" name="contestJudgeDeadlineTime" type="text" class="submit" size="10" value="<?php echo
+    <td class="data"><input id="contestJudgeDeadlineTime" name="contestJudgeDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close judge/steward registrations.</em></td>
   </tr>

@@ -7,7 +7,7 @@
 $judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
 
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO judging_locations (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s)",
+	$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",
                        GetSQLValueString($judgingDate, "text"),
                        GetSQLValueString(capitalize($_POST['judgingLocation']), "scrubbed"),
                        GetSQLValueString(capitalize($_POST['judgingLocName']), "scrubbed"),
@@ -23,7 +23,7 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE judging_locations SET judgingDate=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
+	$updateSQL = sprintf("UPDATE $judging_locations_db_table SET judgingDate=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
                        GetSQLValueString($judgingDate, "text"),
                        GetSQLValueString(capitalize($_POST['judgingLocation']), "scrubbed"),
                        GetSQLValueString(capitalize($_POST['judgingLocName']), "scrubbed"),

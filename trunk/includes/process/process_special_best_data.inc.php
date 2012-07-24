@@ -8,12 +8,12 @@ if ($action == "add") {
 	foreach($_POST['id'] as $id){
 		if ($_POST['sbd_judging_no'.$id] != "") {
 	
-	$query_entry = sprintf("SELECT * FROM brewing WHERE brewJudgingNumber='%s'", $_POST['sbd_judging_no'.$id]);
+	$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $_POST['sbd_judging_no'.$id]);
 	$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
 	$row_entry = mysql_fetch_assoc($entry);
 	
 	//echo $query_entry."<br>";
-	$insertSQL = sprintf("INSERT INTO special_best_data (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
+	$insertSQL = sprintf("INSERT INTO $special_best_data_db_table (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
 					   GetSQLValueString($_POST['sid'.$id], "int"),
 					   GetSQLValueString($row_entry['brewBrewerID'], "int"),
 					   GetSQLValueString($row_entry['id'], "int"),
@@ -31,7 +31,7 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	foreach($_POST['id'] as $id){
-	$updateSQL = sprintf("UPDATE special_best_data SET sid=%s, bid=%s, eid=%s, sbd_place=%s, sbd_comments=%s WHERE id=%s",
+	$updateSQL = sprintf("UPDATE $special_best_data_db_table SET sid=%s, bid=%s, eid=%s, sbd_place=%s, sbd_comments=%s WHERE id=%s",
 					   GetSQLValueString($_POST['sid'], "int"),
 					   GetSQLValueString($_POST['bid'], "ind"),
 					   GetSQLValueString($_POST['eid'], "int"),

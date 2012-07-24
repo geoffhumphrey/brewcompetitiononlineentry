@@ -80,7 +80,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
       <td width="20%" class="dataList"><?php echo $row_sbd['brewName']; ?></td>
       <td width="20%" class="dataList"><?php echo $row_sbd['brewerFirstName']." ".$row_sbd['brewerLastName']; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=sponsors&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete <?php echo $row_sbd['brewName'] ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbd['brewName']; ?>" title="Delete <?php echo $row_sbd['brewName']; ?>"></a></span>
+      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete <?php echo $row_sbd['brewName'] ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbd['brewName']; ?>" title="Delete <?php echo $row_sbd['brewName']; ?>"></a></span>
       </td>
      </tr>
     <?php } while($row_sbd = mysql_fetch_assoc($sbd));  ?>
@@ -89,7 +89,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
     <?php } else echo "<p>There are entries found in any custom winner categories.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=special_best_data" name="form1">
+<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>" name="form1">
 <table>
 <?php if ($action == "add") { for ($i=1; $i <= $row_sbd['sbi_places']; $i++) { ?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />

@@ -24,7 +24,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
 	});
 	</script>
-<form action="includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=brewing&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($row_user['userLevel'] != 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>">
@@ -35,7 +35,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
 <?php if ($row_user['userLevel'] == 1) { 
 
-$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM brewer ORDER BY brewerLastName";
+$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
 $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
 $row_brewers = mysql_fetch_assoc($brewers);
 
@@ -101,7 +101,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <div id="menu_container">
 <div id="outer">
 <div class="menus">
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>General</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -116,7 +116,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Dates</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Dates</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -129,7 +129,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Specific Gravities</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Specific Gravities</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -142,7 +142,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Malt Extracts</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Malt Extracts</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -222,7 +222,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Grain</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Grain</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -362,7 +362,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Adjuncts</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentables: Adjuncts</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -502,7 +502,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Hops</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Hops</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -785,7 +785,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Mash Schedule</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Mash Schedule</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -830,7 +830,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Water Treatment</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Water Treatment</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -839,7 +839,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Culture</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Culture</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -879,7 +879,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Nutrients</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Yeast Nutrients</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -888,7 +888,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Carbonation</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Carbonation</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -905,7 +905,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Boil</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Boil</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -918,7 +918,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentation</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Fermentation</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -935,7 +935,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Finings</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Finings</h4>
 <div class="toggle_container">
 <table>
 <tr>
@@ -944,7 +944,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 </table>
 </div>
-<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Brewer's Specifics</h4>
+<h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="images/add.png"  /><?php } ?></span>Brewer's Specifics</h4>
 <div class="toggle_container">
 <table>
   <tr>
@@ -956,7 +956,8 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </div>
 </div>
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+<input type="hidden" name="brewConfirmed" value="1">
+<input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
 <?php } 
 else echo "<div class=\"error\">The requested entry was not entered under the currently logged in user's credentials.</div>";

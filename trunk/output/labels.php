@@ -3,6 +3,7 @@ session_start();
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
@@ -10,7 +11,7 @@ require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 
 if (($go == "entries") && ($action == "bottle-entry")) {
-	$query_log = "SELECT * FROM brewing WHERE brewReceived='Y'";
+	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='Y'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -48,7 +49,7 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 }
 
 if (($go == "entries") && ($action == "bottle-judging")) {
-	$query_log = "SELECT * FROM brewing WHERE brewReceived='Y'";
+	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='Y'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -89,7 +90,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id != "default
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM brewer WHERE id = '$id'";
+	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM $brewer_db_table WHERE id = '$id'";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);
@@ -121,7 +122,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id == "default
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName ASC";
+	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM $brewer_db_table WHERE brewerAssignment='J' ORDER BY brewerLastName ASC";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);
@@ -155,7 +156,7 @@ if (($go == "participants") && ($action == "address_labels")) {
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT * FROM brewer ORDER BY brewerLastName ASC";
+	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	
@@ -186,19 +187,19 @@ if (($go == "judging_scores") && ($action == "awards")) {
 	
 	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_Award_Labels.pdf";
 	
-	$query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";
+	$query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	$totalRows_tables = mysql_num_rows($tables);
 	
-	$query_bos = "SELECT * FROM judging_scores_bos ORDER BY scoreType,scorePlace ASC";
+	$query_bos = "SELECT * FROM $judging_scores_bos_db_table ORDER BY scoreType,scorePlace ASC";
 	$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
 	$row_bos = mysql_fetch_assoc($bos);
 	$totalRows_bos = mysql_num_rows($bos);
 	
 	do {
 			
-			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM brewing WHERE id='%s'", $row_bos['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_assoc($entries);
 			if ($row_bos['scorePlace'] != "") { 
@@ -222,7 +223,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 	$totalRows_scores = mysql_num_rows($scores);
 	
 		do {
-			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM brewing WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_assoc($entries);
 			

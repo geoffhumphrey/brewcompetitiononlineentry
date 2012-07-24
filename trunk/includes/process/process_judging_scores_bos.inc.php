@@ -7,7 +7,7 @@
 if ($action == "enter") {
 	foreach($_POST['score_id'] as $score_id)	{
 	if ($_POST['scorePrevious'.$score_id] == "Y") {
-	$updateSQL = sprintf("UPDATE judging_scores_bos SET
+	$updateSQL = sprintf("UPDATE $judging_scores_bos_db_table SET
 	eid=%s,
 	bid=%s,
 	scoreEntry=%s,
@@ -27,7 +27,7 @@ if ($action == "enter") {
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
 	if (($_POST['scorePlace'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
-	$insertSQL = sprintf("INSERT INTO judging_scores_bos (
+	$insertSQL = sprintf("INSERT INTO $judging_scores_bos_db_table (
 	eid, 
 	bid, 
 	scoreEntry,

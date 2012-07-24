@@ -75,7 +75,7 @@ function brewer_assignment_checked($a,$b) {
     <?php if (($action == "default") && ($section != "step5")) {  ?>
     <?php 
 	mysql_select_db($database, $brewing);
-	$query_judging_locs = "SELECT * FROM judging_locations";
+	$query_judging_locs = "SELECT * FROM $judging_locations_db_table ORDER by judgingDate ASC";
 	$judging_locs = mysql_query($query_judging_locs, $brewing) or die(mysql_error());
 	$row_judging_locs = mysql_fetch_assoc($judging_locs);
 	$totalRows_judging_locs = mysql_num_rows($judging_locs);
@@ -122,7 +122,7 @@ function brewer_assignment_checked($a,$b) {
   <td width="30%" class="dataList"><?php echo $row_judging_locs['judgingLocation']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_judging_locs['judgingRounds']; ?></td>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_judging_locs['judgingLocName']; ?>" title="Edit <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=judging_locations&amp;action=delete','id',<?php echo $row_judging_locs['id']; ?>,'Are you sure you want to delete the <?php echo $row_judging_locs['judgingLocName']; ?> location?\nThis cannot be undone and will affect all judges and stewards who indicated this location as a preference.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_judging_locs['judgingLocName']; ?>" title="Delete <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span></td>
+  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_judging_locs['judgingLocName']; ?>" title="Edit <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;action=delete','id',<?php echo $row_judging_locs['id']; ?>,'Are you sure you want to delete the <?php echo $row_judging_locs['judgingLocName']; ?> location?\nThis cannot be undone and will affect all judges and stewards who indicated this location as a preference.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_judging_locs['judgingLocName']; ?>" title="Delete <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span></td>
  </tr>
   <?php } while($row_judging_locs = mysql_fetch_assoc($judging_locs)) ?>
 </tbody>
@@ -137,7 +137,7 @@ function brewer_assignment_checked($a,$b) {
 		
 	});
 	</script>
-	<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=judging_locations&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+	<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>
@@ -208,9 +208,9 @@ function brewer_assignment_checked($a,$b) {
 		} );
 	</script>
 
-<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=brewer&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <?php if ($filter == "staff") { 
-$query_brewers = "SELECT * FROM brewer ORDER BY brewerLastName";
+$query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
 $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
 $row_brewers = mysql_fetch_assoc($brewers);
 ?>
@@ -276,7 +276,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging_locations WHERE id='%s'", $value);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $value);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
@@ -305,7 +305,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 		foreach ($a as $value) {
 			if ($value != "") {
 				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM judging_locations WHERE id='%s'", $b);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				if (substr($value, 0, 1) == "Y") { 
