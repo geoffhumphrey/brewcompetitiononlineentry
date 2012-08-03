@@ -1,5 +1,7 @@
 <?php
 require('paths.php');
+require(INCLUDES.'url_variables.inc.php');
+$current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
 require(INCLUDES.'functions.inc.php'); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
@@ -20,7 +22,7 @@ require(INCLUDES.'headers.inc.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Entry Site</title>
 <link href="css/html_elements.css" rel="stylesheet" type="text/css" />
@@ -78,7 +80,7 @@ require(INCLUDES.'headers.inc.php');
 	<div id="content">
 		<div id="content-inner">
         <div id="header">	
-			<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+			<div id="header-inner"><h1>BCOE&amp;M <?php echo $current_version; ?> Setup</h1></div>
 		</div>
         
     	<?php
@@ -95,15 +97,19 @@ require(INCLUDES.'headers.inc.php');
 		} 
 		
 		else {
-			echo "<div class='error'>Permission Denied</div>";
-			echo "<p>The varialbe called &#36;setup_free_access is set to FALSE in the config.php file in the &ldquo;site&rdquo; folder. For the install and setup scripts to run, it must be set to TRUE. Server access is required to change the config.php file.<p>";
+			echo "
+			<div class='error'>Setup Cannot Run</div>
+			<p>The variable called &#36;setup_free_access is set to FALSE in the config.php file. The config.php file is located in the &ldquo;site&rdquo; folder on your server.</p>
+			<p><strong>For the install and setup scripts to run, it must be set to TRUE. Server access is required to change the config.php file.</strong></p>
+			<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>
+			";
 		}
 		?>
     	</div>
 	</div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><?php include(SECTIONS.'footer.sec.php'); ?></div>
+	<div id="footer-inner"><a href="http://www.brewcompetition.com" target="_blank">BCOE&amp;M</a> Version <?php echo $current_version; ?> &copy;<?php  echo "2009-".date('Y'); ?> by <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
 </div>
 </body>
 </html>

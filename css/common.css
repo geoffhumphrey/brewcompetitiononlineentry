@@ -336,7 +336,7 @@ background-image: none;
 }
 
 .orange {
-	background-color: #F60;
+	background-color: #f90;
 }
 
 .blue { 
@@ -345,6 +345,10 @@ background-image: none;
 
 .purple { 
 	background-color: #306;
+}
+
+.brown{
+	background-color:#804000;
 }
 
 /* ------------------------------- Borders ------------------------------- */
@@ -369,3 +373,10 @@ background-image: none;
 	border-top: 1px dotted #cccccc;
 }
 
+
+.at-a-glance {
+}
+
+.at-a-glance td {
+	padding: 5px;	
+}

@@ -16,6 +16,7 @@ define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
 define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
 define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
+define('UPDATE',ROOT.'update'.DIRECTORY_SEPARATOR);
 define('IMAGES',ROOT.'images'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');

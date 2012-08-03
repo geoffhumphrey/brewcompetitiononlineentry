@@ -8,6 +8,8 @@
 
 
 // General queries if using BCOE for comp organization
+
+//$brewing_db_table = $prefix."brewing";
 $query_sbi = "SELECT * FROM $special_best_info_db_table";
 if ($action == "edit") $query_sbi .= " WHERE id='$id'"; else $query_sbi .= " ORDER BY sbi_rank ASC";
 $sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());

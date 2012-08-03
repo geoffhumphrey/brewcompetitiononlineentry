@@ -29,7 +29,11 @@ function check_setup($tablename, $database) {
 
 }
 
+// Both of the checks below are for v 1.2.1.0 only. Checks to see if new DB tables are there.
+// In future releases, will perform check of the version row in the "system" table
+
 if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
+if (!check_setup($prefix."system",$database)) header ("Location: update.php");
 
 // If all setup has taken place, run normally
 else 
@@ -37,12 +41,19 @@ else
 require(INCLUDES.'functions.inc.php');
 // check to see if all judging numbers have been generated. If not, generate
 if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
+
+// Automatically purge all unconfirmed entries
+purge_entries("unconfirmed", 1);
+
+// Purge entries without defined special ingredients designated to particular styles that require them
+purge_entries("special", 1);
+
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
-include(DB.'entries.db.php');
+require(DB.'entries.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
@@ -181,7 +192,14 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   } 
   if ($registration_open == "1") { // If registration is currently open
-  	if (($action != "print") && ($section != "register") && (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) {  echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries has been reached. No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; }
+  	if (open_limit(get_entry_count(),$row_prefs['prefsEntryLimit'],$registration_open)) { 
+	
+	$query_entry_limit = "SELECT brewUpdated FROM $brewing_db_table ORDER BY brewUpdated DESC LIMIT 1";
+	$entry_limit = mysql_query($query_entry_limit, $brewing) or die(mysql_error());
+	$row_entry_limit = mysql_fetch_assoc($entry_limit);
+
+	echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
+	}
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');

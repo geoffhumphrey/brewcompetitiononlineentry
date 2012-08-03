@@ -60,17 +60,18 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
         <?php if ($row_prefs['prefsPaypal'] == "Y") echo "<li>PayPal</li>"; ?>
     </ul>
 <a name="judging"></a><h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
-<?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { 
-  do { ?>
-  <p>
-  <?php 
-	if ($row_judging['judgingDate'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time")." at "; echo $row_judging['judgingLocName']; 
-	if ($row_judging['judgingTime'] != "") echo ", ".$row_judging['judgingTime'].", ".timezone_name($row_prefs['prefsTimeZone']); if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-	<span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-    <?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
-  <?php } ?>
-</p>
-<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+<?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { ?>
+		<?php do { ?>
+			<p>
+			<?php echo "<strong>".$row_judging['judgingLocName']."</strong>"; ?>
+    		<?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
+            <?php if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>
+            <span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+            <span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+			<?php } ?>
+            <?php if ($row_judging['judgingDate'] != "") echo "<br />".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time")."<br />"; ?>
+			</p>
+			<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
 <?php } ?>
 <a name="categories"></a><h2>Categories Accepted</h2>
 <table class="dataTableCompact" style="border-collapse:collapse;">
@@ -113,9 +114,9 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 if ($totalRows_dropoff > 0) { ?>
 <a name="drop"></a><h2>Drop Off Location<?php if ($totalRows_dropoff > 1) echo "s"; ?></h2>
 <?php do { ?>
-<p><?php if ($row_dropoff['dropLocationWebsite'] != "") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>"; echo $row_dropoff['dropLocationName']; if ($row_dropoff['dropLocationWebsite'] != "") echo "</a>"; ?><br />
+<p><?php if ($row_dropoff['dropLocationWebsite'] != "") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>"; echo "<strong>".$row_dropoff['dropLocationName']."</strong>"; if ($row_dropoff['dropLocationWebsite'] != "") echo "</a>"; ?><br />
 <?php echo $row_dropoff['dropLocation']; ?>
-<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
+<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
 <?php } ?>
 <br />
 <?php echo $row_dropoff['dropLocationPhone']; ?>
@@ -136,11 +137,13 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 <a name="ceremony"></a><h2>Award Ceremony</h2>
 <p>
 	<?php 
-	if ($row_contest_info['contestAwardsLocDate'] != "") echo date_convert($row_contest_info['contestAwardsLocDate'], 2, $row_prefs['prefsDateFormat'])." at "; echo $row_contest_info['contestAwardsLocName'];
-	if ($row_contest_info['contestAwardsLocTime'] != "") echo ", ".$row_contest_info['contestAwardsLocTime'];
-	if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=600" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
+	 echo "<strong>".$row_contest_info['contestAwardsLocName']."</strong>";
+     if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation']; 
+	 if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
 	<span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
-	<?php } ?>
-    <?php if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation']; ?>
+	<?php } 
+	if ($row_contest_info['contestAwardsLocTime'] != "") echo "<br />". 
+	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");
+	?>
 </p>
 <?php } ?>

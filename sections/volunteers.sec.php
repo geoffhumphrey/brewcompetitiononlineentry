@@ -15,13 +15,13 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 <?php } ?>
 
 <h2>Judging and Stewarding</h2>
-<?php if ((greaterDate($today,$row_contest_info['contestRegistrationOpen'])) && (!isset($_SESSION['loginUsername']))) { ?>
+<?php if (($judge_window_open > 0) && (!isset($_SESSION['loginUsername']))) { ?>
 	<p>If you <em>have</em> registered, <a href="index.php?section=login">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
 	<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href="index.php?section=register&amp;go=judge">please register</a>.</p>
-<?php } elseif ((greaterDate($today,$row_contest_info['contestRegistrationOpen'])) && (isset($_SESSION['loginUsername']))) { ?>
+<?php } elseif (($judge_window_open > 0) && (isset($_SESSION['loginUsername']))) { ?>
 	<p>Since you have already registered, you can <a href="index.php?section=list">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
-    <p>If you are willing to judge or steward, please return to register on or after <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time") ?>.</p>
+    <p>If you are willing to judge or steward, please return to register on or after <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time") ?>.</p>
 <?php } ?>
 
 <?php if ($row_contest_info['contestVolunteers'] != "") { ?>

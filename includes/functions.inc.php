@@ -26,6 +26,63 @@ function display_array_content($arrayname,$method) {
 	$b = rtrim($a, ",&nbsp;");
  	return $b;
 }
+
+function purge_entries($type, $interval) {
+	
+	require(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	
+	if ($type == "unconfirmed") {
+		$query_check = sprintf("SELECT id FROM %s WHERE brewConfirmed='0'", $prefix."brewing");
+		if ($interval > 0) $query_check .= " AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+		
+		do { $a[] = $row_check['id']; } while ($row_check = mysql_fetch_assoc($check));
+		
+		foreach ($a as $id) {
+			$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+			mysql_select_db($database, $brewing);
+			$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+		}
+	}
+	
+	if ($type == "special") {
+		$query_check = sprintf("
+							   SELECT id,brewInfo FROM %s WHERE (brewInfo IS NULL OR brewInfo='') 
+							   AND (
+									(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
+									(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
+									(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '22' AND brewSubCategory = 'B') OR 
+									(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
+									(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'B') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'D') OR
+									brewCategorySort >  '28'
+									)", 
+							   $prefix."brewing");
+		if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+		
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+		
+		do { 
+			$a[] = $row_check['id']; 
+		} while ($row_check = mysql_fetch_assoc($check));
+		
+		foreach ($a as $id) {
+			$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+			mysql_select_db($database, $brewing);
+			$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+		}
+	}
+}
+
 /*
 
 function check_setup() {
@@ -113,6 +170,7 @@ function judging_date_return() {
 	$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
+	
 	$today = strtotime("now");
 	do {
  		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
@@ -258,8 +316,11 @@ function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $disp
 			$return = $date." at ".$time.", ".timezone_name($GMT);
 		break;
 		case "date-time-no-gmt":
-			$return = $date." ".$time;
+			$return = $date." at ".$time;
 		break;
+		case "date-no-gmt":
+			$return = $date;
+		break;		
 		case "time-gmt":
 			$return = $time.", ".timezone_name($GMT);
 		break;
@@ -603,7 +664,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'",$prefix."brewing", $id_2);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND brewConfirmed='1'",$prefix."brewing", $id_2);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
@@ -700,7 +761,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	$row_entries = mysql_fetch_array($entries);
 	$totalRows_entries = $row_entries['count'];
 			
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'", $prefix."brewing", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_array($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -807,7 +868,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing", $id_2, $filter);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing", $id_2, $filter);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
@@ -961,7 +1022,7 @@ function total_not_paid_brewer($bid) {
 	$row_all = mysql_fetch_assoc($all);
 	$totalRows_all = $row_all['count'];
 
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewConfirmed='1'", $prefix."brewing", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -974,9 +1035,10 @@ function total_paid_received($go,$id) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewConfirmed='1'", $prefix."brewing");
-	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y' AND brewConfirmed='1'";
-	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y' AND brewConfirmed='1'";
+	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
+	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
+	//if (($go == "entries") && ($id != "default")) $query_entry_count .= " WHERE brewCategorySort='$id'"; 
+	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	return $row['count'];
@@ -1057,7 +1119,7 @@ function style_convert($number,$type) {
 		
 		case "3":
 		$n = ereg_replace('[^0-9]+', '', $number);
-		if ($n >= 23) $style_convert = TRUE;
+		if ($n >= 29) $style_convert = TRUE;
 		else {
 		switch ($number) {
 			case "06D": $style_convert = TRUE; break;
@@ -1235,7 +1297,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1256,7 +1318,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1276,7 +1338,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -1293,7 +1355,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'", $row_styles['brewStyle']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1508,7 +1570,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format) {
 function flight_count($table_id,$method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $table_id);
+	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $table_id);
 	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 	$row_flights = mysql_fetch_assoc($flights);
 	
@@ -1678,7 +1740,7 @@ function get_entry_count() {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewReceived='Y'",$prefix."brewing");
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1747,6 +1809,19 @@ function entry_info($id) {
 }
 
 function get_suffix($dbTable) {
+	/*
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_suffix = sprintf("SELECT archiveSuffix FROM %s WHERE id='%s'", $prefix."archive");
+	$suffix = mysql_query($suffix, $brewing) or die(mysql_error());
+	$row_suffix = mysql_fetch_assoc($suffix);
+	do { $a[] = $row_suffix['archiveSuffix']; } while ($row_suffix = mysql_fetch_assoc($suffix));
+	*/
+	
+	$suffix = strrchr($dbTable,"_");
+	$suffix = ltrim($suffix, "_");
+	/*
+	
 	if (strstr($dbTable,"judging_tables")) $suffix = ltrim($dbTable,"judging_tables");
 	if (strstr($dbTable,"judging_flights")) $suffix = ltrim($dbTable,"judging_flights");
 	if (strstr($dbTable,"judging_scores")) $suffix = ltrim($dbTable,"judging_scores");
@@ -1756,6 +1831,7 @@ function get_suffix($dbTable) {
 	if (strstr($dbTable,"style_types"))  $suffix = ltrim($dbTable,"style_types");
 	if (strstr($dbTable,"special_best_data"))  $suffix = ltrim($dbTable,"special_best_data");
 	if (strstr($dbTable,"special_best_info"))  $suffix = ltrim($dbTable,"special_best_info");
+	*/
 	return $suffix;
 }
 
@@ -1913,14 +1989,41 @@ return $r;
 }
 
 function entries_unconfirmed($user_id) {
-require(CONFIG.'config.php');
-mysql_select_db($database, $brewing);	
-$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='0'", $prefix."brewing", $user_id);
-$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
-$row_entry_check = mysql_fetch_assoc($entry_check);
-$totalRows_entry_check = mysql_num_rows($entry_check); 
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);	
+	$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='0'", $prefix."brewing", $user_id);
+	$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
+	$row_entry_check = mysql_fetch_assoc($entry_check);
+	$totalRows_entry_check = mysql_num_rows($entry_check); 
+	
+	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+}
 
-if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+function entries_no_special($user_id) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);	
+	$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewInfo IS NULL 
+							   AND (
+									(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
+									(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
+									(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '22' AND brewSubCategory = 'B') OR 
+									(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
+									(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
+									(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'B') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
+									(brewCategorySort = '28' AND brewSubCategory = 'D') OR
+									brewCategorySort >  '28'
+									)
+							   ", $prefix."brewing", $user_id);
+	$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
+	$row_entry_check = mysql_fetch_assoc($entry_check);
+	$totalRows_entry_check = mysql_num_rows($entry_check); 
+	
+	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
 }
 
 ?>

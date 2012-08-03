@@ -17,10 +17,10 @@ if (strstr($section,"step")) { ?>
   <?php if (get_contact_count() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="index.php?section=contact">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
-  <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
+  <?php if (($registration_open < "2") && ($registration_open >= "1")  && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="index.php?section=register">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php } ?>
-  <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?>
+  <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?> 
   <?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="index.php?section=pay">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <li><?php if ($section != "list") { ?><a href="index.php?section=list">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li>
   <?php } ?>
@@ -131,8 +131,8 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenu_Preparing_Manage" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;go=style_types">Style Types</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Types</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations &amp; Dates</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=contacts">Competition Contacts</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=sponsors">Sponsors</a>
@@ -158,7 +158,7 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=entries">Entries</a>
-	<a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations</a>		
+	<a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations &amp; Dates</a>		
     <a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=contacts">Competition Contacts</a>
@@ -168,7 +168,8 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenu_Entry_Add" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a>
 	<a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
-	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
+	<a class="menuItem" href="index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 	<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
@@ -189,7 +190,8 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Judging Numbers</a>
 </div>
 <div id="adminMenu_Sorting_Add" class="menu" onmouseover="menuMouseover(event)">
-	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a>
+	<a class="menuItem" href="index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a>
 	<a class="menuItem" href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
@@ -211,7 +213,8 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
 </div>
 <div id="adminMenu_Organizing_Add" class="menu" onmouseover="menuMouseover(event)">
-	<a class="menuItem" href="index.php?section=admin&go=participants&action=add">A Participant</a>
+	<a class="menuItem" href="index.php?section=admin&go=entrant&action=register">A Participant</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 	<a class="menuItem" href="index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
 	<a class="menuItem" href="index.php?section=admin&go=judging_tables&action=add">A Table</a>
     <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
@@ -258,7 +261,7 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="output/labels.php?section=admin&go=participants&action=judging_labels">Judge Scoresheet Labels (All)</a>
 </div>
 <div id="adminMenu_Printing_During" class="menu">
-	<a class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos">All BOS Pullsheets</a>
+	<a id="modal_window_link" class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos">All BOS Pullsheets</a>
 </div>
 <div id="adminMenu_Printing_After" class="menu">
 	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default" title="Print Results by Table With Scores (All)">Results by Table With Scores (All)</a>
@@ -297,7 +300,7 @@ if (strstr($section,"step")) { ?>
 </div>
 
 <div id="adminMenu_Archiving_Manage" class="menu">
-	<a class="menuItem" href="index.php?section=admin&amp;go=archive">Archive Competition Data</a>
+	<a class="menuItem" href="index.php?section=admin&amp;go=archive">Archived Competition Data</a>
 </div>
 
 <?php } ?>

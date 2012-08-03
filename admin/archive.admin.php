@@ -10,7 +10,7 @@ function get_archive_count($table) {
 }
 
 ?>
-<h2>Archive Competition Data</h2>
+<h2>Archived Competition Data</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
 		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a href="index.php?section=admin">Back to Admin</a><?php } else { ?><a href="index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?>
@@ -37,34 +37,43 @@ function get_archive_count($table) {
 <tbody>
   <?php do { ?>
   <tr <?php echo " style=\"background-color:$color\"";?>>
-    <td class="dataList" nowrap="nowrap"><span class="icon"><img src="images/tick.png"  border="0"></span><?php echo $row_archive['archiveSuffix']; ?></td>
-    <td class="dataList" nowrap="nowrap">
-    <?php $db = $prefix."brewer_".$row_archive['archiveSuffix'];
-	if (get_archive_count($db) > 0) { ?>
-    	<span class="icon"><img src="images/monitor.png"  border="0"></span><a href="index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    <td nowrap="nowrap"><span class="icon"><img src="images/tick.png"  border="0"></span><?php echo $row_archive['archiveSuffix']; ?></td>
+    <td class="data" nowrap="nowrap">
+    <?php 
+	$db = $prefix."brewer_".$row_archive['archiveSuffix'];
+	$count = get_archive_count($db);
+	if ($count > 0) { ?>
+    	<a href="index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
     <?php } ?>
     </td>
-    <td class="dataList" nowrap="nowrap">
-    <?php $db = $prefix."brewing_".$row_archive['archiveSuffix'];
-	if (get_archive_count($db) > 0) { ?>
-    	<span class="icon"><img src="images/monitor.png"  border="0"></span><a href="index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a></td>
-    <?php } ?>
-    <td class="dataList" nowrap="nowrap">
-    <?php $db = $prefix."judging_tables_".$row_archive['archiveSuffix'];
-	if (get_archive_count($db) > 0) { ?>
-    	<span class="icon"><img src="images/monitor.png"  border="0"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    <td class="data" nowrap="nowrap">
+    <?php 
+	$db = $prefix."brewing_".$row_archive['archiveSuffix'];
+	$count = get_archive_count($db);
+	if ($count > 0) { ?>
+    	<a href="index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
     <?php } ?>
     </td>
-    <td class="dataList" nowrap="nowrap">
-    <?php $db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
-	if (get_archive_count($db) > 0) { ?>
-    	<span class="icon"><img src="images/monitor.png"  border="0"></span><a href="index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    <td class="data" nowrap="nowrap">
+    <?php 
+	$db = $prefix."judging_tables_".$row_archive['archiveSuffix'];
+	$count = get_archive_count($db);
+	if ($count > 0) { ?>
+    	<a href="index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
     <?php } ?>
     </td>
-    <td class="dataList" nowrap="nowrap">
-    <?php $db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
+    <td class="data" nowrap="nowrap">
+    <?php 
+	$db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
 	if (get_archive_count($db) > 0) { ?>
-    	<span class="icon"><img src="images/monitor.png"  border="0"></span><a href="index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    	<a href="index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    <?php } ?>
+    </td>
+    <td class="data" nowrap="nowrap">
+    <?php 
+	$db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
+	if (get_archive_count($db) > 0) { ?>
+    	<a href="index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
     </td>
     <?php } ?>
     <td class="dataList"><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete','id',<?php echo $row_archive['id']; ?>,'Are you sure you want to delete the archive called <?php echo $row_archive['archiveSuffix']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?" title="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?"></a></span></td>

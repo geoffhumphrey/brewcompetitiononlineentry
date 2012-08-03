@@ -2,15 +2,15 @@
 $queued = $row_judging_prefs['jPrefsQueued'];
 $location = $row_tables_edit['tableLocation'];
 
-$query_table_location = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE id='%s'",$location);
+$query_table_location = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."judging_flights", $location);
 $table_location = mysql_query($query_table_location, $brewing) or die(mysql_error());
 $row_table_location = mysql_fetch_assoc($table_location);
 
-$query_rounds = sprintf("SELECT flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $row_tables_edit['id']);
+$query_rounds = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $prefix."judging_flights", $row_tables_edit['id']);
 $rounds = mysql_query($query_rounds, $brewing) or die(mysql_error());
 $row_rounds = mysql_fetch_assoc($rounds);
 
-$query_flights = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $row_tables_edit['id']);
+$query_flights = sprintf("SELECT * FROM %s WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $prefix."judging_flights", $row_tables_edit['id']);
 $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 $row_flights = mysql_fetch_assoc($flights);
 $total_flights = $row_flights['flightNumber'];
@@ -18,11 +18,9 @@ $total_flights = $row_flights['flightNumber'];
 
 function table_round($tid,$round) {
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php'); 	
 	mysql_select_db($database, $brewing);
 	// get the round where the flight is assigned to
-	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $tid, $round);
+	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $prefix."judging_flights", $tid, $round);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
 	$row_flight_round = mysql_fetch_assoc($flight_round);
 	if ($row_flight_round['count'] > 0) return TRUE; else return FALSE;
@@ -30,11 +28,9 @@ function table_round($tid,$round) {
 
 function flight_round($tid,$flight,$round) {
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
 	// get the round where the flight is assigned to
-	$query_flight_round = sprintf("SELECT flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $tid, $flight);
+	$query_flight_round = sprintf("SELECT flightRound FROM % WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $tid, $flight);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
 	$row_flight_round = mysql_fetch_assoc($flight_round);
 	if ($row_flight_round['flightRound'] == $round) return TRUE; else return FALSE;
@@ -42,10 +38,8 @@ function flight_round($tid,$flight,$round) {
 
 function already_assigned($bid,$tid,$flight,$round) {
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $bid, $tid, $flight, $round);
+	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $prefix."judging_assignments", $bid, $tid, $flight, $round);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	if ($row_assignments['count'] == 1) return TRUE; 
@@ -55,10 +49,8 @@ function already_assigned($bid,$tid,$flight,$round) {
 function unavailable($bid,$location,$round,$tid) { 
     // returns true a person is unavailable if they are already assigned to a table/flight in the same round at the same location
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
+	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	//$totalRows_assignments = mysql_num_rows($assignments);
@@ -79,8 +71,6 @@ function like_dislike($likes,$dislikes,$styles) {
     // if a judge in the returned list listed one or more of the substyles
 	// included in the table in their "likes" or "dislikes"
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php'); 
 	mysql_select_db($database, $brewing);
 	
 	// get the table's associated styles from the "tables" table
@@ -116,19 +106,17 @@ function like_dislike($likes,$dislikes,$styles) {
 
 function entry_conflict($bid,$table_styles) {
 	require(CONFIG.'config.php');
-	require(INCLUDES.'url_variables.inc.php');
-	require(INCLUDES.'db_tables.inc.php');
 	mysql_select_db($database, $brewing);
 	
 	$b = explode(",",$table_styles);
 	
 	foreach ($b as $style) {
 		
-		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='%s'", $style);
+		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $style);
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM $brewer_db_table WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		
@@ -142,10 +130,8 @@ function entry_conflict($bid,$table_styles) {
 function unassign($bid,$location,$round,$tid) {
 	//if (unavailable($bid,$location,$round,$tid)) {
 		require(CONFIG.'config.php');
-		require(INCLUDES.'url_variables.inc.php');
-		require(INCLUDES.'db_tables.inc.php'); 
 		mysql_select_db($database, $brewing);
-		$query_assignments = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $bid, $round, $location);
+		$query_assignments = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);	
 		$r = $row_assignments['id'];
@@ -180,6 +166,10 @@ $r .= '<input type="hidden" name="assignment'.$random.'" value="'.$role.'" />';
 $r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.'" />';
 
 //if ($disabled == "disabled") $r .= '<div class="disabled">Disabled - Participant has an Entry in this Round</div>'; 
+if ($queued == "Y") { 
+	if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; } 
+	if ($selected == 'checked') echo '<div class="brown judge-alert">Assigned to this Table</div>';
+}
 
 if ($unassign > 0) {
 	// Check to see if the participant is already assigned to this round. 
@@ -192,7 +182,7 @@ if ($unassign > 0) {
 	}
 
 if ($queued == "Y") { // For queued judging only
-	if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; }
+	//if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; }
 	$r .= 'Assign to This Round and Table?<br>';
 	$r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /><span class="data">Yes</span><br><input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /><span class="data">No</span>';
 	}
@@ -213,12 +203,12 @@ if ($queued == "N") { // Non-queued judging
 return $r;
 }
 
-function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) {
+function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {
 	if (table_round($tid,$round)) {
 		$unavailable = unavailable($bid,$location,$round,$tid);
 		$entry_conflict = entry_conflict($bid,$table_styles);
 		$already_assigned = already_assigned($bid,$tid,$flight,$round);
-		if ($unavailable == TRUE) $r = '<div class="orange judge-alert">Already Assigned to This Round</div>'; 
+		if ($unavailable == TRUE)$r = '<div class="orange judge-alert">Already Assigned to This Round</div>'; 
 		elseif ($entry_conflict == TRUE) $r = '<div class="blue judge-alert">Disabled - Participant has an Entry at this Table</div>';
 		else $r = like_dislike($likes,$dislikes,$table_styles);
 	}
@@ -265,7 +255,7 @@ If no judges are listed below, no judge indicated that they are available for th
 <ul>
 <?php 
 	for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
-	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
+	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
 	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row_entry_count = mysql_fetch_assoc($entry_count);
 	echo "<li>Flight $c: ".$row_entry_count['count']." entries.</li>";
@@ -310,7 +300,7 @@ If no judges are listed below, no judge indicated that they are available for th
 	 		<?php } ?>
 		} );
 	</script>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $row_judging_prefs['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">
+<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $row_judging_prefs['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">
 <table class="dataTableCompact bdr1" style="margin: 20px 0">
 <thead>
 	<tr>
@@ -372,7 +362,7 @@ if (in_array($table_location,$locations)) {
 			    if  (table_round($row_tables_edit['id'],$i)) {  
 		?>
         <td class="data">
-        <?php echo judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$row_brewer['brewerJudgeLikes'],$row_brewer['brewerJudgeDislikes'],$row_tables_edit['tableStyles']); ?>
+        <?php echo judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$row_brewer['brewerJudgeLikes'],$row_brewer['brewerJudgeDislikes'],$row_tables_edit['tableStyles'],$id); ?>
         <?php echo assign_to_table($id,$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
         </td>
 		<?php }

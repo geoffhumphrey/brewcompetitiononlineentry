@@ -9,7 +9,7 @@
 include_once  (ROOT.'captcha/securimage.php');
 $securimage = new Securimage();
 
-if ($securimage->check($_POST['captcha_code']) == false) {
+if (($securimage->check($_POST['captcha_code']) == false) && ($filter != "admin")) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
 	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
@@ -45,7 +45,8 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	$totalRows_userCheck = mysql_num_rows($userCheck);
 
 	if ($totalRows_userCheck > 0) {
-		header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=2");
+		if ($filter == "admin") header("Location: ../index.php?section=admin&go=".$go."&action=register&msg=10");
+		else header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=2");
 	  }
 	else  {
 	// Add the user's creds to the "users" table
@@ -96,12 +97,12 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 				   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 				   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
 				   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerState']), "text"),
+				   GetSQLValueString($_POST['brewerState'], "text"),
 				   GetSQLValueString($_POST['brewerZip'], "text"),
 				   GetSQLValueString($_POST['brewerCountry'], "text"),
 				   GetSQLValueString($_POST['brewerPhone1'], "text"),
 				   GetSQLValueString($_POST['brewerPhone2'], "text"),
-				   GetSQLValueString(capitalize($_POST['brewerClubs']), "text"),
+				   GetSQLValueString($_POST['brewerClubs'], "text"),
 				   GetSQLValueString($username, "text"),
 				   GetSQLValueString($_POST['brewerSteward'], "text"),
 				   GetSQLValueString($_POST['brewerJudge'], "text"),
@@ -116,7 +117,8 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
 	
-	// Log in the user and redirect
+	if ($filter == "default") {
+	    // Log in the user and redirect
 		session_start();
 		$_SESSION["loginUsername"] = $username;
 		
@@ -128,8 +130,23 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			header("Location: ../index.php?section=brewer&action=edit&go=judge&id=".$row_brewer['id']."#judge");
 		}
 		else header("Location: ../index.php?section=list&msg=1");
+	  } // end if ($filter == "default")
+	
+	if ($filter == "admin") {
+		
+		// Redirect to Judge Info section if willing to judge
+		if ($_POST['brewerJudge'] == "Y") {
+			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
+			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+			$row_brewer = mysql_fetch_assoc($brewer);
+			header("Location: ../index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge");
+		}
+		else header(sprintf("Location: %s", $insertGoTo));
+		
+	  } // end if ($filter == "admin")
 	}
   }
+  //if ($filter == "admin") header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=3");
   else header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=3");
 } // End CAPCHA check
 

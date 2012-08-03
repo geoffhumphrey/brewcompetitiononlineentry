@@ -12,7 +12,7 @@ if ($action == "update") {
 			
 			//Perform check to see if a record is in the DB. If not, insert a new record.
 			// If so, see will update
-			$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE (bid='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
+			$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $prefix."judging_assignments", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			//echo $query_flights."<br>";

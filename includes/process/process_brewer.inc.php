@@ -237,12 +237,12 @@ if ($action == "add") {
 				   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 				   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
 				   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerState']), "text"),
+				   GetSQLValueString($_POST['brewerState'], "text"),
 				   GetSQLValueString($_POST['brewerZip'], "text"),
 				   GetSQLValueString($_POST['brewerCountry'], "text"),
 				   GetSQLValueString($_POST['brewerPhone1'], "text"),
 				   GetSQLValueString($_POST['brewerPhone2'], "text"),
-				   GetSQLValueString(capitalize($_POST['brewerClubs']), "text"),
+				   GetSQLValueString($_POST['brewerClubs'], "text"),
 				   GetSQLValueString($_POST['brewerEmail'], "text"),
 				   GetSQLValueString($_POST['brewerSteward'], "text"),
 				   GetSQLValueString($_POST['brewerJudge'], "text"),
@@ -314,13 +314,13 @@ if ($action == "edit") {
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($_POST['brewerCity'], "text"),
 						   GetSQLValueString(capitalize($_POST['brewerState']), "text"),
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
 						   GetSQLValueString($_POST['brewerPhone1'], "text"),
 						   GetSQLValueString($_POST['brewerPhone2'], "text"),
-						   GetSQLValueString(capitalize($_POST['brewerClubs']), "text"),
+						   GetSQLValueString($_POST['brewerClubs'], "text"),
 						   GetSQLValueString($_POST['brewerEmail'], "text"),
 						   GetSQLValueString($_POST['brewerSteward'], "text"),
 						   GetSQLValueString($_POST['brewerJudge'], "text"),
@@ -346,7 +346,8 @@ if ($action == "edit") {
 	$Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 	
 	if ($go == "register") $updateGoTo = "../index.php?section=brew&msg=2";	
-	elseif ($go == "judge") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=7";
+	elseif (($go == "judge") && ($filter == "default")) $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=7";
+	elseif (($go == "judge") && ($filter != "default")) $updateGoTo = "../index.php?section=admin&go=participants&msg=2";
 	elseif ($go == "default") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=2";
 	else $updateGoTo = $updateGoTo;
 	

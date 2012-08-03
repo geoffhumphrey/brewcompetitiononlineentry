@@ -13,7 +13,7 @@ if ($msg == "10") {
 	// If redirected from PayPal, update the brewer table to mark entries as paid
 	$a = explode('-', $view);
 	foreach (array_unique($a) as $value) {
-		$updateSQL = "UPDATE $brewing_db_table SET brewPaid='Y' WHERE id='".$value."';";
+		$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
 		//echo $updateSQL;
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -41,9 +41,8 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
     <?php 
 	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
 	$entries = "";
-	do { if ($row_log['brewPaid'] != "Y") { ?>
+	do { if ($row_log['brewPaid'] != "1") { ?> 
     	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
-        
     <?php 
 	$entries .= $row_log['id'].", ";
 	$return .= $row_log['id']."-";

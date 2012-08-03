@@ -5,8 +5,6 @@
  *              information about the competition, registration dates/info, and 
  *              winner display after all judging dates have passed.
  */
-
-
 include(DB.'dropoff.db.php');
 if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { 
 	if (judging_date_return() > 0) { ?>
@@ -32,7 +30,7 @@ if (judging_date_return() == 0) {
 		function judging_winner_display($delay) {
 			include(CONFIG.'config.php');
 			mysql_select_db($database, $brewing);
-			$query_check = "SELECT judgingDate FROM $judging_locations_db_table";
+			$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
 			$check = mysql_query($query_check, $brewing) or die(mysql_error());
 			$row_check = mysql_fetch_assoc($check);
 			$today = strtotime("now");

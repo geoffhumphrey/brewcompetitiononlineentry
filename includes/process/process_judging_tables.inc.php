@@ -13,7 +13,7 @@ if ($action == "add") {
 	tableNumber,
 	tableLocation
   	) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString(capitalize($_POST['tableName']), "text"),
+                       GetSQLValueString($_POST['tableName'], "text"),
 					   GetSQLValueString($table_styles, "text"),
 					   GetSQLValueString($_POST['tableNumber'], "text"),
 					   GetSQLValueString($_POST['tableLocation'], "text")
@@ -41,7 +41,7 @@ if ($action == "add") {
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='Y'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+		$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		
@@ -79,7 +79,7 @@ if ($action == "edit") {
 	tableLocation=%s
 	WHERE id=%s",
                     
-	GetSQLValueString(capitalize($_POST['tableName']), "text"),
+	GetSQLValueString($_POST['tableName'], "text"),
 	GetSQLValueString($table_styles, "text"),
 	GetSQLValueString($_POST['tableNumber'], "text"),
 	GetSQLValueString($_POST['tableLocation'], "text"),
