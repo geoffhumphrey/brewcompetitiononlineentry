@@ -313,7 +313,7 @@ if ($action == "add") {
 		brewUpdated,
 		brewConfirmed) VALUES 
 		(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-						   GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
+						   GetSQLValueString($_POST['brewName'], "scrubbed"),
 						   GetSQLValueString($row_style_name['brewStyle'], "text"),
 						   GetSQLValueString($styleTrim, "text"),
 						   GetSQLValueString($styleFix, "text"),
@@ -578,10 +578,6 @@ if ($action == "edit") {
 		$special = "1";
 		break;
 		
-		case "6-D":
-		$special = "1";
-		break;
-		
 		case "22-C":
 		$special = "1";
 		break;
@@ -640,7 +636,7 @@ if ($action == "edit") {
 	} else $custom = "2";
 	
 	$updateSQL = sprintf("UPDATE $brewing_db_table SET brewName=%s, brewStyle=%s, brewCategory=%s, brewCategorySort=%s, brewSubCategory=%s, brewBottleDate=%s, brewDate=%s, brewYield=%s, brewInfo=%s, brewMead1=%s, brewMead2=%s, brewMead3=%s, brewExtract1=%s, brewExtract1Weight=%s, brewExtract2=%s, brewExtract2Weight=%s, brewExtract3=%s, brewExtract3Weight=%s, brewExtract4=%s, brewExtract4Weight=%s, brewExtract5=%s, brewExtract5Weight=%s, brewGrain1=%s, brewGrain1Weight=%s, brewGrain2=%s, brewGrain2Weight=%s, brewGrain3=%s, brewGrain3Weight=%s, brewGrain4=%s, brewGrain4Weight=%s, brewGrain5=%s, brewGrain5Weight=%s, brewGrain6=%s, brewGrain6Weight=%s, brewGrain7=%s, brewGrain7Weight=%s, brewGrain8=%s, brewGrain8Weight=%s, brewGrain9=%s, brewGrain9Weight=%s, brewAddition1=%s, brewAddition1Amt=%s, brewAddition2=%s, brewAddition2Amt=%s, brewAddition3=%s, brewAddition3Amt=%s, brewAddition4=%s, brewAddition4Amt=%s, brewAddition5=%s, brewAddition5Amt=%s, brewAddition6=%s, brewAddition6Amt=%s, brewAddition7=%s, brewAddition7Amt=%s, brewAddition8=%s, brewAddition8Amt=%s, brewAddition9=%s, brewAddition9Amt=%s, brewHops1=%s, brewHops1Weight=%s, brewHops1IBU=%s, brewHops1Time=%s, brewHops2=%s, brewHops2Weight=%s, brewHops2IBU=%s, brewHops2Time=%s, brewHops3=%s, brewHops3Weight=%s, brewHops3IBU=%s, brewHops3Time=%s, brewHops4=%s, brewHops4Weight=%s, brewHops4IBU=%s, brewHops4Time=%s, brewHops5=%s, brewHops5Weight=%s, brewHops5IBU=%s, brewHops5Time=%s, brewHops6=%s, brewHops6Weight=%s, brewHops6IBU=%s, brewHops6Time=%s, brewHops7=%s, brewHops7Weight=%s, brewHops7IBU=%s, brewHops7Time=%s, brewHops8=%s, brewHops8Weight=%s, brewHops8IBU=%s, brewHops8Time=%s, brewHops9=%s, brewHops9Weight=%s, brewHops9IBU=%s, brewHops9Time=%s, brewHops1Use=%s, brewHops2Use=%s, brewHops3Use=%s, brewHops4Use=%s, brewHops5Use=%s, brewHops6Use=%s, brewHops7Use=%s, brewHops8Use=%s, brewHops9Use=%s, brewHops1Type=%s, brewHops2Type=%s, brewHops3Type=%s, brewHops4Type=%s, brewHops5Type=%s, brewHops6Type=%s, brewHops7Type=%s, brewHops8Type=%s, brewHops9Type=%s, brewHops1Form=%s, brewHops2Form=%s, brewHops3Form=%s, brewHops4Form=%s, brewHops5Form=%s, brewHops6Form=%s, brewHops7Form=%s, brewHops8Form=%s, brewHops9Form=%s, brewYeast=%s, brewYeastMan=%s, brewYeastForm=%s, brewYeastType=%s, brewYeastAmount=%s, brewYeastStarter=%s, brewYeastNutrients=%s, brewOG=%s, brewFG=%s, brewPrimary=%s, brewPrimaryTemp=%s, brewSecondary=%s, brewSecondaryTemp=%s, brewOther=%s, brewOtherTemp=%s, brewComments=%s, brewMashStep1Name=%s, brewMashStep1Temp=%s, brewMashStep1Time=%s, brewMashStep2Name=%s, brewMashStep2Temp=%s, brewMashStep2Time=%s, brewMashStep3Name=%s, brewMashStep3Temp=%s, brewMashStep3Time=%s, brewMashStep4Name=%s, brewMashStep4Temp=%s, brewMashStep4Time=%s, brewMashStep5Name=%s, brewMashStep5Temp=%s, brewMashStep5Time=%s, brewFinings=%s, brewWaterNotes=%s, brewBrewerID=%s, brewCarbonationMethod=%s, brewCarbonationVol=%s, brewCarbonationNotes=%s, brewBoilHours=%s, brewBoilMins=%s, brewBrewerFirstName=%s, brewBrewerLastName=%s, brewExtract1Use=%s, brewExtract2Use=%s, brewExtract3Use=%s, brewExtract4Use=%s, brewExtract5Use=%s, brewGrain1Use=%s, brewGrain2Use=%s, brewGrain3Use=%s, brewGrain4Use=%s, brewGrain5Use=%s, brewGrain6Use=%s, brewGrain7Use=%s, brewGrain8Use=%s, brewGrain9Use=%s, brewAddition1Use=%s, brewAddition2Use=%s, brewAddition3Use=%s, brewAddition4Use=%s, brewAddition5Use=%s, brewAddition6Use=%s, brewAddition7Use=%s, brewAddition8Use=%s, brewAddition9Use=%s, brewJudgingLocation=%s, brewCoBrewer=%s, brewUpdated=%s, brewConfirmed=%s WHERE id=%s",
-						   GetSQLValueString(capitalize($_POST['brewName']), "scrubbed"),
+						   GetSQLValueString($_POST['brewName'], "scrubbed"),
 						   GetSQLValueString($row_style_name['brewStyle'], "text"),
 						   GetSQLValueString($styleTrim, "text"),
 						   GetSQLValueString($styleFix, "text"),
@@ -854,21 +850,25 @@ if ($action == "edit") {
 
 if ($action == "update") {
 	
+	
 	foreach($_POST['id'] as $id) { 
+	if ($_POST["brewPaid".$id] == "1") $brewPaid = "1"; else $brewPaid = "0";
+	if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
 		$updateSQL = "UPDATE $brewing_db_table SET 
-		brewPaid='".$_POST["brewPaid".$id]."',
+		brewPaid='".$brewPaid."',
 		brewWinner='".$_POST["brewWinner".$id]."',
 		brewWinnerCat='".$_POST["brewWinnerCat".$id]."', 
 		brewWinnerSubCat='".$_POST["brewWinnerSubCat".$id]."', 
 		brewWinnerPlace='".$_POST["brewWinnerPlace".$id]."',
 		brewBOSRound='".$_POST["brewBOSRound".$id]."',
 		brewBOSPlace='".$_POST["brewBOSPlace".$id]."',
-		brewReceived='".$_POST["brewReceived".$id]."'
+		brewReceived='".$brewReceived."'
 		WHERE id='".$id.";'"; 
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
-		//echo $updateSQL
+		//echo $updateSQL."<br>";
 	} 
-	if($result1) header(sprintf("Location: %s", $massUpdateGoTo)); 
+	//echo $massUpdateGoTo;
+	header(sprintf("Location: %s", $_POST['relocate']."&msg=9")); 
 } // end if ($action == "update")
 ?>

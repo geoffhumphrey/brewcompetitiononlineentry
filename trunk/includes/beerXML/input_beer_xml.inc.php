@@ -221,6 +221,7 @@ class InputBeerXML {
         mysql_select_db($database, $brewing) or die(mysql_error());
         $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());
 		$this->insertedRecipes[mysql_insert_id()] = $recipe->name;
+		//header("Location: ../../index.php?section=list");
         }
     //}}}
   }

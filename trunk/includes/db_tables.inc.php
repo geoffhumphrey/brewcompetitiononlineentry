@@ -33,7 +33,7 @@ if ($dbTable == "default") {
 	$users_db_table = $prefix."users";
 	}
 else {
-	$suffix = ltrim(get_suffix($dbTable), "_"); // HACK - could not isolate code where there's an extra "_"
+	$suffix = rtrim(get_suffix($dbTable), "_"); // HACK - could not isolate code where there's an extra "_"
 	$suffix = "_".$suffix;
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer".$suffix;

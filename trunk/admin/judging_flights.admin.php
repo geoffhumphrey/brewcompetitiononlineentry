@@ -35,7 +35,7 @@ if ($totalRows_tables > 0) {
         <select name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)">
           	<option value=""></option>
           	<?php do { 
-			$query_flights = sprintf("SELECT flightTable FROM FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
+			$query_flights = sprintf("SELECT flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
@@ -120,7 +120,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 </script>
 <?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id,$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'])."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo $flight_count; ?> flights. For each entry below, designate the flight in which it will be judged.</p>
-<form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>" onreset="updateButCount(event);">
+<form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
 <thead>
 	<tr>
@@ -142,7 +142,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
@@ -151,7 +151,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 		
 		do {	
 			if ($action == "edit") {
-				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM FROM $judging_flights_db_table WHERE flightEntryID='%s'", $row_entries['id']);
+				$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM $judging_flights_db_table WHERE flightEntryID='%s'", $row_entries['id']);
 				$flight_number = mysql_query($query_flight_number, $brewing) or die(mysql_error());
 				$row_flight_number = mysql_fetch_assoc($flight_number);	
 				$random = random_generator(7,2);
@@ -195,13 +195,13 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 if (($action == "assign") && ($filter == "rounds")) { 
 	if ($totalRows_tables > 0) { 
 ?>
-<form name="form1" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
+<form name="form1" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
 		
 		foreach (array_unique($a) as $flight_table){
-			$query_flights = sprintf("SELECT * FROM FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
+			$query_flights = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
@@ -218,18 +218,18 @@ if (($action == "assign") && ($filter == "rounds")) {
 ?>
 	
 	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if (($totalRows_flights > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php }  if (($totalRows_flights == 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".date_convert($row_table_location['judgingDate'], 2, $row_prefs['prefsDateFormat'])." at ".$row_table_location['judgingTime']; ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_table_location['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		if ($row_judging_prefs['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
 		
 		for($i=1; $i<$flight_no_total+1; $i++) { 
 		
-		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
+		$query_round_no = sprintf("SELECT id,flightTable,flightRound FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $flight_table, $i);
 		$round_no = mysql_query($query_round_no, $brewing) or die(mysql_error());
 		$row_round_no = mysql_fetch_assoc($round_no);
 		
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $flight_table, $i);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $flight_table, $i);
 		$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row_entry_count = mysql_fetch_assoc($entry_count);
 		

@@ -24,7 +24,7 @@ function brewer_assignment_checked($a,$b) {
 	return $r;
 }
 ?>
-<h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; elseif ($filter == "staff") echo " Staff"; else echo "";  } else echo "Judging Locations"; ?></h2>
+<h2><?php if ($action == "add") echo "Add a Judging Location"; elseif ($action == "edit") echo "Edit a Judging Location"; elseif ($action == "update") { echo "Make Final"; if ($filter == "judges") echo " Judge";  elseif ($filter == "stewards") echo " Steward"; else echo ""; echo " Location Assignments"; } elseif ($action == "assign") { echo "Assign Participants as"; if ($filter == "judges") echo " Judges";  elseif ($filter == "stewards") echo " Stewards"; elseif ($filter == "staff") echo " Staff"; else echo "";  } else echo "Judging Locations &amp; Dates"; ?></h2>
 <?php if (($filter == "default") && ($msg == "9")) { ?>
 <div class="error">Add another judging location, date, or time?</div>
 <p><a href="<?php if ($section == "step5") echo "setup.php?section=step5"; else echo "index.php?section=admin&amp;go=judging"; ?>">Yes</a>&nbsp;&nbsp;&nbsp;<a href="<?php if ($section == "step5") echo "setup.php?section=step6"; else echo "index.php?section=admin"; ?>">No</a>

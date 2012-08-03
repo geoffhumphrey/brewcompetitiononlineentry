@@ -11,7 +11,7 @@ $contestEntryOpen = strtotime($_POST['contestEntryOpen']." ".$_POST['contestEntr
 $contestEntryDeadline = strtotime($_POST['contestEntryDeadline']." ".$_POST['contestEntryDeadlineTime']);
 $contestJudgeOpen = strtotime($_POST['contestJudgeOpen']." ".$_POST['contestJudgeOpenTime']);
 $contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
-
+$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['contestAwardsLocTime']);
 $contestHostWebsite = check_http($_POST['contestHostWebsite']);
 
 // --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
@@ -49,7 +49,6 @@ if ($action == "add") {
 	contestWinnersComplete,
 	contestEntryCap,
 	contestAwardsLocName,
-	contestAwardsLocDate,
 	contestAwardsLocTime,
 	
 	contestEntryFee2,
@@ -72,8 +71,8 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s, %s, %s, %s)",
-						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
+	%s, %s, %s, %s)",
+						   GetSQLValueString($_POST['contestName'], "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
 						   GetSQLValueString($_POST['contestHost'], "text"),
 						   GetSQLValueString($contestHostWebsite, "text"),
@@ -96,8 +95,7 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 						   GetSQLValueString($_POST['contestEntryCap'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
-						   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
-						   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
+						   GetSQLValueString($contestAwardsLocDate, "text"),
 						   GetSQLValueString($_POST['contestEntryFee2'], "text"),
 						   GetSQLValueString($contestEntryFeeDiscount, "text"),
 						   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
@@ -162,7 +160,6 @@ if ($action == "edit") {
 	contestWinnersComplete=%s,
 	contestEntryCap=%s,
 	contestAwardsLocName=%s,
-	contestAwardsLocDate=%s,
 	
 	contestAwardsLocTime=%s,
 	contestEntryFee2=%s,
@@ -175,9 +172,9 @@ if ($action == "edit") {
 	contestCircuit=%s,
 	contestVolunteers=%s
 	WHERE id=%s",
-						   GetSQLValueString(capitalize($_POST['contestName']), "text"),
+						   GetSQLValueString($_POST['contestName'], "text"),
 						   GetSQLValueString($_POST['contestID'], "text"),
-						   GetSQLValueString(capitalize($_POST['contestHost']), "text"),
+						   GetSQLValueString($_POST['contestHost'], "text"),
 						   GetSQLValueString($contestHostWebsite, "text"),
 						   GetSQLValueString($_POST['contestHostLocation'], "text"),
 						   GetSQLValueString($contestRegistrationOpen, "text"),
@@ -198,8 +195,7 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
 						   GetSQLValueString($_POST['contestEntryCap'], "text"),
 						   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
-						   GetSQLValueString($_POST['contestAwardsLocDate'], "text"),
-						   GetSQLValueString($_POST['contestAwardsLocTime'], "text"),
+						   GetSQLValueString($contestAwardsLocDate, "text"),
 						   GetSQLValueString($_POST['contestEntryFee2'], "text"),
 						   GetSQLValueString($contestEntryFeeDiscount, "text"),
 						   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),

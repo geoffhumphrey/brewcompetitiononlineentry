@@ -298,7 +298,7 @@ switch($section) {
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	elseif ($msg == "5") $output = "Info deleted successfully.";
-	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a delseifferent one."; 
+	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a different one."; 
 	elseif ($msg == "7") $output = "Archives created successfully. Click the archive name to view.";
 	elseif ($msg == "8") $output = "Archive \"".$filter."\" deleted."; 
 	elseif ($msg == "9") $output = "The records have been updated.";

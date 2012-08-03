@@ -89,7 +89,7 @@ if ($go == "participants") {
 			foreach ($a as $id) { 
 			$deleteEntries = sprintf("DELETE FROM $brewing_db_table WHERE id='%s'", $id);
 			mysql_select_db($database, $brewing);
-			$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error());
+			$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
 			}
 	} else {
 		$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE id='%s'", $id);

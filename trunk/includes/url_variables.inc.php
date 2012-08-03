@@ -90,5 +90,10 @@ if (isset($_GET['tb'])) {
   $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
 }
 
+$purge = "default";
+if (isset($_GET['purge'])) {
+  $purge = (get_magic_quotes_gpc()) ? $_GET['purge'] : addslashes($_GET['purge']);
+}
+
 
 ?>

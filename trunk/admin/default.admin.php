@@ -1,3 +1,6 @@
+<div id="header">	
+	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+</div>
 <?php 
 /**
  * Module:      default.admin.php
@@ -9,13 +12,36 @@ include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
 include(DB.'entries.db.php'); 
-include(DB.'brewer.db.php'); 
-if (($section == "admin") && ($go == "default")) { ?>
+include(DB.'brewer.db.php');
+if (($section == "admin") && ($go == "default")) { 
+
+
+
+function total_discount() { 
+	require(CONFIG.'config.php');
+	
+	$query_discount = sprintf("SELECT uid FROM %s WHERE brewerDiscount='Y'", $prefix."brewer");
+	$discount = mysql_query($query_discount, $brewing) or die(mysql_error());
+	$row_discount = mysql_fetch_assoc($discount);
+	$totalRows_discount = mysql_num_rows($discount);
+	
+	do { $a[] = $row_discount['uid']; } while ($row_discount = mysql_fetch_assoc($discount));
+	
+	foreach ($a as $brewer_id) {
+	
+		$query_discount_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerId='%s'", $prefix."brewing", $brewer_id);
+		$discount_number = mysql_query($query_discount_number, $brewing) or die(mysql_error());
+		$row_discount_number = mysql_fetch_assoc($discount_number);
+		$b[] = $row_discount_number['count']; 
+		
+	}
+	
+	$return = $totalRows_discount."^".array_sum($b);
+	return $return;
+}
+?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
-<div id="header">	
-	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-</div>
 <?php 
 if ($setup_free_access == TRUE) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
@@ -27,8 +53,8 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
     	<td colspan="6">As of <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
 	</tr>
     <tr>
-		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Confirmed Entries</a>:</td>
-        <td class="data"><?php echo $totalRows_entry_count; ?></td>
+		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a> (Confirmed/Unconfirmed):</td>
+        <td class="data"><?php echo $totalRows_log_confirmed."/".$totalRows_entry_count; ?></td>
 		<td class="dataLabel">Total Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
         <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants">Total Participants</a>:</td>
@@ -42,6 +68,16 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
         <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
         <td class="data"><?php echo get_participant_count('judge'); ?></td>
 	</tr>
+    <?php if (($row_contest_info['contestEntryFeePassword'] != "") && ($row_contest_info['contestEntryFeePasswordNum'] != "")) { ?>
+    <tr>
+        <td class="dataLabel">Participants Who Redeemed Discount:</td>
+        <td class="data"><?php $a = explode("^",total_discount()); echo $a[0]; ?></td>
+        <td class="dataLabel">Total Discounted Entries:</td>
+        <td class="data"><?php echo $a[1]; ?></td>
+        <td class="dataLabel">Total Fees at Discount:</td>
+        <td class="data"><?php echo $row_prefs['prefsCurrency'].($a[1] * $row_contest_info['contestEntryFeePasswordNum']); ?></td>
+    </tr>
+    <?php } ?>
 </table>
 </div>
 <?php } if ($row_user['userLevel'] == "1") {
@@ -158,11 +194,12 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
             	<li><a href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
 			</ul>
             <ul class="admin_default">
-    			<li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
+    			<li><a href="index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
+    			<li><a href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li></li>
    			 	<li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
             <ul class="admin_default">
-			    <li><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
+		      <li><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
             </ul>
             <ul class="admin_default">
             	<li><a href="index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
@@ -192,10 +229,11 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			</ul>
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
-			    <li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
+			    <li><a href="index.php?section=admin&amp;go=entrant&amp;action=regiser">A Participant</a></li>
+			    <li><a href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 			    <li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
-            <p class="admin_default_header">Regenerate</p>
+      <p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
             	<li>Entry Judging Numbers:</li>
                 <!--
@@ -275,10 +313,11 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
     			<li><a href="index.php?section=admin&amp;go=participants&amp;action=add">A Participant</a></li>
+    			<li><a href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
     			<li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
   			<?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
-			<ul class="admin_default">
+	  <ul class="admin_default">
    			 	<li><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
     			<li><a href="index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></li>
@@ -511,7 +550,10 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
   		<?php } ?>
 			<p class="admin_default_header">CSV Files</p>
 			<ul class="admin_default">
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a></li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries (Limited Data)</a></li>
+                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries (All Data)</a></li>
+            </ul>
+			<ul class="admin_default">
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a></li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="output/entries_export.php?go=csv"></a></li>
 			</ul>
@@ -555,6 +597,8 @@ if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 if ($go == "special_best") 	    		include (ADMIN.'special_best.admin.php');
 if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php');
+if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
+if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

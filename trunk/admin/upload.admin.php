@@ -87,7 +87,7 @@ $filelist = "";
 while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
       	$filelist .= "<tr>\n";
-		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  class=\"thickbox\">".$file."</a></td>\n";
+		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  id=\"modal_window_link\">".$file."</a></td>\n";
       	$filelist .= "<td width=\"5%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
 		else $filelist .="<td>&nbsp;</td>\n";

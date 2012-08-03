@@ -53,7 +53,7 @@ if($result1){
 if ($action == "add") {
 	
 mysql_select_db($database, $brewing);
-$query_style_name = "SELECT brewStyleGroup FROM `styles` ORDER BY id DESC LIMIT 1";
+$query_style_name = "SELECT brewStyleGroup FROM `".$prefix."styles` ORDER BY id DESC LIMIT 1";
 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 $row_style_name = mysql_fetch_assoc($style_name);
 $style_add_one = $row_style_name['brewStyleGroup'] + 1;
@@ -87,7 +87,7 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
   %s, %s, %s, %s, %s, 
   %s, %s, %s)",
                        GetSQLValueString("A", "text"),
-                       GetSQLValueString(capitalize($_POST['brewStyle']), "scrubbed"),
+                       GetSQLValueString($_POST['brewStyle'], "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),
                        GetSQLValueString($_POST['brewStyleFG'], "text"),
@@ -139,7 +139,7 @@ if ($action == "edit") {
 	  
 	  WHERE id=%s",
                        GetSQLValueString($_POST['brewStyleNum'], "text"),
-                       GetSQLValueString(capitalize($_POST['brewStyle']), "scrubbed"),
+                       GetSQLValueString($_POST['brewStyle'], "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
                        GetSQLValueString($_POST['brewStyleOGMax'], "text"),
                        GetSQLValueString($_POST['brewStyleFG'], "text"),

@@ -143,7 +143,7 @@ $row_countries = mysql_fetch_assoc($countries);
 </td>
 </tr>
 <?php } ?>
-<?php if ($go == "judge") { ?>
+<?php if (($go == "judge") || ($go == "admin")) { ?>
 <tr>
 	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
 </tr>

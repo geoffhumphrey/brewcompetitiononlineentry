@@ -68,7 +68,7 @@ else
 
 //-->
 </script>
-<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+<?php if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; ?>
 <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
@@ -100,10 +100,15 @@ else
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
+
+if ($section != "admin") { 
 ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
-  
-<form action="includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<?php } 
+if ($section == "admin") echo "<h2>Add";
+if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>"; 
+?> 
+<form action="includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
@@ -227,7 +232,9 @@ $row_countries = mysql_fetch_assoc($countries);
       <td class="data">&nbsp;</td>
 </tr>
 </tr>
-<?php } ?>
+<?php } 
+if ($section != "admin") { 
+?>
 <tr>
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
@@ -241,6 +248,7 @@ $row_countries = mysql_fetch_assoc($countries);
     <td class="data"><span class="required">Required</span></td>
     <td class="data">&nbsp;</td>
 </tr>
+<?php } ?>
 </table>
 <p><input name="submit" type="submit" class="button" value="Register" /></p>
 <script type="text/javascript">

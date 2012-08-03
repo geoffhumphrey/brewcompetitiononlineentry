@@ -1,17 +1,22 @@
 <?php 
 require('paths.php');
-require(INCLUDES.'functions.inc.php');
-//if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
-require(DB.'common.db.php');
-require(DB.'brewer.db.php');
-require(DB.'entries.db.php');
-require(DB.'archive.db.php'); 
+require(INCLUDES.'db_tables.inc.php');
+require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'version.inc.php'); // used only for version 1.2.1.0; subsequent versions will utilize a db query.
 require(INCLUDES.'headers.inc.php');
 $section = "update";
 $current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
+
+require(INCLUDES.'functions.inc.php'); 
+require(DB.'common.db.php');
+require(DB.'archive.db.php'); 
+
+$query_log = "SELECT * FROM $brewing_db_table";
+$log = mysql_query($query_log, $brewing) or die(mysql_error());
+$row_log = mysql_fetch_assoc($log);
+$totalRows_log = mysql_num_rows($log); 
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -19,18 +24,19 @@ $current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
-<link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link href="css/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="container">
 <div id="navigation">
-	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
+	<div id="navigation-inner"></div>
 </div>
 <div id="content">
  	 <div id="content-inner">
      <div id="header">	
 		<div id="header-inner"><h1>BCOE&amp;M <?php echo $current_version; ?> Database Update Script</h1></div>
   	</div>
+     <?php if ($action == "default") { ?><div class="error">BCOE&amp;M <?php echo $current_version; ?> Database Update Script must be run to update the database.</div><?php } ?>
 <?php 
 function table_exists($table_name) {
 	require(CONFIG.'config.php');
@@ -45,7 +51,7 @@ if (table_exists($table_name)) {
 
 	if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
 		<?php if (($action == "default") && ($msg == "default")) { ?>
-		<p>This function will update your BCOE&amp;M from its current version, <?php echo $version; ?>, to the latest version, <?php echo $current_version; ?>.</p>
+		<h2>This script will update your BCOE&amp;M database from its current version, <?php echo $version; ?>, to the latest version, <?php echo $current_version; ?>.</h2>
 		<p><span class="icon"><img src="images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
 		<p><span class="icon"><img src="images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>
 		<?php } ?>
@@ -87,6 +93,8 @@ if (table_exists($table_name)) {
 	
 				if (($version == "1.2.0.3") || ($version == "1.2.0.4"))  {
 					include (UPDATE.'current_update.php');
+					//exit;
+					//echo "CURRENT!!";
 				} 
 			
 			/// Perform structure check ///
@@ -104,8 +112,6 @@ if (table_exists($table_name)) {
 			echo "<ul>";
 			echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
 			echo "<li>Go to the <a href='index.php?section=admin'>Admin Main Menu</a>.</li>";
-			echo "<li>Update your <a href='index.php?section=admin&go=preferences'>Site Preferences</a>.</li>";
-			echo "<li>Update your <a href='index.php?section=admin&go=contest_info'>Competition's Info</a>.</li>"; 
 			echo "</ul>";
 			
 		}
@@ -128,10 +134,7 @@ else {
 	<p>You have indicated in the config.php file that a prefix of $prefix should be prepended to each table name. Is this correct? If not, make the required changes to the config.php file and try again.</p>
 	<p>If the prefix is correct, you might want to run the <a href='update.php?action=repair'>database repair utility</a> to make sure the correct prefix is being used.</p>
 	";
-	echo "
-	<p>Please run the <a href='setup.php'>install and setup utility</a> to install the correct database tables.</p>
-	<p>You will need to set the 
-	";
+	echo "<p>Please run the <a href='setup.php'>install and setup utility</a> to install the correct database tables.</p>";
 }
 
 
@@ -140,7 +143,7 @@ else {
 </div>
 </div>
 <div id="footer">
-	<div id="footer-inner"><a href="http://www.brewcompetition.com" target="_blank">Brew Competition Online Entry and Management</a> (BCOE&amp;M) Version <?php echo $current_version; ?> &copy;<?php  echo "2009-".date('Y'); ?> by <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
+	<div id="footer-inner"><a href="http://www.brewcompetition.com" target="_blank">BCOE&amp;M</a> Version <?php echo $current_version; ?> &copy;<?php  echo "2009-".date('Y'); ?> by <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.</div>
 </div>
 </body>
 </html>

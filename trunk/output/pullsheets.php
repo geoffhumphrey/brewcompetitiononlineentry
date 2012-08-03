@@ -8,11 +8,6 @@ require_once(DB.'common.db.php');
 include_once(DB.'admin_common.db.php');
 require_once(INCLUDES.'version.inc.php');
 require_once(INCLUDES.'headers.inc.php');
-
-$query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";
-$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-$row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -74,7 +69,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
         </div>
@@ -122,7 +117,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -217,7 +212,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -268,7 +263,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>
@@ -311,7 +306,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s'  AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s'  AND brewReceived='1' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -393,7 +388,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1' ORDER BY id", $row_styles['brewStyle']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];

@@ -15,11 +15,11 @@ do { $style[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-
 if ($row_prefs['prefsCompOrg'] == "Y") { 
 	foreach (array_unique($style) as $style) {
 		$style = explode("-",$style);
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='Y'", $brewing_db_table,  $style[0], $style[1]);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style[0], $style[1]);
 		$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row_entry_count = mysql_fetch_assoc($entry_count);
 		
-		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
+		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
 		$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 		$row_score_count = mysql_fetch_assoc($score_count);
 		
@@ -28,8 +28,9 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		//echo $query_score_count;
 		// Display all winners 
 		if ($row_entry_count['count'] > 0) {
+			if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
 ?>
-	<h3>Category <?php echo ltrim($style[0],"0").$style[1].": ".$style[2]." (".$row_entry_count['count']." entries)"; ?></h3>
+	<h3>Category <?php echo ltrim($style[0],"0").$style[1].": ".$style[2]." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
     <?php if ($row_score_count['count'] > 0) { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -67,7 +68,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 </thead>
     <tbody>
     <?php 
-		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.id = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
+		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
 		if (($action == "print") && ($view == "winners")) $query_scores .= " AND a.scorePlace IS NOT NULL";
 		elseif (($action == "default") && ($view == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
 		else $query_scores .= "";
@@ -100,7 +101,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 	?>
 <?php // }  ?>
 <?php 
-// if NOT using BCOE to organize comp and if winners have been designated, display using legacy code
+/* if NOT using BCOE to organize comp and if winners have been designated, display using legacy code
 if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) { 
 ?>
 <script type="text/javascript" language="javascript">
@@ -170,4 +171,5 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
 </table>
 <?php if ($row_contest_info['contestWinnersComplete'] != "") echo $row_contest_info['contestWinnersComplete'];  
 	} 
+*/
 ?>

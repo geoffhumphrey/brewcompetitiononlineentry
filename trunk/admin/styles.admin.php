@@ -64,7 +64,7 @@ function checkUncheckAll(theElement) {
 		} );
 	</script>
 <form name="form1" method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
-<p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></p>
+<p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Style Categories"; ?>" /></p>
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
@@ -109,7 +109,7 @@ function checkUncheckAll(theElement) {
  <?php } while($row_styles = mysql_fetch_assoc($styles)) ?>
  </tbody>
  </table>
- <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" /></p>
+ <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Style Categories"; ?>" /></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
 </form>
 <?php } ?>

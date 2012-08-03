@@ -7,17 +7,17 @@
  */
 ?> 
 
-<?php if ($row_prefs['prefsCompOrg'] == "Y")  { 
+<?php 
 	// Display BOS winners for each applicable style type
 	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 	sort($a);
 	foreach ($a as $type) {
-		$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'", $style_type_db_table, $type);
+		$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."style_types", $type);
 		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 		$row_style_type = mysql_fetch_assoc($style_type);
 		
 		if ($row_style_type['styleTypeBOS'] == "Y") { 
-			$query_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID AND scoreType='%s' ORDER BY a.scorePlace", $scores_bos_db_table, $brewing_db_table, $brewer_db_table, $type);
+			$query_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID AND scoreType='%s' ORDER BY a.scorePlace", $prefix."judging_scores_bos", $prefix."brewing", $prefix."brewer", $type);
 			$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
 			//echo $query_bos;
 			$row_bos = mysql_fetch_assoc($bos);
@@ -84,16 +84,16 @@ if ($action == "print") {
 	else echo "<h3>BOS - ".$row_style_type['styleTypeName']."</h3><p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
     } 
   }
-} // end if ($row_prefs['prefsCompOrg'] == "Y")
-
+  
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
 echo "<h2>Other Overall Winners</h2>";
 do { 
-$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$sbd_db_table,$row_sbi['id']);
+$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$row_sbi['id']);
 $sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
 $row_sbd = mysql_fetch_assoc($sbd);
 $totalRows_sbd = mysql_num_rows($sbd);
+
 
 if ($totalRows_sbd > 0) {
 $random = random_generator(6,2);		

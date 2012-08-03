@@ -11,7 +11,7 @@ require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 
 if (($go == "entries") && ($action == "bottle-entry")) {
-	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='Y'";
+	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -49,7 +49,7 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 }
 
 if (($go == "entries") && ($action == "bottle-judging")) {
-	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='Y'";
+	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -156,10 +156,9 @@ if (($go == "participants") && ($action == "address_labels")) {
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
+	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC");
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
-	
 	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_All_Participant_Address_Labels.pdf";
 	
 	do {
@@ -216,7 +215,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 	
 	do {
 	
-	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", "judging_scores", $row_tables['id']);
+	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", "$judging_scores_db_table", $row_tables['id']);
 	$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);

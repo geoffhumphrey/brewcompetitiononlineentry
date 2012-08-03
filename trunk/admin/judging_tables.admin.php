@@ -2,11 +2,11 @@
 include(DB.'judging_locations.db.php'); 
 include(DB.'styles.db.php');
 include(DB.'brewer.db.php');
-
 function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
-	include(CONFIG.'config.php'); 	
+	include(CONFIG.'config.php');
+	//include(INCLUDES.'db_tables.inc.php');
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE assignTable='%s' AND assignment='J'", $tid);
+	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	if ($dbTable == "default") $r = '<a href="index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign Judges to this Table">'.$row_assignments['count']."</a>";
@@ -16,8 +16,9 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 
 function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 	include(CONFIG.'config.php');	
+	//include(INCLUDES.'db_tables.inc.php');
 	mysql_select_db($database, $brewing);
-	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE assignTable='%s' AND assignment='S'", $tid);
+	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
 	if ($dbTable == "default") $r = '<a href="index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign Stewards to this Table">'.$row_assignments['count']."</a>";
@@ -29,7 +30,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 if ($action == "edit") echo "Edit Table"; 
 elseif ($action == "add") echo "Add a Table"; 
 else echo "All Tables"; 
-if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
+if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php if ($action != "print") { ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
@@ -50,8 +51,8 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
   		<span class="icon"><img src="images/printer.png" alt="Print" title="Print..." /></span>
   		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_tables');">Print...</a></div>
   		<div id="printMenu_tables" class="menu" onmouseover="menuMouseover(event)">
-  			<a class="menuItem thickbox" href="output/print.php?section=admin&amp;go=judging_tables&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Tables List</a>
-    		<a class="menuItem thickbox" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800">Pullsheets by Table</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?section=admin&amp;go=judging_tables&amp;action=print">Tables List</a>
+    		<a id="modal_window_link" class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default">Pullsheets by Table</a>
 		</div>
 	</span>
     <?php } ?>
@@ -89,7 +90,7 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
     	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
     	<div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
-			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
+			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
 			$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
 			$row_flights_2 = mysql_fetch_assoc($flights_2);
 			$totalRows_flights_2 = $row_flights_2['count'];
@@ -154,10 +155,10 @@ if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_tables_"); ?></h2>
 <?php if ($action != "print") { ?>
 <?php if ($totalRows_judging > 1) { ?>
 <table>
-	<td colspan="2" class="dataLabel">Total Entries by Location:</th>
+	<td colspan="2" class="dataLabel">Total Entries by Location</th>
 	<?php do { ?>
 	<tr>
-    	<td class="dataLeft" nowrap="nowrap" width="1%"><?php echo $row_judging['judgingLocName']." &ndash; "; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat'])." at ".$row_judging['judgingTime'].": "; ?></td>
+    	<td class="dataLeft" nowrap="nowrap" width="1%" style="padding-left:0;"><?php echo $row_judging['judgingLocName']." &ndash; ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
         <td class="data"><?php echo get_table_info(1,"count_total","default","default",$row_judging['id']); ?></td>
      </tr>  
 	<?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
@@ -248,7 +249,7 @@ if ($totalRows_tables > 0) { ?>
         <td class="data<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']) ?></td>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
-        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables['tableName']; ?> table" title="Edit the <?php echo $row_tables['tableName']; ?> table"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=judging_tables&amp;action=delete','id',<?php echo $row_tables['id']; ?>,'Are you sure you want to delete the <?php echo $row_tables['tableName']; ?> table?\nALL associated FLIGHTS and SCORES will be deleted as well.\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete the <?php echo $row_tables['tableName']; ?> table" title="Delete the <?php echo $row_tables['tableName']; ?> table"></a></span><span class="icon"><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800"><img src="images/printer.png"  border="0" alt="Print the pullsheet for <?php echo $row_tables['tableName']; ?>" title="Print the pullsheet for <?php echo $row_tables['tableName']; ?>"></a></span><?php if ($row_judging_prefs['jPrefsQueued'] == "N") { if (flight_count($row_tables['id'],1)) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/application_form_edit.png" alt="Edit flights for <?php echo $row_tables['tableName']; ?>" title="Edit flights for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } elseif (($totalRows_flights == 0) && ($entry_count > $row_judging_prefs['jPrefsFlightEntries'])) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/application_form_add.png" alt="Define flights for <?php echo $row_tables['tableName']; ?>" title="Define flights for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } else { ?><span class="icon"><img src="images/application_form_fade.png" alt="No need to define flights for <?php echo $row_tables['tableName']; ?>" title="No need to define flights for <?php echo $row_tables['tableName']; ?>" /></span><?php } ?><?php } // end if ($row_judging_prefs['jPrefsQueued'] == "N") ?><?php if (score_count($row_tables['id'],1)) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/rosette_edit.png" alt="Edit scores for <?php echo $row_tables['tableName']; ?>" title="Edit scores for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/rosette_add.png" alt="Enter scores for <?php echo $row_tables['tableName']; ?>" title="Enter scores for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } ?>
+        <td class="data<?php if ($action == "print") echo " bdr1B"; ?>" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables['tableName']; ?> table" title="Edit the <?php echo $row_tables['tableName']; ?> table"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=judging_tables&amp;action=delete','id',<?php echo $row_tables['id']; ?>,'Are you sure you want to delete the <?php echo $row_tables['tableName']; ?> table?\nALL associated FLIGHTS and SCORES will be deleted as well.\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete the <?php echo $row_tables['tableName']; ?> table" title="Delete the <?php echo $row_tables['tableName']; ?> table"></a></span><span class="icon"><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/printer.png"  border="0" alt="Print the pullsheet for <?php echo $row_tables['tableName']; ?>" title="Print the pullsheet for <?php echo $row_tables['tableName']; ?>"></a></span><?php if ($row_judging_prefs['jPrefsQueued'] == "N") { if (flight_count($row_tables['id'],1)) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/application_form_edit.png" alt="Edit flights for <?php echo $row_tables['tableName']; ?>" title="Edit flights for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } elseif (($totalRows_flights == 0) && ($entry_count > $row_judging_prefs['jPrefsFlightEntries'])) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/application_form_add.png" alt="Define flights for <?php echo $row_tables['tableName']; ?>" title="Define flights for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } else { ?><span class="icon"><img src="images/application_form_fade.png" alt="No need to define flights for <?php echo $row_tables['tableName']; ?>" title="No need to define flights for <?php echo $row_tables['tableName']; ?>" /></span><?php } ?><?php } // end if ($row_judging_prefs['jPrefsQueued'] == "N") ?><?php if (score_count($row_tables['id'],1)) { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/rosette_edit.png" alt="Edit scores for <?php echo $row_tables['tableName']; ?>" title="Edit scores for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;id=<?php echo $row_tables['id']; ?>"><img src="images/rosette_add.png" alt="Enter scores for <?php echo $row_tables['tableName']; ?>" title="Enter scores for <?php echo $row_tables['tableName']; ?>" /></a></span><?php } ?>
         </td>
         <?php } ?>
     </tr>
@@ -290,14 +291,19 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
   <tr>
     <td class="dataLabel">Table Number:</td>
     <td class="data">
+    <?php 
+	$query_table_number = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber";
+	$table_number = mysql_query($query_table_number, $brewing) or die(mysql_error());
+	$row_table_number = mysql_fetch_assoc($table_number);
+	do { $a[] = $row_table_number['tableNumber']; } while ($row_table_number = mysql_fetch_assoc($table_number));
+	//print_r($a);
+		?>
+    
     <select name="tableNumber" id="tableNumber">
-    	<?php 
-		$query_last_table_number = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber DESC LIMIT 1";
-		$last_table_number = mysql_query($query_last_table_number, $brewing) or die(mysql_error());
-		$row_last_table_number = mysql_fetch_assoc($last_table_number);
+    	<?php		
 		for($i=1; $i<150+1; $i++) { 
 		?>
-    	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_tables_edit['tableNumber'] == $i)) echo "selected"; elseif ($i <= $row_last_table_number['tableNumber']) echo "disabled"; elseif (($action != "edit") && (($row_last_table_number['tableNumber'] + 1) == $i)) echo "selected"; else echo ""; ?>><?php echo $i; ?></option>
+    	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_tables_edit['tableNumber'] == $i)) echo "selected"; elseif (in_array($i,$a)) echo "disabled"; elseif (($action != "edit") && (($row_last_table_number['tableNumber'] + 1) == $i)) echo "selected"; else echo ""; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
     </td>
@@ -309,7 +315,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     <select name="tableLocation" id="tableLocation">
           <option value=""></option>
           <?php do { ?>
-          <option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo date_convert($row_judging1['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
+          <option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging1['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
           <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
     </select>
     </td>
@@ -321,7 +327,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     <td class="dataLabel">Style(s):</td>
     <td class="data">
     <?php 
-    $query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewReceived='Y'"; // Changed to only "brewReceived" by request as of 1.2.1.0
+    $query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewReceived='1'"; // Changed to only "brewReceived" by request as of 1.2.1.0
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 

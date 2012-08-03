@@ -27,7 +27,7 @@ CHANGE  `contestRegistrationDeadline`  `contestRegistrationDeadline` VARCHAR(255
 CHANGE  `contestEntryOpen`  `contestEntryOpen` VARCHAR(255) NULL DEFAULT NULL ,
 CHANGE  `contestEntryDeadline`  `contestEntryDeadline` VARCHAR(255) NULL DEFAULT NULL ,
 ADD  `contestJudgeOpen` VARCHAR(255) NULL AFTER  `contestEntryDeadline` ,
-ADD  `contestJudgeDeadline` VARCHAR(255) NULL AFTER  `contestJudgeOpen ;
+ADD  `contestJudgeDeadline` VARCHAR(255) NULL AFTER  `contestJudgeOpen` ;
 
 ALTER TABLE  `brewing` ADD  `brewConfirmed` TINYINT( 1 ) NULL COMMENT  '0 = false; 1 = true';
 
@@ -66,4 +66,4 @@ CREATE TABLE IF NOT EXISTS `system` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `system` (`id`, `version`) VALUES (1, '1.2.1', '2012-08-01');
+INSERT INTO `system` (`id`, `version`, `version_date`) VALUES (1, '1.2.1', '2012-08-01');

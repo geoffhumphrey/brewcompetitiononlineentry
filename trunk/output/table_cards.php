@@ -33,7 +33,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h4>
+    <h4><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

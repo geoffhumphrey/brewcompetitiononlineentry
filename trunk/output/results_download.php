@@ -159,7 +159,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 		do { $style[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 	
 		foreach (array_unique($style) as $style) {
-			$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='Y'", $brewing_db_table,  $style);
+			$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $brewing_db_table,  $style);
 			$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 			$row_entry_count = mysql_fetch_assoc($entry_count);
 			
@@ -215,7 +215,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 
 		foreach (array_unique($style) as $style) {
 			$style = explode("-",$style);
-			$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='Y'", $brewing_db_table,  $style[0], $style[1]);
+			$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style[0], $style[1]);
 			$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 			$row_entry_count = mysql_fetch_assoc($entry_count);
 			

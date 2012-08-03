@@ -1,7 +1,7 @@
 <h2>
 <?php 
 if ($action == "enter") echo "Enter/Edit BOS Places - ".$row_style_type['styleTypeName']; else echo "Best of Show (BOS) Entries and Places"; 
-if ($dbTable != "default") echo ": ".ltrim($dbTable, "judging_scores_bos_"); 
+if ($dbTable != "default") echo ": ".get_suffix($dbTable); 
 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 ?>
 </h2>
@@ -197,7 +197,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <?php } // end if ($action == "default") ?>
 
 <?php if ($action == "enter") { ?>
-<form name="scores" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $go; ?>">
+<form name="scores" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
