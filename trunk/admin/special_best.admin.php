@@ -5,20 +5,21 @@
  *              (e.g., for a Pro-Am, Best Entry Name, Stewards Choice, etc.)
  */
 
+$query_sbd = "SELECT COUNT(*) as 'count' FROM $special_best_data_db_table";
+$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
+$row_sbd = mysql_fetch_assoc($sbd);
 
-
-?>
-
-<?php include(DB.'winners.db.php'); ?>
+ ?>
 <h2><?php if ($action == "add") echo "Add a Custom Winning Category"; elseif ($action == "edit") echo "Edit a Custom Winning Category"; else echo "Custom Winning Categories"; ?></h2>
 <div class="adminSubNavContainer">
-   	<span class="adminSubNav">
-        <span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a></span>
+   	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a></span>
     	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a>
+    	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
         <?php } else { ?>
-        <span class="icon"><img src="images/award_star_add.png" /></span><a href="index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a>
-   		<?php } ?>
+        <span class="adminSubNav"><span class="icon"><img src="images/award_star_add.png" /></span><a href="index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a></span>
+   		<?php } if ($row_sbd['count'] > 0) { ?>
+        <span class="adminSubNav"><span class="icon"><img src="images/award_star_gold_2.png" /></span><a href="index.php?section=admin&amp;go=special_best_data">View Custom Winning Category Entires</a></span>
+        <?php } ?>
     </span>
 </div>
 <?php if ($action == "default") { ?>
@@ -123,6 +124,6 @@ if (($action == "add") || ($action == "edit")) { ?>
   </tr>
 </table>
 <p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Winning Category"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } ?>

@@ -83,38 +83,6 @@ function purge_entries($type, $interval) {
 	}
 }
 
-/*
-
-function check_setup() {
-	
-	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	
-	
-	$query_setup = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE NOT id='0'", $prefix."users");
-	$setup = mysql_query($query_setup, $brewing);
-	$row_setup = mysql_fetch_assoc($setup);
-	$totalRows_setup = $row_setup['count'];
-	
-	echo $query_setup;
-
-	$query_setup1 = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."contest_info");
-	$setup1 = mysql_query($query_setup1, $brewing);
-	$row_setup1 = mysql_fetch_assoc($setup1);
-	$totalRows_setup1 = $row_setup1['count'];
-
-	$query_setup2 = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."preferences");
-	$setup2 = mysql_query($query_setup2, $brewing);
-	$row_setup2 = mysql_fetch_assoc($setup2);
-	$totalRows_setup2 = $row_setup2['count'];
-
-	if (($totalRows_setup == 0) && ($totalRows_setup1 == 0) && ($totalRows_setup2 == 0)) return true;
-	else return false;	
-	
-}
-
-*/
-
 // function to generate random number
 function random_generator($digits,$method){
 	srand ((double) microtime() * 10000000);
@@ -139,20 +107,35 @@ function random_generator($digits,$method){
 	return $random_generator;
 } // end of function
 
-function relocate($referer,$page) {
-	// determine if referrer has any msg=X or id=X variables attached and remove
-	if (strstr($referer,"&msg")) { 
+function relocate($referer,$page,$msg,$id) {
+	
+	// Break URL into an array
+	$parts = parse_url($referer);
+	$referer = $parts['query'];	
+	
+	// Remove $msg=X from query string
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
+
+	// Remove $id=X from query string
 	$pattern = array("/[0-9]/", "/&id=/");
 	$referer = preg_replace($pattern, "", $referer);
+	
+	// Remove $pg=X from query string and add back in
 	if ($page != "default") { 
-		$pattern = array("/[0-9]/", "/&pg=/"); 
-		$referer = preg_replace($pattern, "", $referer); 
+		$pattern = array("/[0-9]/", "/&pg=/");
+		$referer = str_replace($pattern,"",$referer);
 		$referer .= "&pg=".$page; 
-		}
 	}
-	return $referer;
+	
+	$pattern = array('\'', '"');
+	$referer = str_replace($pattern,"",$referer);
+	$referer = stripslashes($referer);	
+	
+	// Reconstruct the URL
+	$reconstruct = "http://".$_SERVER['SERVER_NAME']."/index.php?".$referer;
+	return $reconstruct;
+	
 }
 
 function check_judging_numbers() {
@@ -1504,7 +1487,7 @@ function text_number($n) {
     return $new_n;
 }
 
-function style_choose($section,$go,$action,$filter,$script_name,$method) {
+function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
@@ -1522,7 +1505,7 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
 		//if ($num == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
+		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
 		mysql_free_result($result);
 	}
 	
@@ -1841,8 +1824,10 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
+	$totalRows_tables = mysql_num_rows($tables); 
 	//echo $query_tables;
 	
+	if ($totalRows_tables > 0) {
 	$r = "<select name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
 	$r .= "<option>Choose Below:</option>";
 		do { 
@@ -1856,7 +1841,35 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 		    mysql_free_result($scores);
 		} while ($row_tables = mysql_fetch_assoc($tables));
      $r .= "</select>";
+	} 
+	 else $r = "No tables have been defined.";
 	 mysql_free_result($tables);
+	 return $r;
+}
+
+function score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_sbi = "SELECT id,sbi_name FROM $special_best_info_db_table ORDER BY sbi_name ASC";
+	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
+	$row_sbi = mysql_fetch_assoc($sbi);
+	$totalRows_sbi = mysql_num_rows($sbi); 
+	//echo $query_tables;
+	if ($totalRows_sbi > 0) {
+	$r = "<select name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
+	$r .= "<option>Choose Below:</option>";
+		do { 
+		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $special_best_data_db_table WHERE sid='%s'", $row_sbi['id']);
+		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+		$row_scores = mysql_fetch_assoc($scores);
+		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
+        	$r .= "<option value=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</option>";
+		    mysql_free_result($scores);
+		} while ($row_sbi = mysql_fetch_assoc($sbi));
+     $r .= "</select>";
+	} 
+	else $r = "No custom winning cateories have been defined.";
+	 mysql_free_result($sbi);
 	 return $r;
 }
 

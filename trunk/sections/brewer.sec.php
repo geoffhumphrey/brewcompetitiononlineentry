@@ -114,6 +114,11 @@ $row_countries = mysql_fetch_assoc($countries);
   <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
   <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
 </tr>
+<?php if (($go == "judge") || ($go == "admin")) { ?>
+<tr>
+	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
+</tr>
+<?php } ?>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
@@ -121,7 +126,9 @@ $row_countries = mysql_fetch_assoc($countries);
       <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
       <td class="data">&nbsp;</td>
 </tr>
+
 <?php if ($totalRows_judging > 1) { ?>
+
 <tr>
 <td class="dataLabel">Your Stewarding<br />Location Availabilty:</td>
 <td colspan="3" class="data">
@@ -141,11 +148,6 @@ $row_countries = mysql_fetch_assoc($countries);
 
 
 </td>
-</tr>
-<?php } ?>
-<?php if (($go == "judge") || ($go == "admin")) { ?>
-<tr>
-	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
 </tr>
 <?php } ?>
 <tr>
@@ -190,7 +192,7 @@ $row_countries = mysql_fetch_assoc($countries);
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
-	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

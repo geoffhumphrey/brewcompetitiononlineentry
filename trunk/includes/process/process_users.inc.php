@@ -76,8 +76,10 @@ if ($totalRows_userCheck > 0) {
 	}
 	
 /*
-  $insertGoTo = "../index.php?section=login&username=".$username;
-  header(sprintf("Location: %s", $insertGoTo));
+  	$insertGoTo = "../index.php?section=login&username=".$username;
+  	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 */
   }
  }
@@ -110,9 +112,11 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($_POST['user_name'], "text"));
 						   
-	  mysql_select_db($database, $brewing);
-	  $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	  header(sprintf("Location: %s", $updateGoTo));  
+	 	mysql_select_db($database, $brewing);
+	  	$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	  	$pattern = array('\'', '"');
+  		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  		header(sprintf("Location: %s", stripslashes($updateGoTo)));  
 	}
 	
 	// --------------------------- If Changing a Participant's User Name ------------------------------- //
@@ -163,8 +167,10 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 				exit;
 				}
 	/*
-	  $insertGoTo = "../index.php?section=login&username=".$username;
-	  header(sprintf("Location: %s", $insertGoTo));
+	  	$insertGoTo = "../index.php?section=login&username=".$username;
+	  	$pattern = array('\'', '"');
+  		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  		header(sprintf("Location: %s", stripslashes($insertGoTo)));
 	*/
 	  }
 	 }

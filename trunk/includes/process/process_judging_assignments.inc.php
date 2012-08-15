@@ -121,7 +121,9 @@ if ($action == "update") {
 		} // end foreach	  
  }  // end if ($row_judging_prefs['jPrefsQueued'] == "Y")
 
-header(sprintf("Location: %s", $updateGoTo));
+$pattern = array('\'', '"');
+$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 
 if ($action == "add") {

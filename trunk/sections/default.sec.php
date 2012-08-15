@@ -26,25 +26,20 @@ if (judging_date_return() > 0) { ?>
 if (judging_date_return() == 0) { 
 	include ('judge_closed.sec.php'); 
 	if ($row_prefs['prefsDisplayWinners'] == "Y") {  
-		$delay = $row_prefs['prefsWinnerDelay'] * 3600;
 		function judging_winner_display($delay) {
 			include(CONFIG.'config.php');
 			mysql_select_db($database, $brewing);
-			$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
+			$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
 			$check = mysql_query($query_check, $brewing) or die(mysql_error());
 			$row_check = mysql_fetch_assoc($check);
 			$today = strtotime("now");
-			$delay = $delay * 3600;
-			do {
-				if (($row_check['judgingDate']+$delay) > $today) $newDate[] = 1; 
-				else $newDate[] = 0;
-			} while ($row_check = mysql_fetch_assoc($check));
-			$r = array_sum($newDate);
-			return $r;
+			$r = $row_check['judgingDate'] + $delay;
+			if ($r > $today) return FALSE; else return TRUE;
 		}
-		if (judging_winner_display($row_prefs['prefsWinnerDelay']) == "0") {
+		$delay = $row_prefs['prefsWinnerDelay'] * 3600;
+		if (judging_winner_display($delay)) {
 		//include (INCLUDES.'db_tables.inc.php');
-		include (DB.'winners.db.php'); ?>
+		//include (DB.'winners.db.php'); ?>
         <h2>Best of Show Winners<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_bos_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")) { ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Best of Show Winner List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Best of Show Winner List in HTML format"/></a></span><?php } } ?></h2>
         <?php include (SECTIONS.'bos.sec.php'); ?>
 		<h2>Winning Entries<?php if ($section == "past_winners") echo ": ".$trimmed; if ($row_scores['count'] > 0) { if (($section == "default") && ($row_prefs['prefsCompOrg'] == "Y") && ($action != "print")){ ?><span class="icon">&nbsp;<a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf"><img src="images/page_white_acrobat.png" border="0" title="Download a PDF of the Winners List"/></a></span><span class="icon"><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html"><img src="images/html.png" border="0" title="Download the Winners List in HTML format"/></a></span><?php } } ?></h2>

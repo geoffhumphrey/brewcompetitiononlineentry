@@ -58,7 +58,8 @@ session_start();
   		$_SESSION['loginUsername'] = $loginUsername;
 		//echo $_SESSION["loginUsername"];
   		// If the username/password combo is OK, relocate to the "protected" content index page
-  		header("Location: ../index.php?section=list");
+		if ($section != "update") header("Location: ../index.php?section=list");
+		else header("Location: ../update.php");
   		exit;
 	}
 else

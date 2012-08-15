@@ -20,7 +20,7 @@ function get_archive_count($table) {
 <form action="includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s data?\nThis CANNOT be undone.');">
 <p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"></p>
 <p><input name="submit" type="submit" class="button" value="Archive Now"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php if ($totalRows_archive > 0) { ?>
 <h3>Archives</h3>

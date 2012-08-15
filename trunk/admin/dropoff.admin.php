@@ -55,7 +55,7 @@
     <td class="data">&nbsp;</td>
   </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } 
  } 

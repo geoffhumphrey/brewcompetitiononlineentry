@@ -59,7 +59,7 @@ if (($registration_open == "1") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-    <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,"index.php","none"); ?></span>
+    <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,$view,"index.php","none"); ?></span>
     <?php if (($totalRows_log - $totalRows_log_confirmed) > 0) { ?>
   	<span class="adminSubNav">
     <span class="icon"><img src="images/exclamation.png"  /></span><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $filter; ?>&amp;purge=true" onclick="return confirm('Are you sure? This will delete all unconfirmed entries in the database - even those that are less than 24 hours old. This cannot be undone.');">Purge Unconfirmed Entries</a> from the Database?</span>
@@ -257,7 +257,7 @@ if (($filter == "default") && ($bid == "default")) $entries_unconfirmed = ($tota
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td class="dataList"><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
   <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewReceived'] == "1") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "1") echo "X"; } ?></td>
   
@@ -304,7 +304,7 @@ if (($filter == "default") && ($bid == "default")) $entries_unconfirmed = ($tota
 ?>
 <?php if ($dbTable == "default") { ?>
 <p><input type="submit" name="Submit" class="button" value="Update Entries" />&nbsp;<span class="required">Click "Update Entries" <em>before</em> paging through records.</span></p><?php } ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 
 <?php } 

@@ -107,9 +107,11 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 					   );
 
 
-  mysql_select_db($database_brewing, $brewing);
-  $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-  header(sprintf("Location: %s", $insertGoTo));
+  	mysql_select_db($database_brewing, $brewing);
+  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+  	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 	
 }
 
@@ -171,7 +173,9 @@ if ($action == "edit") {
 	 $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   } while ($row_log = mysql_fetch_assoc($log));
   
-  header(sprintf("Location: %s", $updateGoTo));
+  	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	
 }
 ?>

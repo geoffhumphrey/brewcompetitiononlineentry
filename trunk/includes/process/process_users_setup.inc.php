@@ -20,7 +20,9 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	$insertGoTo = "../setup.php?section=step2&go=".$username;
-	header(sprintf("Location: %s", $insertGoTo));	
+	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));	
 	
 	session_start();
 	$_SESSION["loginUsername"] = $username;

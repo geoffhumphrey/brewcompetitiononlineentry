@@ -62,21 +62,30 @@ function capitalize($string) {
 	return $capitalize;
 }
 
-function relocate($referer,$page) {
-	// determine if referrer has any msg=X or id=X variables attached and remove
-	if (strstr($referer,"&msg")) { 
+function relocate($referer,$page,$msg,$id) {
+	// Break URL into an array
+	$parts = parse_url($referer);
+	$referer = $parts['query'];	
+	
+	// Remove $msg=X from query string
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
+
+	// Remove $id=X from query string
 	$pattern = array("/[0-9]/", "/&id=/");
 	$referer = preg_replace($pattern, "", $referer);
+	
+	// Remove $pg=X from query string and add back in
 	if ($page != "default") { 
-		$pattern = array("/[0-9]/", "/&pg=/"); 
-		$referer = preg_replace($pattern, "", $referer); 
+		$pattern = array("/[0-9]/", "/&pg=/");
+		$referer = str_replace($pattern,"",$referer);
 		$referer .= "&pg=".$page; 
-		}
 	}
 	$string = strpos($referer,"?");
 	if ($string === false) $referer = $referer."?";
+	$pattern = array('\'', '"');
+	$referer = str_replace($pattern,"",$referer);
+	$referer = stripslashes($referer);
 	return $referer;
 }
 
@@ -122,9 +131,12 @@ else {
 	$massUpdateGoTo = $_POST['relocate']."&msg=9";
 }
 
-$deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=5";
-//echo $deleteGoTo;
+$deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id)."&msg=5";
 
+//echo $insertGoTo;
+//echo $updateGoTo;
+//echo $deleteGoTo;
+//exit;
 //session_start();
 
 // --------------------------- Entries -------------------------------- //
@@ -195,11 +207,11 @@ if ($dbTable == $prefix."judging_scores_bos") 	include_once (PROCESS.'process_ju
 
 if ($dbTable == $prefix."style_types") 			include_once (PROCESS.'process_style_types.inc.php');
 
-// --------------------------- Custom Winner Category Info ------------------------------- //
+// --------------------------- Custom Winning Category Info ------------------------------- //
 
 if ($dbTable == $prefix."special_best_info") 	include_once (PROCESS.'process_special_best_info.inc.php');
 
-// --------------------------- Custom Winner Category Entries ------------------------------- //
+// --------------------------- Custom Winning Category Entries ------------------------------- //
 
 if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
 
@@ -259,8 +271,8 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-if ($go == "hidden") $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default"); 
-else $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default")."&msg=14";
+if ($go == "hidden") $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); 
+else $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id)."&msg=14";
 header(sprintf("Location: %s", $updateGoTo));		
 }
 

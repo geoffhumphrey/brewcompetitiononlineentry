@@ -10,7 +10,22 @@ require(INCLUDES.'version.inc.php');
 require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 
-if (($go == "entries") && ($action == "bottle-entry")) {
+function truncate($string, $limit, $break=".", $pad="")
+{
+  // return with no change if string is shorter than $limit
+  if(strlen($string) <= $limit) return $string;
+
+  // is $break present between $limit and the end of the string?
+  if(false !== ($breakpoint = strpos($string, $break, $limit))) {
+    if($breakpoint < strlen($string) - 1) {
+      $string = substr($string, 0, $breakpoint) . $pad;
+    }
+  }
+
+  return $string;
+}
+
+if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
 	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
@@ -48,8 +63,42 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 	$pdf->Output($filename,D);
 }
 
-if (($go == "entries") && ($action == "bottle-judging")) {
+if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
+	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
+
+	$filename = str_replace(" ","_",$row_contest_info['contestName'])."_Bottle_Labels";
+	if ($filter != "default") $filename .= "_Category_".$filter;
+	$filename .= ".pdf";
+	$pdf = new PDF_Label('5160'); 
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','',8);
+
+	// Print labels
+	do {
+		
+		if ($row_log['id'] < 10) $entry_no = "00".$row_log['id'];
+		elseif (($row_log['id'] >= 10) && ($row_log['id'] < 100)) $entry_no = "0".$row_log['id'];
+		else $entry_no = $row_log['id'];																						  
+		
+		$text = sprintf("\n%s (%s) Special: %s",
+		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
+		str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
+		
+		$pdf->Add_Label($text);
+		
+	} while ($row_log = mysql_fetch_assoc($log));
+
+	$pdf->Output($filename,D);
+}
+
+
+if (($go == "entries") && ($action == "bottle-judging") && ($view != "special")) {
+	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -83,6 +132,40 @@ if (($go == "entries") && ($action == "bottle-judging")) {
 	} while ($row_log = mysql_fetch_assoc($log));
 
 	$pdf->Output($filename,D);
+	
+}
+
+if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
+	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
+
+	$filename = str_replace(" ","_",$row_contest_info['contestName'])."_Bottle_Labels";
+	if ($filter != "default") $filename .= "_Category_".$filter;
+	$filename .= ".pdf";
+	$pdf = new PDF_Label('5160'); 
+	
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','',7);
+
+	// Print labels
+	do {
+		
+		$entry_no = $row_log['brewJudgingNumber'];																						  
+		
+		$text = sprintf("\n%s (%s) Special: %s",
+		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
+		str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
+		
+		$pdf->Add_Label($text);
+		
+	} while ($row_log = mysql_fetch_assoc($log));
+
+	$pdf->Output($filename,D);
+	
 }
 
 if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
@@ -156,7 +239,7 @@ if (($go == "participants") && ($action == "address_labels")) {
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC");
+	$query_brewer = sprintf("SELECT * FROM %s ORDER BY brewerLastName ASC",$brewer_db_table);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_All_Participant_Address_Labels.pdf";
@@ -215,7 +298,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 	
 	do {
 	
-	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", "$judging_scores_db_table", $row_tables['id']);
+	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $row_tables['id']);
 	$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
@@ -240,4 +323,5 @@ if (($go == "judging_scores") && ($action == "awards")) {
 	
 	$pdf->Output($filename,D);
 }
+
 ?>

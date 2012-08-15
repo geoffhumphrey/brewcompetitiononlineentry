@@ -66,7 +66,9 @@ if ($action == "add") {
 		} while ($row_entries = mysql_fetch_assoc($entries));
 	}
 	if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
-	header(sprintf("Location: %s", $insertGoTo));
+	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 }
 
 if ($action == "edit") {
@@ -220,8 +222,9 @@ if ($action == "edit") {
   			$Result = mysql_query($delete, $brewing) or die(mysql_error());
 			}
 	} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
-  
-  header(sprintf("Location: %s", $updateGoTo));
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 
 ?>

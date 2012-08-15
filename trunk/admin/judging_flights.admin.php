@@ -187,7 +187,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
     </tr>
 </tbody>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if ($id !="default") ?>
 

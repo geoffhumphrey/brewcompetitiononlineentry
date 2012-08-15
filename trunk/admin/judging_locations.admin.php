@@ -89,7 +89,7 @@ function brewer_assignment_checked($a,$b) {
 			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
 			"sDom": 'irtip',
 			"bStateSave" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[1,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
 				null,
@@ -167,7 +167,7 @@ function brewer_assignment_checked($a,$b) {
   	</tr>
 </table>
 <input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit";?>">
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end else ?>
 
@@ -290,7 +290,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
   </td>
   <?php } if (($filter == "judges") || ($filter == "bos")) { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
-  <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; if ($row_brewer['brewerJudgeMead'] == "Y") echo "<div class='purple judge-alert' style='font-weight: normal; font-size: 1em;'>Certified Mead Judge</div>"; ?></td>
+  <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>
   <?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']) ?></td>
   <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']) ?></td>
@@ -324,7 +324,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tbody>
 </table>
 <p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" />&nbsp;<span class="required">Click "<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" <em>before</em> paging through records.</span></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($current_page,"default"); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($current_page,"default",$msg,$id); ?>">
 </form>
 <?php } else { if ($action == "update") echo "<div class='error'>No $filter have been assigned.</div>"; else echo "<div class='error'>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</div>"; } ?>
 <?php } // end if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) ?>

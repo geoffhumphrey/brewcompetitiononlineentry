@@ -26,13 +26,12 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
 </head>
-<body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
+<body <?php if ($tb != "view") { ?>onload="javascript:window.print()"<?php } ?>>
 <?php if ($view != "sign-in") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

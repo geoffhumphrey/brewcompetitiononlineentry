@@ -141,7 +141,11 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$row_brewer = mysql_fetch_assoc($brewer);
 			header("Location: ../index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge");
 		}
-		else header(sprintf("Location: %s", $insertGoTo));
+		else { 
+		$pattern = array('\'', '"');
+  		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		}
 		
 	  } // end if ($filter == "admin")
 	}
