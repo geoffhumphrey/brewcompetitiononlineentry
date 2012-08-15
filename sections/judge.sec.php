@@ -40,5 +40,5 @@ include(DB.'styles.db.php');
 <input type="hidden" name="brewerJudgeRank"  value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />
 <?php } ?>
 <input type="hidden" name="brewerCountry"  value="<?php echo $row_brewer['brewerCountry']; ?>" />
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
 </form>

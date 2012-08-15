@@ -14,9 +14,6 @@ include(DB.'dropoff.db.php');
 include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
 if (($section == "admin") && ($go == "default")) { 
-
-
-
 function total_discount() { 
 	require(CONFIG.'config.php');
 	
@@ -147,7 +144,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
                 <li><a href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
 			</ul>
             <ul class="admin_default">
-            	<li><a href="index.php?section=admin&amp;go=special_best&amp;action=add">A Custom Winner Category</a></li>
+            	<li><a href="index.php?section=admin&amp;go=special_best&amp;action=add">A Custom Winning Category</a></li>
 			</ul>
 			<ul class="admin_default">
 			    <li><a href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
@@ -225,7 +222,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			</ul>
 			<ul class="admin_default">
 			    <li>Mark Entries as Paid/Received for Category:</li>
-			    <li><?php echo style_choose($section,"entries",$action,$filter,"index.php","none"); ?></li>
+			    <li><?php echo style_choose($section,"entries",$action,$filter,$view,"index.php","none"); ?></li>
 			</ul>
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
@@ -266,25 +263,31 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
             	<li>Sorting Sheets:</li>
 				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
                 <li>For Category:</li>
-				<li><?php echo style_choose($section,"default",$action,$filter,"output/sorting.php","thickbox"); ?></li>
+				<li><?php echo style_choose($section,"default",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
             </ul>
             <ul class="admin_default">
             	<li>Entry Number / Judging Number Cheat Sheets:</li>
 				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=cheat&amp;filter=default">All Categories</a></li>
                 <li>For Category:</li>
-				<li><?php echo style_choose($section,"cheat",$action,$filter,"output/sorting.php","thickbox"); ?></li>
+				<li><?php echo style_choose($section,"cheat",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
             </ul>
 			<ul class="admin_default">
-				<li>Bottle Labels (Using Entry Numbers - Avery 5160):</li>
+				<li>Bottle Labels (Using <em>Entry Numbers</em> - Avery 5160):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">All Categories</a></li>
 				<li>For Category:</li>
-				<li><?php echo style_choose($section,"entries","bottle-entry",$filter,"output/labels.php","none"); ?></li>
+				<li><?php echo style_choose($section,"entries","bottle-entry",$filter,$view,"output/labels.php","none"); ?></li>
 			</ul>
             <ul class="admin_default">
-				<li>Bottle Labels (Using Judging Numbers - Avery 5160):</li>
+				<li>Bottle Labels (Using <em>Judging Numbers</em> - Avery 5160):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
 				<li>For Category:</li>
-				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,"output/labels.php","none"); ?></li>
+				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,$view,"output/labels.php","none"); ?></li>
+			</ul>
+            <ul class="admin_default">
+				<li>Bottle Labels with Special Ingredients (Using <em>Judging Numbers</em> - Avery 5160):</li>
+			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special">All Categories</a></li>
+				<li>For Category:</li>
+				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,"special","output/labels.php","none"); ?></li>
 			</ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</h4>
@@ -370,55 +373,65 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li><a href="index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a></li>
 				<li><a href="index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a></li>
 			</ul>
+            <ul class="admin_default">
+  				<li><a href="index.php?section=admin&amp;go=special_best">Custom Winning Categories</a></li>
+				<li><a href="index.php?section=admin&amp;go=special_best_data">Custom Winning Category Entries</a></li>
+			</ul>
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
 				<li>Scores For:</li>
 				<li><?php echo score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table); ?></li>
             </ul>
+            <ul class="admin_default">
+				<li>Winners for Custom Winning Category:</li>
+				<li><?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?></li>
+            </ul>
 </div>
 <h4 class="trigger"><span class="icon"><img src="images/printer.png"  /></span>Printing and Reporting</h4>
 <div class="toggle_container">
 <p class="admin_default_header">Before Judging</p>
+			<?php if ($totalRows_tables > 0) { ?>
 			<ul class="admin_default">
-	<li>Print Pullsheets:</li>
+				<li>Print Pullsheets:</li>
 				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
 				<li>
-    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
-    	<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
-    		<?php do { ?>
-			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
-    		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
-    	</div>
-    </li>
+    				<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
+    				<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
+    				<?php do { ?>
+						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
+    				<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+    				</div>
+    			</li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Table Cards:</li>
 				<li><a id="modal_window_link" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
 				<li>
-    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
-    	<div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
-    		<?php do { ?>
-			<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
-    		<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
-    	</div>
-    </li>
+                	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
+                    <div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
+                        <?php do { ?>
+                        <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+                        <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+                    </div>
+    			</li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Judge Assignments:</li>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">By Table</a></li>
-    <?php if ($totalRows_judging > 1) { ?>
+   				<?php if ($totalRows_judging > 1) { ?>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location" title="Print Judge Assignments by Location">By Location</a></li>
-    <?php } ?>
+    			<?php } ?>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Steward Assignments:</li>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" title="Print Steward Assignments by Table">By Table</a></li>
-    <?php if ($totalRows_judging > 1) { ?>
+    			<?php if ($totalRows_judging > 1) { ?>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" title="Print Steward Assignments by Location">By Location</a></li>
-	<?php } ?>
+				<?php } ?>
 			</ul>
+            <?php } ?>
 			<ul class="admin_default">
 				<li>Print Sign-in Sheets:</li>
 				<li><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Print a Judge Sign-in Sheet">Judges</a></li>   
@@ -428,19 +441,22 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li>Judge Scoresheet Labels (Avery 5150):</li>
             	<li><a href="output/labels.php?section=admin&go=participants&action=judging_labels">Download PDF</a> (All Assigned Judges, 30 Labels per Judge)</li>
             </ul>
+			<?php if ($row_scores['count'] > 0) { ?>
 <p class="admin_default_header">During Judging</p>
-			<ul class="admin_default">
+            <ul class="admin_default">
 				<li>Print BOS Pullsheets:
     			<ul>
         			<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>
-    	  <?php do { ?>
-          <?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
-          <?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
+    	  			<?php do { ?>
+          			<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
+          			<?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
         		</ul>
     			</li>
 			</ul>
+            <?php } ?>
 			<p class="admin_default_header">After Judging</p>
-			<ul class="admin_default">
+			<?php if ($totalRows_tables > 0) { ?>
+            <ul class="admin_default">
 				<li>Results Report by Table (with Scores):</li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
@@ -464,10 +480,12 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
 				<li><a href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Download XML</a></li>
 			</ul>
+            <?php if ($row_scores['count'] > 0) { ?>
 			<ul class="admin_default">
 				<li>Award Labels (Avery 5160):</li>
 				<li><a href="output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Download PDF</a></li>
 			</ul>
+            <?php } } ?>
 			<ul class="admin_default">
 				<li>Participant Address Labels (Avery 5160):</li>
 				<li><a href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Download PDF</a></li>
@@ -550,12 +568,12 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
   		<?php } ?>
 			<p class="admin_default_header">CSV Files</p>
 			<ul class="admin_default">
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries (Limited Data)</a></li>
-                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries (All Data)</a></li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
+                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a> (All Data)</li>
             </ul>
 			<ul class="admin_default">
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a></li>
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="output/entries_export.php?go=csv"></a></li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a> (Limited Data)</li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="output/entries_export.php?go=csv"></a> (Limited Data)</li>
 			</ul>
 			<ul class="admin_default">
 				<li><a href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>
@@ -563,8 +581,9 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			</ul>
 			<p class="admin_default_header">Promo Materials</p>
 			<ul class="admin_default">
-				<li><a href="output/promo_export.php?section=admin&amp;go=html&amp;action=html">HTML</a></li>
-				<li><a href="output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a></li>
+				<li><a href="output/promo_export.php?section=admin&amp;go=html&amp;action=html">HTML</a> (.html)</li>
+				<li><a href="output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a> (.doc)</li>
+                <li><a href="output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a> (.txt)</li>
 			</ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="images/camera_add.png" /></span>Archiving</h4>

@@ -3,7 +3,7 @@
 // -----------------------------------------------------------
 // Data Updates: Archive Tables
 //   Convert the data in archived brewer tables to be compatible
-//   with the new boolean system in place for judges/stewards/staff 
+//   with the new boolean schema for paid, received, and winner 
 // -----------------------------------------------------------
 
 // -----------------------------------------------------------
@@ -26,18 +26,44 @@ if ($totalRows_archive > 0) {
 	do { $a[] = $row_archive['archiveSuffix']; } while ($row_archive = mysql_fetch_assoc($archive));
 	
 	foreach ($a as $suffix) {
-		/*
-		
-		// ------------------------ 
-		// Not in 1.2.1.0 - Applies only a future release with multiple style sets
-		// ------------------------
-		
-		$query_log = sprintf("SELECT id,brewSubCategory,brewCategorySort FROM %s","brewing_".$suffix);
+			
+			
+		$query_log = sprintf("SELECT brewPaid,brewWinner,brewReceived,brewUpdated,brewConfirmed,id FROM %s",$prefix."brewing_".$suffix);
 		$log = mysql_query($query_log, $brewing) or die(mysql_error());
 		$row_log = mysql_fetch_assoc($log);
 		$totalRows_log = mysql_num_rows($log);
 		
 		//echo $query_log."<br>";
+		
+		do {
+		if ($row_log['brewPaid'] == "Y") $brewPaid = "1"; else $brewPaid = "0";
+		if ($row_log['brewWinner'] == "Y") $brewWinner = "1"; else $brewWinner = "0";
+		if ($row_log['brewReceived'] == "Y") $brewReceived = "1"; else $brewReceived = "0";
+		
+		
+		$updateSQL = sprintf("UPDATE ".$prefix."brewing_".$suffix." SET 
+								 brewPaid='%s',
+								 brewWinner='%s',
+								 brewReceived='%s',
+								 brewConfirmed='%s',
+								 brewUpdated=%s
+								 WHERE id='%s';",
+								 $brewPaid,
+								 $brewWinner,
+								 $brewReceived,
+								 "1",
+								 "NOW()",
+								 $row_log['id']);
+			mysql_select_db($database, $brewing);
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+			
+		} while ($row_log = mysql_fetch_assoc($log));
+		echo "<ul><li>All archive entry data updated.</li></ul>";
+		
+		/*
+		// ------------------------ 
+		// Not in 1.2.1.0 - Applies only a future release with multiple style sets
+		// ------------------------
 		
 		do {
 			

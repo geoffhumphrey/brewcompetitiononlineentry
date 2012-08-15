@@ -11,7 +11,7 @@ if (($action == "default") || ($action == "login") || ($action == "logout")) {
 	if (($action != "print") && ($msg != "default")) echo $msg_output;  
 	if (!isset($_SESSION['loginUsername'])) { 
 ?>
-<form action="includes/logincheck.inc.php" method="POST" name="form1" id="form1">
+<form action="includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Email Address:</td>

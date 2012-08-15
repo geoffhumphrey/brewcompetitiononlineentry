@@ -60,7 +60,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php } ?>
 <?php if ((($action == "default") || ($action == "edit"))  && ($dbTable == "default")) { ?>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 1</span>
+	<span class="adminSubNav">Step 1: Assign Judges and Stewards</span>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/user_add.png" alt="Back"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Particpants as Judges</a>
     </span>
@@ -69,7 +69,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
     </span>
 </div>
 <div class="adminSubNavContainer">  
-	<span class="adminSubNav">Step 2</span>
+	<span class="adminSubNav">Step 2: Define All Tables</span>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/application_add.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a>
     </span>
@@ -83,7 +83,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php if (($action == "default")  && ($dbTable == "default")) { ?>
 <?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 3</span>
+	<span class="adminSubNav">Step 3: Define All Flights</span>
 	<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/application_form_add.png" alt="Define/Edit flights" title="Define/Edit flights" /></span>
@@ -104,13 +104,13 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
     <?php } else echo "Skipped. Defining flights is disabled for queued judging...less work for you!"; ?>
 </div>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 4</span>
+	<span class="adminSubNav">Step 4: <?php echo "Assign ".$assign_to." to Rounds"; ?></span>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/application_form_add.png" alt="<?php echo "Assign ".$assign_to." to Rounds"; ?>" /></span><a href="index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;&filter=rounds"><?php echo "Assign ".$assign_to." to Rounds"; ?></a>
     </span>
 </div>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 5</span>
+	<span class="adminSubNav">Step 5: Assign Judges and Stewards to Tables</span>
 <?php if ((($action == "assign")  && ($id != "default")) || (($action == "default") && ($dbTable == "default"))) { ?>
 		<span class="adminSubNav">
         	<span class="icon"><img src="images/user_add.png" alt="Assign Judges/Stewards to Tables"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
@@ -120,7 +120,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php } // end if ($totalRows_tables > 0) ?>
 	<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 6</span>
+	<span class="adminSubNav">Step 6: Enter or Add Scores</span>
 	<span class="adminSubNav">
     	<span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
    	 	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
@@ -145,7 +145,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 	</span>
 </div>
 <div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 7</span>
+	<span class="adminSubNav">Step 7: Enter or Edit BOS Entries</span>
     <span class="adminSubNav">
 		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
@@ -153,7 +153,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
   	<?php } // end if (($totalRows_tables > 0) && ($dbTable == "default")) ?>
 <?php } // end if ($action == "default")?>
 <?php if ($action != "print") { ?>
-<?php if ($totalRows_judging > 1) { ?>
+<?php if (($totalRows_judging > 1) && ($dbTable == "default")) { ?>
 <table>
 	<td colspan="2" class="dataLabel">Total Entries by Location</th>
 	<?php do { ?>
@@ -362,7 +362,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
   </tbody>
 </table>
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update Table"; else echo "Add Table"; ?>"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if (($action == "add") || ($action == "edit")) ?>
 

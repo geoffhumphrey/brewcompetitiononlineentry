@@ -21,7 +21,9 @@ if ($action == "add") {
 		mysql_select_db($database, $brewing);
   		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
-	header(sprintf("Location: %s", $insertGoTo));	
+	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 }
 
 if ($action == "edit") {
@@ -59,7 +61,9 @@ if ($action == "edit") {
   			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
   	}
-	header(sprintf("Location: %s", $updateGoTo));
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 
 if ($action == "assign") {
@@ -99,6 +103,7 @@ if ($action == "assign") {
 		} while ($row_flights = mysql_fetch_assoc($flights));
 		}
  	}
-	header(sprintf("Location: %s", $updateGoTo));
-}
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));}
 ?>

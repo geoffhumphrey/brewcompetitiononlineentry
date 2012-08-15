@@ -94,7 +94,7 @@ else
         <td class="data" id="inf_email"><span class="required">Required</span></td>
   	</tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
 </form>
 <?php } else { 
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
@@ -105,8 +105,10 @@ if ($section != "admin") {
 ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
 <?php } 
-if ($section == "admin") echo "<h2>Add";
-if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>"; 
+if ($section == "admin") { 
+echo "<h2>Add";
+if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>";
+} 
 ?> 
 <form action="includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
@@ -258,6 +260,7 @@ if ($section != "admin") {
 	});
 </script>
 <input type="hidden" name="userLevel" value="2" />
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
 <input type="hidden" name="brewerSteward" value="N" />

@@ -30,7 +30,7 @@ function flight_round($tid,$flight,$round) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	// get the round where the flight is assigned to
-	$query_flight_round = sprintf("SELECT flightRound FROM % WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $tid, $flight);
+	$query_flight_round = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $tid, $flight);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
 	$row_flight_round = mysql_fetch_assoc($flight_round);
 	if ($row_flight_round['flightRound'] == $round) return TRUE; else return FALSE;
@@ -355,7 +355,7 @@ if (in_array($table_location,$locations)) {
 	<tr> 
     	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; //echo " - ".$row_brewer['id']; ?></td>
         <?php if ($filter == "judges") { ?>
-        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<div class='purple judge-alert' style='font-weight: normal; font-size: 1em;'>Certified Mead Judge</div>"; ?></td>
+        <td nowrap="nowrap"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>
         <td nowrap="nowrap"><?php if (($row_brewer['brewerJudgeID'] != "") && ($row_brewer['brewerJudgeID'] != "0")) echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
         <?php } ?>
 		<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
@@ -374,7 +374,7 @@ if (in_array($table_location,$locations)) {
 </tbody>
 </table>
 <p><input type="submit" class="button" name="Submit" value="Assign to Table #<?php echo $row_tables_edit['tableNumber']; ?>" /></p>
-<input type="hidden" name="relocate" value="<?php echo relocate("http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'],"default"); if ($msg != "default") echo "&id=".$id; ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); if ($msg != "default") echo "&id=".$id; ?>">
 </form>
 <?php
 //mysql_free_result($styles);

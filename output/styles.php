@@ -33,7 +33,7 @@ $totalRows_styles = mysql_num_rows($styles);
     <table>
 	<tr>
   	<td class="dataLabel">Filter By Style Name</td>
-  	<td class="data"><?php echo style_choose($section,"default","default",$filter,"index.php","none"); ?></td>
+  	<td class="data"><?php echo style_choose($section,"default","default",$filter,$view,"index.php","none"); ?></td>
     </tr>
   </table>
 <?php if ($totalRows_styles > 0) { ?>

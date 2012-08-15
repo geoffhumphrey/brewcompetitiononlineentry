@@ -46,7 +46,9 @@ if ($action == "enter") {
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
 		}
 	}
-	header(sprintf("Location: %s", $updateGoTo));
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 
 ?>

@@ -525,7 +525,9 @@ if ($action == "add") {
 	 else $insertGoTo = "../index.php?section=list&msg=1";
 	 
 	 // Finally, relocate
-	 header(sprintf("Location: %s", $insertGoTo));
+	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 } // end if ($action == "add")
 
 if ($action == "edit") {
@@ -844,7 +846,9 @@ if ($action == "edit") {
 	  elseif ((strstr($updateGoTo, "section=admin")) || (strstr($updateGoTo, "section=beerxml"))) $updateGoTo = $updateGoTo;
 	  else  $updateGoTo = "../index.php?section=list&msg=2";
 	 
-	 header(sprintf("Location: %s", $updateGoTo));
+	 	$pattern = array('\'', '"');
+  		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 
 } // end if ($action == "edit")
 

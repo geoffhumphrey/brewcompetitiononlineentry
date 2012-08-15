@@ -21,5 +21,5 @@
 </table>
 <p><input name="Submit" type="submit" class="button" value="Submit"></p>
 <input type="hidden" name="user_name" value="<?php echo $username; ?>">
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>

@@ -9,6 +9,6 @@ include ('current/alter_tables.php');
 // include ('current/data_updates_styles.php');
 include ('current/data_updates_brewing.php');
 include ('current/data_updates_misc.php');
-// include ('current/data_updates_archives.php');
+include ('current/data_updates_archives.php');
 	
 ?>

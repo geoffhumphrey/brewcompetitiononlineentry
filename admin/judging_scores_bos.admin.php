@@ -269,6 +269,6 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 </tbody>
 </table>
 <p><input type="submit" class="button" value="Enter"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default"); ?>">
+<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if ($id != "default"); ?>

@@ -151,7 +151,7 @@ if (($action == "update") && ($row_prefs['prefsCompOrg'] == "Y")) {
 			$updateSQL = "UPDATE $brewer_db_table SET brewerAssignment='O' WHERE id='".$id."';";
 		}
 		
-		else $updateSQL = "SELECT id from brewer WHERE id='".$id."';";
+		else $updateSQL = "SELECT id from $brewer_db_table WHERE id='".$id."';";
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	} 
 	
@@ -261,8 +261,10 @@ if ($action == "add") {
 		elseif ($_POST['brewerJudge'] == "Y") $insertGoTo = "../index.php?section=judge&go=judge";
 		elseif ($section == "admin") $insertGoTo = "../index.php?section=admin&go=participants&msg=1&username=".$username;
 		else $insertGoTo = $insertGoTo; 
-		
-	header(sprintf("Location: %s", $insertGoTo));
+	
+	$pattern = array('\'', '"');
+  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 	}
 } // end if ($action == "add")
 
@@ -351,6 +353,8 @@ if ($action == "edit") {
 	elseif ($go == "default") $updateGoTo = "../index.php?section=list&go=".$go."&filter=default&msg=2";
 	else $updateGoTo = $updateGoTo;
 	
-	header(sprintf("Location: %s", $updateGoTo));
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 ?>

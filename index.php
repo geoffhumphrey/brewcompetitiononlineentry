@@ -12,20 +12,24 @@ error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
 function check_setup($tablename, $database) {
-
+	require(CONFIG.'config.php');
+	/*
     if(!$database) {
         $res = mysql_query("SELECT DATABASE()");
         $database = mysql_result($res, 0);
     }
-
-    $res = mysql_query("
+	*/
+    $query_log = "
         SELECT COUNT(*) AS count 
         FROM information_schema.tables 
         WHERE table_schema = '$database' 
-        AND table_name = '$tablename'
-    ");
+        AND table_name = '$tablename'";
 
-    return mysql_result($res, 0) == 1;
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+
+    if ($row_log['count'] == 0) return FALSE;
+	else return TRUE;
 
 }
 
@@ -35,7 +39,7 @@ function check_setup($tablename, $database) {
 if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
 if (!check_setup($prefix."system",$database)) header ("Location: update.php");
 
-// If all setup has taken place, run normally
+// If all setup or update has taken place, run normally
 else 
 {
 require(INCLUDES.'functions.inc.php');
@@ -54,9 +58,10 @@ require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(DB.'entries.db.php');
-require(INCLUDES.'version.inc.php');
+//require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
+require(DB.'winners.db.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -150,11 +155,10 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
-		
+			
 		if ($row_user['userLevel'] == "1") {
 			if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
-			if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "user") 	include (SECTIONS.'user.sec.php');

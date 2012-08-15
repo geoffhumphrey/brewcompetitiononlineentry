@@ -31,7 +31,11 @@ WHERE id=%s",
 		header("location:../index.php?msg=$message"); 
 	}
 	
-	else header(sprintf("Location: %s", $updateGoTo));
+	else {
+	$pattern = array('\'', '"');
+  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
+	}
 }
 
 
