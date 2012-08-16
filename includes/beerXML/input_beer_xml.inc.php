@@ -31,6 +31,23 @@
 // +------------------------------------------------------------------------+
 //}}}
 
+function generate_judging_num($style_cat_num) {
+	// Generate the Judging Number each entry 
+	require('paths.php');
+	require(CONFIG.'config.php');
+	//require('../includes/url_variables.inc.php');
+	mysql_select_db($database, $brewing);
+	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
+	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
+	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
+	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
+	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $return = $style_cat_num."001";
+	else $return = $row_brewing_styles['brewJudgingNumber'] + 1;
+	return $return;
+}
+
+
+
 include ('parse_beer_xml.inc.php');
 //{{{ InputBeerXML
 class InputBeerXML {
@@ -206,19 +223,19 @@ class InputBeerXML {
 		
 		$vf["brewBrewerID"] = $_POST["brewBrewerID"];
 		$vf["brewConfirmed"] = "0";
+		$vf["brewJudgingNumber"] = generate_judging_num($vf["brewCategory"]);
 		
         foreach($vf as $field=>$value){
             $fields .= ", " . $field;
             $values .= ", '" . $value . "'";
         }
+		mysql_select_db($database, $brewing) or die(mysql_error());
         $fields .= ", brewUpdated";
         $fields .= ")";
 		$values .= ", NOW( )";
         $values .= ")";
-        $sqlQuery .= $fields . $values;
-        //echo $sqlQuery . "<br />";
-		//exit;
-        mysql_select_db($database, $brewing) or die(mysql_error());
+        $sqlQuery .= $fields . $values;        
+		
         $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());
 		$this->insertedRecipes[mysql_insert_id()] = $recipe->name;
 		//header("Location: ../../index.php?section=list");

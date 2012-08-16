@@ -133,7 +133,7 @@ function relocate($referer,$page,$msg,$id) {
 	$referer = stripslashes($referer);	
 	
 	// Reconstruct the URL
-	$reconstruct = "http://".$_SERVER['SERVER_NAME']."/index.php?".$referer;
+	$reconstruct = "http://".$_SERVER['SERVER_NAME'].$_SERVER['PATH_INFO']."/index.php?".$referer;
 	return $reconstruct;
 	
 }
@@ -1712,10 +1712,10 @@ function get_contact_count() {
 function brewer_info($bid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail'];
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid'];
 	return $r;
 }
 
@@ -2038,5 +2038,100 @@ function entries_no_special($user_id) {
 	
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
 }
+
+
+function data_integrity_check() {
+	// Match user emails against the record in the brewer table,
+	// Compare user's id against uid,
+	// If no match, replace uid with user's id
+	// This prevents "lost" entries in the system
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_user_check = sprintf("SELECT id,user_name FROM %s", $prefix."users");
+	$user_check = mysql_query($query_user_check, $brewing) or die(mysql_error());
+	$row_user_check = mysql_fetch_assoc($user_check);
+	
+	do { 
+	
+		// Get Brewer Info
+		$query_brewer = sprintf("SELECT id,uid,brewerEmail,brewerFirstName,brewerLastname FROM %s WHERE brewerEmail='%s'",$prefix."brewer",$row_user_check['user_name']);
+		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+		$row_brewer = mysql_fetch_assoc($brewer);
+		$totalRows_brewer = mysql_num_rows($brewer);
+		
+		// Check to see if info is matching up. If not...
+		if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1)) {
+			// ...Update to the correct uid
+			$updateSQL = sprintf("UPDATE %s SET uid='%s' WHERE id='%s'", $prefix."brewer", $row_user_check['id'], $row_brewer['id']);
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			// Change all associated entries to the correct uid (brewBrewerID row) in the "brewing" table
+			$query_brewer_entries = sprintf("SELECT id FROM %s WHERE brewBrewerLastName='%s' AND brewBrewerFirstName='%s'",$prefix."brewing",$row_brewer['brewerLastName'],$row_brewer['brewerLastName']);
+			$brewer_entries = mysql_query($query_brewer_entries, $brewing) or die(mysql_error());
+			$row_brewer_entries = mysql_fetch_assoc($brewer_entries);
+			$totalRows_brewer_entries = mysql_num_rows($brewer_entries);
+			
+			if ($totalRows_brewer_entries > 0) {
+				do {
+					$updateSQL = sprintf("UPDATE %s SET brewBrewerID='%s' WHERE id='%s'", $prefix."brewing", $row_brewer_entries['id'], $row_brewer['id']);
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
+			}
+			
+		} // end if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1))
+		
+		
+		// Delete user record if no record of the user's extended information is found in the "brewer" table
+		if ($totalRows_brewer == 0) {	
+			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_user_check['id']);
+  			$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());		
+			
+			// Check to see if there are entries under that uid. If so, delete.
+			$query_brewer_entries = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$row_user_check['id']);
+			$brewer_entries = mysql_query($query_brewer_entries, $brewing) or die(mysql_error());
+			$row_brewer_entries = mysql_fetch_assoc($brewer_entries);
+			$totalRows_brewer_entries = mysql_num_rows($brewer_entries);
+			
+			if ($totalRows_brewer_entries > 0) {
+				do {
+					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_brewer_entries['id']);
+					$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());		
+				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
+			}
+
+		} // end if ($totalRows_brewer == 0)
+		
+	} while ($row_user_check = mysql_fetch_assoc($user_check));
+	
+	
+	// Check if there are "blank" entries. If so, delete.
+	$query_blank = sprintf("SELECT id FROM %s WHERE 
+							 (brewStyle IS NULL OR brewStyle = '')
+							 AND 
+							 (brewCategory IS NULL OR brewCategory = '')
+							 AND 
+							 (brewCategorySort IS NULL OR brewCategorySort = '')
+							 AND 
+							 (brewBrewerID IS NULL OR brewBrewerID = '')
+							 ",$prefix."brewing");
+	$blank = mysql_query($query_blank, $brewing) or die(mysql_error());
+	$row_blank = mysql_fetch_assoc($blank);
+	$totalRows_blank = mysql_num_rows($blank);
+	
+	if ($totalRows_blank > 0) {
+		do {
+			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_blank['id']);
+			$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+		} while ($row_blank = mysql_fetch_assoc($blank));	
+	}
+	
+	// Last update the "system" table with the date/time the function ended
+	$updateSQL = sprintf("UPDATE %s SET data_check=%s WHERE id='1'", $prefix."system", "NOW( )");
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+} // END function
+
 
 ?>

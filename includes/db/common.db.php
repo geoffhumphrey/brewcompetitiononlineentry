@@ -5,12 +5,16 @@
 
 mysql_select_db($database, $brewing);
 
+$today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
+
 if (strstr($url['path'],"index.php")) { // only for version 1.2.1.0; REMOVE for subsequent version
-	$query_version = sprintf("SELECT version FROM %s WHERE id=1", $prefix."system");
+	$query_version = sprintf("SELECT * FROM %s WHERE id=1", $prefix."system");
 	$version = mysql_query($query_version, $brewing) or die(mysql_error());
 	$row_version = mysql_fetch_assoc($version);
 	$version = $row_version['version'];
+	$data_check_date = strtotime($row_version['data_check']); 
+	
 }
 
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");

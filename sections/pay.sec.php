@@ -31,7 +31,7 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 $total_not_paid = total_not_paid_brewer($row_user['id']);
 
 if ($total_entry_fees > 0) { 
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below. Please go to <a href='index.php?section=list'>your entry list</a> to confirm all your entry data.<br />Unconfirmed entry data will be deleted regularly.</div>";
+if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below. Please go to <a href='index.php?section=list'>your entry list</a> to confirm all your entry data.<br />Unconfirmed entry data will be deleted every 24 hours.</div>";
 ?>
 
 <p><span class="icon"><img src="images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/pay_my_fees.html" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>

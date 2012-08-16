@@ -8,7 +8,7 @@ require('../paths.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 //require(INCLUDES.'functions.inc.php');
-
+include(INCLUDES.'scrubber.inc.php');
 function check_http($input) {
 	if (($input != "") && (!strstr($input, "http://"))) $input = "http://".$input; else $input = $input;
 	return $input;
@@ -131,7 +131,7 @@ else {
 	$massUpdateGoTo = $_POST['relocate']."&msg=9";
 }
 
-$deleteGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id)."&msg=5";
+$deleteGoTo = $_SERVER['HTTP_REFERER']."&msg=5";
 
 //echo $insertGoTo;
 //echo $updateGoTo;
@@ -207,11 +207,11 @@ if ($dbTable == $prefix."judging_scores_bos") 	include_once (PROCESS.'process_ju
 
 if ($dbTable == $prefix."style_types") 			include_once (PROCESS.'process_style_types.inc.php');
 
-// --------------------------- Custom Winning Category Info ------------------------------- //
+// --------------------------- Custom Winner Category Info ------------------------------- //
 
 if ($dbTable == $prefix."special_best_info") 	include_once (PROCESS.'process_special_best_info.inc.php');
 
-// --------------------------- Custom Winning Category Entries ------------------------------- //
+// --------------------------- Custom Winner Category Entries ------------------------------- //
 
 if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
 
@@ -271,8 +271,8 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-if ($go == "hidden") $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); 
-else $updateGoTo = relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id)."&msg=14";
+if ($go == "hidden") $updateGoTo = "../index.php"; 
+else $updateGoTo = "../index.php?section=admin&msg=14";
 header(sprintf("Location: %s", $updateGoTo));		
 }
 

@@ -4,9 +4,11 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "special_best_info" table
  */
 
+
+
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank) VALUES (%s, %s, %s, %s)",
-					   GetSQLValueString($_POST['sbi_name'], "text"),
+					   GetSQLValueString(strtr($_POST['sbi_name'],$html_string), "text"),
 					   GetSQLValueString($_POST['sbi_description'], "text"),
 					   GetSQLValueString($_POST['sbi_places'], "int"),
 					   GetSQLValueString($_POST['sbi_rank'], "int")
@@ -21,7 +23,7 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	$updateSQL = sprintf("UPDATE $special_best_info_db_table SET sbi_name=%s, sbi_description=%s, sbi_places=%s, sbi_rank=%s WHERE id=%s",
-					   GetSQLValueString($_POST['sbi_name'], "text"),
+					   GetSQLValueString(strtr($_POST['sbi_name'],$html_string), "text"),
 					   GetSQLValueString($_POST['sbi_description'], "text"),
 					   GetSQLValueString($_POST['sbi_places'], "int"),
 					   GetSQLValueString($_POST['sbi_rank'], "int"),

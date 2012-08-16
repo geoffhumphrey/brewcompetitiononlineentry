@@ -210,6 +210,7 @@ switch($section) {
 	if ($msg == "default") { 
 	if ($totalRows_styles < 98) $output_extend = "<div class='info'>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles. To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
 	}
+	if ($msg == "1") $output = "Your entry has been recorded.";
 	if ($msg == "2") $output = "Your entry has been confirmed.";
 	break;
 

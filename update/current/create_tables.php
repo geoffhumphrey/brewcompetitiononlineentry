@@ -4,12 +4,18 @@
 //   Table to house system data.
 // -----------------------------------------------------------
 
-$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."system` (`id` int(11) NOT NULL AUTO_INCREMENT, `version` varchar(12) DEFAULT NULL, `version_date` date DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM;";
+$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."system` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version` varchar(12) DEFAULT NULL,
+  `version_date` date DEFAULT NULL,
+  `data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`) VALUES (1, '1.2.1.0', '2012-08-01');";
+$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`,`data_check`) VALUES (1, '1.2.1.0', '2012-08-31', NOW( ));";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";

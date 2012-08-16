@@ -102,7 +102,11 @@ if (($action == "update") && ($row_prefs['prefsCompOrg'] == "N")) {
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 	} 
-if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
+if($result1){ 
+	$pattern = array('\'', '"');
+	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+	header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));  
+}
 }
 
 if (($action == "update") && ($row_prefs['prefsCompOrg'] == "Y")) {
@@ -175,7 +179,11 @@ if (($action == "update") && ($row_prefs['prefsCompOrg'] == "Y")) {
 		}
 	}
 	
-	if($result1){ header(sprintf("Location: %s", $massUpdateGoTo));  }
+	if($result1){ 
+	$pattern = array('\'', '"');
+  	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+	header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));  
+	}
 }
 
 // --------------------------------------- Adding a Participant ----------------------------------------
