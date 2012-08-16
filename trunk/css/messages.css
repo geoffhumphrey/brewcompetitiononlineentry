@@ -56,6 +56,21 @@
 	-moz-border-radius: 5px;
 }
 
+.error2 {
+	color: #C13100;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 0 0 1em 0;
+	padding: .5em .5em .5em 2.2em;
+	background-image: url(../images/error.png);
+	background-position:.5em;
+	background-repeat: no-repeat;
+	background-color: #FFFBD0;
+	border: 1px solid #C13100;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
 .required {
 	color: #FF0000;
 	padding: .25em .5em .25em 1.7em;
