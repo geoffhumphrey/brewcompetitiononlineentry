@@ -14,6 +14,7 @@ include(DB.'dropoff.db.php');
 include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
 if (($section == "admin") && ($go == "default")) { 
+$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 function total_discount() { 
 	require(CONFIG.'config.php');
 	
@@ -51,7 +52,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 	</tr>
     <tr>
 		<td class="dataLabel"><a href="index.php?section=admin&amp;go=entries">Entries</a> (Confirmed/Unconfirmed):</td>
-        <td class="data"><?php echo $totalRows_log_confirmed."/".$totalRows_entry_count; ?></td>
+        <td class="data"><?php echo $totalRows_log_confirmed."/".$entries_unconfirmed; ?></td>
 		<td class="dataLabel">Total Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
         <td class="dataLabel"><a href="index.php?section=admin&amp;go=participants">Total Participants</a>:</td>

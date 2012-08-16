@@ -595,6 +595,8 @@ textarea {
 }
 
 .at-a-glance {
+	background-color: #BFCAB2;
+	border: 1px solid #1A2A00;
 }
 
 /* --------------------- menus.css Overrides -------------------- */

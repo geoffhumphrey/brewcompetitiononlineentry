@@ -61,62 +61,62 @@ function capitalize($string) {
 	$capitalize = ucwords($lowercase);
 	return $capitalize;
 }
-
-function relocate($referer,$page,$msg,$id) {
-	// Break URL into an array
-	$parts = parse_url($referer);
-	$referer = $parts['query'];	
+if ($action != "purge") {
+	function relocate($referer,$page,$msg,$id) {
+		// Break URL into an array
+		$parts = parse_url($referer);
+		$referer = $parts['query'];	
+		
+		// Remove $msg=X from query string
+		$pattern = array("/[0-9]/", "/&msg=/");
+		$referer = preg_replace($pattern, "", $referer);
 	
-	// Remove $msg=X from query string
-	$pattern = array("/[0-9]/", "/&msg=/");
-	$referer = preg_replace($pattern, "", $referer);
-
-	// Remove $id=X from query string
-	$pattern = array("/[0-9]/", "/&id=/");
-	$referer = preg_replace($pattern, "", $referer);
-	
-	// Remove $pg=X from query string and add back in
-	if ($page != "default") { 
-		$pattern = array("/[0-9]/", "/&pg=/");
+		// Remove $id=X from query string
+		$pattern = array("/[0-9]/", "/&id=/");
+		$referer = preg_replace($pattern, "", $referer);
+		
+		// Remove $pg=X from query string and add back in
+		if ($page != "default") { 
+			$pattern = array("/[0-9]/", "/&pg=/");
+			$referer = str_replace($pattern,"",$referer);
+			$referer .= "&pg=".$page; 
+		}
+		$string = strpos($referer,"?");
+		if ($string === false) $referer = $referer."?";
+		$pattern = array('\'', '"');
 		$referer = str_replace($pattern,"",$referer);
-		$referer .= "&pg=".$page; 
+		$referer = stripslashes($referer);
+		return $referer;
 	}
-	$string = strpos($referer,"?");
-	if ($string === false) $referer = $referer."?";
-	$pattern = array('\'', '"');
-	$referer = str_replace($pattern,"",$referer);
-	$referer = stripslashes($referer);
-	return $referer;
-}
 
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
-{
-  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
-  require ('scrubber.inc.php');
-  switch ($theType) {
-  
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-	case "scrubbed":
-	  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
-  }
-  return $theValue;
+	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+	{
+	  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
+	  require ('scrubber.inc.php');
+	  switch ($theType) {
+	  
+		case "text":
+		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  break;    
+		case "long":
+		case "int":
+		  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+		  break;
+		case "double":
+		  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
+		  break;
+		case "date":
+		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  break;
+		case "defined":
+		  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+		  break;
+		case "scrubbed":
+		  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
+	  }
+	  return $theValue;
+	}
 }
-
 // Script Specific Variables
 
 if (strpos($_POST['relocate'],"?") === false) { 
@@ -217,9 +217,16 @@ if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_spe
 
 // --------------------------- Various Actions ------------------------------- //
 
-if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php'); 
+if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php');
 
 if ($action == "beerxml")				include_once (PROCESS.'process_beerxml.inc.php');
+
+if ($action == "purge") {
+	require(INCLUDES.'functions.inc.php');
+	purge_entries("unconfirmed", 0);
+	purge_entries("special", 0); 
+	header(sprintf("Location: %s", "../index.php?section=admin&go=entries&purge=true"));
+}
 
 if ($action == "check_discount") {
 	

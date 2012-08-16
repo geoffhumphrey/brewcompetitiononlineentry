@@ -1,13 +1,7 @@
 <?php
 //include(DB.'entries.db.php');
 if ($purge == "true") {
-// Automatically purge all unconfirmed entries
-purge_entries("unconfirmed", 0);
-
-// Purge entries without defined special ingredients designated to particular styles that require them
-purge_entries("special", 0);
-
-if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been deleted from the database</div>";
+echo "<div class='error'>All unconfirmed entries have been deleted from the database</div>";
 }
 
 if (($registration_open == "1") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>If your competition awards strata is for the overall category only, select the placing entry's category and leave the subcategory blank.</div>"; 
@@ -62,23 +56,19 @@ if (($registration_open == "1") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
     <span class="icon"><img src="images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,$view,"index.php","none"); ?></span>
     <?php if (($totalRows_log - $totalRows_log_confirmed) > 0) { ?>
   	<span class="adminSubNav">
-    <span class="icon"><img src="images/exclamation.png"  /></span><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $filter; ?>&amp;purge=true" onclick="return confirm('Are you sure? This will delete all unconfirmed entries in the database - even those that are less than 24 hours old. This cannot be undone.');">Purge Unconfirmed Entries</a> from the Database?</span>
+    <span class="icon"><img src="images/exclamation.png"  /></span><a href="includes/process.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete all unconfirmed entries in the database - even those that are less than 24 hours old. This cannot be undone.');">Purge Unconfirmed Entries</a> from the Database?
+    </span>
     <?php } ?>
 </div>
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 
-/*
-$total_fees = total_fees($bid, $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
-$total_fees_paid = total_fees_paid($bid, $row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $filter);
-$total_fees_unpaid = ($total_fees - $total_fees_paid);
-*/
 if (($filter == "default") && ($bid == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 ?>
 <table class="dataTable">
 <?php if ($entries_unconfirmed > 0) { ?>
 <tr>
-   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are marked in <span class="yellow" style="padding: 2px 5px 2px 5px; border: 1px solid #F90;">yellow</span> and are not included in fee calculations. Entries over 24 hours old will be automatically deleted. Or, <a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $filter; ?>&amp;purge=true" onclick="return confirm('Are you sure? This will delete all unconfirmed entries in the database - even those that are less than 24 hours old. This cannot be undone.');">you can delete them now</a>.</td>
+   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are marked in <span class="yellow" style="padding: 2px 5px 2px 5px; border: 1px solid #F90;">yellow</span> and are not included in fee calculations.</td>
 </tr>
 <?php } ?>
 <tr>

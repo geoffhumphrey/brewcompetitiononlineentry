@@ -549,7 +549,8 @@ textarea {
 }
 
 .at-a-glance {
-
+	background-color: #bec8d8;
+	border: 1px solid #394a59;
 }
 
 /* --------------------- menus.css Overrides -------------------- */
