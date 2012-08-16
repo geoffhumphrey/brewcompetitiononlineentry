@@ -98,7 +98,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
       <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
       <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete <?php echo $row_sbd['brewName'] ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbd['brewName']; ?>" title="Delete <?php echo $row_sbd['brewName']; ?>"></a></span>
+      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
       </td>
      </tr>
     <?php
@@ -133,7 +133,7 @@ if (($action == "add") || ($action == "edit")) { ?>
   <input type="hidden" name="id[]" value="<?php echo $row_sbd['id']; ?>" />
   <input type="hidden" name="bid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['bid']; ?>" />
   <input type="hidden" name="eid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['eid']; ?>" />
-  
+  <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
   <tr>
     <td class="dataLabel"><?php echo $row_sbi['sbi_name']; ?> Winning Entry Judging Number:</td>
@@ -145,7 +145,6 @@ if (($action == "add") || ($action == "edit")) { ?>
     <td class="dataLabel">Brewer:</td>
 	<td class="data"><?php $info = explode("^", brewer_info($row_sbd['bid'])); echo $info[0]." ".$info[1]; ?></td>
   </tr>
-  <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   	<?php } while($row_sbd = mysql_fetch_assoc($sbd)); 
 	
 	if ($totalRows_sbd < $row_sbi['sbi_places']) {

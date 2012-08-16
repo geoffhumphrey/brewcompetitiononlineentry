@@ -66,7 +66,7 @@ if ($_FILES['userfile']) {
     $_SESSION['recipes'] = $recipes;
    }
 
-   print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=". htmlentities($message) . "&inserted=true'</script>";
+   print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=1</script>";
 }
 else if (!$_FILES['userfile']) $message = "userfile check failed";
 else
@@ -76,7 +76,7 @@ else
 
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php 
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='index.php?section=list'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted regularly.</div>";
+if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='index.php?section=list'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
 
 //$return = "index.php?section=brew&action=edit&id=".$row_entry_check['id']."&msg=10";
 //echo $return;	

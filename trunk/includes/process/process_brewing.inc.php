@@ -873,6 +873,8 @@ if ($action == "update") {
 		//echo $updateSQL."<br>";
 	} 
 	//echo $massUpdateGoTo;
-	header(sprintf("Location: %s", $_POST['relocate']."&msg=9")); 
+	$pattern = array('\'', '"');
+  	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+	header(sprintf("Location: %s", $massUpdateGoTo)); 
 } // end if ($action == "update")
 ?>

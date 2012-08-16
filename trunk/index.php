@@ -43,15 +43,6 @@ if (!check_setup($prefix."system",$database)) header ("Location: update.php");
 else 
 {
 require(INCLUDES.'functions.inc.php');
-// check to see if all judging numbers have been generated. If not, generate
-if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
-
-// Automatically purge all unconfirmed entries
-purge_entries("unconfirmed", 1);
-
-// Purge entries without defined special ingredients designated to particular styles that require them
-purge_entries("special", 1);
-
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
@@ -62,6 +53,19 @@ require(DB.'entries.db.php');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
 require(DB.'winners.db.php');
+
+
+// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
+if ($today > ($data_check_date + 86400)) data_integrity_check();
+
+// check to see if all judging numbers have been generated. If not, generate
+if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
+
+// Automatically purge all unconfirmed entries
+purge_entries("unconfirmed", 1);
+
+// Purge entries without defined special ingredients designated to particular styles that require them
+purge_entries("special", 1);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

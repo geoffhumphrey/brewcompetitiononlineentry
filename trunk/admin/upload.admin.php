@@ -51,7 +51,7 @@ if ($_REQUEST[del] && $DELETABLE)  {
   else if (strpos($_REQUEST[del],$upload_dir) === false);  // possible hacking
   else if (substr($_REQUEST[del],0,6)==$upload_dir) {
     unlink($_REQUEST[del]);
-    print "<script>window.location.href='?action=upload&amp;section=".$section."&message=". htmlentities($message) . "&inserted=true'</script>";
+    print "<script>window.location.href='?action=upload&amp;section=".$section."</script>";
   }
 }
 else if ($_FILES['userfile']) {

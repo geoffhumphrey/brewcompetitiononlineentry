@@ -4,6 +4,24 @@
  * Description: This module does all the heavy lifting for all DB deletes: new entries,
  *              new users, organization, etc.
  */
+if ($go == "special_best") {
+	mysql_select_db($database, $brewing);
+	
+	$query_delete_assign = sprintf("SELECT id FROM $special_best_data_db_table WHERE sid='%s'", $id);
+	$delete_assign = mysql_query($query_delete_assign, $brewing) or die(mysql_error()); 
+	$row_delete_assign = mysql_fetch_assoc($delete_assign);
+	$totalRows_delete_assign = mysql_num_rows($delete_assign);
+	if ($totalRows_delete_assign > 0) {
+		do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysql_fetch_assoc($delete_assign));
+	
+		foreach ($z as $aid) {
+		$deleteAssign = sprintf("DELETE FROM $special_best_data_db_table WHERE id='%s'", $aid);
+		//echo $deleteAssign."<br>";
+		$Result = mysql_query($deleteAssign, $brewing) or die(mysql_error());
+		}
+	}
+	
+}
 
 if ($go == "judging_location") {
   // remove relational location ids from affected rows in brewer's table
@@ -117,7 +135,7 @@ if ($go == "judging_tables") {
 	$totalRows_delete_assign = mysql_num_rows($delete_assign);
 	
 	if ($totalRows_delete_assign > 0) {
-		do { $z[] = $row_delete_assign['id']; } while (mysql_fetch_assoc($delete_assign));
+		do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysql_fetch_assoc($delete_assign));
 	
 		foreach ($z as $aid) {
 		$deleteAssign = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $aid);
