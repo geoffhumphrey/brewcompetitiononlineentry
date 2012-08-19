@@ -90,8 +90,7 @@ if ($totalRows_bos > 0) {
 	  } 
     }
   }
-  
-  require(DB.'winners.db.php');
+
   if ($totalRows_sbi > 0) {	
   
   	do {
@@ -100,7 +99,7 @@ if ($totalRows_bos > 0) {
 		$row_sbd = mysql_fetch_assoc($sbd);
 		$totalRows_sbd = mysql_num_rows($sbd);
 		
-			$html .= '<br><br><strong>'.$row_sbi['sbi_name'].'</strong><br>';
+			$html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
 			$html .= '<br>'.strtr($row_sbi['sbi_description'],$html_remove).'<br>';
 			$html .= '<table border="1">';
 			$html .= '<tr>';
@@ -178,7 +177,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 			$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
 			$html .= '</tr>';
 		 
-			$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID AND a.scorePlace IS NOT NULL ORDER BY a.scorePlace", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+			$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
 			$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 			$row_scores = mysql_fetch_assoc($scores);
 			$totalRows_scores = mysql_num_rows($scores);
@@ -201,7 +200,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 				$html .= '</tr>';
 			} while ($row_scores = mysql_fetch_assoc($scores));
 			$html .= '</table>';
-			} else echo "<p>No winners were reported for this category.</p>";
+			} 
 		} 
 	} // end if ($row_prefs['prefsWinnerMethod'] == "1") 
 	
@@ -219,8 +218,6 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 			$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 			$row_entry_count = mysql_fetch_assoc($entry_count);
 			
-			echo $row_entry_count['count'];
-			
 			$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
 			$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 			$row_score_count = mysql_fetch_assoc($score_count);
@@ -236,7 +233,8 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 			$html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>Club</strong></td>';
 			$html .= '</tr>';
 		 
-			$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.id = b.brewBrewerID AND a.scorePlace IS NOT NULL ORDER BY a.scorePlace", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
+			
+			$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
 			$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 			$row_scores = mysql_fetch_assoc($scores);
 			$totalRows_scores = mysql_num_rows($scores);
@@ -259,7 +257,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 				$html .= '</tr>';
 			} while ($row_scores = mysql_fetch_assoc($scores));
 			$html .= '</table>';
-			} else echo "<p>No winners were reported for this category.</p>";
+			} 
 		}
 		
 	}
@@ -303,7 +301,7 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 				//	mysql_free_result($entries);
 				} while ($row_scores = mysql_fetch_assoc($scores));
 				$html .= '</table>';
-			} else echo "<p>No winners have been reported for this category.</p>"; // end if ($entry_count > 0);
+			} 
 		} while ($row_tables = mysql_fetch_assoc($tables));
 	} // end 
 

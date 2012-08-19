@@ -5,6 +5,7 @@
  *              show results.
  * 
  */
+require(DB.'winners.db.php');
 ?> 
 
 <?php 
@@ -71,11 +72,11 @@ if ($action == "print") {
 <tbody>
 	<?php do { 	?>
 	<tr>
-        <td class="data"><?php if ($action != "print") echo display_place($row_bos['scorePlace'],2); else echo display_place($row_bos['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_bos['brewerFirstName']." ".$row_bos['brewerLastName']; if ($row_bos['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_bos['brewCoBrewer']; ?></td>
-        <td class="data"><?php echo $row_bos['brewName']; ?></td>
-        <td class="data"><?php echo $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle']; ?></td>
-        <td class="data"><?php echo $row_bos['brewerClubs']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php if ($action != "print") echo display_place($row_bos['scorePlace'],2); else echo display_place($row_bos['scorePlace'],1); ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_bos['brewerFirstName']." ".$row_bos['brewerLastName']; if ($row_bos['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_bos['brewCoBrewer']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_bos['brewName']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_bos['brewerClubs']; ?></td>
     </tr>
     <?php } while ($row_bos = mysql_fetch_assoc($bos)); ?>
 </tbody>
@@ -130,8 +131,7 @@ $random = random_generator(6,2);
         <th class="dataList bdr1B" width="20%">Brewer(s)</th>
         <th class="dataList bdr1B" width="20%">Entry Name</th>
         <th class="dataList bdr1B" width="20%">Style</th>
-        <th class="dataList bdr1B" width="20%">Comments</th>
-        <th class="dataList bdr1B" width="19%">Club</th>
+        <th class="dataList bdr1B">Club</th>
     </tr>
 </thead>
 <tbody>
@@ -141,12 +141,11 @@ $random = random_generator(6,2);
 	$style = $entry_info['5'].$entry_info['2'];
 	?>
 	<tr>
-        <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data"><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],4); ?></td><?php } ?>
-        <td class="data"><?php echo $brewer_info['0']." ".$brewer_info['1']; if ($row_entries['brewCoBrewer'] != "") echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
-        <td class="data"><?php echo $entry_info['0']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($entry_info['1'],1).": ".$entry_info['3']; ?></td>
-        <td class="data"><?php echo $row_sbd['sbd_comments']; ?></td>
-        <td class="data"><?php echo $brewer_info['7']; ?></td>    
+        <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],4); ?></td><?php } ?>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $brewer_info['0']." ".$brewer_info['1']; if ($row_entries['brewCoBrewer'] != "") echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $entry_info['0']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $style." ".style_convert($entry_info['1'],1).": ".$entry_info['3']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $brewer_info['8']; ?></td>    
     </tr>
     <?php } while ($row_sbd = mysql_fetch_assoc($sbd)); ?>
 </tbody>

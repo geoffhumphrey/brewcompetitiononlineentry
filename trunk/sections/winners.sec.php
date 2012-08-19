@@ -9,6 +9,7 @@
 // If using BCOE for comp organization, display winners by table
 if ($row_prefs['prefsCompOrg'] == "Y") { 
 	do { 
+	if ($entry_count > 0) { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 	if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
 	if (score_count($row_tables['id'],"1"))	{
@@ -23,10 +24,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		?>
         </div>
 	</div>
-    	<?php } 
-	if ($entry_count > 0) { 
-	
-	?>
+    <?php } ?>
     
     
      <script type="text/javascript" language="javascript">
@@ -66,8 +64,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
     <tbody>
     <?php 
 		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $row_tables['id']);
-		if (($action == "print") && ($view == "winners")) $query_scores .= " AND a.scorePlace IS NOT NULL";
-		if (($action == "default") && ($view == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
+		if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 		$query_scores .= " ORDER BY a.scorePlace";
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
@@ -77,21 +74,22 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 	?>
     <tr>
-        <td class="data"><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
-        <td class="data"><?php echo $row_scores['brewName']; ?></td>
-        <td class="data"><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
-        <td class="data"><?php echo $row_scores['brewerClubs']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewName']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewerClubs']; ?></td>
         <?php if ($filter == "scores") { ?>
-        <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['scoreEntry']; ?></td>
         <?php } ?>
     </tr>
     <?php } while ($row_scores = mysql_fetch_assoc($scores)); ?>
     </tbody>
     </table>
     <?php 
-			} // end if ($entry_count > 0);
-		} else echo "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet. Please check back later.</p>";
- 	} while ($row_tables = mysql_fetch_assoc($tables));
+			} else echo "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet. Please check back later.</p>";
+ 		} // end if ($entry_count > 0);
+	} while ($row_tables = mysql_fetch_assoc($tables));
 } 
+else echo "<p>Preferences are not set to display winners.</p>";
 ?>

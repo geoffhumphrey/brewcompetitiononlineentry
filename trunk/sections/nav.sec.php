@@ -259,9 +259,9 @@ if (strstr($section,"step")) { ?>
 <?php if ($totalRows_tables > 0) { ?>
 	<a id="modal_window_link" class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Pullsheets for All Tables">Pullsheets for All Tables</a>
 	<a id="modal_window_link" class="menuItem" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards for All Tables">Table Cards for All Tables</a>
-	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-    <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Judging Assignments by Last Name">Judging Assignments by Last Name</a>
-<?php } ?>
+	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Judging Assignments by Last Name">Judge Assignments by Last Name</a>
+    <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Judging Assignments by Last Name">Steward Assignments by Last Name</a>
+    <?php } ?>
     <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Judge Sign-in Sheet">Judge Sign-in Sheet</a>
 	<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" title="Steward Sign-in Sheet">Steward Sign-in Sheet</a>
     <a class="menuItem" href="output/labels.php?section=admin&go=participants&action=judging_labels">Judge Scoresheet Labels (All)</a>
@@ -273,10 +273,10 @@ if (strstr($section,"step")) { ?>
 <?php } ?>
 <div id="adminMenu_Printing_After" class="menu">
 	<?php if ($totalRows_tables > 0) { ?>
-	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default" title="Print Results by Table With Scores (All)">Results by Table With Scores (All)</a>
-	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners" title="Print Results by Table With Scores (Winners Only)">Results by Table With Scores (Winners Only)</a>
-    <a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default" title="Print Results by Table Without Scores (All)">Results by Table Without Scores (All)</a>
-	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners" title="Print Results by Table Without Scores (Winners Only)">Results by Table Without Scores (Winners Only)</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=default" title="Print Results by Table With Scores (All)">Results <?php $method = winner_method($row_prefs['prefsWinnerMethod'],1); ?> With Scores (All)</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=scores&amp;view=winners" title="Print Results by Table With Scores (Winners Only)">Results <?php echo $method; ?> With Scores (Winners Only)</a>
+    <a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=default" title="Print Results by Table Without Scores (All)">Results <?php echo $method; ?> Without Scores (All)</a>
+	<a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=winners" title="Print Results by Table Without Scores (Winners Only)">Results <?php echo $method; ?> Without Scores (Winners Only)</a>
     <a id="modal_window_link" class="menuItem" href="output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=default&amp;filter=bos&amp;view=default" title="Print BOS Round(s) Results Report">BOS Round(s) Results Report</a>
 	<a id="modal_window_link" class="menuItem" href="output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" title="Print BJCP Judge/Steward/Staff Points Report">BJCP Judge/Steward/Staff Points Report</a>
 	<?php if ($row_scores['count'] > 0) { ?>

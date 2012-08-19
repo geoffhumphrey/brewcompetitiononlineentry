@@ -119,7 +119,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 }
 </script>
 <?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id,$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'])."</p>"; ?>
-<p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo $flight_count; ?> flights. For each entry below, designate the flight in which it will be judged.</p>
+<p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo readable_number($flight_count); ?> flights. For each entry below, designate the flight in which it will be judged.</p>
 <form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
 <thead>
