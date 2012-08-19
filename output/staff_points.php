@@ -77,6 +77,7 @@ function total_points($total_entries,$method) {
 function judge_points($bid,$bos) { 
 	session_start(); 
 	require('../paths.php'); 
+	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 1.0 points per competition	
@@ -84,7 +85,7 @@ function judge_points($bid,$bos) {
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 1.0; 
@@ -92,7 +93,9 @@ function judge_points($bid,$bos) {
 	}
 	
 	$points = array_sum($b);
-	if ($bos == "Y") $points = $points + 0.5; else $points = $points;
+	if (($bos == "Y") && ($points >= .5)) $points = $points + 0.5; 
+	if (($bos == "Y") && ($points < .5)) $points = 1.0; 
+	else $points = $points;
 	return number_format($points,1);
 	
 }
@@ -101,6 +104,7 @@ function judge_points($bid,$bos) {
 function steward_points($bid) {
 	session_start(); 
 	require('../paths.php'); 
+	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
 	
 	// *minimum* of 0.5 points per day	
@@ -108,7 +112,7 @@ function steward_points($bid) {
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $prefix."judging_assignments", $bid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 0.5; 

@@ -49,6 +49,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
+<?php echo winner_method($row_prefs['prefsWinnerMethod'],2); ?> 
 </div>
  <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
@@ -63,11 +64,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"sDom": 'ipfrtip',
 			"bStateSave" : false,
 			<?php if ($filter == "category") { ?>
-			"aaSorting": [[4,'asc'],[5,'desc'],[6,'asc']],
+			"aaSorting": [[4,'asc'],[6,'asc'],[5,'desc']],
 			<?php } elseif ($dbTable != "default") { ?>
 			"aaSorting": [[2,'asc'],[8,'asc']],
 			<?php } else { ?>
-			"aaSorting": [[2,'asc'],[5,'desc'],[6,'asc']],
+			"aaSorting": [[2,'asc'],[6,'asc'],[5,'desc']],
 			<?php } ?>
 			"bProcessing" : true,
 			"aoColumns": [

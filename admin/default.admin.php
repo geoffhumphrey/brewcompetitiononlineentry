@@ -13,6 +13,7 @@ include(DB.'stewarding.db.php');
 include(DB.'dropoff.db.php'); 
 include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
+
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 function total_discount() { 
@@ -458,12 +459,12 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			<p class="admin_default_header">After Judging</p>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
-				<li>Results Report by Table (with Scores):</li>
+				<li>Results Report <?php echo $method; ?> (with Scores):</li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report by Table (Winners Only with Scores)">Print (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
-				<li>Results Report by Table (without Scores):</li>
+				<li>Results Report by <?php echo $method; ?> (without Scores):</li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report by Table (All with Scores)">Print (All)</a></li>
 				<li><a id="modal_window_link" href="output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report by Table (Winners Only without Scores)">Print (Winners Only)</a></li>
 				<li><a href="output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>

@@ -278,14 +278,14 @@ if ($action == "add") {
 
 // --------------------------------------- Editing a Participant ----------------------------------------
 if ($action == "edit") {
-	if ($totalRows_judging > 1) {  
-	if (($_POST['brewerJudgeLocation'] != "") && (!strstr($_POST['brewerJudgeLocation'],","))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']); 
-	elseif (($_POST['brewerJudgeLocation'] != "") && (strstr($_POST['brewerJudgeLocation'],","))) $location_pref1 = $_POST['brewerJudgeLocation']; 
-	else $location_pref1 = "";
-	if (($_POST['brewerStewardLocation'] != "") && (!strstr($_POST['brewerStewardLocation'],","))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']); 
-	elseif (($_POST['brewerJudgeLocation'] != "") && (strstr($_POST['brewerStewardLocation'],","))) $location_pref2 = $_POST['brewerStewardLocation'];
-	else $location_pref2 = "";
-} 
+        if ($totalRows_judging > 1) {
+        if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+        else $location_pref1 = "";
+        if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+        else $location_pref2 = "";
+}
 	else { 
 		$location_pref1 = $_POST['brewerJudgeLocation'];
 		$location_pref2 = $_POST['brewerStewardLocation'];

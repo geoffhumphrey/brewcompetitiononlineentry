@@ -26,7 +26,7 @@ include(DB.'judging_locations.db.php'); ?>
 <h2>Entries</h2>
 <p>Entries will be accepted between <?php echo $entry_open; ?> and <?php echo $entry_closed; ?>. All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php echo $entry_closed; ?> and will not be accepted after this date/time. For details, see the <a href="index.php?section=entry">Entry Information</a> page.</p> 
 <?php if ($row_prefs['prefsEntryLimit'] != "") { ?>
-<p>There is a limit of <?php echo $row_prefs['prefsEntryLimit']; ?> entries for this competition.</p>
+<p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.</p>
 <?php } ?>
 
 <?php if ($registration_open == "1") { ?>

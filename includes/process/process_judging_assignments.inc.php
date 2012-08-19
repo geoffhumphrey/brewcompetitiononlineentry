@@ -120,20 +120,6 @@ if ($action == "update") {
 			}
 		} // end foreach	  
  }  // end if ($row_judging_prefs['jPrefsQueued'] == "Y")
-
-$pattern = array('\'', '"');
-$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-header(sprintf("Location: %s", stripslashes($updateGoTo)));
+header(sprintf("Location: %s", "http://".$_SERVER['SERVER_NAME'].$_SERVER['PATH_INFO']."/index.php?section=admin&go=judging_tables"));
 }
-
-if ($action == "add") {
-			   
-	
-}
-
-if ($action == "edit") {
-	
-}
-
-
 ?>

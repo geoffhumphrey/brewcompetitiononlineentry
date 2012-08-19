@@ -1712,10 +1712,10 @@ function get_contact_count() {
 function brewer_info($bid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid'];
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid']."^".$row_brewer_info['brewerClubs'];
 	return $r;
 }
 
@@ -2044,7 +2044,9 @@ function data_integrity_check() {
 	// Match user emails against the record in the brewer table,
 	// Compare user's id against uid,
 	// If no match, replace uid with user's id
-	// This prevents "lost" entries in the system
+	// Search for "blanks" in the brewing and delete them
+	// Search for "blanks" in the brewer table and delete them
+	// This prevents "blank" entries and users in the system
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -2079,7 +2081,7 @@ function data_integrity_check() {
 					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
 			}
-			
+			mysql_free_result($brewer_entries);
 		} // end if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1))
 		
 		
@@ -2100,11 +2102,10 @@ function data_integrity_check() {
 					$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());		
 				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
 			}
-
+			mysql_free_result($brewer_entries);
 		} // end if ($totalRows_brewer == 0)
-		
+		mysql_free_result($brewer);
 	} while ($row_user_check = mysql_fetch_assoc($user_check));
-	
 	
 	// Check if there are "blank" entries. If so, delete.
 	$query_blank = sprintf("SELECT id FROM %s WHERE 
@@ -2127,11 +2128,103 @@ function data_integrity_check() {
 		} while ($row_blank = mysql_fetch_assoc($blank));	
 	}
 	
+	
+	// Check if there are "blanks" in the brewer table. If so, delete.
+	$query_blank1 = sprintf("SELECT id FROM %s WHERE 
+							 (brewerFirstName IS NULL OR brewerFirstName = '')
+							 AND 
+							 (brewerLastName IS NULL OR brewerLastName = '')
+							 ",$prefix."brewer");
+	$blank1 = mysql_query($query_blank1, $brewing) or die(mysql_error());
+	$row_blank1 = mysql_fetch_assoc($blank1);
+	$totalRows_blank1 = mysql_num_rows($blank1);
+	
+	if ($totalRows_blank1 > 0) {
+		do {
+			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewer", $row_blank1['id']);
+			$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+		} while ($row_blank1 = mysql_fetch_assoc($blank1));	
+	}
+	
+	
+	mysql_free_result($blank);
+	mysql_free_result($blank1);
+	mysql_free_result($user_check);
+	
 	// Last update the "system" table with the date/time the function ended
 	$updateSQL = sprintf("UPDATE %s SET data_check=%s WHERE id='1'", $prefix."system", "NOW( )");
 	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
 } // END function
 
+
+function readable_number($a){
+
+// http://www.iamcal.com/publish/articles/php/readable_numbers/
+
+	$bits_a = array("thousand", "million", "billion", "trillion",
+		"quadrillion");
+	$bits_b = array("ten", "twenty", "thirty", "fourty", "fifty", 
+		"sixty", "seventy", "eighty", "ninety");
+	$bits_c = array("one", "two", "three", "four", "five", "six", 
+		"seven", "eight", "nine", "ten", "eleven", "twelve", 
+		"thirteen", "fourteen", "fifteen", "sixteen", "seventeen", 
+		"eighteen", "nineteen");
+
+	if ($a==0){return 'zero';}
+
+	$out = ($a<0)?'minus ':'';
+
+	$a = abs($a);
+	for($i=count($bits_a); $i>0; $i--){
+		$p = pow(1000, $i);
+		if ($a > $p){
+			$b = floor($a/$p);
+			$a -= $p * $b;
+			$out .= readable_number($b).' '.$bits_a[$i-1];
+			$out .= (($a)?', ':'');
+		}
+	}
+	if ($a > 100){
+		$b = floor($a/100);
+		$a -= 100 * $b;
+		$out .= readable_number($b).' hundred'.(($a)?' and ':' ');
+	}
+	if ($a >= 20){
+		$b = floor($a/10);
+		$a -= 10 * $b;	
+		$out .= $bits_b[$b-1].' ';
+	}
+	if ($a){
+		$out .= $bits_c[$a-1];
+	}
+	return $out;
+}
+
+function winner_method($type,$output_type) {
+	
+	if ($output_type == 1) {
+		switch ($type) {
+			case 0: $output = "By Table";
+			break;
+			case 1: $output = "By Category";
+			break;
+			case 3: $output = "By Sub-Category";
+			break;
+		}
+	}
+	
+	if ($output_type == 2) {
+		switch ($type) {
+			case 0: $output = "<p>Your chosen award structure is to award places <strong>by table</strong>. Select the award places for the table as a whole below.</p>";
+			break;
+			case 1: $output = "<p>Your chosen award structure is to award places <strong>by category</strong>. Select the award places for each overall category below (there may be more than one at this table).</p>";
+			break;
+			case 3: $output = "<p>Your chosen award structure is to award places <strong>by sub-category</strong>. Select the award places for each sub-category below (there may be more than one at this table).</p>";
+			break;
+		}
+	}
+	return $output;
+}
 
 ?>

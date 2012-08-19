@@ -23,7 +23,8 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row_entry_count = mysql_fetch_assoc($entry_count);
 		
-		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+		if (($action == "print") && ($view == "winners")) $query_score_count .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 		$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 		$row_score_count = mysql_fetch_assoc($score_count);
 		
@@ -32,9 +33,9 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		//echo $query_score_count;
 		// Display all winners 
 	if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
+	if ($row_entry_count['count'] > 0) {
 ?>
 	<h3>Category <?php echo ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
-    <?php if ($row_score_count['count'] > 0) { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $style; ?>').dataTable( {
@@ -71,12 +72,11 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 </thead>
     <tbody>
     <?php 
-		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
 		
-		if (($action == "print") && ($view == "winners")) $query_scores .= " AND a.scorePlace IS NOT NULL";
-		elseif (($action == "default") && ($view == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
+		if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 		$query_scores .= " ORDER BY a.scorePlace";
-		
+		//echo $query_scores."<br>";
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		$totalRows_scores = mysql_num_rows($scores);
@@ -85,19 +85,20 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 		$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 	?>
     <tr>
-        <td class="data"><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
-        <td class="data"><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
-        <td class="data"><?php echo $row_scores['brewName']; ?></td>
-        <td class="data"><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
-        <td class="data"><?php echo $row_scores['brewerClubs']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewName']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['brewerClubs']; ?></td>
         <?php if ($filter == "scores") { ?>
-        <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="border-bottom: 1px solid #ccc;"'; ?>><?php echo $row_scores['scoreEntry']; ?></td>
         <?php } ?>
     </tr>
     <?php } while ($row_scores = mysql_fetch_assoc($scores)); ?>
     </tbody>
     </table>
-    <?php 	} else echo "<p>No winners have been reported for this category.</p>";
+    <?php 	} 
 		} 
 	} 
+	else echo "<p>Preferences are not set to display winners.</p>";
 ?>

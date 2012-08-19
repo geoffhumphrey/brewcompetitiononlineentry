@@ -72,9 +72,9 @@ Leave as if you have a database dedicated to your BCOE&M installation.
 ******************************************************************************
 
 // Suggested Usage 
-If you wish to define a prefix to the database tables, it is suggested that you use an underscore (_),
+If you wish to define a prefix to the database tables, it is  HIGHLY suggested that you use an underscore (_),
 after a short descriptor that identifies which install is using which tables. For example:
-$prefix = "bcoe1_";
+$prefix = "bcoem1_";
 or
 $prefix = "comp1_";
 

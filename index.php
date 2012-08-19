@@ -206,7 +206,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	$entry_limit = mysql_query($query_entry_limit, $brewing) or die(mysql_error());
 	$row_entry_limit = mysql_fetch_assoc($entry_limit);
 
-	echo "<div class='closed'>The limit of ".$row_prefs['prefsEntryLimit']." entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
+	echo "<div class='closed'>The limit of ".readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].") entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
 	}
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
