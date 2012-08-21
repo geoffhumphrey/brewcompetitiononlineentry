@@ -39,13 +39,10 @@ if ($totalRows_tables > 0) {
 			$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
-			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 			?>
-            <?php if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { ?>
-          	<option value="index.php?section=admin&amp;go=judging_flights&amp;&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #:".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
-          	<?php } 
-			} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)) 
-			?>
+          	<option value="index.php?section=admin&amp;go=judging_flights&amp;&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
+          	<?php mysql_free_result($flights);
+			} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
         </select>
         </td>
     </tr>

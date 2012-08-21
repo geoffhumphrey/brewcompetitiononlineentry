@@ -8,13 +8,6 @@ require(INCLUDES.'functions.inc.php');
 require(DB.'common.db.php');
 require(DB.'archive.db.php'); 
 
-function table_exists($table_name) {
-	require(CONFIG.'config.php');
-	// taken from http://snippets.dzone.com/posts/show/3369
-	if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$table_name."'"))) return TRUE;
-	else return FALSE;
-}
-
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
 	/*

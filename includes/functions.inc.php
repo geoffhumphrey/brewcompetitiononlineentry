@@ -2147,6 +2147,70 @@ function data_integrity_check() {
 	}
 	
 	
+	// Look for duplicate entries in the judging_scores table
+	$query_judging_duplicates = sprintf("SELECT eid FROM %s",$prefix."judging_scores");
+	$judging_duplicates = mysql_query($query_judging_duplicates, $brewing) or die(mysql_error());
+	$row_judging_duplicates = mysql_fetch_assoc($judging_duplicates);
+	$totalRows_judging_duplicates = mysql_num_rows($judging_duplicates);
+	
+	if ($totalRows_judging_duplicates > 2) {
+	
+	do { $a[] = $row_judging_duplicates['eid']; } while ($row_judging_duplicates = mysql_fetch_assoc($judging_duplicates));
+																								  
+		foreach ($a as $eid) {
+			
+			$query_duplicates = sprintf("SELECT id FROM %s WHERE eid='%s'",$prefix."judging_scores",$eid);
+			$duplicates = mysql_query($query_duplicates, $brewing) or die(mysql_error());
+			$row_duplicates = mysql_fetch_assoc($duplicates);
+			$totalRows_duplicates = mysql_num_rows($duplicates);
+			
+			if ($totalRows_duplicates > 1) {
+				
+				for($i=1; $i<$totalRows_duplicates; $i++) {
+				
+					$query_duplicate = sprintf("SELECT id FROM %s WHERE eid='%s'",$prefix."judging_scores",$eid);
+					$duplicate = mysql_query($query_duplicate, $brewing) or die(mysql_error());
+					$row_duplicate = mysql_fetch_assoc($duplicate);
+				
+					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores", $row_duplicate['id']);
+					$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+					mysql_free_result($duplicate);
+				}
+				
+			}
+			mysql_free_result($duplicates);
+		}
+	}
+	
+	// Erase judging assignments of the organizer if any
+	$query_org = sprintf("SELECT uid FROM %s WHERE brewerAssignment='O'",$prefix."brewer");
+	$org = mysql_query($query_org, $brewing) or die(mysql_error());
+	$row_org = mysql_fetch_assoc($org);
+	$totalRows_org = mysql_num_rows($org);
+	
+	if ($totalRows_org > 0) {
+		
+		$query_org_judging = sprintf("SELECT id FROM %s WHERE bid='%s'",$prefix."judging_assignments", $row_org['uid']);
+		$org_judging = mysql_query($query_org_judging, $brewing) or die(mysql_error());
+		$row_org_judging = mysql_fetch_assoc($org_judging);
+		$totalRows_org_judging = mysql_num_rows($org_judging);
+		
+		if ($totalRows_org_judging > 0) {
+			
+			do {
+				
+				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_assignments", $row_org_judging['id']);
+				$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+				
+			} while ($row_org_judging = mysql_fetch_assoc($org_judging));
+		
+		mysql_free_result($org_judging);
+		
+		}
+		
+	}
+	mysql_free_result($org);
+	mysql_free_result($judging_duplicates);
 	mysql_free_result($blank);
 	mysql_free_result($blank1);
 	mysql_free_result($user_check);
@@ -2164,7 +2228,7 @@ function readable_number($a){
 
 	$bits_a = array("thousand", "million", "billion", "trillion",
 		"quadrillion");
-	$bits_b = array("ten", "twenty", "thirty", "fourty", "fifty", 
+	$bits_b = array("ten", "twenty", "thirty", "forty", "fifty", 
 		"sixty", "seventy", "eighty", "ninety");
 	$bits_c = array("one", "two", "three", "four", "five", "six", 
 		"seven", "eight", "nine", "ten", "eleven", "twelve", 
@@ -2225,6 +2289,14 @@ function winner_method($type,$output_type) {
 		}
 	}
 	return $output;
+}
+
+
+function table_exists($table_name) {
+	require(CONFIG.'config.php');
+	// taken from http://snippets.dzone.com/posts/show/3369
+	if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$table_name."'"))) return TRUE;
+	else return FALSE;
 }
 
 ?>

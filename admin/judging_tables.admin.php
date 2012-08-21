@@ -59,71 +59,74 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 </div>
 <?php } ?>
 <?php if ((($action == "default") || ($action == "edit"))  && ($dbTable == "default")) { ?>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 1: Assign Judges and Stewards</span>
-	<span class="adminSubNav">
+<table class="dataTableCompact">
+<tr>
+	<td><strong>Step 1: </strong>Assign Judges and Stewards</td>
+	<td>
     	<span class="icon"><img src="images/user_add.png" alt="Back"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Particpants as Judges</a>
-    </span>
-    <span class="adminSubNav">
+    </td>
+    <td>
         <span class="icon"><img src="images/user_add.png" alt="Back"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Particpants as Stewards</a>
-    </span>
-</div>
-<div class="adminSubNavContainer">  
-	<span class="adminSubNav">Step 2: Define All Tables</span>
-	<span class="adminSubNav">
+    </td>
+</tr>
+<tr>
+	<td><strong>Step 2: </strong>Define All Tables</span>
+	<td>
     	<span class="icon"><img src="images/application_add.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a>
-    </span>
+    </td>
     <?php if ($filter != "orphans") { ?>
-	<span class="adminSubNav">
+	<td>
   		<span class="icon"><img src="images/application_view_list.png" alt="Orphans" title="Styles Not Assigned to Tables" /></span><a href="index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">View Styles Not Assigned to Tables</a>
-    </span>
+    </td>
 	<?php } ?>
-</div>
+</tr>
 <?php } ?>
 <?php if (($action == "default")  && ($dbTable == "default")) { ?>
 <?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 3: Define All Flights</span>
+<tr>
+	<td><strong>Step 3: </strong>Define All Flights</td>
+    <td class="data">
 	<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-	<span class="adminSubNav">
+	
     	<span class="icon"><img src="images/application_form_add.png" alt="Define/Edit flights" title="Define/Edit flights" /></span>
-    	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
+<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'flightsMenu_tables');">Define/Edit Flights for...</a></div>
     	<div id="flightsMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
 			$query_flights_2 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s'", $row_tables_edit['id']);
 			$flights_2 = mysql_query($query_flights_2, $brewing) or die(mysql_error());
 			$row_flights_2 = mysql_fetch_assoc($flights_2);
 			$totalRows_flights_2 = $row_flights_2['count'];
-			$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
-			if ($entry_count > $row_judging_prefs['jPrefsFlightEntries']) { 
 			?>
     		<a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
-    		<?php } mysql_free_result($flights_2); } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+    		<?php mysql_free_result($flights_2); 
+			} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
-	</span>
+	
     <?php } else echo "Skipped. Defining flights is disabled for queued judging...less work for you!"; ?>
-</div>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 4: <?php echo "Assign ".$assign_to." to Rounds"; ?></span>
-    <span class="adminSubNav">
+    </td>
+    <td class="data">&nbsp;</td>
+</tr>
+<tr>
+	<td><strong>Step 4: </strong><?php echo "Assign ".$assign_to." to Rounds"; ?></td>
+    <td class="data">
     	<span class="icon"><img src="images/application_form_add.png" alt="<?php echo "Assign ".$assign_to." to Rounds"; ?>" /></span><a href="index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;&filter=rounds"><?php echo "Assign ".$assign_to." to Rounds"; ?></a>
-    </span>
-</div>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 5: Assign Judges and Stewards to Tables</span>
-<?php if ((($action == "assign")  && ($id != "default")) || (($action == "default") && ($dbTable == "default"))) { ?>
-		<span class="adminSubNav">
-        	<span class="icon"><img src="images/user_add.png" alt="Assign Judges/Stewards to Tables"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
-     	</span> 
-	<?php } ?>
-</div>
+    </td>
+    <td class="data">&nbsp;</td>
+</tr>
+<tr>
+	<td><strong>Step 5: </strong>Assign Judges and Stewards to Tables</td>
+    <td class="data">
+    	<span class="icon"><img src="images/user_add.png" alt="Assign Judges/Stewards to Tables"></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
+    </td>
+    <td class="data">&nbsp;</td>
+</tr>
 <?php } // end if ($totalRows_tables > 0) ?>
-	<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 6: Enter or Add Scores</span>
-	<span class="adminSubNav">
+<?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
+<tr>
+	<td><strong>Step 6: </strong>Enter or Add Scores</td>
+	<td class="data">
     	<span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
-   	 	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
+		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     	<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     		<?php do { 
 			$query_scores_2 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
@@ -134,23 +137,38 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
     		<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_2  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
     		<?php mysql_free_result($scores_2);	} while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
 		</div>
-	</span>
-    <span class="adminSubNav">
+	</td>
+    <td class="data">
     	<span class="icon"><img src="images/rosette.png" alt="View Scores"></span>
     	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoreMenu');">View Scores...</a></div>
   		<div id="scoreMenu" class="menu" onmouseover="menuMouseover(event)">
   			<a class="menuItem" href="index.php?section=admin&go=judging_scores">By Table</a>
     		<a class="menuItem" href="index.php?section=admin&go=judging_scores&amp;filter=category">By Category</a>
   		</div>
-	</span>
-</div>
-<div class="adminSubNavContainer">
-	<span class="adminSubNav">Step 7: Enter or Edit BOS Entries</span>
-    <span class="adminSubNav">
-		<span class="icon"><img src="images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
-    </span>
-</div>
-  	<?php } // end if (($totalRows_tables > 0) && ($dbTable == "default")) ?>
+	</td>
+</tr>
+<tr>
+	<td><strong>Step 7: </strong>Enter or Edit BOS Entries</td>
+    <td class="data">
+    	<span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
+		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_2');">Enter/Edit BOS Places For...</a></div>
+		<div id="scoresMenu_bos_2" class="menu" onmouseover="menuMouseover(event)">
+		<?php do { 
+			if ($row_style_types['styleTypeBOS'] == "Y") { ?>
+			<a class="menuItem" href="index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types['id'] ?>">BOS Places - <?php echo $row_style_types['styleTypeName']; ?></a>
+		<?php 
+			}
+		} while ($row_style_types = mysql_fetch_assoc($style_types));
+		?>
+		</div>
+    </td>
+     <td class="data">
+		<span class="icon"><img src="images/rosette.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span><a href="index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
+    </td>
+</tr>
+
+<?php } // end if (($totalRows_tables > 0) && ($dbTable == "default")) ?>
+</table>
 <?php } // end if ($action == "default")?>
 <?php if ($action != "print") { ?>
 <?php if (($totalRows_judging > 1) && ($dbTable == "default")) { ?>
