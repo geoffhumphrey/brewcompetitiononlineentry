@@ -27,7 +27,7 @@ if (strstr($section,"step")) { ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="index.php?section=admin" onclick="index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a></div></li>
 <?php } ?>
-  <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">Help</a></li>
+  <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
   <li><?php sessionAuthenticateNav(); ?></li>
 </ul>
 <?php } ?>
@@ -134,6 +134,8 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenu_Preparing_Manage" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;go=style_types">Style Types</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=special_best">Custom Winning Categories</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=special_best_data">Custom Winning Category Entries</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=judging">Judging Locations &amp; Dates</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=contacts">Competition Contacts</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
@@ -141,7 +143,8 @@ if (strstr($section,"step")) { ?>
 </div>
 <div id="adminMenu_Preparing_Add" class="menu">
 	<a class="menuItem" href="index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a>
-    <a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Type</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
+    <a class="menuItem" href="index.php?section=admin&amp;go=special_best">A Custom Winning Category</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
     <a class="menuItem" href="index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>

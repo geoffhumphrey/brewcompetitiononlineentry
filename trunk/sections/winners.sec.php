@@ -9,11 +9,11 @@
 // If using BCOE for comp organization, display winners by table
 if ($row_prefs['prefsCompOrg'] == "Y") { 
 	do { 
-	if ($entry_count > 0) { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-	if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
-	if (score_count($row_tables['id'],"1"))	{
-		if ($action == "print") { 
+	if ($entry_count > 0) { 
+		if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
+			if (score_count($row_tables['id'],"1"))	{
+				if ($action == "print") { 
 	?>
 	<div id="header">	
 		<div id="header-inner">
@@ -64,7 +64,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
     <tbody>
     <?php 
 		$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $row_tables['id']);
-		if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
+		if (($action == "print") && ($view == "winners") || ($action == "default")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 		$query_scores .= " ORDER BY a.scorePlace";
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);

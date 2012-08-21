@@ -169,7 +169,7 @@ $row_countries = mysql_fetch_assoc($countries);
 				<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
       		</select>
             </td>
-            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>

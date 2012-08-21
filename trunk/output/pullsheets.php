@@ -71,7 +71,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			?>
             <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
-            <p>** Note: if there are no entries below, flights at this table have not been assigned to rounds.</p>
+            <p>** Please Note:</p>
+            <ul>
+            	<li>If there entries are showing below, flights at this table have not been assigned to rounds.</li>
+               	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
+            </ul>
             <?php } ?>
         </div>
 	</div>
@@ -168,6 +172,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
             <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
+            <p>** Please Note:</p>
+            <ul>
+            	<li>If there entries are showing below, flights at this table have not been assigned to rounds.</li>
+               	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
+            </ul>
         </div>
 	</div>
      <?php 

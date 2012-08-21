@@ -12,12 +12,6 @@
 //$brewing_db_table = $prefix."brewing";
 
 
-function table_exists($table_name) {
-	require(CONFIG.'config.php');
-	// taken from http://snippets.dzone.com/posts/show/3369
-	if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$table_name."'"))) return TRUE;
-	else return FALSE;
-}
 
 if (table_exists($special_best_info_db_table)) { 
 	$query_sbi = "SELECT * FROM $special_best_info_db_table";

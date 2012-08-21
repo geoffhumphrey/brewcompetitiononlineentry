@@ -1,3 +1,4 @@
+
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
@@ -13,6 +14,143 @@ include(DB.'stewarding.db.php');
 include(DB.'dropoff.db.php'); 
 include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
+
+function admin_help($go,$header_output,$action,$filter) {
+	
+	switch($go) {
+		case "preferences": $page = "site_prefs";
+		break;
+		
+		case "judging_preferences": $page = "comp_org_prefs";
+		break;
+		
+		case "style_types": $page = "style_types";
+		break;
+		
+		case "styles": 
+			switch ($action) {
+			
+			case "add":
+			case "edit": $page = "custom_style";
+			break;
+			
+			default: $page = "accepted_style";
+			break;
+			}
+		break;
+		
+		case "special_best": 
+		case "special_best_data": $page = "custom_winner";
+		break;
+		
+		case "judging":
+		
+			switch($filter) {
+				case "judges": 
+				case "stewards":
+				case "staff":
+				$page = "assigning";
+				break;
+				
+				default: $page = "judging_locations";
+				break;
+				
+				
+			}
+		
+		
+		break;
+		
+		case "contacts": $page = "comp_contacts";
+		break;
+		
+		case "dropoff": $page = "drop_off";
+		break;
+		
+		case "sponsors": $page = "sponsors";
+		break;
+		
+		case "contest_info": $page = "competition_info";
+		break;
+		
+		case "entrant":
+		case "judge": $page = "participants";
+		break;
+		
+		case "participants": 
+			switch ($filter) {
+				case "judges": 
+				case "assignJudges": $page = "judges";
+				break;
+				
+				case "stewards":
+				case "assignStewards": $page = "stewards";
+				break;
+				
+				default: $page = "participants";
+				break;
+			}
+		
+		break;
+		
+		
+		case "entries": $page = "entries";
+		break;
+		
+		case "assign": $page = "assigning";
+		break;
+		
+		case "judging_tables": 
+			switch ($action) {
+				case "assign": $page = "assigning";
+				break; 
+				
+				default: $page = "tables";
+				break;
+			}
+		
+		break;
+		
+		case "judging_flights": 
+			switch ($action) {
+				
+				case "rounds": $page = "rounds";
+				break;
+				
+				case "default": $page = "flights";
+				break;
+				
+			}
+			
+			switch ($filter) {
+				case "rounds": $page = "rounds";
+				break;
+				
+				case "default": $page = "flights";
+				break;
+			}
+		
+		break;
+		
+		case "judging_scores": $page = "scores";
+		break;
+		
+		case "judging_scores_bos": $page = "best_of_show";
+		break;
+		
+		case "special_best_data": $page = "introduction";
+		break;
+		
+		case "archive": $page = "archiving";
+		break;
+		
+		default: $page = "introduction";
+		break;
+	}
+	
+	$return = '<p><span class="icon"><img src="images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
+	return $return;	
+}
 
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
@@ -38,12 +176,19 @@ function total_discount() {
 	$return = $totalRows_discount."^".array_sum($b);
 	return $return;
 }
+
+
+
 ?>
+
+
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php } ?>
+
 <?php 
 if ($setup_free_access == TRUE) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
-if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
+if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter); ?>
 <?php if (($section == "admin") && ($go == "default")) { ?>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 

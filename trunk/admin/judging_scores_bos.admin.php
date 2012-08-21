@@ -28,19 +28,6 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 	<?php } ?>
     <?php if ($action == "default") { ?>
     <span class="adminSubNav">
-    <span class="icon"><img src="images/rosette.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
-		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos');">View...</a></div>
-		<div id="scoresMenu_bos" class="menu" onmouseover="menuMouseover(event)">
-		<?php do { 
-			if ($row_style_types['styleTypeBOS'] == "Y") { ?>
-			<a class="menuItem" href="#<?php echo $row_style_types['id'] ?>">BOS Entries and Places - <?php echo $row_style_types['styleTypeName']; ?></a>
-		<?php 
-			}
-		} while ($row_style_types = mysql_fetch_assoc($style_types));
-		?>
-		</div>
-	</span>
-    <span class="adminSubNav">
     <span class="icon"><img src="images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
 		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_2');">Enter/Edit...</a></div>
 		<div id="scoresMenu_bos_2" class="menu" onmouseover="menuMouseover(event)">
