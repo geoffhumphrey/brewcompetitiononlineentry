@@ -156,7 +156,7 @@ function judging_date_return() {
 	
 	$today = strtotime("now");
 	do {
- 		if ($row_check['judgingDate'] > $today) $newDate[] = 1; 
+ 		if ($row_check['judgingDate'] >= $today) $newDate[] = 1; 
  		else $newDate[] = 0;
 	} while ($row_check = mysql_fetch_assoc($check));
 	$r = array_sum($newDate);
@@ -1529,24 +1529,33 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	return $style_choose;   			
 }
 
-function table_location($table_id,$date_format,$time_zone,$time_format) { 
+function table_location($table_id,$date_format,$time_zone,$time_format,$method) { 
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
+	
 	$query_table = sprintf("SELECT tableLocation FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
 	$row_table = mysql_fetch_assoc($table);
 	
-	$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
-	$location = mysql_query($query_location, $brewing) or die(mysql_error());
-	$row_location = mysql_fetch_assoc($location);
-	$totalRows_location = mysql_num_rows($location);
-	
-	if ($totalRows_location == 1) {
-    $table_location = $row_location['judgingLocName']." - ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
+	if ($method == "some-variable") {
+		// Future use 
 	}
-	else $table_location = ""; 
+	
+	if ($method == "default") {
+	
+		$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
+		$location = mysql_query($query_location, $brewing) or die(mysql_error());
+		$row_location = mysql_fetch_assoc($location);
+		$totalRows_location = mysql_num_rows($location);
+		
+		if ($totalRows_location == 1) {
+			$table_location = $row_location['judgingLocName']." - ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
+		}
+		else $table_location = ""; 
+		mysql_free_result($location);
+	}
+	
 	mysql_free_result($table);
-	mysql_free_result($location);
 	return $table_location;
 }
 
@@ -1564,6 +1573,7 @@ function flight_count($table_id,$method) {
 		case "2": return $row_flights['count'];
 		break;
 	}
+	mysql_free_result($flights);
 }
 
 function score_count($table_id,$method) {
@@ -1610,6 +1620,8 @@ function orphan_styles() {
 		} while ($row_styles = mysql_fetch_assoc($styles));
 	}
 	if ($return == "") $return .= "<p>All custom styles have a valid style type associated with them.</p>";
+	mysql_free_result($styles);
+	mysql_free_result($style_types);
 	return $return;
 
 }
@@ -1716,6 +1728,7 @@ function brewer_info($bid) {
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid']."^".$row_brewer_info['brewerClubs'];
+	mysql_free_result($brewer_info);
 	return $r;
 }
 
@@ -1788,6 +1801,7 @@ function entry_info($id) {
 	$entry_info = mysql_query($query_entry_info, $brewing) or die(mysql_error());
 	$row_entry_info = mysql_fetch_assoc($entry_info);
 	$r = $row_entry_info['brewName']."^".$row_entry_info['brewCategorySort']."^".$row_entry_info['brewSubCategory']."^".$row_entry_info['brewStyle']."^".$row_entry_info['brewCoBrewer']."^".$row_entry_info['brewCategory']."^".$row_entry_info['brewJudgingNumber'];
+	mysql_free_result($entry_info);
 	return $r;
 }
 
@@ -1881,25 +1895,55 @@ function score_check($id,$judging_scores_db_table) {
 	$row_scores = mysql_fetch_assoc($scores);
 	
 	$r = $row_scores['scoreEntry']; 
+	mysql_free_result($scores);
 	return $r;
 }
 
-function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$method) {
+function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_scores = sprintf("SELECT scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
+	$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	
 	if ($row_scores['scorePlace'] >= "1") {
+		
+		if ($method == "0") {  // Display by Table
+		
 		$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
 		$table = mysql_query($query_table, $brewing) or die(mysql_error());
 		$row_table = mysql_fetch_assoc($table);
-		$r = display_place($row_scores['scorePlace'],$method).": ".$row_table['tableName'];
+		$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
+		mysql_free_result($table);
+		} 
+		
+		if ($method == "1") {  // Display by Category
+		
+		$query_entry = sprintf("SELECT brewCategorySort FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+		$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
+		$row_entry = mysql_fetch_assoc($entry);
+		$r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
+		mysql_free_result($entry);
+		}
+		
+		if ($method == "2") {  // Display by Category
+		
+		$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+		$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
+		$row_entry = mysql_fetch_assoc($entry);
+		
+		$query_style = sprintf("SELECT brewStyle FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+		$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		
+		$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
+		mysql_free_result($entry);
+		mysql_free_result($style);
+		}
 	} 
 	else $r = "-";
-	
+	mysql_free_result($scores);
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
@@ -2010,6 +2054,7 @@ function entries_unconfirmed($user_id) {
 	$totalRows_entry_check = mysql_num_rows($entry_check); 
 	
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+	mysql_free_result($entry_check);
 }
 
 function entries_no_special($user_id) {
@@ -2035,21 +2080,19 @@ function entries_no_special($user_id) {
 	$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
 	$row_entry_check = mysql_fetch_assoc($entry_check);
 	$totalRows_entry_check = mysql_num_rows($entry_check); 
-	
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+	mysql_free_result($entry_check);
 }
 
 
 function data_integrity_check() {
-	// Match user emails against the record in the brewer table,
-	// Compare user's id against uid,
-	// If no match, replace uid with user's id
-	// Search for "blanks" in the brewing and delete them
-	// Search for "blanks" in the brewer table and delete them
-	// This prevents "blank" entries and users in the system
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
+	
+	// Match user emails against the record in the brewer table,
+	// Compare user's id against uid,
+	// If no match, replace uid with user's id
 	
 	$query_user_check = sprintf("SELECT id,user_name FROM %s", $prefix."users");
 	$user_check = mysql_query($query_user_check, $brewing) or die(mysql_error());
@@ -2182,7 +2225,9 @@ function data_integrity_check() {
 		}
 	}
 	
-	// Erase judging assignments of the organizer if any
+	// Erase judging and stewarding assignments of the organizer if any
+	// INTERIM MEASURE. Incorporate this check once the 
+	// judging/stewarding/staff methodology is reworked
 	$query_org = sprintf("SELECT uid FROM %s WHERE brewerAssignment='O'",$prefix."brewer");
 	$org = mysql_query($query_org, $brewing) or die(mysql_error());
 	$row_org = mysql_fetch_assoc($org);
@@ -2198,10 +2243,8 @@ function data_integrity_check() {
 		if ($totalRows_org_judging > 0) {
 			
 			do {
-				
 				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_assignments", $row_org_judging['id']);
 				$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
-				
 			} while ($row_org_judging = mysql_fetch_assoc($org_judging));
 		
 		mysql_free_result($org_judging);
@@ -2297,6 +2340,73 @@ function table_exists($table_name) {
 	// taken from http://snippets.dzone.com/posts/show/3369
 	if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$table_name."'"))) return TRUE;
 	else return FALSE;
+}
+
+
+function table_assignments($uid,$method,$time_zone,$date_format,$time_format) {
+	
+	// Gather and output the judging or stewarding assignments for a user
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$output = "";
+	
+	$query_table_assignments = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
+	$table_assignments = mysql_query($query_table_assignments, $brewing) or die(mysql_error());
+	$row_table_assignments = mysql_fetch_assoc($table_assignments);
+	$totalRows_table_assignments = mysql_num_rows($table_assignments);
+	
+	if ($totalRows_table_assignments > 0) {
+		do {
+			$location = explode("^",get_table_info(1,"location",$row_table_assignments['assignTable'],"default","default"));
+			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
+			$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
+			$output .= "\t\t<tr>\n";
+			$output .= "\t\t\t<td class='dataLeft'>".$location[2]."</td>\n";
+			$output .= "\t\t\t<td class='data'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+			$output .= "\t\t\t<td class='data'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
+			$output .= "\t\t</tr>\n";
+			$output .= "\t</table>\n";
+			
+		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
+	}
+	
+	mysql_free_result($table_assignments);
+	return $output;
+}
+
+function available_at_location($location,$role,$round) {
+	// Returnds the number of judges available per location/date
+	// Takes into account assignments in the judging_assignments table
+	// and returns a total number available less those who have been 
+	// assigned to the location and round.
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	if ($role == "judges") $query_available = sprintf("SELECT brewerJudgeLocation FROM %s WHERE brewerJudgeLocation IS NOT NULL", $prefix."brewer");
+	if ($role == "stewards") $query_available = sprintf("SELECT brewerStewardLocation FROM %s WHERE brewerStewardLocation IS NOT NULL", $prefix."brewer");
+	$available = mysql_query($query_available, $brewing) or die(mysql_error());
+	$row_available = mysql_fetch_assoc($available);
+	$totalRows_available = mysql_num_rows($available);
+	
+	$return = "";
+	
+	do {
+		if ($role == "judges") $available_location = explode(",",$row_available['brewerJudgeLocation']); 
+		if ($role == "stewards") $available_location =  explode(",",$row_available['brewerStewardLocation']);
+		if (in_array("Y-".$location,$available_location)) $count[] = 1; else $count[] = 0;
+		
+		//$return .= $row_available['brewerJudgeLocation']."<br>";
+		
+	} while ($row_available = mysql_fetch_assoc($available));
+	
+	$return = array_sum($count);
+	//$return = print_r;
+	return $return;
+	
+	mysql_free_result($available);
+	
 }
 
 ?>

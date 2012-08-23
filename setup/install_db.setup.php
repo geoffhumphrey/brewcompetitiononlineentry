@@ -850,7 +850,6 @@ if ($setup_free_access == TRUE) {
 	  `prefsEntryForm` char(1) DEFAULT NULL,
 	  `prefsRecordLimit` int(11) DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
 	  `prefsRecordPaging` int(11) DEFAULT '100' COMMENT 'User defined per page record limit',
-	  `prefsCompOrg` char(1) DEFAULT NULL,
 	  `prefsTheme` varchar(255) DEFAULT NULL,
 	  `prefsDateFormat` char(1) DEFAULT NULL,
 	  `prefsContact` char(1) DEFAULT NULL,

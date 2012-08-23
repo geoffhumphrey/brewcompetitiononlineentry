@@ -44,8 +44,7 @@ foreach($_POST['id'] as $id)	{
 	}
 		 
 if($result1){ 
-	if (($section == "step7") && ($row_prefs['prefsCompOrg'] == "N")) header("location:../index.php?msg=success");
-	elseif (($section == "step7") && ($row_prefs['prefsCompOrg'] == "Y")) header("location:../setup.php?section=step8"); 
+	if ($section == "step7") header("location:../setup.php?section=step8"); 
 	else {
 		$pattern = array('\'', '"');
   		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);

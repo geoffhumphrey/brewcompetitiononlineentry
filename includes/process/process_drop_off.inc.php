@@ -8,7 +8,7 @@ $dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
 
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $drop_off_db_table (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
-                       GetSQLValueString(capitalize($_POST['dropLocationName']), "text"),
+                       GetSQLValueString($_POST['dropLocationName'], "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
 					   GetSQLValueString($dropLocationWebsite, "text"),
@@ -26,7 +26,7 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	$updateSQL = sprintf("UPDATE $drop_off_db_table SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
-                       GetSQLValueString(capitalize($_POST['dropLocationName']), "text"),
+                       GetSQLValueString($_POST['dropLocationName'], "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
 					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),

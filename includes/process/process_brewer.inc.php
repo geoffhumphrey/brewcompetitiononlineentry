@@ -7,7 +7,7 @@
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(DB.'judging_locations.db.php');
-
+/*
 if (($action == "update") && ($row_prefs['prefsCompOrg'] == "N")) {
 
 	foreach($_POST['id'] as $id){ 
@@ -108,8 +108,8 @@ if($result1){
 	header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));  
 }
 }
-
-if (($action == "update") && ($row_prefs['prefsCompOrg'] == "Y")) {
+*/
+if ($action == "update") {
 
 	foreach($_POST['id'] as $id){ 
 		$query_assignment = "SELECT id,brewerAssignment FROM $brewer_db_table WHERE id='".$id."'";
@@ -325,7 +325,7 @@ if ($action == "edit") {
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
 						   GetSQLValueString($_POST['brewerCity'], "text"),
-						   GetSQLValueString(capitalize($_POST['brewerState']), "text"),
+						   GetSQLValueString($_POST['brewerState'], "text"),
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
 						   GetSQLValueString($_POST['brewerPhone1'], "text"),

@@ -55,8 +55,8 @@ elseif (($section == "admin") && ($go == "entries") && ($filter != "default") &&
 elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($bid != "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' ORDER BY $sort $dir";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
-	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewPaid='1' AND brewConfirmed='1'"; 
-	$query_confirmed = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewConfirmed='1' ORDER BY $sort $dir";
+	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewPaid='1'"; 
+	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewConfirmed='1'";
 	}
 else { 
 	$query_log = "SELECT * FROM $brewing_db_table";
@@ -77,9 +77,10 @@ $totalRows_log = mysql_num_rows($log);
 $log_paid = mysql_query($query_log_paid, $brewing) or die(mysql_error());
 $row_log_paid = mysql_fetch_assoc($log_paid);
 $totalRows_log_paid = mysql_num_rows($log_paid);
-	
+
 $log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error());
 $row_log_confirmed = mysql_fetch_assoc($log_confirmed);
 $totalRows_log_confirmed = mysql_num_rows($log_confirmed);
+
 
 ?>
