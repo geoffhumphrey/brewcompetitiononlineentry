@@ -8,6 +8,32 @@ require_once(DB.'common.db.php');
 include_once(DB.'admin_common.db.php');
 require_once(INCLUDES.'version.inc.php');
 require_once(INCLUDES.'headers.inc.php');
+
+function check_flight_round($flight_round,$round) {
+
+	if ($round == "default") {
+		if ($flight_round != "") return TRUE;
+		else return FALSE;
+	}
+	
+	if ($round != "default") {
+		if (($flight_round != "") && ($flight_round == $round)) return TRUE;
+		else return FALSE;
+	}
+		
+}
+
+if ( $go == "judging_tables" ) {
+   $query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";	
+}
+
+if ( $go == "judging_locations" ) {
+   $query_tables = sprintf("SELECT $judging_tables_db_table.*, $judging_assignments_db_table.assignRound FROM $judging_tables_db_table, $judging_assignments_db_table WHERE $judging_tables_db_table.tableNumber = $judging_assignments_db_table.assignTable AND $judging_tables_db_table.tableLocation = '%s' AND $judging_assignments_db_table.assignRound = '%s' GROUP BY $judging_assignments_db_table.assignTable ORDER BY tableNumber", $location, $round);	
+}
+
+$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+$row_tables = mysql_fetch_assoc($tables);
+$totalRows_tables = mysql_num_rows($tables);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -51,9 +77,7 @@ function check_flight_number($entry_id,$flight) {
 	
 }
 
-
-?>
-<?php if (($go == "judging_tables") && ($id == "default"))
+if (($go == "judging_tables") || ( $go == "judging_locations") && ($id == "default") && ($totalRows_tables > 0))
 do { 
 $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
@@ -69,12 +93,12 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <p>** Please Note:</p>
             <ul>
             	<li>If there entries are showing below, flights at this table have not been assigned to rounds.</li>
-               	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
+               	<li>If entries are missing, all entries have not been assigned to a flight or round <?php if ($round != "default") echo "OR they have been assigned to a different round"; ?>.</li>
             </ul>
             <?php } ?>
         </div>
@@ -115,7 +139,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     </thead>
     <tbody>
     <?php 
-	$a = explode(",", $row_tables['tableStyles']); 
+	$a = explode(",", $row_tables['tableStyles']);
 	
 	foreach (array_unique($a) as $value) {
 		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
@@ -128,7 +152,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		do {
 			$flight_round = check_flight_number($row_entries['id'],$i);
-			if ($flight_round != "") {
+			if (check_flight_round($flight_round,$round)) {
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -154,7 +178,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
 
-if (($go == "judging_tables") && ($id != "default")) { 
+if (($go == "judging_tables") || ($go == "judging_locations") && ($id != "default") && ($totalRows_tables > 0)) { 
 	
 $flights = number_of_flights($row_tables_edit['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
@@ -169,7 +193,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
             <p>** Please Note:</p>
@@ -259,7 +283,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 
 
 <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
-<?php if (($go == "judging_tables") && ($id == "default"))  
+<?php if (($go == "judging_tables") || ($go == "judging_locations") && ($id == "default") && ($totalRows_tables > 0))  
 do { 
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
@@ -273,7 +297,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <p>** Note: if there are no entries below, this table has not been assigned to a round.</p>
             <?php } ?>
@@ -342,7 +366,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 <div style="page-break-after:always;"></div>
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
-if (($go == "judging_tables") && ($id != "default")) { 
+if (($go == "judging_tables") || ($go == "judging_locations") && ($id != "default") && ($totalRows_tables > 0)) { 
 $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 ?>
 <div id="content">
@@ -355,7 +379,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></h2>
+            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>

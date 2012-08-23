@@ -14,21 +14,13 @@ $totalRows_themes = mysql_num_rows($themes);
 </div>
 <?php } ?>
 <p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
-<h3>Competition Organization</h3>
-<table>
-  <tr>
-    <td class="dataLabel">Use for Competition Organization:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsCompOrg" value="Y" id="prefsCompOrg_0"  <?php if ($row_prefs['prefsCompOrg'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsCompOrg" value="N" id="prefsCompOrg_1" <?php if ($row_prefs['prefsCompOrg'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate if your installation will be used to organize the competition (e.g., defining tables, defining flights, assigning judges to tables, printing pull sheets, etc.). If Yes, there will be no need to utilize a thrid party tool such as HCCP.</td>
-  </tr>
+<h3>General</h3>
+<table>  
   <tr>
   	<td class="dataLabel">Entry Limit:</td>
     <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_prefs['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
     <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
   </tr>
-</table>
-<h3>General</h3>
-<table>
   <tr>
   	<td class="dataLabel">Competition Logo Size:</td>
     <td nowrap="nowrap" class="data">
@@ -266,12 +258,12 @@ $totalRows_themes = mysql_num_rows($themes);
   </tr>
    <tr>
   	<td class="dataLabel">Google Wallet for Payment:</td>
-   	<td class="data"><input type="radio" name="prefsGoogle" value="Y" id="prefsGoogle_0"  <?php if ($row_prefs['prefsGoogle'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsGoogle" value="N" id="prefsGoogle_1" <?php if ($row_prefs['prefsPaypal'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td class="data"><input type="radio" name="prefsGoogle" value="Y" id="prefsGoogle_0"  <?php if ($row_prefs['prefsGoogle'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsGoogle" value="N" id="prefsGoogle_1" <?php if ($row_prefs['prefsGoogle'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to accept credit card payments via PayPal?</td>
   </tr>
   <tr>
     <td class="dataLabel">Google Merchant ID:</td>
-    <td class="data"><input name="prefsGoogleAccount" type="text" size="35" maxlength="255" value="<?php echo $row_prefs['prefsGoogleAccount']; ?>"></td>
+    <td class="data"><input name="prefsGoogleAccount" type="text" size="35" value="<?php echo $row_prefs['prefsGoogleAccount']; ?>"></td>
     <td class="data">Indicate your Google Merchant ID.<br />Please note that a <a href="https://checkout.google.com/sell/" target="_blank">Google Wallet/Checkout</a> account is required to accept payments through Google. To function properly, your account must be <a href="https://support.google.com/checkout/sell/bin/answer.py?hl=en&amp;ctx=cartwizard_acceptunsigned&amp;answer=113366" target="_blank">set up to accept unsigned carts</a>.</td>
   </tr>
   <tr>

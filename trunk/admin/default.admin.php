@@ -12,7 +12,7 @@ include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
-include(DB.'entries.db.php'); 
+//include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
 
 function admin_help($go,$header_output,$action,$filter) {
@@ -227,10 +227,7 @@ if (($action != "print") && ($go != "default")) echo admin_help($go,$header_outp
 <?php } if ($row_user['userLevel'] == "1") {
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
-if ($go == "default") { 
-if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<div class='info'>Now that registration is closed, keep your entry database up to date by 1) adding any participants and their associated entries who did not register online and 2) finalizing judge and steward assignments.</div>";
-
-?>
+if ($go == "default") { ?>
 <div id="menu_container">
 <div id="outer">
 <p>Click the headings below to expand and collapse each category.</p>
@@ -444,7 +441,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 			    <li><a href="index.php?section=admin&amp;go=participants">Participants</a></li>
 			    <li><a href="index.php?section=admin&amp;go=entries">Entries</a></li>
 			</ul>
-	  		<?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
+	  		
 			<ul class="admin_default">
   				<li><a href="index.php?section=admin&amp;go=judging_tables">Tables</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
@@ -455,7 +452,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
   				<li><a href="index.php?section=admin&amp;go=styles&amp;filter=orphans">Styles Without a Valid Style Type</a></li>
   				<li><a href="index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">Styles Not Assigned to Tables</a></li>
 			</ul>
-			<?php } ?>
+			
 			<ul class="admin_default">
     			<li><a href="index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></li>
     			<li><a href="index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></li>
@@ -466,28 +463,15 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
     			<li><a href="index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
     			<li><a href="index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
 			</ul>
-  			<?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
-	  <ul class="admin_default">
+  			
+	  		<ul class="admin_default">
    			 	<li><a href="index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
     			<li><a href="index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></li>
                 <?php } ?>
 			</ul>
-  			<?php } ?>
+  			
 <p class="admin_default_header">Assign</p>
-  <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-			<ul class="admin_default">
-				<li><a href="index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges">Judges (Final Assignments)</a></li>
-				<li><a href="index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards">Stewards (Final Assignments)</a></li>
-			</ul>
-  	<?php if ($totalRows_judging > 1) { ?>
-			<ul class="admin_default">
-				<li><a href="index.php?section=admin&amp;go=judging&amp;action=update&amp;filter=judges">Judges to a Location</a></li>
-				<li><a href="index.php?section=admin&amp;go=judging&amp;action=update&amp;filter=stewards">Stewards to a Location</a></li>
-			</ul>
- 	 <?php } ?>
-  <?php } ?>
-  <?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
   			<ul class="admin_default">
 				<li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
 				<li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
@@ -504,9 +488,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a></li>
 			</ul>
   	<?php } ?>
-  <?php } ?>
 </div>
-<?php if ($row_prefs['prefsCompOrg'] == "Y") { ?>
 <h4 class="trigger"><span class="icon"><img src="images/rosette.png"  /></span>Scoring</h4>
 <div class="toggle_container">
 <p class="admin_default_header">Manage/View</p>
@@ -549,6 +531,17 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
     				<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
     				</div>
     			</li>
+                <li>
+                    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc');">For Location...</a></div>
+                    <div id="pullsheetsloc" class="menu" onmouseover="menuMouseover(event)">
+                     <?php do { for ($round=1; $round <= $row_judging['judgingRounds']; $round++) { 
+					 $location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
+					 
+					 ?>
+                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                    <?php }} while ($row_judging = mysql_fetch_assoc($judging)); ?>
+                    </div>
+                </li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Table Cards:</li>
@@ -561,6 +554,24 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
                         <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
                     </div>
     			</li>
+                
+                
+                
+                <li>
+                <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cardsloc');">For Location...</a></div>
+                    <div id="table_cardsloc" class="menu" onmouseover="menuMouseover(event)">
+                        <?php  do { for ($round=1; $round <= $row_judging2['judgingRounds']; $round++) { 
+						$location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging2['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
+						?>
+                        <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a>
+                        <?php }} while ($row_judging2 = mysql_fetch_assoc($judging2));   ?>
+                    </div>
+    				</li>
+                
+                
+                
+                
+                
 			</ul>
 			<ul class="admin_default">
 				<li>Print Judge Assignments:</li>
@@ -637,8 +648,11 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li>Participant Address Labels (Avery 5160):</li>
 				<li><a href="output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Download PDF</a></li>
 			</ul>
+            <ul class="admin_default">
+				<li>Participant Summaries:</li>
+				<li><a id="modal_window_link" href="output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a></li>
+			</ul>
 </div>
-<?php } ?>
 <h4 class="trigger"><span class="icon"><img src="images/page_go.png"  /></span>Exporting</h4>
 <div class="toggle_container">
 <p class="admin_default_header">Email Addresses (CSV Files)</p>
@@ -653,34 +667,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a></li>
 			</ul>
   			
-		<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-			<?php if ($totalRows_judging1 > 1) { ?>
-			<ul class="admin_default">
-				<li>Judges for Location:
-        		<select name="judge_location" id="judge_location" onchange="jumpMenu('self',this,0)">
-          			<option value=""></option>
-          			<option value="output/email_export.php?section=all&amp;go=csv&amp;filter=judges&amp;">All Locations</option>
-          			<?php do { ?>
-          			<option value="output/email_export.php?section=loc&amp;go=csv&amp;filter=judges&amp;bid=<?php echo $row_judging1['id']; ?>"><?php echo $row_judging1['judgingLocName']." ("; echo date_convert($row_judging1['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
-          			<?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
-          		</select>
-    			</li>
-				<li><em>* Be sure to make final <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em></li>
-			</ul>
-			<ul class="admin_default">
-				<li>Stewards for Location:
-        		<select name="judge_location" id="judge_location" onchange="jumpMenu('self',this,0)">
-          			<option value=""></option>
-         			<option value="output/email_export.php?section=all&amp;go=csv&amp;filter=stewards">All Locations</option>
-          			<?php do { ?>
-         			<option value="output/email_export.php?section=loc&amp;go=csv&amp;filter=stewards&amp;bid=<?php echo $row_stewarding['id']; ?>"><?php echo $row_stewarding['judgingLocName']." ("; echo date_convert($row_stewarding['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
-          			<?php } while ($row_stewarding = mysql_fetch_assoc($stewarding)) ?>
-          		</select>
-    			</li>
-				<li><em>* Be sure to make final <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em>    </li>
-			</ul>
- 			<?php } ?>
- 		<?php } ?>
+		
 			<p class="admin_default_header">Tab Delimited Files</li>
 			<p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
 			<ul class="admin_default">
@@ -688,32 +675,7 @@ if (($registration_open == "2") && ($row_prefs['prefsCompOrg'] == "N")) echo "<d
 				<li><a href="output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid">Paid & Received Entries</a></li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=tab">All Entries</a></li>
 			</ul>
-  		<?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-  			<?php if ($totalRows_judging1 > 1) { ?>
-			<ul class="admin_default">
-				<li>Participants for Location:
-        		<select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
-          			<option value=""></option>
-          			<?php do { ?>
-          			<option value="output/participants_export.php?section=loc&amp;go=tab&amp;bid=<?php echo $row_stewarding2['id']; ?>"><?php echo $row_stewarding2['judgingLocName']." ("; echo date_convert($row_stewarding2['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
-          			<?php } while ($row_stewarding2 = mysql_fetch_assoc($stewarding2)) ?>
-        		</select>
-    			</li>
-				<li><em>* Be sure to make final <a href="/index.php?section=admin&amp;go=styles&amp;filter=judging">style</a>, <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">judging</a> and <a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">stewarding</a> location assignments before exporting.</em></li>
-			</ul>
-			<ul class="admin_default">
-				<li>Paid and Received Entries for Location:
-        		<select name="tab_choice" id="tab_choice" onchange="jumpMenu('self',this,0)">
-          			<option value=""></option>
-          			<?php do { ?>
-          			<option value="output/entries_export.php?section=loc&amp;go=tab&amp;filter=paid&amp;bid=<?php echo $row_judging2['id']; ?>"><?php echo $row_judging2['judgingLocName']." ("; echo date_convert($row_judging2['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
-          			<?php } while ($row_judging2 = mysql_fetch_assoc($judging2)) ?>
-        		</select>
-    			</li>
-			</ul>   
-  			<?php } ?>
-  		<?php } ?>
-			<p class="admin_default_header">CSV Files</p>
+  			<p class="admin_default_header">CSV Files</p>
 			<ul class="admin_default">
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
                 <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a> (All Data)</li>

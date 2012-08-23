@@ -61,14 +61,6 @@ function brewer_assignment_checked($a,$b) {
     <span class="adminSubNav">
     	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
  	</span>
-	<?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Assign Judges to a Location</a>
-    </span>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Assign Stewards to a Location</a>
-	</span>
-    <?php } ?>
 </div>
 	<?php } // end if ($section == "admin") {?>
 	<?php } ?>
@@ -167,7 +159,7 @@ function brewer_assignment_checked($a,$b) {
   	</tr>
 </table>
 <input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit";?>">
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end else ?>
 
@@ -189,16 +181,9 @@ function brewer_assignment_checked($a,$b) {
 				{ "asSorting": [  ] },
 				null,
 				null,
-				<?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-				{ "asSorting": [  ] },
-				<?php } ?>
 				<?php if (($filter == "judges") || ($filter == "bos")) { ?>
 				null,
 				null,
-					<?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges"))  { ?>
-				null,
-				null,
-					<?php } ?>
 				<?php } ?>
 				<?php if ($bid != "default") { ?>
 				null
@@ -236,16 +221,9 @@ $row_brewers = mysql_fetch_assoc($brewers);
   <th class="dataHeading bdr1B">&nbsp;</th>
   <th class="dataHeading bdr1B">Name</th>
   <th class="dataHeading bdr1B">Assigned As</th>
-  <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-  <th class="dataHeading bdr1B">Assigned To</th>
-  <?php } ?>
   <?php if (($filter == "judges") || ($filter == "bos")) { ?>
   <th class="dataHeading bdr1B">ID</th>
   <th class="dataHeading bdr1B">Rank</th>
-  	<?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
-  <th class="dataHeading bdr1B">Likes</th>
-  <th class="dataHeading bdr1B">Dislikes</th>
-  	<?php } ?>
   <?php } ?>
   <?php if ($bid != "default") { ?>
   <th class="dataHeading bdr1B">Location Preferences</th>
@@ -266,35 +244,9 @@ $row_brewers = mysql_fetch_assoc($brewers);
   <?php } ?>
   <td width="10%" class="dataList"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
   <td width="5%" class="dataList"><?php echo brewer_assignment($row_brewer['brewerAssignment'],"1"); ?></td>
-  <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-  <td width="15%" class="dataList">
-  <?php if ((($row_brewer['brewerAssignment'] == "J") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignment'] == "S") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>
-		<table class="dataTableCompact">
-		<?php 
-		if ($row_brewer['brewerAssignment'] == "J") $a = explode(",",$row_brewer['brewerJudgeAssignedLocation']);
-		if ($row_brewer['brewerAssignment'] == "S") $a = explode(",",$row_brewer['brewerStewardAssignedLocation']);
-		sort($a);
-		foreach ($a as $value) {
-			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $value);
-				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat']).")</td>\n";
-				echo "</td>\n</tr>";
-				}
-			}
-		?>
-    	</table>
-		<?php } else echo "Not Set"; ?>
-  </td>
-  <?php } if (($filter == "judges") || ($filter == "bos")) { ?>
+  <?php if (($filter == "judges") || ($filter == "bos")) { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeRank']; if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>
-  <?php if (($row_prefs['prefsCompOrg'] == "N") && ($filter == "judges")) { ?>
-  <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeLikes']) ?></td>
-  <td width="10%" class="dataList"><?php echo str_replace(",", ", ", $row_brewer['brewerJudgeDislikes']) ?></td>
-  <?php } ?>
   	<?php } if ($bid != "default") { ?>
   <td class="dataList">
   	<table class="dataTableCompact">

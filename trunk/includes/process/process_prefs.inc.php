@@ -32,7 +32,6 @@ if ($action == "add") {
 	
 	prefsWinnerMethod,
 	prefsDisplaySpecial,
-	prefsCompOrg,
 	prefsEntryForm,
 	prefsRecordLimit,
 	
@@ -79,7 +78,6 @@ if ($action == "add") {
 						   
 						   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
 						   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
-						   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 						   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 						   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 						   
@@ -128,7 +126,6 @@ if ($action == "edit") {
 	prefsWinnerDelay=%s,
 	prefsWinnerMethod=%s,
 	prefsDisplaySpecial=%s, 
-	prefsCompOrg=%s, 
 	prefsEntryForm=%s,
 	prefsRecordLimit=%s,
 	prefsRecordPaging=%s,
@@ -161,7 +158,6 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
 						   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
 						   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
-						   GetSQLValueString($_POST['prefsCompOrg'], "text"),
 						   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 						   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 						   GetSQLValueString($_POST['prefsRecordPaging'], "int"),

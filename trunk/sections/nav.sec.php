@@ -230,10 +230,7 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a>
 	<a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewardss">Participants as Stewards</a>
     <a class="menuItem" href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a>
-	<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Judges to a Location</a>
-	<a class="menuItem" href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Stewards to a Location</a>
-	<?php } if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
+	<?php  if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
 	<a class="menuItem" href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Tables to Rounds</a>
 	<?php } if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
     <a class="menuItem" href="index.php?section=admin&amp;go=judging_flights&amp;action=rounds">Flights to Rounds</a>

@@ -11,7 +11,7 @@ include(DB.'admin_common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
 include(DB.'brewer.db.php');
-$query_organizer = "SELECT * FROM $brewer_db_table WHERE brewerAssignmentOrganizer='1'";
+$query_organizer = "SELECT * FROM $brewer_db_table WHERE brewerAssignment='O'";
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
@@ -26,13 +26,12 @@ $total_entries_judged = get_entry_count();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title><?php echo $row_contest_info['contestName']; ?> Summary</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
 </head>
-<body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
+<body onload="javascript:window.print()">
 <div id="content">
 <?php do { 
 // Check for Entries
@@ -87,7 +86,7 @@ if ($totalRows_log > 0) { ?>
         <td class="data bdr1B_gray"><?php echo $row_log['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'] ?></td>
         <td class="data bdr1B_gray"><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
-        <td class="data bdr1B_gray"><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,1); ?></td>
+        <td class="data bdr1B_gray"><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); ?></td>
     </tr>
     <?php } while ($row_log = mysql_fetch_assoc($log)); ?>
     </tbody>

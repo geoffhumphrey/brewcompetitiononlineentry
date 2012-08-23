@@ -91,15 +91,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
  	</span>
-	<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    <span class="adminSubNav">
-		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=judges">Assign Judges to a Location</a>
-	</span>
- 	<span class="adminSubNav">
-		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=stewards">Assign Stewards to a Location</a>
-	</span>
-	<?php }  ?>
-    <?php if (($totalRows_tables > 1) && ($row_prefs['prefsCompOrg'] == "Y")) { ?>
+    <?php if ($totalRows_tables > 1) { ?>
     <span class="adminSubNav">
 		<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
 	</span>
@@ -145,8 +137,7 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>, 
-				{ "asSorting": [  ] }<?php } if ($dbTable == "default") { ?>, 
+				null<?php if ($dbTable == "default") { ?>, 
 				{ "asSorting": [  ] }
 				<?php } ?>
 			]
@@ -160,9 +151,6 @@ if ($totalRows_participant_count > 0) {
 				null,
 				null,
 				null,
-				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			{ "asSorting": [  ] },
-    			<?php } ?>
 				{ "asSorting": [  ] }
 			]
 		<?php } ?>
@@ -174,9 +162,6 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				null,
-				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			{ "asSorting": [  ] },
-    			<?php } ?>
 				{ "asSorting": [  ] }
 			]
 		<?php } ?>
@@ -188,9 +173,6 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				null,
-				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			{ "asSorting": [  ] },
-    			<?php } ?>
 				{ "asSorting": [  ] }
 			]
 		<?php } ?>
@@ -220,9 +202,7 @@ if ($totalRows_participant_count > 0) {
 				null,
 				null,
 				null,
-				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
-    			null,
-    			<?php } ?>
+				null
 			]
 		<?php } ?>
 		
@@ -232,9 +212,6 @@ if ($totalRows_participant_count > 0) {
 				null,
 				{ "asSorting": [  ] },
 				null,
-				<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    			null,
-    			<?php } ?>
 				null,
 				null
 			]
@@ -246,9 +223,7 @@ if ($totalRows_participant_count > 0) {
 				null,
 				null,
 				{ "asSorting": [  ] },
-				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
-    			null
-    			<?php } ?>
+				null
 
 			]
 		<?php } ?>
@@ -259,9 +234,7 @@ if ($totalRows_participant_count > 0) {
 				null,
 				null,
 				{ "asSorting": [  ] },
-				null<?php if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>,
-    			null
-    			<?php } ?>
+				null
 			]
 		<?php } ?>
 			} );
@@ -279,9 +252,6 @@ if ($totalRows_participant_count > 0) {
     <th class="dataHeading bdr1B">Steward?</th>
     <th class="dataHeading bdr1B">Judge?</th>
     <th class="dataHeading bdr1B">Assigned As</th>
-  <?php } 
-	if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-    <th class="dataHeading bdr1B">Assigned To</th>
   <?php } if ($filter != "default") { ?>
     <?php if ($filter == "judges") { ?>
     <th class="dataHeading bdr1B">ID</th>
@@ -312,30 +282,10 @@ if ($totalRows_participant_count > 0) {
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerSteward'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerSteward'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerJudge'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerJudge'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo brewer_assignment($row_brewer['brewerAssignment'], "1"); ?></td>
-  	<?php } if (($totalRows_judging > 1) && ($row_prefs['prefsCompOrg'] == "N")){ ?>
-    	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">
-		<?php if ((($row_brewer['brewerAssignment'] == "J") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignment'] == "S") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>
-		<table class="dataTableCompact">
-		<?php 
-		if ($row_brewer['brewerAssignment'] == "J") $a = explode(",",$row_brewer['brewerJudgeAssignedLocation']);
-		if ($row_brewer['brewerAssignment'] == "S") $a = explode(",",$row_brewer['brewerStewardAssignedLocation']);
-		sort($a);
-		foreach ($a as $value) {
-			if (($value != "") || ($value != 0)) {
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $value);
-				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				echo "<tr>\n<td>".$value.":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat']).")</td>\n";
-				echo "</td>\n</tr>";
-				}
-			}
-		?>
-    	</table>
-		<?php } else echo "Not Set"; ?>
+  	<?php } ?>
 		
 		</td>
-	<?php } if ($filter != "default") { ?>
+	<?php if ($filter != "default") { ?>
     	<?php if ($filter == "judges") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerJudgeID']; ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>

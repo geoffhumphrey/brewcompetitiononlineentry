@@ -860,12 +860,6 @@ if ($action == "update") {
 	if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
 		$updateSQL = "UPDATE $brewing_db_table SET 
 		brewPaid='".$brewPaid."',
-		brewWinner='".$_POST["brewWinner".$id]."',
-		brewWinnerCat='".$_POST["brewWinnerCat".$id]."', 
-		brewWinnerSubCat='".$_POST["brewWinnerSubCat".$id]."', 
-		brewWinnerPlace='".$_POST["brewWinnerPlace".$id]."',
-		brewBOSRound='".$_POST["brewBOSRound".$id]."',
-		brewBOSPlace='".$_POST["brewBOSPlace".$id]."',
 		brewReceived='".$brewReceived."'
 		WHERE id='".$id.";'"; 
 		mysql_select_db($database, $brewing);
@@ -873,8 +867,9 @@ if ($action == "update") {
 		//echo $updateSQL."<br>";
 	} 
 	//echo $massUpdateGoTo;
+	$massUpdateGoTo = "../index.php?section=admin&go=entries&msg=9";
 	$pattern = array('\'', '"');
   	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
-	header(sprintf("Location: %s", $massUpdateGoTo)); 
+	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
 } // end if ($action == "update")
 ?>

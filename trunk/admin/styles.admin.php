@@ -14,11 +14,6 @@ include(DB.'styles.db.php');
     </span>
     <?php } ?>
 <?php if ($action == "default") { ?>
-  	<?php if (($totalRows_judging > 1) && ($filter == "default") && ($row_prefs['prefsCompOrg'] == "N")) { ?>
-  	<span class="adminSubNav">
-    	<span class="icon"><img src="images/note.png"  /></span><a href="index.php?section=admin&amp;go=styles&amp;filter=judging">Designate Style Categories for Judging Locations</a>
-  	</span>
-	<?php } ?>
   	<span class="adminSubNav">
     	<span class="icon"><img src="images/note_add.png"  /></span><a href="index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a>
     </span>

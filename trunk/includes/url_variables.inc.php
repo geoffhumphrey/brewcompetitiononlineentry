@@ -95,5 +95,16 @@ if (isset($_GET['purge'])) {
   $purge = (get_magic_quotes_gpc()) ? $_GET['purge'] : addslashes($_GET['purge']);
 }
 
+$round = "default";
+if (isset($_GET['round'])) {
+  $round = (get_magic_quotes_gpc()) ? $_GET['round'] : addslashes($_GET['round']);
+}
+
+$location = "default";
+if (isset($_GET['location'])) {
+  $location = (get_magic_quotes_gpc()) ? $_GET['location'] : addslashes($_GET['location']);
+}
+
+
 
 ?>

@@ -1,5 +1,5 @@
 <?php 
-echo "<h2>Performing Database Updates for Version ".$current_version.". Please stand by.</h2>";
+echo "<h2>Performing Database Updates for Version ".$current_version."...</h2>";
 	
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 	

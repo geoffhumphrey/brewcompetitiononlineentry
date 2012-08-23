@@ -248,22 +248,37 @@ If no judges are listed below, no judge indicated that they are available for th
 </tr>
 </table>
 <h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$id,$dbTable,"default"); echo " (".$entry_count." entries)"; ?></h3>
-<p><strong>Location:</strong> <?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat']); ?></p>
+<table class="dataTableCompact">
+	<tr>
+    	<td class="dataLabel">Location:</td>
+        <td class="data"><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></td>
+     </tr>
+     <!-- 
+     <tr>
+        <td class="dataLabel">Available Judges<br />At This Location:</td>
+        <td class="data"><?php // echo available_at_location($row_tables_edit['tableLocation'],$filter,"default"); ?></td>
+    </tr>
+    -->
 <?php if ($row_rounds['flightRound'] != "") { ?>
 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-<p><strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>
-<ul>
-<?php 
-	for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
-	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
-	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-	$row_entry_count = mysql_fetch_assoc($entry_count);
-	echo "<li>Flight $c: ".$row_entry_count['count']." entries.</li>";
-	}
-?>
-</ul>
-</p>
+	<tr>
+    	<td class="dataLabel">Number of Flights:</td>
+		<td class="data"><?php echo $row_flights['flightNumber']; ?></td>
+    </tr>
+    <tr>
+    	<td colspan="2">
+            <ul>
+            <?php 
+                for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
+                $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s'", $row_tables_edit['id'], $c);
+                $entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+                $row_entry_count = mysql_fetch_assoc($entry_count);
+                echo "<li>Flight $c: ".$row_entry_count['count']." entries.</li>";
+                }
+            ?>
+            </ul>
 <?php } ?>
+</table>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
