@@ -24,7 +24,7 @@ function check_flight_round($flight_round,$round) {
 }
 
 if ( $go == "judging_tables" ) {
-   $query_tables = "SELECT * FROM judging_tables ORDER BY tableNumber";	
+   $query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";	
 }
 
 if ( $go == "judging_locations" ) {
@@ -77,7 +77,7 @@ function check_flight_number($entry_id,$flight) {
 	
 }
 
-if (($go == "judging_tables") || ( $go == "judging_locations") && ($id == "default") && ($totalRows_tables > 0))
+if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id == "default"))
 do { 
 $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
@@ -104,11 +104,13 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         </div>
 	</div>
     <?php 
-	for($i=1; $i<$flights+1; $i++) { ?>
+	for($i=1; $i<$flights+1; $i++) { 
+	$random =  random_generator(5,2)
+	?>
     <h3><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i; ?></h3>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable<?php echo $row_tables['id']."-".$i; ?>').dataTable( {
+		$('#sortable<?php echo $random; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -126,7 +128,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $row_tables['id']."-".$i; ?>">
+    <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
@@ -178,7 +180,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
 
-if (($go == "judging_tables") || ($go == "judging_locations") && ($id != "default") && ($totalRows_tables > 0)) { 
+if ((($go == "judging_tables") || ($go == "judging_locations")) &&  ($id != "default")) { 
 	
 $flights = number_of_flights($row_tables_edit['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
@@ -204,11 +206,13 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         </div>
 	</div>
      <?php 
-	for($i=1; $i<$flights+1; $i++) { ?>
+	for($i=1; $i<$flights+1; $i++) { 
+	$random = random_generator(5,1);
+	?>
     <h3><?php echo "Table ".$row_tables_edit['tableNumber'].", Flight ".$i; ?></h3>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable<?php echo $row_tables_edit['id']."-".$i; ?>').dataTable( {
+		$('#sortable<?php echo $random; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -226,7 +230,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $row_tables['id']."-".$i; ?>">
+    <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
@@ -283,7 +287,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 
 
 <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
-<?php if (($go == "judging_tables") || ($go == "judging_locations") && ($id == "default") && ($totalRows_tables > 0))  
+<?php if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id == "default"))  
 do { 
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
@@ -366,7 +370,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 <div style="page-break-after:always;"></div>
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
-if (($go == "judging_tables") || ($go == "judging_locations") && ($id != "default") && ($totalRows_tables > 0)) { 
+if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "default")) { 
 $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 ?>
 <div id="content">
