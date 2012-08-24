@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
+<style type="text/css">
+<!--
+body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; }
+table					{ border-collapse: collapse; width: 100%; }
+table td				{ padding: 2px; }
+table th				{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
+.headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+.headerTitleSm 			{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
+.bottle, .medium 		{ font-size: .9em; } 
+.small 					{ font-size: .7em; margin: 0; } 
+#printContainer 		{ width: 100%; }
+.bdr1_thick	 			{ border: 5px solid #000000; }
+.bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
+.bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
+.bdr1B 					{ border-bottom: 1px solid #000000; }
+.bdr1L 					{ border-left: 1px solid #000000; }
+.bdr1R 					{ border-right: 1px solid #000000; }
+.bdr1T 					{ border-top: 1px solid #000000; }
+.bdr1R_dashed			{ border-right: 1px dashed #000000; }
+.bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
+.headerItalic 		    { font-size: 8px; font-style: italic; }
+table.small	td			{ padding: 1px 2px 1px 3px; }
+table.bottleLabel		{ border-collapse: collapse; width: 700px; }
+table.bottleLabel-inner	{ margin: 15px; width: 325px }
+table.bottleLabel-inner	td { padding: 5px; text-align: left; }
+.error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-image: url(../images/error.png); background-position: center left; background-repeat: no-repeat; }
+-->
+</style>
+</head>
+
+<body 
+[onshow_a;block=begin;when [var.action]=='print']
+onload="javascript:window.print()"
+[onshow_a;block=end]
+>
+
+<!--
+This is not intended as a complete example. For some more complex usage, see the BJCP
+form.
+
+More information about Tiny But Strong templating system at
+http://www.tinybutstrong.com/
+-->
+
+<div id="printContainer">
+<a name="labels_top" id="labelsOtop"></a>
+
+<!-- div for non-print header -->
+<div>
+[onshow_b;block=div;when [var.action]!='print']
+<table>
+  <tr>
+    <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
+    <td width="5%" nowrap="nowrap"><img src = "../images/eye.png"  />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
+    <td width="5%" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  </tr>
+</table>
+</div> <!-- end non-print header-->
+
+<h1>Entry Form, [onshow.contest_info.contestName]</h1>
+
+<h2>Brewer</h2>
+
+<ul>
+  <li>Name(s): [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</li>
+  <li>Address: [onshow.brewer_info.brewerAddress], [onshow.brewer_info.brewerCity], 
+       [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip],
+      </li>
+   <li>Phone: [onshow.brewer_info.brewerPhone1]</li>
+   <li>Club: [onshow.brewer_info.brewerClubs]</li>
+</ul>
+
+<h2>Style Entered</h2>
+
+<ul>
+  <li>Style number: [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
+  <li>Style name: [onshow.brewing_info.styleName]</li>
+  
+  <!-- Better formatting and/or conditional display would greatly improve layout here -->
+  <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
+  <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
+</ul>
+
+<h2>Recipe</h2>
+
+<h3>Grains and Fermentables</h3>
+
+<table>
+  <tr>
+    <th>Amount</th>
+    <th>Type</th>
+  </tr>
+  <tr>
+    <td>[grains.weight.lb;block=tr] lb ([grains.weight.percent]%)</td>
+    <td>[grains.name]</td>
+  </tr>
+  <tr>
+    <td>[adjuncts.weight.lb;block=tr] lb ([adjuncts.weight.percent]%)</td>
+    <td>[adjuncts.name]</td>
+  </tr>
+  <tr>
+    <td>[extracts.weight.lb;block=tr] lb ([extracts.weight.percent]%)</td>
+    <td>[extracts.name]</td>
+  </tr>
+</table>
+
+<h3>Hops</h3>
+
+<table>
+  <tr>
+    <th>Amount (oz)</th>
+    <th>Type</th>
+    <th>%&#945;</th>
+    <th>Usage</th>
+    <th>Minutes</th>
+  </tr>
+  <tr>
+    <td>[hops.weight.oz;block=tr]</td>
+    <td>[hops.name]</td>
+    <td>[hops.alphaAcid]</td>
+    <td>[hops.use]</td>
+    <td>[hops.minutes]</td>
+  </tr>
+</table>
+
+<h3>Yeast</h3>
+
+<p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
+
+<h3>Processes</h3>
+
+<ul>
+  <li>OG: [onshow.brewing_info.brewOG;frm='0.000']</li>
+  <li>FG: [onshow.brewing_info.brewFG;frm='0.000']</li>
+</ul>
+
+<p>Fermented at [onshow.brewing_info.brewPrimaryTemp.f]&deg;F for [onshow.brewing_info.brewPrimary]
+days and [onshow.brewing_info.brewSecondaryTemp.f]&deg;F for [onshow.brewing_info.brewSecondary]
+days.</p>
+<table>
+  <tr>
+    <th width="40%">Mash temperature</th>
+    <th>Minutes</th>
+  </tr>
+  <tr>
+    <td>[mashSteps.temp.f;block=tr]&deg;F</td>
+    <td>[mashSteps.minutes]</td>
+  </tr>
+</table>
+<br style="page-break-after:always;">
+<br />
+<a name="labels" id="labels"></a>
+<h1>Bottle Labels</h1>
+<table align="center" class="bottleLabel">
+  <tr>
+    <td align="center">
+    <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td nowrap="nowrap">Competition:</td>
+        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+    </table>
+    </td>
+    <td align="center">
+    <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td nowrap="nowrap">Competition:</td>
+        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td align="center">
+    <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td nowrap="nowrap">Competition:</td>
+        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+    </table>
+    </td>
+    <td align="center">
+      <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td nowrap="nowrap">Competition:</td>
+        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,687 @@
+@charset "utf-8";
+/* CSS Document 
+*        Document Name: claussenii.css
+*        Description:   A custom theme that expands upon default.css
+*		 Color scheme:  #1A2A00 (dark green); #3A6907 (medium green); #BFCAB2 (light green);
+*/
+
+@import url("html_elements.css");
+@import url("common.css");
+@import url("messages.css");
+@import url("menus.css");
+@import url("sorting.css");
+@import url("thickbox.css");
+@import url("calendar.css");
+@import url(http://fonts.googleapis.com/css?family=Cabin|Droid+Serif:700);
+
+/* --------------------- html_elements.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in  
+   html_lements.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+html, body {
+	background-color: #eeeeee;
+}
+
+body, caption, input, textarea, select, option, legend, fieldset  {
+	/* font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; */
+	font-family: 'Cabin', "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 13px;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0em;
+	word-spacing: 0.004em;
+	line-height: 1.5;
+}
+
+option {
+}
+
+th, td {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+pre, code {
+}
+
+p {
+	margin: 1.25em 0 1.25em 0;
+}
+
+/* Links */
+
+a:link {
+	color: #900;
+}
+
+a:visited {
+	color: #900;
+}
+
+a:hover, a:focus {
+	color: #3A6907;
+	text-decoration: none;
+}
+
+a:active {
+	color:#FC3;
+}
+
+/** headings **/
+h1 {
+	font-family: Droid Serif;
+	font-size: 1.9em;
+	color: #1A2A00;
+	margin: 1em 0 1.5em 0;
+}
+
+h2 {
+	font-family: Droid Serif;
+	font-size: 1.5em;
+	color: #1A2A00;
+	margin: 1em 0 1em 0;
+}
+
+h3 {
+	font-family: Droid Serif;
+	font-size: 1.3em;
+	color: #1A2A00;
+	margin: 1em 0 1em 0;
+}
+
+h4, h5, h6 {
+	font-family: Droid Serif;
+	color: #1A2A00;
+	margin: 1em 0 1em 0;
+}
+
+/** lists **/
+ul, ol {
+}
+
+ul ul, ul ol, ol ol, ol ul {
+}
+
+li {
+}
+
+ul { 
+}
+
+ul ul { 
+}
+
+ul ul ul { 
+}
+
+ul ul ul ul { 
+}
+
+ol { 
+}
+
+ol ol { 
+}
+
+ol ol ol { 
+}
+
+dt  {
+}
+
+dd {
+}
+
+
+/** tables **/
+table {
+}
+
+td {
+	padding: .5em 2em .5em .5em;
+}
+
+th {
+	padding: 1em .5em 1em .5em;
+	text-align: left;
+	background-color: #3A6907;
+	color:  #1A2A00;
+}
+
+/** images **/
+img  {
+}
+
+/** horizontal rules **/
+hr  {
+}
+
+/** forms **/
+form {
+}
+
+button, menu, textarea, label, submit, .submit, select, input {
+	border: 1px solid #aaaaaa;
+	background-color: #dedede;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+select, optgroup, option  {
+}
+
+textarea {
+}
+
+
+/* --------------------- common.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in common.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+/* ------------------------------- Content ------------------------------- */
+
+#content {
+}
+
+#content-inner {
+
+}
+
+#content-inner-no-nav {
+	padding: 1em;
+}
+
+#content-inner h2 { 
+}
+
+#content-inner-no-nav h2 {
+	border-bottom: 1px solid #1A2A00;
+}
+
+#content-inner .menu {
+	border: 1px solid #3A6907;
+	background-color: #BFCAB2;
+}
+
+
+#content-inner .menu a {
+	color: #1A2A00;
+}
+
+#content-inner .menu a.menuItem:hover, 
+#content-inner .menu a.menuItemHighlight {
+	background-color: #7B9959;
+	color: #fff;
+}
+
+#container {
+	position: relative;
+	min-height: 95%;
+	background-color: #ffffff;
+}
+
+/* ------------------------------- Nav ------------------------------- */
+
+#navigation { 
+	width: 100%;
+	position: relative;
+	height: 35px;
+	background-image: url(../images/claussenii/nav.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:#1A2A00;
+	border-bottom: 1px solid #1A2A00;
+}
+
+#navigation-inner
+{
+	padding: .75em;
+	vertical-align:middle;
+	font-weight: bold;
+	color: #BFCAB2;
+}
+
+#navigation-inner a,
+#navigation-inner a:visited,
+#navigation-inner a:hover,
+#navigation-inner a:focus,
+#navigation-inner a:active{
+	
+}
+
+#navigation-inner .menu {
+	border: 1px solid #1A2A00;
+	background-color: #BFCAB2;
+}
+
+#navigation-inner .menu a {
+	color: #1A2A00;
+	font-weight: normal;
+}
+
+#navigation-inner .menu a.menuItem:hover, 
+#navigation-inner .menu a.menuItemHighlight {
+	background-color: #7B9959;
+	color: #FFF;
+}
+
+#nav {
+	margin: 0;
+	padding: 0;
+}
+
+#nav ul {
+	padding-left: 0;	
+}
+
+#nav li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1em 0 0;
+	margin: 0;
+}
+
+#nav li a {
+	color: #fff;
+	font-weight: normal;
+}
+
+#nav li a:visited {
+	color: #fff;
+}
+
+#nav li a:hover,
+#nav li a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#nav li a:active,{
+	color: #FC3;
+	text-decoration: none;
+}
+
+
+#break {
+	display: inline;
+	vertical-align: middle;
+	float: right;
+	font-weight:normal;
+	font-style: italic;
+	font-size: .8em;
+}
+
+/* ------------------------------- Header ------------------------------- */
+#header {
+	width: auto;
+	height: auto;
+}
+
+#header-inner {
+}
+
+#header-inner h1 {
+	border-bottom: 1px dashed #1A2A00;
+}
+
+
+/* ------------------------------- Footer ------------------------------- */
+#footer {
+	background-color: #3A6907;
+	border-top: 1px solid #1A2A00;
+	background-image: url(../images/claussenii/footer.png);
+	background-position: center;
+	color: #BFCAB2;
+	height: auto;
+}
+
+#footer-inner {
+	vertical-align: middle;
+	text-align: center;
+	padding: .75em;
+}
+
+#footer-inner a {
+	color:#FFF;
+}
+
+#footer-inner a:visited {
+	color: #fff;
+}
+
+#footer-inner a:hover,
+#footer-inner a:focus {
+	color: #FC3;
+	text-decoration: none;
+}
+
+#footer-inner a:active,{
+	color: #FC3;
+	text-decoration: none;
+}
+
+/* ------------------------------- Data Display ------------------------------- */
+
+.dataTable {
+}
+
+.dataTable th {
+	background-color: #BFCAB2;
+}
+
+.dataTable td {
+}
+
+.dataHeading {
+}
+
+.dataList {
+}
+
+.dataLabel {
+}
+
+.data {
+}
+
+.data-left {
+}
+
+.icon {
+}
+
+.dataTableCompact  { 
+}
+
+.dataTableCompact td { 
+}
+
+.dataTableCompact th {
+	background-color: #3A6907;
+}
+
+/* ------------------------------- Forms ------------------------------- */
+
+.button { 
+	font-weight: bold;
+} 
+
+.button:hover {
+	background-color: #BFCAB2;
+}
+
+.paypal {
+}
+
+/* ------------------------------- Collapse jquery ------------------------------- */
+
+.trigger {
+	color: #1A2A00;
+}
+
+.trigger a {
+}
+
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
+}
+
+.toggle_container {
+/* Use the following for accordian */
+/* display: none */
+}
+
+.toggle_container a {
+/* Use the following for accordian */
+/* display: block */
+}
+
+
+/* ------------------------------- Admin ------------------------------- */
+
+.admin {
+}
+
+.admin_default {
+	margin: 0 0 1.5em 0;
+	padding: 0 .5em 0 0;
+}
+
+.admin_default ul {
+	display: inline;
+}
+
+.admin_default li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default li li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default_header {
+	font-size: 1em;
+	font-weight: bold;
+	margin: 1.5em 0 .5em 0;
+	padding: 0 0 .5em 0;
+}
+
+/* -- Admin Menu -- */
+
+.menu {	
+}
+
+/* -- Admin Sub-Navigation -- */
+
+.adminSubNavContainer {
+}
+
+.adminSubNav {
+}
+
+/* ------------------------------- Sponsor Display ------------------------------- */
+
+#sponsor {
+}
+
+#sponsor li {
+}
+
+.looper {
+}
+
+.looper_large {
+}
+
+.looper_large th {
+}
+
+.looper_large .location {
+}
+
+.looper_large .logo {
+}
+
+.looper_large .info {
+}
+
+
+/* ------------------------------- Setup ------------------------------- */
+
+.setupTitle {
+}
+
+/* ------------------------------- Colors ------------------------------- */
+
+.red {
+}
+
+.green {
+}
+
+.yellow {
+}
+
+.orange {
+}
+
+.blue { 
+}
+
+/* ------------------------------- Borders ------------------------------- */
+
+.bdr1 {
+	border: 1px solid #1A2A00;
+}
+
+.bdr1T {
+	border-top: 1px solid #1A2A00;
+}
+
+.bdr1B {
+	border-bottom: 1px solid #1A2A00;
+}
+
+.bdr1B_dashed {
+}
+
+.bdr1T_dashed {
+}
+
+/* --------------------- messages.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in messages.css - 
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.info {
+}
+
+.closed {
+}
+
+.error {
+}
+
+.required {
+}
+
+.judge-alert {
+}
+
+.bos {
+}
+
+.at-a-glance {
+	background-color: #BFCAB2;
+	border: 1px solid #1A2A00;
+}
+
+/* --------------------- menus.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the menus.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+#menu_container .trigger a:link,
+#menu_container .trigger a:hover, 
+#menu_container .trigger a:active, 
+#menu_container .trigger a:focus {
+	background-color: $fff;
+}
+
+#menu_container .trigger.open a:link, 
+#menu_container .trigger.open a:visited {
+	background-color: #fff;
+}
+
+
+
+
+/* --------------------- sorting.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the sorting.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.paging_full_numbers {
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+
+}
+
+.paging_full_numbers span.paginate_button {
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #BFCAB2;
+}
+
+
+
+
+/* --------------------- thickbox.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the thickbox.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+
+
+
+/* --------------------- calendar.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the calendar.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+
+
+
+
