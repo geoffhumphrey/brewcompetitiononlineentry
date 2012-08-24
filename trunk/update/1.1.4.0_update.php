@@ -1,5 +1,5 @@
 <?php 
-echo "<h2>Performing Updates for Version 1.1.5...</h2>";
+echo "<h2>Performing Updates for Version 1.1.4...</h2>";
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` ADD `contestRegistrationOpen` DATE NULL AFTER `contestHostLocation`, ADD `contestEntryOpen` DATE NULL AFTER `contestRegistrationDeadline`;"; 
 mysql_select_db($database, $brewing);

@@ -31,10 +31,10 @@ elseif (($section == "admin") && ($go == "entries") && ($filter == "default") &&
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'";
 	}
 elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "unpaid")) { 
-	$query_log = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0'";
+	$query_log = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
-	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0'";
-	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0' AND brewConfirmed='1'";
+	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL";
+	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL AND brewConfirmed='1'";
 	}
 elseif (($section == "admin") && ($go == "entries") && ($filter != "default") && ($dbTable == "default") && ($bid == "default") && ($view == "default")) { 
 	$query_log = "SELECT * FROM $brewing_db_table WHERE brewCategorySort='$filter' ORDER BY $sort $dir";
@@ -63,12 +63,10 @@ else {
 	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 	}
-	
-	
+
 //echo $query_log."<br>";
 //echo $query_log_paid."<br>";
 //echo $query_confirmed."<br>";
-
 
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);

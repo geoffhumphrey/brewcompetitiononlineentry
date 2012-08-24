@@ -57,7 +57,7 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 
-if (($filter == "default") && ($bid == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
+if (($filter == "default") && ($bid == "default") && ($view == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 ?>
 <table class="dataTable">
 <?php if ($entries_unconfirmed > 0) { ?>
@@ -67,17 +67,17 @@ if (($filter == "default") && ($bid == "default")) $entries_unconfirmed = ($tota
 <?php } ?>
 <tr>
   <td class="dataHeading" width="5%">Total Entries <?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
-  <td class="data"><?php echo $totalRows_log_confirmed." confirmed, ".$entries_unconfirmed." unconfirmed"; ?></td>
+  <td class="data"><?php echo $totalRows_log_confirmed." confirmed, "; echo $entries_unconfirmed." unconfirmed"; ?></td>
 </tr>
+<?php if ($view == "default") { ?>
 <tr>
   <td class="dataHeading">Total Confirmed Entry Fees <?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
 </tr>
-<?php if ($view == "default") { ?>
 <tr>
   <td class="dataHeading">Paid &amp; Unpaid Confirmed Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php 
-  if ($filter == "default") { 
+  if (($filter == "default") && ($bid == "default")) { 
   	if ($totalRows_log_paid > 0) echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a> (".$row_prefs['prefsCurrency'].$total_fees_paid.")";
  	else echo $totalRows_log_paid." paid (".$row_prefs['prefsCurrency'].$total_fees_paid.")";
 	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo ", <a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid</a> (".$row_prefs['prefsCurrency'].$total_fees_unpaid.")"; 

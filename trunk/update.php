@@ -5,8 +5,44 @@ require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'functions.inc.php'); 
-require(DB.'common.db.php');
-require(DB.'archive.db.php'); 
+mysql_select_db($database, $brewing);
+//require(DB.'archive.db.php'); 
+
+
+$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
+$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+$row_contest_info = mysql_fetch_assoc($contest_info);
+$totalRows_contest_info = mysql_num_rows($contest_info); 
+
+$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
+$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+$row_prefs = mysql_fetch_assoc($prefs);
+$totalRows_prefs = mysql_num_rows($prefs);
+
+// Session specific queries
+if (isset($_SESSION["loginUsername"]))  {
+	$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION["loginUsername"]);
+	$user = mysql_query($query_user, $brewing) or die(mysql_error());
+	$row_user = mysql_fetch_assoc($user);
+	$totalRows_user = mysql_num_rows($user);
+
+	$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
+	$name = mysql_query($query_name, $brewing) or die(mysql_error());
+	$row_name = mysql_fetch_assoc($name);
+	$totalRows_name = mysql_num_rows($name);
+
+	if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) {
+		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $username);
+		}
+	elseif (($section == "brewer") && ($action == "edit")) { 
+		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $row_brewer['brewerEmail']);
+		}
+	else $query_user_level = sprintf("SELECT id from %s",$prefix."users");
+	$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
+	$row_user_level = mysql_fetch_assoc($user_level);
+	$totalRows_user_level = mysql_num_rows($user_level);
+	
+}
 
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
@@ -34,6 +70,7 @@ $query_log = "SELECT * FROM $brewing_db_table";
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log); 
+
 $current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
 $section = "update";
 $table_name = $prefix."system";
@@ -77,45 +114,49 @@ if (check_setup($prefix."preferences",$database)) {
 			if ($action == "update") {
 				
 				// Perform updates to the db based upon the current version
-					if ($version < "1.1.3") {
+					$version = str_replace(".","",$version);
+					if ($version < "113") {
 						echo "
 						<div class='error'>Your installed version is incompatible with this update script.</div>
 						<p>Please update your database and files manually through version 1.1.2 to utilize the update feature.</p>
 						";
 					}
-					if ($version == "1.1.3") {
+					if ($version == "113") {
 						include (UPDATE.'1.1.4.0_update.php');
 						include (UPDATE.'1.1.5.0_update.php');
 						include (UPDATE.'1.1.6.0_update.php');
 						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'current_update.php');
 					}
 					
-					if ($version == "1.1.4") {
+					if ($version == "114") {
 						include (UPDATE.'1.1.5.0_update.php');
 						include (UPDATE.'1.1.6.0_update.php');
 						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'current_update.php');
 					}
 					
-					if ($version == "1.1.5") {
+					if ($version == "115") {
 						include (UPDATE.'1.1.6.0_update.php');
 						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'current_update.php');
 					}
 					
-					if (($version == "1.1.6") || ($version == "1.1.6.1")) {
+					if (($version == "116") || ($version == "1161")) {
 						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'current_update.php');
 					}
 					
-					if (($version == "1.2.0.0") || ($version == "1.2.0.1") || ($version == "1.2.0.2")) {
+					if ($version >= "1200") {
+						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'current_update.php');
 					}
-		
-					if (($version == "1.2.0.3") || ($version == "1.2.0.4"))  {
-						include (UPDATE.'current_update.php');
-					} 
+					
+				if ($version >= "113") {
 					
 				echo "<p class='error' style='width:230px; margin-top:20px;'>Update to ".$current_version." Complete!</p>";	
 				
@@ -127,6 +168,8 @@ if (check_setup($prefix."preferences",$database)) {
 				echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
 				echo "<li>Go to the <a href='index.php?section=admin'>Admin Main Menu</a>.</li>";
 				echo "</ul>";
+				
+				}
 				
 			} // end if ($action == "update")
 			
