@@ -67,7 +67,7 @@ foreach (array_unique($style) as $style) {
 </thead>
 <tbody>
 <?php 
-	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
+	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
 	if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 	$query_scores .= " ORDER BY a.scorePlace";
 	//echo $query_scores;
@@ -92,6 +92,10 @@ foreach (array_unique($style) as $style) {
 </tbody>
 </table>
 <?php 	} 
+	else { ?>
+		<h3>Category <?php echo ltrim($style[0],"0").$style[1].": ".$style[2]." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
+		<p>No winners have been entered yet for this sub-category. Please check back later.</p>
+        <?php }
 	} 
 } 
 ?>
