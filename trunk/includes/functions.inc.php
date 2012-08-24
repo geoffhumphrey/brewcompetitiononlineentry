@@ -1101,7 +1101,7 @@ function style_convert($number,$type) {
 		break;
 		
 		case "3":
-		$n = ereg_replace('[^0-9]+', '', $number);
+		$n = preg_replace('/[^0-9]+/', '', $number);
 		if ($n >= 29) $style_convert = TRUE;
 		else {
 		switch ($number) {
@@ -1140,7 +1140,7 @@ function style_convert($number,$type) {
 		break;
 		
 		case "5":
-		$n = ereg_replace('[^0-9]+', '', $number);
+		$n = preg_replace('/[^0-9]+/', '', $number);
 		if ($n >= 24) $style_convert = TRUE;
 		break;
 		
