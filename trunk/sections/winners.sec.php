@@ -85,7 +85,7 @@ if ($entry_count > 0) {
 </tbody>
 </table>
 <?php 
-		} else echo "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet. Please check back later.</p>";
+		} else echo "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p>";
 	} // end if ($entry_count > 0);
 } while ($row_tables = mysql_fetch_assoc($tables));
 

@@ -93,8 +93,7 @@ do {
 	}
 	
 	if (($action == "default") && ($filter == "winners")) {
-		$query_scores = sprintf("SELECT eid,scorePlace FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_sql['tableNumber']);
-		$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";	
+		$query_scores = sprintf("SELECT eid,scorePlace FROM $judging_scores_db_table WHERE scoreTable='%s' AND scorePlace IS NOT NULL ORDER BY scorePlace ASC", $row_sql['id']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		$totalRows_scores = mysql_num_rows($scores);
@@ -118,7 +117,6 @@ do {
 	}		
 } while ($row_sql = mysql_fetch_assoc($sql));
 
-
 header('Content-type: application/x-msdownload');
 header('Content-Disposition: attachment;filename='.$filename);
 header('Pragma: no-cache');
@@ -129,5 +127,6 @@ foreach ($a as $fields) {
     fputcsv($fp,$fields,$separator);
 }
 fclose($fp);
+
 }
 ?>

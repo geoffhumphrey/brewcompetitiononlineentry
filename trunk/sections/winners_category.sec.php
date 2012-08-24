@@ -28,7 +28,7 @@ foreach (array_unique($style) as $style) {
 	//echo $query_score_count;
 	// Display all winners 
 if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
-if ($row_entry_count['count'] > 0) {
+if ($row_score_count['count'] > 0) {
 ?>
 <h3>Category <?php echo ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
  <script type="text/javascript" language="javascript">
@@ -67,7 +67,7 @@ if ($row_entry_count['count'] > 0) {
 </thead>
 <tbody>
 <?php 
-	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
 	
 	if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 	$query_scores .= " ORDER BY a.scorePlace";
@@ -92,6 +92,10 @@ if ($row_entry_count['count'] > 0) {
 <?php } while ($row_scores = mysql_fetch_assoc($scores)); ?>
 </tbody>
 </table>
-<?php 	} 
-	} 
+<?php 	} // end if > 0
+		else { ?>
+		<h3>Category <?php echo ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
+		<p>No winners have been entered yet for this category. Please check back later.</p>
+        <?php }
+	} // end foreach
 ?>
