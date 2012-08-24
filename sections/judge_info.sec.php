@@ -7,7 +7,7 @@
       <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
       <td width="15%" class="data">Have you taken <strong>and passed</strong> the BJCP Mead Exam?</td>
       <td class="data">
-      <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; elseif (($section == "register") && ($go == "judge")) echo "CHECKED"; ?>/> No</td>
+      <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; elseif ((($action == "edit") || ($section == "register")) && ($go == "judge")) echo "CHECKED"; ?>/> No</td>
     </tr>
     <tr>
       <td width="10%" class="dataLabel">Judge Rank:</td>
