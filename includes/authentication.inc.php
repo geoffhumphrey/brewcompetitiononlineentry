@@ -51,7 +51,7 @@ function sessionAuthenticate()
   // Check if the user hasn't logged in
   if (!isset($_SESSION["loginUsername"]))
   {
-    header("Location: ../index.php?section=login&msg=1");
+    header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
     exit;
   }
 

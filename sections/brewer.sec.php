@@ -192,7 +192,7 @@ $row_countries = mysql_fetch_assoc($countries);
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
-	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo "../index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
+	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo $base_url."/index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

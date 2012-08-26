@@ -28,7 +28,7 @@ WHERE id=%s",
 	if ($section == "step8") {
 		// Lock down the config file
 		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
-		header("location:../index.php?msg=$message"); 
+		header(sprintf("Location: %s", $base_url."/index.php?msg=$message")); 
 	}
 	
 	else {

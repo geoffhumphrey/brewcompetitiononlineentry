@@ -58,14 +58,14 @@ session_start();
   		$_SESSION['loginUsername'] = $loginUsername;
 		//echo $_SESSION["loginUsername"];
   		// If the username/password combo is OK, relocate to the "protected" content index page
-		if ($section != "update") header("Location: ../index.php?section=list");
+		if ($section != "update") header(sprintf("Location: %s", $base_url."/index.php?section=list"));
 		else header("Location: ../update.php");
   		exit;
 	}
 else
 	{
   		// If the username/password combo is incorrect or not found, relocate to the login error page
-  		header("Location: ../index.php?section=login&msg=1");
+  		header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
   		session_destroy();
   		exit;
 	}

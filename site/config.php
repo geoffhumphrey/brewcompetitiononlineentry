@@ -94,6 +94,23 @@ After finishing the upgrade, be sure to open this file again and change the TRUE
  
 */
 
+
 $setup_free_access = FALSE;
+
+/*
+******************************************************************************
+Set the base URL of your installation. In most cases the default will be OK. 
+
+IF YOU ARE RUNNING YOUR INSTANCE OF BCOE&M IN A SUBFOLDER...
+Change the $base_url variable below to the url of your installations
+
+For example:
+$base_url = "http://www.brewcompetition.com/bcoe"; 
+
+Note that there is NO trailing slash!
+
+*/
+
+$base_url = "http://".$_SERVER['SERVER_NAME'];
 
 ?>

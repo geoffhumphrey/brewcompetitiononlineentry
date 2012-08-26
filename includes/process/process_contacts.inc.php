@@ -59,7 +59,7 @@ $securimage = new Securimage();
 		setcookie("from_name", $_POST['from_name'], 0, "/");
 		setcookie("subject", $_POST['subject'], 0, "/");
 		setcookie("message", $_POST['message'], 0, "/");
-		header("Location: ../index.php?section=contact&action=email&msg=2");
+		header(sprintf("Location: %s", $base_url."/index.php?section=contact&action=email&msg=2"));
 	}
 
 	else {
@@ -97,7 +97,7 @@ $securimage = new Securimage();
 		//echo $message;
 		
 		mail($to_email, $subject, $message, $headers);
-		header("Location: ../index.php?section=contact&action=email&msg=1&id=".$row_contact['id']);
+		header(sprintf("Location: %s", $base_url."/index.php?section=contact&action=email&msg=1&id=".$row_contact['id']));
 	}
 }
 

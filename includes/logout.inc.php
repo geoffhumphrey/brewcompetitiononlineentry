@@ -1,5 +1,5 @@
 <?php
-$logout_location = "../index.php?section=login&action=logout&msg=3";
+$logout_location = $base_url."/index.php?section=login&action=logout&msg=3";
 
 session_start();
 $requested_logout = true;

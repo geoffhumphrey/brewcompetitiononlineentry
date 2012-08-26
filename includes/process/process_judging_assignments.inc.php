@@ -120,6 +120,6 @@ if ($action == "update") {
 			}
 		} // end foreach	  
  }  // end if ($row_judging_prefs['jPrefsQueued'] == "Y")
-header(sprintf("Location: %s", "http://".$_SERVER['SERVER_NAME'].$_SERVER['PATH_INFO']."/index.php?section=admin&go=judging_tables"));
+header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=judging_tables&msg=2"));
 }
 ?>

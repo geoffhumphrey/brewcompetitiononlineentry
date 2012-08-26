@@ -14,7 +14,7 @@ $forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
 $row_forgot = mysql_fetch_assoc($forgot);
 $totalRows_forgot = mysql_num_rows($forgot);
 
-if ($totalRows_forgot == 0) { header("Location: ../index.php?section=login&action=forgot&msg=1"); }
+if ($totalRows_forgot == 0) { header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=1")); }
 if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { //if answer is correct
 
 /*
@@ -36,11 +36,11 @@ $updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE user_name='
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
-  $updateGoTo = "../index.php?section=login&go=".$key."&msg=2";
+  $updateGoTo = $base_url."/index.php?section=login&go=".$key."&msg=2";
   header(sprintf("Location: %s", $updateGoTo)); 
 
 } else {
-header("Location: ../index.php?section=login&action=forgot&go=verify&msg=4&username=".$username); 
+header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
 }
 
 /*
@@ -53,11 +53,11 @@ $headers 	= "Content-Type: text/html; charset=iso-8859-1\n".$headers;// for html
 if (mail("$em","Password Reset","This is in response to your request for a password reset at from the ".$row_contest_info['contestName']." entry site. \n \nYour user name: $row->userid \n Your new password: ".$key."\n\n
 \n\n Thank You \n \n The ".$row_contest_info['contestName']." Staff","$headers")) 
 {
-header("Location: ../index.php?section=login&action=forgot&msg=2");
+header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=2"));
 }
 else
 { 
-header("Location: ../index.php?section=login&action=forgot&msg=3");
+header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=3"));
 }
 */
 
