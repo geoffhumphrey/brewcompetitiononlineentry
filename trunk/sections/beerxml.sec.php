@@ -59,7 +59,7 @@ if ($_FILES['userfile']) {
         $insertedRecipes = $input->insertBlogs();
         $recipes = '';
         foreach($insertedRecipes as $id=>$name){
-            $recipes .= "<tr><td><a href=\"../index.php?page=brewBlogDetail&amp;id=" .$id . "\">" . $name . "</a></td></tr>";
+            $recipes .= "<tr><td><a href=\"".$base_url."/index.php?page=brewBlogDetail&amp;id=" .$id . "\">" . $name . "</a></td></tr>";
         }
         $message = count($insertedRecipes) . " BrewBlogs Inserted";
     }

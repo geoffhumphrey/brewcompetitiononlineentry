@@ -184,7 +184,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
     </tr>
 </tbody>
 </table>
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if ($id !="default") ?>
 
@@ -251,7 +251,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 	} else echo "<p>No flights have been defined.</p>";
   } ?>
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
-<input type="hidden" name="relocate" value="../index.php?section=admin&action=<?php echo $action; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
+<input type="hidden" name="relocate" value="<?php echo $base_url; ?>/index.php?section=admin&action=<?php echo $action; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
 </form>
 <?php } // end if ($totalRows_tables > 0) ?>
 <?php } // end if ($action == "assign") ?>

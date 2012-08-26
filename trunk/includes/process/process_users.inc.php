@@ -27,7 +27,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 
 if ($totalRows_userCheck > 0) {
   if ($section == "admin") $msg = "10"; else $msg = "2";
-  header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg);
+  header(sprintf("Location:  %s", $base_url."/index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg));
   }
   else 
   {
@@ -59,31 +59,31 @@ if ($totalRows_userCheck > 0) {
   			$_SESSION["loginUsername"] = $username;
 
   			// If the username/password combo is OK, relocate to the "protected" content index page
-  			header("Location: ../index.php?action=add&section=brewer&go=".$go."&msg=1");
+  			header(sprintf("Location: %s", $base_url."/index.php?action=add&section=brewer&go=".$go."&msg=1"));
   			exit;
 			}
 		else
 			{
   			// If the username/password combo is incorrect or not found, relocate to the login error page
-  			header("Location: ../index.php?section=login&go=".$go."&msg=1");
+  			header(sprintf("Location: %s", $base_url."/index.php?section=login&go=".$go."&msg=1"));
   			session_destroy();
   			exit;
 			}
 	}
 	
 	if ($section == "admin") {
-	header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username));
+	header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username)));
 	}
 	
 /*
-  	$insertGoTo = "../index.php?section=login&username=".$username;
+  	$insertGoTo = $base_url."/index.php?section=login&username=".$username;
   	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   	header(sprintf("Location: %s", stripslashes($insertGoTo)));
 */
   }
  }
- else header("Location: ../index.php?section=".$section."&go=".$go."&action=".$action."&msg=3");
+ else header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&action=".$action."&msg=3"));
 }
 
 // ---------------------------  Editing a User -------------------------------------------
@@ -122,7 +122,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	// --------------------------- If Changing a Participant's User Name ------------------------------- //
 	if ($go == "username") {
 	if ($totalRows_userCheck > 0) {
-	  header("Location: ../index.php?section=user&action=username&id=".$id."&msg=1");
+	  header("Location: ".$base_url."/index.php?section=user&action=username&id=".$id."&msg=1");
 	  }
 	  else 
 	  {  
@@ -156,18 +156,18 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 				$_SESSION["loginUsername"] = $username;
 	
 				// If the username/password combo is OK, relocate to the "protected" content index page
-				header("Location: ../index.php?section=list&msg=3");
+				header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
 				exit;
 				}
 			else
 				{
 				// If the username/password combo is incorrect or not found, relocate to the login error page
-				header("Location: ../index.php?section=user&action=username&msg=2");
+				header(sprintf("Location: %s", $base_url."/index.php?section=user&action=username&msg=2"));
 				session_destroy();
 				exit;
 				}
 	/*
-	  	$insertGoTo = "../index.php?section=login&username=".$username;
+	  	$insertGoTo = $base_url."/index.php?section=login&username=".$username;
 	  	$pattern = array('\'', '"');
   		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   		header(sprintf("Location: %s", stripslashes($insertGoTo)));
@@ -177,7 +177,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 }
  else {
 	
- 	header("Location: ../index.php?section=user&action=username&msg=4&id=".$id);
+ 	header(sprintf("Location: %s", $base_url."/index.php?section=user&action=username&msg=4&id=".$id));
  }
 
 // --------------------------- If Changing a Paricipant's Password ------------------------------- //
@@ -192,7 +192,7 @@ if ($go == "password") {
 	$row_userPass = mysql_fetch_assoc($userPass);
 	$totalRows_userPass = mysql_num_rows($userPass);
 
-	if ($passwordOld != $row_userPass['password']) header("Location: ../index.php?section=user&action=password&msg=3&id=".$id);
+	if ($passwordOld != $row_userPass['password']) header(sprintf("Location: %s", $base_url."/index.php?section=user&action=password&msg=3&id=".$id));
 	
 	else {  
   		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
@@ -200,7 +200,7 @@ if ($go == "password") {
                        GetSQLValueString($id, "text")); 
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		header("Location: ../index.php?section=list&id=".$id."&msg=4");
+		header(sprintf("Location: %s", $base_url."/index.php?section=list&id=".$id."&msg=4"));
   	}
  }
 	

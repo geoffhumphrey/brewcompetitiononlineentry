@@ -62,7 +62,9 @@ function capitalize($string) {
 	return $capitalize;
 }
 if ($action != "purge") {
-	function relocate($referer,$page,$msg,$id) {
+	function relocate($referer,$page,$msg,$id) { 
+		include(CONFIG."config.php");
+	
 		// Break URL into an array
 		$parts = parse_url($referer);
 		$referer = $parts['query'];	
@@ -81,12 +83,14 @@ if ($action != "purge") {
 			$referer = str_replace($pattern,"",$referer);
 			$referer .= "&pg=".$page; 
 		}
-		$string = strpos($referer,"?");
-		if ($string === false) $referer = $referer."?";
+		
 		$pattern = array('\'', '"');
 		$referer = str_replace($pattern,"",$referer);
-		$referer = stripslashes($referer);
-		return $referer;
+		$referer = stripslashes($referer);	
+		
+		// Reconstruct the URL
+		$reconstruct = $base_url."/index.php?".$referer;
+		return $reconstruct;
 	}
 
 	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -225,7 +229,7 @@ if ($action == "purge") {
 	require(INCLUDES.'functions.inc.php');
 	purge_entries("unconfirmed", 0);
 	purge_entries("special", 0); 
-	header(sprintf("Location: %s", "../index.php?section=admin&go=entries&purge=true"));
+	header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=entries&purge=true"));
 }
 
 if ($action == "check_discount") {
@@ -243,9 +247,9 @@ if ($action == "check_discount") {
 		//echo $updateSQL;
   		mysql_select_db($database, $brewing);
   		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  		header(sprintf("Location: %s", "../index.php?section=pay&bid=".$id."&msg=12"));
+  		header(sprintf("Location: %s", $base_url."/index.php?section=pay&bid=".$id."&msg=12"));
 	}
-	else header(sprintf("Location: %s", "../index.php?section=pay&bid=".$id."&msg=13"));
+	else header(sprintf("Location: %s", $base_url."/index.php?section=pay&bid=".$id."&msg=13"));
 }
 
 
@@ -278,8 +282,8 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-if ($go == "hidden") $updateGoTo = "../index.php"; 
-else $updateGoTo = "../index.php?section=admin&msg=14";
+if ($go == "hidden") $updateGoTo = $base_url."/index.php"; 
+else $updateGoTo = $base_url."/index.php?section=admin&msg=14";
 header(sprintf("Location: %s", $updateGoTo));		
 }
 

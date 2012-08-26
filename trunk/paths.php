@@ -20,4 +20,6 @@ define('UPDATE',ROOT.'update'.DIRECTORY_SEPARATOR);
 define('IMAGES',ROOT.'images'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');
+$php_version = phpversion();
+$current_page = $base_url."/index.php?".$_SERVER['QUERY_STRING'];
 ?>

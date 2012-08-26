@@ -25,7 +25,7 @@ $suffix_check = mysql_query($query_suffix_check, $brewing) or die(mysql_error())
  $row_suffix_check = mysql_fetch_assoc($suffix_check);
 
 if ($row_suffix_check['count'] > 0) { 
-header("Location: ../index.php?section=admin&amp;go=archive&amp;msg=6");
+header(sprintf("Location: %s", $base_url."/index.php?section=admin&amp;go=archive&amp;msg=6"));
 } 
 
 else {
@@ -193,12 +193,12 @@ session_start();
   		// Register the loginUsername
  		$_SESSION["loginUsername"] = $user_name;
 		// If the username/password combo is OK, relocate to the "protected" content index page
-  		header("Location: ../index.php?section=admin&go=archive&msg=7");
+  		header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=archive&msg=7"_);
   		exit;
 		}
 	else {
   		// If the username/password combo is incorrect or not found, relocate to the login error page
-  		header("Location: ../index.php?section=login&msg=1");
+  		header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
   		session_destroy();
   		exit;
 		}

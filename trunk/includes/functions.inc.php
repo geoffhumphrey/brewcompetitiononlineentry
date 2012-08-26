@@ -109,6 +109,8 @@ function random_generator($digits,$method){
 
 function relocate($referer,$page,$msg,$id) {
 	
+	include(CONFIG."config.php");
+	
 	// Break URL into an array
 	$parts = parse_url($referer);
 	$referer = $parts['query'];	
@@ -133,7 +135,7 @@ function relocate($referer,$page,$msg,$id) {
 	$referer = stripslashes($referer);	
 	
 	// Reconstruct the URL
-	$reconstruct = "http://".$_SERVER['SERVER_NAME'].$_SERVER['PATH_INFO']."/index.php?".$referer;
+	$reconstruct = $base_url."/index.php?".$referer;
 	return $reconstruct;
 	
 }

@@ -516,13 +516,13 @@ if ($action == "add") {
 		$id = $row_brew_id['id'];
 		}
 	  
-	  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1"))))  $insertGoTo = "../index.php?section=admin&go=entries";
+	  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1"))))  $insertGoTo = $base_url."/index.php?section=admin&go=entries";
 	  elseif (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1"))) {
-			if ($section == "admin") $insertGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
-			else $insertGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
+			if ($section == "admin") $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
+			else $insertGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1";
 	  }
-	  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = "../index.php?section=admin&go=entries&msg=1";
-	 else $insertGoTo = "../index.php?section=list&msg=1";
+	  //elseif (($row_user['userLevel'] == "1") && ($filter != $row_user['id'])) $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=1";
+	 else $insertGoTo = $base_url."/index.php?section=list&msg=1";
 	 
 	 // Finally, relocate
 	$pattern = array('\'', '"');
@@ -832,19 +832,18 @@ if ($action == "edit") {
 	  mysql_select_db($database, $brewing);
 	  $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	  
-	  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1")))) $updateGoTo = "../index.php?section=admin&go=entries";
-	  //elseif ($go == "beerXML") $updateGoTo = "../index.php?section=".$section."&go=".$go."&filter=".$filter."&msg=3";
+	  if (($section == "admin") && (($_POST['brewInfo'] != "") && (($special == "1") || ($custom == "1")))) $updateGoTo = $base_url."/index.php?section=admin&go=entries";
 	  elseif (($_POST['brewInfo'] == "") && (($special == "1") || ($custom == "1"))) {
 		  	
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 	  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			
-			if ($section == "admin") $updateGoTo = "../index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
-			else $updateGoTo = "../index.php?section=brew&action=edit&id=$id&msg=1";
+			if ($section == "admin") $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1";
+			else $updateGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1";
 	  }
 	  elseif ((strstr($updateGoTo, "section=admin")) || (strstr($updateGoTo, "section=beerxml"))) $updateGoTo = $updateGoTo;
-	  else  $updateGoTo = "../index.php?section=list&msg=2";
+	  else  $updateGoTo = $base_url."/index.php?section=list&msg=2";
 	 
 	 	$pattern = array('\'', '"');
   		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
@@ -867,7 +866,7 @@ if ($action == "update") {
 		//echo $updateSQL."<br>";
 	} 
 	//echo $massUpdateGoTo;
-	$massUpdateGoTo = "../index.php?section=admin&go=entries&msg=9";
+	$massUpdateGoTo = $base_url."/index.php?section=admin&go=entries&msg=9";
 	$pattern = array('\'', '"');
   	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 

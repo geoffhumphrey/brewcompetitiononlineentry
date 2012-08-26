@@ -6,8 +6,6 @@
  */
 
 require('paths.php');
-$php_version = phpversion();
-$current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
@@ -136,8 +134,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
  	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   	</div>
-  <?php }
-  
+  <?php  }
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
   if ($registration_open == "0") { 
   	if ($section != "admin") {
