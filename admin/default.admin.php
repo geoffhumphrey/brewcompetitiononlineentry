@@ -650,7 +650,7 @@ if ($go == "default") { ?>
 			</ul>
             <ul class="admin_default">
 				<li>Participant Summaries:</li>
-				<li><a id="modal_window_link" href="output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a></li>
+				<li><a id="modal_window_link" href="output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a> (All Participants with Entries)</li>
 			</ul>
 </div>
 <h4 class="trigger"><span class="icon"><img src="images/page_go.png"  /></span>Exporting</h4>
@@ -660,6 +660,7 @@ if ($go == "default") { ?>
 				<li><a href="output/email_export.php">All Participants</a></li>          
 				<li><a href="output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Judges</a></li>
 				<li><a href="output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Stewards</a></li>
+                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
             </ul>
             <ul class="admin_default">
             	<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a></li>

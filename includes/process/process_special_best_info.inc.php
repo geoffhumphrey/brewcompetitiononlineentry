@@ -7,11 +7,12 @@
 
 
 if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank) VALUES (%s, %s, %s, %s)",
+	$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank, sbi_display_places) VALUES (%s, %s, %s, %s, %s)",
 					   GetSQLValueString(strtr($_POST['sbi_name'],$html_string), "text"),
 					   GetSQLValueString($_POST['sbi_description'], "text"),
 					   GetSQLValueString($_POST['sbi_places'], "int"),
-					   GetSQLValueString($_POST['sbi_rank'], "int")
+					   GetSQLValueString($_POST['sbi_rank'], "int"),
+					   GetSQLValueString($_POST['sbi_display_places'], "int")
 					   );
 
 	mysql_select_db($database, $brewing);
@@ -22,11 +23,12 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE $special_best_info_db_table SET sbi_name=%s, sbi_description=%s, sbi_places=%s, sbi_rank=%s WHERE id=%s",
+	$updateSQL = sprintf("UPDATE $special_best_info_db_table SET sbi_name=%s, sbi_description=%s, sbi_places=%s, sbi_rank=%s, sbi_display_places=%s WHERE id=%s",
 					   GetSQLValueString(strtr($_POST['sbi_name'],$html_string), "text"),
 					   GetSQLValueString($_POST['sbi_description'], "text"),
 					   GetSQLValueString($_POST['sbi_places'], "int"),
 					   GetSQLValueString($_POST['sbi_rank'], "int"),
+					   GetSQLValueString($_POST['sbi_display_places'], "int"),
 					   GetSQLValueString($id, "int"));
 
 	mysql_select_db($database, $brewing);

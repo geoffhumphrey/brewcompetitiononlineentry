@@ -63,9 +63,7 @@ require(INCLUDES.'headers.inc.php');
 		});
 	</script>
 <script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
-<script type="text/javascript" src="js_includes/calendar_control.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="js_includes/smoothscroll.js" ></script>
 <script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>

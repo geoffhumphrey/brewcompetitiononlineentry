@@ -76,7 +76,7 @@ if (($go == "csv") && ((($action == "default") || ($action == "hccp")) && ($filt
 
 if (($go == "csv") && ($action == "email") && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Entry Name','Info');
 
-if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table-Number','Table-Name','Category','Sub-Category','Style','Place','Last Name','First Name','Entry Name','Club','Co Brewer');
+if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Entry Name','Club','Co Brewer');
 
 do {
 	
@@ -84,7 +84,7 @@ do {
 	
 	if (($go == "csv") && ($action == "email") && ($filter != "winners")) {
 		
-		$query_brewer = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE id='%s'", $row_sql['brewBrewerID']);
+		$query_brewer = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE uid='%s'", $row_sql['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
@@ -106,11 +106,11 @@ do {
 				$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 				$row_entries = mysql_fetch_assoc($entries);
 				
-				$query_brewer = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerClubs FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
+				$query_brewer = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerClubs,brewerEmail FROM $brewer_db_table WHERE uid='%s'", $row_entries['brewBrewerID']);
 				$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 				$row_brewer = mysql_fetch_assoc($brewer);
 				
-				$a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],$row_entries['brewStyle'],$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
+				$a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],$row_entries['brewStyle'],$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),$row_brewer['brewerEmail'],strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
 				
 			} while ($row_scores = mysql_fetch_assoc($scores)); 
 		}

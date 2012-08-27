@@ -37,7 +37,7 @@ foreach (array_unique($a) as $style) {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']<?php if ($filter == "scores") { ?>,[5,'desc']<?php } ?>],
+		"aaSorting": [<?php if ($action == "print") { ?>[0,'asc']<?php } ?>],
 		"bProcessing" : false,
 		"aoColumns": [
 			{ "asSorting": [  ] },
@@ -66,8 +66,8 @@ foreach (array_unique($a) as $style) {
 </thead>
 <tbody>
 <?php 
-	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
-	if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
+	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
+	if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
 	$query_scores .= " ORDER BY a.scorePlace";
 	//echo $query_scores;
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());

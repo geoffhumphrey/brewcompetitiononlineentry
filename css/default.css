@@ -2,7 +2,9 @@
 /* CSS Document 
 *        Document Name: default.css
 *        Description:   BCOE&M default theme
-*		 Color scheme:  #37517B (dark blue); #acc0c7 (medium-light blue); #bec8d8 (light blue);
+*		 Color scheme:  #37517B (dark blue)
+                        #acc0c7 (medium-light blue)
+						#bec8d8 (light blue)
 */
 
 @import url("html_elements.css");
@@ -10,8 +12,6 @@
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
-@import url("thickbox.css");
-@import url("calendar.css");
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
 
 /* --------------------- html_elements.css Overrides -------------------- */
@@ -579,39 +579,3 @@ textarea {
    NOT edit the file itself!
    **************************************************************
 */
-
-
-
-
-
-/* --------------------- thickbox.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the thickbox.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- calendar.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the calendar.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-

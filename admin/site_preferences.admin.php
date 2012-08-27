@@ -236,7 +236,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <tr>
       <td class="dataLabel">Checks for Payment:</td>
       <td class="data"><input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($row_prefs['prefsCheck'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> 
-        Yes&nbsp;&nbsp;
+        Yes<br/>
         <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($row_prefs['prefsCheck'] == "N") echo "CHECKED"; ?>/> 
         No</td>
       <td class="data">Do you want to accept checks for entry payments?</td>

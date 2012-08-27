@@ -2,7 +2,10 @@
 /* CSS Document 
 *        Document Name: claussenii.css
 *        Description:   A custom theme that expands upon default.css
-*		 Color scheme:  #1A2A00 (dark green); #3A6907 (medium green); #BFCAB2 (light green);
+*		 Color scheme:  #1A2A00 (dark green)
+                        #3A6907 (medium green)
+						#BFCAB2 (light green)
+						#D9E0D2 (ultra-light green)
 */
 
 @import url("html_elements.css");
@@ -10,8 +13,6 @@
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
-@import url("thickbox.css");
-@import url("calendar.css");
 @import url(http://fonts.googleapis.com/css?family=Cabin|Droid+Serif:700);
 
 /* --------------------- html_elements.css Overrides -------------------- */
@@ -214,7 +215,7 @@ textarea {
 
 #content-inner .menu {
 	border: 1px solid #3A6907;
-	background-color: #BFCAB2;
+	background-color: #D9E0D2;
 }
 
 
@@ -252,7 +253,7 @@ textarea {
 	padding: .75em;
 	vertical-align:middle;
 	font-weight: bold;
-	color: #BFCAB2;
+	color: #D9E0D2;
 }
 
 #navigation-inner a,
@@ -265,7 +266,7 @@ textarea {
 
 #navigation-inner .menu {
 	border: 1px solid #1A2A00;
-	background-color: #BFCAB2;
+	background-color: #D9E0D2;
 }
 
 #navigation-inner .menu a {
@@ -345,7 +346,7 @@ textarea {
 	border-top: 1px solid #1A2A00;
 	background-image: url(../images/claussenii/footer.png);
 	background-position: center;
-	color: #BFCAB2;
+	color: #D9E0D2;
 	height: auto;
 }
 
@@ -595,7 +596,7 @@ textarea {
 }
 
 .at-a-glance {
-	background-color: #BFCAB2;
+	background-color: #D9E0D2;
 	border: 1px solid #1A2A00;
 }
 
@@ -650,38 +651,4 @@ textarea {
 .paging_full_numbers span.paginate_button:hover {
 	background-color: #BFCAB2;
 }
-
-
-
-
-/* --------------------- thickbox.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the thickbox.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- calendar.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the calendar.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
 

@@ -34,12 +34,13 @@ $row_sbd = mysql_fetch_assoc($sbd);
                 "iDisplayLength" : <?php echo $limit; ?>,
                 "sDom": 'irtip',
                 "bStateSave" : false,
-                "aaSorting": [[3,'asc']],
+                "aaSorting": [[4,'asc']],
                 "aoColumns": [
                     null,
                     { "asSorting": [  ] },
                     null,
                     null,
+					null,
 					{ "asSorting": [  ] },
                     ]
                 } );
@@ -51,6 +52,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
       <th class="dataHeading bdr1B">Name</th>
       <th class="dataHeading bdr1B">Description</th>
       <th class="dataHeading bdr1B">Places</th>
+      <th class="dataHeading bdr1B">Places Displayed?</th>
       <th class="dataHeading bdr1B">Rank</th>
       <th class="dataHeading bdr1B">Actions</th>
      </tr>
@@ -65,6 +67,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
       <td width="20%" class="dataList"><?php echo $row_sbi['sbi_name']; ?></td>
       <td width="35%" class="dataList"><?php echo $row_sbi['sbi_description']; ?></td>
       <td width="5%" class="dataList"><?php echo $row_sbi['sbi_places']; ?></td>
+      <td width="5%" class="dataList"><?php if ($row_sbi['sbi_display_places'] == 1) echo "Yes"; else echo "No" ?></td>
       <td width="25%" class="dataList"><?php echo $row_sbi['sbi_rank']; ?></td>
       <td class="dataList" nowrap="nowrap">
       <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
@@ -91,6 +94,15 @@ if (($action == "add") || ($action == "edit")) { ?>
   <tr>
     <td class="dataLabel">Places:</td>
     <td class="data"><input name="sbi_places" type="text" size="5" value="<?php if ($action == "edit") echo $row_sbi['sbi_places']; ?>"></td>
+    <td class="data">&nbsp;</td>
+  </tr>
+  
+  <tr>
+    <td class="dataLabel">Display Places?</td>
+    <td class="data">
+    	<input type="radio" name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if ($row_sbi['sbi_display_places'] == "1") echo "CHECKED"; ?> />Yes<br />
+        <input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ($row_sbi['sbi_display_places'] == "0") echo "CHECKED"; ?> />No
+    </td>
     <td class="data">&nbsp;</td>
   </tr>
 

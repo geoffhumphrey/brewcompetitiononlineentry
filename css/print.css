@@ -10,8 +10,6 @@
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
-@import url("thickbox.css");
-@import url("calendar.css");
 
 /* --------------------- html_elements.css Overrides -------------------- */
 
@@ -660,35 +658,6 @@ border-left: 1px solid #cccccc;
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
-
-
-
-
-/* --------------------- thickbox.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the thickbox.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- calendar.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the calendar.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
 
 
 /* --------------------- Custom/Print Specific Styles -------------------- */

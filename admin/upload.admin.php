@@ -86,9 +86,8 @@ $handle=opendir($upload_dir);
 $filelist = "";
 while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
-      	$filelist .= "<tr>\n";
-		$filelist .= "<td width=\"5%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  id=\"modal_window_link\">".$file."</a></td>\n";
-      	$filelist .= "<td width=\"5%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
+		$filelist .= "<td width=\"25%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  id=\"modal_window_link\">".$file."</a></td>\n";
+      	$filelist .= "<td width=\"25%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
 		else $filelist .="<td>&nbsp;</td>\n";
 		$filelist .= "</tr>\n";
@@ -123,44 +122,88 @@ function do_upload($upload_dir, $upload_url) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
-<link href="../css/thickbox.css" rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" src="../js_includes/thickbox.js"></script>
+<link href="../css/sorting.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="../js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="../js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="../css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="../js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link rel="stylesheet" href="../js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="../js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#modal_window_link").fancybox({
+				'width'				: '75%',
+				'height'			: '75%',
+				'fitToView'			: false,
+				'scrolling'         : 'auto',
+				'openEffect'		: 'elastic',
+				'closeEffect'		: 'elastic',
+				'openEasing'     	: 'easeOutBack',
+				'closeEasing'   	: 'easeInBack',
+				'openSpeed'         : 'normal',
+				'closeSpeed'        : 'normal',
+				'type'				: 'iframe',
+				'helpers' 			: {	title : { type : 'inside' } },
+				<?php if ($modal_window == "false") { ?>
+				'afterClose': 		function() { parent.location.reload(true); }
+				<?php } ?>
+			});
+
+		});
+	</script>
+<script type="text/javascript" src="../js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#sortable').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null,
+			{ "asSorting": [  ] }
+			]
+		} );
+	} );
+</script>
 <style type="text/css">
-#content-inner a:link {
-	color:#00F;
-}
-#content-inner a:visited, a:active {
+	#content-inner a:link {
+		color:#00F;
+	}
+	#content-inner a:visited, a:active {
+		
+	}
 	
-}
-
-#content-inner a:hover {
-	text-decoration: underline;
-}
-
-.button { 
-border: 1px solid #aaaaaa;
-background-color: #cccccc;
-font-weight: bold;
-padding: 3px;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-} 
-
-.button:hover {
-border: 1px solid #aaaaaa;
-background-color: #bec8d8;
-cursor: pointer;
-}
-
-input, textarea, select, submit {
-font-size: 1em;
-border: 1px solid #c0c0c0;
-background-color: #eeeeee;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-}
-
+	#content-inner a:hover {
+		text-decoration: underline;
+	}
+	
+	.button { 
+	border: 1px solid #aaaaaa;
+	background-color: #cccccc;
+	font-weight: bold;
+	padding: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	} 
+	
+	.button:hover {
+	border: 1px solid #aaaaaa;
+	background-color: #bec8d8;
+	cursor: pointer;
+	}
+	
+	input, textarea, select, submit {
+	font-size: 1em;
+	border: 1px solid #c0c0c0;
+	background-color: #eeeeee;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	}
 </style>
 </head>
 <body>
@@ -185,9 +228,19 @@ background-color: #eeeeee;
 	</table>
 	</form>
 	<h2>Files in the Directory</h2>
-	<table class="dataTable">
-	<?php echo $filelist; ?>
-	</tr>
+	<table class="dataTable" id="sortable">
+    <thead>
+    	<tr>
+            <th>File Name</th>
+            <th>Date Uploaded</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        	<?php echo $filelist; ?>
+        </tr>
+    </tbody>
 	</table>
 	<?php } 
 	if ($section == "confirm") { ?>

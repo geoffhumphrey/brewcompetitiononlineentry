@@ -44,7 +44,7 @@ if ($totalRows_log > 0) { ?>
 	<div id="content-inner">
 	<div id="header">	
 		<div id="header-inner">
-        	<h1><?php echo $row_contest_info['contestName']; ?> Summary for <?php echo $row_brewer['brewerFirstName']. " ".$row_brewer['brewerLastName']; ?></h2>
+        	<h1><?php echo $row_contest_info['contestName']; ?> Summary for <?php echo $row_brewer['brewerFirstName']. " ".$row_brewer['brewerLastName']; ?></h1>
         </div>
     </div>
     <p>Thank you for entering our competition, <?php echo $row_brewer['brewerFirstName']; ?>. A summary of your entries and their associated scores and places is below.</p>
