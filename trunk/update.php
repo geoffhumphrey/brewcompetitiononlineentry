@@ -74,7 +74,7 @@ $totalRows_log = mysql_num_rows($log);
 $current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
 $section = "update";
 $table_name = $prefix."system";
-if (!check_setup($prefix."system",$database)) $version = "1.2.0.4"; // used only for version 1.2.1.0; subsequent versions will utilize a db query. We must assume all updates have been done upto this latest version.
+if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php'); // used only for version 1.2.1.0; subsequent versions will utilize a db query.
 else $version = $current_version;
 ?>
 
