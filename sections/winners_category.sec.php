@@ -6,29 +6,30 @@
  * 
  */
 
-
+mysql_select_db($database, $brewing);
 $query_styles = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup ASC";
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
-do { $style[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
+do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 
-foreach (array_unique($style) as $style) {
+foreach (array_unique($a) as $style) {
 	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $brewing_db_table,  $style);
 	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row_entry_count = mysql_fetch_assoc($entry_count);
 	
 	$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
-	if (($action == "print") && ($view == "winners")) $query_score_count .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
+	if (($action == "print") && ($view == "winners")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
+	if (($action == "default") && ($view == "default")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
 	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 	$row_score_count = mysql_fetch_assoc($score_count);
 	
 	
-	//echo $row_score_count['count'];
+	//echo $row_score_count['count']."<br>";
 	//echo $query_score_count;
 	// Display all winners 
 if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
-if ($row_score_count['count'] > 0) {
+if ($row_score_count['count'] > "0")   {
 ?>
 <h3>Category <?php echo ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
  <script type="text/javascript" language="javascript">
@@ -68,8 +69,6 @@ if ($row_score_count['count'] > 0) {
 <tbody>
 <?php 
 	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
-	
-	if (($action == "print") && ($view == "winners")) $query_scores .= " AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
 	$query_scores .= " ORDER BY a.scorePlace";
 	//echo $query_scores."<br>";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
@@ -93,9 +92,5 @@ if ($row_score_count['count'] > 0) {
 </tbody>
 </table>
 <?php 	} // end if > 0
-		else { ?>
-		<h3>Category <?php echo ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
-		<p>No winners have been entered yet for this category. Please check back later.</p>
-        <?php }
 	} // end foreach
 ?>
