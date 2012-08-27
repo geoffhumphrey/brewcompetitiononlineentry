@@ -1032,9 +1032,17 @@ function total_paid_received($go,$id) {
 function style_convert($number,$type) {
 	
 	$styles_db_table = $prefix."styles";
+	
 	switch ($type) {
 		
 		case "1": 
+		
+		require(CONFIG.'config.php');
+		mysql_select_db($database, $brewing);
+		$query_style = sprintf("SELECT brewStyle FROM %s WHERE brewStyleGroup='%s'",$prefix."styles",$number); 
+		$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		
 		switch ($number) {
 			case "01": $style_convert = "Light Lager"; break;
 			case "02": $style_convert = "Pilsner"; break;
@@ -1064,7 +1072,7 @@ function style_convert($number,$type) {
 			case "26": $style_convert = "Other Mead"; break;
 			case "27": $style_convert = "Standard Cider and Perry"; break;
 			case "28": $style_convert = "Specialty Cider and Perry"; break;
-			default: $style_convert = "Custom Style"; break;
+			default: $style_convert = $row_style['brewStyle']; break;
 		}
 		break;
 		

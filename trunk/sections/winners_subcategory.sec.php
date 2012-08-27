@@ -10,9 +10,9 @@ $query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_ta
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
-do { $style[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle']; } while ($row_styles = mysql_fetch_assoc($styles));
+do { $a[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle']; } while ($row_styles = mysql_fetch_assoc($styles));
 
-foreach (array_unique($style) as $style) {
+foreach (array_unique($a) as $style) {
 	$style = explode("-",$style);
 	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style[0], $style[1]);
 	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
@@ -21,7 +21,6 @@ foreach (array_unique($style) as $style) {
 	$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
 	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 	$row_score_count = mysql_fetch_assoc($score_count);
-	
 	
 	//echo $row_score_count['count'];
 	//echo $query_score_count;
@@ -77,12 +76,14 @@ foreach (array_unique($style) as $style) {
 			
 	do { 
 	$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+	if ($row_scores['brewCategorySort'] > 28) $style_long = style_convert($row_scores['brewCategorySort'],1);
+	else $style_long = $row_scores['brewStyle'];
 ?>
 <tr>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewName']; ?></td>
-	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
+	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$style_long; ?></td>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewerClubs']; ?></td>
 	<?php if ($filter == "scores") { ?>
 	<td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
@@ -92,10 +93,6 @@ foreach (array_unique($style) as $style) {
 </tbody>
 </table>
 <?php 	} 
-	else { ?>
-		<h3>Category <?php echo ltrim($style[0],"0").$style[1].": ".$style[2]." (".$row_entry_count['count']." ".$entries.")"; ?></h3>
-		<p>No winners have been entered yet for this sub-category. Please check back later.</p>
-        <?php }
 	} 
 } 
 ?>
