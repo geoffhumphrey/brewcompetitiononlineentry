@@ -28,7 +28,7 @@ echo "<ul><li>System table created.</li></ul>";
 
 $updateSQL = "
 CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
-  id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `sbi_name` varchar(255) DEFAULT NULL,
   `sbi_description` text,
   `sbi_places` int(11) DEFAULT NULL,
