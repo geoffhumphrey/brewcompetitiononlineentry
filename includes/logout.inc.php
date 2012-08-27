@@ -1,4 +1,6 @@
 <?php
+require('../paths.php');
+
 $logout_location = $base_url."/index.php?section=login&action=logout&msg=3";
 
 session_start();
