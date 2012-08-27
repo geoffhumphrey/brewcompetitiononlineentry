@@ -47,7 +47,7 @@ if ($action == "print") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -108,7 +108,7 @@ $random = random_generator(6,2);
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [],
 			"bProcessing" : false,
 			"aoColumns": [
 				<?php if ($row_sbi['sbi_display_places'] == "1") { ?>		  
@@ -141,10 +141,10 @@ $random = random_generator(6,2);
 	$style = $entry_info['5'].$entry_info['2'];
 	?>
 	<tr>
-        <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],4); ?></td><?php } ?>
+        <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],0); ?></td><?php } ?>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['0']." ".$brewer_info['1']; if ($row_entries['brewCoBrewer'] != "") echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $entry_info['0']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style." ".style_convert($entry_info['1'],1).": ".$entry_info['3']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$entry_info['3']; ?></td>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['8']; ?></td>    
     </tr>
     <?php } while ($row_sbd = mysql_fetch_assoc($sbd)); ?>

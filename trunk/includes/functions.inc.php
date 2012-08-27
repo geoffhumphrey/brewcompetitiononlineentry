@@ -27,6 +27,18 @@ function display_array_content($arrayname,$method) {
  	return $b;
 }
 
+function addOrdinalNumberSuffix($num) {
+    if (!in_array(($num % 100),array(11,12,13))){
+      switch ($num % 10) {
+        // Handle 1st, 2nd, 3rd
+        case 1:  return $num.'st';
+        case 2:  return $num.'nd';
+        case 3:  return $num.'rd';
+      }
+    }
+    return $num.'th';
+  }
+
 function purge_entries($type, $interval) {
 	
 	require(CONFIG.'config.php');	
@@ -1770,34 +1782,51 @@ function get_participant_count($type) {
 }
 
 function display_place($place,$method) {
+	
+	if ($method == "0") { 
+		$place = addOrdinalNumberSuffix($place);
+	}
+	
 	if ($method == "1") { 
 		switch($place){
-			case "1": $place = "1st";
+			case "1": $place = addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "2nd";
+			case "2": $place = addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "3rd";
+			case "3": $place = addOrdinalNumberSuffix($place);
 			break;
-			case "4": $place = "4th";
+			case "4": $place = addOrdinalNumberSuffix($place);
 			break;
 			case "5": $place = "HM";
 			break;
-		default: $place = "None";
+		default: $place = "N/A";
 		}
 	}
 	if ($method == "2") { 
 		switch($place){
-			case "1": $place = "<span class=\"icon\"><img src=\"images/medal_gold_3.png\"></span>1st";
+			case "1": $place = "<span class=\"icon\"><img src=\"images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class=\"icon\"><img src=\"images/medal_silver_3.png\"></span>2nd";
+			case "2": $place = "<span class=\"icon\"><img src=\"images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class=\"icon\"><img src=\"images/medal_bronze_3.png\"></span>3rd";
+			case "3": $place = "<span class=\"icon\"><img src=\"images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "4": $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>4th";
+			case "4": $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
 			case "5": $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>HM";
 			break;
 			default: $place = "N/A";
+			}
+	}
+	
+	if ($method == "3") { 
+		switch($place){
+			case "1": $place = "<span class=\"icon\"><img src=\"images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
+			break;
+			case "2": $place = "<span class=\"icon\"><img src=\"images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
+			break;
+			case "3": $place = "<span class=\"icon\"><img src=\"images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
+			break;
+			default: $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
 			}
 	}
 	

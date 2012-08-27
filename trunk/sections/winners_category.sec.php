@@ -39,7 +39,7 @@ if ($row_score_count['count'] > "0")   {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']<?php if ($filter == "scores") { ?>,[5,'desc']<?php } ?>],
+		"aaSorting": [<?php if ($action == "print") { ?>[0,'asc']<?php } ?>],
 		"bProcessing" : false,
 		"aoColumns": [
 			{ "asSorting": [  ] },
@@ -68,8 +68,9 @@ if ($row_score_count['count'] > "0")   {
 </thead>
 <tbody>
 <?php 
-	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
-	$query_scores .= " ORDER BY a.scorePlace";
+	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+	if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
+	$query_scores .= " ORDER BY a.scorePlace ASC";
 	//echo $query_scores."<br>";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);

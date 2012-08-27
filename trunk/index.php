@@ -108,9 +108,7 @@ purge_entries("special", 1);
 		});
 	</script>
 <script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
-<script type="text/javascript" src="js_includes/calendar_control.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="js_includes/smoothscroll.js" ></script>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>

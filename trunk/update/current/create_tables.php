@@ -28,12 +28,12 @@ echo "<ul><li>System table created.</li></ul>";
 
 $updateSQL = "
 CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  id` int(11) NOT NULL AUTO_INCREMENT,
   `sbi_name` varchar(255) DEFAULT NULL,
   `sbi_description` text,
   `sbi_places` int(11) DEFAULT NULL,
   `sbi_rank` int(11) DEFAULT NULL,
-  `sbi_display_places` int(1) DEFAULT NULL,
+  `sbi_display_places` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;
 

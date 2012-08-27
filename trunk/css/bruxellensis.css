@@ -2,7 +2,10 @@
 /* CSS Document 
 *        Document Name: bruxellensis.css
 *        Description:   A custom theme that expands upon default.css
-*		 Color scheme:  #394a59 (dark blue); #acc0c7 (medium-light blue); #bec8d8 (light blue);
+*		 Color scheme:  #394a59 (dark blue)
+                        #acc0c7 (medium-light blue)
+						#bec8d8 (light blue)
+						#DFE4EC (ultra-light blue)
 */
 
 @import url("html_elements.css");
@@ -10,8 +13,6 @@
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
-@import url("thickbox.css");
-@import url("calendar.css");
 @import url(http://fonts.googleapis.com/css?family=Istok+Web|Tienne:900);
 
 /* --------------------- html_elements.css Overrides -------------------- */
@@ -254,7 +255,7 @@ textarea {
 
 #navigation-inner .menu {
 	border: 1px solid #394a59;
-	background-color: #acc0c7;
+	background-color: #DFE4EC;
 }
 
 #navigation-inner .menu a {
@@ -374,7 +375,7 @@ textarea {
 
 .button:hover {
 	border: 1px solid #aaaaaa;
-	background-color: #bec8d8;
+	background-color: #DFE4EC;
 }
 
 .paypal {
@@ -549,7 +550,7 @@ textarea {
 }
 
 .at-a-glance {
-	background-color: #bec8d8;
+	background-color: #DFE4EC;
 	border: 1px solid #394a59;
 }
 
@@ -578,39 +579,3 @@ textarea {
    NOT edit the file itself!
    **************************************************************
 */
-
-
-
-
-
-/* --------------------- thickbox.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the thickbox.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- calendar.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the calendar.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-
