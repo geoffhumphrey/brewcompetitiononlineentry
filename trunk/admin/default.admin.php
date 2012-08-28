@@ -435,18 +435,18 @@ if ($go == "default") { ?>
 			</ul>
             <ul class="admin_default">
             	<li>Round Bottle Labels (Using <em>Entry Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
-                <li>All Categories: <select name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)">
+                <li>All Categories: <select name="round_entry" id="round_entry" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
-                    <?php for($i=0; $i<=12; $i++) { ?>
+                    <?php for($i=1; $i<=12; $i++) { ?>
                     <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> labels per entry</li>
             </ul>
             <ul class="admin_default">
             	<li>Round Bottle Labels (Using <em>Judging Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
-                <li>All Categories: <select name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)">
+                <li>All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
-                    <?php for($i=0; $i<=12; $i++) { ?>
+                    <?php for($i=1; $i<=12; $i++) { ?>
                     <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> labels per entry</li>
