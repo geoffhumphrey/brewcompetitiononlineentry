@@ -26,8 +26,7 @@ echo "<ul><li>System table created.</li></ul>";
 //  Tables to house custom "best of" categories and data.
 // -----------------------------------------------------------
 
-$updateSQL = "
-CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
+$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sbi_name` varchar(255) DEFAULT NULL,
   `sbi_description` text,
@@ -42,8 +41,7 @@ mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "
-CREATE TABLE IF NOT EXISTS `".$prefix."special_best_data` (
+$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
   `bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',

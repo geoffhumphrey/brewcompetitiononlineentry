@@ -20,7 +20,7 @@ function get_archive_count($table) {
 <form action="includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s data?\nThis CANNOT be undone.');">
 <p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"></p>
 <p><input name="submit" type="submit" class="button" value="Archive Now"></p>
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php if ($totalRows_archive > 0) { ?>
 <h3>Archives</h3>
@@ -57,25 +57,33 @@ function get_archive_count($table) {
     <td class="data" nowrap="nowrap">
     <?php 
 	$db = $prefix."judging_tables_".$row_archive['archiveSuffix'];
+	if (table_exists($db)) {
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
     	<a href="index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php } ?>
+    <?php } 
+	}?>
     </td>
     <td class="data" nowrap="nowrap">
     <?php 
 	$db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
+	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
     	<a href="index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
-    <?php } ?>
+    <?php } 
+	}
+	?>
     </td>
     <td class="data" nowrap="nowrap">
     <?php 
 	$db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
+	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
     	<a href="index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
     </td>
-    <?php } ?>
+    <?php } 
+	}
+	?>
     <td class="dataList"><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete','id',<?php echo $row_archive['id']; ?>,'Are you sure you want to delete the archive called <?php echo $row_archive['archiveSuffix']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?" title="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?"></a></span></td>
   </tr>
   <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>

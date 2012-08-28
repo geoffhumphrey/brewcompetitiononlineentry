@@ -27,7 +27,7 @@ echo "<ul><li>Competition info table updated.</li></ul>";
 // -----------------------------------------------------------
 
 $updateSQL = "
-ALTER TABLE  `".$prefix."brewing` CHANGE  `brewScore`  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT  'Timestamp of when the entry was last updated';";
+ALTER TABLE  `".$prefix."brewing` ADD  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT  'Timestamp of when the entry was last updated';";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
@@ -126,6 +126,11 @@ $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
 echo "<ul><li>Row names changed successfully in archive table.</li></ul>";
 */
+
+$query_archive = "SELECT archiveSuffix FROM $archive_db_table";
+$archive = mysql_query($query_archive, $brewing) or die(mysql_error());
+$row_archive = mysql_fetch_assoc($archive);
+$totalRows_archive = mysql_num_rows($archive);
 
 if ($totalRows_archive > 0) {
 	do { 

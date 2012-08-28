@@ -20,15 +20,17 @@ if ($msg != "1") {
 	<td class="data bdr1T" width="25%">
     <select name="to">
     	<?php 
-		mysql_select_db($database, $brewing);
-		$query_contacts = sprintf("SELECT * FROM %s ORDER BY contactLastName, contactPosition",$prefix."contacts");
+		$query_contacts = sprintf("SELECT * FROM %s ORDER BY contactLastName ASC",$prefix."contacts");
 		$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
-		mysql_free_result($contacts);
+		$row_contacts = mysql_fetch_assoc($contacts);
 		do { 
     	?>
     	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
-        <?php } while ($row_contact = mysql_fetch_assoc($contacts)) ; ?>
+        <?php } while ($row_contact = mysql_fetch_assoc($contacts)); 
+		mysql_free_result($contacts);
+		?>
     </select>
+    
     </td>
     <td class="data bdr1T"><span class="required">Required</span></td>
 </tr>
@@ -75,7 +77,9 @@ if ($msg != "1") {
 </table>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
 </form>
-<?php } 
+<?php
+
+} 
 if ($msg == "1")
  { ?>
 <p>Additionally, a copy has been sent to the email address you provided.</p>

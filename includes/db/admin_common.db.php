@@ -1,14 +1,17 @@
 <?php
 // Determine if current or archive
 //include(INCLUDES.'db_tables.inc.php');
-$query_style_type = "SELECT * FROM $style_types_db_table"; 
-if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
-if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
-if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
-if (($go == "judging_tables") && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
-$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-$row_style_type = mysql_fetch_assoc($style_type);
+if (table_exists($style_types_db_table)) {
+	$query_style_type = "SELECT * FROM $style_types_db_table"; 
+	if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
+	if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
+	if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
+	if (($go == "judging_tables") && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
+	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+	$row_style_type = mysql_fetch_assoc($style_type);
+}
 
+if (table_exists($judging_tables_db_table)) {
 $query_tables = "SELECT * FROM $judging_tables_db_table";
 if (($id == "default") || ($go == "judging_scores")) $query_tables .= " ORDER BY tableNumber ASC";
 //if ($id != "default") $query_tables .= " WHERE id='$id'";
@@ -25,6 +28,8 @@ $tables_edit = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
 $row_tables_edit = mysql_fetch_assoc($tables_edit);
 $tables_edit_2 = mysql_query($query_tables_edit, $brewing) or die(mysql_error());
 $row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2);
+
+}
 
 if ($go == "judging_scores") {
 	$query_scores = "SELECT * FROM $judging_scores_db_table ORDER BY eid ASC";

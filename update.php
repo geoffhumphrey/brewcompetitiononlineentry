@@ -151,8 +151,12 @@ if (check_setup($prefix."preferences",$database)) {
 						include (UPDATE.'current_update.php');
 					}
 					
-					if ($version >= "1200") {
+					if (($version >= "1200") && ($version <= "1202")) {
 						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'current_update.php');
+					}
+					
+					if ($version == "1204") {						
 						include (UPDATE.'current_update.php');
 					}
 					
