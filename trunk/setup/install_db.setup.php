@@ -37,7 +37,7 @@ if ($setup_free_access == TRUE) {
 	  `archiveBrewingTableName` varchar(255) DEFAULT NULL,
 	  `archiveSuffix` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -300,7 +300,7 @@ if ($setup_free_access == TRUE) {
 	  `brewJudgingNumber` varchar(10) DEFAULT NULL,
 	  `brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '0 = false; 1 = true',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	
 	";
 	
@@ -323,7 +323,7 @@ if ($setup_free_access == TRUE) {
 	  `contactPosition` varchar(255) DEFAULT NULL,
 	  `contactEmail` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -376,7 +376,7 @@ if ($setup_free_access == TRUE) {
 	`contestCircuit` text,
 	`contestVolunteers` text,
 	PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -395,7 +395,7 @@ if ($setup_free_access == TRUE) {
 	  `id` int(11) NOT NULL DEFAULT '0',
 	  `name` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -665,7 +665,7 @@ if ($setup_free_access == TRUE) {
 	  `dropLocationWebsite` varchar(255) DEFAULT NULL,
 	  `dropLocationNotes` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -686,7 +686,7 @@ if ($setup_free_access == TRUE) {
 	  `flightEntryID` text COMMENT 'array of ids of each entry from the brewing table',
 	  `flightRound` int(11) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -708,7 +708,7 @@ if ($setup_free_access == TRUE) {
 	  `judgingLocation` text NOT NULL,
 	  `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -730,7 +730,7 @@ if ($setup_free_access == TRUE) {
 	  `jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
 	  `jPrefsRounds` int(11) DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8  ;
+	) ENGINE=MyISAM ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -760,7 +760,7 @@ if ($setup_free_access == TRUE) {
 	  `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
 	  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom styles',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -783,7 +783,7 @@ if ($setup_free_access == TRUE) {
 	  `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
 	  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom stylesr',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8  ;
+	) ENGINE=MyISAM ;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -807,7 +807,7 @@ if ($setup_free_access == TRUE) {
 	  `tableJudges` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
 	  `tableStewards` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8  ;
+	) ENGINE=MyISAM ;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -857,7 +857,7 @@ if ($setup_free_access == TRUE) {
 	  `prefsEntryLimit` int(11) DEFAULT NULL,
 	  `prefsTimeFormat` tinyint(1) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -879,7 +879,7 @@ if ($setup_free_access == TRUE) {
 	  `sbd_place` int(11) DEFAULT NULL,
 	  `sbd_comments` text,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -901,7 +901,7 @@ if ($setup_free_access == TRUE) {
 	  `sbi_rank` int(11) DEFAULT NULL,
 	  `sbi_display_places` int(1) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -924,7 +924,7 @@ if ($setup_free_access == TRUE) {
 	  `sponsorLocation` text,
 	  `sponsorLevel` tinyint(1) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -960,7 +960,7 @@ if ($setup_free_access == TRUE) {
 	  `brewStyleOwn` varchar(255) DEFAULT 'bcoe',
 	  `brewStyleJudgingLoc` int(8) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1086,7 +1086,7 @@ if ($setup_free_access == TRUE) {
 	  `styleTypeBOS` char(1) DEFAULT NULL,
 	  `styleTypeBOSMethod` int(11) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1114,15 +1114,16 @@ if ($setup_free_access == TRUE) {
 	  `id` int(11) NOT NULL AUTO_INCREMENT,
 	  `version` varchar(12) DEFAULT NULL,
 	  `version_date` date DEFAULT NULL,
+	  `data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+	) ENGINE=MyISAM ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
 	echo "<li><strong>System</strong> table installed successfully.</li>";
 	
 	$sql = "
-	INSERT INTO `$system_db_table` (`id`, `version`, `version_date`) VALUES (1, '1.2.1', '2012-08-01');
+	INSERT INTO `$system_db_table` (`id`, `version`, `version_date`) VALUES (1, '1.2.1.0', '2012-09-01', NOW( ));;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1141,7 +1142,7 @@ if ($setup_free_access == TRUE) {
 	  `themeTitle` varchar(255) DEFAULT NULL,
 	  `themeFileName` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+	) ENGINE=MyISAM ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1174,7 +1175,7 @@ if ($setup_free_access == TRUE) {
 	  `userQuestionAnswer` varchar(255) DEFAULT NULL,
 	  `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8  ;
+	) ENGINE=MyISAM ;
 	";
 	
 	mysql_select_db($database, $brewing);

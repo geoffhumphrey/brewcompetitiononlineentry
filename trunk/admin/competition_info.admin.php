@@ -263,12 +263,12 @@ $row_name = mysql_fetch_assoc($name);
 <table>
   <tr>
     <td class="dataLabel">Awards Date:</td>
-    <td class="data"><input id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" class="submit" size="20" value="<?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+    <td class="data"><input id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="data"><em>Provide even if the date of judging is the same.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Start Time:</td>
-    <td class="data"><input id="contestAwardsLocTime" name="contestAwardsLocTime" type="text" class="submit" size="10" value="<?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>"></td>
+    <td class="data"><input id="contestAwardsLocTime" name="contestAwardsLocTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>"></td>
     <td class="data"><em>The approximate time the awards ceremony will begin.</em></td>
   </tr>
   <tr>

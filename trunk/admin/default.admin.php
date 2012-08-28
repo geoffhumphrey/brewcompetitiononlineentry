@@ -428,11 +428,29 @@ if ($go == "default") { ?>
 				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,$view,"output/labels.php","none"); ?></li>
 			</ul>
             <ul class="admin_default">
-				<li>Bottle Labels with Special Ingredients (Using <em>Judging Numbers</em> - Avery 5160):</li>
+				<li>Bottle Labels with Special Ingredients (Using <em>Judging Numbers</em> - Avery 5160 - 1 entry per label):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special">All Categories</a></li>
 				<li>For Category:</li>
 				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,"special","output/labels.php","none"); ?></li>
 			</ul>
+            <ul class="admin_default">
+            	<li>Round Bottle Labels (Using <em>Entry Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
+                <li>All Categories: <select name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=0; $i<=12; $i++) { ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> labels per entry</li>
+            </ul>
+            <ul class="admin_default">
+            	<li>Round Bottle Labels (Using <em>Judging Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
+                <li>All Categories: <select name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=0; $i<=12; $i++) { ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> labels per entry</li>
+            </ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="images/book.png" alt="" /></span>Organizing</h4>
 		<div class="toggle_container">
