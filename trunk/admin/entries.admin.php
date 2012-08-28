@@ -192,7 +192,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
-	$query_brewer = sprintf("SELECT brewerDiscount,brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid='%s'",$row_log['brewBrewerID']);
+	$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid='%s'",$row_log['brewBrewerID']);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_array($brewer);
 	

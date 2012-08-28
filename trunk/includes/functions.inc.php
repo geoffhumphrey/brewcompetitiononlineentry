@@ -1200,11 +1200,11 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 		$suffix = ltrim(get_suffix($dbTable), "_");
 		$suffix = "_".$suffix;
 		$judging_tables_db_table = $prefix."judging_tables".$suffix;
-		$judging_locations_db_table = $prefix."judging_locations";
-		$judging_scores_db_table = $prefix."judging_scores";
-		$judging_scores_bos_db_table = $prefix."judging_scores_bos";
+		$judging_locations_db_table = $prefix."judging_locations".$suffix;
+		$judging_scores_db_table = $prefix."judging_scores".$suffix;
+		$judging_scores_bos_db_table = $prefix."judging_scores_bos".$suffix;
 		$styles_db_table = $prefix."styles";
-		$brewing_db_table = $prefix."brewing";
+		$brewing_db_table = $prefix."brewing".$suffix;
 
 		
 	}
