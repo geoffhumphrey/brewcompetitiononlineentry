@@ -35,7 +35,7 @@ function check_setup($tablename, $database) {
 // In future releases, will perform check of the version row in the "system" table
 
 if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
-if (!check_setup($prefix."system",$database)) header ("Location: update.php");
+if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database))) header ("Location: update.php"); 
 
 // If all setup or update has taken place, run normally
 else 

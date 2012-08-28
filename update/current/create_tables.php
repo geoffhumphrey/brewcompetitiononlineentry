@@ -15,7 +15,7 @@ mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`,`data_check`) VALUES (1, '1.2.1.0', '2012-08-31', NOW( ));";
+$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`,`data_check`) VALUES (1, '1.2.1.0', '2012-09-01', NOW( ));";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
