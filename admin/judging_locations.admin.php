@@ -7,7 +7,7 @@
  *
  */
 
-include(DB.'judging_locations.db.php'); 
+if ($section != "step5") include(DB.'judging_locations.db.php'); 
 
 // Page specific functions
 

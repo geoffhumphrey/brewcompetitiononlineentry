@@ -5,8 +5,8 @@
  *              new users, organization, etc.
  */
 require('../paths.php');
-require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
+if ($section != "setup") require(DB.'common.db.php');
 //require(INCLUDES.'functions.inc.php');
 include(INCLUDES.'scrubber.inc.php');
 function check_http($input) {

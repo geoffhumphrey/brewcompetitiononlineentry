@@ -263,7 +263,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 	}
 	
 	$pdf->WriteHTML($html);
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 if ($view == "xml") {

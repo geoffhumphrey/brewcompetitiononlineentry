@@ -1115,6 +1115,7 @@ if ($setup_free_access == TRUE) {
 	  `version` varchar(12) DEFAULT NULL,
 	  `version_date` date DEFAULT NULL,
 	  `data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
+	  `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
 	  PRIMARY KEY (`id`)
 	) ENGINE=MyISAM ;
 	";
@@ -1122,9 +1123,7 @@ if ($setup_free_access == TRUE) {
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
 	echo "<li><strong>System</strong> table installed successfully.</li>";
 	
-	$sql = "
-	INSERT INTO `$system_db_table` (`id`, `version`, `version_date`) VALUES (1, '1.2.1.0', '2012-09-01', NOW( ));;
-	";
+	$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.0', '2012-09-01', NOW( ),'0');";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
