@@ -5,10 +5,12 @@
  *              information - references the "brewer" database table.
  * 
  */
-
+mysql_select_db($database, $brewing);
+if ($section != "step2") {
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
-include(DB.'styles.db.php'); 
+include(DB.'styles.db.php');
+}
 include(DB.'brewer.db.php');
 if ($section != "step2") {
 	mysql_select_db($database, $brewing);

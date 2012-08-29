@@ -45,7 +45,7 @@ echo "<ul><li>Updates to judging locations table completed.</li></ul>";
 	if ($row_contest_info['contestEntryDeadline'] != "") $string4 = strtotime($row_contest_info['contestEntryDeadline']."08:00 PM");
 	else $string4 = strtotime(date("Y-m-d")."08:00 PM");
 	
-	if ($row_contest_info['contestAwardsLocationDate'] != "") $string5 = strtotime($row_contest_info['contestAwardsLocDate'].$row_contest_info['contestAwardsLocationTime']);
+	if ($row_contest_info['contestAwardsLocDate'] != "") $string5 = strtotime($row_contest_info['contestAwardsLocDate'].$row_contest_info['contestAwardsLocTime']);
 	else $string5 = strtotime(date("Y-m-d")."08:00 PM");
 
 	$updateSQL = sprintf("UPDATE $contest_info_db_table SET 

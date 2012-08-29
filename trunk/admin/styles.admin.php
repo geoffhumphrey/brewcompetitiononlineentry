@@ -1,5 +1,5 @@
 <?php 
-include(DB.'judging_locations.db.php'); 
+if ($section != "step7") include(DB.'judging_locations.db.php'); 
 include(DB.'styles.db.php'); 
 ?>
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
@@ -73,7 +73,7 @@ function checkUncheckAll(theElement) {
  </thead>
  <tbody>
  <?php do { 
-    	if (($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
+    	if (($section != "step7") && ($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
  		$query_judging2 = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
 		$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 		$row_judging2 = mysql_fetch_assoc($judging2);

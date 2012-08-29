@@ -310,7 +310,7 @@ if ($view == "pdf") { $pdf->WriteHTML($html); }
 
 
 if ($view == "pdf") { 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 	//echo $html;
 	}
 if ($view == "html") { 

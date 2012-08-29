@@ -1042,7 +1042,7 @@ function total_paid_received($go,$id) {
 }
 
 function style_convert($number,$type) {
-	
+	require(CONFIG.'config.php');
 	$styles_db_table = $prefix."styles";
 	
 	switch ($type) {
@@ -2376,8 +2376,12 @@ function winner_method($type,$output_type) {
 
 function table_exists($table_name) {
 	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
 	// taken from http://snippets.dzone.com/posts/show/3369
-	if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$table_name."'"))) return TRUE;
+	$query_exists = "SHOW TABLES LIKE '".$table_name."'";
+	$exists = mysql_query($query_exists, $brewing) or die(mysql_error());
+	$totalRows_exists = mysql_num_rows($exists);
+	if ($totalRows_exists > 0) return TRUE;
 	else return FALSE;
 }
 

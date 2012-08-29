@@ -1,4 +1,5 @@
 <?php 
+error_reporting(0);
 include('../paths.php');
 require(CONFIG.'config.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
@@ -7,7 +8,6 @@ require(INCLUDES.'url_variables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-session_start(); 
 
 $imageSrc = "../images/";
 
@@ -42,7 +42,7 @@ $message ="";
 }
 
 // Process User's Request
-if ($_REQUEST[del] && $DELETABLE)  {
+if ($_REQUEST['del'] && $DELETABLE)  {
   $resource = fopen("log.txt","a");
   fwrite($resource,date("Ymd h:i:s")."DELETE - $_SERVER[REMOTE_ADDR]"."$_REQUEST[del]\n");
   fclose($resource);

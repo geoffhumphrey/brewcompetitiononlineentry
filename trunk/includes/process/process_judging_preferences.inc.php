@@ -28,7 +28,13 @@ WHERE id=%s",
 	if ($section == "step8") {
 		// Lock down the config file
 		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
-		header(sprintf("Location: %s", $base_url."/index.php?msg=$message")); 
+		
+		
+		$updateSQL = sprintf("UPDATE %s SET setup='1' WHERE id='1'",$prefix."system");			   
+		mysql_select_db($database, $brewing);
+  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		header(sprintf("Location: %s", $base_url."/index.php?msg=2")); 
 	}
 	
 	else {

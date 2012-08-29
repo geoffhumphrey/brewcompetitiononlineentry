@@ -60,7 +60,7 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
@@ -93,7 +93,7 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 
@@ -131,7 +131,7 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "default"))
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 	
 }
 
@@ -164,7 +164,7 @@ if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "defa
 		}
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 	
 }
 
@@ -197,7 +197,7 @@ if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "defaul
 		}
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 	
 }
 
@@ -230,7 +230,7 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 	
 }
 
@@ -263,7 +263,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id != "default
 		$pdf->Add_Label($text);
 	}
 	
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 if (($go == "participants") && ($action == "judging_labels") && ($id == "default")) {
@@ -297,7 +297,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id == "default
 		}
 	} while ($row_brewer = mysql_fetch_assoc($brewer));
 	
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 if (($go == "participants") && ($action == "address_labels")) {
@@ -325,7 +325,7 @@ if (($go == "participants") && ($action == "address_labels")) {
 		}
 	} while ($row_brewer = mysql_fetch_assoc($brewer));
 	
-	$pdf->Output($filename,D);
+	$pdf->Output($filename,'D');
 }
 
 if (($go == "judging_scores") && ($action == "awards")) {
@@ -468,10 +468,8 @@ if (($go == "judging_scores") && ($action == "awards")) {
 		} while ($row_tables = mysql_fetch_assoc($tables));
 	
 	}
-	
-	
-	
-	$pdf->Output($filename,D);
+		
+	$pdf->Output($filename,'D');
 }
 
 ?>
