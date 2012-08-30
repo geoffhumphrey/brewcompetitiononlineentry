@@ -15,11 +15,7 @@ $system = mysql_query($query_system, $brewing) or die(mysql_error());
 $row_system = mysql_fetch_assoc($system);
 
 if ($row_system['setup'] == 1) header ('Location: index.php');
-
-else {
-if ($section != "step0") require(DB.'common.db.php');
-require(INCLUDES.'version.inc.php');
-//require(INCLUDES.'headers.inc.php');
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -78,10 +74,18 @@ require(INCLUDES.'version.inc.php');
         <div id="header">	
 			<div id="header-inner"><h1>BCOE&amp;M <?php echo $current_version; ?> Setup</h1></div>
 		</div>
-        
-    	<?php
-		if (($setup_free_access == TRUE) && ($row_system['setup'] == 0)) {
-			if ($section == "step0")	include(SETUP.'install_db.setup.php');
+<?php 
+if ($setup_free_access == TRUE) {
+	if ($section != "step0") require(DB.'common.db.php');
+	require(INCLUDES.'version.inc.php');
+	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
+	if (table_exists($prefix."system")) {
+		mysql_select_db($database, $brewing);
+		$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
+		$system = mysql_query($query_system, $brewing) or die(mysql_error());
+		$row_system = mysql_fetch_assoc($system);
+		
+		if ($row_system['setup'] == 0) {
 			if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
 			if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
 			if ($section == "step3") 	include(SETUP.'site_preferences.setup.php');
@@ -89,27 +93,23 @@ require(INCLUDES.'version.inc.php');
 			if ($section == "step6") 	include(SETUP.'drop-off.setup.php');
 			if ($section == "step5") 	include(SETUP.'judging_locations.setup.php');
 			if ($section == "step7") 	include(SETUP.'accepted_styles.setup.php');
-			if ($section == "step8") 	include(SETUP.'judging_preferences.setup.php');
-		} 
-		
-		elseif (($setup_free_access == FALSE) && (!table_exists($prefix."system"))) {
-			echo "
-			<div class='error'>Setup Cannot Run</div>
-			<p>The variable called &#36;setup_free_access is set to FALSE in the config.php file. The config.php file is located in the &ldquo;site&rdquo; folder on your server.</p>
-			<p><strong>For the install and setup scripts to run, it must be set to TRUE. Server access is required to change the config.php file.</strong></p>
-			<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>
-			";
+			if ($section == "step8") 	include(SETUP.'judging_preferences.setup.php');		
 		}
 		
-		else {
-			echo "
-			<div class='error'>Setup Has Already Run</div>
-			<p>There is no need to run the setup scripting.</p>
-			<p>Go to the <a href='".$base_url."/index.php'>Home Page</a></p>
-			
-			";
-		}
-		?>
+	} // end if (table_exists($prefix."system"))
+	
+}
+
+if ($setup_free_access == FALSE) {
+	echo "
+	<div class='error'>Setup Cannot Run</div>
+	<p>The variable called &#36;setup_free_access is set to FALSE in the config.php file. The config.php file is located in the &ldquo;site&rdquo; folder on your server.</p>
+	<p><strong>For the install and setup scripts to run, it must be set to TRUE. Server access is required to change the config.php file.</strong></p>
+	<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>
+	";
+}
+
+?>
     	</div>
 	</div>
 </div>
@@ -118,8 +118,3 @@ require(INCLUDES.'version.inc.php');
 </div>
 </body>
 </html>
-<?php } 
-}
-?>
-
-
