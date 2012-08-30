@@ -26,9 +26,6 @@ while ($row_judging_locations = mysql_fetch_assoc($judging_locations));
 
 echo "<ul><li>Updates to judging locations table completed.</li></ul>";
 
-
-
-
 // Update Preferences to use new date/time schema
 
 	// Convert current time/date to UNIX
@@ -70,5 +67,22 @@ echo "<ul><li>Updates to judging locations table completed.</li></ul>";
 	//echo $updateSQL."<br>";
 
 echo "<ul><li>Updates to prefereces table completed.</li></ul>";
+
+
+// Add the date of the update to all current users
+// *************************** 1.2.1.0 ONLY ******************************
+
+$query_user = sprintf("SELECT id,userCreated FROM %s", $users_db_table);
+$user = mysql_query($query_user, $brewing) or die(mysql_error());
+$row_user = mysql_fetch_assoc($user);
+$totalRows_user = mysql_num_rows($user);
+
+do {
+	$updateSQL = sprintf("UPDATE %s SET userCreated=NOW( ) WHERE id='%s'",$users_db_table,$row_user['id']); 
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+} while ($row_user = mysql_fetch_assoc($user));
+
+echo "<ul><li>Users table updated.</li></ul>";	
 
 ?>
