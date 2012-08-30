@@ -15,7 +15,7 @@ $system = mysql_query($query_system, $brewing) or die(mysql_error());
 $row_system = mysql_fetch_assoc($system);
 
 if ($row_system['setup'] == 1) header ('Location: index.php');
-}
+
 else {
 if ($section != "step0") require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
@@ -80,7 +80,7 @@ require(INCLUDES.'version.inc.php');
 		</div>
         
     	<?php
-		if (($setup_free_access == TRUE) && (!table_exists($prefix."system"))) {
+		if (($setup_free_access == TRUE) && ($row_system['setup'] == 0)) {
 			if ($section == "step0")	include(SETUP.'install_db.setup.php');
 			if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
 			if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
@@ -106,6 +106,7 @@ require(INCLUDES.'version.inc.php');
 			<div class='error'>Setup Has Already Run</div>
 			<p>There is no need to run the setup scripting.</p>
 			<p>Go to the <a href='".$base_url."/index.php'>Home Page</a></p>
+			
 			";
 		}
 		?>
@@ -117,5 +118,8 @@ require(INCLUDES.'version.inc.php');
 </div>
 </body>
 </html>
-<?php } ?>
+<?php } 
+}
+?>
+
 

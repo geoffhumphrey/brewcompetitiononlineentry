@@ -1203,7 +1203,7 @@ if ($setup_free_access == TRUE) {
 	<p><strong>However, the setup process is not done!</strong></p>
 	<p>Click &ldquo;Continue&rdquo; below to setup and customize your installation.</p>
 	<div style='padding: 20px; margin: 30px 0 0 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; -webkit-border-radius: 3px;
-	-moz-border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='setup.php?section=step1&amp;action=install-db'>Continue</a></div>";
+	-moz-border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='setup.php?section=step1'>Continue</a></div>";
 	}
 
 }
