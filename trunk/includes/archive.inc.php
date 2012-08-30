@@ -193,7 +193,7 @@ session_start();
   		// Register the loginUsername
  		$_SESSION["loginUsername"] = $user_name;
 		// If the username/password combo is OK, relocate to the "protected" content index page
-  		header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=archive&msg=7"_);
+  		header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=archive&msg=7");
   		exit;
 		}
 	else {
