@@ -52,12 +52,34 @@ if ($totalRows_archive > 0) {
 								 $brewWinner,
 								 $brewReceived,
 								 "1",
-								 "NOW()",
+								 "NOW( )",
 								 $row_log['id']);
 			mysql_select_db($database, $brewing);
 			$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 			
 		} while ($row_log = mysql_fetch_assoc($log));
+		
+		
+		$query_user = sprintf("SELECT * FROM %s", $prefix."users_".$suffix);
+		$user = mysql_query($query_user, $brewing) or die(mysql_error());
+		$row_user = mysql_fetch_assoc($user);
+		$totalRows_user = mysql_num_rows($user);
+		
+		do {
+			$updateSQL = sprintf("UPDATE %s SET userCreated=NOW( ) WHERE id='%s'",$users_db_table,$row_user['id']); 
+			mysql_select_db($database, $brewing);
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			if ($row_user['userQuestion'] == "") {
+				
+				$updateSQL = sprintf("UPDATE %s SET userQuestion='%s', userQuestionAnswer='%s' WHERE id='%s'",$prefix."users_".$suffix,"What is your favorite all-time beer to drink?","Pabst",$row_user['id']); 
+				mysql_select_db($database, $brewing);
+				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+			
+			}
+			
+		} while ($row_user = mysql_fetch_assoc($user));
+		
 		echo "<ul><li>All archive entry data updated.</li></ul>";
 		
 		/*
