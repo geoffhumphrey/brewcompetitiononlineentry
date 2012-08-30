@@ -1,6 +1,6 @@
 <?php 
 mysql_select_db($database, $brewing);
-$query_themes = "SELECT * FROM $themes_db_table";
+$query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
 $themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 $row_themes = mysql_fetch_assoc($themes);
 $totalRows_themes = mysql_num_rows($themes);
