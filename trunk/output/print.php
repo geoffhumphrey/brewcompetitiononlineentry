@@ -6,7 +6,8 @@
  * 
  */
 
-require('../paths.php'); 
+require('../paths.php');
+error_reporting(0);
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
