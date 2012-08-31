@@ -186,7 +186,7 @@ function total_discount() {
 <?php } ?>
 
 <?php 
-if ($setup_free_access == TRUE) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
+if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter); ?>
 <?php if (($section == "admin") && ($go == "default")) { ?>
