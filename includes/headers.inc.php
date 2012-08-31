@@ -25,7 +25,7 @@ switch($section) {
 	if ($msg == "chmod") { 
 		$output = "Setup was successful. However, your config.php permissions file could not be changed.";
 		$output_extend = "<div class='error'>It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
-		if ($setup_free_access == TRUE) $output_extend .= "<div class='error'>Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
+		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='error'>Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
 	}
 	
 	if     ($msg == "1") $output = "Info added successfully."; 

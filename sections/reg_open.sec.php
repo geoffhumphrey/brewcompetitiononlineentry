@@ -21,7 +21,7 @@ include(DB.'judging_locations.db.php'); ?>
 <?php } elseif (($registration_open == "1") && (isset($_SESSION['loginUsername']))) { ?>
 	<p>Since you have already registered, you can <a href="index.php?section=list">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
-    <p>If you are willing to judge or steward, please return to register on or after <?php echo $reg_open ?>.</p>
+    <p>If you are willing to judge or steward, please return to register on or after <?php echo $judge_open; ?>.</p>
 <?php } ?>
 <h2>Entries</h2>
 <p>Entries will be accepted between <?php echo $entry_open; ?> and <?php echo $entry_closed; ?>. All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php echo $entry_closed; ?> and will not be accepted after this date/time. For details, see the <a href="index.php?section=entry">Entry Information</a> page.</p> 
