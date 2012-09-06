@@ -16,7 +16,6 @@ $row_judging1 = mysql_fetch_assoc($judging1);
 $totalRows_judging1 = mysql_num_rows($judging1);
 
 $query_judging2 = "SELECT * FROM $judging_locations_db_table";
-if ($section == "list") $query_judging2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerJudgeLocation2']);
 if (($section == "brewer") || ($section == "admin")) $query_judging2 .= " ORDER BY judgingDate,judgingLocName";
 $judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
 $row_judging2 = mysql_fetch_assoc($judging2);

@@ -4,11 +4,31 @@
  * Description: This module does all the heavy lifting for any DB updates; new entries,
  *              new users, organization, etc.
  */
+ 
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', '1');
+
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
-if ($section != "setup") require(DB.'common.db.php');
-//require(INCLUDES.'functions.inc.php');
-include(INCLUDES.'scrubber.inc.php');
+
+
+if ($section != "setup")  { 
+	require(DB.'common.db.php');
+	require(INCLUDES.'date_time.inc.php');
+	
+	// Set timezone globals for the site
+	$timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
+	date_default_timezone_set($timezone_prefs);
+	$tz = date_default_timezone_get();
+	
+	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
+	else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
+	
+	
+}
+
+require(INCLUDES.'scrubber.inc.php');
 function check_http($input) {
 	if (($input != "") && (!strstr($input, "http://"))) $input = "http://".$input; else $input = $input;
 	return $input;
@@ -37,8 +57,20 @@ $style_types_db_table = $prefix."style_types";
 $themes_db_table = $prefix."themes";
 $users_db_table = $prefix."users";
 
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set('display_errors', '1');
+if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
+	require(DB.'common.db.php');
+	require(INCLUDES.'date_time.inc.php');
+	
+	// Set timezone globals for the site
+	$timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
+	date_default_timezone_set($timezone_prefs);
+	$tz = date_default_timezone_get();
+	
+	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
+	else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
+	
+}
 
 // --------------------------- Various Functions -------------------------------- //
 

@@ -6,8 +6,8 @@
  */
 
 require('paths.php');
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set('display_errors', '1');
+//error_reporting(E_ALL ^ E_NOTICE);
+//ini_set('display_errors', '1');
 
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
@@ -64,6 +64,15 @@ purge_entries("unconfirmed", 1);
 
 // Purge entries without defined special ingredients designated to particular styles that require them
 purge_entries("special", 1);
+
+// Set timezone globals for the site
+$timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
+date_default_timezone_set($timezone_prefs);
+$tz = date_default_timezone_get();
+
+// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
+else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -128,7 +137,8 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 </div>
 <div id="content">
  	 <div id="content-inner"> 
-  <?php if ($section != "admin") { ?>
+  <?php // echo $tz; echo "<br>".$timezone_offset; echo "<br>".$row_prefs['prefsTimeZone']; echo "<br>".date('T');
+  if ($section != "admin") { ?>
  	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   	</div>
