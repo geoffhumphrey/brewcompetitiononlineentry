@@ -131,36 +131,44 @@ $totalRows_themes = mysql_num_rows($themes);
   	<td class="dataLabel">Time Zone:</td>
     <td class="data">
     <select name="prefsTimeZone">
-      <option value="-12" <?php if ($row_prefs['prefsTimeZone'] == "-12") echo "SELECTED"; ?>>(GMT -12:00) Eniwetok, Kwajalein</option>
-      <option value="-11" <?php if ($row_prefs['prefsTimeZone'] == "-11") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
-      <option value="-10" <?php if ($row_prefs['prefsTimeZone'] == "-10") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
-      <option value="-9" <?php if ($row_prefs['prefsTimeZone'] == "-9") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
-      <option value="-8" <?php if ($row_prefs['prefsTimeZone'] == "-8") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
-      <option value="-7" <?php if ($row_prefs['prefsTimeZone'] == "-7") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-      <option value="-6" <?php if ($row_prefs['prefsTimeZone'] == "-6") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
-      <option value="-5" <?php if ($row_prefs['prefsTimeZone'] == "-5") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-      <option value="-4" <?php if ($row_prefs['prefsTimeZone'] == "-4") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-      <option value="-3.5" <?php if ($row_prefs['prefsTimeZone'] == "-3.5") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
-      <option value="-3" <?php if ($row_prefs['prefsTimeZone'] == "-3") echo "SELECTED"; ?>>(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
-      <option value="-2" <?php if ($row_prefs['prefsTimeZone'] == "-2") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
-      <option value="-1" <?php if ($row_prefs['prefsTimeZone'] == "-1") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
-      <option value="0" <?php if ($row_prefs['prefsTimeZone'] == "0") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
-      <option value="1" <?php if ($row_prefs['prefsTimeZone'] == "1") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
-      <option value="2" <?php if ($row_prefs['prefsTimeZone'] == "2") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, South Africa</option>
-      <option value="3" <?php if ($row_prefs['prefsTimeZone'] == "3") echo "SELECTED"; ?>>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
-      <option value="3.5" <?php if ($row_prefs['prefsTimeZone'] == "3.5") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
-      <option value="4" <?php if ($row_prefs['prefsTimeZone'] == "4") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-      <option value="4.5" <?php if ($row_prefs['prefsTimeZone'] == "4.5") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
-      <option value="5" <?php if ($row_prefs['prefsTimeZone'] == "5") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-      <option value="5.5" <?php if ($row_prefs['prefsTimeZone'] == "5.5") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-      <option value="6" <?php if ($row_prefs['prefsTimeZone'] == "6") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo</option>
-      <option value="7" <?php if ($row_prefs['prefsTimeZone'] == "7") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>-12
-      <option value="8" <?php if ($row_prefs['prefsTimeZone'] == "8") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
-      <option value="9" <?php if ($row_prefs['prefsTimeZone'] == "9") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-      <option value="9.5" <?php if ($row_prefs['prefsTimeZone'] == "9.5") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin</option>
-      <option value="10" <?php if ($row_prefs['prefsTimeZone'] == "10") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-      <option value="11" <?php if ($row_prefs['prefsTimeZone'] == "11") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-      <option value="12" <?php if ($row_prefs['prefsTimeZone'] == "12") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+      <option value="-12.000" <?php if ($row_prefs['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein</option>
+      <option value="-11.000" <?php if ($row_prefs['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
+      <option value="-10.000" <?php if ($row_prefs['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
+      <option value="-9.000" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
+      <option value="-8.000" <?php if ($row_prefs['prefsTimeZone'] == "-8.000") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada), Tiajuana</option>
+      <option value="-7.000" <?php if ($row_prefs['prefsTimeZone'] == "-7.000") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+      <option value="-7.001" <?php if ($row_prefs['prefsTimeZone'] == "-7.001") echo "SELECTED"; ?>>(GMT -7:00) Arizona (No Daylight Savings)</option>
+      <option value="-6.000" <?php if ($row_prefs['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America, Mexico City</option>
+      <option value="-6.001" <?php if ($row_prefs['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
+      <option value="-6.002" <?php if ($row_prefs['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
+      <option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+      <option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+      <option value="-4.001" <?php if ($row_prefs['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay</option>
+      <option value="-3.500" <?php if ($row_prefs['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
+      <option value="-3.000" <?php if ($row_prefs['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Brazil, Buenos Aires, Georgetown, Greenland</option>
+      <option value="-3.001" <?php if ($row_prefs['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (No Daylight Savings)</option>
+      <option value="-2.000" <?php if ($row_prefs['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
+      <option value="-1.000" <?php if ($row_prefs['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+      <option value="0.000" <?php if ($row_prefs['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
+      <option value="1.000" <?php if ($row_prefs['prefsTimeZone'] == "1.000") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+      <option value="2.000" <?php if ($row_prefs['prefsTimeZone'] == "2.000") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, South Africa</option>
+      <option value="3.000" <?php if ($row_prefs['prefsTimeZone'] == "3.000") echo "SELECTED"; ?>>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg, Nairobi</option>
+      <option value="3.500" <?php if ($row_prefs['prefsTimeZone'] == "3.500") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
+      <option value="4.000" <?php if ($row_prefs['prefsTimeZone'] == "4.000") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+      <option value="4.500" <?php if ($row_prefs['prefsTimeZone'] == "4.500") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
+      <option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.000") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+      <option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+      <option value="5.750" <?php if ($row_prefs['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
+      <option value="6.000" <?php if ($row_prefs['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
+      <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>-12
+      <option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
+      <option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Queensland, Perth, the Northern Territory, Western Australia</option>
+      <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+      <option value="9.500" <?php if ($row_prefs['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin</option>
+      <option value="10.000" <?php if ($row_prefs['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+      <option value="10.001" <?php if ($row_prefs['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane</option>
+      <option value="11.000" <?php if ($row_prefs['prefsTimeZone'] == "11.000") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+      <option value="12.000" <?php if ($row_prefs['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
     </select>
     </td>
     </tr>

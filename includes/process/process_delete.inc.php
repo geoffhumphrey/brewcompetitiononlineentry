@@ -38,19 +38,7 @@ if ($go == "judging_location") {
 		}
   	while($row_loc = mysql_fetch_assoc($loc));
 }
-  
-	$query_loc = "SELECT * FROM $brewer_db_table WHERE brewerJudgeLocation2='$id'";
-	$loc = mysql_query($query_loc, $brewing) or die(mysql_error());
-	$row_loc = mysql_fetch_assoc($loc);
-	$totalRows_loc = mysql_num_rows($loc);
-	if ($totalRows_loc > 0) {
-  		do  {
-  		$updateSQL = "UPDATE $brewer_db_table SET brewerJudgeLocation2=NULL WHERE id='".$row_loc['id']."'; ";
-		mysql_select_db($database, $brewing);
-  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		}
-  	while($row_loc = mysql_fetch_assoc($loc));
-	}
+
   
 	$query_loc = "SELECT * FROM $brewer_db_table WHERE brewerStewardLocation='$id'";
 	$loc = mysql_query($query_loc, $brewing) or die(mysql_error());

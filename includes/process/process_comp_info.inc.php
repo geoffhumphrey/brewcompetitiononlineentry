@@ -14,6 +14,10 @@ $contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['con
 $contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['contestAwardsLocTime']);
 $contestHostWebsite = check_http($_POST['contestHostWebsite']);
 
+//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 
+//echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$row_prefs['prefsTimeZone'];
+  	
+
 // --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
 
 if ($action == "add") {

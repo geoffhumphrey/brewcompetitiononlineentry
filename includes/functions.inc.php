@@ -6,6 +6,8 @@
  *
  */
 
+include (INCLUDES.'date_time.inc.php');
+
 $pg = "default";
 if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
@@ -161,32 +163,6 @@ function check_judging_numbers() {
 	if ($row_check['count'] == 0) return true; else return false;
 }
 
-function judging_date_return() {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
-	$check = mysql_query($query_check, $brewing) or die(mysql_error());
-	$row_check = mysql_fetch_assoc($check);
-	
-	$today = strtotime("now");
-	do {
- 		if ($row_check['judgingDate'] >= $today) $newDate[] = 1; 
- 		else $newDate[] = 0;
-	} while ($row_check = mysql_fetch_assoc($check));
-	$r = array_sum($newDate);
-	return $r;
-}
-
-function greaterDate($start_date,$end_date)
-{
-  $start = strtotime($start_date);
-  $end = strtotime($end_date);
-  if ($start > $end)
-   return TRUE;
-  else
-   return FALSE;
-}
-
 $color = "#eeeeee";
 $color1 = "#e0e0e0";
 $color2 = "#eeeeee";
@@ -251,134 +227,8 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 	
 }
 
-// ---------------------------- Date Conversion -----------------------------------------
-
-function getTimeZoneDateTime($GMT, $timestamp, $date_format, $time_format, $display_format, $return_format) { 
-    $timezones = array( 
-        '-12'=>'Pacific/Kwajalein', 
-        '-11'=>'Pacific/Midway', 
-        '-10'=>'Pacific/Honolulu', 
-        '-9'=>'America/Anchorage', 
-        '-8'=>'America/Los_Angeles', 
-        '-7'=>'America/Denver', 
-        '-6'=>'America/Mexico_City', 
-        '-5'=>'America/New_York', 
-        '-4'=>'America/Caracas', 
-        '-3.5'=>'America/St_Johns', 
-        '-3'=>'America/Argentina/Buenos_Aires', 
-        '-2'=>'Atlantic/South_Georgia',
-        '-1'=>'Atlantic/Azores', 
-        '0'=>'Europe/London', 
-        '1'=>'Europe/Paris', 
-        '2'=>'Europe/Helsinki', 
-        '3'=>'Europe/Moscow', 
-        '3.5'=>'Asia/Tehran', 
-        '4'=>'Asia/Baku', 
-        '4.5'=>'Asia/Kabul', 
-        '5'=>'Asia/Karachi', 
-        '5.5'=>'Asia/Calcutta', 
-        '6'=>'Asia/Colombo', 
-        '7'=>'Asia/Bangkok', 
-        '8'=>'Asia/Singapore', 
-        '9'=>'Asia/Tokyo', 
-        '9.5'=>'Australia/Darwin', 
-        '10'=>'Pacific/Guam', 
-        '11'=>'Asia/Magadan', 
-        '12'=>'Asia/Kamchatka',
-		'13'=>'Pacific/Tongatapu',
-    );
-	
-    date_default_timezone_set($timezones[$GMT]);
-	switch($display_format) {
-		case "long": // Long Format
-			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
-			else $date = date('l j F, Y', $timestamp);
-		break;
-		case "short": // Short Format
-			if ($date_format == "1") $date = date('m/d/Y', $timestamp);
-			elseif ($date_format = "2") $date = date('d/m/Y',$timestamp);
-			else $date = date('Y/m/d', $timestamp);
-		break;
-		
-		case "system": // MySQL Format
-			$date = date('Y-m-d', $timestamp);
-		break;
-	}
-	
-	if ($time_format == "1") $time = date('H:i',$timestamp);
-	else $time = date('g:i A',$timestamp);
-	
-	switch($return_format) {
-		case "date-time":
-			$return = $date." at ".$time.", ".timezone_name($GMT);
-		break;
-		case "date-time-no-gmt":
-			$return = $date." at ".$time;
-		break;
-		case "date-no-gmt":
-			$return = $date;
-		break;		
-		case "time-gmt":
-			$return = $time.", ".timezone_name($GMT);
-		break;
-		case "time":
-			$return = $time;
-		break;
-		default: $return = $date;
-	}
-	return $return;
-}
-
-
-
-
-// http://www.phpbuilder.com/annotate/message.php3?id=1031006
-function date_convert($date,$func,$format) {
-if ($func == 1)	{ //insert conversion
-	list($day, $month, $year) = split('[/.-]', $date); 
-	$date = "$year-$month-$day"; 
-	}
-if ($func == 2)	{ //output conversion
-	list($year, $month, $day) = explode("-", $date);
-	if ($month == "01" ) { $month = "January "; }
-	if ($month == "02" ) { $month = "February "; }
-	if ($month == "03" ) { $month = "March "; }
-	if ($month == "04" ) { $month = "April "; }
-	if ($month == "05" ) { $month = "May "; }
-	if ($month == "06" ) { $month = "June "; }
-	if ($month == "07" ) { $month = "July "; }
-	if ($month == "08" ) { $month = "August "; }
-	if ($month == "09" ) { $month = "September "; }
-	if ($month == "10" ) { $month = "October "; }
-	if ($month == "11" ) { $month = "November "; }
-	if ($month == "12" ) { $month = "December "; }
-	$day = ltrim($day, "0");
-	if ($format == 1) $date = "$month $day, $year";
-	if ($format == 2) $date = "$day $month $year";
-	if ($format == 3) $date = "$year $month $day";
-	}
-	
-if ($func == 3)	{ //output conversion
-	list($year, $month, $day) = explode("-", $date);
-	if ($month == "01" ) { $month = "Jan"; }
-	if ($month == "02" ) { $month = "Feb"; }
-	if ($month == "03" ) { $month = "Mar"; }
-	if ($month == "04" ) { $month = "Apr"; }
-	if ($month == "05" ) { $month = "May"; }
-	if ($month == "06" ) { $month = "Jun"; }
-	if ($month == "07" ) { $month = "Jul"; }
-	if ($month == "08" ) { $month = "Aug"; }
-	if ($month == "09" ) { $month = "Sep"; }
-	if ($month == "10" ) { $month = "Oct"; }
-	if ($month == "11" ) { $month = "Nov"; }
-	if ($month == "12" ) { $month = "Dec"; }
-	$day = ltrim($day, "0");
-	if ($format == 1) $date = "$month $day, $year";
-	if ($format == 2) $date = "$day $month $year";
-	if ($format == 3) $date = "$year $month $day";
-	}	
-return $date;
-}
+// ---------------------------- Date -----------------------------------------
+// All date functions moved to date_time.inc.php
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
@@ -1465,7 +1315,7 @@ function check_bos_loc($id) {
 	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 	$row_judging = mysql_fetch_assoc($judging);
 	$totalRows_judging = mysql_num_rows($judging);
-	$bos_loc = $row_judging['judgingLocName']." (".date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat']).")";
+	$bos_loc = $row_judging['judgingLocName']." (".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")";
 	return $bos_loc;
 }
 
@@ -1986,76 +1836,6 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
-
-function timezone_name($GMT) {
-	switch($GMT) {
-		case "-12": $timezone_name = "Niue Time";
-		break;
-		case "-11": $timezone_name = "Somoa Time";
-		break;
-        case "-10": $timezone_name = "Hawaii-Aleutian Time";
-		break;
-        case "-9": $timezone_name = "Alaska Time";
-		break; 
-        case "-8": $timezone_name = "Pacific Time";
-		break; 
-        case "-7": $timezone_name = "Mountain Time";
-		break; 
-        case "-6": $timezone_name = "Central Time";
-		break; 
-        case "-5": $timezone_name = "Eastern Time";
-		break;
-        case "-4": $timezone_name = "Atlantic Time";
-		break; 
-       	case "-3.5": $timezone_name = "Newfoundland Time";
-		break; 
-        case "-3": $timezone_name = "Western Greenland Time";
-		break; 
-        case "-2": $timezone_name = "South Sandwich Islands Time";
-		break;
-        case "-1": $timezone_name = "Somoa Standard Time";
-		break; 
-        case "0": $timezone_name = "Western European Time";
-		break;
-        case "1": $timezone_name = "Central European Time";
-		break;
-        case "2": $timezone_name = "Eastern European Time";
-		break;
-        case "3": $timezone_name = "East Africa Time";
-		break; 
-        case "3.5": $timezone_name = "Iran Standard Time";
-		break; 
-        case "4": $timezone_name = "Gulf Standard Time";
-		break;
-        case "4.5": $timezone_name = "Afghanistan Time";
-		break; 
-        case "5": $timezone_name = "Pakistan Standard Time";
-		break; 
-        case "5.5": $timezone_name = "Indian Standard Time";
-		break; 
-        case "6": $timezone_name = "British Indian Ocean Time";
-		break; 
-        case "7": $timezone_name = "Indochina Time";
-		break; 
-        case "8": $timezone_name = "ASEAN Common Time";
-		break;
-        case "9": $timezone_name = "Australian Western Standard Time";
-		break;
-        case "9.5": $timezone_name = "Australian Central Standard Time";
-		break;
-        case "10": $timezone_name = "Australian Eastern Standard Time";
-		break;
-        case "11": $timezone_name = "Solomon Islands Time";
-		break;
-        case "12": $timezone_name = "New Zeland Standard Time";
-		break;
-		case "13": $timezone_name = "Phoenix Island Time";
-		break;
-	}
-	return $timezone_name;
-}
-
-
 
 function brewer_assignment($a,$method){ 
 	switch($method) {

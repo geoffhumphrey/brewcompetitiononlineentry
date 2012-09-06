@@ -853,7 +853,7 @@ if ($setup_free_access == TRUE) {
 	  `prefsTheme` varchar(255) DEFAULT NULL,
 	  `prefsDateFormat` char(1) DEFAULT NULL,
 	  `prefsContact` char(1) DEFAULT NULL,
-	  `prefsTimeZone` int(11) DEFAULT NULL,
+	  `prefsTimeZone` DECIMAL(10,3)  DEFAULT NULL,
 	  `prefsEntryLimit` int(11) DEFAULT NULL,
 	  `prefsTimeFormat` tinyint(1) DEFAULT NULL,
 	  PRIMARY KEY (`id`)

@@ -262,7 +262,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				if (substr($value, 0, 1) == "Y") { 
 					echo "<tr>\n<td>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-					echo date_convert($row_judging_loc3['judgingDate'], 3, $row_prefs['prefsDateFormat']).")</td>\n";
+					echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_loc3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")</td>\n";
 					echo "</td>\n</tr>";
 				}
 				}
@@ -294,7 +294,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
-	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo date_convert($row_judging['judgingDate'], 3, $row_prefs['prefsDateFormat']).")"; ?></option>
+	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></option>
     <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
    </select>
   </td>
