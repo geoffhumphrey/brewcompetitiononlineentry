@@ -380,7 +380,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
   </tbody>
 </table>
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update Table"; else echo "Add Table"; ?>"></p>
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if (($action == "add") || ($action == "edit")) ?>
 

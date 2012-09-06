@@ -168,7 +168,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 </table>
 
 <p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries in <?php echo $row_sbi['sbi_name'];?>"></p>
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } ?>
 

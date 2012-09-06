@@ -260,7 +260,7 @@ if ($section != "admin") {
 	});
 </script>
 <input type="hidden" name="userLevel" value="2" />
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
 <input type="hidden" name="brewerSteward" value="N" />
