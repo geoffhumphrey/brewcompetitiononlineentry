@@ -321,5 +321,5 @@ $row_name = mysql_fetch_assoc($name);
 </table>
 <?php } ?>
 <p><input name="submit" type="submit" class="button" value="Submit"></p>
-<input type="hidden" name="relocate" value=<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
