@@ -139,6 +139,7 @@ if (file_exists($filename)) {
 					//  Finish and Clean Up
 					// -----------------------------------------------------------
 					
+					echo "<p>To take advanage of this version's added feaures, go to your <a href='index.php?section=admin&amp;go=preferences'>site's preferences</a> and customize your installation.</p>";
 					echo "<ul>";
 					echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
 					echo "<li>Go to the <a href='index.php?section=admin'>Admin Main Menu</a>.</li>";
