@@ -69,7 +69,7 @@ mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "UPDATE  `".$prefix."preferences` SET  `prefsTimeZone` =  '-5.000', `prefsEntryLimit` =  '500', `prefsTimeFormat` =  '0', `prefsGoogle` = 'N', `prefsWinnerDelay` = '24', `prefsWinnerMethod` = '0' WHERE `id` = '1';"; 
+$updateSQL = "UPDATE  `".$prefix."preferences` SET  `prefsTimeZone` =  '-5.000', `prefsEntryLimit` =  NULL, `prefsTimeFormat` =  '0', `prefsGoogle` = 'N', `prefsWinnerDelay` = '24', `prefsWinnerMethod` = '0' WHERE `id` = '1';"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";

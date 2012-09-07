@@ -148,7 +148,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	if ($section != "admin") {
   	?>
     <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?></div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?>.</div><?php } ?>
     <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
