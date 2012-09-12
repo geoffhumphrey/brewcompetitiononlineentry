@@ -91,8 +91,16 @@ if ($setup_free_access == TRUE) {
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
 	
-	echo "<li><strong>Participants</strong> table installed successfully.</li>";
+	/*
+	// For hosted accounts on brewcompetition.com
+	$updateSQL = "INSERT INTO `$brewer_db_table` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
+	(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+	"; 
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	*/
 	
+	echo "<li><strong>Participants</strong> table installed successfully.</li>";
 	
 	// ------------------- 
 	// Brewing Table
@@ -1181,22 +1189,18 @@ if ($setup_free_access == TRUE) {
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
 	
-	echo "<li><strong>Users</strong> table installed successfully.</li>";		
-	
 	/*
-	// ------------------- 
-	// System Table
-	// -------------------
-	
+	// For hosted accounts on brewcompetition.com 
 	$sql = "
-	
+	INSERT INTO `$users_db_table` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES
+	(1, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '1', 'What was your high school mascot?', 'spartan', NOW( ));
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
-     //echo "<p>".$sql."</p>";
-	
-	echo "<li><strong>Users</strong> table installed successfully.</li>";	
 	*/
+	
+	echo "<li><strong>Users</strong> table installed successfully.</li>";		
+
 	echo "</ul>";
 	echo "
 	<h3>All database tables and default data have been installed successfully.</h3>

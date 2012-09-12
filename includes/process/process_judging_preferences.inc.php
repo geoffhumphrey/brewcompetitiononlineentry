@@ -34,6 +34,25 @@ WHERE id=%s",
 		mysql_select_db($database, $brewing);
   		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
+		/*
+		// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
+		$to_email = "prost@brewcompetition.com";
+		$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
+		$message = "<html>" . "\r\n";
+		$message .= "<body>
+					<p>BCOEM Setup Completed for ".$_SERVER['SERVER_NAME']."</p>
+					<p>Be sure to change setup_free_access to FALSE</p>
+					</body>" . "\r\n";
+		$message .= "</html>";
+		
+		$headers  = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+		$headers .= "To: BCOEM Admin <prost@brewcompetition.com>, " . "\r\n";
+		$headers .= "From: BCOEM Server <noreply@brewcompetition.com>" . "\r\n";
+		
+		
+		mail($to_email, $subject, $message, $headers);
+		*/
 		header(sprintf("Location: %s", $base_url."/index.php?msg=2")); 
 	}
 	
