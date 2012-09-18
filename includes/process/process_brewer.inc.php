@@ -355,14 +355,15 @@ if ($action == "edit") {
 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 	
-	if ($go == "register") $base_url."/index.php?section=brew&msg=2";	
-	elseif (($go == "judge") && ($filter == "default")) $base_url."/index.php?section=list&go=".$go."&filter=default&msg=7";
-	elseif (($go == "judge") && ($filter != "default")) $base_url."/index.php?section=admin&go=participants&msg=2";
-	elseif ($go == "default") $base_url."/index.php?section=list&go=".$go."&filter=default&msg=2";
+	if ($go == "register") $updateGoTo = $base_url."/index.php?section=brew&msg=2";	
+	elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."/index.php?section=list&go=".$go."&filter=default&msg=7";
+	elseif (($go == "judge") && ($filter != "default")) $updateGoTo = $base_url."/index.php?section=admin&go=participants&msg=2";
+	elseif ($go == "default") $updateGoTo = $base_url."/index.php?section=list&go=".$go."&filter=default&msg=2";
 	else $updateGoTo = $updateGoTo;
 	
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+	//echo $updateGoTo;
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 ?>

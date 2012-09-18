@@ -205,7 +205,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 <?php } ?>
 <h2>Entries</h2>
 
-<?php if (($totalRows_log > 0) && ($registration_open > 0) && ($entry_window_open > 0) && ($judge_window_open > 0)) { 
+<?php if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)) { 
 if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. For each unconfirmed entry below marked in yellow and with a <span class='icon'><img src='images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours.</div>";
 
 if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have entries that require you to define special ingredients. For each entry below marked in orange and with a <span class='icon'><img src='images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
@@ -223,12 +223,12 @@ if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have 
         <span class="icon"><img src="images/page_code.png"  /></span><a href="index.php?section=beerxml">Import Entries Using BeerXML</a>
    	</span>
 <?php } ?>
-    <span class="adminSubNav">
+    <span class="adminSubNav">d
         <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="output/print.php?section=list&amp;action=print" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
 	</span>
 </div>
 
-<?php if ((judging_date_return() > 0) && ($totalRows_log > 0) && ($registration_open > 0) && ($entry_window_open > 0) && ($judge_window_open > 0)) { 
+<?php if ((judging_date_return() > 0) && ($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)) { 
 
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
 $total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
@@ -249,7 +249,7 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 </div>
 <?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
 <?php } // end if ($action != "print")
-if (($totalRows_log > 0) && ($registration_open > 0) && ($entry_window_open > 0) && ($judge_window_open > 0)) { ?>
+if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {

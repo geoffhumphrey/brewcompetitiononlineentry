@@ -55,9 +55,12 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <a name="payment"></a><h2>Payment</h2>
 <p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
     <ul>
-    	<?php if ($row_prefs['prefsCash'] == "Y") echo "<li>Cash</li>"; ?>
-        <?php if ($row_prefs['prefsCheck'] == "Y") echo "<li>Check, made out to <em>".$row_prefs['prefsCheckPayee']."</em></li>"; ?>
-        <?php if ($row_prefs['prefsPaypal'] == "Y") echo "<li>PayPal</li>"; ?>
+    	<?php 
+		if ($row_prefs['prefsCash'] == "Y") echo "<li>Cash</li>";
+        if ($row_prefs['prefsCheck'] == "Y") echo "<li>Check, made out to <em>".$row_prefs['prefsCheckPayee']."</em></li>";
+        if ($row_prefs['prefsPaypal'] == "Y") echo "<li>PayPal</li>";
+		if ($row_prefs['prefsGoogle'] == "Y") echo "<li>Google Wallet</li>"; 
+		?>
     </ul>
 <a name="judging"></a><h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
 <?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { ?>
