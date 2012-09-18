@@ -416,7 +416,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 			$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 			$row_entry_count = mysql_fetch_assoc($entry_count);
 			
-			$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.id = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
+			$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
 			$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
 			$row_score_count = mysql_fetch_assoc($score_count);
 			
