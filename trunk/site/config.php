@@ -94,8 +94,9 @@ After finishing the upgrade, be sure to open this file again and change the TRUE
  
 */
 
-
 $setup_free_access = FALSE;
+
+$setup_key = "default";
 
 /*
 ******************************************************************************

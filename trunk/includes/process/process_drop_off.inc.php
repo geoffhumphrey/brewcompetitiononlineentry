@@ -29,8 +29,8 @@ if ($action == "edit") {
                        GetSQLValueString($_POST['dropLocationName'], "text"),
                        GetSQLValueString($_POST['dropLocation'], "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
-					   GetSQLValueString($_POST['dropLocationWebsite'], "text"),
 					   GetSQLValueString($dropLocationWebsite, "text"),
+					   GetSQLValueString($_POST['dropLocationNotes'], "text"),
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
