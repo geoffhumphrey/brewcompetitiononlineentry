@@ -40,8 +40,8 @@ WHERE id=%s",
 		$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
 		$message = "<html>" . "\r\n";
 		$message .= "<body>
-					<p>BCOEM Setup Completed for ".$_SERVER['SERVER_NAME']."</p>
-					<p>Be sure to change setup_free_access to FALSE</p>
+					<p>BCOEM Setup Completed for http://".$_SERVER['SERVER_NAME']."</p>
+					<p><a href='https://box462.bluehost.com:2083/frontend/bluehost/filemanager/index.html?dirselect=domainrootselect&domainselect=".$_SERVER['SERVER_NAME']."'>Be sure to change setup_free_access to FALSE</a></p>
 					</body>" . "\r\n";
 		$message .= "</html>";
 		
