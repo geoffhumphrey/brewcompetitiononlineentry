@@ -39,7 +39,7 @@ body {
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);
@@ -59,7 +59,7 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[4,'asc'],[3,'asc'],[0,'asc']],
+			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				null,
@@ -96,7 +96,7 @@ if ($totalRows_entries > 0) {
 	?>
     <tr>
         <td class="data bdr1B_gray"><?php if ($row_entries['id'] < 100) echo "0"; echo $row_entries['id']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
@@ -149,7 +149,7 @@ if ($totalRows_entries > 0) {
 	?>
     <tr>
         <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>

@@ -156,7 +156,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 	
 	?>
 	<tr <?php echo "style=\"background-color:$color\""; ?>>
-		<td><?php echo $row_entries['brewJudgingNumber']; ?>
+		<td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?>
         <input type="hidden" name="id[]" value="<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random ?>" />
         <input type="hidden" name="flightTable" value="<?php echo $row_tables_edit['id']; ?>" />
         <input type="hidden" name="flightEntryID<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random; ?>" value="<?php echo $row_entries['id']; ?>" />

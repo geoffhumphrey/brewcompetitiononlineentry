@@ -116,8 +116,7 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "default"))
 	// Print labels
 	do {
 		
-		$entry_no = $row_log['brewJudgingNumber'];																						  
-		
+		$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);																						  
 		$text = sprintf("\n%s (%s)   %s (%s)   %s (%s)\n\n\n%s (%s)   %s (%s)   %s (%s)",
 		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
 		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
@@ -154,7 +153,7 @@ if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "defa
 	// Print labels
 	do {
 		for($i=0; $i<$sort; $i++) {
-			$entry_no = $row_log['brewJudgingNumber'];																						  
+			$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);																						  
 			
 			$text = sprintf("\n%s (%s)",
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
@@ -220,7 +219,7 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 	// Print labels
 	do {
 		
-		$entry_no = $row_log['brewJudgingNumber'];																						  
+		$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);																						  
 		
 		$text = sprintf("\n%s (%s) Special: %s",
 		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 

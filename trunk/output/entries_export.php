@@ -80,7 +80,7 @@ if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = a
 
 do {
 	
-	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],strtr($row_sql['brewName'],$html_remove),strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
+	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),strtr($row_sql['brewName'],$html_remove),strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
 	
 	if (($go == "csv") && ($action == "email") && ($filter != "winners")) {
 		
@@ -88,7 +88,7 @@ do {
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
-		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewJudgingNumber'],$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
+		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],readable_judging_number($row_sql['brewCategory'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
 		
 	}
 	
