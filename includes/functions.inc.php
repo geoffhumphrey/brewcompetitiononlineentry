@@ -2232,4 +2232,16 @@ function available_at_location($location,$role,$round) {
 	
 }
 
+function str_osplit($string, $offset){
+    return isset($string[$offset]) ? array(substr($string, 0, $offset), substr($string, $offset)) : false;
+ }
+ 
+function readable_judging_number($style,$number) {
+	if ($style < 10) $number = "0".$number;
+  	else $number = $number;
+	$judging_number = str_osplit($number, 2);
+	return $judging_number[0]."-".$judging_number[1];
+}
+
+
 ?>
