@@ -223,7 +223,7 @@ if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have 
         <span class="icon"><img src="images/page_code.png"  /></span><a href="index.php?section=beerxml">Import Entries Using BeerXML</a>
    	</span>
 <?php } ?>
-    <span class="adminSubNav">d
+    <span class="adminSubNav">
         <span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="output/print.php?section=list&amp;action=print" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
 	</span>
 </div>
