@@ -29,12 +29,14 @@ if ($filter != "winners") {
 	if ($filter == "all") $query_sql = "SELECT * FROM $brewing_db_table";
 	else $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber FROM $brewing_db_table";
 	
-	if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1'"; 
+	if (($filter == "paid") && ($bid == "default") && ($view == "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1'"; 
+	if (($filter == "paid") && ($bid == "default") && ($view == "all"))  $query_sql .= " WHERE brewPaid = '1'"; 
 	if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation = '$bid'"; 
-	if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = '0' OR brewPaid = '' AND brewReceived = '1'"; 
+	if (($filter == "nopay") && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE brewPaid = '0' OR brewPaid = '' AND brewReceived = '1'";
+	if (($filter == "nopay") && ($bid == "default") && ($view == "all")) $query_sql .= " WHERE brewPaid = '0' OR brewPaid = ''"; 
 }
 
-if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerID";
+if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
 
 if ($filter == "winners") $query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 
@@ -47,7 +49,7 @@ $row_sql = mysql_fetch_assoc($sql);
 $num_fields = mysql_num_fields($sql); 
 
 include (INCLUDES.'scrubber.inc.php');
-$filename = $contest."_entries_".$filter."_".$date.$loc.$extension;
+$filename = $contest."_entries_".$filter."_".$action."_".$date.$loc.$extension;
 
 if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 	$headers = array(); 
@@ -74,13 +76,13 @@ else {
 if (($go == "csv") && ((($action == "default") || ($action == "hccp")) && ($filter != "winners"))) $a [] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
 
 
-if (($go == "csv") && ($action == "email") && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Entry Name','Info');
+if (($go == "csv") && ($action == "email") && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
 
 if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Entry Name','Club','Co Brewer');
 
 do {
 	
-	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),strtr($row_sql['brewName'],$html_remove),strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
+	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],strtr($row_sql['brewName'],$html_remove),strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
 	
 	if (($go == "csv") && ($action == "email") && ($filter != "winners")) {
 		
@@ -88,7 +90,7 @@ do {
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
 		
-		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],readable_judging_number($row_sql['brewCategory'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
+		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
 		
 	}
 	

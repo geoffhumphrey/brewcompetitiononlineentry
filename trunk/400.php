@@ -1,6 +1,12 @@
 <?php
 require('paths.php');
 require(DB.'common.db.php');
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php'); 
+require(INCLUDES.'constants.inc.php');
+$section = "400";
 ?>
 <html>
 <head>

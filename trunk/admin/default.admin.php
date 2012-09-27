@@ -405,9 +405,12 @@ if ($go == "default") { ?>
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
-				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
+                <li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
                 <li>For Category:</li>
 				<li><?php echo style_choose($section,"default",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
+				<li><a id="modal_window_link" href="output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;view=entry">All Categories</a> (Entry Numbers Only)</li>
+                <li>For Category (Entry Numbers Only):</li>
+				<li><?php echo style_choose($section,"default",$action,$filter,"entry","output/sorting.php","thickbox"); ?></li>
             </ul>
             <ul class="admin_default">
             	<li>Entry Number / Judging Number Cheat Sheets:</li>
@@ -682,13 +685,15 @@ if ($go == "default") { ?>
             </ul>
             <ul class="admin_default">
             	<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a></li>
+            	<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a></li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid & Received Entries</a><a href="output/email_export.php?section=admin&amp;filter=judges"></a></li>
+                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;view=all">All Non-Paid Entries</a></li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a></li>
 			</ul>
   			
 		
 			<p class="admin_default_header">Tab Delimited Files</li>
-			<p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
+<p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
 			<ul class="admin_default">
 				<li><a href="output/participants_export.php?section=admin&amp;go=tab">All Participants</a></li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid">Paid & Received Entries</a></li>
@@ -696,12 +701,14 @@ if ($go == "default") { ?>
 			</ul>
   			<p class="admin_default_header">CSV Files</p>
 			<ul class="admin_default">
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
                 <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a> (All Data)</li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
             </ul>
 			<ul class="admin_default">
+            	<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a> (Limited Data)</li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a> (Limited Data)</li>
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a><a href="output/entries_export.php?go=csv"></a> (Limited Data)</li>
+                <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a> (Limited Data)</li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a> (Limited Data)</li>
 			</ul>
 			<ul class="admin_default">
 				<li><a href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>

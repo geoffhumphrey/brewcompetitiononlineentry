@@ -97,7 +97,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <p>** Please Note:</p>
             <ul>
-            	<li>If there entries are showing below, flights at this table have not been assigned to rounds.</li>
+            	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
                	<li>If entries are missing, all entries have not been assigned to a flight or round <?php if ($round != "default") echo "OR they have been assigned to a different round"; ?>.</li>
             </ul>
             <?php } ?>
@@ -200,7 +200,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
             <?php } ?>
             <p>** Please Note:</p>
             <ul>
-            	<li>If there entries are showing below, flights at this table have not been assigned to rounds.</li>
+            	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
                	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
             </ul>
         </div>

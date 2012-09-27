@@ -290,7 +290,9 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Judges</a>
 	<a class="menuItem" href="output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Stewards</a>
     <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a>
 	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;action=hccp">All Non-Paid  Entries</a>
 	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
 </div>
 <div id="adminMenu_Exporting_Tab" class="menu">
@@ -299,8 +301,11 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=tab">All Entries</a>
 </div>
 <div id="adminMenu_Exporting_CSV" class="menu">
-	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv">All Entries</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries (All Data)</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv">All Entries (Limited Data)</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a>
 	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+    <a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a>
 	<a class="menuItem" href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
     <a class="menuItem" href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a>
 	<a class="menuItem" href="output/participants_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>
@@ -308,6 +313,7 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenu_Exporting_Promo" class="menu">
 	<a class="menuItem" href="output/promo_export.php?section=admin&amp;action=html">HTML</a>
 	<a class="menuItem" href="output/promo_export.php?section=admin&amp;action=word">Word</a>
+    <a class="menuItem" href="output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a>
 </div>
 
 <div id="adminMenu_Archiving_Manage" class="menu">
