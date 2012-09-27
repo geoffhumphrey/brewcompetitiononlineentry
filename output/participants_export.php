@@ -52,6 +52,7 @@ brewer.brewerJudgeRank,
 brewer.brewerClubs, 
 brewer.brewerJudgeLikes, 
 brewer.brewerJudgeDislikes,
+brewer.brewerAssignment,
 brewer.id,
 brewing.brewBrewerID,
 brewing.brewJudgingLocation
@@ -75,7 +76,8 @@ brewerNickname,
 brewerEmail, 
 brewerJudgeID, 
 brewerJudgeRank, 
-brewerClubs, 
+brewerClubs,
+brewerAssignment,
 brewerJudgeLikes, 
 brewerJudgeDislikes 
 FROM $brewer_db_table
@@ -84,9 +86,11 @@ ORDER BY brewerLastName ASC
 
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
-$a[] = array('FirstName','LastName','Address','City','State','Zip','Country','Phone','Assignment','Email','JudgeID','JudgeRank','Clubs','Likes','Dislikes');
+$a[] = array('First Name','Last Name','Address','City','State','Zip','Country','Phone','Assignment','Email','Judge ID','Judge Rank','Clubs','Likes','Dislikes');
+
 do { 
-$a[] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerAddress'],$row_sql['brewerCity'],$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$row_sql['brewerNickname'],$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
+if ($go == "tab") $assignment = $row_sql['brewerNickname']; else $assignment = $row_sql['brewerAssignment'];
+$a[] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerAddress'],$row_sql['brewerCity'],$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$assignment,$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
 } while ($row_sql = mysql_fetch_assoc($sql));
 
 $filename = $contest."_participants_".$date.$loc.$extension;

@@ -41,11 +41,12 @@ if (($filter == "judges") && ($section == "admin"))   $query_sql .= " WHERE brew
 if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
 if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignment='S'";
 if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
+$query_sql .= " ORDER BY brewerLastName ASC";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
 
-if ($filter == "judges") $a [] = array('FirstName','LastName','Email','Likes','Dislikes');
-else $a [] = array('FirstName','LastName','Email');
+if ($filter == "judges") $a [] = array('First Name','Last Name','Email','Likes','Dislikes');
+else $a [] = array('First Name','Last Name','Email');
 
 do {
 	if ($filter == "judges") $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));

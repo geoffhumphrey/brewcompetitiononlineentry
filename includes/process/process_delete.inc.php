@@ -23,49 +23,58 @@ if ($go == "special_best") {
 	
 }
 
-if ($go == "judging_location") {
+if ($go == "judging") {
   // remove relational location ids from affected rows in brewer's table
 	mysql_select_db($database, $brewing);
-	$query_loc = "SELECT * from $brewer_db_table WHERE brewerJudgeLocation='$id'";
+	$query_loc = "SELECT id,brewerJudgeLocation,brewerStewardLocation from $brewer_db_table";
 	$loc = mysql_query($query_loc, $brewing) or die(mysql_error());
 	$row_loc = mysql_fetch_assoc($loc);
 	$totalRows_loc = mysql_num_rows($loc);
-  	if ($totalRows_loc > 0) {
-  		do  {
-  		$updateSQL = "UPDATE $brewer_db_table SET brewerJudgeLocation=NULL WHERE id='".$row_loc['id']."'; ";
-		mysql_select_db($database, $brewing);
-  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	do  {
+		
+		if ($row_loc['brewerJudgeLocation'] != "") {
+		$a = explode(",",$row_loc['brewerJudgeLocation']);
+			if ((in_array("Y-".$id,$a)) || (in_array("N-".$id,$a))) {
+				foreach ($a as $b) {
+					if ($b == "Y-".$id) $c[] = ""; 
+					elseif ($b == "N-".$id) $c[] = "";
+					else $c[] = $b.",";
+				}
+				$d = rtrim(implode("",$c),",");
+				$updateSQL = "UPDATE $brewer_db_table SET brewerJudgeLocation='".$d."' WHERE id='".$row_loc['id']."'; ";
+				mysql_select_db($database, $brewing);
+				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				//echo $updateSQL."<br>";
+				unset($c, $d);
+			}
+		unset($a);
 		}
-  	while($row_loc = mysql_fetch_assoc($loc));
-}
-
-  
-	$query_loc = "SELECT * FROM $brewer_db_table WHERE brewerStewardLocation='$id'";
-	$loc = mysql_query($query_loc, $brewing) or die(mysql_error());
-	$row_loc = mysql_fetch_assoc($loc);
-	$totalRows_loc = mysql_num_rows($loc);
-	if ($totalRows_loc > 0) {
-  		do  {
-  		$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation=NULL WHERE id='".$row_loc['id']."'; ";
-		mysql_select_db($database, $brewing);
-  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		if ($row_loc['brewerStewardLocation'] != "") {
+		$e = explode(",",$row_loc['brewerStewardLocation']);
+			if ((in_array("Y-".$id,$e)) || (in_array("N-".$id,$e))) {
+				foreach ($e as $f) {
+					
+					if ($f == "Y-".$id) $g[] = ""; 
+					elseif ($f == "N-".$id) $g[] = "";
+					else $g[] = $f.",";
+					
+				}
+				$h = rtrim(implode("",$g),",");
+				$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation='".$h."' WHERE id='".$row_loc['id']."'; ";
+				mysql_select_db($database, $brewing);
+				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				//echo $updateSQL."<br>";
+				unset($g, $h);
+			}
+		unset($e);
 		}
-  	while($row_loc = mysql_fetch_assoc($loc));
-	}
-  
-	$query_loc = "SELECT * FROM $brewer_db_table WHERE brewerStewardLocation2='$id'";
-	$loc = mysql_query($query_loc, $brewing) or die(mysql_error());
-	$row_loc = mysql_fetch_assoc($loc);
-	$totalRows_loc = mysql_num_rows($loc);
-	if ($totalRows_loc > 0) {
-  		do  {
-  		$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation2=NULL WHERE id='".$row_loc['id']."'; ";
-		mysql_select_db($database, $brewing);
-  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		}
-  	while($row_loc = mysql_fetch_assoc($loc));
-  	}
-} // end if ($go == "judging_location")
+	} while ($row_loc = mysql_fetch_assoc($loc));
+	
+} // end if ($go == "judging")
 
 
 if ($go == "participants") {

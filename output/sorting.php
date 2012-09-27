@@ -67,7 +67,9 @@ if ($totalRows_entries > 0) {
 				null,
 				null,
 				{ "asSorting": [  ] },
+				<?php if ($view == "default") { ?>
 				{ "asSorting": [  ] },
+				<?php } ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
@@ -79,7 +81,9 @@ if ($totalRows_entries > 0) {
     <thead>
     <tr>
     	<th width="1%" class="dataHeading bdr1B">Entry #</th>
-    	<th width="1%" class="dataHeading bdr1B">Judging #</th>
+    	<?php if ($view == "default") { ?>
+        <th width="1%" class="dataHeading bdr1B">Judging #</th>
+		<?php } ?>
         <th width="20%" class="dataHeading bdr1B">Brewer</th>
         <th class="dataHeading bdr1B">Entry Name</th>
         <th width="20%" class="dataHeading bdr1B">Style</th>
@@ -96,7 +100,9 @@ if ($totalRows_entries > 0) {
 	?>
     <tr>
         <td class="data bdr1B_gray"><?php if ($row_entries['id'] < 100) echo "0"; echo $row_entries['id']; ?></td>
+        <?php if ($view == "default") { ?>
         <td class="data bdr1B_gray"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
+        <?php } ?>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
@@ -122,11 +128,6 @@ if ($totalRows_entries > 0) {
 			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
