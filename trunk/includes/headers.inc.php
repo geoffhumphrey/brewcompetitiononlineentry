@@ -219,6 +219,10 @@ switch($section) {
 	else $header_output = $row_contest_info['contestName'];
 	
 		switch($go) {
+			
+			case "default": 
+			$header_output .= " Dashboard";
+			break;
 		
 			case "judging":
 			$header_output .= ": Judging";

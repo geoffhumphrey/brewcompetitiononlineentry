@@ -10,7 +10,7 @@ $totalRows_themes = mysql_num_rows($themes);
 <h2>Site Preferences</h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
 	</span>
 </div>
 <?php } ?>

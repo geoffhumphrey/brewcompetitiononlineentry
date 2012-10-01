@@ -7,7 +7,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 ?></h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
   	</span>
     <?php if  ($dbTable != "default") { ?>
 	<span class="adminSubNav">

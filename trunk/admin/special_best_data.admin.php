@@ -29,7 +29,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
 <h2><?php if ($action == "add") echo "Add Entries to Custom Winning Category: ".$row_sbi['sbi_name']; elseif ($action == "edit") echo "Edit Entries in Custom Winning Category: ".$row_sbi['sbi_name']; else echo "Custom Winning Category Entries"; ?></h2>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a></span>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a></span>
     </span>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a>

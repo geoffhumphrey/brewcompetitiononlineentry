@@ -7,7 +7,7 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 </h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
   	</span>
     <?php if  ($dbTable != "default") { ?>
 	<span class="adminSubNav">

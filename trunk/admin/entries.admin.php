@@ -5,7 +5,7 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
 <form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
   	</span>
 	<?php if ($dbTable != "default") { ?>
   	<span class="adminSubNav">

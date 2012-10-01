@@ -4,7 +4,7 @@
 <h2>Competition Organization Preferences</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNavContainer">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
 	</span>
 </div>
 <?php } ?>

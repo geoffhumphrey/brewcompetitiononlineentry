@@ -142,7 +142,7 @@ if (file_exists($filename)) {
 					echo "<p>To take advanage of this version's added feaures, go to your <a href='index.php?section=admin&amp;go=preferences'>site's preferences</a> and customize your installation.</p>";
 					echo "<ul>";
 					echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
-					echo "<li>Go to the <a href='index.php?section=admin'>Admin Main Menu</a>.</li>";
+					echo "<li>Go to the <a href='index.php?section=admin'>Admin Dashboard</a>.</li>";
 					echo "</ul>";
 					
 					}
@@ -156,7 +156,7 @@ if (file_exists($filename)) {
 				echo "<div class='info'>The installed version (".$version.") is the same as the version for upgrade. No updates are necessary.</div>";
 				echo "<ul>";
 				echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
-				echo "<li>Go to the <a href='index.php?section=admin'>Admin Main Menu</a>.</li>";
+				echo "<li>Go to the <a href='index.php?section=admin'>Admin Dashboard</a>.</li>";
 				echo "</ul>";
 			}
 		} // end check of user level

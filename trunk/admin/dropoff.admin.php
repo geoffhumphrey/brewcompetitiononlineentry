@@ -8,7 +8,7 @@
 <div class="adminSubNavContainer">
    <?php if ((($action == "default") || ($action == "update") || ($action == "assign")) && ($section != "step6")) { ?>
    <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
    </span>
    <?php } ?>
    <?php if ((($action == "add") || ($action == "edit")) && ($section != "step6")) { ?>

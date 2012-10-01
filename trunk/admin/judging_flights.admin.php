@@ -7,7 +7,7 @@ elseif (($action == "assign") && ($filter == "rounds"))  echo "Assign $assign_to
 else echo "Define/Edit Flights"; ?></h2>
 <div class="adminSubNavContainer">
  	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
     </span>
    	<span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>

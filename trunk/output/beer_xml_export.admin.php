@@ -6,19 +6,19 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 
-mysql_select_db($database_brewing, $brewing);
+mysql_select_db($database, $brewing);
 $query_log = sprintf("SELECT * FROM $brewing_db_table WHERE id = '%s'", $id);
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log);
 
-mysql_select_db($database_brewing, $brewing);
+mysql_select_db($database, $brewing);
 $query_name = "SELECT * FROM $brewer_db_table WHERE id='$bid'";
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 $totalRows_name = mysql_num_rows($name);
 
-/* mysql_select_db($database_brewing, $brewing);
+/* mysql_select_db($database, $brewing);
 $query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyle = '%s'", $colname_style);
 $style = mysql_query($query_style, $brewing) or die(mysql_error());
 $row_style = mysql_fetch_assoc($style);

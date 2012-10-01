@@ -97,7 +97,31 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
   	<tr>
     	<td class="dataLabel">Judging Availability<br />Locations:</td>
     	<td class="data">
-    	<table class="dataTableCompact">
+        <script type="text/javascript" language="javascript">
+			 $(document).ready(function() {
+				$('#sortable_judge').dataTable( {
+					"bPaginate" : false,
+					"sDom": 'rt',
+					"bStateSave" : false,
+					"bLengthChange" : false,
+					"aaSorting": [[2,'asc']],
+					"aoColumns": [
+						null,
+						null,
+						null
+						]
+					} );
+				} );
+		</script> 
+    	<table class="dataTable bdr1" id="sortable_judge">
+        <thead>
+        <tr>
+        	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
+            <th class="dataHeading bdr1B" width="35%">Location</th>
+            <th class="dataHeading bdr1B">Date/Time</th>
+        </tr>
+        </thead>
+        <tbody>
 		<?php 
 		$a = explode(",",$row_brewer['brewerJudgeLocation']);
 		arsort($a);
@@ -107,13 +131,22 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				echo "<tr>\n<td style='padding-left:0;'>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_loc3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")</td>\n";
-				echo "</td>\n</tr>";
+				echo "<tr>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo substr($value, 0, 1);
+				echo "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo $row_judging_loc3['judgingLocName'];
+				echo "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_loc3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");
+				echo "</td>\n";
+				echo "</tr>";
 				}
 			else echo "";
 			}
 		?>
+        </tbody>
     	</table>
     	</td>
   	</tr>
@@ -179,7 +212,31 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
   	<tr>
     	<td class="dataLabel">Stewarding Availability<br />Locations:</td>
     	<td class="data">
-    	<table class="dataTableCompact">
+    	<script type="text/javascript" language="javascript">
+			 $(document).ready(function() {
+				$('#sortable_steward').dataTable( {
+					"bPaginate" : false,
+					"sDom": 'rt',
+					"bStateSave" : false,
+					"bLengthChange" : false,
+					"aaSorting": [[2,'asc']],
+					"aoColumns": [
+						null,
+						null,
+						null
+						]
+					} );
+				} );
+		</script> 
+    	<table class="dataTable bdr1" id="sortable_steward">
+        <thead>
+        <tr>
+        	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
+            <th class="dataHeading bdr1B" width="35%">Location</th>
+            <th class="dataHeading bdr1B">Date/Time</th>
+        </tr>
+        </thead>
+        <tbody>
 		<?php 
 		$a = explode(",",$row_brewer['brewerStewardLocation']);
 		arsort($a);
@@ -189,13 +246,22 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				echo "<tr>\n<td style='padding-left:0;'>".substr($value, 0, 1).":</td>\n<td>".$row_judging_loc3['judgingLocName']." ("; 
-				echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_loc3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")</td>\n";
-				echo "</td>\n</tr>";
+				echo "<tr>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo substr($value, 0, 1);
+				echo "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo $row_judging_loc3['judgingLocName'];
+				echo "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
+				echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging_loc3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");
+				echo "</td>\n";
+				echo "</tr>";
 				}
 			else echo "";
 			}
 		?>
+        </tbody>
     	</table>
     	</td>
   </tr>
@@ -277,7 +343,7 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 			} );
 		} );
 </script>
-<table class="dataTable" id="sortable">
+<table class="dataTable bdr1" id="sortable">
 <thead>
  <tr>
   	<th class="dataHeading bdr1B" width="5%">Entry #</th>

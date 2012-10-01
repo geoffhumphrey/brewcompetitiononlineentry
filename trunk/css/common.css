@@ -354,23 +354,23 @@ background-image: none;
 /* ------------------------------- Borders ------------------------------- */
 
 .bdr1 {
-	border: 1px solid #cccccc;
+	border: 1px solid #ccc;
 }
 
 .bdr1T {
-	border-top: 1px solid #cccccc;
+	border-top: 1px solid #ccc;
 }
 
 .bdr1B {
-	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .bdr1B_dashed {
-	border-bottom: 1px dotted #cccccc;
+	border-bottom: 1px dotted #ccc;
 }
 
 .bdr1T_dashed {
-	border-top: 1px dotted #cccccc;
+	border-top: 1px dotted #ccc;
 }
 
 

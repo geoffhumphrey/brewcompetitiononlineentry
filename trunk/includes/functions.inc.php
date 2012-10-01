@@ -2071,6 +2071,7 @@ function data_integrity_check() {
 		}
 		
 	}
+		
 	mysql_free_result($org);
 	mysql_free_result($judging_duplicates);
 	mysql_free_result($blank);

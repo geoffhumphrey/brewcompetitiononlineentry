@@ -12,7 +12,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
  ?>
 <h2><?php if ($action == "add") echo "Add a Custom Winning Category"; elseif ($action == "edit") echo "Edit a Custom Winning Category"; else echo "Custom Winning Categories"; ?></h2>
 <div class="adminSubNavContainer">
-   	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a></span>
+   	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a></span>
     	<?php if (($action == "add") || ($action == "edit")) { ?>
     	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
         <?php } else { ?>

@@ -241,9 +241,12 @@ if ($section != "admin") {
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
     <img id="captcha" src="captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
-	<p><object type="application/x-shockwave-flash" data="captcha/securimage_play.swf?audio=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#777&amp;borderWidth=1&amp;borderColor=#000" height="19" width="19">
-	    <param name="movie" value="captcha/securimage_play.swf?audio=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#777&amp;borderWidth=1&amp;borderColor=#000" />
-  	</object>&nbsp;Play audio</p>
+	<p>
+    <object type="application/x-shockwave-flash" data="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
+	<param name="movie" value="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
+	</object>
+    &nbsp;Play audio
+    </p>
 	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
     <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = 'captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
     </td>

@@ -39,7 +39,7 @@ if ($action == "edit") {
 					   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
                        GetSQLValueString($id, "int"));
 	//echo $updateSQL."<br>";
-  	mysql_select_db($database_brewing, $brewing);
+  	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
