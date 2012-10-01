@@ -14,7 +14,7 @@ echo $database."<br>";
 // Clean the data collected in the <form>
 function sterilize ($sterilize=NULL) 
 {
-	if ($sterilize==NULL) {return NULL;}
+	if ($sterilize==NULL) { return NULL; }
 	$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
 	foreach ($check as $value) {
 	$sterilize=str_replace($value, '', $sterilize);
@@ -26,9 +26,8 @@ function sterilize ($sterilize=NULL)
 	return $sterilize;
 	}
 
-
-$loginUsername = $_POST['loginUsername'];
-$loginPassword = $_POST['loginPassword'];
+$loginUsername = sterilize($_POST['loginUsername']);
+$loginPassword = sterilize($_POST['loginPassword']);
 
 mysql_select_db($database, $brewing);
 $password = md5($loginPassword);
@@ -41,8 +40,7 @@ $loginUsername = strtolower($loginUsername);
 
 session_start();
 // Authenticate the user
-	if ($totalRows_login == 1)
-	{
+	if ($totalRows_login == 1) {
   		// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
 		$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",$loginUsername, $row_login['id']);
 		
@@ -58,12 +56,12 @@ session_start();
   		$_SESSION['loginUsername'] = $loginUsername;
 		//echo $_SESSION["loginUsername"];
   		// If the username/password combo is OK, relocate to the "protected" content index page
-		if ($section != "update") header(sprintf("Location: %s", $base_url."/index.php?section=list"));
+		if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."/index.php?section=list"));
+		elseif (($section != "update") && ($row_login['userLevel'] == "1")) header(sprintf("Location: %s", $base_url."/index.php?section=admin"));
 		else header("Location: ../update.php");
   		exit;
 	}
-else
-	{
+else {
   		// If the username/password combo is incorrect or not found, relocate to the login error page
   		header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
   		session_destroy();

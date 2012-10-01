@@ -419,25 +419,25 @@ if ($go == "default") { ?>
 				<li><?php echo style_choose($section,"cheat",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
             </ul>
 			<ul class="admin_default">
-				<li>Bottle Labels (Using <em>Entry Numbers</em> - Avery 5160):</li>
+				<li>Bottle Labels (Using <em>Entry</em> Numbers - Avery 5160):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">All Categories</a></li>
 				<li>For Category:</li>
 				<li><?php echo style_choose($section,"entries","bottle-entry",$filter,$view,"output/labels.php","none"); ?></li>
 			</ul>
             <ul class="admin_default">
-				<li>Bottle Labels (Using <em>Judging Numbers</em> - Avery 5160):</li>
+				<li>Bottle Labels (Using <em>Judging</em> Numbers - Avery 5160):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
 				<li>For Category:</li>
 				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,$view,"output/labels.php","none"); ?></li>
 			</ul>
             <ul class="admin_default">
-				<li>Bottle Labels with Special Ingredients (Using <em>Judging Numbers</em> - Avery 5160 - 1 entry per label):</li>
+				<li>Bottle Labels with Special Ingredients (Using <em>Judging</em> Numbers - Avery 5160 - 1 entry per label):</li>
 			    <li><a href="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special">All Categories</a></li>
 				<li>For Category:</li>
 				<li><?php echo style_choose($section,"entries","bottle-judging",$filter,"special","output/labels.php","none"); ?></li>
 			</ul>
             <ul class="admin_default">
-            	<li>Round Bottle Labels (Using <em>Entry Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
+            	<li>Round Bottle Labels (Using <em>Entry</em> Numbers - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
                 <li>All Categories: <select name="round_entry" id="round_entry" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
@@ -446,7 +446,7 @@ if ($go == "default") { ?>
                 </select> labels per entry</li>
             </ul>
             <ul class="admin_default">
-            	<li>Round Bottle Labels (Using <em>Judging Numbers</em> - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
+            	<li>Round Bottle Labels (Using <em>Judging</em> Numbers - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
                 <li>All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
@@ -541,14 +541,14 @@ if ($go == "default") { ?>
 <div class="toggle_container">
 <p class="admin_default_header">Before Judging</p>
 			<?php if ($totalRows_tables > 0) { ?>
-			<ul class="admin_default">
-				<li>Print Pullsheets:</li>
-				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
+            <ul class="admin_default">
+				<li>Print Pullsheets (Using <em>Entry</em> Numbers):</li>
+				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
 				<li>
     				<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
     				<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
     				<?php do { ?>
-						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
+						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
     				<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
     				</div>
     			</li>
@@ -559,12 +559,35 @@ if ($go == "default") { ?>
 					 $location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
 					 
 					 ?>
-                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
                     <?php }} while ($row_judging = mysql_fetch_assoc($judging)); ?>
                     </div>
                 </li>
 			</ul>
 			<ul class="admin_default">
+				<li>Print Pullsheets (Using <em>Judging</em> Numbers):</li>
+				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
+				<li>
+    				<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets_judging');">For Table #...</a></div>
+    				<div id="pullsheets_judging" class="menu" onmouseover="menuMouseover(event)">
+    				<?php do { ?>
+						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+    				<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+    				</div>
+    			</li>
+                <li>
+                    <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc_judging');">For Location...</a></div>
+                    <div id="pullsheetsloc_judging" class="menu" onmouseover="menuMouseover(event)">
+                     <?php do { for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) { 
+					 $location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging1['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
+					 
+					 ?>
+                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                    <?php }} while ($row_judging1 = mysql_fetch_assoc($judging1)); ?>
+                    </div>
+                </li>
+			</ul>
+            <ul class="admin_default">
 				<li>Print Table Cards:</li>
 				<li><a id="modal_window_link" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
 				<li>
@@ -575,9 +598,6 @@ if ($go == "default") { ?>
                         <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
                     </div>
     			</li>
-                
-                
-                
                 <li>
                 <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cardsloc');">For Location...</a></div>
                     <div id="table_cardsloc" class="menu" onmouseover="menuMouseover(event)">
@@ -588,11 +608,6 @@ if ($go == "default") { ?>
                         <?php }} while ($row_judging2 = mysql_fetch_assoc($judging2));   ?>
                     </div>
     				</li>
-                
-                
-                
-                
-                
 			</ul>
 			<ul class="admin_default">
 				<li>Print Judge Assignments:</li>

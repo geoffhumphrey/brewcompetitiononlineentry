@@ -110,7 +110,7 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 					   );
 
 
-  	mysql_select_db($database_brewing, $brewing);
+  	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
   	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -163,7 +163,7 @@ if ($action == "edit") {
 					   GetSQLValueString($_POST['brewStyleOwn'], "text"),
                        GetSQLValueString($id, "int"));
 
-  mysql_select_db($database_brewing, $brewing);
+  mysql_select_db($database, $brewing);
   $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
   	$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']); 

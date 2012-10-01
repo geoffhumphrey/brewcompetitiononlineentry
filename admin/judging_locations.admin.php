@@ -34,7 +34,7 @@ function brewer_assignment_checked($a,$b) {
 <div class="adminSubNavContainer">
    	<?php if (($action == "default") || ($action == "update") || ($action == "assign")) { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
    	</span>
     <span class="adminSubNav">
     	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=participants">Back to Participants</a>

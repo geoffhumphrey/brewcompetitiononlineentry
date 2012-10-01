@@ -11,18 +11,7 @@ require('paths.php');
 
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
-	/*
-    if(!$database) {
-        $res = mysql_query("SELECT DATABASE()");
-        $database = mysql_result($res, 0);
-    }
-	*/
-    $query_log = "
-        SELECT COUNT(*) AS count 
-        FROM information_schema.tables 
-        WHERE table_schema = '$database' 
-        AND table_name = '$tablename'";
-
+	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
 
@@ -31,7 +20,23 @@ function check_setup($tablename, $database) {
 
 }
 
-// Both of the checks below are for v 1.2.1.0 only. Checks to see if new DB tables are there.
+function version_check($version) {
+	// Current version is 1.2.1.1
+	// Change version in system table if not 1.2.1.1
+	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
+	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
+	require(CONFIG.'config.php');
+	
+	if ($version != "1.2.1.1") {	
+		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.1","1");
+		mysql_select_db($database, $brewing);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
+	}
+}
+
+version_check($version);
+
+// Both of the checks below are for v 1.2.1.X only. Checks to see if new DB tables are there.
 // In future releases, will perform check of the version row in the "system" table
 
 if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
@@ -89,7 +94,7 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <script type="text/javascript" src="js_includes/jquery.ui.tabs.min.js"></script>
 <script type="text/javascript" src="js_includes/jquery.ui.position.min.js"></script>
 <script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 <link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
 <script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 <link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />

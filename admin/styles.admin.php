@@ -6,7 +6,7 @@ include(DB.'styles.db.php');
 <?php if ($section != "step7") { ?>
 <div class="adminSubNavContainer">
     <span class="adminSubNav">
-        <span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin</a>
+        <span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
     </span> 
     <?php if (($action == "add") || ($action == "edit") || ($filter != "default")) { ?>
    	<span class="adminSubNav">

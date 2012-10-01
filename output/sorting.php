@@ -39,7 +39,7 @@ body {
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);
@@ -48,7 +48,7 @@ if ($totalRows_entries > 0) {
     <div id="header">	
 		<div id="header-inner">
         	<h1><?php echo "Category ".ltrim($style,"0").": ".style_convert($style,1); ?></h1>
-            <h3><?php echo $totalRows_entries." Entries"; ?></h2>
+            <h3><?php echo $totalRows_entries." Entries"; ?></h3>
         </div>
 	</div>
     <?php if ($go == "default") { ?>
@@ -108,7 +108,7 @@ if ($totalRows_entries > 0) {
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewSubCategory']; ?></td>
         <td class="data bdr1B_gray"><?php echo $brewer_info[2]."<br>".$brewer_info[6]; ?></td>
-        <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'>"; ?></p></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>

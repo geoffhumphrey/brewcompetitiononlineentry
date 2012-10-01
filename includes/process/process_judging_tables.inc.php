@@ -2,6 +2,7 @@
 /*
  * Module:      process_judging_tables.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_tables" table
+ *              Adds/moves/deletes corresponding entries to the judging_flights table
  */
 
 if ($action == "add") {
@@ -36,7 +37,7 @@ if ($action == "add") {
 	$a = explode(",",$table_styles);
 	
 	foreach (array_unique($a) as $value) {
-	
+		
 		$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM $styles_db_table WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
@@ -46,7 +47,25 @@ if ($action == "add") {
 		$row_entries = mysql_fetch_assoc($entries);
 		
 		do {
-			
+		
+		// Check if entry is already in the judging_flights table
+		$query_empty_count = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_entries['id']);
+		$empty_count = mysql_query($query_empty_count, $brewing) or die(mysql_error());
+		$row_empty_count = mysql_fetch_assoc($empty_count);
+		$totalRows_empty_count = mysql_num_rows($empty_count);
+		
+		// if so, update the record with the new judging_table id
+		if ($totalRows_empty_count > 0) {
+			$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
+						   GetSQLValueString($row_table['id'], "text"),
+						   GetSQLValueString($row_entries['id'], "text"));
+			//echo $updateSQL."<br>";
+			mysql_select_db($database, $brewing);
+			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		}
+		
+		// if not, add a new record to the judging_flights table
+		else {
 			$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
 				flightTable, 
 				flightNumber, 
@@ -62,9 +81,10 @@ if ($action == "add") {
 			//echo $insertSQL."<br>";
 			mysql_select_db($database, $brewing);
   			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			
+			}
 		} while ($row_entries = mysql_fetch_assoc($entries));
 	}
+	
 	if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -96,9 +116,10 @@ if ($action == "edit") {
 	$row_flight_count = mysql_fetch_assoc($flight_count);
 	$totalRows_flight_count = mysql_num_rows($flight_count);
 	
-	//echo "<p>".$totalRows_flight_count."<p>";
+	//echo "<p>".$totalRows_flight_count."</p>";
   	
-	// If flights are designated and the Table's styles have changed, loop through the judging_flights and update or remove the affected entries
+	// If flights are designated and the Table's styles have changed, 
+	// loop through the judging_flights table and update or remove the affected entries
   	if (($totalRows_flight_count > 0) && ($table_styles != "")) {
 		
 		$query_flight_round = sprintf("SELECT flightRound FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $id);
@@ -113,7 +134,7 @@ if ($action == "edit") {
 					
 		do { $t[] = $row_table_styles['id']; } while ($row_table_styles = mysql_fetch_assoc($table_styles));
 	
-	// Update or remove	
+		// Update or remove	
 		do { $f[] = $row_flight_count['id']; } while ($row_flight_count = mysql_fetch_assoc($flight_count)); 
 		
 		foreach ($f as $id) {
@@ -159,7 +180,7 @@ if ($action == "edit") {
 			
 			$entry_style = $row_entry['brewCategorySort'].$row_entry['brewSubCategory'];
 			
-			//echo "<p>".$query_entry."<br>";
+			//echo "<p>".$row_flight_info['flightEntryID'];
 			
 			foreach ($a as $style_id) {
 				
@@ -173,7 +194,7 @@ if ($action == "edit") {
 				
 				$table_style = $row_style['brewStyleGroup'].$row_style['brewStyleNum'];
 				
-				//echo "Table Style: ".$table_style."<br>";
+				//echo "<br>Table Style: ".$table_style."<br>";
 				//echo "Entry Style: ".$entry_style."<br>";
 				
 				if ($table_style == $entry_style) $b[] = 1;
@@ -187,12 +208,23 @@ if ($action == "edit") {
 			//echo $update."<br>";
 			//echo $delete."<br>";
 			
-			// Delete if no table found that contains the entry's style
+			// Delete the flightTable (id from judging_tables) if no table is found that contains the entry's style
+			// This "saves" the row for future use
 			if (($delete == 0) && ($update == "")) {
-				$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $row_flight_info['id']);
+				//$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $row_flight_info['id']);
 				//echo $delete."<br>";
+  				$updateSQL = sprintf("UPDATE $judging_flights_db_table SET
+					flightTable=%s, 
+					flightNumber=%s, 
+					flightRound=%s
+					WHERE id=%s",
+                       GetSQLValueString("", "text"),
+                       GetSQLValueString("1", "text"),
+                       GetSQLValueString("1", "text"),
+                       GetSQLValueString($id, "text"));
+				//echo $updateSQL.";<br>";
   				mysql_select_db($database, $brewing);
-  				$Result = mysql_query($delete, $brewing) or die(mysql_error());	
+  				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 			}
 			
 			// If table style is assigned to another table, reassign the entry to that table
@@ -207,13 +239,73 @@ if ($action == "edit") {
                        GetSQLValueString("1", "text"),
                        GetSQLValueString($id, "text"));
 				//echo $updateSQL."<br>";
-  				mysql_select_db($database_brewing, $brewing);
+  				mysql_select_db($database, $brewing);
   				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 			}
 		}
 	} //end if (($row_flight_count['count'] > 0) && ($table_styles != ""))
 	
-	// Remove all flight rows if unassigning all present table styles
+	
+	// Check rows for "blank" flightTables in the judging_flights table
+			
+	$query_empty_count = "SELECT flightEntryID FROM $judging_flights_db_table WHERE flightTable='' OR flightTable IS NULL";
+	$empty_count = mysql_query($query_empty_count, $brewing) or die(mysql_error());
+	$row_empty_count = mysql_fetch_assoc($empty_count);
+	$totalRows_empty_count = mysql_num_rows($empty_count);
+	
+	//echo "<p>".$totalRows_empty_count."</p>";
+	// If so, match up the flightEntryID with the id in the brewing table
+	// determine its style, and assign the row to the proper table
+	
+	if ($totalRows_empty_count > 0) {
+		
+		do { $z[] = $row_empty_count['flightEntryID']; } while ($row_empty_count = mysql_fetch_assoc($empty_count));
+		
+		foreach ($z as $id) {
+			
+			$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $id);
+			$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
+			$row_entry = mysql_fetch_assoc($entry);
+			
+			//echo $query_entry."<br>";
+			
+			$query_style = sprintf("SELECT id FROM $styles_db_table WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+			$style = mysql_query($query_style, $brewing) or die(mysql_error());
+			$row_style = mysql_fetch_assoc($style);
+			
+			//echo $query_style."<br>";
+			
+			$query_table_styles = "SELECT id,tableStyles FROM $judging_tables_db_table";
+			$table_styles = mysql_query($query_table_styles, $brewing) or die(mysql_error());
+			$row_table_styles = mysql_fetch_assoc($table_styles);
+			
+			//echo $row_style['id']."<br>";
+			//echo $query_table_styles."<br>";
+		
+			do {
+				$style_array = explode(",",$row_table_styles['tableStyles']);
+				//echo "<p>";
+				//print_r($style_array);
+				
+				if (in_array($row_style['id'],$style_array)) {
+					
+					$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
+						   GetSQLValueString($row_table_styles['id'], "text"),
+						   GetSQLValueString($id, "text"));
+					//echo $updateSQL."<br>";
+					mysql_select_db($database, $brewing);
+					$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
+				}
+				//echo "</p>";
+			} while ($row_table_styles = mysql_fetch_assoc($table_styles));
+				
+		}
+		
+	}
+	
+	mysql_free_result($empty_count);
+
+	// Remove all flight rows if unassigning ALL present table styles
 	if (($totalRows_flight_count > 0) && ($table_styles == "")) {
 		do { $a[] = $row_flight_count['id']; } while ($row_flight_count = mysql_fetch_assoc($flight_count));
 		foreach ($a as $id) {

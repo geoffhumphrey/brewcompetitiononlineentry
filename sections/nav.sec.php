@@ -34,7 +34,7 @@ if (strstr($section,"step")) { ?>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
 <!-- Admin Main Link -->
-	<a class="menuItem" href="index.php?section=admin">Admin Main Menu</a>
+	<a class="menuItem" href="index.php?section=admin">Admin Dashboard</a>
 
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
