@@ -49,8 +49,6 @@
 
 require_once dirname(__FILE__) . '/securimage.php';
 
-$img = new securimage();
-
 // You can customize the image by making changes below, some examples are included - remove the "//" to uncomment
 
 //$img->ttf_file        = './Quiff.ttf';
@@ -70,8 +68,12 @@ $img = new securimage();
 
 // see securimage.php for more options that can be set
 
+$img = new securimage();
+$img->text_color = new Securimage_Color(rand(0, 64),rand(64, 128),rand(128, 255));
+$img->image_signature = 'brewcompetition.com';
+$img->signature_color = new Securimage_Color("#aaa");
+$img->num_lines = rand(4, 8);
 
-
-$img->show();  // outputs the image and content headers to the browser
+$img->show('backgrounds/bg3.jpg');  // outputs the image and content headers to the browser
 // alternate use: 
 // $img->show('/path/to/background_image.jpg');

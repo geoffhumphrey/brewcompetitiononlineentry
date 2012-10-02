@@ -112,7 +112,7 @@ if($result1){
 if ($action == "update") {
 
 	foreach($_POST['id'] as $id){ 
-		$query_assignment = "SELECT id,brewerAssignment FROM $brewer_db_table WHERE id='".$id."'";
+		$query_assignment = "SELECT id,uid,brewerAssignment FROM $brewer_db_table WHERE id='".$id."'";
 		$assignment = mysql_query($query_assignment, $brewing) or die(mysql_error());
 		$row_assignment = mysql_fetch_assoc($assignment);
 		
@@ -131,18 +131,64 @@ if ($action == "update") {
 			$updateSQL = "UPDATE $brewer_db_table SET brewerAssignment='";
 			$updateSQL .= $_POST["brewerAssignment".$id];
 			$updateSQL .= "' WHERE id='".$id."';";
+			
+			// Check to see if the participant is assigned to be a judge or steward in the judging_assignments table
+			$query_assign = sprintf("SELECT * FROM $judging_assignments_db_table WHERE bid='%s' AND assignment ='%s'",$id,$_POST["brewerAssignment".$id]);
+			$assign = mysql_query($query_assign, $brewing) or die(mysql_error());
+			$row_assign = mysql_fetch_assoc($assign);
+			$totalRows_assign = mysql_num_rows($assign);
+			
+			// If so, delete all instances
+			if ($totalRows_assign > 0) {
+				do {
+					$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_assign['id']);
+					mysql_select_db($database, $brewing);
+					$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+				} while ($row_assign = mysql_fetch_assoc($assign)); 
+			}
 		}
 		
 		elseif (($_POST["brewerAssignment".$id] == "") && ($filter == "judges") && ($row_assignment['brewerAssignment'] == "J")) {
 			$updateSQL = "UPDATE $brewer_db_table SET brewerAssignment='";
 			$updateSQL .= $_POST["brewerAssignment".$id];
 			$updateSQL .= "' WHERE id='".$id."';";
+			
+			// Check to see if the participant is assigned to be a judge or steward in the judging_assignments table
+			$query_assign = sprintf("SELECT * FROM $judging_assignments_db_table WHERE bid='%s' AND assignment ='%s'",$id,"J");
+			$assign = mysql_query($query_assign, $brewing) or die(mysql_error());
+			$row_assign = mysql_fetch_assoc($assign);
+			$totalRows_assign = mysql_num_rows($assign);
+			
+			// If so, delete all instances
+			if ($totalRows_assign > 0) {
+				do {
+					$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_assign['id']);
+					mysql_select_db($database, $brewing);
+					$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+				} while ($row_assign = mysql_fetch_assoc($assign)); 
+			}
+			
 		}
 		
 		elseif (($_POST["brewerAssignment".$id] == "") && ($filter == "stewards") && ($row_assignment['brewerAssignment'] == "S")) {
 			$updateSQL = "UPDATE $brewer_db_table SET brewerAssignment='";
 			$updateSQL .= $_POST["brewerAssignment".$id];
 			$updateSQL .= "' WHERE id='".$id."';";
+			
+			// Check to see if the participant is assigned to be a judge or steward in the judging_assignments table
+			$query_assign = sprintf("SELECT * FROM $judging_assignments_db_table WHERE bid='%s' AND assignment ='%s'",$id,"S");
+			$assign = mysql_query($query_assign, $brewing) or die(mysql_error());
+			$row_assign = mysql_fetch_assoc($assign);
+			$totalRows_assign = mysql_num_rows($assign);
+			
+			// If so, delete all instances
+			if ($totalRows_assign > 0) {
+				do {
+					$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_assign['id']);
+					mysql_select_db($database, $brewing);
+					$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+				} while ($row_assign = mysql_fetch_assoc($assign)); 
+			}
 		}
 		
 		elseif (($_POST["brewerAssignment".$id] == "") && ($filter == "staff") && ($row_assignment['brewerAssignment'] == "X")) {
