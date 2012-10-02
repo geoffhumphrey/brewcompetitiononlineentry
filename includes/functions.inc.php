@@ -1359,6 +1359,36 @@ function text_number($n) {
     return $new_n;
 }
 
+
+function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	if ($method == "thickbox") {  $class = 'class="menuItem" id="modal_window_link"'; }
+	
+	if ($method == "none") { $class = 'class="menuItem"'; }
+	
+	$random = random_generator(7,2);
+	
+	$query_tables = sprintf("SELECT * FROM %s ORDER BY tableNumber ASC", $prefix."judging_tables");
+	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+	$row_tables = mysql_fetch_assoc($tables);
+	$totalRows_tables = mysql_num_rows($tables);
+	
+	$table_choose = '<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, \'menu_categories'.$random.'\');">For Table #...</a></div>';
+	$table_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
+	
+	do {
+		$table_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a>';
+	} while ($row_tables = mysql_fetch_assoc($tables));
+	
+	$table_choose .= '</div>';
+	mysql_free_result($tables);
+	return $table_choose;
+	
+}
+
+
 function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
