@@ -544,14 +544,7 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Entry</em> Numbers):</li>
 				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
-				<li>
-    				<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets');">For Table #...</a></div>
-    				<div id="pullsheets" class="menu" onmouseover="menuMouseover(event)">
-    				<?php do { ?>
-						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=<?php echo $row_tables['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a>
-    				<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
-    				</div>
-    			</li>
+				<li><?php echo table_choose($section,"judging_tables",$action,$filter,"entry","output/pullsheets.php","thickbox"); ?></li>
                 <li>
                     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc');">For Location...</a></div>
                     <div id="pullsheetsloc" class="menu" onmouseover="menuMouseover(event)">
@@ -567,14 +560,7 @@ if ($go == "default") { ?>
 			<ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Judging</em> Numbers):</li>
 				<li><a id="modal_window_link" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
-				<li>
-    				<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheets_judging');">For Table #...</a></div>
-    				<div id="pullsheets_judging" class="menu" onmouseover="menuMouseover(event)">
-    				<?php do { ?>
-						<a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Pullsheet for Table # <?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
-    				<?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
-    				</div>
-    			</li>
+				<li><?php echo table_choose($section,"judging_tables",$action,$filter,$view,"output/pullsheets.php","thickbox"); ?></li>
                 <li>
                     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc_judging');">For Location...</a></div>
                     <div id="pullsheetsloc_judging" class="menu" onmouseover="menuMouseover(event)">
@@ -590,14 +576,7 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 				<li>Print Table Cards:</li>
 				<li><a id="modal_window_link" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
-				<li>
-                	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cards');">For Table #...</a></div>
-                    <div id="table_cards" class="menu" onmouseover="menuMouseover(event)">
-                        <?php do { ?>
-                        <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=<?php echo $row_tables_edit['id']; ?>" title="Print Table Card for Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?>"><?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
-                        <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
-                    </div>
-    			</li>
+                <li><?php echo table_choose($section,"judging_tables",$action,$filter,$view,"output/table_cards.php","thickbox"); ?></li>
                 <li>
                 <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cardsloc');">For Location...</a></div>
                     <div id="table_cardsloc" class="menu" onmouseover="menuMouseover(event)">
