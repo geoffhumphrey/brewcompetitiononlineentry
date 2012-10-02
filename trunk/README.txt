@@ -4,7 +4,7 @@
 ** Brew Competition Online Entry & Management                       **
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston and Bruce Buerger              **
-** Release 1.2.1.0 September 1, 2012                                **
+** Release 1.2.1.1 October 1, 2012                                  **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
@@ -62,28 +62,10 @@ Changes in This Version
 
 **********************************************************************
 
-This release features a few fairly major upgrades and numerous minor ones. It also addresses bugs reported between December 1, 2011 and August 25, 2012.
-	- Added browser-based database setup and updating.
-	- Added the ability to for the BCOE&M installation to run on a shared database (or multiple installations on a single database).
-	- Added the ability to cap the number of entries.
-	- Added custom winning category functionality.
-	- Added ability for competitions to accept payment via Google Wallet (Issue 48 on Google Code).
-	- Added localization capabilities. Allows for granular, time-zone specific dates and times to be utilized by the program.
-	- Added registration windows for judges and stewards (now separate from regular entrants). Comps can now register judges and stewards before and after the entry window (Issue 133 on Google Code).
-	- Added the ability for admins to designate the method to designate winners (by table, by category or by subcategory - Issue 142 on Google Code).
-	- Added a new public page: Volunteer Information (thanks to Bruce Buerger for his contribution).
-	- Added data integrity scripting that checks for inconsistencies between the user and brewer tables as well as deleting any entry that is either blank or is not attributed to any verified user.
-	- Added another bottle label option that includes special ingredients (if any) on the label itself. Useful for Category 23, for example, and custom categories.
-	- Added the ability to export promo materials in Bulletin Board Code (BBC) format. Useful for posting a competition announcement to various homebrewing forums.
-	- Added the ability to export all entry data in CSV format (Issue 149 on Google Code).
-	- Added time stamping for users and entry updates (Issue 52 on Google Code).
-	- Added ability to filter admin display of paid entries (Issue 129 on Google Code).
-	- Added granular display of the number of entries that had reduced fees from a promo code (Issue 146 on Google Code).
-	- Updated the BJCP Ranks to utilize those that went into effect April 1, 2012 (as reported to SourceForge). Added explanation/help text to the participant information screen.
-	- Cleaned up archived data display.
-	- Addressed all verified bugs reported to Google Code (Issues 117, 119, 120, 123, 124, 127, 137, 138, 150, 151, 152, 153, 155, 156, and 157).
-	- Deprecated the option to choose whether to utilize BCOE&M for competition organization. Going forward, it will be assumed that Administrators will utilize the organization functions (those beyond simply gathering participant and entry data) as little or as much as they wish without needing to specify as such.
+This release features mostly bug fixes and a couple of enhancements.
 
+Addresses Google Code Issues 160, 163, 164, 166, 167, 169, 171, 172, 173, 174, 175, 176, and 177
+Access: http://code.google.com/p/brewcompetitiononlineentry/issues
 
 **********************************************************************
 
@@ -148,7 +130,6 @@ Installation: Upgrading
 
 1. 	Update the Database
 	- As of version 1.2.1.0, there is no need to perform a manual update to the MySQL database (via phpMyAdmin or other means).
-	- Admins should upload the new files to their server via FTP, browse to their installation's web address, and proceed through the updating process.
 
 2. 	Upload the New Files
 	- Most versions add or make changes to multiple files. Therefore, you should replace all of the folders/files on your web server.
@@ -158,18 +139,19 @@ Installation: Upgrading
 	- Using a text editor or your favorite WYSIWYG editor, open the config.php file in the "sites" folder. Add username, password, and database variables for your BCOE&M installation's MySQL database.
 	- Connect to your webserver via FTP.
 	- Upload all files and folders from the "competition" folder ONLY.
-	- Finally, if you are receiving server errors after trying to access your installation, see below.
 	- After uploading the files, navigate to your site's web address.
-	- Proceed through the update process. Only users with administrative access can initiate the upgrade process.
+	- Proceed through the update process. Only users with administrative access can initiate the update process.
+	
+4.  Proceed through the Updata Process
 
-3. 	Update Your Site Preferences
+5. 	Update Your Site Preferences
 	Most versions add new features. Consequentlyu, you may need to set preferences for them.
 	- Log in.
 	- Roll over Admin in the top navigation bar.
 	- Choose Defining Preferences > Define > Site Preferences.
 	- Adjust your site's preferences.
 
-4. 	Choose your Competition Organization Preferences
+6. 	Choose your Competition Organization Preferences
 	- Log in.
 	- Roll over Admin in the top navigation bar.
 	- Choose Defining Preferences > Define > Competition Organization Preferences.

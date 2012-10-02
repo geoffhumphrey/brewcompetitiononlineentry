@@ -53,6 +53,18 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
   		<div id="printMenu_tables" class="menu" onmouseover="menuMouseover(event)">
   			<a id="modal_window_link" class="menuItem" href="output/print.php?section=admin&amp;go=judging_tables&amp;action=print">Tables List</a>
     		<a id="modal_window_link" class="menuItem" href="output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default">Pullsheets by Table</a>
+            <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">Judge Assignments By Last Name</a>
+			<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">Judge Assignments By Table</a>
+   			<?php if ($totalRows_judging > 1) { ?>
+			<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location" title="Print Judge Assignments by Location">Judge Assignments By Location</a>
+    		<?php } ?>
+            <a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Print Steward Assignments by Name">Steward Assignments By Last Name</a>
+			<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" title="Print Steward Assignments by Table">Steward Assignments By Table</a>
+   			<?php if ($totalRows_judging > 1) { ?>
+			<a id="modal_window_link" class="menuItem" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" title="Print Steward Assignments by Location">Steward Assignments By Location</a>
+    		<?php } ?>
+            
+            
 		</div>
 	</span>
     <?php } ?>
@@ -85,7 +97,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php if (($totalRows_tables > 0) && ($dbTable == "default")) { ?>
 <tr>
 	<td><strong>Step 3: </strong>Define All Flights</td>
-    <td class="data">
+    <td class="data" <?php if ($row_judging_prefs['jPrefsQueued'] == "Y") echo "colspan='2'"; ?>>
 	<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
 	
     	<span class="icon"><img src="images/application_form_add.png" alt="Define/Edit flights" title="Define/Edit flights" /></span>

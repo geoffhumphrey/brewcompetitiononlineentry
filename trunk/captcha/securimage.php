@@ -177,7 +177,7 @@ class Securimage
      * The color of the captcha text
      * @var Securimage_Color
      */
-    public $text_color     = '#707070';
+    public $text_color     = '#990000';
     /**
      * The color of the lines over the captcha
      * @var Securimage_Color
@@ -187,7 +187,7 @@ class Securimage
      * The color of the noise that is drawn
      * @var Securimage_Color 
      */
-    public $noise_color    = '#707070';
+    public $noise_color    = '#cccccc';
     
     /**
      * How transparent to make the text 0 = completely opaque, 100 = invisible
@@ -232,18 +232,18 @@ class Securimage
      * true to use the wordlist file, false to generate random captcha codes
      * @var bool
      */
-    public $use_wordlist   = false;
+    public $use_wordlist   = true;
 
     /**
      * The level of distortion, 0.75 = normal, 1.0 = very high distortion
      * @var double
      */
-    public $perturbation = 0.75;
+    public $perturbation = 0.40;
     /**
      * How many lines to draw over the captcha code to increase security
      * @var int
      */
-    public $num_lines    = 8;
+    public $num_lines    = 5;
     /**
      * The level of noise (random dots) to place on the image, 0-10
      * @var int
