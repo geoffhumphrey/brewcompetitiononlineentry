@@ -70,15 +70,17 @@ $row_name = mysql_fetch_assoc($name);
 // Second, rename current tables and recreate new ones.
 $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
 
+
+// For hosted accounts, limit the table creation to the users, brewer, brewing, judging_tables, judging_assignments, judging_scores, and judging_scores_bos, and style_types tables
+//$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
+
 foreach ($tables_array as $table) { 
 	$rename_table = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
-        // echo "<p>".$rename_table."</p>";     
 	$result = mysql_query($rename_table, $brewing) or die(mysql_error());
+	
 	$create_table = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
-        // echo "<p>".$create_table."</p>";     
 	$result = mysql_query($create_table, $brewing) or die(mysql_error());
 }
-
 
 $insert_style_types = "
 INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
@@ -86,7 +88,7 @@ INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS
 	(2, 'Cider', 'bcoe', 'Y', 3),
 	(3, 'Mead', 'bcoe', 'Y', 3)
 ";
-// echo "<p>".$create_style_types."</p>";
+
 $result = mysql_query($insert_style_types, $brewing) or die(mysql_error());
 
 // Insert current user's info into new "users" and "brewer" table
