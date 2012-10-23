@@ -1533,6 +1533,8 @@ function bjcp_rank($rank,$method) {
 		switch($rank) {
 			case "Apprentice": $return = "Level 1:";
 			break;
+			case "Provisional": $return = "Level 1:";
+			break;
 			case "Recognized": $return = "Level 2:";
 			break;
 			case "Certified": $return = "Level 3:";
@@ -1551,7 +1553,9 @@ function bjcp_rank($rank,$method) {
 			break;
 			case "Professional Brewer": $return = "Level 2:";
 			break;
-			default: $return = "";
+			case "Mead Judge": $return = "Level 3:";
+			break;
+			default: $return = "Level 0:";
 		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
 	}

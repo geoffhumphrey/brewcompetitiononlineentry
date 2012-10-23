@@ -39,7 +39,7 @@ body {
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid,brewReceived FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
 $entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 $row_entries = mysql_fetch_assoc($entries);
 $totalRows_entries = mysql_num_rows($entries);
@@ -99,7 +99,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php if ($row_entries['id'] < 100) echo "0"; echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_entries['id']); ?></td>
         <?php if ($view == "default") { ?>
         <td class="data bdr1B_gray"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <?php } ?>
@@ -109,7 +109,7 @@ if ($totalRows_entries > 0) {
         <td class="data bdr1B_gray"><?php echo $row_entries['brewSubCategory']; ?></td>
         <td class="data bdr1B_gray"><?php echo $brewer_info[2]."<br>".$brewer_info[6]; ?></td>
         <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'>"; ?></p></td>
-        <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
+        <td class="data bdr1B_gray"><?php if ($row_entries['brewReceived'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'>"; ?></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
     </tbody>
@@ -149,7 +149,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_entries['id']); ?></td>
         <td class="data bdr1B_gray"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
     </tr>

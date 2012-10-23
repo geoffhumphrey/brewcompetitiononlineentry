@@ -7,6 +7,52 @@
  */
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
+
+function highlight_required($msg,$method) {
+	
+	if ($method == "1") {
+		switch($msg) {
+			case "1-6-D":		
+			case "1-16-E":
+			case "1-17-F":
+			case "1-20-A":
+			case "1-21-A":
+			case "1-21-B":
+			case "1-22-B":
+			case "1-22-C":
+			case "1-23-A":
+			case "1-25-C":
+			case "1-26-A":
+			case "1-26-C":
+			case "1-27-E":
+			case "1-28-B":
+			case "1-28-C":
+			case "1-28-D":
+			case "4":
+			return TRUE;
+			break;
+			
+			default: 
+			return FALSE;
+			break;
+		}
+	}
+	if ($method == "2") {
+		if (strstr($msg,"1-24")) return TRUE;
+		elseif (strstr($msg,"1-25")) return TRUE;
+		elseif (strstr($msg,"1-26")) return TRUE;
+		elseif (strstr($msg,"1-27")) return TRUE;
+		elseif (strstr($msg,"1-28")) return TRUE;
+		else return FALSE;
+	}
+	
+	if ($method == "3") {
+		if (strstr($msg,"1-24")) return TRUE;
+		elseif (strstr($msg,"1-25")) return TRUE;
+		elseif (strstr($msg,"1-26")) return TRUE;
+		else return FALSE;
+	}
+}
 ?>
 <script type="text/javascript" language="javascript" src="js_includes/toggle.js"></script>
 <?php 
@@ -74,23 +120,35 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </table>
 <table>
 <tr>
-   <td class="dataLabel">Special Ingredients/Classic Style:</td>
+   <td class="dataLabel">Special Ingredients, Classic Style, and/or Special Procedures:</td>
 </tr>
 <tr>
-   <td class="dataLeft">(required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 27E, 28B-D)</td>
+   <td class="dataLeft">(required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, 28B-D, and all custom styles)</td>
 </tr>
 <tr>
-   <td class="dataLabel" colspan="2"><textarea <?php if ($msg == "1") echo "style=\"border: 1px solid #FF0000\""; ?>  name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
+   <td class="dataLabel"><textarea <?php if (highlight_required($msg,"1")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99;\""; ?>  name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
 </tr>
 </table>
-<table>
+<table <?php if (highlight_required($msg,"2")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99; margin-bottom: 10px;\""; ?>>
 <tr>
-   <td class="dataLabel">For Mead and Cider:</td>
+   <td class="dataLabel" colspan="2">For Mead and Cider:</td>
+</tr>
+<tr>
+   <td class="dataLeft" colspan="2">(required for categories 24, 25, 26, 27, and 28)</td>
+</tr>
+<tr>
    <td class="data"><input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED"; ?>/> Still<br /><input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED"; ?>/> Petillant<br /><input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED"; ?>/> Sparkling</td>
    <td class="data"><input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED"; ?> /> Dry<br /><input type="radio" name="brewMead2" value="Semi-Sweet" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED"; ?>/> Semi-Sweet<br /><input type="radio" name="brewMead2" value="Sweet" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED"; ?>/> Sweet</td>
 </tr>
+</table>
+<table <?php if (highlight_required($msg,"3")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99; margin-bottom: 10px;\""; ?>>
 <tr>
-   <td class="dataLabel">For Mead:</td>
+   <td class="dataLabel" colspan="2">For Mead:</td>
+</tr>
+<tr>
+   <td class="dataLeft" colspan="2">(required for categories 24, 25, and 26)</td>
+</tr>
+<tr>
    <td class="data"><input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED"; ?> /> Hydromel (light)<br /><input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED"; ?> /> Standard<br /><input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED"; ?> /> Sack (strong)</td>
    <td>&nbsp;</td>
 </tr>

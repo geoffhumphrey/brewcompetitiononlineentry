@@ -42,7 +42,7 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 	$return = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&msg=10&view=";
 	$entries = "";
 	do { if ($row_log['brewPaid'] != "1") { ?> 
-    	<li><?php echo "Entry #".$row_log['id'].": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
+    	<li><?php echo "Entry #".sprintf("%04s",$row_log['id']).": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
     <?php 
 	$entries .= $row_log['id'].", ";
 	$return .= $row_log['id']."-";
@@ -105,7 +105,7 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
 <h3>PayPal</h3>
 <p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
-<div class="info">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to ..." link on PayPal's confirmation screen after you have sent your payment.</div>
+<div class="error">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to ..." link on PayPal's confirmation screen after you have sent your payment.</div>
 
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">

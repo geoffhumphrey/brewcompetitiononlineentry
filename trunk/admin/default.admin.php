@@ -702,7 +702,7 @@ if ($go == "default") { ?>
             	<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a> (Limited Data)</li>
 				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a> (Limited Data)</li>
                 <li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a> (Limited Data)</li>
-				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid & Received Entries</a> (Limited Data)</li>
+				<li><a href="output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay">Non-Paid & Received Entries</a> (Limited Data)</li>
 			</ul>
 			<ul class="admin_default">
 				<li><a href="output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>

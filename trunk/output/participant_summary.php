@@ -82,7 +82,7 @@ if ($totalRows_log > 0) { ?>
     <tbody>
     <?php do { ?>
     <tr>
-    	<td class="bdr1B_gray"><?php echo $row_log['id']; ?></td>
+    	<td class="bdr1B_gray"><?php echo sprintf("%04s",$row_log['id']); ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'] ?></td>
         <td class="data bdr1B_gray"><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>

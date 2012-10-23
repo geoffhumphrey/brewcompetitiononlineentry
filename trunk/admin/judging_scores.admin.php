@@ -126,7 +126,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		//if ($row_tables_1['id'] != "") { // if table is erased.
 	?>
 	<tr>
-    	<td><?php echo $row_entries_1['id']; ?></td>
+    	<td><?php echo sprintf("%04s",$row_entries_1['id']); ?></td>
         <td class="data"><?php echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']);  ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
@@ -220,7 +220,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php echo $row_entries['id']; ?></td>
+        <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
         <td class="data"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>

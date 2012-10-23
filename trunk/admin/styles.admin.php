@@ -118,7 +118,7 @@ function checkUncheckAll(theElement) {
 </tr>
 <tr>
     <td class="dataLabel" >Style Type:</td>
-    <td class="data">
+    <td class="data" nowrap="nowrap">
     <select name="brewStyleType" id="brewStyleType" class="text_area">
     	<option value=""></option>
         <?php do { ?>

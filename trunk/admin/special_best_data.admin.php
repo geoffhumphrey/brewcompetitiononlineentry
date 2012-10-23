@@ -93,7 +93,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
      <tr>
       <td width="15%" class="dataList"><?php echo $row_sbi['sbi_name']; ?></td>
       <td width="1%" class="dataList"><?php echo $row_sbd['sbd_place']; ?></td>
-      <td width="1%" class="dataList"><?php echo $row_sbd['eid']; ?></td>
+      <td width="1%" class="dataList"><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
       <td width="1%" class="dataList"><?php echo $info[6]; ?></td>
       <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
       <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>

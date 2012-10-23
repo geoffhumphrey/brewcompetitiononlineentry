@@ -29,9 +29,13 @@ if ($section != "setup")  {
 }
 
 require(INCLUDES.'scrubber.inc.php');
+
 function check_http($input) {
-	if (($input != "") && (!strstr($input, "http://"))) $input = "http://".$input; else $input = $input;
-	return $input;
+	if ($input != "") {
+			if (strstr($input,"http://")) return $input;
+			if (strstr($input,"https://")) return $input;
+			if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;		   
+		}
 }
 
 $archive_db_table = $prefix."archive";
@@ -88,9 +92,20 @@ function generate_judging_num($style_cat_num) {
 	return $return;
 }
 
-function capitalize($string) {
-	$lowercase = strtolower($string);
-	$capitalize = ucwords($lowercase);
+function ucwordspecific($str,$delimiter) {
+	$delimiter_space = $delimiter." ";
+	$output = str_replace($delimiter_space,$delimiter,ucwords(str_replace($delimiter,$delimiter_space,$str)));
+	return $output;
+}
+
+function capitalize($string1) {
+	require(INCLUDES.'scrubber.inc.php');
+	$capitalize = strtr($string1,$html_remove);
+	$capitalize = ucwords($capitalize);
+	$capitalize = ucwordspecific($capitalize,"-");
+	$capitalize = ucwordspecific($capitalize,".");
+	$capitalize = ucwordspecific($capitalize,"(");
+	$capitalize = ucwordspecific($capitalize,")");
 	return $capitalize;
 }
 if ($action != "purge") {

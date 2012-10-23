@@ -45,7 +45,7 @@ if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
   echo "</body>";
   exit();
 }
-
+$brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
 $brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove);
 $brewer_info['brewerAddress'] = strtr($brewer_info['brewerAddress'],$html_remove);

@@ -17,14 +17,37 @@ function date_created($uid,$date_format,$time_format,$timezone) {
 	$totalRows_user = mysql_num_rows($user);
 	
 	if (($totalRows_user == 1) && ($row_user['userCreated'] != "")) {
-	$result = getTimeZoneDateTime($timezone, strtotime($row_user['userCreated']), $date_format,  $time_format, "short", "date-time-no-gmt");
+		$result = getTimeZoneDateTime($timezone, strtotime($row_user['userCreated']), $date_format,  $time_format, "short", "date-time-no-gmt");
 	}
 	
 	else $result = "&nbsp;";
-	
 	return $result;
-	
-	
+}
+
+function judge_steward_availability($input) {
+	$a = explode(",",$input);
+	arsort($a);
+	$return = "<table class='dataTableCompact'>";
+	foreach ($a as $value) {
+	if ($value != "") {
+		$b = substr($value, 2);
+		$c = substr($value, 0, 1);
+			if ($c == "Y") {
+			require(CONFIG.'config.php');
+			require(DB.'common.db.php');
+			$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $b);
+			$location = mysql_query($query_location, $brewing) or die(mysql_error());
+			$row_location = mysql_fetch_assoc($location);
+			//$return .= $query_location."<br />";
+			$return .= "<tr>";
+			$return .= "<td class='data'>".$row_location['judgingLocName']."</td>";
+			$return .= "<td class='data'>".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_location['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt")."</td>";
+			$return .= "</tr>";
+			}
+		}
+	}
+	$return .= "</table>";
+	return $return;
 }
 ?>
 
@@ -67,8 +90,9 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
   			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants');">Print <em>This</em> List</a></div>
   			<div id="printMenu_participants" class="menu" onmouseover="menuMouseover(event)">
   				<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=brewer_name">By Last Name</a>
+                <?php if (($filter == "judges") || ($filter == "stewards")) { ?>
   				<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=club">By Club</a>
-  				<?php if ($filter == "judges") { ?>
+                <?php } if (($filter == "judges") || ($filter == "assignJudges")) { ?>
                 <a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a>
 				<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a>
 				<?php } ?>
@@ -230,7 +254,7 @@ if ($totalRows_participant_count > 0) {
 			]
 		<?php } ?>
 		
-		<?php if ($filter == "judges") { ?>
+		<?php if (($filter == "judges") || ($filter == "assignJudges")) { ?>
 		"aoColumns": [
 				null,
 				null,
@@ -255,7 +279,7 @@ if ($totalRows_participant_count > 0) {
 		<?php } ?>
 		
 		
-		<?php if (($filter == "assignJudges") || ($filter == "assignStewards")) { ?>
+		<?php if ($filter == "assignStewards") { ?>
 		"aoColumns": [
 				null,
 				null,
@@ -274,13 +298,13 @@ if ($totalRows_participant_count > 0) {
     <th class="dataHeading bdr1B">Last</th>
     <th class="dataHeading bdr1B">First</th>
     <th class="dataHeading bdr1B">Info</th>
-    <th class="dataHeading bdr1B">Club</th>
+    <th class="dataHeading bdr1B"><?php if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "assignJudges") || ($filter == "stewards") || ($filter == "assignStewards"))) echo "Location(s) Available"; else echo "Club"; ?></th>
   <?php if ($filter == "default") { ?>
     <th class="dataHeading bdr1B">Steward?</th>
     <th class="dataHeading bdr1B">Judge?</th>
     <th class="dataHeading bdr1B">Assigned As</th>
   <?php } if ($filter != "default") { ?>
-    <?php if ($filter == "judges") { ?>
+    <?php if (($filter == "judges") || ($filter == "assignJudges")) { ?>
     <th class="dataHeading bdr1B">ID</th>
     <th class="dataHeading bdr1B">Rank</th>
     <?php } }?>
@@ -300,12 +324,15 @@ if ($totalRows_participant_count > 0) {
 	$query_user1 = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $row_brewer['brewerEmail']);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
+	
+	if (($filter == "judges") || ($filter == "assignJudges")) $locations = $row_brewer['brewerJudgeLocation'];
+	if (($filter == "stewards") || ($filter == "assignStewards")) $locations = $row_brewer['brewerStewardLocation'];
 ?>
   <tr>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerLastName']; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerFirstName']; ?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><a href="mailto:<?php echo $row_brewer['brewerEmail']; ?>?Subject=<?php if ($filter == "judges") echo "Judging at ".$row_contest_info['contestName']; elseif ($filter == "stewards") echo "Stewarding at ".$row_contest_info['contestName']; else echo $row_contest_info['contestName'];  ?>"><?php echo $row_brewer['brewerEmail']; ?></a><br /><?php if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1)<br>";  if ($row_brewer['brewerPhone2'] != "") echo $row_brewer['brewerPhone2']." (2)"; ?></td>
-    <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerClubs']; ?></td>
+    <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "assignJudges") || ($filter == "stewards") || ($filter == "assignStewards"))) echo judge_steward_availability($locations); else echo $row_brewer['brewerClubs']; ?></td>
   	<?php if ($filter == "default") { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerSteward'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerSteward'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_brewer['brewerJudge'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='images/tick.png'>"; } if ($row_brewer['brewerJudge'] == "N") {  if ($action == "print") echo ""; else echo "<img src='images/cross.png'>"; } ?></td>
@@ -314,7 +341,7 @@ if ($totalRows_participant_count > 0) {
 		
 		</td>
 	<?php if ($filter != "default") { ?>
-    	<?php if ($filter == "judges") { ?>
+    	<?php if (($filter == "judges") || ($filter == "assignJudges")) { ?>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_brewer['brewerJudgeID']; ?></td>
     	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") { echo "<br />"; if ($action != "print") echo "<span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>"; echo "Certified Mead Judge"; } ?></td>
 	  	<?php } 

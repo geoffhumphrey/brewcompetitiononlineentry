@@ -4,14 +4,15 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table
  */
 $sponsorURL = check_http($_POST['sponsorURL']);
+$sponsor_name = capitalize($_POST['sponsorName']);
 
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
+                       GetSQLValueString(strtr($sponsor_name,$html_string), "text"),
                        GetSQLValueString($sponsorURL, "text"), 
                        GetSQLValueString($_POST['sponsorImage'], "text"),
-                       GetSQLValueString($_POST['sponsorText'], "text"),
-					   GetSQLValueString($_POST['sponsorLocation'], "text"),
+                       GetSQLValueString(strtr($_POST['sponsorText'],$html_string), "text"),
+					   GetSQLValueString(strtr($_POST['sponsorLocation'],$html_string), "text"),
 					   GetSQLValueString($_POST['sponsorLevel'], "int")
 					   );
 
@@ -24,11 +25,11 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
-                       GetSQLValueString(capitalize($_POST['sponsorName']), "text"),
-                       GetSQLValueString($sponsorURL, "text"),
+                       GetSQLValueString(strtr($sponsor_name,$html_string), "text"),
+                       GetSQLValueString($sponsorURL, "text"), 
                        GetSQLValueString($_POST['sponsorImage'], "text"),
-                       GetSQLValueString($_POST['sponsorText'], "text"),
-					   GetSQLValueString($_POST['sponsorLocation'], "text"),
+                       GetSQLValueString(strtr($_POST['sponsorText'],$html_string), "text"),
+					   GetSQLValueString(strtr($_POST['sponsorLocation'],$html_string), "text"),
 					   GetSQLValueString($_POST['sponsorLevel'], "int"),
 					   GetSQLValueString($id, "int"));
 

@@ -137,7 +137,7 @@ if ($row_assignments['count'] >= 2) $staff_points = number_format(round(($staff_
 elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_points,1);
 else $staff_points = 0;
 
-// Staff
+// Organizer
 $query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignment='O'";
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
@@ -271,13 +271,13 @@ $filename = str_replace(" ","_",$row_contest_info['contestName'])."_BJCP_Points_
 $output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"; 
 $output .= "<OrgReport>\n";	
 $output .= "\t<CompData>\n";
-$output .= "\t\t<CompID>".$row_contest_info['contestID']."<CompID>\n";
-$output .= "\t\t<CompName>".$row_contest_info['contestName']."<CompName>\n";
-$output .= "\t\t<CompDate>".$row_judging['judgingDate']."<CompDate>\n";
-$output .= "\t\t<CompEntries>".$total_entries."<CompEntries>\n";
-$output .= "\t\t<CompDays>".$totalRows_judging."<CompDays>\n";
-$output .= "\t\t<CompSessions><CompSessions>\n";
-$output .= "\t\t<CompFlights><CompFlights>\n";
+$output .= "\t\t<CompID>".$row_contest_info['contestID']."</CompID>\n";
+$output .= "\t\t<CompName>".$row_contest_info['contestName']."</CompName>\n";
+$output .= "\t\t<CompDate>".$row_judging['judgingDate']."</CompDate>\n";
+$output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
+$output .= "\t\t<CompDays>".$totalRows_judging."</CompDays>\n";
+$output .= "\t\t<CompSessions></CompSessions>\n";
+$output .= "\t\t<CompFlights></CompFlights>\n";
 $output .= "\t</CompData>\n";
 
 	if ($totalRows_judges > 0) { 
