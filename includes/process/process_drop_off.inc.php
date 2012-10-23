@@ -5,14 +5,14 @@
  */
 
 $dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
-
+$dropLocationName = strtr($_POST['dropLocationName'],$html_string);
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $drop_off_db_table (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
-                       GetSQLValueString($_POST['dropLocationName'], "text"),
-                       GetSQLValueString($_POST['dropLocation'], "text"),
+                       GetSQLValueString(capitalize($dropLocationName), "text"),
+                       GetSQLValueString(strtr($_POST['dropLocation'],$html_string), "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
-					   GetSQLValueString($dropLocationWebsite, "text"),
-					   GetSQLValueString($_POST['dropLocationNotes'], "text")
+					   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
+					   GetSQLValueString(strtr($_POST['dropLocationNotes'],$html_string), "text")
 					   );
 
 	mysql_select_db($database, $brewing);
@@ -26,11 +26,11 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	$updateSQL = sprintf("UPDATE $drop_off_db_table SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
-                       GetSQLValueString($_POST['dropLocationName'], "text"),
-                       GetSQLValueString($_POST['dropLocation'], "text"),
+                       GetSQLValueString(capitalize($dropLocationName), "text"),
+                       GetSQLValueString(strtr($_POST['dropLocation'],$html_string), "text"),
                        GetSQLValueString($_POST['dropLocationPhone'], "text"),
-					   GetSQLValueString($dropLocationWebsite, "text"),
-					   GetSQLValueString($_POST['dropLocationNotes'], "text"),
+					   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
+					   GetSQLValueString(strtr($_POST['dropLocationNotes'],$html_string), "text"),
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);

@@ -9,6 +9,7 @@ include(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
+$special_ingredients = array("6D", "16E", "17F", "20A", "21A", "21B", "22B", "22C", "23A", "25C", "26A", "26B", "26C", "27E", "28B", "28C", "28D");
 
 function truncate($string, $limit, $break=".", $pad="")
 {
@@ -26,8 +27,8 @@ function truncate($string, $limit, $break=".", $pad="")
 }
 
 if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
-	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = "SELECT * FROM $brewing_db_table";
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -43,9 +44,7 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
 	// Print labels
 	do {
 		
-		if ($row_log['id'] < 10) $entry_no = "00".$row_log['id'];
-		elseif (($row_log['id'] >= 10) && ($row_log['id'] < 100)) $entry_no = "0".$row_log['id'];
-		else $entry_no = $row_log['id'];																						  
+		$entry_no = sprintf("%04s",$row_log['id']);																						  
 		
 		$text = sprintf("\n%s (%s)   %s (%s)   %s (%s)\n\n\n%s (%s)   %s (%s)   %s (%s)",
 		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
@@ -64,8 +63,8 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
 }
 
 if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
-	$query_log = "SELECT * FROM $brewing_db_table WHERE brewReceived='1'";
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = "SELECT * FROM $brewing_db_table";
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -81,15 +80,16 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 	// Print labels
 	do {
 		
-		if ($row_log['id'] < 10) $entry_no = "00".$row_log['id'];
-		elseif (($row_log['id'] >= 10) && ($row_log['id'] < 100)) $entry_no = "0".$row_log['id'];
-		else $entry_no = $row_log['id'];																						  
+		$entry_no = sprintf("%04s",$row_log['id']);																						  
 		
-		$text = sprintf("\n%s (%s) Special: %s",
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
-		str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
-		
-		$pdf->Add_Label($text);
+		$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
+				
+		if (in_array($style,$special_ingredients)) {
+			$text = sprintf("\n%s (%s) Special: %s",
+			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
+			str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
+			$pdf->Add_Label($text);
+		}
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 
@@ -98,8 +98,8 @@ if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 
 
 if (($go == "entries") && ($action == "bottle-judging") && ($view == "default")) {
-	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -135,8 +135,8 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "default"))
 }
 
 if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "default")) {
-	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -168,8 +168,8 @@ if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "defa
 }
 
 if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "default")) {
-	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -186,7 +186,7 @@ if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "defaul
 	// Print labels
 	do {
 		for($i=0; $i<$sort; $i++) {
-			$entry_no = $row_log['id'];																						  
+			$entry_no = sprintf("%04s",$row_log['id']);																						  
 			
 			$text = sprintf("\n%s (%s)",
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
@@ -201,8 +201,8 @@ if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "defaul
 }
 
 if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-	$query_log = sprintf("SELECT * FROM %s WHERE brewReceived=1",$prefix."brewing");
-	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
+	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log = mysql_fetch_assoc($log);
@@ -219,13 +219,16 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 	// Print labels
 	do {
 		
-		$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);																						  
+		$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
 		
-		$text = sprintf("\n%s (%s) Special: %s",
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
-		str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
-		
-		$pdf->Add_Label($text);
+		$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
+				
+		if (in_array($style,$special_ingredients)) {
+			$text = sprintf("\n%s (%s) Special: %s",
+			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
+			str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
+			$pdf->Add_Label($text);
+		}
 		
 	} while ($row_log = mysql_fetch_assoc($log));
 

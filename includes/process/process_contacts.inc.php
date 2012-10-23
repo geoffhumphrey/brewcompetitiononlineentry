@@ -16,7 +16,7 @@ if ($action == "add") {
                        GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
                        GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
                        GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-					   GetSQLValueString($_POST['contactEmail'], "text"));
+					   GetSQLValueString(strtolower($_POST['contactEmail']), "text"));
 	//echo $insertSQL;				   
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
@@ -36,7 +36,7 @@ if ($action == "edit") {
                        GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
                        GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
                        GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-					   GetSQLValueString($_POST['contactEmail'], "text"),
+					   GetSQLValueString(strtolower($_POST['contactEmail']), "text"),
 					   GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
@@ -55,9 +55,9 @@ $securimage = new Securimage();
 
 	if ($securimage->check($_POST['captcha_code']) == false) {
 		setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
-		setcookie("from_email", $_POST['from_email'], 0, "/");
-		setcookie("from_name", $_POST['from_name'], 0, "/");
-		setcookie("subject", $_POST['subject'], 0, "/");
+		setcookie("from_email", strtolower($_POST['from_email']), 0, "/");
+		setcookie("from_name", capitalize($_POST['from_name']), 0, "/");
+		setcookie("subject", capitalize($_POST['subject']), 0, "/");
 		setcookie("message", $_POST['message'], 0, "/");
 		header(sprintf("Location: %s", $base_url."/index.php?section=contact&action=email&msg=2"));
 	}
@@ -73,9 +73,9 @@ $securimage = new Securimage();
 		// Gather the variables from the form
 		$to_email = $row_contact['contactEmail'];
 		$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
-		$from_email = $_POST['from_email'];
-		$from_name = $_POST['from_name'];
-		$subject = $_POST['subject'];
+		$from_email = strtolower($_POST['from_email']);
+		$from_name = capitalize($_POST['from_name']);
+		$subject = capitalize($_POST['subject']);
 		$message_post = $_POST['message'];
 		
 		// Build the message

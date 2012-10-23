@@ -150,7 +150,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	
 	?>
 	<tr>
-    	<td><?php echo $row_bos['eid']; ?></td>
+    	<td><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
         <td class="data"><?php echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
@@ -236,7 +236,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
         <?php if ($row_scores['id'] != "") { ?>
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $row_scores['id']; ?>" />
         <?php } ?>
-        <td><?php echo $row_enter_bos['eid'];  ?></td>
+        <td><?php echo sprintf("%04s",$row_enter_bos['eid']);  ?></td>
         <td class="data"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $row_scores['scoreEntry']; ?>" /></td>

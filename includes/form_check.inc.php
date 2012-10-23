@@ -40,8 +40,6 @@ if(WithoutContent(document.form1.contestEntryDeadline.value))
 	{ errormessage += "\nThe competition entry deadline"; }
 if(WithoutContent(document.form1.contestRegistrationDeadline.value))
 	{ errormessage += "\nThe competition registration deadline"; }
-if(WithoutContent(document.form1.contestDate.value))
-	{ errormessage += "\nAt least one date of judging"; }
 if(WithoutContent(document.form1.contestEntryFee.value))
 	{ errormessage += "\nThe entry fee - enter a zero for a free entry fee"; }
 if(WithoutContent(document.form1.contestShippingAddress.value))

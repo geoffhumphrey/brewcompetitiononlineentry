@@ -21,14 +21,14 @@ function check_setup($tablename, $database) {
 }
 
 function version_check($version) {
-	// Current version is 1.2.1.1
-	// Change version in system table if not 1.2.1.1
+	// Current version is 1.2.1.2, change version in system table if not
+	// There are NO database structure or data updates for version 1.2.1.2
 	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.2.1.1") {	
-		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.1","1");
+	if ($version != "1.2.1.2") {	
+		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.2","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
 	}
