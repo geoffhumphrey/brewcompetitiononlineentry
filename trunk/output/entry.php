@@ -46,8 +46,11 @@ if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
   exit();
 }
 $brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
+$brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
 $brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove);
+$brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
+$brewer_info['brewerLastName'] = strtr($brewer_info['brewerLastName'],$html_remove);
 $brewer_info['brewerAddress'] = strtr($brewer_info['brewerAddress'],$html_remove);
 $brewer_info['brewerCity'] = strtr($brewer_info['brewerCity'],$html_remove);
 $brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);

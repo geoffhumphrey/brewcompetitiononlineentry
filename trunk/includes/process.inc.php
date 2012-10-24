@@ -106,6 +106,7 @@ function capitalize($string1) {
 	$capitalize = ucwordspecific($capitalize,".");
 	$capitalize = ucwordspecific($capitalize,"(");
 	$capitalize = ucwordspecific($capitalize,")");
+	$capitalize = strtr($capitalize,$html_string);
 	return $capitalize;
 }
 if ($action != "purge") {

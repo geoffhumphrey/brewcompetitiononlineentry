@@ -41,8 +41,6 @@ if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerL
 
 if ($filter == "winners") $query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 
-
-
 //echo $query_sql."<br />";
 
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
@@ -51,6 +49,7 @@ $num_fields = mysql_num_fields($sql);
 
 include (INCLUDES.'scrubber.inc.php');
 $filename = $contest."_entries_".$filter."_".$action."_".$date.$loc.$extension;
+
 
 if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 	$headers = array(); 
@@ -72,28 +71,23 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
     die; 
 	} 
 }
+
 else {
 
-if (($go == "csv") && ((($action == "default") || ($action == "hccp")) && ($filter != "winners"))) $a [] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
+if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a [] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
 
 
-if (($go == "csv") && ($action == "email") && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
+if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
 
 if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Entry Name','Club','Co Brewer');
 
 do {
-	
-	if ((($action == "default") || ($action == "hccp")) && ($filter != "winners")) $a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],strtr($row_sql['brewName'],$html_remove),strtr($row_sql['brewInfo'], $html_remove),$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
-	
-	if (($go == "csv") && ($action == "email") && ($filter != "winners")) {
-		
-		$query_brewer = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE uid='%s'", $row_sql['brewBrewerID']);
-		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-		$row_brewer = mysql_fetch_assoc($brewer);
-		
-		$a[] = array($row_sql['brewBrewerFirstName'],$row_sql['brewBrewerLastName'],$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['id'],readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$row_sql['brewName'],strtr($row_sql['brewInfo'], $html_remove));
-		
-	}
+$brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
+$brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+$brewName = strtr($row_sql['brewName'],$html_remove);
+$brewInfo = strtr($row_sql['brewInfo'],$html_remove);
+$entryNo = sprintf("%04s",$row_sql['id']);
+	// Winner download
 	
 	if (($action == "default") && ($filter == "winners")) {
 		$query_scores = sprintf("SELECT eid,scorePlace FROM $judging_scores_db_table WHERE scoreTable='%s' AND scorePlace IS NOT NULL ORDER BY scorePlace ASC", $row_sql['id']);
@@ -117,7 +111,24 @@ do {
 				
 			} while ($row_scores = mysql_fetch_assoc($scores)); 
 		}
-	}		
+	}	
+	
+	// No participant email addresses
+	
+	if (($action == "hccp") && ($filter != "winners")) 
+	$a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$entryNo,$brewName,$brewInfo,$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
+	
+	// With email addresses of participants.
+	
+	if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
+		
+		$query_brewer = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE uid='%s'", $row_sql['brewBrewerID']);
+		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+		$row_brewer = mysql_fetch_assoc($brewer);
+		
+		$a[] = array($brewerFirstName,$brewerLastName,$row_brewer['brewerEmail'],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$entryNo,readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$brewName,$brewInfo);
+	}
+
 } while ($row_sql = mysql_fetch_assoc($sql));
 
 header('Content-type: application/x-msdownload');
