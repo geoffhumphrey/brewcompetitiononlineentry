@@ -5,6 +5,7 @@ require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
+require(INCLUDES.'scrubber.inc.php');
 
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
@@ -89,8 +90,12 @@ $row_sql = mysql_fetch_assoc($sql);
 $a[] = array('First Name','Last Name','Address','City','State','Zip','Country','Phone','Assignment','Email','Judge ID','Judge Rank','Clubs','Likes','Dislikes');
 
 do { 
+$brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
+$brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
+$brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
+$brewerAddress = strtr($row_sql['brewerCity'],$html_remove);
 if ($go == "tab") $assignment = $row_sql['brewerNickname']; else $assignment = $row_sql['brewerAssignment'];
-$a[] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerAddress'],$row_sql['brewerCity'],$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$assignment,$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
+$a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$assignment,$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
 } while ($row_sql = mysql_fetch_assoc($sql));
 
 $filename = $contest."_participants_".$date.$loc.$extension;

@@ -256,7 +256,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id != "default
 	for($i=0; $i<30; $i++) {
 		
 		$text = sprintf("\n%s\n%s %s\n%s",
-		$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
+		strtr($row_brewer['brewerFirstName'],$html_remove)." ".strtr($row_brewer['brewerLastName'],$html_remove), 
 		$rank,
 		$judge_id,
 		$row_brewer['brewerEmail']
@@ -289,7 +289,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id == "default
 		for($i=0; $i<30; $i++) {
 			
 			$text = sprintf("\n%s\n%s %s\n%s",
-			$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
+			strtr($row_brewer['brewerFirstName'],$html_remove)." ".strtr($row_brewer['brewerLastName'],$html_remove),  
 			$rank,
 			$judge_id,
 			$row_brewer['brewerEmail']
@@ -315,9 +315,9 @@ if (($go == "participants") && ($action == "address_labels")) {
 	do {
 		if (total_paid_received("default",$row_brewer['id']) > 0) {
 			$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-			$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
-			$row_brewer['brewerAddress'],
-			$row_brewer['brewerCity'],
+			strtr($row_brewer['brewerFirstName'],$html_remove)." ".strtr($row_brewer['brewerLastName'],$html_remove), 
+			strtr($row_brewer['brewerAddress'],$html_remove),
+			strtr($row_brewer['brewerCity'],$html_remove),
 			$row_brewer['brewerState'],
 			$row_brewer['brewerZip'],
 			$row_brewer['brewerCountry']
@@ -356,7 +356,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 			$text = sprintf("\n%s\n%s\n%s\n%s",
 			display_place($row_bos['scorePlace'],1)." - BEST IN SHOW",
 			style_type($row_bos['scoreType'],"3","default"),
-			$row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName'], 
+			strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove), 
 			strtr($row_entries['brewName'],$html_remove)." - ".$row_entries['brewStyle']
 			);
 			$pdf->Add_Label($text);
@@ -395,7 +395,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 					$text = sprintf("\n%s%s\n%s\n%s",
 					display_place($row_scores['scorePlace'],1)." - ",
 					style_convert($row_scores['brewCategorySort'],1),
-					$row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], 
+					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
 					strtr($row_scores['brewName'],$html_remove)
 					);
 					$pdf->Add_Label($text);
@@ -434,7 +434,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 					$text = sprintf("\n%s%s\n%s\n%s",
 					display_place($row_scores['scorePlace'],1)." - ",
 					$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
-					$row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], 
+					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
 					strtr($row_scores['brewName'],$html_remove)
 					);
 					$pdf->Add_Label($text);
@@ -460,7 +460,7 @@ if (($go == "judging_scores") && ($action == "awards")) {
 				$text = sprintf("\n%s%s\n%s\n%s",
 				display_place($row_scores['scorePlace'],1)." - ",
 				$row_tables['tableName'],
-				$row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName'], 
+				strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove), 
 				strtr($row_entries['brewName'],$html_remove)
 				);
 				$pdf->Add_Label($text);

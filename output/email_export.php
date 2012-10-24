@@ -5,6 +5,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'scrubber.inc.php');
 
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
@@ -49,8 +50,10 @@ if ($filter == "judges") $a [] = array('First Name','Last Name','Email','Likes',
 else $a [] = array('First Name','Last Name','Email');
 
 do {
-	if ($filter == "judges") $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
-	else $a [] = array($row_sql['brewerFirstName'],$row_sql['brewerLastName'],$row_sql['brewerEmail']);
+$brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
+$brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
+	if ($filter == "judges") $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
+	else $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail']);
 } while ($row_sql = mysql_fetch_assoc($sql)); 
 
 
