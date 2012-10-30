@@ -7,7 +7,7 @@ DirectoryIndex index.php
 RewriteEngine on
 RewriteRule ^$ index.php [L]
 RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
-RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&action=$2 [L]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L]
 
 # Custom error pages

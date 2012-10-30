@@ -3,20 +3,20 @@
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
     	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a>
         <?php } else { ?>
-        <span class="icon"><img src="images/award_star_add.png"  /></span><a href="index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a>
    		<?php } ?>
     </span>
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/picture_add.png"  /></span><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link" class="data"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/picture_add.png"  /></span><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link" class="data"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
 	</span>
 </div>
 <?php if ($totalRows_sponsors > 0) { ?>
 <?php if ($action == "default") { ?>
 <div class="adminSubNavContainer">
-<p><span class="icon"><img src="images/tick.png"  alt="Yes" title="Yes"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
-<p><span class="icon"><img src="images/cross.png"  alt="No" title="No"></span> =  No logo.
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/tick.png"  alt="Yes" title="Yes"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/cross.png"  alt="No" title="No"></span> =  No logo.
 </div>
 <?php } ?>
 <?php if ($action == "default") { ?>
@@ -61,10 +61,10 @@
   <td width="15%" class="dataList"><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>" id="modal_window_link"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
   <td width="5%" class="dataList"><?php echo $row_sponsors['sponsorLevel']; ?></td>
-  <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="images/tick.png"  alt="Yes"><?php } else { ?><img src="images/cross.png"  alt="No"><?php } ?></td>
+  <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="<?php echo $base_url; ?>/images/tick.png"  alt="Yes"><?php } else { ?><img src="<?php echo $base_url; ?>/images/cross.png"  alt="No"><?php } ?></td>
   <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
+  <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
  </tr>
 <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
  </tbody>
@@ -73,7 +73,7 @@
 <p>There are no sponsors in the database.</p>
 <?php } ?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">Sponsor Name:</td>

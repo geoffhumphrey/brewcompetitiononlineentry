@@ -5,7 +5,7 @@ var ImageDialog = {
 		tinyMCEPopup.requireLangPack();
 
 		if (url = tinyMCEPopup.getParam("external_image_list_url"))
-			document.write('<script language="javascript" type="text/javascript" src="' + tinyMCEPopup.editor.documentBaseURI.toAbsolute(url) + '"></script>');
+			document.write('<script language="javascript" type="text/javascript" ' + tinyMCEPopup.editor.documentBaseURI.toAbsolute(url) + '"></script>');
 	},
 
 	init : function(ed) {
@@ -454,9 +454,9 @@ var ImageDialog = {
 		u = tinyMCEPopup.editor.documentBaseURI.toAbsolute(u);
 
 		if (!st)
-			tinyMCEPopup.dom.setHTML('prev', '<img id="previewImg" src="' + u + '" border="0" onload="ImageDialog.updateImageData(this);" onerror="ImageDialog.resetImageData();" />');
+			tinyMCEPopup.dom.setHTML('prev', '<img id="previewImg" ' + u + '" border="0" onload="ImageDialog.updateImageData(this);" onerror="ImageDialog.resetImageData();" />');
 		else
-			tinyMCEPopup.dom.setHTML('prev', '<img id="previewImg" src="' + u + '" border="0" onload="ImageDialog.updateImageData(this, 1);" />');
+			tinyMCEPopup.dom.setHTML('prev', '<img id="previewImg" ' + u + '" border="0" onload="ImageDialog.updateImageData(this, 1);" />');
 	}
 };
 

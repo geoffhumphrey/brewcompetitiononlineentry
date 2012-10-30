@@ -13,7 +13,7 @@ if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
-<form name="form1" method="post" action="includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
+<form name="form1" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <tr style="background-color: <?php echo $color2; ?>">
 	<td class="dataLabel bdr1T" width="5%">Contact:</td>
@@ -57,15 +57,15 @@ if ($msg != "1") {
 <tr style="background-color: <?php echo $color1; ?>">
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
-    <img id="captcha" src="captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
+    <img id="captcha" src="<?php echo $base_url; ?>/captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
 	<p>
-    <object type="application/x-shockwave-flash" data="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
-	<param name="movie" value="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
+    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
+	<param name="movie" value="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
 	</object>
     &nbsp;Play audio
     </p>
 	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
-    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = 'captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
+    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>/captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
     </td>
     <td class="data"><span class="required">Required</span></td>
     <td class="data">&nbsp;</td>
@@ -79,7 +79,7 @@ if ($msg != "1") {
   	<td colspan="2" class="data"><input name="clear" type="button" class="button" value="Clear Values" onClick="window.location.href='index.php?section=contact'"></td>
 </tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php
 
@@ -87,7 +87,7 @@ if ($msg != "1") {
 if ($msg == "1")
  { ?>
 <p>Additionally, a copy has been sent to the email address you provided.</p>
-<p>Would you like to send <a href="index.php?section=contact">another message</a>?</p>
+<p>Would you like to send <a href="<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>">another message</a>?</p>
 <?php } 
 } else {
 ?>

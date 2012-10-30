@@ -14,9 +14,9 @@ require(INCLUDES.'headers.inc.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
-<link href="../css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="javascript" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <body onload="javascript:window.print()">
 <div id="content">

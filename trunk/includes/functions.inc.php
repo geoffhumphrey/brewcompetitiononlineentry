@@ -8,6 +8,46 @@
 
 include (INCLUDES.'date_time.inc.php');
 
+function build_public_url($section="default",$go="default",$action="default",$sef="true",$base_url) {
+	if ($sef = "true") {
+		$url = $base_url."/";
+		if ($section != "default") $url .= $section."/";
+		if ($go != "default") $url .= $go."/";
+		if ($action != "default") $url .= $action."/";
+		return rtrim($url,"/");		
+	}
+	else {
+		$url = $base_url."/index.php?section=".$section;
+		if ($go != "default") $url .= "&amp;go=".$go;
+		if ($action != "default") $url .= "&amp;action=".$action;
+		return $url;
+	}
+}
+/*
+function build_admin_url ($section="default",$go="default",$action="default",$id="default",$filter="default",$view="default",$sef="true",$base_url) {
+	if ($sef = "true") {
+		$url = $base_url."/";
+		if ($section != "default") $url .= $section."/";
+		if ($go != "default") $url .= $go."/";
+		if ($action != "default") $url .= $action."/";
+		if ($id != "default") $url .= $id."/";
+		if ($filter != "default") $url .= $filter."/";
+		if ($view != "default") $url .= $view."/";
+		return $url;		
+	}
+	else {
+		$url = $base_url."/index.php?section=".$section;
+		if ($go != "default") $url .= "&amp;go=".$go;
+		if ($action != "default") $url .= "&amp;action=".$action;
+		if ($id != "default") $url .= "&amp;id=".$id;
+		if ($filter != "default") $url .= "&amp;filter=".$filter;
+		if ($view != "default") $url .= "&amp;view=".$view."/";
+		return $url;
+	}
+}
+*/
+
+
 $pg = "default";
 if (isset($_GET['pg'])) {
   $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
@@ -1517,7 +1557,7 @@ function orphan_styles() {
 	if ($totalRows_styles > 0) {
 		do {
 			if (!in_array($row_styles['brewStyleType'], $a)) { 
-				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
+				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='".$base_url."/images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
 			}
 		} while ($row_styles = mysql_fetch_assoc($styles));
 	}
@@ -1638,11 +1678,15 @@ function brewer_info($bid) {
 	return $r;
 }
 
-function get_entry_count() {
+function get_entry_count($method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewConfirmed='1'",$prefix."brewing");
+	if ($method == "received") $query_paid .= " AND brewReceived='1'";
+	if ($method == "paid-received") $query_paid .= " AND brewReceived='1' AND brewPaid='1'";
+	if ($method == "unpaid-received") $query_paid .= " AND brewReceived='1' AND brewPaid='0'";
+	if ($method == "paid-not-received") $query_paid .= " AND brewReceived='0' AND brewPaid='1'";
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1667,6 +1711,8 @@ function get_participant_count($type) {
 
 function display_place($place,$method) {
 	
+	require(CONFIG.'config.php');
+	
 	if ($method == "0") { 
 		$place = addOrdinalNumberSuffix($place);
 	}
@@ -1688,15 +1734,15 @@ function display_place($place,$method) {
 	}
 	if ($method == "2") { 
 		switch($place){
-			case "1": $place = "<span class=\"icon\"><img src=\"images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class=\"icon\"><img src=\"images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class=\"icon\"><img src=\"images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "4": $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
+			case "4": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "5": $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>HM";
+			case "5": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/rosette.png\"></span>HM";
 			break;
 			default: $place = "N/A";
 			}
@@ -1704,13 +1750,13 @@ function display_place($place,$method) {
 	
 	if ($method == "3") { 
 		switch($place){
-			case "1": $place = "<span class=\"icon\"><img src=\"images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class=\"icon\"><img src=\"images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class=\"icon\"><img src=\"images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class=\"icon\"><img src=\"".$base_url."/images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
 			break;
-			default: $place = "<span class=\"icon\"><img src=\"images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
+			default: $place = "<span class=\"icon\"><img src=\"".$base_url."/images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
 			}
 	}
 	

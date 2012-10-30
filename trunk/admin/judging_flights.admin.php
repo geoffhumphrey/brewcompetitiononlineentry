@@ -7,19 +7,19 @@ elseif (($action == "assign") && ($filter == "rounds"))  echo "Assign $assign_to
 else echo "Define/Edit Flights"; ?></h2>
 <div class="adminSubNavContainer">
  	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
     </span>
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&go=judging_tables">Back to Tables List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_tables">Back to Tables List</a>
     </span>
     <?php if (($action != "default") && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/application_form_add.png" alt="Define Another Flight"></span><a href="index.php?section=admin&go=judging_flights">Define/Edit Flights</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/application_form_add.png" alt="Define Another Flight"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_flights">Define/Edit Flights</a>
     </span>
     <?php } ?>
     <?php if ($filter == "default") { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/application_form_magnify.png" alt="Assign Flights to Rounds" title="Assign Flights to Rounds" /></span><a href="index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Assign Flights to Rounds</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/application_form_magnify.png" alt="Assign Flights to Rounds" title="Assign Flights to Rounds" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_flights&amp;action=assign&amp;filter=rounds">Assign Flights to Rounds</a>
     </span>
     <?php } ?>
 </div>
@@ -116,8 +116,8 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 }
 </script>
 <?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($id,$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default")."</p>"; ?>
-<p onload="updateButCount(event);">Based upon your <a href="index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo readable_number($flight_count); ?> flights. For each entry below, designate the flight in which it will be judged.</p>
-<form name="flights" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
+<p onload="updateButCount(event);">Based upon your <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo readable_number($flight_count); ?> flights. For each entry below, designate the flight in which it will be judged.</p>
+<form name="flights" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
 <thead>
 	<tr>
@@ -192,7 +192,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 if (($action == "assign") && ($filter == "rounds")) { 
 	if ($totalRows_tables > 0) { 
 ?>
-<form name="form1" method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
+<form name="form1" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
@@ -214,8 +214,8 @@ if (($action == "assign") && ($filter == "rounds")) {
 			
 ?>
 	
-	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if (($totalRows_flights > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php }  if (($totalRows_flights == 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="images/application_form_add.png"></a></span><?php } ?></h3>
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_table_location['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if (($totalRows_flights > 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="<?php echo $base_url; ?>/images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php }  if (($totalRows_flights == 0) && ($row_judging_prefs['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="<?php echo $base_url; ?>/images/application_form_add.png"></a></span><?php } ?></h3>
+	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_table_location['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		if ($row_judging_prefs['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
@@ -251,7 +251,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 	} else echo "<p>No flights have been defined.</p>";
   } ?>
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
-<input type="hidden" name="relocate" value="<?php echo $base_url; ?>/index.php?section=admin&action=<?php echo $action; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if ($totalRows_tables > 0) ?>
 <?php } // end if ($action == "assign") ?>

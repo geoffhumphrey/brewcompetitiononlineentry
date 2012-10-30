@@ -29,13 +29,13 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "steward
 
 // Viewing assigned judges query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "assignJudges") && ($dbTable == "default")) { 
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerAssignment='J' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerJudge='Y' AND brewerAssignment='J' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 	}
 
 // Viewing assigned stewards query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "assignStewards") && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerAssignment='S' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerSteward='Y' AND brewerAssignment='S' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 	}
 

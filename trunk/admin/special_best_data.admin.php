@@ -29,18 +29,18 @@ $totalRows_sbd = mysql_num_rows($sbd);
 <h2><?php if ($action == "add") echo "Add Entries to Custom Winning Category: ".$row_sbi['sbi_name']; elseif ($action == "edit") echo "Edit Entries in Custom Winning Category: ".$row_sbi['sbi_name']; else echo "Custom Winning Category Entries"; ?></h2>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a></span>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a></span>
     </span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a>
     </span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best_data">Back to the Custom Winning Category Entry List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data">Back to the Custom Winning Category Entry List</a>
     </span>
 </div>
 <div class="adminSubNavContainer">
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/award_star_add.png" /></span>Add/Edit Custom Winning Category Entries For: <?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png" /></span>Add/Edit Custom Winning Category Entries For: <?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
     </span>
 </div>
 <?php if (($action == "default") || ($action == "list")) { ?>
@@ -98,7 +98,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
       <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
       <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
+      <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
       </td>
      </tr>
     <?php
@@ -113,7 +113,7 @@ $totalRows_sbd = mysql_num_rows($sbd);
 	<p>Add Winners for Custom Winning Cateory: ".score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table)."</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>" name="form1">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>" name="form1">
 <table>
 <?php if ($action == "add") { for ($i=1; $i <= $row_sbi['sbi_places']; $i++) { ?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />

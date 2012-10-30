@@ -61,11 +61,24 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 					   );
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	
+		//echo $insertSQL."<br />";
 	// Get the id from the "users" table to insert as the uid in the "brewer" table
 		$query_user= "SELECT id FROM $users_db_table WHERE user_name = '$username'";
 		$user = mysql_query($query_user, $brewing) or die(mysql_error());
 		$row_user = mysql_fetch_assoc($user);
+		
+   if ($_POST['brewerJudge'] == "Y") {
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+        
+	}
+	else $location_pref1 = "";
+	
+	if ($_POST['brewerSteward'] == "Y") {
+        if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+	}
+    else $location_pref2 = "";
 	
 	// Add the user's info to the "brewer" table
 	  	$insertSQL = sprintf("INSERT INTO $brewer_db_table (
@@ -113,7 +126,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 				   GetSQLValueString($location_pref2, "text"),
 				   GetSQLValueString($_POST['brewerAHA'], "int")
 				   );
-
+		//echo $insertSQL;
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
 	

@@ -219,19 +219,19 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view" title="View Assignments by Table">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view" title="View Assignments by Table">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon data"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>" title="View Assignments for this Table">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
+        	<span class="icon data"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>" title="View Assignments for this Table">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
-<div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
+<div class="info">Make sure you have <a href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
 <?php if ($totalRows_judging > 1) { ?>
 <br />
-If no judges are listed below, no judge indicated that they are available for this table's location. To make judges available, you will need to edit their preferences via the <a href="index.php?section=admin&amp;go=participants">participants list</a>.<?php } ?>
+If no judges are listed below, no judge indicated that they are available for this table's location. To make judges available, you will need to edit their preferences via the <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">participants list</a>.<?php } ?>
 </div>
 <h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table</h3>
 <table>
@@ -315,7 +315,7 @@ If no judges are listed below, no judge indicated that they are available for th
 	 		<?php } ?>
 		} );
 	</script>
-<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $row_judging_prefs['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">
+<form name="form1" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $row_judging_prefs['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">
 <table class="dataTableCompact bdr1" style="margin: 20px 0">
 <thead>
 	<tr>

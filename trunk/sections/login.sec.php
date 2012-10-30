@@ -5,13 +5,14 @@
  *              site using their username and password (encrypted in the db). 
  * 
  */
-
+ 
 
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
-	if (($action != "print") && ($msg != "default")) echo $msg_output;  
+
 	if (!isset($_SESSION['loginUsername'])) { 
+	if (($action != "print") && ($msg != "default")) echo $msg_output; 
 ?>
-<form action="includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
+<form action="<?php echo $base_url; ?>/includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Email Address:</td>
@@ -25,18 +26,18 @@ if (($action == "default") || ($action == "login") || ($action == "logout")) {
 <p><input type="submit" class="button" value="Login"></p>
 </form>
 <?php if (($section != "update") && ($registration_open < "2")) {
- if ($msg != "default") { ?><p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="index.php?section=register">registered your account</a> yet?</span></p>
+ if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p>
 <?php } } ?>
-<p><span class="icon"><img src="images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="index.php?section=login&amp;action=forgot">click here to reset it</a>.</span></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="<?php echo build_public_url("login","password","forgot",$sef,$base_url); ?>">click here to reset it</a>.</span></p>
 <?php
 } 
 if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are already logged in.</div>";
  } 
 if ($action == "forgot") { 
-	if (($action != "print") && ($msg != "default")) echo $msg_output; 
-	if ($go == "default") {  ?>
+	//if (($action != "print") && ($msg != "default")) echo $msg_output; 
+	if ($go == "password") {  ?>
 <p>To reset your password, enter your email address below.</p>
-<form action="index.php?section=login&amp;action=forgot&amp;go=verify" method="POST" name="form1" id="form1">
+<form action="<?php echo build_public_url("login","verify","forgot",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Email Address:</td>
@@ -62,7 +63,7 @@ if ($go == "verify") {
 		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";
 		} 
 	else { ?>
-	<form action="includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
+	<form action="<?php echo $base_url; ?>/includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 	<table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">ID Verification Question:</td>

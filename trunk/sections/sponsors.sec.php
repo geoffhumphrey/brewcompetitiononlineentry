@@ -9,7 +9,7 @@
 include(DB.'sponsors.db.php');
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Sponsors">Print This Page</a></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Sponsors">Print This Page</a></p>
 <?php } ?>
 <table>
   <tr>
@@ -22,7 +22,7 @@ if ($action != "print") { ?>
     ?>
     <td class="looper_large">
     <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } echo $row_sponsors['sponsorName']; ?><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } if ($row_sponsors['sponsorLocation'] != "") echo "<br>".$row_sponsors['sponsorLocation']; ?></p>
-    <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } ?><img src="<?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) echo "user_images/".$row_sponsors['sponsorImage']; /* elseif ($row_contest_info['contestLogo'] != "") echo "user_images/".$row_contest_info['contestLogo']; else echo "images/no_image_large.png"; */  ?>" width="<?php echo $row_prefs['prefsSponsorLogoSize']; ?>" border="0" /><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } ?></p>
+    <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } ?><img src="<?php if (($row_sponsors['sponsorImage'] !="") && (file_exists('user_images/'.$row_sponsors['sponsorImage']))) echo $base_url."/user_images/".$row_sponsors['sponsorImage']; /* elseif ($row_contest_info['contestLogo'] != "") echo $base_url."/user_images/".$row_contest_info['contestLogo']; */ else echo $base_url."/images/no_image_large.png"; ?>" width="<?php echo $row_prefs['prefsSponsorLogoSize']; ?>" border="0" /><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } ?></p>
     <?php if ($row_sponsors['sponsorText'] != "") echo "<p>".$row_sponsors['sponsorText']."</p>"; ?>
     </td>
     <?php  $sponsors_endRow++;
