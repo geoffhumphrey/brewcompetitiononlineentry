@@ -11,11 +11,11 @@ if ($section == "map") {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Maps</title>
-<link href="../css/default.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body style="background-color:#fff;">
 <div align="center">
-<img style="border:1px solid #999;" src="http://maps.google.com/maps/api/staticmap?center=<?php echo $address1; ?>&zoom=13&size=900x500&markers=color:red|<?php echo $address1; ?>&sensor=false" />
+<img style="border:1px solid #999;" http://maps.google.com/maps/api/staticmap?center=<?php echo $address1; ?>&zoom=13&size=900x500&markers=color:red|<?php echo $address1; ?>&sensor=false" />
 </div>
 <p align="center"><?php echo $address; ?></p>
 </body>

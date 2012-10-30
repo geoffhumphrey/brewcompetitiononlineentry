@@ -5,12 +5,12 @@ $themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 $row_themes = mysql_fetch_assoc($themes);
 $totalRows_themes = mysql_num_rows($themes);
 ?>
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
 <h2>Site Preferences</h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
 	</span>
 </div>
 <?php } ?>
@@ -291,7 +291,7 @@ $totalRows_themes = mysql_num_rows($themes);
   <tr>
   	<td class="dataLabel">Sponsor Logos:</td>
    	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($row_prefs['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Do you want to display the competition sponsors' individual logos (you will need to collect and upload all logos to your installation via the <a href="index.php?section=admin&amp;go=sponsors">sponsor administration page</a>)?</td>
+  	<td class="data">Do you want to display the competition sponsors' individual logos (you will need to collect and upload all logos to your installation via the <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">sponsor administration page</a>)?</td>
   </tr>
   <tr>
   	<td class="dataLabel">Sponsor Logo Size:</td>

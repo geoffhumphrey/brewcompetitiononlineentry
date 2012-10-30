@@ -12,13 +12,13 @@ $row_sbd = mysql_fetch_assoc($sbd);
  ?>
 <h2><?php if ($action == "add") echo "Add a Custom Winning Category"; elseif ($action == "edit") echo "Edit a Custom Winning Category"; else echo "Custom Winning Categories"; ?></h2>
 <div class="adminSubNavContainer">
-   	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a></span>
+   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a></span>
     	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="adminSubNav"><span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
+    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
         <?php } else { ?>
-        <span class="adminSubNav"><span class="icon"><img src="images/award_star_add.png" /></span><a href="index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a></span>
+        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a></span>
    		<?php } if ($row_sbd['count'] > 0) { ?>
-        <span class="adminSubNav"><span class="icon"><img src="images/award_star_gold_2.png" /></span><a href="index.php?section=admin&amp;go=special_best_data">View Custom Winning Category Entires</a></span>
+        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_gold_2.png" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data">View Custom Winning Category Entires</a></span>
         <?php } ?>
     </span>
 </div>
@@ -70,8 +70,8 @@ $row_sbd = mysql_fetch_assoc($sbd);
       <td width="5%" class="dataList"><?php if ($row_sbi['sbi_display_places'] == 1) echo "Yes"; else echo "No" ?></td>
       <td width="25%" class="dataList"><?php echo $row_sbi['sbi_rank']; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
-      <?php if ($row_sbd['count'] > 0) { ?><span class="icon"><a href="index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
+      <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
+      <?php if ($row_sbd['count'] > 0) { ?><span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>/images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>/images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
       </td>
      </tr>
     <?php } while($row_sbi = mysql_fetch_assoc($sbi)) ?>
@@ -80,7 +80,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
     <?php } else echo "<p>There are no custom winner categories were found in the database.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">Custom Winning<br />

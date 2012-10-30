@@ -34,32 +34,32 @@ function brewer_assignment_checked($a,$b) {
 <div class="adminSubNavContainer">
    	<?php if (($action == "default") || ($action == "update") || ($action == "assign")) { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
    	</span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=participants">Back to Participants</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Back to Participants</a>
    	</span>
 	<?php } ?>
    	<?php if ((($action == "add") || ($action == "edit")) && ($section != "step3")) { ?>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=judging">Back to Judging Location List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging">Back to Judging Location List</a>
     </span>
 	<?php } elseif (($section != "step3") && ($filter == "default")) { ?>
      <span class="adminSubNav">
-    	<span class="icon"><img src="images/award_star_add.png"  /></span><a href="index.php?section=admin&amp;go=judging&amp;action=add">Add a Judging Location</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">Add a Judging Location</a>
      </span>
 	 <?php } ?>
 </div>
 <?php if (($action == "update") || ($action == "assign")) { ?>
 <div class="adminSubNavContainer">
  	<span class="adminSubNav">
-    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a>
  	</span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a>
  	</span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="images/user_edit.png"  /></span><a href="index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
  	</span>
 </div>
 	<?php } // end if ($section == "admin") {?>
@@ -114,7 +114,7 @@ function brewer_assignment_checked($a,$b) {
   <td width="30%" class="dataList"><?php echo $row_judging_locs['judgingLocation']; ?></td>
   <td width="10%" class="dataList"><?php echo $row_judging_locs['judgingRounds']; ?></td>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_judging_locs['judgingLocName']; ?>" title="Edit <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;action=delete','id',<?php echo $row_judging_locs['id']; ?>,'Are you sure you want to delete the <?php echo $row_judging_locs['judgingLocName']; ?> location?\nThis cannot be undone and will affect all judges and stewards who indicated this location as a preference.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_judging_locs['judgingLocName']; ?>" title="Delete <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span></td>
+  <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_judging_locs['judgingLocName']; ?>" title="Edit <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;action=delete','id',<?php echo $row_judging_locs['id']; ?>,'Are you sure you want to delete the <?php echo $row_judging_locs['judgingLocName']; ?> location?\nThis cannot be undone and will affect all judges and stewards who indicated this location as a preference.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_judging_locs['judgingLocName']; ?>" title="Delete <?php echo $row_judging_locs['judgingLocName']; ?>"></a></span></td>
  </tr>
   <?php } while($row_judging_locs = mysql_fetch_assoc($judging_locs)) ?>
 </tbody>
@@ -129,7 +129,7 @@ function brewer_assignment_checked($a,$b) {
 		
 	});
 	</script>
-	<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+	<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step5") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $judging_locations_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Date:</td>
@@ -195,7 +195,7 @@ function brewer_assignment_checked($a,$b) {
 		} );
 	</script>
 
-<form name="form1" method="post" action="includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
+<form name="form1" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <?php if ($filter == "staff") { 
 $query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
 $brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
@@ -210,10 +210,10 @@ $row_brewers = mysql_fetch_assoc($brewers);
    </select>
 </span></p>
 <p>According to <a href="http://www.bjcp.org/rules.php" target="_blank">BJCP rules</a>, the Organizer is "...the single program participant who completes and signs the application to register or sanction a competition and who in all ways assumes responsibility for the direction of that competition."</p>
-<p>If the organizer is not on this list, <a href="index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
+<p>If the organizer is not on this list, <a href="<?php echo $base_url; ?>/index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
 <h3>Staff</h3>
 <p>According to <a href="http://www.bjcp.org/rules.php" target="_blank">BJCP rules</a>, staff members are "...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge."
-<p>If a staff member is not on this list, <a href="index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
+<p>If a staff member is not on this list, <a href="<?php echo $base_url; ?>/index.php?section=admin&go=participants&action=add">add them to the database</a>.</p>
 <?php } ?>
 <p><input type="submit" class="button" name="Submit" value="<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" />&nbsp;<span class="required">Click "<?php if ($action == "update") echo "Assign to ".$row_judging['judgingLocName']; elseif ($action == "assign") echo "Assign as ".brewer_assignment($filter,"3"); else echo "Submit"; ?>" <em>before</em> paging through records.</span></p>
 

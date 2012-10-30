@@ -1,10 +1,10 @@
-<script type="text/javascript" src="js_includes/usable_forms.js"></script>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step8") { ?>
 <h2>Competition Organization Preferences</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNavContainer">
-		<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
 	</span>
 </div>
 <?php } ?>
@@ -27,7 +27,7 @@
   <tr>
     <td class="dataLabel">Maximum Places in BOS Round:</td>
     <td nowrap="nowrap" class="data"><input name="jPrefsMaxBOS" type="text" value="<?php echo $row_judging_prefs['jPrefsMaxBOS']; ?>" size="5" maxlength="5" /></td>
-    <td class="data">Indicate the maximum number of places for each of the competition's Best of Show (BOS) <a href="index.php?section=admin&amp;go=style_types">style types</a>. </td>
+    <td class="data">Indicate the maximum number of places for each of the competition's Best of Show (BOS) <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">style types</a>. </td>
   </tr>
 </table>
 <p><input name="submit" type="submit" class="button" value="Set Preferences"></p>

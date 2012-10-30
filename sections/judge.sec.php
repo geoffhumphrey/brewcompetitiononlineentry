@@ -10,7 +10,7 @@
 include(DB.'brewer.db.php');
 include(DB.'styles.db.php'); 
 ?>
-<form action="includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
+<form action="<?php echo $base_url; ?>/includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
 <tr>
@@ -40,5 +40,5 @@ include(DB.'styles.db.php');
 <input type="hidden" name="brewerJudgeRank"  value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />
 <?php } ?>
 <input type="hidden" name="brewerCountry"  value="<?php echo $row_brewer['brewerCountry']; ?>" />
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>

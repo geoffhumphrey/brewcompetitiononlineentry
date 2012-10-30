@@ -15,7 +15,7 @@ $current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
-<link href="css/default.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="container">
@@ -78,8 +78,8 @@ if (file_exists($filename)) {
 				
 				if ($action == "default") { ?>
 				<h2>This script will update your BCOE&amp;M database from its current version, <?php echo $version; ?>, to the latest version, <?php echo $current_version; ?>.</h2>
-				<p><span class="icon"><img src="images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
-				<p><span class="icon"><img src="images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>		
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>		
 				<?php }
 			
 				if ($action == "update") {

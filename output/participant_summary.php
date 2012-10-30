@@ -16,7 +16,7 @@ $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
 //ini_set('display_errors', '0');
-$total_entries_judged = get_entry_count();
+$total_entries_judged = get_entry_count('received');
 //$total_judges = "";
 //$total_participants = get_participant_count();
 //error_reporting(E_ALL);
@@ -27,9 +27,9 @@ $total_entries_judged = get_entry_count();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Summary</title>
-<link href="../css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.js"></script>
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <body onload="javascript:window.print()">
 <div id="content">

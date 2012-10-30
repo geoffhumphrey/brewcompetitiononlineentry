@@ -1,9 +1,9 @@
-<form method="post" action="includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step4") { ?>
 <h2>Competition Info</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
     </span>
 </div>
 <?php } ?>
@@ -36,7 +36,7 @@ $row_name = mysql_fetch_assoc($name);
 <input type="hidden" name="contactPosition" value="Competition Coordinator" />
 <?php } ?>
 <?php if (($section != "step4") && (get_contact_count() == 0)) { ?>
-<div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="index.php?section=admin&go=contacts">add a contact</a>?</div>
+<div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="<?php echo $base_url; ?>/index.php?section=admin&go=contacts">add a contact</a>?</div>
 <?php } ?>
 <h3>General</h3>
 <table>
@@ -68,7 +68,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
     <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
-    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">Upload Logo Image</a></td>
+    <br /><br /><span class="icon"><img src="<?php echo $base_url; ?>/images/picture_add.png" ></span><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>

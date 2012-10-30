@@ -236,6 +236,40 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 	
 }
 
+
+if (($go == "participants") && ($action == "judging_nametags")) {
+	$pdf = new PDF_Label('5395'); 
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','B',20);
+	
+	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerCity,brewerState,brewerAssignment FROM $brewer_db_table WHERE brewerAssignment='J' OR brewerAssignment='S' OR brewerAssignment='X' OR brewerAssignment='O' ORDER BY brewerAssignment,brewerLastName ASC";
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
+	
+	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_Nametags.pdf";
+	
+	do {
+		
+		if ($row_brewer['brewerAssignment'] == "J") $brewerAssignment = "Judge";
+		if ($row_brewer['brewerAssignment'] == "S") $brewerAssignment = "Steward";
+		if ($row_brewer['brewerAssignment'] == "X") $brewerAssignment = "Staff";
+		if ($row_brewer['brewerAssignment'] == "O") $brewerAssignment = "Organizer";
+		
+		$text = sprintf("\n%s\n%s, %s\n%s",
+		strtr($row_brewer['brewerFirstName'],$html_remove)." ".strtr($row_brewer['brewerLastName'],$html_remove),
+		$row_brewer['brewerCity'],
+		$row_brewer['brewerState'],
+		$brewerAssignment
+		);
+		
+		$pdf->Add_Label($text);
+	} while ($row_brewer = mysql_fetch_assoc($brewer));
+	
+	$pdf->Output($filename,'D');
+}
+
+
 if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
 	$pdf = new PDF_Label('5160'); 
 	$pdf->AddPage();
@@ -329,6 +363,7 @@ if (($go == "participants") && ($action == "address_labels")) {
 	
 	$pdf->Output($filename,'D');
 }
+
 
 if (($go == "judging_scores") && ($action == "awards")) {
 	$pdf = new PDF_Label('5160'); 

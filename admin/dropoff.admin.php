@@ -8,21 +8,21 @@
 <div class="adminSubNavContainer">
    <?php if ((($action == "default") || ($action == "update") || ($action == "assign")) && ($section != "step6")) { ?>
    <span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin">Back to Admin Dashboard</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
    </span>
    <?php } ?>
    <?php if ((($action == "add") || ($action == "edit")) && ($section != "step6")) { ?>
   	<span class="adminSubNav">
-    	<span class="icon"><img src="images/arrow_left.png" alt="Back"></span><a href="index.php?section=admin&amp;go=dropoff">Back to Drop-Off Location List</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff">Back to Drop-Off Location List</a>
     </span>
 	<?php } elseif (($section != "step6") && ($filter == "default")) { ?>
    	<span class="adminSubNav">
-    	<span class="icon"><img src="images/award_star_add.png"  /></span><a href="index.php?section=admin&amp;go=dropoff&amp;action=add">Add a Drop-Off Location</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">Add a Drop-Off Location</a>
    	</span>
 	<?php } ?>
 </div>
 <?php if ((($action == "add") || ($action == "edit")) || ($section == "step6")) { ?>
-<form method="post" action="includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step6") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php if ($section == "step6") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
   <tr>
     <td class="dataLabel">Name:</td>
@@ -103,7 +103,7 @@ if ($totalRows_dropoff > 0) { ?>
   <td width="10%" class="dataList"><?php if ($row_dropoff['dropLocationWebsite'] !="") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>View</a>"; ?></td>
   <td width="25%" class="dataList"><?php echo $row_dropoff['dropLocationNotes']; ?></td>
   <td class="dataList">
-  <span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_dropoff['dropLocationName']; ?>" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;action=delete','id',<?php echo $row_dropoff['id']; ?>,'Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location?\nThis cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_dropoff['dropLocationName']; ?>" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"></a></span></td>
+  <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_dropoff['dropLocationName']; ?>" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;action=delete','id',<?php echo $row_dropoff['id']; ?>,'Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location?\nThis cannot be undone.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_dropoff['dropLocationName']; ?>" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"></a></span></td>
  </tr>
   <?php } while($row_dropoff = mysql_fetch_assoc($dropoff)) ?>
 </tbody>

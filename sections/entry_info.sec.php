@@ -14,9 +14,9 @@ include(DB.'styles.db.php');
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
-<img src="user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
+<img src="<?php echo $base_url; ?>/user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Entry Information">Print This Page</a></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Entry Information">Print This Page</a></p>
 <?php $contact_count= get_contact_count();
 if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($contact_count > 1) echo "s"; ?></a><br /><?php } ?>
 <a href="#reg_window">Registration Window</a><br />
@@ -35,7 +35,7 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <?php } ?>
 <?php if ($contact_count > 0) { ?>
 <a name="officials"></a><h2>Competition Official<?php if ($contact_count > 1) echo "s"; ?></h2>
-<?php if ($action != "print") { ?><p>You can send an email to any of the following individuals via the <a href="index.php?section=contact">Contact</a> section.</p><?php } ?>
+<?php if ($action != "print") { ?><p>You can send an email to any of the following individuals via the <a href="<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>">Contact</a> section.</p><?php } ?>
 <ul>
 <?php do { ?>
 <li><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition']; if ($action == "print") echo " (".$row_contact['contactEmail'].")"; ?></li>
@@ -69,8 +69,8 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 			<?php echo "<strong>".$row_judging['judgingLocName']."</strong>"; ?>
     		<?php if ($row_judging['judgingLocation'] != "") echo "<br />".$row_judging['judgingLocation']; ?>
             <?php if (($row_judging['judgingLocation'] != "") && ($action != "print"))  { ?>
-            <span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
-            <span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+            <span class="icon"><a id="modal_window_link" href="<?php echo $base_url; ?>/output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Map to <?php echo $row_judging['judgingLocName']; ?>"><img src="<?php echo $base_url; ?>/images/map.png"  border="0" alt="Map <?php echo $row_judging['judgingLocName']; ?>" title="Map <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
+            <span class="icon"><a href="<?php echo $base_url; ?>/output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_judging['judgingLocation']); ?>" title="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" target="_blank"><img src="<?php echo $base_url; ?>/images/car.png"  border="0" alt="Driving Directions to <?php echo $row_judging['judgingLocName']; ?>" title="Driving Direcitons to <?php echo $row_judging['judgingLocName']; ?>" /></a></span>
 			<?php } ?>
             <?php if ($row_judging['judgingDate'] != "") echo "<br />".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time")."<br />"; ?>
 			</p>
@@ -120,7 +120,7 @@ if ($totalRows_dropoff > 0) { ?>
 <?php do { ?>
 <p><?php if ($row_dropoff['dropLocationWebsite'] != "") echo "<a href='".$row_dropoff['dropLocationWebsite']."' target='_blank'>"; echo "<strong>".$row_dropoff['dropLocationName']."</strong>"; if ($row_dropoff['dropLocationWebsite'] != "") echo "</a>"; ?><br />
 <?php echo $row_dropoff['dropLocation']; ?>
-<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
+<?php if ($action != "print") { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="<?php echo $base_url; ?>/output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Map to <?php echo $row_dropoff['dropLocationName']; ?>"><img src="<?php echo $base_url; ?>/images/map.png"  border="0" alt="Map <?php echo $row_dropoff['dropLocationName']; ?>" title="Map <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span><span class="icon"><a href="<?php echo $base_url; ?>/output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_dropoff['dropLocation']); ?>" title="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" target="_blank"><img src="<?php echo $base_url; ?>/images/car.png"  border="0" alt="Driving Directions to <?php echo $row_dropoff['dropLocationName']; ?>" title="Driving Direcitons to <?php echo $row_dropoff['dropLocationName']; ?>" /></a></span>
 <?php } ?>
 <br />
 <?php echo $row_dropoff['dropLocationPhone']; ?>
@@ -143,8 +143,8 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 	<?php 
 	 echo "<strong>".$row_contest_info['contestAwardsLocName']."</strong>";
      if ($row_contest_info['contestAwardsLocation'] != "") echo "<br />".$row_contest_info['contestAwardsLocation']; 
-	 if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
-	<span class="icon"><a href="output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" target="_blank"><img src="images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
+	 if (($row_contest_info['contestAwardsLocation'] != "") && ($action != "print")) { ?>&nbsp;&nbsp;<span class="icon"><a id="modal_window_link" href="<?php echo $base_url; ?>/output/maps.php?section=map&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Map to <?php echo $row_contest_info['contestAwardsLocName']; ?>"><img src="<?php echo $base_url; ?>/images/map.png"  border="0" alt="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Map <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
+	<span class="icon"><a href="<?php echo $base_url; ?>/output/maps.php?section=driving&amp;id=<?php echo str_replace(' ', '+', $row_contest_info['contestAwardsLocation']); ?>" title="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" target="_blank"><img src="<?php echo $base_url; ?>/images/car.png"  border="0" alt="Driving Directions to <?php echo $row_contest_info['contestAwardsLocName']; ?>" title="Driving Direcitons to <?php echo $row_contest_info['contestAwardsLocName']; ?>" /></a></span>
 	<?php } 
 	if ($row_contest_info['contestAwardsLocTime'] != "") echo "<br />". 
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");

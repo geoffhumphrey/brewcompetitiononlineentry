@@ -18,7 +18,7 @@ $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 $totalRows_assignments = mysql_num_rows($assignments);
 
-$count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0); 
+$count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEntries'])),0); 
 
 ?>
 
@@ -27,9 +27,9 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
-<link href="../css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="../js_includes/jquery.dataTables.js"></script>
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.js"></script>
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <body <?php if ($tb != "view") { ?>onload="javascript:window.print()"<?php } ?>>
 <?php if ($view != "sign-in") { ?>

@@ -9,6 +9,10 @@ require('paths.php');
 //error_reporting(E_ALL ^ E_NOTICE);
 //ini_set('display_errors', '1');
 
+if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else $sef = "false"; 
+//if (in_array("mod_rewrite", apache_get_modules())) echo "mod_rewrite loaded";
+
+
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
 	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
@@ -85,20 +89,20 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
-<link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="css/jquery-ui-1.8.18.custom.css" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript" src="js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="js_includes/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="js_includes/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="js_includes/jquery.ui.tabs.min.js"></script>
-<script type="text/javascript" src="js_includes/jquery.ui.position.min.js"></script>
-<script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
-<link rel="stylesheet" href="css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
-<script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
@@ -121,16 +125,16 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 
 		});
 	</script>
-<script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="js_includes/delete.js"></script>
-<script type="text/javascript" src="js_includes/jump_menu.js" ></script>
-<script type="text/javascript" src="js_includes/smoothscroll.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
-<script type="text/javascript" src="js_includes/menu.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/menu.js"></script>
 <?php } 
 if ($section == "admin") { ?>
-<script type="text/javascript" src="js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="js_includes/tinymce.init.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce.init.js"></script>
 <?php } 
 if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include(INCLUDES.'form_check.inc.php'); ?>
 </head>
@@ -154,7 +158,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	?>
     <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
     <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?>.</div><?php } ?>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
@@ -184,7 +188,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   if ($registration_open == "2") {
 	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="index.php?section=register&amp;go=judge">register here</a>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
@@ -210,13 +214,13 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   } 
   if ($registration_open == "1") { // If registration is currently open
-  	if (open_limit(get_entry_count(),$row_prefs['prefsEntryLimit'],$registration_open)) { 
+  	if (open_limit(get_entry_count("default"),$row_prefs['prefsEntryLimit'],$registration_open)) { 
 	
 	$query_entry_limit = "SELECT brewUpdated FROM $brewing_db_table ORDER BY brewUpdated DESC LIMIT 1";
 	$entry_limit = mysql_query($query_entry_limit, $brewing) or die(mysql_error());
 	$row_entry_limit = mysql_fetch_assoc($entry_limit);
 
-	echo "<div class='closed'>The limit of ".readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].") entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='index.php?section=register&amp;go=judge'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
+	echo "<div class='closed'>The limit of ".readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].") entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
 	}
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');

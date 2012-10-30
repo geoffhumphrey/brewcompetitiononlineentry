@@ -20,8 +20,8 @@ $totalRows_styles = mysql_num_rows($styles);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Styles</title>
-<link href="../css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../js_includes/jump_menu.js"></script>
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jump_menu.js"></script>
 </head>
 <body>
 <div id="container">

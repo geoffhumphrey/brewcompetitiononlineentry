@@ -11,11 +11,12 @@ include(DB.'stewarding.db.php');
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
 ?>
-<script type="text/javascript" src="js_includes/email_check.js"></script>
-<script type="text/javascript" src="js_includes/username_check.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/email_check.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
 <script type="text/javascript">
 pic1 = new Image(16, 16); 
-pic1.src = "images/loader.gif";
+pic1.src = "<?php echo $base_url; ?>/images/loader.gif";
 
 $(document).ready(function(){
 
@@ -25,7 +26,7 @@ var usr = $("#user_name").val();
 
 if(usr.length >= 3)
 {
-$("#status").html('<span class="icon"><img src="images/loader.gif" align="absmiddle"><span>Checking availability...');
+$("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/loader.gif" align="absmiddle"><span>Checking availability...');
 
     $.ajax({  
     type: "POST",  
@@ -39,7 +40,7 @@ $("#status").html('<span class="icon"><img src="images/loader.gif" align="absmid
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
 		$("#user_name").addClass("object_ok");
-		$(this).html('<span class="icon"><img src="images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
+		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>/images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
 	}  
 	else  
 	{  
@@ -72,7 +73,7 @@ else
 <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
-		<li>If you have already registered, <a href="index.php?section=login"> log in here</a>. </li>
+		<li>If you have already registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>"> log in here</a>. </li>
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>
     	<li>Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct. </li>
     	<li>Once you have registered, you can proceed through the entry process. </li>
@@ -87,14 +88,14 @@ else
     	<td class="data" width="5%">
        	  <select name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
-    		<option value="index.php?section=register&amp;go=judge">Yes</option>
-    		<option value="index.php?section=register&amp;go=entrant">No</option>
+    		<option value="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">Yes</option>
+    		<option value="<?php echo build_public_url("register","entrant","default",$sef,$base_url); ?>">No</option>
 		  </select>
   		</td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
   	</tr>
 </table>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } else { 
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
@@ -110,7 +111,7 @@ echo "<h2>Add";
 if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>";
 } 
 ?> 
-<form action="includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="<?php echo $base_url; ?>/includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
@@ -224,31 +225,75 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?>  />Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg == "4") && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; ?> /> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" />Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg == "4") && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
       <td class="data">&nbsp;</td>
 </tr>
+	<?php if ($totalRows_judging > 1) { ?>
+    <tr rel="steward_no" >
+    <td class="dataLabel">Stewarding<br />Location Availabilty:</td>
+    <td colspan="3" class="data">
+    <?php do { ?>
+        <table class="dataTableCompact">
+            <tr>
+                <td width="1%" nowrap="nowrap">
+                    <select name="brewerStewardLocation[]" id="brewerStewardLocation">
+                        <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                        <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                    </select>
+                </td>
+                <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_stewarding['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+            </tr>
+        </table>
+    <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
+    </td>
+    </tr>
+    <?php } ?>
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg == "4") && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; ?> /> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg == "4") && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
       <td class="data">&nbsp;</td>
 </tr>
-</tr>
+
+	<?php if ($totalRows_judging > 1) { ?>
+    <tr rel="judge_no">
+    <td class="dataLabel">Judging<br />Location Availablity:</td>
+    <td class="data" colspan="3">
+    <?php do { ?>
+        <table class="dataTableCompact">
+            <tr>
+                <td width="1%" nowrap="nowrap">
+                <select name="brewerJudgeLocation[]" id="brewerJudgeLocation">
+                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                </select>
+                </td>
+                <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+            </tr>
+        </table>
+    <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
+    </td>
+    </tr>
+    <?php } else { ?>
+        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+        <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+    <?php } ?>
+
 <?php } 
 if ($section != "admin") { 
 ?>
 <tr>
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
-    <img id="captcha" src="captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
+    <img id="captcha" src="<?php echo $base_url; ?>/captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
 	<p>
-    <object type="application/x-shockwave-flash" data="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
-	<param name="movie" value="captcha/securimage_play.swf?audio_file=captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
+    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
+	<param name="movie" value="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
 	</object>
     &nbsp;Play audio
     </p>
 	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
-    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = 'captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
+    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>/captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
     </td>
     <td class="data"><span class="required">Required</span></td>
     <td class="data">&nbsp;</td>

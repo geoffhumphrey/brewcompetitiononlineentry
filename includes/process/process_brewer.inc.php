@@ -234,16 +234,19 @@ if ($action == "update") {
 
 // --------------------------------------- Adding a Participant ----------------------------------------
 if ($action == "add") {
-	if ($totalRows_judging < 2) {  
-		$location_pref1 = $_POST['brewerJudgeLocation'];
-		$location_pref2 = $_POST['brewerStewardLocation'];
-	} 
-	else { 
-	if ($go == "judge") {
-			$location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-			$location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-		}
+	if ($_POST['brewerJudge'] == "Y") {
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+        
 	}
+	else $location_pref1 = "";
+	
+	if ($_POST['brewerSteward'] == "Y") {
+        if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+	}
+    else $location_pref2 = "";
+	
 	mysql_select_db($database, $brewing);
 	$query_user = sprintf("SELECT id FROM $users_db_table WHERE id = '%s'", $_POST['uid']);
 	$user = mysql_query($query_user, $brewing) or die(mysql_error());
@@ -312,7 +315,7 @@ if ($action == "add") {
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		//echo $insertSQL;
 		if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
-		elseif ($_POST['brewerJudge'] == "Y") $insertGoTo = $base_url."/index.php?section=judge&go=judge";
+		elseif (($_POST['brewerJudge'] == "Y") || ($_POST['brewerSteward'] == "Y")) $insertGoTo = $base_url."/index.php?section=judge&go=judge";
 		elseif ($section == "admin") $insertGoTo = $base_url."/index.php?section=admin&go=participants&msg=1&username=".$username;
 		else $insertGoTo = $insertGoTo; 
 	
@@ -324,18 +327,20 @@ if ($action == "add") {
 
 // --------------------------------------- Editing a Participant ----------------------------------------
 if ($action == "edit") {
-        if ($totalRows_judging > 1) {
-        if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+        
+    if ($_POST['brewerJudge'] == "Y") {
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
         elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
-        else $location_pref1 = "";
+        
+	}
+	else $location_pref1 = "";
+	
+	if ($_POST['brewerSteward'] == "Y") {
         if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
         elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
-        else $location_pref2 = "";
-}
-	else { 
-		$location_pref1 = $_POST['brewerJudgeLocation'];
-		$location_pref2 = $_POST['brewerStewardLocation'];
 	}
+    else $location_pref2 = "";
+
 	if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
 	if ($_POST['brewerJudgeDislikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
 	

@@ -9,7 +9,7 @@ require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-$imageSrc = "../images/";
+$imageSrc = $base_url."/images/";
 
 $fileCornfirm = "default";
 if (isset($_GET['fileConfirm'])) {
@@ -86,7 +86,7 @@ $handle=opendir($upload_dir);
 $filelist = "";
 while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
-		$filelist .= "<td width=\"25%\" nowrap class=\"data-left\"><a href=\"../../user_images/$file\"  id=\"modal_window_link\">".$file."</a></td>\n";
+		$filelist .= "<td width=\"25%\" nowrap class=\"data-left\"><a href=\"".$base_url."/user_images/$file\"  id=\"modal_window_link\">".$file."</a></td>\n";
       	$filelist .= "<td width=\"25%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 	    if ($row_user['userLevel'] == "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
 		else $filelist .="<td>&nbsp;</td>\n";
@@ -121,15 +121,15 @@ function do_upload($upload_dir, $upload_url) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
-<link href="../css/print.css" rel="stylesheet" type="text/css" />
-<link href="../css/sorting.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/sorting.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript" src="../js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="../js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<link rel="stylesheet" href="../css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="../js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<link rel="stylesheet" href="../js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
-<script type="text/javascript" src="../js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
@@ -152,7 +152,7 @@ function do_upload($upload_dir, $upload_url) {
 
 		});
 	</script>
-<script type="text/javascript" src="../js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript">
  $(document).ready(function() {
 	$('#sortable').dataTable( {
@@ -247,7 +247,7 @@ function do_upload($upload_dir, $upload_url) {
 	<h3>Delete Image</h3>
 	<table>
   	<tr>
-		<td width="5%" rowspan="2" nowrap><a href="../user_images/<?php echo $fileConfirm; ?>" id="modal_window_link"><img src="../user_images/<?php echo $fileConfirm; ?>" border="0" width="100"></a></td>
+		<td width="5%" rowspan="2" nowrap><a href="<?php echo $base_url; ?>/user_images/<?php echo $fileConfirm; ?>" id="modal_window_link"><img src="<?php echo $base_url; ?>/user_images/<?php echo $fileConfirm; ?>" border="0" width="100"></a></td>
 		<td width="5%" nowrap class="data">Are you sure you want to delete <?php echo $fileConfirm; ?>?</td>
    		<td width="5%" nowrap class="data"><a href="?action=upload&amp;section=delete&fileConfirm=<?php echo $fileConfirm; ?>">Yes</a></td>
     	<td class="data"><a href="?action=upload">No</a></td>

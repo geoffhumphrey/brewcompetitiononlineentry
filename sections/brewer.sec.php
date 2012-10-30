@@ -29,19 +29,19 @@ if ($section == "step2")  {
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
 <?php if ($section == "step2") { ?>
-<form action="includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
+<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
 <input name="brewerSteward" type="hidden" value="N" />
 <input name="brewerJudge" type="hidden" value="N" />
 <input name="brewerEmail" type="hidden" value="<?php echo $go; ?>" />
 <input name="uid" type="hidden" value="<?php echo $row_brewerID['id']; ?>" />
 <?php } else { ?>
-<form action="includes/process.inc.php?section=<?php if ($section == "brewer") echo "list"; else echo "admin"; echo "&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $brewer_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php if ($section == "brewer") echo "list"; else echo "admin"; echo "&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $brewer_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php } 
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
 ?>
-<p><span class="icon"><img src="images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
@@ -116,11 +116,6 @@ $row_countries = mysql_fetch_assoc($countries);
   <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
   <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
 </tr>
-<?php if (($go == "judge") || ($go == "admin")) { ?>
-<tr>
-	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
-</tr>
-<?php } ?>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
@@ -132,7 +127,7 @@ $row_countries = mysql_fetch_assoc($countries);
 <?php if ($totalRows_judging > 1) { ?>
 
 <tr>
-<td class="dataLabel">Your Stewarding<br />Location Availabilty:</td>
+<td class="dataLabel">Stewarding<br />Location Availabilty:</td>
 <td colspan="3" class="data">
 <?php do { ?>
 	<table class="dataTableCompact">
@@ -160,7 +155,7 @@ $row_countries = mysql_fetch_assoc($countries);
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
-<td class="dataLabel">Your Judging<br />Location Availablity:</td>
+<td class="dataLabel">Judging<br />Location Availablity:</td>
 <td class="data" colspan="3">
 <?php do { ?>
 	<table class="dataTableCompact">
@@ -177,6 +172,11 @@ $row_countries = mysql_fetch_assoc($countries);
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
 </td>
 </tr>
+<?php if (($go == "judge") || ($go == "admin")) { ?>
+<tr>
+	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
+</tr>
+<?php } ?>
 <?php } else { ?>
     <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
     <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
@@ -194,7 +194,7 @@ $row_countries = mysql_fetch_assoc($countries);
 	<input name="brewerSteward" type="hidden" value="N" /> 
 	<?php } ?>
 <?php } ?>
-	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo $base_url."/index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],$pg,$msg,$id); ?>">
+	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo $base_url."/index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";

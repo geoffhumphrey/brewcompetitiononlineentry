@@ -75,10 +75,7 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 else {
 
 if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a [] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
-
-
 if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
-
 if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Entry Name','Club','Co Brewer');
 
 do {
