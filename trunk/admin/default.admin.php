@@ -16,7 +16,7 @@ include(DB.'dropoff.db.php');
 include(DB.'brewer.db.php');
 
 function admin_help($go,$header_output,$action,$filter) {
-	
+	include (CONFIG.'config.php');
 	switch($go) {
 		case "preferences": $page = "site_prefs";
 		break;

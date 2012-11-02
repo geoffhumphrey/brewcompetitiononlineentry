@@ -21,7 +21,7 @@ $totalRows_styles = mysql_num_rows($styles);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Styles</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jump_menu.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js"></script>
 </head>
 <body>
 <div id="container">

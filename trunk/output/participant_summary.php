@@ -28,8 +28,8 @@ $total_entries_judged = get_entry_count('received');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Summary</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.js"></script>
-<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <body onload="javascript:window.print()">
 <div id="content">

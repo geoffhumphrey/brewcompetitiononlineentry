@@ -23,17 +23,12 @@ function check_flight_round($flight_round,$round) {
 		
 }
 
-if ( $go == "judging_tables" ) {
-   $query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";	
-}
-
-if ( $go == "judging_locations" ) {
-   $query_tables = sprintf("SELECT $judging_tables_db_table.*, $judging_assignments_db_table.assignRound FROM $judging_tables_db_table, $judging_assignments_db_table WHERE $judging_tables_db_table.tableNumber = $judging_assignments_db_table.assignTable AND $judging_tables_db_table.tableLocation = '%s' AND $judging_assignments_db_table.assignRound = '%s' GROUP BY $judging_assignments_db_table.assignTable ORDER BY tableNumber", $location, $round);	
-}
-
+$query_tables = "SELECT * FROM $judging_tables_db_table";
+if ($go == "judging_locations") $query_tables .= sprintf(" WHERE tableLocation = '%s'", $location);
+$query_table .= " ORDER BY tableNumber";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
+$totalRows_tables = mysql_num_rows($tables); 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -42,12 +37,19 @@ $totalRows_tables = mysql_num_rows($tables);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
-<body onload="javascript:window.print()">
 <?php 
 
+if ($totalRows_tables == 0) { 
+echo "<body>";
+echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>"; 
+} 
+else {
+?>
+<body onload="javascript:window.print()">
+<?php 
 // Use the following if not using queued judging - delinieates by flight and round
  if ($row_judging_prefs['jPrefsQueued'] == "N") {
 
@@ -119,9 +121,9 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				null,
+				null,
+				null,
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
@@ -671,7 +673,8 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	</div>
 </div>
 <div style="page-break-after:always;"></div>
-<?php } // end if (($go == "judging_scores_bos") && ($id != "default")) ?>
-
+<?php } // end if (($go == "judging_scores_bos") && ($id != "default")) 
+}
+?>
 </body>
 </html>

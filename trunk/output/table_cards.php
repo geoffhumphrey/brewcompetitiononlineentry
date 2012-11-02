@@ -13,17 +13,13 @@ if ( $go == "judging_tables" ) {
 }
 
 if ( $go == "judging_locations" ) {
-   $query_tables = sprintf("SELECT $judging_tables_db_table.*, $judging_assignments_db_table.assignRound FROM $judging_tables_db_table, $judging_assignments_db_table WHERE $judging_tables_db_table.tableNumber = $judging_assignments_db_table.assignTable AND $judging_tables_db_table.tableLocation = '%s' AND $judging_assignments_db_table.assignRound = '%s' GROUP BY $judging_assignments_db_table.assignTable ORDER BY tableNumber", $location, $round);       
+   $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);       
 }
 
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables);
-
-
-if ($round != "default") $round2 = $round; else $round2 = "default";
-
-if ($filter == "stewards") $filter = "S"; else $filter = "J";
+//echo $query_tables."<br>";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,9 +28,20 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" language="javascript" https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" <?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
+
+
+<?php
+if ($totalRows_tables == 0) { 
+echo "<body>";
+echo "<h1>No judge/steward assignments have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>"; 
+} 
+else {
+if ($round != "default") $round2 = $round; else $round2 = "default";
+if ($filter == "stewards") $filter = "S"; else $filter = "J";
+?>
 <body onload="javascript:window.print()">
 <?php if ($id == "default") { ?>
 
@@ -165,6 +172,8 @@ $totalRows_assignments = mysql_num_rows($assignments);
     <?php } ?>
     </table>
 </div>
-<?php } ?>
+<?php } 
+}
+?>
 </body>
 </html>

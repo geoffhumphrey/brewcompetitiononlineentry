@@ -31,8 +31,8 @@ function version_check($version) {
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.2.1.2") {	
-		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.2","1");
+	if ($version != "1.2.1.3") {	
+		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.3","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
 	}
