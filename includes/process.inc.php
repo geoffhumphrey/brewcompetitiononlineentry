@@ -109,6 +109,7 @@ function capitalize($string1) {
 	$capitalize = strtr($capitalize,$html_string);
 	return $capitalize;
 }
+
 if ($action != "purge") {
 	function relocate($referer,$page,$msg,$id) { 
 		include(CONFIG."config.php");

@@ -277,7 +277,7 @@ for ($i=1; $i <= 9; $i++) {
   }
 }
 
-$TBS =& new clsTinyButStrong;
+$TBS = new clsTinyButStrong;
 
 if ($row_prefs['prefsEntryForm'] == "B") { 
 $TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');

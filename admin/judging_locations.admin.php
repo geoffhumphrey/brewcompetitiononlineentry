@@ -248,7 +248,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
   <td width="5%" class="dataList"><?php echo brewer_assignment($row_brewer['brewerAssignment'],"1"); ?></td>
   <?php if (($filter == "judges") || ($filter == "bos")) { ?>
   <td width="5%" class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
-  <td width="5%" class="dataList"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>
+  <td width="5%" class="dataList"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") echo "<br /><span class='icon'><img src='".$base_url."/images/star.png' alt='' title='Certified Mead Judge'></span>Certified Mead Judge"; ?></td>
   	<?php } if ($bid != "default") { ?>
   <td class="dataList">
   	<table class="dataTableCompact">

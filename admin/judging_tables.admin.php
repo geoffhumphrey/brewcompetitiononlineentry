@@ -9,7 +9,7 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($dbTable == "default") $r = '<a href="<?php echo $base_url; ?>/index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign Judges to this Table">'.$row_assignments['count']."</a>";
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'/index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign Judges to this Table">'.$row_assignments['count']."</a>";
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -21,7 +21,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($dbTable == "default") $r = '<a href="<?php echo $base_url; ?>/index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign Stewards to this Table">'.$row_assignments['count']."</a>";
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'/index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign Stewards to this Table">'.$row_assignments['count']."</a>";
 	else $r = $row_assignments['count'];
 	return $r;
 }
