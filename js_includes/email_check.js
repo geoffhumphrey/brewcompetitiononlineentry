@@ -34,7 +34,7 @@ document.getElementById("msg_email").innerHTML=httpxml.responseText;
 
 }
 }
-var url="includes/email.inc.php";
+var url="/includes/email.inc.php";
 url=url+"?email="+email;
 url=url+"&sid="+Math.random();
 httpxml.onreadystatechange=stateck;
