@@ -157,6 +157,7 @@ button, menu, textarea, label, submit, .submit, select, input {
 	background-color: #dedede;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
 
 select, optgroup, option  {
