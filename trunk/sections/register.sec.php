@@ -11,7 +11,6 @@ include(DB.'stewarding.db.php');
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
 ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/email_check.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
 <script type="text/javascript">
@@ -30,7 +29,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/
 
     $.ajax({  
     type: "POST",  
-    url: "includes/username.inc.php",  
+    url: "<?php echo $base_url; ?>/includes/username.inc.php",  
     data: "user_name="+ usr,  
     success: function(msg){  
    
@@ -66,6 +65,51 @@ else
 });
 
 });
+
+function AjaxFunction(email)
+{
+	var httpxml;
+		try
+		{
+		// Firefox, Opera 8.0+, Safari
+		httpxml=new XMLHttpRequest();
+		}
+	catch (e)
+		{
+		// Internet Explorer
+		try
+		{
+		httpxml=new ActiveXObject("Msxml2.XMLHTTP");
+		}
+	catch (e)
+		{
+		try
+		{
+		httpxml=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch (e)
+		{
+		//alert("Your browser does not support AJAX!");
+	return false;
+	}
+	}
+}
+function stateck()
+{
+if(httpxml.readyState==4)
+{
+document.getElementById("msg_email").innerHTML=httpxml.responseText;
+
+}
+}
+var url="<?php echo $base_url; ?>/includes/email.inc.php";
+url=url+"?email="+email;
+url=url+"&sid="+Math.random();
+httpxml.onreadystatechange=stateck;
+httpxml.open("GET",url,true);
+httpxml.send(null);
+}
+
 
 //-->
 </script>
