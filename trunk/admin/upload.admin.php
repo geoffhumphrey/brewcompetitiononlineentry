@@ -133,8 +133,8 @@ function do_upload($upload_dir, $upload_url) {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
-				'width'				: '75%',
-				'height'			: '75%',
+				'width'				: '85%',
+				'maxHeight'			: '85%',
 				'fitToView'			: false,
 				'scrolling'         : 'auto',
 				'openEffect'		: 'elastic',
