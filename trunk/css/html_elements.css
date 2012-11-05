@@ -139,6 +139,7 @@ button, menu, textarea, label, submit, .submit, select, input {
 	font-size: .95em;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
+	border-radius: 3px;
 	min-height: 15px;
 	vertical-align: middle;
 	padding: 2px;
@@ -153,6 +154,7 @@ textarea {
 	font-size: .95em;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
+	border-radius: 3px;
 	min-height: 15px;
 	vertical-align: top;
 	padding: 2px;

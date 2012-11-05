@@ -172,15 +172,15 @@ $row_countries = mysql_fetch_assoc($countries);
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
 </td>
 </tr>
+<?php } else { ?>
+    <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+    <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+<?php } } ?>
 <?php if (($go == "judge") || ($go == "admin")) { ?>
 <tr>
 	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
 </tr>
 <?php } ?>
-<?php } else { ?>
-    <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-    <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-<?php } } ?>
 <?php if ($action == "edit") include ('judge_info.sec.php'); ?>
 </table>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>

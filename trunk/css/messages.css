@@ -24,6 +24,7 @@
 	border: 1px solid #000099;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 .closed {
@@ -39,6 +40,7 @@
 	border: 1px solid #0A4A06;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 .error {
@@ -54,6 +56,7 @@
 	border: 1px solid #FF0000;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 .error2 {
@@ -69,6 +72,7 @@
 	border: 1px solid #C13100;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 .required {
@@ -110,6 +114,7 @@
 	border: 1px solid #ccc;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 	white-space:nowrap;
 }
 
