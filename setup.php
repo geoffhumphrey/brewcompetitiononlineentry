@@ -40,8 +40,8 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
-				'width'				: '75%',
-				'height'			: '75%',
+				'width'				: '85%',
+				'maxHeight'			: '85%',
 				'fitToView'			: false,
 				'scrolling'         : 'auto',
 				'openEffect'		: 'elastic',
