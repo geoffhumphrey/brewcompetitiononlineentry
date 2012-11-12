@@ -375,7 +375,7 @@ if ($action == "edit") {
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-						   GetSQLValueString($_POST['brewerCity'], "text"),
+						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
 						   GetSQLValueString($_POST['brewerState'], "text"),
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),

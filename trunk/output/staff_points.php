@@ -11,6 +11,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'admin_common.db.php');
+include(DB.'judging_locations.db.php'); 
 mysql_select_db($database, $brewing);
 
 // Get total amount of paid and received entries
@@ -212,7 +213,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
     	$html .= '<tr>';
     	$html .= '<td width="300">'.$judge_info['1'].', '.$judge_info['0'].'</td>';
     	$html .= '<td width="150">';
-			if ($judge_info['4'] != "") $html .= $judge_info['4']; else $html .= '&nbsp;';
+			if ($judge_info['4'] != "") $html .= ucfirst($judge_info['4']); else $html .= '&nbsp;';
 		$html .= '</td>';
     	$html .= '<td width="150">'.judge_points($bid,$judge_info['5']).'</td>';
     	$html .= '</tr>';
@@ -273,7 +274,7 @@ $output .= "<OrgReport>\n";
 $output .= "\t<CompData>\n";
 $output .= "\t\t<CompID>".$row_contest_info['contestID']."</CompID>\n";
 $output .= "\t\t<CompName>".$row_contest_info['contestName']."</CompName>\n";
-$output .= "\t\t<CompDate>".$row_judging['judgingDate']."</CompDate>\n";
+$output .= "\t\t<CompDate>".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
 $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
 $output .= "\t\t<CompDays>".$totalRows_judging."</CompDays>\n";
 $output .= "\t\t<CompSessions></CompSessions>\n";
@@ -287,20 +288,36 @@ $output .= "\t</CompData>\n";
 		$judge_info = explode("^",brewer_info($bid));
 		if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
 		else $assignment = "Judge";
-    	$output .= "\t\t<JudgeData>\n";
-    	$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
-    	$output .= "\t\t\t<JudgeID>";
-			if ($judge_info['4'] != "") $output .= $judge_info['4']; else $output .= "";
-		$output .= "</JudgeID>\n";
-		$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
-    	$output .= "\t\t\t<JudgePoints>".judge_points($bid,$judge_info['5'])."</JudgePoints>\n";
-		$output .= "\t\t\t<NonJudgePoints>0</NonJudgePoints>\n";
-    	$output .= "\t\t</JudgeData>\n";
-    	}  
+		if ($judge_info['4'] != ""){ 
+			$output .= "\t\t<JudgeData>\n";
+			$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeID>".$judge_info['4']."</JudgeID>\n";
+			$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePoints>".judge_points($bid,$judge_info['5'])."</JudgePoints>\n";
+			$output .= "\t\t\t<NonJudgePoints>0</NonJudgePoints>\n";
+			$output .= "\t\t</JudgeData>\n";
+		}
+    }  
 	$output .= "\t</BJCPpoints>\n";
     }  
 
-	if (($totalRows_stewards > 0) || ($totalRows_staff > 0) || ($totalRows_organizer > 0)) $output .= "\t<NonBJCP>\n";
+	$output .= "\t<NonBJCP>\n";
+	
+	do { $j[] = $row_judges['bid']; } while ($row_judges = mysql_fetch_assoc($judges));
+	sort($j);
+	foreach (array_unique($j) as $bid) { 
+		$judge_info = explode("^",brewer_info($bid));
+		if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
+		else $assignment = "Judge";
+		if ($judge_info['4'] == ""){ 
+			$output .= "\t\t<JudgeData>\n";
+			$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePoints>".judge_points($bid,$judge_info['5'])."</JudgePoints>\n";
+			$output .= "\t\t\t<NonJudgePoints>0</NonJudgePoints>\n";
+			$output .= "\t\t</JudgeData>\n";
+		}
+    } 
 	
 	if ($totalRows_stewards > 0) { 
 	do { $s[] = $row_stewards['bid']; } while ($row_stewards = mysql_fetch_assoc($stewards));
@@ -335,7 +352,7 @@ $output .= "\t</CompData>\n";
     	$output .= "\t\t</JudgeData>\n";
 	}
 	
-	if (($totalRows_stewards > 0) || ($totalRows_staff > 0) || ($totalRows_organizer > 0)) $output .= "\t</NonBJCP>\n";
+	$output .= "\t</NonBJCP>\n";
 	
 	$output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
 	$output .= "</OrgReport>";
@@ -440,7 +457,7 @@ if ($view == "default") { // printing from browser ?>
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
-    	<td class="data bdr1B_gray"><?php echo $judge_info['4']; ?></td>
+    	<td class="data bdr1B_gray"><?php echo ucfirst($judge_info['4']); ?></td>
         <td class="data bdr1B_gray"><?php echo judge_points($bid,$judge_info['5']); ?></td>
     </tr>
     <?php }  ?>

@@ -60,7 +60,7 @@ if ($go == "verify") {
 	if (($action != "print") && ($msg != "default")) echo $msg_output;
 	
 	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
-		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href=\"index.php?section=login&amp;action=forgot\">Try again?</a>";
+		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href='".build_public_url("login","password","forgot",$sef,$base_url)."'>Try again?</a>";
 		} 
 	else { ?>
 	<form action="<?php echo $base_url; ?>/includes/forgot_password.inc.php" method="POST" name="form1" id="form1">

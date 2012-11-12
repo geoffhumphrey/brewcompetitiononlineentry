@@ -87,6 +87,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
 			else $date = date('l j F, Y', $timestamp);
 		break;
+		
 		case "short": // Short Format
 			if ($date_format == "1") $date = date('m/d/Y', $timestamp);
 			elseif ($date_format = "2") $date = date('d/m/Y',$timestamp);
@@ -95,6 +96,10 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		
 		case "system": // MySQL Format
 			$date = date('Y-m-d', $timestamp);
+		break;
+		
+		case "xml": // XML Report Format
+			$date = date('l j F Y', $timestamp);
 		break;
 	}
 	

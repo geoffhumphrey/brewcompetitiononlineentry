@@ -38,6 +38,7 @@ if ($filter != "winners") {
 }
 
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
+if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
 
 if ($filter == "winners") $query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 
@@ -54,10 +55,9 @@ $filename = $contest."_entries_".$filter."_".$action."_".$date.$loc.$extension;
 if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 	$headers = array(); 
 	for ($i = 0; $i < $num_fields; $i++) {     
-		   $headers[] = mysql_field_name($sql , $i); 
+		   $headers[] = mysql_field_name($sql,$i); 
 		} 
 	$fp = fopen('php://output', 'w'); 
-	
 	
 	if ($fp && $sql) {
 		header('Content-Type: text/csv');
@@ -65,9 +65,10 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 		header('Pragma: no-cache');
 		header('Expires: 0');
 		fputcsv($fp, $headers);
-		while ($row = mysql_fetch_row($sql))  {
-			fputcsv($fp, array_values($row));
+		do {
+			fputcsv($fp, array_values($row_sql));
 		}
+		while ($row_sql = mysql_fetch_assoc($sql));
     die; 
 	} 
 }

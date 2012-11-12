@@ -76,7 +76,7 @@ else
 
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php 
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='index.php?section=list'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
+if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
 
 //$return = "index.php?section=brew&action=edit&id=".$row_entry_check['id']."&msg=10";
 //echo $return;	
