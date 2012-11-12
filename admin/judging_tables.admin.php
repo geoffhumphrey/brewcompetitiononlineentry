@@ -386,7 +386,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
             <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
         	</tbody>
         </table>
-    <?php } else echo "There are no styles available with entries marked as both paid and received."; ?>
+    <?php } else echo "There are no styles available with entries marked as &ldquo;received.&rdquo;"; ?>
     </td>
   </tr>
   </tbody>

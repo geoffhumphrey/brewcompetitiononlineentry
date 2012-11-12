@@ -10,8 +10,6 @@ require('paths.php');
 //ini_set('display_errors', '1');
 
 if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else $sef = "false"; 
-//if (in_array("mod_rewrite", apache_get_modules())) echo "mod_rewrite loaded";
-
 
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
@@ -24,9 +22,16 @@ function check_setup($tablename, $database) {
 
 }
 
+if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
+if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database))) header ("Location: update.php"); 
+
+// If all setup or update has taken place, run normally
+else 
+{
+
 function version_check($version) {
-	// Current version is 1.2.1.2, change version in system table if not
-	// There are NO database structure or data updates for version 1.2.1.2
+	// Current version is 1.2.1.3, change version in system table if not
+	// There are NO database structure or data updates for version 1.2.1.3
 	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
 	require(CONFIG.'config.php');
@@ -37,18 +42,8 @@ function version_check($version) {
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
 	}
 }
-
+	
 version_check($version);
-
-// Both of the checks below are for v 1.2.1.X only. Checks to see if new DB tables are there.
-// In future releases, will perform check of the version row in the "system" table
-
-if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
-if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database))) header ("Location: update.php"); 
-
-// If all setup or update has taken place, run normally
-else 
-{
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
@@ -56,11 +51,9 @@ require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(DB.'entries.db.php');
-//require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
 require(DB.'winners.db.php');
-
 
 // Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
 if ($today > ($data_check_date + 86400)) data_integrity_check();
@@ -145,14 +138,15 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
 </div>
 <div id="content">
- 	 <div id="content-inner"> 
+	<div id="content-inner"> 
   <?php // echo $tz; echo "<br>".$timezone_offset; echo "<br>".$row_prefs['prefsTimeZone']; echo "<br>".date('T');
   if ($section != "admin") { ?>
- 	<div id="header">	
+	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   	</div>
   <?php  }
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
+  
   if ($registration_open == "0") { 
   	if ($section != "admin") {
   	?>

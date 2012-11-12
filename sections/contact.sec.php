@@ -76,7 +76,7 @@ if ($msg != "1") {
 </tr>
 <tr>
   	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="clear" type="button" class="button" value="Clear Values" onClick="window.location.href='index.php?section=contact'"></td>
+  	<td colspan="2" class="data"><input name="clear" type="button" class="button" value="Clear Values" onClick="window.location.href='<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>'"></td>
 </tr>
 </table>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

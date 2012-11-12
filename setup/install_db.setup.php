@@ -683,6 +683,28 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Drop Off Locations</strong> table installed successfully.</li>";
 	
 	// ------------------- 
+	// Judging Assignments Table
+	// -------------------
+	
+	$sql = "
+	CREATE TABLE `$judging_assignments_db_table` (
+	`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`bid` INT( 11 ) NULL COMMENT 'id from brewer table',
+	`assignment` CHAR ( 1 ) NULL,
+	`assignTable` INT( 11 ) NULL COMMENT 'id from judging_tables table',
+	`assignFlight` INT( 11 ) NULL ,
+	`assignRound` INT( 11 ) NULL,
+	`assignLocation` INT ( 11 ) NULL
+	) ENGINE = MYISAM ;
+	";
+	
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($sql, $brewing) or die(mysql_error());
+    //echo "<p>".$sql."</p>";
+	
+	echo "<li><strong>Judging Assignments</strong> table installed successfully.</li>";
+	
+	// ------------------- 
 	// Judging Flights Table
 	// -------------------
 	
@@ -1190,7 +1212,7 @@ if ($setup_free_access == TRUE) {
      //echo "<p>".$sql."</p>";
 	
 	/*
-	// For hosted accounts on brewcompetition.com 
+	// For hosted accounts on brewcompetition.com or brewcomp.com 
 	$sql = "
 	INSERT INTO `$users_db_table` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES
 	(1, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '1', 'What was your high school mascot?', 'spartan', NOW( ));
@@ -1207,7 +1229,7 @@ if ($setup_free_access == TRUE) {
 	<p><strong>However, the setup process is not done!</strong></p>
 	<p>Click &ldquo;Continue&rdquo; below to setup and customize your installation.</p>
 	<div style='padding: 20px; margin: 30px 0 0 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; -webkit-border-radius: 3px;
-	-moz-border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='setup.php?section=step1'>Continue</a></div>";
+	-moz-border-radius: 3px; border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='setup.php?section=step1'>Continue</a></div>";
 	}
 
 }

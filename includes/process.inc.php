@@ -87,9 +87,9 @@ function generate_judging_num($style_cat_num) {
 	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
 	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
 	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
-	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $return = $style_cat_num."001";
-	else $return = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return $return;
+	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
+	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
+	return $output;
 }
 
 function ucwordspecific($str,$delimiter) {
@@ -100,14 +100,14 @@ function ucwordspecific($str,$delimiter) {
 
 function capitalize($string1) {
 	require(INCLUDES.'scrubber.inc.php');
-	$capitalize = strtr($string1,$html_remove);
-	$capitalize = ucwords($capitalize);
-	$capitalize = ucwordspecific($capitalize,"-");
-	$capitalize = ucwordspecific($capitalize,".");
-	$capitalize = ucwordspecific($capitalize,"(");
-	$capitalize = ucwordspecific($capitalize,")");
-	$capitalize = strtr($capitalize,$html_string);
-	return $capitalize;
+	$output = strtr($string1,$html_remove);
+	$output = ucwords($output);
+	$output = ucwordspecific($output,"-");
+	$output = ucwordspecific($output,".");
+	$output = ucwordspecific($output,"(");
+	$output = ucwordspecific($output,")");
+	$output = strtr($output,$html_string);
+	return $output;
 }
 
 if ($action != "purge") {
@@ -138,8 +138,8 @@ if ($action != "purge") {
 		$referer = stripslashes($referer);	
 		
 		// Reconstruct the URL
-		$reconstruct = $base_url."/index.php?".$referer;
-		return $reconstruct;
+		$output = $base_url."/index.php?".$referer;
+		return $output;
 	}
 
 	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 

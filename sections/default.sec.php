@@ -6,7 +6,7 @@
  *              winner display after all judging dates have passed.
  */
 include(DB.'dropoff.db.php');
-if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row_contest_info['contestLogo']))) { 
+if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].'/user_images/'.$row_contest_info['contestLogo']))) { 
 	if (judging_date_return() > 0) { ?>
 <img src="<?php echo $base_url; ?>/user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />
 <?php } 
@@ -84,7 +84,7 @@ if ($row_prefs['prefsSponsors'] == "Y") {
 	if ($totalRows_sponsors > 0) {
 ?>
 <h2>Sponsors</h2>
-<p><?php echo $row_contest_info['contestHost']; ?> is proud to have the following <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "<a href=\"index.php?section=sponsors\">sponsors</a>"; else echo "sponsors"; ?> for the <?php echo $row_contest_info['contestName']; ?>:
+<p><?php echo $row_contest_info['contestHost']; ?> is proud to have the following <?php if ($row_prefs['prefsSponsorLogos'] == "Y") echo "<a href='".build_public_url("sponsors","default","default",$sef,$base_url)."'>sponsors</a>"; else echo "sponsors"; ?> for the <?php echo $row_contest_info['contestName']; ?>:
 <?php if ($row_prefs['prefsSponsorLogos'] == "Y") { ?>
 <table>
   <tr>
