@@ -102,16 +102,22 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 <h2>Pay Online</h2>
 <p><span class="required"> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</span></p>
 <?php } ?>
-<?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
+<?php if ($row_prefs['prefsPaypal'] == "Y") { 
+
+if ($row_prefs['prefsTransFee'] == "Y") $pay_the_man = $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
+else $pay_the_man = number_format($total_to_pay, 2);
+if ($pay_the_man < 30.00) $pay_the_man = $pay_the_man + .01; else $pay_the_man = $pay_the_man;
+$fee = number_format((($total_to_pay * .03) + .30), 2, '.', ''); if ($pay_the_man < 30.00) $fee = $fee + .01; else $fee = $fee; 
+?>
 <h3>PayPal</h3>
-<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
-<div class="error">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to ..." link on PayPal's confirmation screen after you have sent your payment.</div>
+<p>Click the "Pay Now" button below to pay online using PayPal. <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency'].$fee;  ?> will be added into your total.<?php } ?></p>
+<div class="error">To make sure your PayPal payment is marked "paid" on <em>this site</em>, please click the "Return to..." link on PayPal's confirmation screen after you have sent your payment.</div>
 
 <form name="PayPal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>">
 <input type="hidden" name="item_name" value="<?php echo $row_name['brewerLastName'].", ".$row_name['brewerFirstName']." - ".$row_contest_info['contestName']." Payment";?>">
-<input type="hidden" name="amount" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>">
+<input type="hidden" name="amount" value="<?php echo $pay_the_man; ?>">
 <input type="hidden" name="currency_code" value="<?php echo $currency_code; ?>">
 <input type="hidden" name="button_subtype" value="services">
 <input type="hidden" name="no_note" value="0">
@@ -124,14 +130,21 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal">
 </form>
 <?php } ?>
-<?php if ($row_prefs['prefsGoogle'] == "Y") { ?>
+<?php if ($row_prefs['prefsGoogle'] == "Y") { 
+if ($row_prefs['prefsTransFee'] == "Y") $pay_the_man = $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
+else $pay_the_man = number_format($total_to_pay, 2);
+if ($pay_the_man < 30.00) $pay_the_man = $pay_the_man + .01; else $pay_the_man = $pay_the_man;
+?>
 <h3>Google Wallet</h3>
 <p>Click the "Buy Now" button below to pay for your entries using Google Wallet.  <?php if ($row_prefs['prefsTransFee'] == "Y") { ?>Please note that a transaction fee of <?php echo $row_prefs['prefsCurrency']; echo number_format((($total_to_pay * .03) + .30), 2, '.', ''); ?> will be added into your total.<?php } ?></p>
+<div class="error">To make sure your Google Wallet payment is marked "paid" on <em>this site</em>, please click the "Return to..." link on Google Wallet's confirmation screen after you have sent your payment.</div>
+
 <form action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $row_prefs['prefsGoogleAccount']; ?>" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" target="_top">
-    <input name="item_name_1" type="hidden" value="<?php echo $row_name['brewerLastName'].", ".(substr($row_name['brewerFirstName'],0,1))." - ".$row_contest_info['contestName']." Payment";?>"/>
+  <input name="item_name_1" type="hidden" value="<?php echo $row_name['brewerLastName'].", ".(substr($row_name['brewerFirstName'],0,1))." - ".$row_contest_info['contestName']." Payment";?>"/>
+    <input name="checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url" type="hidden" value="<?php echo rtrim($return, "-"); ?>" />
     <input name="item_description_1" type="hidden" value="<?php echo "Entry #: ".rtrim($entries,", "); ?>"/>
     <input name="item_quantity_1" type="hidden" value="1"/>
-    <input name="item_price_1" type="hidden" value="<?php if ($row_prefs['prefsTransFee'] == "Y") echo $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); else echo number_format($total_to_pay, 2); ?>"/>
+    <input name="item_price_1" type="hidden" value="<?php echo $pay_the_man; ?>"/>
     <input name="item_currency_1" type="hidden" value="<?php echo $currency_code; ?>"/>
     <input name="_charset_" type="hidden" value="utf-8"/>
     <input src="https://checkout.google.com/buttons/buy.gif?merchant_id=<?php echo $row_prefs['prefsGoogleAccount']; ?>&amp;w=117&amp;h=48&amp;style=white&amp;variant=text&amp;loc=en_US" type="image" class="paypal" alt="Pay your competition entry fees with Google Wallet" title="Pay your compeition entry fees with Google Wallet"/>

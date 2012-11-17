@@ -13,7 +13,6 @@ require(DB.'common.db.php');
 require(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 mysql_select_db($database, $brewing);
-
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
 //$total_entries = 88;
@@ -21,6 +20,75 @@ function round_down_to_hundred($number) {
     if (strlen($number)<3) { $number = $number;	} 
 	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
     return $number;
+}
+
+function total_days () {
+	require('../paths.php');
+	require(INCLUDES.'db_tables.inc.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_sessions = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
+	$sessions = mysql_query($query_sessions, $brewing) or die(mysql_error());
+	$row_sessions = mysql_fetch_assoc($sessions);
+	
+	do {
+		$a[] = $row_sessions['judgingDate'];
+	} while ($row_sessions = mysql_fetch_assoc($sessions));
+	
+	$output = array_unique($a);	
+	$output2 = count($output);
+	return $output2;
+	
+}
+
+function total_sessions () {
+	require('../paths.php');
+	require(INCLUDES.'db_tables.inc.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_sessions = sprintf("SELECT judgingRounds FROM %s", $prefix."judging_locations");
+	$sessions = mysql_query($query_sessions, $brewing) or die(mysql_error());
+	$row_sessions = mysql_fetch_assoc($sessions);
+	
+	do {
+	$a[] = $row_sessions['judgingRounds'];	
+	} while ($row_sessions = mysql_fetch_assoc($sessions));
+	
+	$output = array_sum($a);
+	return $output;
+	
+}
+
+function total_flights () {
+	require('../paths.php');
+	require(INCLUDES.'db_tables.inc.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_tables = sprintf("SELECT id FROM %s", $prefix."judging_tables");
+	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+	$row_tables = mysql_fetch_assoc($tables);
+	
+	do {
+	$a[] = $row_tables['id'];	
+	} while ($row_tables = mysql_fetch_assoc($tables));
+	
+	foreach ($a as $table_id) {
+		$query_table_flights = sprintf("SELECT flightNumber FROM %s WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $prefix."judging_flights", $table_id);
+		$table_flights = mysql_query($query_table_flights, $brewing) or die(mysql_error());
+		$row_table_flights = mysql_fetch_assoc($table_flights);
+		$b[] = $row_table_flights['flightNumber'];
+	}
+	
+	$output = array_sum($b);
+	return $output;
+	
+}
+
+function validate_bjcp_id($input) {
+	$length = strlen($input); 
+	if ($length != 5) return FALSE;
+	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
+	else return TRUE;
 }
 
 // Get possible organizer points
@@ -139,7 +207,7 @@ elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_poi
 else $staff_points = 0;
 
 // Organizer
-$query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignment='O'";
+$query_organizer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignment='O'";
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
@@ -150,7 +218,7 @@ $judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_judges = mysql_fetch_assoc($judges);
 $totalRows_judges = mysql_num_rows($judges);
 
-$query_bos_judges = "SELECT id FROM $brewer_db_table WHERE brewerJudgeBOS='Y'";
+$query_bos_judges = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerJudgeBOS='Y'";
 $judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_judges = mysql_fetch_assoc($judges);
 $totalRows_judges = mysql_num_rows($judges);
@@ -162,12 +230,14 @@ $row_stewards = mysql_fetch_assoc($stewards);
 $totalRows_stewards = mysql_num_rows($stewards);
 
 // Staff
-$query_staff = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignment='X'";
+$query_staff = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignment='X'";
 $staff = mysql_query($query_staff, $brewing) or die(mysql_error());
 $row_staff = mysql_fetch_assoc($staff);
 $totalRows_staff = mysql_num_rows($staff);
 
+
 if ($view == "pdf") {
+
 $filename = str_replace(" ","_",$row_contest_info['contestName']).'_BJCP_Points_Report.'.$view;
 require(CLASSES.'fpdf/html_table.php');
 $pdf=new PDF();
@@ -213,13 +283,14 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
     	$html .= '<tr>';
     	$html .= '<td width="300">'.$judge_info['1'].', '.$judge_info['0'].'</td>';
     	$html .= '<td width="150">';
-			if ($judge_info['4'] != "") $html .= ucfirst($judge_info['4']); else $html .= '&nbsp;';
+			if (validate_bjcp_id($judge_info['4'])) $html .= ucfirst($judge_info['4']); else $html .= '&nbsp;';
 		$html .= '</td>';
     	$html .= '<td width="150">'.judge_points($bid,$judge_info['5']).'</td>';
     	$html .= '</tr>';
     	}  
     $html .= '</table>';
-    }  
+    } 
+	
 	if ($totalRows_stewards > 0) { 
 	$html .= '<br><br><strong>Stewards</strong><br>';
 	$html .= '<table border="1">';
@@ -234,7 +305,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 		$html .= '<tr>';
     	$html .= '<td width="300">'.$steward_info['1'].", ".$steward_info['0'].'</td>';
         $html .= '<td width="150">';
-			if ($steward_info['4'] != "") $html .= $steward_info['4']; else $html .= '&nbsp;';
+			if (validate_bjcp_id($steward_info['4'])) $html .= ucfirst($steward_info['4']); else $html .= '&nbsp;';
 		$html .= '</td>';
 		$html .= '<td width="150">'.steward_points($bid).'</td>';
     	$html .= '</tr>';
@@ -254,7 +325,7 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 		$html .= '<tr>';
     	$html .= '<td width="300">'.$row_staff['brewerLastName'].", ".$row_staff['brewerFirstName'].'</td>';
 		$html .= '<td width="150">';
-			if ($row_staff['brewerJudgeID'] != "") $html .= $row_staff['brewerJudgeID']; else $html .= '&nbsp;';
+			if (validate_bjcp_id($row_staff['brewerJudgeID'])) $html .= ucfirst($row_staff['brewerJudgeID']); else $html .= '&nbsp;';
 		$html .= '</td>';
         $html .= '<td width="150">'.$staff_points.'</td>';
     	$html .= '</tr>';
@@ -268,6 +339,10 @@ $html .= '<br><strong>Total Entries</strong>: '.$total_entries.'<br>';
 }
 
 if ($view == "xml") {
+do { $j[] = $row_judges['bid']; } while ($row_judges = mysql_fetch_assoc($judges));	
+do { $s[] = $row_stewards['bid']; } while ($row_stewards = mysql_fetch_assoc($stewards));	
+do { $st[] = $row_staff['id']; } while ($row_staff = mysql_fetch_assoc($staff));
+do { $o[] = $row_organizer['id']; } while ($row_organizer = mysql_fetch_assoc($organizer));
 $filename = str_replace(" ","_",$row_contest_info['contestName'])."_BJCP_Points_Report.".$view;
 $output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"; 
 $output .= "<OrgReport>\n";	
@@ -276,82 +351,129 @@ $output .= "\t\t<CompID>".$row_contest_info['contestID']."</CompID>\n";
 $output .= "\t\t<CompName>".$row_contest_info['contestName']."</CompName>\n";
 $output .= "\t\t<CompDate>".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
 $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
-$output .= "\t\t<CompDays>".$totalRows_judging."</CompDays>\n";
-$output .= "\t\t<CompSessions></CompSessions>\n";
-$output .= "\t\t<CompFlights></CompFlights>\n";
+$output .= "\t\t<CompDays>".total_days()."</CompDays>\n";
+$output .= "\t\t<CompSessions>".total_sessions()."</CompSessions>\n";
+$output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
 $output .= "\t</CompData>\n";
-
-	if ($totalRows_judges > 0) { 
-	do { $j[] = $row_judges['bid']; } while ($row_judges = mysql_fetch_assoc($judges));
-	$output .= "\t<BJCPpoints>\n";
+$output .= "\t<BJCPpoints>\n";
+	
+	// Judges with a properly formatted BJCP IDs in the system
 	foreach (array_unique($j) as $bid) { 
-		$judge_info = explode("^",brewer_info($bid));
-		if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
-		else $assignment = "Judge";
-		if ($judge_info['4'] != ""){ 
+	$judge_info = explode("^",brewer_info($bid));
+	if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
+	else $assignment = "Judge";
+		if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) { 
+				$output .= "\t\t<JudgeData>\n";
+				$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeID>".$judge_info['4']."</JudgeID>\n";
+				$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+				$output .= "\t\t\t<JudgePts>".judge_points($bid,$judge_info['5'])."</JudgePts>\n";
+				$output .= "\t\t\t<NonJudgePts>0</NonJudgePts>\n";
+				$output .= "\t\t</JudgeData>\n";
+		}
+    }
+	
+	// Stewards with a properly formatted BJCP IDs in the system
+	foreach (array_unique($s) as $bid) { 
+	$steward_info = explode("^",brewer_info($bid));
+		if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
+				$output .= "\t\t<JudgeData>\n";
+				$output .= "\t\t\t<JudgeName>".$steward_info['0']." ".$steward_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeID>".$steward_info['4']."</JudgeID>\n";
+				$output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
+				$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+				$output .= "\t\t\t<NonJudgePts>".steward_points($bid)."</NonJudgePts>\n";
+				$output .= "\t\t</JudgeData>\n";
+    	}  
+	}
+
+	
+	// Staff Members with a properly formatted BJCP IDs in the system
+	foreach (array_unique($st) as $bid) {
+	$staff_info = explode("^",brewer_info($bid));
+		if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) { 
 			$output .= "\t\t<JudgeData>\n";
-			$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
-			$output .= "\t\t\t<JudgeID>".$judge_info['4']."</JudgeID>\n";
-			$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
-			$output .= "\t\t\t<JudgePoints>".judge_points($bid,$judge_info['5'])."</JudgePoints>\n";
-			$output .= "\t\t\t<NonJudgePoints>0</NonJudgePoints>\n";
+			$output .= "\t\t\t<JudgeName>".$staff_info['0']." ".$staff_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeID>".$staff_info['4']."</JudgeID>\n";
+			$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+			$output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
 			$output .= "\t\t</JudgeData>\n";
 		}
-    }  
+	}
+	
+	// Organizer with a properly formatted BJCP ID in the system
+	foreach (array_unique($o) as $bid) {
+	$organizer_info = explode("^",brewer_info($bid));
+		if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) { 
+			$output .= "\t\t<JudgeData>\n";
+			$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeID>".$organizer_info['4']."</JudgeID>\n";
+			$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+			$output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
+			$output .= "\t\t</JudgeData>\n";
+		}
+	}
+	
 	$output .= "\t</BJCPpoints>\n";
-    }  
 
 	$output .= "\t<NonBJCP>\n";
 	
-	do { $j[] = $row_judges['bid']; } while ($row_judges = mysql_fetch_assoc($judges));
-	sort($j);
+	// Judges without a properly formatted BJCP IDs in the system
 	foreach (array_unique($j) as $bid) { 
-		$judge_info = explode("^",brewer_info($bid));
-		if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
-		else $assignment = "Judge";
-		if ($judge_info['4'] == ""){ 
+	$judge_info = explode("^",brewer_info($bid));
+	if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
+	else $assignment = "Judge";
+		if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) { 
+				$output .= "\t\t<JudgeData>\n";
+				$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+				$output .= "\t\t\t<JudgePts>".judge_points($bid,$judge_info['5'])."</JudgePts>\n";
+				$output .= "\t\t\t<NonJudgePts>0</NonJudgePts>\n";
+				$output .= "\t\t</JudgeData>\n";
+		}
+    }
+	
+	// Stewards without a properly formatted BJCP IDs in the system
+	foreach (array_unique($s) as $bid) { 
+	$steward_info = explode("^",brewer_info($bid));
+		if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (!validate_bjcp_id($steward_info['4']))) {
+				$output .= "\t\t<JudgeData>\n";
+				$output .= "\t\t\t<JudgeName>".$steward_info['0']." ".$steward_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
+				$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+				$output .= "\t\t\t<NonJudgePts>".steward_points($bid)."</NonJudgePts>\n";
+				$output .= "\t\t</JudgeData>\n";
+    	}  
+	}
+
+	
+	// Staff Members without a properly formatted BJCP IDs in the system
+	foreach (array_unique($st) as $bid) {
+	$staff_info = explode("^",brewer_info($bid));
+		if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) { 
 			$output .= "\t\t<JudgeData>\n";
-			$output .= "\t\t\t<JudgeName>".$judge_info['0']." ".$judge_info['1']."</JudgeName>\n";
-			$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
-			$output .= "\t\t\t<JudgePoints>".judge_points($bid,$judge_info['5'])."</JudgePoints>\n";
-			$output .= "\t\t\t<NonJudgePoints>0</NonJudgePoints>\n";
+			$output .= "\t\t\t<JudgeName>".$staff_info['0']." ".$staff_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+			$output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
 			$output .= "\t\t</JudgeData>\n";
 		}
-    } 
-	
-	if ($totalRows_stewards > 0) { 
-	do { $s[] = $row_stewards['bid']; } while ($row_stewards = mysql_fetch_assoc($stewards));
-	foreach (array_unique($s) as $bid) { 
-		$steward_info = explode("^",brewer_info($bid));
-		$output .= "\t\t<JudgeData>\n";
-    	$output .= "\t\t\t<JudgeName>".$steward_info['0']." ".$steward_info['1']."</JudgeName>\n";
-		$output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
-    	$output .= "\t\t\t<JudgePoints>0</JudgePoints>\n";
-		$output .= "\t\t\t<NonJudgePoints>".steward_points($bid)."</NonJudgePoints>\n";
-    	$output .= "\t\t</JudgeData>\n";
-    	}  
-	}
-	if ($totalRows_staff > 0) { 
-	do { 
-		$output .= "\t\t<JudgeData>\n";
-    	$output .= "\t\t\t<JudgeName>".$row_staff['brewerFirstName']." ".$row_staff['brewerLastName']."</JudgeName>\n";
-		$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
-    	$output .= "\t\t\t<JudgePoints>0</JudgePoints>\n";
-		$output .= "\t\t\t<NonJudgePoints>".$staff_points."</NonJudgePoints>\n";
-    	$output .= "\t\t</JudgeData>\n";
-    	}  
-	while ($row_staff = mysql_fetch_assoc($staff));
-	}	
-	
-	if ($totalRows_organizer > 0) { 
-		$output .= "\t\t<JudgeData>\n";
-    	$output .= "\t\t\t<JudgeName>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName']."</JudgeName>\n";
-		$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
-    	$output .= "\t\t\t<JudgePoints>0</JudgePoints>\n";
-		$output .= "\t\t\t<NonJudgePoints>".$organ_points."</NonJudgePoints>\n";
-    	$output .= "\t\t</JudgeData>\n";
 	}
 	
+	// Organizer without a properly formatted BJCP ID in the system
+	foreach (array_unique($o) as $bid) {
+	$organizer_info = explode("^",brewer_info($bid));
+		if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (!validate_bjcp_id($organizer_info['4']))) { 
+			$output .= "\t\t<JudgeData>\n";
+			$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+			$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+			$output .= "\t\t\t<JudgePts>0</JudgePts>\n";
+			$output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
+			$output .= "\t\t</JudgeData>\n";
+		}
+	}
 	$output .= "\t</NonBJCP>\n";
 	
 	$output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
@@ -365,6 +487,7 @@ $output .= "\t</CompData>\n";
 	echo $output;
 	exit();
 }
+
 if ($view == "default") { // printing from browser ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -416,7 +539,7 @@ if ($view == "default") { // printing from browser ?>
     <tbody>
     <tr>
     	<td class="bdr1B_gray"><?php echo $row_organizer['brewerLastName'].", ".$row_organizer['brewerFirstName']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_organizer['brewerJudgeID']; ?></td>
+        <td class="data bdr1B_gray"><?php if (validate_bjcp_id($row_organizer['brewerJudgeID'])) echo $row_organizer['brewerJudgeID']; ?></td>
         <td class="data bdr1B_gray"><?php echo $organ_points; ?></td>
     </tr>
     </tbody>
@@ -457,7 +580,7 @@ if ($view == "default") { // printing from browser ?>
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
-    	<td class="data bdr1B_gray"><?php echo ucfirst($judge_info['4']); ?></td>
+    	<td class="data bdr1B_gray"><?php if (validate_bjcp_id($judge_info['4'])) echo ucfirst($judge_info['4']); ?></td>
         <td class="data bdr1B_gray"><?php echo judge_points($bid,$judge_info['5']); ?></td>
     </tr>
     <?php }  ?>
@@ -499,7 +622,7 @@ if ($view == "default") { // printing from browser ?>
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $steward_info['1'].", ".$steward_info['0']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $steward_info['4']; ?></td>
+        <td class="data bdr1B_gray"><?php if (validate_bjcp_id($steward_info['4'])) echo $steward_info['4']; ?></td>
         <td class="data bdr1B_gray"><?php echo steward_points($bid); ?></td>
     </tr>
     <?php }  ?>
@@ -537,7 +660,7 @@ if ($view == "default") { // printing from browser ?>
     <?php do {  ?>
     <tr>
     	<td class="bdr1B_gray"><?php echo $row_staff['brewerLastName'].", ".$row_staff['brewerFirstName']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_staff['brewerJudgeID']; ?></td>
+        <td class="data bdr1B_gray"><?php if (validate_bjcp_id($row_staff['brewerJudgeID'])) echo $row_staff['brewerJudgeID']; ?></td>
         <td class="data bdr1B_gray"><?php echo $staff_points; ?></td>
     </tr>
     <?php } while ($row_staff = mysql_fetch_assoc($staff)); ?>
