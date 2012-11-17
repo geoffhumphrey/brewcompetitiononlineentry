@@ -5,8 +5,9 @@
  *              Adds/moves/deletes corresponding entries to the judging_flights table
  */
 
-if ($action == "add") {
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
+if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
+
+if ($action == "add") {	
 
 	$insertSQL = sprintf("INSERT INTO $judging_tables_db_table (
 	tableName, 
@@ -19,6 +20,7 @@ if ($action == "add") {
 					   GetSQLValueString($_POST['tableNumber'], "text"),
 					   GetSQLValueString($_POST['tableLocation'], "text")
 					   );
+	//echo $insertSQL;
 
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
@@ -89,10 +91,10 @@ if ($action == "add") {
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   	header(sprintf("Location: %s", stripslashes($insertGoTo)));
+
 }
 
 if ($action == "edit") {
-	if ($_POST['tableStyles'] != "") $tableStyles = implode(",",$_POST['tableStyles']); else $tableStyles = "";
 
 	$updateSQL = sprintf("UPDATE $judging_tables_db_table SET 
 	tableName=%s, 
@@ -101,20 +103,22 @@ if ($action == "edit") {
 	tableLocation=%s
 	WHERE id=%s",
                     
-	GetSQLValueString($_POST['tableName'], "text"),
-	GetSQLValueString($tableStyles, "text"),
-	GetSQLValueString($_POST['tableNumber'], "text"),
-	GetSQLValueString($_POST['tableLocation'], "text"),
-	GetSQLValueString($id, "text"));
+						GetSQLValueString($_POST['tableName'], "text"),
+					   	GetSQLValueString($table_styles, "text"),
+					   	GetSQLValueString($_POST['tableNumber'], "text"),
+					   	GetSQLValueString($_POST['tableLocation'], "text"),
+						GetSQLValueString($id, "text"));
 
+	//echo $updateSQL."<br>";
   	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+ 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
   	// Check to see if flights have been designated already
   	$query_flight_count = sprintf("SELECT id,flightEntryID FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
 	$flight_count = mysql_query($query_flight_count, $brewing) or die(mysql_error());
 	$row_flight_count = mysql_fetch_assoc($flight_count);
 	$totalRows_flight_count = mysql_num_rows($flight_count);
+	
 	
 	// echo "<p>".$totalRows_flight_count."</p>";
   	
