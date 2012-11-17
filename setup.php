@@ -1,7 +1,7 @@
 <?php
 require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
-$current_version = "1.2.1.3"; // Change to db query variable after v1.2.1.0.
+$current_version = "1.2.1.3"; 
 require(INCLUDES.'functions.inc.php'); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');

@@ -7,7 +7,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 require(DB.'common.db.php');
 require(INCLUDES.'headers.inc.php');
-$current_version = "1.2.1.0"; // Change to db query variable after v1.2.1.0.
+$current_version = "1.2.1.3";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -62,13 +62,22 @@ if (file_exists($filename)) {
 	$row_log = mysql_fetch_assoc($log);
 	$totalRows_log = mysql_num_rows($log); 
 	
-	
 	$section = "update";
-	$table_name = $prefix."system";
-	if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php'); // used only for version 1.2.1.0; subsequent versions will utilize a db query.
-	else $version = $current_version;
+	
+	// check to see if the "system" db table is present, if not, use the legacy hard-coded version
+	if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php');
+	
+	// if "system" db table is present, get installed version from it
+	if (check_setup($prefix."system",$database)) { 
+		$query_version = "SELECT version FROM $system_db_table";
+		$version = mysql_query($query_version, $brewing) or die(mysql_error());
+		$row_version = mysql_fetch_assoc($version);	
+		$version = $row_version['version'];
+	}
+
 		 
-		 if (($action == "default") && ($version != $current_version)) { ?><div class="error">BCOE&amp;M <?php echo $current_version; ?> Database Update Script must be run to update the database.</div><?php } ?>
+	if (($action == "default") && ($version != $current_version)) { ?><div class="error">BCOE&amp;M <?php echo $current_version; ?> Database Update Script must be run to update the database.</div><?php } ?>
+	
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
@@ -127,7 +136,9 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version == "1204") {						
+						if ($version == "1204") { 
+							// Version 1.2.1.0 was last major update to the DB tables
+							// If version is 1.2.1.0 or later, the DB structure is current (installed by the setup script)						
 							include (UPDATE.'current_update.php');
 						}
 						
