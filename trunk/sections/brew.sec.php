@@ -70,7 +70,20 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
 	});
 	</script>
-<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php if (($row_user['userLevel'] == 1) && ($go == "entries")) echo "admin"; else echo "list" ?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<?php 
+function admin_relocate($user_level,$go,$referrer) {
+	
+	if (strstr($referrer,"list")) $list = TRUE;
+	if (strstr($referrer,"entries")) $list = FALSE;
+	if (($user_level == 1) && ($go == "entries") && ($list == FALSE)) $output = "admin";
+	elseif (($user_level == 1) && ($go == "entries") && ($list == TRUE)) $output = "list";
+	else $output = "list";
+	return $output;
+	
+}
+
+?>
+<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo admin_relocate($row_user['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($row_user['userLevel'] != 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>">

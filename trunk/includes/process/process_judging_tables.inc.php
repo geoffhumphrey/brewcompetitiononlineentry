@@ -92,7 +92,7 @@ if ($action == "add") {
 }
 
 if ($action == "edit") {
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = "";
+	if ($_POST['tableStyles'] != "") $tableStyles = implode(",",$_POST['tableStyles']); else $tableStyles = "";
 
 	$updateSQL = sprintf("UPDATE $judging_tables_db_table SET 
 	tableName=%s, 
@@ -102,7 +102,7 @@ if ($action == "edit") {
 	WHERE id=%s",
                     
 	GetSQLValueString($_POST['tableName'], "text"),
-	GetSQLValueString($table_styles, "text"),
+	GetSQLValueString($tableStyles, "text"),
 	GetSQLValueString($_POST['tableNumber'], "text"),
 	GetSQLValueString($_POST['tableLocation'], "text"),
 	GetSQLValueString($id, "text"));
@@ -116,10 +116,11 @@ if ($action == "edit") {
 	$row_flight_count = mysql_fetch_assoc($flight_count);
 	$totalRows_flight_count = mysql_num_rows($flight_count);
 	
-	//echo "<p>".$totalRows_flight_count."</p>";
+	// echo "<p>".$totalRows_flight_count."</p>";
   	
 	// If flights are designated and the Table's styles have changed, 
 	// loop through the judging_flights table and update or remove the affected entries
+	
   	if (($totalRows_flight_count > 0) && ($table_styles != "")) {
 		
 		$query_flight_round = sprintf("SELECT flightRound FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $id);

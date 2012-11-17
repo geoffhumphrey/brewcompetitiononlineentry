@@ -338,21 +338,16 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
     </select>
     </td>
   </tr>
-  <?php if ($totalRows_judging1 > 1) { ?>
   <tr>
     <td class="dataLabel">Location:</td>
     <td class="data">
     <select name="tableLocation" id="tableLocation">
-          <option value=""></option>
           <?php do { ?>
           <option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging1['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
           <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
     </select>
     </td>
   </tr>
-  <?php } else { ?>
-  <input type="hidden" name="tableLocation"  value="<?php echo $row_judging1['id']; ?>" />
-  <?php } ?>
   <tr>
     <td class="dataLabel">Style(s):</td>
     <td class="data">
@@ -376,7 +371,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
         	<?php do { ?>
             <?php if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default") > 0) { ?>
             <tr>
-            	<td><input name="tableStyles[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if ($action == "edit") { if (get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; }  if ($action == "add") { if (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; } ?>></td>
+            	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if ($action == "edit") { if (get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; }  if ($action == "add") { if (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; } ?>></td>
                 <td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
                 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?>
                 <td class="data"><?php echo $row_styles['brewStyle'].get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>

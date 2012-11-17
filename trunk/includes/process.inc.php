@@ -172,6 +172,37 @@ if ($action != "purge") {
 }
 // Script Specific Variables
 
+function clean_up_url($referer) {
+	
+	include(CONFIG."config.php");
+	
+	// Break URL into an array
+	$parts = parse_url($referer);
+	$referer = $parts['query'];	
+	
+	// Remove $msg=X from query string
+	$pattern = array("/[0-9]/", "/&msg=/");
+	$referer = preg_replace($pattern, "", $referer);
+
+	// Remove $id=X from query string
+	$pattern = array("/[0-9]/", "/&id=/");
+	$referer = preg_replace($pattern, "", $referer);
+	
+	// Remove $pg=X from query string and add back in
+	$pattern = array("/[0-9]/", "/&pg=/");
+	$referer = str_replace($pattern,"",$referer);
+	
+	
+	$pattern = array('\'', '"');
+	$referer = str_replace($pattern,"",$referer);
+	$referer = stripslashes($referer);	
+	
+	// Reconstruct the URL
+	$reconstruct = $base_url."/index.php?".$referer;
+	return $reconstruct;
+	
+}
+
 if (strpos($_POST['relocate'],"?") === false) { 
 	$insertGoTo = $_POST['relocate']."?msg=1"; 
 	$updateGoTo = $_POST['relocate']."?msg=2";
@@ -183,8 +214,12 @@ else {
 	$updateGoTo = $_POST['relocate']."&msg=2";
 	$massUpdateGoTo = $_POST['relocate']."&msg=9";
 }
-
-$deleteGoTo = $_SERVER['HTTP_REFERER']."&msg=5";
+if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."/list"))  		$deleteGoTo = $base_url."/index.php?section=list&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/rules")) 		$deleteGoTo = $base_url."/index.php?section=rules&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/volunteers")) $deleteGoTo = $base_url."/index.php?section=volunteers&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/sponsors")) 	$deleteGoTo = $base_url."/index.php?section=sponsors&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/pay")) 		$deleteGoTo = $base_url."/index.php?section=pay&msg=5"; 
+else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 
 //echo $insertGoTo;
 //echo $updateGoTo;
