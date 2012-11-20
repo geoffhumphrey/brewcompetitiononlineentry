@@ -110,6 +110,13 @@ function capitalize($string1) {
 	return $output;
 }
 
+function strip_newline($input) {
+	$output = preg_replace("/[\n\r]/"," ",$input);
+	return $output;
+}
+
+// --------------------------- // -------------------------------- //
+
 if ($action != "purge") {
 	function relocate($referer,$page,$msg,$id) { 
 		include(CONFIG."config.php");

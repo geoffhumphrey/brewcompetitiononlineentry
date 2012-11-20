@@ -353,6 +353,7 @@ switch($section) {
 		if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; 
 		}
 	elseif ($msg == "13") $output = "The table that was just defined does not have any associated styles.";
+	
 	elseif ($msg == "15") $output = "One or more pieces of required data are missing - outlined in red below. Please check your data and enter again.";
 	else $output = "";
 	break;
@@ -361,6 +362,8 @@ switch($section) {
 
 }
 if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
+if ($msg == "16") $output = "Your installation has been set up successfully!";
+if ($msg == "17") $output = "Your installation has been updated successfully!";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
 
 

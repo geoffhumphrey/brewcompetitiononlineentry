@@ -53,7 +53,7 @@ WHERE id=%s",
 		
 		mail($to_email, $subject, $message, $headers);
 		*/
-		header(sprintf("Location: %s", $base_url."/index.php?msg=2")); 
+		header(sprintf("Location: %s", $base_url."/index.php?msg=16")); 
 	}
 	
 	else {
