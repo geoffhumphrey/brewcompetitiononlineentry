@@ -57,9 +57,9 @@ echo "<ul><li>Date created and last access timestamp rows added to users table.<
 
 $updateSQL = "
 ALTER TABLE  `".$prefix."preferences` 
-ADD  `prefsTimeZone` DECIMAL(10,3)  NULL , 
-ADD  `prefsEntryLimit` INT(11) NULL , 
-ADD  `prefsTimeFormat` TINYINT(1) NULL,
+ADD  `prefsTimeZone` DECIMAL(10,3)  NULL DEFAULT NULL , 
+ADD  `prefsEntryLimit` INT(11) NULL DEFAULT NULL , 
+ADD  `prefsTimeFormat` TINYINT(1) NULL DEFAULT NULL ,
 ADD  `prefsGoogle` CHAR(1) NULL DEFAULT NULL AFTER  `prefsTransFee` ,
 ADD  `prefsGoogleAccount` VARCHAR (255) NULL DEFAULT NULL COMMENT  'Google Merchant ID' AFTER  `prefsGoogle`,
 ADD  `prefsWinnerDelay` INT(11) NULL DEFAULT NULL COMMENT  'Hours after last judging date beginning time to delay displaying winners' AFTER `prefsDisplayWinners`,
@@ -82,12 +82,12 @@ echo "<ul><li>Preferences table updated.</li></ul>";
 //   Change/add rows to accomodate new time schema.
 // -----------------------------------------------------------
 
-$updateSQL = "ALTER TABLE  `".$prefix."judging_locations` CHANGE  `judgingDate`  `judgingDate` VARCHAR( 255 ) NULL;"; 
+$updateSQL = "ALTER TABLE  `".$prefix."judging_locations` CHANGE  `judgingDate` `judgingDate` VARCHAR( 255 ) NULL DEFAULT NULL;"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "ALTER TABLE `".$prefix."judging_locations` CHANGE  `judgingTime`  `judgingTime` VARCHAR( 255 ) NULL;"; 
+$updateSQL = "ALTER TABLE `".$prefix."judging_locations` CHANGE  `judgingTime` `judgingTime` VARCHAR( 255 ) NULL DEFAULT NULL;"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
@@ -144,7 +144,7 @@ if ($totalRows_archive > 0) {
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		//echo $updateSQL."<br>";
 		
-		$updateSQL = "ALTER TABLE `".$prefix."brewing_".$row_archive['archiveSuffix']."` ADD  `brewConfirmed` TINYINT(1) DEFAULT NULL COMMENT '0 = false; 1 = true';";
+		$updateSQL = "ALTER TABLE `".$prefix."brewing_".$row_archive['archiveSuffix']."` ADD  `brewConfirmed` TINYINT(1) NULL DEFAULT NULL COMMENT '0 = false; 1 = true';";
 		mysql_select_db($database, $brewing);
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		//echo $updateSQL."<br>";  
