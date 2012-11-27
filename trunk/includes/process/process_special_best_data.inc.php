@@ -8,7 +8,9 @@ if ($action == "add") {
 	foreach($_POST['id'] as $id){
 		if ($_POST['sbd_judging_no'.$id] != "") {
 	
-	$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $_POST['sbd_judging_no'.$id]);
+	$cleaned = ltrim($_POST['sbd_judging_no'.$id],"0");
+	$cleaned = str_replace("-","",$cleaned);
+	$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
 	$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
 	$row_entry = mysql_fetch_assoc($entry);
 	
@@ -34,7 +36,10 @@ if ($action == "add") {
 if ($action == "edit") {
 	
 	foreach($_POST['id'] as $id){
-		$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $_POST['sbd_judging_no'.$id]);
+		
+		$cleaned = ltrim($_POST['sbd_judging_no'.$id],"0");
+		$cleaned = str_replace("-","",$cleaned);
+		$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
 		$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
 		$row_entry = mysql_fetch_assoc($entry);
 			

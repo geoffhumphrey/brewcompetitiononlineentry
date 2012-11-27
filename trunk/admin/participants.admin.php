@@ -49,8 +49,12 @@ function judge_steward_availability($input) {
 	$return .= "</table>";
 	return $return;
 }
+if ($action != "print") { 
+	if (($dbTable == "default") && ($totalRows_participant_count > $row_prefs['prefsRecordLimit']))	{ 
+			echo "<div class='info'>The DataTables recordset paging limit of ".$row_prefs['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$row_prefs['prefsRecordPaging']." participants.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of participants ($totalRows_participant_count).</div>";
+	}
+}
 ?>
-
 <h2><?php 
 if ($filter == "judges") echo "Available Judges"; 
 elseif ($filter == "stewards") echo "Available Stewards";

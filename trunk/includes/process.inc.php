@@ -317,7 +317,60 @@ if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php');
 if ($action == "beerxml")				include_once (PROCESS.'process_beerxml.inc.php');
 
 if ($action == "purge") {
-	require(INCLUDES.'functions.inc.php');
+	
+	function purge_entries($type, $interval) {
+		
+		require(CONFIG.'config.php');	
+		mysql_select_db($database, $brewing);
+		
+		if ($type == "unconfirmed") {
+			$query_check = sprintf("SELECT id FROM %s WHERE brewConfirmed='0'", $prefix."brewing");
+			if ($interval > 0) $query_check .= " AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			
+			do { $a[] = $row_check['id']; } while ($row_check = mysql_fetch_assoc($check));
+			
+			foreach ($a as $id) {
+				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+				mysql_select_db($database, $brewing);
+				$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+			}
+		}
+		
+		if ($type == "special") {
+			$query_check = sprintf("SELECT id,brewInfo FROM %s WHERE (
+						(brewCategorySort = '06' AND brewSubCategory = 'D') OR 
+						(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
+						(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
+						(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '21' AND brewSubCategory = 'B') OR 
+						(brewCategorySort = '22' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '26' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
+						(brewCategorySort = '28' AND brewSubCategory = 'B') OR
+						(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '28' AND brewSubCategory = 'D') OR 
+						brewCategorySort >  '28')", 
+						$prefix."brewing");
+			if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+			
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			
+			do { 
+				if ($row_check['brewInfo'] == "") {
+					$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+					mysql_select_db($database, $brewing);
+					$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+				}
+			} while ($row_check = mysql_fetch_assoc($check));
+		}
+	}
 	purge_entries("unconfirmed", 0);
 	purge_entries("special", 0); 
 	header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=entries&purge=true"));

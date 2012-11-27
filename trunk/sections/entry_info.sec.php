@@ -50,7 +50,7 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <?php if ($row_prefs['prefsEntryLimit'] != "") { ?>
 <a name="entry_limit"></a><h2>Entry Limit</h2>
-<p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.</p>
+<p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.  Currently, <?php echo $totalRows_log; if ($totalRows_log == 1) echo " entry has"; else echo " entries have"; ?>  been logged.</p>
 <?php } ?>
 <a name="payment"></a><h2>Payment</h2>
 <p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>

@@ -36,10 +36,10 @@ function version_check($version) {
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.2.1.3") {	
-		$updateSQL = sprintf("UPDATE %s SET version='%s' WHERE id='%s'",$prefix."system","1.2.1.3","1");
+	if ($version != "1.2.1.3") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.2.1.3","2012-12-01","1");
 		mysql_select_db($database, $brewing);
-		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
 	
@@ -61,12 +61,13 @@ if ($today > ($data_check_date + 86400)) data_integrity_check();
 // check to see if all judging numbers have been generated. If not, generate
 if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 
+/*
 // Automatically purge all unconfirmed entries
 purge_entries("unconfirmed", 1);
 
 // Purge entries without defined special ingredients designated to particular styles that require them
 purge_entries("special", 1);
-
+*/
 // Set timezone globals for the site
 $timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
 date_default_timezone_set($timezone_prefs);

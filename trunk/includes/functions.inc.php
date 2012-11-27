@@ -102,38 +102,36 @@ function purge_entries($type, $interval) {
 	}
 	
 	if ($type == "special") {
-		$query_check = sprintf("
-							   SELECT id,brewInfo FROM %s WHERE (brewInfo IS NULL OR brewInfo='') 
-							   AND (
-									(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
-									(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
-									(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '22' AND brewSubCategory = 'B') OR 
-									(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
-									(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'B') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'D') OR
-									brewCategorySort >  '28'
-									)", 
-							   $prefix."brewing");
+		$query_check = sprintf("SELECT id,brewInfo FROM %s WHERE (brewInfo IS NULL OR brewInfo='') AND (
+						(brewCategorySort = '06' AND brewSubCategory = 'D') OR 
+						(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
+						(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
+						(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '21' AND brewSubCategory = 'B') OR 
+						(brewCategorySort = '22' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
+						(brewCategorySort = '26' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
+						(brewCategorySort = '28' AND brewSubCategory = 'B') OR
+						(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
+						(brewCategorySort = '28' AND brewSubCategory = 'D') OR 
+						brewCategorySort >  '28')", 
+						$prefix."brewing");
 		if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
 		do { 
-			$a[] = $row_check['id']; 
+				if ($row_check['brewInfo'] == "") {
+					$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+					mysql_select_db($database, $brewing);
+					$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+				}
 		} while ($row_check = mysql_fetch_assoc($check));
-		
-		foreach ($a as $id) {
-			$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
-			mysql_select_db($database, $brewing);
-			$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
-		}
 	}
 }
 
@@ -1233,7 +1231,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -2157,6 +2155,10 @@ function data_integrity_check() {
 	mysql_free_result($blank);
 	mysql_free_result($blank1);
 	mysql_free_result($user_check);
+	
+	// Next, purge all entries that are unconfirmed
+	purge_entries("unconfirmed", 1);
+	purge_entries("special", 1);
 	
 	// Last update the "system" table with the date/time the function ended
 	$updateSQL = sprintf("UPDATE %s SET data_check=%s WHERE id='1'", $prefix."system", "NOW( )");
