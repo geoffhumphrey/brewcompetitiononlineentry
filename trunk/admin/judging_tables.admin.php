@@ -73,7 +73,23 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 </div>
 <?php } // if ($action != "print") ?>
 
-<?php if ($action == "default") { ?>
+<?php if (($action == "default") && ($dbTable == "default")) { ?>
+<div class="adminSubNavContainer">
+		<span class="adminSubNav">
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name&amp;tb=view" title="View Assignments by Name">View All Judge Assignments By Last Name</a>
+        </span>
+        <span class="adminSubNav">
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;tb=view" title="View Assignments by Table">View All Judge Assignments By Table</a>
+        </span>
+</div>
+<div class="adminSubNavContainer">
+        <span class="adminSubNav">
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;tb=view" title="View Assignments by Name">View All Steward Assignments By Last Name</a>
+        </span>
+        <span class="adminSubNav">
+        	<span class="icon"><img src="<?php echo $base_url; ?>/images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;tb=view" title="View Assignments by Table">View All Steward Assignments By Table</a>
+        </span>
+</div>
 <table class="dataTableCompact">
 
 <tr>

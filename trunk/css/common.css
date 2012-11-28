@@ -41,12 +41,16 @@
 }
 
 #container {
+	padding-top: 40px;
 }
 
 /* ------------------------------- Nav ------------------------------- */
 
 #navigation { 
-	
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
 }
 
 #navigation-inner {

@@ -240,21 +240,19 @@ textarea {
 
 #navigation { 
 	width: 100%;
-	position: relative;
-	height: 35px;
-	background-image: url(../images/claussenii/nav.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-color:#1A2A00;
-	border-bottom: 1px solid #1A2A00;
 }
 
 #navigation-inner
 {
-	padding: .75em;
 	vertical-align:middle;
 	font-weight: bold;
+	background-image: url(../images/claussenii/nav.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:#1A2A00;
 	color: #D9E0D2;
+	border-bottom: 1px solid #1A2A00;
+	padding: .65em;
 }
 
 #navigation-inner a,
