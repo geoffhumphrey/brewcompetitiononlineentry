@@ -66,7 +66,12 @@ Changes in This Version
 
 **********************************************************************
 
-This release features mostly bug fixes and a couple of enhancements. 
+This release features mostly bug fixes and a couple of enhancements:
+- Enhanced the data integrity functions to be very explicit with regard to messaging about special ingredients/classic style requirements.
+- Added the ability to utilize "clean" URLs for public pages (Entry Information, Rules, Volunteer Info, etc.)
+- Updated to Fancybox 2.1.3
+- Updated to some CSS3 scripting, especially concerning rounded corners (now supported by IE9)
+- Fixed some Archive display issues resulting from legacy code and database structure
 
 Addresses the following reported issues on Google Code (http://code.google.com/p/brewcompetitiononlineentry/issues/list):
 - Issue 186

@@ -55,8 +55,17 @@ $filename = $contest."_entries_".$filter."_".$action."_".$date.$loc.$extension;
 if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 	$headers = array(); 
 	for ($i = 0; $i < $num_fields; $i++) {     
-		   $headers[] = mysql_field_name($sql,$i); 
-		} 
+		   $headers[] = mysql_field_name($sql,$i);
+		}
+		$headers[] .= "Table";
+		$headers[] .= "Flight";
+		$headers[] .= "Round";
+		$headers[] .= "Score";
+		$headers[] .= "Place";
+		$headers[] .= "BOS Place";
+		$headers[] .= "Style Type";
+		$headers[] .= "Location";
+	
 	$fp = fopen('php://output', 'w'); 
 	
 	if ($fp && $sql) {
@@ -66,7 +75,32 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 		header('Expires: 0');
 		fputcsv($fp, $headers);
 		do {
-			fputcsv($fp, array_values($row_sql));
+			$fields1 = array_values($row_sql);
+			
+			$query_scores = sprintf("SELECT scoreEntry,scorePlace,scoreType FROM $judging_scores_db_table WHERE eid='%s'",$row_sql['id']);
+			$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+			$row_scores = mysql_fetch_assoc($scores);
+			
+			$query_flight = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_sql['id']);
+			$flight = mysql_query($query_flight, $brewing) or die(mysql_error());
+			$row_flight = mysql_fetch_assoc($flight);
+			
+			$query_bos = sprintf("SELECT scorePlace FROM $judging_scores_bos_db_table WHERE eid='%s'",$row_sql['id']);
+			$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
+			$row_bos = mysql_fetch_assoc($bos);
+			$totalRows_bos = mysql_num_rows($bos);
+			if ($totalRows_bos > 0) $bos_place = $row_bos['scorePlace']; else $bos_place = "";
+			
+			$style_type = style_type($row_scores['scoreType'],2,"bcoe");
+			$location = explode("^",get_table_info(1,"location",$row_flight['flightTable'],"default","default"));
+			$table_info = explode("^",get_table_info(1,"basic",$row_flight['flightTable'],"default","default"));
+			$table_name = sprintf("%02s",$table_info[0]).": ".$table_info[1];
+
+			$fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type,$location[2]);
+			
+			$fields = array_merge($fields1,$fields2);
+			
+			fputcsv($fp, $fields);
 		}
 		while ($row_sql = mysql_fetch_assoc($sql));
     die; 

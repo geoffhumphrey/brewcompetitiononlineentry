@@ -58,20 +58,20 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc'],[1,'asc']],
+			"aaSorting": [[5,'asc'],[4,'asc'],[0,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				null,
 				null,
 				null,
 				null,
-				{ "asSorting": [  ] },
+				null,
 				<?php if ($view == "default") { ?>
-				{ "asSorting": [  ] },
+				null,
 				<?php } ?>
+				null,
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
+				{ "asSorting": [  ] } 
 				]
 			} );
 		} );
