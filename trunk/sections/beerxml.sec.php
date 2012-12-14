@@ -81,8 +81,15 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 //$return = "index.php?section=brew&action=edit&id=".$row_entry_check['id']."&msg=10";
 //echo $return;	
 
+$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'", $prefix."brewing",$row_user['id']);
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			
+			
+
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
+<?php if ($row_check['count'] < $row_prefs['prefsUserEntryLimit']) { ?>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>
@@ -99,6 +106,9 @@ if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have 
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>" />
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>" />
 </form>
+<?php } else { ?>
+<span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  /></span><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong>
+<?php } ?>
 <?php } else { ?>
 <div id="header">
 	<div id="header-inner"><h1>Import Beer XML File</h1></div>

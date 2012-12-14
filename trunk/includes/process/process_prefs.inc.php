@@ -43,6 +43,11 @@ if ($action == "add") {
 	prefsEntryLimit,
 	
 	prefsTimeFormat,
+	prefsUserEntryLimit,
+	prefsUserSubCatLimit,
+	prefsPayToPrint,
+	prefsHideRecipe,
+	prefsUseMods,
 	id
 	) VALUES (
 	%s, %s, %s, %s, %s, 
@@ -50,6 +55,7 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
+	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
 	%s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -89,6 +95,11 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['prefsEntryLimit'], "text"),
 						   
 						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
+						   GetSQLValueString($_POST['prefsUserEntryLimit'], "int"),
+						   GetSQLValueString($_POST['prefsUserSubCatLimit'], "int"),
+						   GetSQLValueString($_POST['prefsPayToPrint'], "text"),
+						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
+						   GetSQLValueString($_POST['prefsUseMods'], "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		//echo $insertSQL;
@@ -140,7 +151,12 @@ if ($action == "edit") {
 	prefsTimeZone=%s,
 	prefsEntryLimit=%s,
 	
-	prefsTimeFormat=%s
+	prefsTimeFormat=%s,
+	prefsUserEntryLimit=%s,
+	prefsUserSubCatLimit=%s,
+	prefsPayToPrint=%s,
+	prefsHideRecipe=%s,
+	prefsUseMods=%s
 	WHERE id=%s",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
@@ -179,6 +195,11 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsEntryLimit'], "text"),
 						   
 						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
+						   GetSQLValueString($_POST['prefsUserEntryLimit'], "int"),
+						   GetSQLValueString($_POST['prefsUserSubCatLimit'], "int"),
+						   GetSQLValueString($_POST['prefsPayToPrint'], "text"),
+						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
+						   GetSQLValueString($_POST['prefsUseMods'], "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		mysql_select_db($database, $brewing);

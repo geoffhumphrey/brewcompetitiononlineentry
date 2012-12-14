@@ -22,6 +22,7 @@ if ($dbTable == "default") {
 	$judging_scores_db_table = $prefix."judging_scores";
 	$judging_scores_bos_db_table = $prefix."judging_scores_bos";
 	$judging_tables_db_table = $prefix."judging_tables";
+	$mods_db_table = $prefix."mods";
 	$preferences_db_table = $prefix."preferences";
 	$special_best_data_db_table = $prefix."special_best_data";
 	$special_best_info_db_table = $prefix."special_best_info";
@@ -49,6 +50,7 @@ else {
 	$judging_scores_db_table = $prefix."judging_scores".$suffix;
 	$judging_scores_bos_db_table = $prefix."judging_scores_bos".$suffix;
 	$judging_tables_db_table = $prefix."judging_tables".$suffix;
+	$mods_db_table = $prefix."mods";
 	$preferences_db_table = $prefix."preferences";
 	$special_best_data_db_table = $prefix."special_best_data".$suffix;
 	$special_best_info_db_table = $prefix."special_best_info".$suffix;

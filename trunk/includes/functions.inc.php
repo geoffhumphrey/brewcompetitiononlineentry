@@ -1569,9 +1569,10 @@ function orphan_styles() {
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
 		switch($rank) {
-			case "Apprentice": $return = "Level 1:";
-			break;
-			case "Provisional": $return = "Level 1:";
+			case "Apprentice": 
+			case "Provisional":
+			case "Rank Pending":
+			$return = "Level 1:";
 			break;
 			case "Recognized": $return = "Level 2:";
 			break;
@@ -1589,7 +1590,12 @@ function bjcp_rank($rank,$method) {
 			break;
 			case "Experienced": $return = "Level 0:";
 			break;
-			case "Professional Brewer": $return = "Level 2:";
+			case "Professional Brewer":
+			case "Beer Sommelier":
+			case "Certified Cicerone":
+			case "Master Cicerone":
+			case "Judge with Sensory Training":
+			$return = "Level 2:";
 			break;
 			case "Mead Judge": $return = "Level 3:";
 			break;
@@ -1600,13 +1606,17 @@ function bjcp_rank($rank,$method) {
 	
 	if ($method == "2") {
 		switch($rank) {
-			case "None": $return = "Experienced Judge";
+			case "None": 
+			case "":
+			case "Experienced":
+			$return = "Experienced Judge";
 			break;
-			case "": $return = "Experienced Judge";
-			break;
-			case "Professional Brewer": $return = $rank;
-			break;
-			case "Experienced": $return = $rank." Judge";
+			case "Professional Brewer":
+			case "Beer Sommelier":
+			case "Certified Cicerone":
+			case "Master Cicerone":
+			case "Judge with Sensory Training":
+			$return = $rank;
 			break;
 			default: $return = "BJCP ".$rank." Judge";
 		}
@@ -2325,6 +2335,25 @@ function readable_judging_number($style,$number) {
 	$judging_number = str_osplit($number, 2);
 	return $judging_number[0]."-".$judging_number[1];
 }
+
+
+function limit_subcategory($style,$pref_num,$uid) {
+		if ($pref_num != "") {
+			$style_break = explode("-",$style);
+			
+			require(CONFIG.'config.php');
+			mysql_select_db($database, $brewing);
+		
+			$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_break['0'],$style_break['1']);
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			
+			if ($row_check['count'] >= $pref_num) return TRUE;
+			else return FALSE;
+			
+		}
+		else return FALSE;
+	}
 
 
 ?>

@@ -15,6 +15,26 @@ include(DB.'dropoff.db.php');
 //include(DB.'entries.db.php'); 
 include(DB.'brewer.db.php');
 
+function participant_choose($brewer_db_table) {
+	require(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	
+	$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
+	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
+	$row_brewers = mysql_fetch_assoc($brewers);
+	
+	$output = "";
+	$output .= "<select name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\">";
+	$output .= "<option value=\"\">Choose Below:</option>";
+	do { 
+		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
+	} while ($row_brewers = mysql_fetch_assoc($brewers)); 
+	$output .= "</select>";
+	
+	return $output;
+}
+
+
 function admin_help($go,$header_output,$action,$filter) {
 	include (CONFIG.'config.php');
 	switch($go) {
@@ -258,6 +278,19 @@ if ($go == "default") { ?>
 				<li><a href="http://help.brewcompetition.com" title="Help" target="_blank">All Help Topics</a></li>
     		</ul>
         </div>
+        <?php if ($row_prefs['prefsUseMods'] == "Y") { ?>
+        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick.png"  /></span>Custom Modules</h4>
+		<div class="toggle_container">
+        	<p class="admin_default_header">Manage/View</p>
+			<ul class="admin_default">
+            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods">Custom Modules</a></li>
+            </ul>
+            <p class="admin_default_header">Add</p>
+			<ul class="admin_default">
+            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">A Custom Module</a></li>
+            </ul>
+        </div>
+        <?php } ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png"  /></span>Defining Preferences</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Define</p>
@@ -337,7 +370,7 @@ if ($go == "default") { ?>
             <ul class="admin_default">
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li></li>
-   			 	<li><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
+   			 	<li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
             <ul class="admin_default">
 		      <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
@@ -372,7 +405,7 @@ if ($go == "default") { ?>
 			<ul class="admin_default">
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=regiser">A Participant</a></li>
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
+			    <li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
       <p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
@@ -482,7 +515,7 @@ if ($go == "default") { ?>
 			<ul class="admin_default">
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a></li>
+    			<li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
   			
 	  		<ul class="admin_default">
@@ -751,6 +784,7 @@ if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 if ($go == "special_best") 	    		include (ADMIN.'special_best.admin.php');
 if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php');
+if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
 if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
 }

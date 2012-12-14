@@ -14,6 +14,11 @@
       <td class="data"><select name="brewerJudgeRank">
         <option value="Novice" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Novice")) echo "SELECTED"; ?>>Non-BJCP - Novice</option>
         <option value="Professional Brewer" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Professional Brewer")) echo "SELECTED"; ?>>Non-BJCP - Professional Brewer</option>
+        <option value="Beer Sommelier" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Beer Sommelier")) echo "SELECTED"; ?>>Non-BJCP - Beer Sommelier</option>
+        <option value="Certified Cicerone" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified Cicerone")) echo "SELECTED"; ?>>Non-BJCP - Certified Cicerone</option>
+        <option value="Master Cicerone" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified Cicerone")) echo "SELECTED"; ?>>Non-BJCP - Master Cicerone</option>
+        <option value="Judge with Sensory Training" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Judge with Sensory Training")) echo "SELECTED"; ?>>Non-BJCP - Judge with Sensory Training</option>
+        <option value="Rank Pending" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Rank Pending")) echo "SELECTED"; ?>>BJCP - Rank Pending</option>
         <option value="Apprentice" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Apprentice")) echo "SELECTED"; ?>>BJCP - Apprentice</option>
         <option value="Provisional" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Provisional")) echo "SELECTED"; ?>>BJCP - Provisional</option>
         <option value="Recognized" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Recognized")) echo "SELECTED"; ?>>BJCP - Recognized</option>

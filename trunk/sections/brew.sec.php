@@ -54,7 +54,29 @@ function highlight_required($msg,$method) {
 	}
 }
 ?>
+
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/toggle.js"></script>
+<script type="text/javascript">
+// Based upon http://www.9lessons.info/2010/04/live-character-count-meter-with-jquery.html
+$(document).ready(function()
+{
+	$("#brewInfo").keyup(function()
+	{
+		var box=$(this).val();
+		var main = box.length *100;
+		var value= (main / 150);
+		var count= 150 - box.length;
+		
+		if(box.length <= 150)
+		{
+		$('#count').html(count);
+		}
+		return false;
+	}
+	);
+}
+);
+</script>
 <?php 
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log['brewBrewerID']) || ($row_user['userLevel'] == 1)))) {
@@ -64,7 +86,7 @@ if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log[
 <?php if ($action == "add") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/page_code.png"  /></span>You can also <a href="<?php echo build_public_url("beerxml","default","default",$sef,$base_url); ?>">import your entry's BeerXML document</a>.</p>
 <?php } } ?>
- <script>
+<script>
 	$(function() {
 		$( "#brewDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
 		$( "#brewBottleDate" ).datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });;
@@ -84,31 +106,31 @@ function admin_relocate($user_level,$go,$referrer) {
 
 ?>
 <form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo admin_relocate($row_user['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<?php if ($row_user['userLevel'] != 1) { ?>
+<?php if ($row_user['userLevel'] == 2) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>">
 <?php } ?> 
 <h2>Required Information</h2>
-<table>
-<p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
-<?php if ($row_user['userLevel'] == 1) { 
 
-$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
-$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
-$row_brewers = mysql_fetch_assoc($brewers);
+<p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
+<table>
+<?php if ($row_user['userLevel'] == 1) { 
+if ($filter == "admin") $brewer_id = $row_user['id']; else $brewer_id = $filter; 
+
+$query_brewer = sprintf("SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'",$brewer_id);
+$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+$row_brewer = mysql_fetch_assoc($brewer);
 
 ?>
+
 <tr>
    <td class="dataLabel">Brewer:</td>
    <td class="data">
-   <select name="brewBrewerID">
-    <?php do { ?>
-   	<option value="<?php echo $row_brewers['uid']; ?>" <?php if (($action == "add") && ($filter == $row_brewers['uid'])) echo "SELECTED"; elseif (($action == "edit") && ($row_log['brewBrewerID'] == $row_brewers['uid'])) echo "SELECTED";  elseif ((($action == "add") && ($filter == "admin")) && ($row_user['id'] == $row_brewers['uid'])) echo "SELECTED"; ?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
-    <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
-   </select>
+   <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>
+   <input type="hidden" name="brewBrewerID" value="<?php echo $row_brewer['uid']; ?>">
    </td>
-   <td class="data"><span class="required">Required for all entires</span></td>
+   <td class="data">&nbsp;</td>
 </tr>
 <?php } ?>
 <tr>
@@ -121,11 +143,19 @@ $row_brewers = mysql_fetch_assoc($brewers);
    <td class="data">
    <select name="brewStyle">
    	 <option value=""></option>
-    <?php do {  
+    <?php
+	
+	do {  
 	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
+	if ($row_user['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_user['id']);
+	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$filter);
+	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_log['brewBrewerID']);
+	elseif (($row_user['userLevel'] == 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_user['id']);
+	else $subcat_limit = FALSE;
 	?>
-     <option value="<?php echo $style_value; ?>" <?php if ($action == "edit")  if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
-    <?php } while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
+     <option value="<?php echo $style_value; ?>" <?php if ($action == "edit")  if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; if ($subcat_limit) echo " DISABLED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) echo " [disabled - subcategory entry limit reached]" ?></option>
+    <?php 
+	} while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
    </select>
    </td>
    <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="<?php echo $base_url; ?>/images/information.png" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/styles.php">View Accepted Styles</a></td>
@@ -133,21 +163,43 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </table>
 <table>
 <tr>
-   <td class="dataLabel">Special Ingredients, Classic Style, and/or Special Procedures:</td>
+   <td class="dataLabel">Special Ingredients and/or Classic Style:</td>
 </tr>
 <tr>
-   <td class="dataLeft">(required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, 28B-D, and all custom styles)</td>
+   <td class="dataLeft">
+   <em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, 28B-D, and all custom styles</em><br />
+(150 character limit - use keywords)
+  </td>
 </tr>
 <tr>
-   <td class="dataLabel"><textarea <?php if (highlight_required($msg,"1")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99;\""; ?>  name="brewInfo" cols="67" rows="10"><?php if ($action == "edit") echo $row_log['brewInfo']; ?></textarea></td>
+   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99;\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo']; ?>" maxlength="150" size="75">
+   </td>
 </tr>
+<tr>
+   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold">150</span></td>
+</tr>
+</table>
+<table>
+    <tr>
+       <td class="dataLabel">Brewer's Specifics:</td>
+    </tr>
+    <tr>
+   		<td class="dataLeft"><em>Use to record special procedures, brewing techniques, etc.</em></td>
+	</tr>
+    <tr>
+    	<td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
+    </tr>
 </table>
 <table <?php if (highlight_required($msg,"2")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99; margin-bottom: 10px;\""; ?>>
 <tr>
    <td class="dataLabel" colspan="2">For Mead and Cider:</td>
 </tr>
 <tr>
-   <td class="dataLeft" colspan="2">(required for categories 24, 25, 26, 27, and 28)</td>
+   <td class="dataLeft" colspan="2"><em>Required for categories 24, 25, 26, 27, and 28</em></td>
+</tr>
+<tr>
+   <td class="dataLeft">Carbonation (Choose ONE):</td>
+   <td class="dataLeft">Sweetness (Choose ONE):</td>
 </tr>
 <tr>
    <td class="data"><input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED"; ?>/> Still<br /><input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED"; ?>/> Petillant<br /><input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED"; ?>/> Sparkling</td>
@@ -159,13 +211,17 @@ $row_brewers = mysql_fetch_assoc($brewers);
    <td class="dataLabel" colspan="2">For Mead:</td>
 </tr>
 <tr>
-   <td class="dataLeft" colspan="2">(required for categories 24, 25, and 26)</td>
+   <td class="dataLeft" colspan="2"><em>Required for categories 24, 25, and 26</em></td>
+</tr>
+<tr>
+   <td class="dataLeft" colspan="2">Strength (Choose ONE):</td>
 </tr>
 <tr>
    <td class="data"><input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED"; ?> /> Hydromel (light)<br /><input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED"; ?> /> Standard<br /><input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED"; ?> /> Sack (strong)</td>
    <td>&nbsp;</td>
 </tr>
 </table>
+<?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
 <h2>Optional Information</h2>
 <p>The information below is not required to process your entry. However, the more information you provide about your entry, the more complete the required entry documentation will be.</p>
 <p>Click the headings below to expand and collapse each category.</p>
@@ -955,7 +1011,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <table>
 <tr>
    <td class="dataLabel">Type/Amount:</td>
-   <td class="data"><textarea name="brewYeastNutrients" cols="60" rows="5" id="brewYeastNutrients"><?php if ($action == "edit") echo $row_log['brewYeastNutrients']; ?></textarea></td>
+   <td class="data"><input type="text" name="brewYeastNutrients" id="brewYeastNutrients" size="75" value="<?php if ($action == "edit") echo $row_log['brewYeastNutrients']; ?>" /></td>
 </tr>
 </table>
 </div>
@@ -972,7 +1028,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 </tr>
 <tr>
    <td class="dataLabel">Type/Amount:</td>
-   <td class="data"><textarea name="brewCarbonationNotes" cols="60" rows="5" id="brewCarbonationNotes"><?php if ($action == "edit") echo $row_log['brewCarbonationNotes']; ?></textarea></td>
+   <td class="data"><input type="text" name="brewCarbonationNotes" size="75" value="<?php if ($action == "edit") echo $row_log['brewCarbonationNotes']; ?>" /></td>
 </tr>
 </table>
 </div>
@@ -1011,18 +1067,12 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <table>
 <tr>
    <td class="dataLabel">Type/Amount:</td>
-   <td class="data"><textarea name="brewFinings" cols="60" rows="5" id="brewFinings"><?php if ($action == "edit") echo $row_log['brewFinings']; ?></textarea></td>
+   <td class="data"><input type="text" name="brewFinings" id="brewFinings" value="<?php if ($action == "edit") echo $row_log['brewFinings']; ?>" /></td>
 </tr>
 </table>
 </div>
 <h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/add.png"  /><?php } ?></span>Brewer's Specifics</h4>
-<div class="toggle_container">
-<table>
-  <tr>
-    <td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
-  </tr>
-</table>
-</div>
+<?php } ?>
 </div>
 </div>
 </div>

@@ -107,6 +107,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.1.6.0_update.php');
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
+							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -115,6 +116,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.1.6.0_update.php');
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
+							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -122,23 +124,26 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.1.6.0_update.php');
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
+							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						if (($version == "116") || ($version == "1161")) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
+							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1200") && ($version <= "1202")) {
+						if (($version >= "1200") && ($version < "1210")) {
 							include (UPDATE.'1.2.0.3_update.php');
+							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version == "1204") { 
-							// Version 1.2.1.0 was last major update to the DB tables
-							// If version is 1.2.1.0 or later, the DB structure is current (installed by the setup script)						
+						if ($version >= "1210")  {
+							// last verion to have a db update was 1.2.1.0
+							// if 1.2.1.0 later, update only with the 1.2.2.0 changes
 							include (UPDATE.'current_update.php');
 						}
 						

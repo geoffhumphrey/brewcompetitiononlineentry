@@ -1,62 +1,27 @@
 <?php
 // -----------------------------------------------------------
-// Create Table: system
-//   Table to house system data.
+// Create Table: mods
+//   Table to house information about custom module files.
 // -----------------------------------------------------------
 
-$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."system` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`version` varchar(12) DEFAULT NULL,
-	`version_date` date DEFAULT NULL,
-	`data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
-	`setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
-	PRIMARY KEY (`id`)
+$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."mods`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
+  `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
+  `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=none 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
+  `mod_extend_function_admin` varchar(255) DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
+  `mod_filename` varchar(255) DEFAULT NULL COMMENT 'File name of the custom module',
+  `mod_description` TEXT DEFAULT NULL COMMENT 'Description of the custom module',
+  `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
+  `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
+  `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 //echo $updateSQL."<br>";
 
-$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.1', '2012-09-01', NOW( ),'1');";
-mysql_select_db($database, $brewing);
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
-//echo $updateSQL."<br>";
-echo "<ul><li>System table created.</li></ul>";
-
-// -----------------------------------------------------------
-// Create Tables: special_best_info, special_best_data
-//  Tables to house custom "best of" categories and data.
-// -----------------------------------------------------------
-
-$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sbi_name` varchar(255) DEFAULT NULL,
-  `sbi_description` text,
-  `sbi_places` int(11) DEFAULT NULL,
-  `sbi_rank` int(11) DEFAULT NULL,
-  `sbi_display_places` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM ;
-
-"; 
-mysql_select_db($database, $brewing);
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
-//echo $updateSQL."<br>";
-
-$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
-  `bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
-  `eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
-  `sbd_place` int(11) DEFAULT NULL,
-  `sbd_comments` text,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM ;
-";
-mysql_select_db($database, $brewing);
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
-//echo $updateSQL."<br>";
-
-echo "<ul><li>Custom &ldquo;best of&rdquo; tables created.</li></ul>";
+echo "<ul><li>Custom Modules table created.</li></ul>";
 
 
 /*

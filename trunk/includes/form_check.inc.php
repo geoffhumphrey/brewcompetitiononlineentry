@@ -175,7 +175,7 @@ if(WithoutSelectionValue(document.form1.brewStyle))
 	{ errormessage += "\nA style from the drop-down list."; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('To enter your brew, the following information is required:\n' + errormessage + '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.');
+	alert('To enter your brew, the following information is required:\n' + errormessage <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>+ '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.'<?php } ?>);
 	return false;
 	}
 return true;

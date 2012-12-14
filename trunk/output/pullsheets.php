@@ -133,12 +133,12 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Round</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Round</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -160,7 +160,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray">
+        <td class="data bdr1B_gray" nowrap>
 		<?php 
 		if ($view == "entry") echo $row_entries['id']; 
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
@@ -186,6 +186,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <?php if ($flights == 0) { ?><div style="page-break-after:always;"></div><?php } ?>
 <?php 	} 
 	while ($row_tables = mysql_fetch_assoc($tables)); 
+
 
 if ((($go == "judging_tables") || ($go == "judging_locations")) &&  ($id != "default")) { 
 	
@@ -240,12 +241,12 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Round</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Round</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -267,7 +268,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray">
+        <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo $row_entries['id']; 
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
@@ -342,11 +343,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <table class="dataTable" width="100%" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -365,7 +366,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray">
+        <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo $row_entries['id']; 
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
@@ -428,11 +429,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <table class="dataTable" width="100%" id="sortable<?php echo $row_tables_edit['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -452,7 +453,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray">
+        <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo $row_entries['id']; 
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
@@ -530,11 +531,11 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <table class="dataTable" id="sortable<?php echo $type; ?>">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
 <tbody>
@@ -551,7 +552,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-        <td class="data bdr1B_gray">
+        <td class="data bdr1B_gray" nowrap>
 		<?php 
 		if ($view == "entry") echo $row_entries_1['id']; 
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 
@@ -628,11 +629,11 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <table class="dataTable" id="sortable">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
-        <th class="dataHeading bdr1B" width="10%">#</th>
+    	<th class="dataHeading bdr1B" width="75">Pull Order</th>
+        <th class="dataHeading bdr1B" width="5">#</th>
         <th class="dataHeading bdr1B">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="75">Score</th>
+        <th class="dataHeading bdr1B" width="75">Place</th>
     </tr>
     </thead>
 <tbody>
@@ -649,7 +650,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 	?>
     <tr>
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
-       	<td class="data bdr1B_gray">
+       	<td class="data bdr1B_gray" nowrap>
 		<?php 
 		if ($view == "entry") echo $row_entries_1['id']; 
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 

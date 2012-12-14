@@ -6,7 +6,11 @@
  * 
  */
 
-
+function pay_to_print($prefs_pay,$entry_paid) { 
+	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
+	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
+	elseif ($prefs_pay == "N") return TRUE;
+}
 
 if ($_SESSION["loginUsername"] != $row_user['user_name']) { ?>
 <p>Please <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> or <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">register</a> to view your list of brews entered into the <?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?>, <?php echo $row_contest_info['contestHostLocation']; ?>.</p> 
@@ -272,22 +276,35 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 <h2>Entries</h2>
 
 <?php if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)) { 
+
 if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. For each unconfirmed entry below marked in yellow and with a <span class='icon'><img src='".$base_url."/images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours.</div>";
 
 if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have entries that require you to define special ingredients. For each entry below marked in orange and with a <span class='icon'><img src='".$base_url."/images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
 ?>
-<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo readable_number($totalRows_log); if ($totalRows_log <= 1) echo " entry"; else echo " entries"; ?>, listed below. <?php if (judging_date_return() > 0) { echo "Be sure to print an entry form and bottle labels for"; if ($totalRows_log <= 1) echo " it."; else echo " each."; } else echo "Judging has taken place."; ?></p>
+<p><?php echo $row_name['brewerFirstName']; ?>, you have <?php echo readable_number($totalRows_log); if ($totalRows_log == 1) echo " entry"; else echo " entries"; ?>, listed below.</p>
 <?php } ?>
 <?php if ($action != "print") { ?>
 
+
+<?php if ($row_prefs['prefsUserEntryLimit'] != "") { 
+$remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
+?>
 <div class="adminSubNavContainer">
-<?php if (((!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) && $registration_open == "1")) { ?>
+	<span class="adminSubNav">
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  /></span><?php if ($remaining_entries >= 1) { ?>You have <strong><?php echo readable_number($remaining_entries); ?></strong> <?php if ($remaining_entries == 1) echo "entry"; else echo "entries"; ?> left before you reach the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.<?php } else { ?><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong><?php } ?>
+	</span>
+</div>
+<?php } ?>
+<div class="adminSubNavContainer">
+<?php if (($registration_open == "1") && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) && ($remaining_entries >= 1))  { ?>
    	<span class="adminSubNav">
         <span class="icon"><img src="<?php echo $base_url; ?>/images/book_add.png"  /></span><a href="<?php if ($row_user['userLevel'] == "1") echo "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; else echo "index.php?section=brew&amp;action=add"; ?>">Add an Entry</a>
    	</span>
+    <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
     <span class="adminSubNav">
         <span class="icon"><img src="<?php echo $base_url; ?>/images/page_code.png"  /></span><a href="<?php echo build_public_url("beerxml","default","default",$sef,$base_url); ?>">Import Entries Using BeerXML</a>
    	</span>
+    <?php } ?>
 <?php } ?>
     <span class="adminSubNav">
         <span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/print.php?section=list&amp;action=print" title="Print Your List of Entries and Info">Print Your List of Entries and Info</a>
@@ -410,7 +427,7 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
     </td>
     <?php } if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
-  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; if ($row_log['brewConfirmed'] == 0) echo "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>&nbsp;&nbsp;<span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>&nbsp;&nbsp;<span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a>
+  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; if ($row_log['brewConfirmed'] == 0) echo "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>&nbsp;&nbsp;<span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>&nbsp;&nbsp;<?php if (pay_to_print($row_prefs['prefsPayToPrint'],$row_log['brewPaid'])) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a><?php } ?>
   </td>
   <?php } ?>
   <?php } ?>
