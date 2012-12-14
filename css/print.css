@@ -734,6 +734,8 @@ border-left: 1px solid #cccccc;
 	min-height: 50px;
 	vertical-align: text-top;
 	margin: 0;
+	max-width: 100px;
+	width: 75px;
 }
 
 .box_small {

@@ -926,7 +926,7 @@ if ($action == "update") {
 		$updateSQL = "UPDATE $brewing_db_table SET 
 		brewPaid='".$brewPaid."',
 		brewReceived='".$brewReceived."'
-		WHERE id='".$id.";'"; 
+		WHERE id='".$id."'";
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 		//echo $updateSQL."<br>";

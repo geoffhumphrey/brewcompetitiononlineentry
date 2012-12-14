@@ -4,8 +4,6 @@
 // Data Updates: Brewer Table
 // -----------------------------------------------------------
 
-
-
 $query_brewer = "SELECT * FROM $brewer_db_table";
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);

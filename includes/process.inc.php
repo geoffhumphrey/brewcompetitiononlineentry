@@ -52,12 +52,14 @@ $judging_preferences_db_table = $prefix."judging_preferences";
 $judging_scores_db_table = $prefix."judging_scores";
 $judging_scores_bos_db_table = $prefix."judging_scores_bos";
 $judging_tables_db_table = $prefix."judging_tables";
+$mods_db_table = $prefix."mods";
 $preferences_db_table = $prefix."preferences";
 $special_best_data_db_table = $prefix."special_best_data";
 $special_best_info_db_table = $prefix."special_best_info";
 $sponsors_db_table = $prefix."sponsors";
 $styles_db_table = $prefix."styles";
 $style_types_db_table = $prefix."style_types";
+$system_db_table = $prefix."system";
 $themes_db_table = $prefix."themes";
 $users_db_table = $prefix."users";
 
@@ -310,11 +312,15 @@ if ($dbTable == $prefix."special_best_info") 	include_once (PROCESS.'process_spe
 
 if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
 
+// --------------------------- Custom Modules ------------------------------- //
+
+if ($dbTable == $prefix."mods") 				include_once (PROCESS.'process_mods.inc.php');
+
 // --------------------------- Various Actions ------------------------------- //
 
-if ($action == "delete")				include_once (PROCESS.'process_delete.inc.php');
+if ($action == "delete")						include_once (PROCESS.'process_delete.inc.php');
 
-if ($action == "beerxml")				include_once (PROCESS.'process_beerxml.inc.php');
+if ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
 
 if ($action == "purge") {
 	

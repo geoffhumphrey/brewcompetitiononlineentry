@@ -18,9 +18,29 @@ $totalRows_themes = mysql_num_rows($themes);
 <h3>General</h3>
 <table>  
   <tr>
-  	<td class="dataLabel">Entry Limit:</td>
+  	<td class="dataLabel">Total Entry Limit:</td>
     <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_prefs['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
     <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entry Limit Per Participant:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsUserEntryLimit" type="text" value="<?php echo $row_prefs['prefsUserEntryLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">Limit of entries that each participant can enter. Leave blank if no limit.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entry Limit Per Sub-category:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsUserSubCatLimit" type="text" value="<?php echo $row_prefs['prefsUserSubCatLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">Limit of entries that each participant can enter into a sub-category. Leave blank if no limit.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Hide Entry Recipe Section:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($row_prefs['prefsHideRecipe'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($row_prefs['prefsHideRecipe'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Use Custom Modules:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">FOR ADVANCED USERS. Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
   </tr>
   <tr>
   	<td class="dataLabel">Competition Logo Size:</td>
@@ -38,7 +58,7 @@ $totalRows_themes = mysql_num_rows($themes);
   </tr>
   <tr>
     <td class="dataLabel">Winner Display:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($row_prefs['prefsDisplayWinners'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</td>
   </tr>
   <tr>
@@ -56,12 +76,11 @@ $totalRows_themes = mysql_num_rows($themes);
     <option value="2" <?php if ($row_prefs['prefsWinnerMethod'] == "2") echo "SELECTED"; ?>>By Style Sub-Category</option>
     </select>
     </td>
-    </td>
     <td class="data">How the competition will award places for winning entries.</td>
   </tr>
   <tr>
     <td class="dataLabel">Require Special Ingredients<br />
-      or Classic Style:</td>
+      for Custom Styles:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
     <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
   </tr>
@@ -69,7 +88,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="dataLabel">Printed Entry Form to Use:</td>
     <td nowrap="nowrap" class="data">
     <select name="prefsEntryForm">
-    <option value="B" <?php if ($row_prefs['prefsEntryForm'] == "B") echo " SELECTED"; ?> />BJCP Official</option>
+    <option value="B" <?php if (($section == "step3") || ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
     <option value="M" <?php if ($row_prefs['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
     <option value="U" <?php if ($row_prefs['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
     </select>
@@ -97,12 +116,12 @@ $totalRows_themes = mysql_num_rows($themes);
 <table>
   <tr>
   	<td class="dataLabel">DataTables Record Threshold:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "500"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "750"; else echo $row_prefs['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
   </tr>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "100"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>
@@ -160,7 +179,7 @@ $totalRows_themes = mysql_num_rows($themes);
       <option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
       <option value="5.750" <?php if ($row_prefs['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
       <option value="6.000" <?php if ($row_prefs['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
-      <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>-12
+      <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
       <option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
       <option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Queensland, Perth, the Northern Territory, Western Australia</option>
       <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
@@ -234,6 +253,11 @@ $totalRows_themes = mysql_num_rows($themes);
     <option value="&#8360;" <?php if ($row_prefs['prefsCurrency'] == "&#8360;") echo "SELECTED"; ?>>&#8360; - Rupee</option>
     </select>    </td>
     <td class="data">&nbsp;</td>
+    <tr>
+    <td class="dataLabel">Pay for Entries to Print Paperwork:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($row_prefs['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($row_prefs['prefsPayToPrint'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate if the entry must be marked as paid to be able to print associated paperwork.<br /><em>The default of &ldquo;No&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</em></td>
+  	</tr>
     <tr>
       <td class="dataLabel">Cash for Payment:</td>
       <td class="data"><input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($row_prefs['prefsCash'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> 
