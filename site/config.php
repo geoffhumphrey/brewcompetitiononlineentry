@@ -103,15 +103,18 @@ $setup_key = "default";
 Set the base URL of your installation. In most cases the default will be OK. 
 
 IF YOU ARE RUNNING YOUR INSTANCE OF BCOE&M IN A SUBFOLDER...
-Change the $base_url variable below to the url of your installations
+Add the name of the subdirectory between the quotes of the $sub_directory variable.
+* Be sure to INCLUDE a leading slash [/] and NO trailing slash [/]!
 
 For example:
-$base_url = "http://www.brewcompetition.com/bcoe"; 
+$sub_directory = "/bcoe"; 
 
-Note that there is NO trailing slash!
+LEAVE the $base_url variable below untouched.
 
 */
 
-$base_url = "http://".$_SERVER['SERVER_NAME'];
+$sub_directory = "";
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory;
+
 
 ?>

@@ -193,7 +193,9 @@ switch($section) {
 	elseif ($msg == "4") $output = "Your password has been updated."; 
 	elseif ($msg == "5") $output = "Info deleted successfully."; 
 	elseif ($msg == "6") $output = "You should verify all your entries imported using BeerXML."; 
-	elseif ($msg == "7") $output = "You have registered as a judge or steward. Thank you."; 
+	elseif ($msg == "7") $output = "You have registered as a judge or steward. Thank you.";
+	elseif ($msg == "8") $output = "You have reached the entry limit. Your entry was not added.";
+	elseif ($msg == "9") $output = "You have reached the entry limit for the sub-category. Your entry was not added."; 
 	else $output = "";
 	break;
 	

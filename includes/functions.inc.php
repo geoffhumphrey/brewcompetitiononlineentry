@@ -2337,20 +2337,32 @@ function readable_judging_number($style,$number) {
 }
 
 
-function limit_subcategory($style,$pref_num,$uid) {
+function limit_subcategory($style,$pref_num,$pref_sub_num,$pref_sub_array,$uid) {
 		if ($pref_num != "") {
 			$style_break = explode("-",$style);
 			
 			require(CONFIG.'config.php');
 			mysql_select_db($database, $brewing);
-		
+			
+			$pref_sub_array = explode(",",$pref_sub_array);
+			
+			$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",ltrim($style_break['0'],"0"),$style_break['1']); 
+			$style = mysql_query($query_style, $brewing) or die(mysql_error());
+			$row_style = mysql_fetch_assoc($style);
+			
 			$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_break['0'],$style_break['1']);
 			$check = mysql_query($query_check, $brewing) or die(mysql_error());
 			$row_check = mysql_fetch_assoc($check);
+						
+			if (in_array($row_style['id'],$pref_sub_array)) {
+				if (($row_check['count'] >= $pref_sub_num)) return TRUE;
+				else return FALSE;
+			}
 			
-			if ($row_check['count'] >= $pref_num) return TRUE;
-			else return FALSE;
-			
+			if (!in_array($row_style['id'],$pref_sub_array)) {
+				if (($row_check['count'] >= $pref_num)) return TRUE;
+				else return FALSE;
+			}
 		}
 		else return FALSE;
 	}

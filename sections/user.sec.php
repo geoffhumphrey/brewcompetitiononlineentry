@@ -6,8 +6,8 @@
  * 
  */
 
-
-if ((($_SESSION["loginUsername"] == $row_user['user_name'])) || ($row_user['userLevel'] == "1"))
+include(INCLUDES.'mods_top.inc.php');
+if ((($_SESSION["loginUsername"] == $row_user['user_name'])) || ($row_user['userLevel'] <= "1"))
 {
 if ($action == "username") { ?><script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/email_check.js"></script><?php } 
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
@@ -46,4 +46,6 @@ if ($action == "password") {
 <input name="userLevel" type="hidden" value="<?php echo $row_user['userLevel']; ?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } else echo "<div class=\"error\">You can only edit your own user name and password.</div>"; ?>
+<?php } else echo "<div class=\"error\">You can only edit your own user name and password.</div>"; 
+include(INCLUDES.'mods_bottom.inc.php');
+?>

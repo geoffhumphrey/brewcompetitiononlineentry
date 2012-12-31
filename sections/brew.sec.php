@@ -78,6 +78,7 @@ $(document).ready(function()
 );
 </script>
 <?php 
+
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action == "add") || (($action == "edit") && (($row_user['id'] == $row_log['brewBrewerID']) || ($row_user['userLevel'] == 1)))) {
 	if ($filter == "default") { ?>
@@ -103,7 +104,7 @@ function admin_relocate($user_level,$go,$referrer) {
 	return $output;
 	
 }
-
+include(INCLUDES.'mods_top.inc.php');
 ?>
 <form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo admin_relocate($row_user['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($row_user['userLevel'] == 2) { ?>
@@ -116,7 +117,7 @@ function admin_relocate($user_level,$go,$referrer) {
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
 <table>
 <?php if ($row_user['userLevel'] == 1) { 
-if ($filter == "admin") $brewer_id = $row_user['id']; else $brewer_id = $filter; 
+if (($filter == "admin") || ($filter == "default")) $brewer_id = $row_user['id']; else $brewer_id = $filter; 
 
 $query_brewer = sprintf("SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'",$brewer_id);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
@@ -144,13 +145,12 @@ $row_brewer = mysql_fetch_assoc($brewer);
    <select name="brewStyle">
    	 <option value=""></option>
     <?php
-	
 	do {  
 	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-	if ($row_user['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_user['id']);
-	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$filter);
-	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_log['brewBrewerID']);
-	elseif (($row_user['userLevel'] == 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_user['id']);
+	if ($row_user['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_user['id']);
+	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$filter);
+	elseif (($row_user['userLevel'] == 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_log['brewBrewerID']);
+	elseif (($row_user['userLevel'] == 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_user['id']);
 	else $subcat_limit = FALSE;
 	?>
      <option value="<?php echo $style_value; ?>" <?php if ($action == "edit")  if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; if ($subcat_limit) echo " DISABLED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) echo " [disabled - subcategory entry limit reached]" ?></option>
@@ -1073,17 +1073,19 @@ $row_brewer = mysql_fetch_assoc($brewer);
 </div>
 <h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/add.png"  /><?php } ?></span>Brewer's Specifics</h4>
 <?php } ?>
-</div>
-</div>
-</div>
+
+
+
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
 <input type="hidden" name="brewConfirmed" value="1">
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
+
 <?php } 
 else echo "<div class=\"error\">The requested entry was not entered under the currently logged in user's credentials.</div>";
+include(INCLUDES.'mods_bottom.inc.php');
 ?>
-
-
-
+</div>
+</div>
+</div>
 

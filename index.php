@@ -6,8 +6,8 @@
  */
 
 require('paths.php');
-//error_reporting(E_ALL ^ E_NOTICE);
-//ini_set('display_errors', '1');
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', '1');
 
 if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else $sef = "false"; 
 
@@ -23,27 +23,28 @@ function check_setup($tablename, $database) {
 }
 
 if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
-if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database))) header ("Location: update.php"); 
+if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database)) && (check_setup($prefix."mods",$database))) header ("Location: update.php"); 
 
 // If all setup or update has taken place, run normally
 else 
 {
 
 function version_check($version) {
-	// Current version is 1.2.1.3, change version in system table if not
+	// Current version is 1.2.2.0, change version in system table if not
 	// There are NO database structure or data updates for version 1.2.1.3
 	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.2.1.3") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.2.1.3","2012-12-01","1");
+	if ($version != "1.2.2.0") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.2.2.0","2013-01-31","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
 	
 version_check($version);
+
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
@@ -85,7 +86,8 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="<?php echo $base_url; ?>/css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" type="text/css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
@@ -123,7 +125,7 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
-<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
+<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/menu.js"></script>
 <?php } 
 if ($section == "admin") { ?>
@@ -169,7 +171,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
-		if ($row_user['userLevel'] == "1") {
+		if ($row_user['userLevel'] <= "1") {
 			if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
@@ -199,7 +201,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
-		if ($row_user['userLevel'] == "1") {
+		if ($row_user['userLevel'] <= "1") {
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
@@ -228,7 +230,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	// if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
-		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
+		if ($row_user['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');

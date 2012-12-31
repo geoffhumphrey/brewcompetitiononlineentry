@@ -6,7 +6,8 @@
  *              winner display after all judging dates have passed.
  */
 include(DB.'dropoff.db.php');
-if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].'/user_images/'.$row_contest_info['contestLogo']))) { 
+
+if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_contest_info['contestLogo']))) { 
 	if (judging_date_return() > 0) { ?>
 <img src="<?php echo $base_url; ?>/user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />
 <?php } 
@@ -16,9 +17,11 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print General Information">Print This Page</a></p>
 <?php } ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
-<?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($section == "admin")) { 
-		if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
-		if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
+<?php 
+include(INCLUDES.'mods_top.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] <= "1") && ($section == "admin")) { 
+if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
+if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
 	} 
 if (judging_date_return() > 0) { ?>
 <p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="<?php echo build_public_url("rules","default","default",$sef,$base_url); ?>">competition rules</a>.</p>
@@ -126,5 +129,6 @@ else { ?>
 <?php 
 		} // end if no logos 
 	} // end if (totalRows_sponsors > 0)
+	include(INCLUDES.'mods_bottom.inc.php');
 } // end if prefs dictate display sponsors 
 ?>

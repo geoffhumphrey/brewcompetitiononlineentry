@@ -20,13 +20,15 @@ else
 $total_not_paid = total_not_paid_brewer($row_user['id']);
 include(DB.'judging_locations.db.php');
 if (($action != "print") && ($msg != "default")) echo $msg_output;
+include(INCLUDES.'mods_top.inc.php');
 ?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <?php } ?>
 <p>Thank you for entering the <?php echo $row_contest_info['contestName']; ?>, <?php echo $row_name['brewerFirstName']; ?>.</p>
 <h2>Info</h2>
-<?php if ($action != "print") { ?>
+<?php 
+if ($action != "print") { ?>
 
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
@@ -87,7 +89,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
     <?php } ?>
   	<tr>
     	<td class="dataLabel">AHA Member Number:</td>
-    	<td class="data"><?php if ($row_brewer['brewerAHA'] != "") echo $row_brewer['brewerAHA']; else echo "Not provided"; ?></td>
+    	<td class="data"><?php if ($row_brewer['brewerAHA'] < "999999994") echo $row_brewer['brewerAHA']; elseif ($row_brewer['brewerAHA'] >= "999999994") echo "Pending"; if ($row_brewer['brewerAHA'] == "") echo "Not provided"; ?></td>
   	</tr>
   	<?php if ($row_brewer['brewerAssignment'] == "") { ?>
   	<tr>
@@ -291,14 +293,14 @@ $remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
 ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
-        <span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  /></span><?php if ($remaining_entries >= 1) { ?>You have <strong><?php echo readable_number($remaining_entries); ?></strong> <?php if ($remaining_entries == 1) echo "entry"; else echo "entries"; ?> left before you reach the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.<?php } else { ?><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong><?php } ?>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/information.png"  /></span><?php if ($remaining_entries >= 1) { ?>You have <strong><?php echo readable_number($remaining_entries); ?></strong> <?php if ($remaining_entries == 1) echo "entry"; else echo "entries"; ?> left before you reach the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.<?php } else { ?><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong><?php } ?>
 	</span>
 </div>
 <?php } ?>
 <div class="adminSubNavContainer">
 <?php if (($registration_open == "1") && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) && ($remaining_entries >= 1))  { ?>
    	<span class="adminSubNav">
-        <span class="icon"><img src="<?php echo $base_url; ?>/images/book_add.png"  /></span><a href="<?php if ($row_user['userLevel'] == "1") echo "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; else echo "index.php?section=brew&amp;action=add"; ?>">Add an Entry</a>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/book_add.png"  /></span><a href="<?php if ($row_user['userLevel'] <= "1") echo "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; else echo "index.php?section=brew&amp;action=add"; ?>">Add an Entry</a>
    	</span>
     <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
     <span class="adminSubNav">
@@ -312,7 +314,6 @@ $remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
 </div>
 
 <?php if ((judging_date_return() > 0) && ($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)) { 
-
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
 $total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $row_brewer['uid'], $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
@@ -325,9 +326,11 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 	<span class="adminSubNav">
 		<span class="icon"><img src="<?php echo $base_url; ?>/images/star.png"  border="0" alt="Discounted!" title="Discounted Entry Fees"></span>Your fees have been discounted to <?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']; ?> per entry.
 	</span>
-<?php } ?>
+	<?php } ?>
+</div>
+<div class="adminSubNavContainer">
    	<span class="adminSubNav">
-        <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay Entry Fees</a><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
+        <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  border="0" alt="Entry Fees" title="Entry Fees"></span><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay Your Fees</a><?php if ($row_prefs['prefsPayToPrint'] == "Y") echo " <em>** Please note that you will not be able to print your entry documentation until you pay for your entries.</em>"; ?><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
     </span>
 </div>
 <?php } // end if ((judging_date_return() > 0) && ($totalRows_log > 0)) ?>
@@ -360,6 +363,7 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 			} );
 		} );
 </script>
+<a name="list"></a>
 <table class="dataTable bdr1" id="sortable">
 <thead>
  <tr>
@@ -436,4 +440,7 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 </tbody>
 </table>
 <?php 
-} else { echo "<p>You do not have any entries.</p>"; if ($registration_open == "0") echo "<p>You can add your entries on or after $reg_open.</p>"; } ?>
+} else { echo "<p>You do not have any entries.</p>"; if ($registration_open == "0") echo "<p>You can add your entries on or after $reg_open.</p>"; } 
+
+include(INCLUDES.'mods_bottom.inc.php');
+?>

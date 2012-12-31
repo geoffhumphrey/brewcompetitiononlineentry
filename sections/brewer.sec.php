@@ -27,7 +27,7 @@ if ($section == "step2")  {
 	$totalRows_brewerID = mysql_num_rows($brewerID);
 }
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] == "1")))  { ?>
+if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] <= "1")))  { ?>
 <?php if ($section == "step2") { ?>
 <form action="<?php echo $base_url; ?>/includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
 <input name="brewerSteward" type="hidden" value="N" />
@@ -43,6 +43,7 @@ $row_countries = mysql_fetch_assoc($countries);
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
+<?php include(INCLUDES.'mods_top.inc.php'); ?>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
 <tr>
@@ -105,15 +106,42 @@ $row_countries = mysql_fetch_assoc($countries);
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
+<?php if (table_exists("nhcClubs")) { 
+
+// Custom code for AHA - possiblity of inclusion in a future version
+$query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
+$clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
+$row_clubs = mysql_fetch_assoc($clubs);
+
+?>
+<tr>
+      <td class="dataLabel">Club Name:</td>
+      <td class="data" colspan="3">
+      <select name="brewerClubs" id="brewerClubs">
+      <?php do { ?>
+      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
+      <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
+      </select>
+      </td>
+</tr>
+<?php } else { ?>
 <tr>
       <td class="dataLabel">Club Name:</td>
       <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
+<?php } ?>
 <tr>
   <td class="dataLabel">AHA Member Number:</td>
-  <td class="data"><input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="11" /></td>
+  
+  <td class="data">
+  <?php if ($row_brewer['brewerAHA'] >= "999999994") { // For use with NHC ?>
+  Pending<input type="hidden" name="brewerAHA" value="<?php echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
+  <?php } else { ?>
+  <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
+  <?php } ?>
+  </td>
   <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
 </tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
@@ -186,7 +214,7 @@ $row_countries = mysql_fetch_assoc($countries);
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <?php if ($section != "step2") { ?>
 	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
-	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] == "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
+	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] <= "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />
     <?php if ($go == "entrant") { ?>
@@ -198,4 +226,5 @@ $row_countries = mysql_fetch_assoc($countries);
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";
+include(INCLUDES.'mods_bottom.inc.php');
 ?>

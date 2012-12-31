@@ -8,16 +8,16 @@
 include(DB.'contacts.db.php');
 if ($row_prefs['prefsContact'] == "Y") {
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-
+include(INCLUDES.'mods_top.inc.php');
 if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
 <form name="form1" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">
-<tr style="background-color: <?php echo $color2; ?>">
-	<td class="dataLabel bdr1T" width="5%">Contact:</td>
-	<td class="data bdr1T" width="25%">
+<tr>
+	<td class="dataLabel" width="5%">Contact:</td>
+	<td class="data" width="25%">
     <select name="to">
     	<?php 
 		$query_contacts = sprintf("SELECT * FROM %s ORDER BY contactLastName ASC",$prefix."contacts");
@@ -32,29 +32,29 @@ if ($msg != "1") {
     </select>
     
     </td>
-    <td class="data bdr1T"><span class="required">Required</span></td>
+    <td class="data"><span class="required">Required</span></td>
 </tr>
-<tr style="background-color: <?php echo $color1; ?>">
+<tr>
 	<td class="dataLabel">Your Name (First and Last):</td>
 	<td class="data"><input name="from_name" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_name']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
-<tr style="background-color: <?php echo $color2; ?>">
+<tr>
 	<td class="dataLabel">Your Email Address:</td>
 	<td class="data"><input name="from_email" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_email']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
-<tr style="background-color: <?php echo $color1; ?>">
+<tr>
 	<td class="dataLabel">Subject:</td>
 	<td class="data"><input name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; else echo $row_contest_info['contestName']; ?>" size="50"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
-<tr style="background-color: <?php echo $color2; ?>">
+<tr>
 	<td class="dataLabel">Message:</td>
-	<td class="data"><textarea name="message" cols="70" rows="20" class="mceNoEditor"><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea></td>
+	<td class="data"><textarea name="message" cols="100" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
-<tr style="background-color: <?php echo $color1; ?>">
+<tr>
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
     <img id="captcha" src="<?php echo $base_url; ?>/captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
@@ -97,4 +97,6 @@ if ($msg == "1")
 	<li><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].' &ndash; <a href="mailto:'.$row_contact['contactEmail'].'">'.$row_contact['contactEmail'].'</a>'; ?></li>
 <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
 </ul>
-<?php } ?>
+<?php } 
+include(INCLUDES.'mods_bottom.inc.php');
+?>
