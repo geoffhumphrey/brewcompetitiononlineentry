@@ -8,7 +8,7 @@
 include(DB.'contacts.db.php');
 if ($row_prefs['prefsContact'] == "Y") {
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if ($msg != "1") {
 //if (!isset($_SESSION["loginUsername"])) { session_start(); }
 ?>
@@ -98,5 +98,5 @@ if ($msg == "1")
 <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
 </ul>
 <?php } 
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

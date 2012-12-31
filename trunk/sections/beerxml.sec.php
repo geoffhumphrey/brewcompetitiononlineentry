@@ -86,7 +86,7 @@ $query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'
 			$row_check = mysql_fetch_assoc($check);
 			
 			
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
 <?php if ($row_check['count'] < $row_prefs['prefsUserEntryLimit']) { ?>
@@ -116,5 +116,5 @@ include(INCLUDES.'mods_top.inc.php');
 <div class="error">Your server's version of PHP does not support the BeerXML import feature.</div>
 <p>PHP version 5.x or higher is required &mdash; this server is running PHP version <?php echo $php_version; ?>.</p>
 <?php } 
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

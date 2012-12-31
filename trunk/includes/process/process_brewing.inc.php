@@ -87,15 +87,9 @@ if ($row_prefs['prefsUserEntryLimit'] != "") {
 
 }
 
-
-// Check if user has reached the limit of the total number of entries allowed per user. If so, redirect.
-
-
-
-
 if ($action == "add") {
 	
-	if ($row_user['userLevel'] == 1) { 
+	if ($row_user['userLevel'] <= 1) { 
 		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $_POST['brewBrewerID']);
 		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 		$row_brewer = mysql_fetch_assoc($brewer);
@@ -620,7 +614,9 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	
-	if ($row_user['userLevel'] == 1) { 
+	
+	
+	if ($row_user['userLevel'] <= 1) { 
 		$name = $_POST['brewBrewerID'];
 		
 		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $name);
@@ -643,8 +639,16 @@ if ($action == "edit") {
 	$styleTrim = ltrim($style[0], "0"); 
 	if ($style [0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
 	
-	// Get style name from broken parts
+	// Check if style has been changed. If so, regenerate judging number.
 	mysql_select_db($database, $brewing);
+	$query_style_changed = "SELECT brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='$id'";
+	$style_changed = mysql_query($query_style_changed, $brewing) or die(mysql_error());
+	$row_style_changed = mysql_fetch_assoc($style_changed);
+	
+	$style_previous = $row_style_changed['brewCategory']."-".$row_style_changed['brewSubCategory'];
+	if ($style_previous != $styleBreak) $new_judging_number = TRUE; else $new_judging_number = FALSE;
+	
+	// Get style name from broken parts
 	$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
@@ -844,13 +848,20 @@ if ($action == "edit") {
 	  
 	mysql_select_db($database, $brewing);
 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	if ($new_judging_number) {
+		$judging_number = generate_judging_num($styleTrim);
+		$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingNumber='%s' WHERE id=%s", $judging_number, GetSQLValueString($id, "int"));
+		mysql_select_db($database, $brewing);
+		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
 	  
 	// Check if entry requires special ingredients or a classic style
 	  
 	if (check_special_ingredients($styleBreak)) {
 		  
 		if ($_POST['brewInfo'] == "") {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
@@ -872,7 +883,7 @@ if ($action == "edit") {
 	 elseif (check_mead_strength($style[0])) {
 		
 		if ($_POST['brewMead3'] == "") {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
@@ -891,7 +902,7 @@ if ($action == "edit") {
 	 elseif (check_carb_sweetness($style[0])) {
 		 
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
@@ -911,7 +922,7 @@ if ($action == "edit") {
 	elseif ((check_carb_sweetness($style[0])) && (check_mead_strength($style[0]))) {
 		 
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}

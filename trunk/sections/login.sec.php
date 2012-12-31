@@ -6,7 +6,7 @@
  * 
  */
  
-include(INCLUDES.'mods_top.inc.php');
+if ($section != "update") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
 
 	if (!isset($_SESSION['loginUsername'])) { 
@@ -83,6 +83,5 @@ if ($go == "verify") {
 	<?php }
 	} 
 }
-
-include(INCLUDES.'mods_bottom.inc.php');
+if ($section != "update") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

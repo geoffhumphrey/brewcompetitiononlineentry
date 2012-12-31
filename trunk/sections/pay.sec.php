@@ -6,7 +6,7 @@
  * 
  */
 
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 $bid = $row_name['uid'];
 
 if ($msg == "10") {
@@ -143,5 +143,5 @@ if (($row_prefs['prefsCurrency'] == "$") && ($pay_the_man < 30.00)) $pay_the_man
 </form>
 <?php } ?>
 <?php } 
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>
