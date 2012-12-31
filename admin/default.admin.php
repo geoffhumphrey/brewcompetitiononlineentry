@@ -170,6 +170,37 @@ function admin_help($go,$header_output,$action,$filter) {
 	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
 	return $return;	
 }
+
+function custom_modules($type,$method) {
+	require(CONFIG.'config.php');
+	
+	if ($type == "reports") { $type = 1; $modal = "id='modal_window_link'"; }
+	if ($type == "exports") { $type = 2; $modal = ""; }
+	
+	if ($method == 1) {
+		
+		$query_custom_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE mod_type='%s'", $prefix."mods", $type);
+		$custom_number = mysql_query($query_custom_number, $brewing) or die(mysql_error());
+		$row_custom_number = mysql_fetch_assoc($custom_number);
+		
+		if ($row_custom_number['count'] > 0) return TRUE;	
+	}
+	
+	if ($method == 2) {
+		
+		$query_custom_mod = sprintf("SELECT * FROM %s WHERE mod_type='%s' ORDER BY mod_name ASC", $prefix."mods", $type);
+		$custom_mod = mysql_query($query_custom_mod, $brewing) or die(mysql_error());
+		$row_custom_mod = mysql_fetch_assoc($custom_mod);
+		$output = "";
+		do {
+			$output .= "<li><a ".$modal." href='".$base_url."/mods/".$row_custom_mod['mod_filename']."'>".$row_custom_mod['mod_name']."</a></li>";
+			//$output = $query_custom_mod;
+		} while ($row_custom_mod = mysql_fetch_assoc($custom_mod));
+		
+		return $output;
+	}
+}
+
 include(INCLUDES.'mods_top.inc.php');
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
@@ -702,6 +733,13 @@ if ($go == "default") { ?>
 				<li>Participant Summaries:</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a> (All Participants with Entries)</li>
 			</ul>
+            
+            <?php if (custom_modules("reports",1)) { ?>
+            <p class="admin_default_header">Custom Reports</p>
+			<ul class="admin_default">
+				<?php echo custom_modules("reports",2); ?>
+			</ul>
+            <?php } ?>
 </div>
 <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/page_go.png"  /></span>Exporting</h4>
 <div class="toggle_container">
@@ -747,6 +785,12 @@ if ($go == "default") { ?>
 				<li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a> (.doc)</li>
                 <li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a> (.txt)</li>
 			</ul>
+            <?php if (custom_modules("exports",1)) { ?>
+            <p class="admin_default_header">Custom Exports</p>
+			<ul class="admin_default">
+				<?php echo custom_modules("exports",2); ?>
+			</ul>
+            <?php } ?>
 		</div>
         <?php if ($row_user['userLevel'] == "0") { ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/camera_add.png" /></span>Archiving</h4>
