@@ -7,6 +7,8 @@
  */
 
 include(DB.'sponsors.db.php');
+include(INCLUDES.'mods_top.inc.php');
+
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Sponsors">Print This Page</a></p>
@@ -42,3 +44,4 @@ if ($action != "print") { ?>
 	}
 	?>
 </table>
+<?php include(INCLUDES.'mods_bottom.inc.php'); ?>

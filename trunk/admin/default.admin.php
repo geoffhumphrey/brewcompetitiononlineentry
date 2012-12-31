@@ -1,4 +1,3 @@
-
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
@@ -171,7 +170,7 @@ function admin_help($go,$header_output,$action,$filter) {
 	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
 	return $return;	
 }
-
+include(INCLUDES.'mods_top.inc.php');
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 function total_discount() { 
@@ -244,9 +243,9 @@ if (($action != "print") && ($go != "default")) echo admin_help($go,$header_outp
     <?php } ?>
 </table>
 </div>
-<?php } if ($row_user['userLevel'] == "1") {
-			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
-			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
+<?php } if ($row_user['userLevel'] <= "1") {
+			if (($totalRows_dropoff == "0") && ($go == "default") && ($row_user['userLevel'] == "0")) echo "<div class='error'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
+			if (($totalRows_judging == "0") && ($go == "default") && ($row_user['userLevel'] == "0")) echo "<div class='error'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>"; 
 if ($go == "default") { ?>
 <div id="menu_container">
 <div id="outer">
@@ -255,30 +254,34 @@ if ($go == "default") { ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span>Help</h4>
         <div class="toggle_container">
         	<p class="admin_default_header">Quick Links</p>
+            <?php if ($row_user['userLevel'] == "0") { ?>
         	<ul class="admin_default">
 				<li><a href="http://help.brewcompetition.com/files/gone_through.html" title="Help" id="modal_window_link">I've Gone Through Set Up, What Do I Do Now?</a></li>
     			<li><a href="http://help.brewcompetition.com/files/comp_contacts.html" title="Help" id="modal_window_link">How Do I Add More Contacts?</a></li>
                 <li><a href="http://help.brewcompetition.com/files/drop_off.html" title="Help" id="modal_window_link">How Do I Add More Drop Off Locations?</a></li>
     			<li><a href="http://help.brewcompetition.com/files/sponsors.html" title="Help" id="modal_window_link">How Do I Display Sponsors?</a></li>			
             </ul>
+            <?php } ?>
             <ul class="admin_default">
-				<li><a href="http://help.brewcompetition.com/files/style_types.html" title="Help" id="modal_window_link">What Are Style Types?</a></li>
     			<li><a href="http://help.brewcompetition.com/files/tables.html" title="Help" id="modal_window_link">How Do I Set Up Tables?</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
                 <li><a href="http://help.brewcompetition.com/files/flights.html" title="Help" id="modal_window_link">How Do I Define Flights?</a></li>			
             	<?php } ?>
                 <li><a href="http://help.brewcompetition.com/files/judges.html" title="Help" id="modal_window_link">How Do I Assign Judges/Stewards to Tables?</a></li>
+                <li><a href="http://help.brewcompetition.com/files/scoring.html" title="Help" id="modal_window_link">How Do I Enter Scores?</a></li>
     		</ul>
+            <?php if ($row_user['userLevel'] == "0") { ?>
             <ul class="admin_default">
-				<li><a href="http://help.brewcompetition.com/files/scoring.html" title="Help" id="modal_window_link">How Do I Enter Scores?</a></li>
-                <li><a href="http://help.brewcompetition.com/files/archiving.html" title="Help" id="modal_window_link">What are Archives?</a></li>		
+            	<li><a href="http://help.brewcompetition.com/files/archiving.html" title="Help" id="modal_window_link">What are Archives?</a></li>	
+				<li><a href="http://help.brewcompetition.com/files/style_types.html" title="Help" id="modal_window_link">What Are Style Types?</a></li>
             </ul>
+            <?php } ?>
             <p class="admin_default_header">More Help</p>
             <ul class="admin_default">
 				<li><a href="http://help.brewcompetition.com" title="Help" target="_blank">All Help Topics</a></li>
     		</ul>
         </div>
-        <?php if ($row_prefs['prefsUseMods'] == "Y") { ?>
+        <?php if (($row_prefs['prefsUseMods'] == "Y") && ($row_user['userLevel'] == "0")) { ?>
         <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick.png"  /></span>Custom Modules</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
@@ -291,6 +294,7 @@ if ($go == "default") { ?>
             </ul>
         </div>
         <?php } ?>
+        <?php if ($row_user['userLevel'] == "0") { ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png"  /></span>Defining Preferences</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Define</p>
@@ -339,6 +343,7 @@ if ($go == "default") { ?>
 			    <li><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link">Sponsor Logos</a></li>
 			</ul>
 		</div>
+        <?php } ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/note.png"  /></span>Entry and Data Gathering</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Manage/View</p>
@@ -363,15 +368,18 @@ if ($go == "default") { ?>
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
 			</ul>
 			<p class="admin_default_header">Add</p>
+            <?php if ($row_user['userLevel'] == "0") { ?>
 			<ul class="admin_default">
   				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
             	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
 			</ul>
+            <?php } ?>
             <ul class="admin_default">
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li></li>
    			 	<li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
+            <?php if ($row_user['userLevel'] == "0") { ?>
             <ul class="admin_default">
 		      <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
             </ul>
@@ -381,13 +389,15 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></li>
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
-
 			</ul>
+            <?php } ?>
 			<p class="admin_default_header">Assign</p>
 			<ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
+			    <?php if ($row_user['userLevel'] == "0") { ?>
+                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
+                <?php } ?>
 			</ul>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_refresh.png"  /></span>Sorting Received Entries</h4>
@@ -410,16 +420,6 @@ if ($go == "default") { ?>
       <p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
             	<li>Entry Judging Numbers:</li>
-                <!--
-                <li>
-                <select name="generate_choice_1" id="generate_choice_1" onchange="jumpMenu('self',this,0)" >
-				<option>Choose Below:</option>
-                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Key Off Entry Number (Ascending)</option>
-                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Key Off Entry Number (Descending)</option>
-                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Key Off Entry Name (Ascending)</option>
-                <option value="includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Key Off Entry Name (Descending)</option>
-                </select>
-                                -->
                 <li>
                 <div class="menuBar">
                 <a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'menu_generate');">Key Off Of... (Select One)</a>
@@ -431,9 +431,6 @@ if ($go == "default") { ?>
                 </div>
                 </div>
                 </li>
-
-			    <!-- <li>Entry Judging Numbers for Category:</li>
-                <li><?php //echo style_choose($section,"entries","generate_judging_numbers",$filter,"includes/process.inc.php","none"); ?></li> -->
 			</ul>
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
@@ -524,14 +521,13 @@ if ($go == "default") { ?>
     			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></li>
                 <?php } ?>
 			</ul>
-  			
-<p class="admin_default_header">Assign</p>
+  			<p class="admin_default_header">Assign</p>
   			<ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
 			</ul>
-  	<?php if ($totalRows_tables > 1) { ?>
+  			<?php if ($totalRows_tables > 1) { ?>
 			<ul class="admin_default">
             	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds"><?php echo $assign_to; ?> to Rounds</a></li>
             </ul>
@@ -541,11 +537,11 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a></li>
 			</ul>
-  	<?php } ?>
-</div>
-<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/rosette.png"  /></span>Scoring</h4>
-<div class="toggle_container">
-<p class="admin_default_header">Manage/View</p>
+  			<?php } ?>
+            </div>
+            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/rosette.png"  /></span>Scoring</h4>
+            <div class="toggle_container">
+            <p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a></li>
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a></li>
@@ -569,10 +565,10 @@ if ($go == "default") { ?>
 				<li>Winners for Custom Winning Category:</li>
 				<li><?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?></li>
             </ul>
-</div>
-<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  /></span>Printing and Reporting</h4>
-<div class="toggle_container">
-<p class="admin_default_header">Before Judging</p>
+            </div>
+            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  /></span>Printing and Reporting</h4>
+            <div class="toggle_container">
+			<p class="admin_default_header">Before Judging</p>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Entry</em> Numbers):</li>
@@ -723,9 +719,7 @@ if ($go == "default") { ?>
                 <li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;view=all">All Non-Paid Entries</a></li>
 				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a></li>
 			</ul>
-  			
-		
-			<p class="admin_default_header">Tab Delimited Files</li>
+  			<p class="admin_default_header">Tab Delimited Files</li>
 <p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
 			<ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>/output/participants_export.php?section=admin&amp;go=tab&amp;action=hccp">All Participants</a></li>
@@ -754,6 +748,7 @@ if ($go == "default") { ?>
                 <li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a> (.txt)</li>
 			</ul>
 		</div>
+        <?php if ($row_user['userLevel'] == "0") { ?>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/camera_add.png" /></span>Archiving</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Manage/View</p>
@@ -761,10 +756,11 @@ if ($go == "default") { ?>
 				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=archive">Archives</a></li>
 			</ul>
 		</div>
+        <?php } ?>
 	</div>
 </div>
 </div>
-<?php 	} 
+<?php } 
 if ($go == "contest_info") 				include (ADMIN.'competition_info.admin.php');
 if ($go == "preferences") 				include (ADMIN.'site_preferences.admin.php');
 if ($go == "judging") 	    			include (ADMIN.'judging_locations.admin.php');
@@ -787,6 +783,7 @@ if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php
 if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
 if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
+include(INCLUDES.'mods_bottom.inc.php');
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

@@ -24,24 +24,24 @@ if (strstr($section,"step")) { ?>
   <?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   <li><?php if ($section != "list") { ?><a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li>
   <?php } ?>
-  <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
+  <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>/index.php?section=admin" onclick="<?php echo $base_url; ?>/index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a></div></li>
 <?php } ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
   <li><?php sessionAuthenticateNav(); ?></li>
 </ul>
 <?php } ?>
-<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) { ?>
+<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">
 <!-- Admin Main Link -->
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin">Admin Dashboard</a>
-
+<?php if ($row_user['userLevel'] == "0") { ?>
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
 
 <!-- Preparing Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Preparing');"><span class="menuItemText">Preparing</span><span class="menuItemArrow">&#9654;</span></a>	
-
+<?php } ?>
 <!-- Entry and Data Gathering Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Entry');"><span class="menuItemText">Entry and Data Gathering</span><span class="menuItemArrow">&#9654;</span></a>
 
@@ -59,10 +59,10 @@ if (strstr($section,"step")) { ?>
 
 <!-- Exporting Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Exporting');"><span class="menuItemText">Exporting</span><span class="menuItemArrow">&#9654;</span></a>
-	
+<?php if ($row_user['userLevel'] == "0") { ?>	
 <!-- Archiving Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Archiving');"><span class="menuItemText">Archiving</span><span class="menuItemArrow">&#9654;</span></a>
-
+<?php } ?>
 <!-- Bug Reporting -->
 <a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
 </div>
@@ -159,27 +159,35 @@ if (strstr($section,"step")) { ?>
 </div>
 
 <div id="adminMenu_Entry_Manage" class="menu">
+<?php if ($row_user['userLevel'] == "0") { ?>	
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">Style Types</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
+<?php } ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging">Judging Locations &amp; Dates</a>		
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
+<?php if ($row_user['userLevel'] == "0") { ?>	
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts">Competition Contacts</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Sponsors</a>
+<?php } ?>
 </div>
 <div id="adminMenu_Entry_Add" class="menu">
+<?php if ($row_user['userLevel'] == "0") { ?>	
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
+<?php } ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
+<?php if ($row_user['userLevel'] == "0") { ?>	
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
+<?php } ?>
 </div>
 <div id="adminMenu_Entry_Assign" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a>

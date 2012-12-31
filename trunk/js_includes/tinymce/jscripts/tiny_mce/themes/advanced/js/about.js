@@ -63,7 +63,7 @@ function insertHelpIFrame() {
 	var html;
 
 	if (tinyMCEPopup.getParam('docs_url')) {
-		html = '<iframe width="100%" height="300" ' + tinyMCEPopup.editor.baseURI.toAbsolute(tinyMCEPopup.getParam('docs_url')) + '"></iframe>';
+		html = '<iframe width="100%" height="300" src="' + tinyMCEPopup.editor.baseURI.toAbsolute(tinyMCEPopup.getParam('docs_url')) + '"></iframe>';
 		document.getElementById('iframecontainer').innerHTML = html;
 		document.getElementById('help_tab').style.display = 'block';
 		document.getElementById('help_tab').setAttribute("aria-hidden", "false");

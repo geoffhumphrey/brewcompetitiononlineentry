@@ -6,7 +6,7 @@
  * 
  */
  
-
+include(INCLUDES.'mods_top.inc.php');
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
 
 	if (!isset($_SESSION['loginUsername'])) { 
@@ -83,4 +83,6 @@ if ($go == "verify") {
 	<?php }
 	} 
 }
+
+include(INCLUDES.'mods_bottom.inc.php');
 ?>

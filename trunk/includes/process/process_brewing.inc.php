@@ -70,6 +70,29 @@ $query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '
 $user = mysql_query($query_user, $brewing) or die(mysql_error());
 $row_user = mysql_fetch_assoc($user);
 
+
+if ($row_prefs['prefsUserEntryLimit'] != "") {
+	
+	// Check if user has reached the limit of entries in a particular sub-category. If so, redirect.
+	$query_brews = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewBrewerId = '%s'", $row_user['id']);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+		if ($row_brews['count'] >= $row_prefs['prefsUserEntryLimit']) {
+			$insertGoTo = $base_url."/index.php?section=list&msg=8";
+			$pattern = array('\'', '"');
+  			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+  			header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		}
+
+}
+
+
+// Check if user has reached the limit of the total number of entries allowed per user. If so, redirect.
+
+
+
+
 if ($action == "add") {
 	
 	if ($row_user['userLevel'] == 1) { 
@@ -925,7 +948,8 @@ if ($action == "update") {
 	if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
 		$updateSQL = "UPDATE $brewing_db_table SET 
 		brewPaid='".$brewPaid."',
-		brewReceived='".$brewReceived."'
+		brewReceived='".$brewReceived."',
+		brewBoxNum='".$_POST["brewBoxNum".$id]."'
 		WHERE id='".$id."'";
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	

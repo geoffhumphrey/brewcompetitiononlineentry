@@ -48,7 +48,7 @@ require(INCLUDES.'constants.inc.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers") 	include (SECTIONS.'volunteers.sec.php');	
 	if (isset($_SESSION['loginUsername'])) {
-		if ($row_user['userLevel'] == "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
+		if ($row_user['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');

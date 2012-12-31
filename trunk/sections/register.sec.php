@@ -10,6 +10,7 @@ include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
+
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
@@ -113,7 +114,10 @@ httpxml.send(null);
 
 //-->
 </script>
-<?php if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; ?>
+<?php 
+if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
+if ($section != "admin") include(INCLUDES.'mods_top.inc.php');
+?>
 <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
 <p>Our competition entry system is completely electronic.
 	<ul>
@@ -253,12 +257,32 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
+<?php if (table_exists("nhcClubs")) { 
+
+// Custom code for AHA - possiblity of inclusion in a future version
+$query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
+$clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
+$row_clubs = mysql_fetch_assoc($clubs);
+
+?>
 <tr>
       <td class="dataLabel">Club Name:</td>
-      <td class="data"><input type="text" name="brewerClubs" value="<?php if ($msg == "4") echo $_COOKIE['brewerClubs']; ?>" size="32" maxlength="200"></td>
+      <td class="data" colspan="3">
+      <select name="brewerClubs" id="brewerClubs">
+      <?php do { ?>
+      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
+      <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
+      </select>
+      </td>
+</tr>
+<?php } else { ?>
+<tr>
+      <td class="dataLabel">Club Name:</td>
+      <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
+<?php } ?>
 <tr>
   <td class="dataLabel">AHA Member Number:</td>
   <td class="data"><input type="text" name="brewerAHA" value="<?php if ($msg == "4") echo $_COOKIE['brewerAHA']; ?>" size="11" maxlength="11" /></td>
@@ -358,4 +382,6 @@ if ($section != "admin") {
 <input type="hidden" name="brewerSteward" value="N" />
 <?php } ?>
 </form>
-<?php } ?>
+<?php } 
+if ($section != "admin") include(INCLUDES.'mods_bottom.inc.php');
+?>

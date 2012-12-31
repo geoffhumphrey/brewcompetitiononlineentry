@@ -80,52 +80,105 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	}
     else $location_pref2 = "";
 	
-	// Add the user's info to the "brewer" table
-	  	$insertSQL = sprintf("INSERT INTO $brewer_db_table (
-		  uid,
-		  brewerFirstName, 
-		  brewerLastName, 
-		  brewerAddress, 
-		  brewerCity, 
-		  brewerState, 
-		  
-		  brewerZip,
-		  brewerCountry,
-		  brewerPhone1, 
-		  brewerPhone2, 
-		  brewerClubs, 
-		  brewerEmail, 
-		  
-		  brewerSteward, 
-		  brewerJudge,
-		  brewerJudgeID,
-		  brewerJudgeMead,
-		  brewerJudgeRank,
-		  brewerJudgeLocation,
-		  brewerStewardLocation,
-		  brewerAHA
-		  ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-				   GetSQLValueString($row_user['id'], "int"),
-				   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-				   GetSQLValueString($_POST['brewerState'], "text"),
-				   GetSQLValueString($_POST['brewerZip'], "text"),
-				   GetSQLValueString($_POST['brewerCountry'], "text"),
-				   GetSQLValueString($_POST['brewerPhone1'], "text"),
-				   GetSQLValueString($_POST['brewerPhone2'], "text"),
-				   GetSQLValueString($_POST['brewerClubs'], "text"),
-				   GetSQLValueString($username, "text"),
-				   GetSQLValueString($_POST['brewerSteward'], "text"),
-				   GetSQLValueString($_POST['brewerJudge'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeID'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
-				   GetSQLValueString($location_pref1, "text"),
-				   GetSQLValueString($location_pref2, "text"),
-				   GetSQLValueString($_POST['brewerAHA'], "int")
-				   );
+		// Add the user's info to the "brewer" table
+	  	// Numbers 999999994 through 999999999 are reserved for NHC applications.
+		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
+			
+			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
+			  uid,
+			  brewerFirstName, 
+			  brewerLastName, 
+			  brewerAddress, 
+			  brewerCity, 
+			  brewerState, 
+			  
+			  brewerZip,
+			  brewerCountry,
+			  brewerPhone1, 
+			  brewerPhone2, 
+			  brewerClubs, 
+			  brewerEmail, 
+			  
+			  brewerSteward, 
+			  brewerJudge,
+			  brewerJudgeID,
+			  brewerJudgeMead,
+			  brewerJudgeRank,
+			  brewerJudgeLocation,
+			  brewerStewardLocation,
+			  brewerAHA
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+						   GetSQLValueString($row_user['id'], "int"),
+						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($_POST['brewerState'], "text"),
+						   GetSQLValueString($_POST['brewerZip'], "text"),
+						   GetSQLValueString($_POST['brewerCountry'], "text"),
+						   GetSQLValueString($_POST['brewerPhone1'], "text"),
+						   GetSQLValueString($_POST['brewerPhone2'], "text"),
+						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($username, "text"),
+						   GetSQLValueString($_POST['brewerSteward'], "text"),
+						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($location_pref1, "text"),
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($_POST['brewerAHA'], "int")
+						   );
+		}
+		
+		else {
+			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
+			  uid,
+			  brewerFirstName, 
+			  brewerLastName, 
+			  brewerAddress, 
+			  brewerCity, 
+			  brewerState, 
+			  
+			  brewerZip,
+			  brewerCountry,
+			  brewerPhone1, 
+			  brewerPhone2, 
+			  brewerClubs, 
+			  brewerEmail, 
+			  
+			  brewerSteward, 
+			  brewerJudge,
+			  brewerJudgeID,
+			  brewerJudgeMead,
+			  brewerJudgeRank,
+			  brewerJudgeLocation,
+			  brewerStewardLocation
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+						   GetSQLValueString($row_user['id'], "int"),
+						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($_POST['brewerState'], "text"),
+						   GetSQLValueString($_POST['brewerZip'], "text"),
+						   GetSQLValueString($_POST['brewerCountry'], "text"),
+						   GetSQLValueString($_POST['brewerPhone1'], "text"),
+						   GetSQLValueString($_POST['brewerPhone2'], "text"),
+						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($username, "text"),
+						   GetSQLValueString($_POST['brewerSteward'], "text"),
+						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($location_pref1, "text"),
+						   GetSQLValueString($location_pref2, "text")
+						   );
+		}
+		
+		
+		
 		//echo $insertSQL;
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	

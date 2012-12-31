@@ -13,11 +13,13 @@ include(DB.'styles.db.php');
 
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
-<?php if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].'/user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
+<?php if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 <img src="<?php echo $base_url; ?>/user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Entry Information">Print This Page</a></p>
-<?php $contact_count= get_contact_count();
+<?php 
+include(INCLUDES.'mods_top.inc.php');
+$contact_count= get_contact_count();
 if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($contact_count > 1) echo "s"; ?></a><br /><?php } ?>
 <a href="#reg_window">Registration Window</a><br />
 <a href="#entry_window">Entry Window</a><br />
@@ -47,7 +49,7 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <a name="entry_window"></a><h2>Entry Window</h2>
 <p>Entries will be accepted at our shipping and drop-off location<?php if ($totalRows_dropoff > 1) echo "s"; ?> beginning <?php echo $entry_open." through ".$entry_closed; ?>.</p>
 <a name="entry"></a><h2>Entry Fees</h2>
-<p><?php echo $row_prefs['prefsCurrency'].$row_contest_info['contestEntryFee']; ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after ".$row_contest_info['contestEntryFeeDiscountNum']." entries. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'],2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after the ".addOrdinalNumberSuffix($row_contest_info['contestEntryFeeDiscountNum'])." entry. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <?php if ($row_prefs['prefsEntryLimit'] != "") { ?>
 <a name="entry_limit"></a><h2>Entry Limit</h2>
 <p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.  Currently, <?php echo $totalRows_log; if ($totalRows_log == 1) echo " entry has"; else echo " entries have"; ?>  been logged.</p>
@@ -150,4 +152,6 @@ if ($row_contest_info['contestAwards'] != "") { ?>
 	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");
 	?>
 </p>
-<?php } ?>
+<?php } 
+include(INCLUDES.'mods_bottom.inc.php');
+?>

@@ -5,14 +5,16 @@
  *              specified in the contest_info database table. 
  * 
  */
-?>
-<?php if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].'/user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
+
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
+if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_contest_info['contestLogo']))) { // display competition's logo if name present in DB and in the correct folder on the server ?>
 <img src="<?php echo $base_url; ?>/user_images/<?php echo $row_contest_info['contestLogo']; ?>" width="<?php echo $row_prefs['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo"/>
 <?php } ?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>/output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Volunteer Info">Print This Page</a></p>
-<?php } ?>
+<?php } 
+include(INCLUDES.'mods_top.inc.php');
+?>
 
 <h2>Judging and Stewarding</h2>
 <?php if (($judge_window_open > 0) && (!isset($_SESSION['loginUsername']))) { ?>
@@ -27,4 +29,8 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_
 <?php if ($row_contest_info['contestVolunteers'] != "") { ?>
 <h2>Other Volunteer Info</h2>
 <?php echo $row_contest_info['contestVolunteers']; ?>
-<?php } ?>
+<?php } 
+
+include(INCLUDES.'mods_bottom.inc.php');
+
+?>

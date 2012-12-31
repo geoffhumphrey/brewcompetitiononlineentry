@@ -4,6 +4,9 @@
  * Description: This module does all the heavy lifting for adding information to the 
  *              "preferences" table.
  */
+if ($_POST['prefsUSCLEx'] != "") $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
+else  $prefsUSCLEx = "";
+
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $preferences_db_table (
 	prefsTemp, 
@@ -45,6 +48,8 @@ if ($action == "add") {
 	prefsTimeFormat,
 	prefsUserEntryLimit,
 	prefsUserSubCatLimit,
+	prefsUSCLEx,
+	prefsUSCLExLimit,
 	prefsPayToPrint,
 	prefsHideRecipe,
 	prefsUseMods,
@@ -57,7 +62,7 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s)",
+	%s, %s, %s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -97,6 +102,8 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
 						   GetSQLValueString($_POST['prefsUserEntryLimit'], "int"),
 						   GetSQLValueString($_POST['prefsUserSubCatLimit'], "int"),
+						   GetSQLValueString($prefsUSCLEx, "text"),
+						   GetSQLValueString($_POST['prefsUSCLExLimit'], "int"),
 						   GetSQLValueString($_POST['prefsPayToPrint'], "text"),
 						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
 						   GetSQLValueString($_POST['prefsUseMods'], "text"),
@@ -154,6 +161,8 @@ if ($action == "edit") {
 	prefsTimeFormat=%s,
 	prefsUserEntryLimit=%s,
 	prefsUserSubCatLimit=%s,
+	prefsUSCLEx=%s,
+	prefsUSCLExLimit=%s,
 	prefsPayToPrint=%s,
 	prefsHideRecipe=%s,
 	prefsUseMods=%s
@@ -197,6 +206,8 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsTimeFormat'], "text"),
 						   GetSQLValueString($_POST['prefsUserEntryLimit'], "int"),
 						   GetSQLValueString($_POST['prefsUserSubCatLimit'], "int"),
+						   GetSQLValueString($prefsUSCLEx, "text"),
+						   GetSQLValueString($_POST['prefsUSCLExLimit'], "int"),
 						   GetSQLValueString($_POST['prefsPayToPrint'], "text"),
 						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
 						   GetSQLValueString($_POST['prefsUseMods'], "text"),

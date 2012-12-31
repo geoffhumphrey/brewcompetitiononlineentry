@@ -1,10 +1,12 @@
 <?php 
+include (DB.'styles.db.php');
 mysql_select_db($database, $brewing);
 $query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
 $themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 $row_themes = mysql_fetch_assoc($themes);
 $totalRows_themes = mysql_num_rows($themes);
 ?>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
 <form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
 <h2>Site Preferences</h2>
@@ -16,32 +18,7 @@ $totalRows_themes = mysql_num_rows($themes);
 <?php } ?>
 <p><input name="submit" type="submit" class="button" value="Set Preferences"></p>
 <h3>General</h3>
-<table>  
-  <tr>
-  	<td class="dataLabel">Total Entry Limit:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_prefs['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
-  </tr>
-  <tr>
-  	<td class="dataLabel">Entry Limit Per Participant:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsUserEntryLimit" type="text" value="<?php echo $row_prefs['prefsUserEntryLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">Limit of entries that each participant can enter. Leave blank if no limit.</td>
-  </tr>
-  <tr>
-  	<td class="dataLabel">Entry Limit Per Sub-category:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsUserSubCatLimit" type="text" value="<?php echo $row_prefs['prefsUserSubCatLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">Limit of entries that each participant can enter into a sub-category. Leave blank if no limit.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Hide Entry Recipe Section:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($row_prefs['prefsHideRecipe'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($row_prefs['prefsHideRecipe'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Use Custom Modules:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">FOR ADVANCED USERS. Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
-  </tr>
+<table>
   <tr>
   	<td class="dataLabel">Competition Logo Size:</td>
     <td nowrap="nowrap" class="data">
@@ -79,23 +56,6 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="data">How the competition will award places for winning entries.</td>
   </tr>
   <tr>
-    <td class="dataLabel">Require Special Ingredients<br />
-      for Custom Styles:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
-    <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Printed Entry Form to Use:</td>
-    <td nowrap="nowrap" class="data">
-    <select name="prefsEntryForm">
-    <option value="B" <?php if (($section == "step3") || ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
-    <option value="M" <?php if ($row_prefs['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
-    <option value="U" <?php if ($row_prefs['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
-    </select>
-    </td>
-  	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
-  </tr>
-  <tr>
       <td class="dataLabel">Contact Form:</td>
       <td nowrap="nowrap" class="data"><input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> No</td>
       <td class="data">Enable or disable your installation's contact form. This may be necessary if your site's server does not support PHP's <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option.</td>
@@ -110,6 +70,108 @@ $totalRows_themes = mysql_num_rows($themes);
     </select>
     </td>
   	<td class="data">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Use Custom Modules:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">FOR ADVANCED USERS. Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
+  </tr>
+</table>
+<h3>Entries</h3>
+<table>
+	<tr>
+    <td class="dataLabel">Require Special Ingredients<br />
+      for Custom Styles:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($row_prefs['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Printed Entry Form to Use:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsEntryForm">
+        <option value="B" <?php if (($section == "step3") || ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
+        <option value="M" <?php if ($row_prefs['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
+        <option value="U" <?php if ($row_prefs['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
+        <option value="N" <?php if ($row_prefs['prefsEntryForm'] == "N") echo " SELECTED"; ?> />NHC Style - 1 Page with Barcode</option>
+    </select>
+    </td>
+  	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
+  </tr> 
+  <tr>
+  	<td class="dataLabel">Total Entry Limit:</td>
+    <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_prefs['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
+    <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entry Limit Per Participant:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsUserEntryLimit" />
+    	<option value="" rel="none" <?php ($row_prefs['prefsUserEntryLimit'] == ""); echo "SELECTED"; ?>></option>
+    <?php for ($i=1; $i <= 50; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsUserEntryLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    <?php } ?>
+    </select>
+    </td>
+    <td class="data">Limit of entries that each participant can enter. Leave blank if no limit.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Entry Limit Per Sub-category:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsUserSubCatLimit" />
+    	<option value="" rel="none" <?php ($row_prefs['prefsUserSubCatLimit'] == ""); echo "SELECTED"; ?>></option>
+    <?php for ($i=1; $i <= 50; $i++) { ?>
+    	<option value="<?php echo $i; ?>" rel="user_entry_limit" <?php if ($row_prefs['prefsUserSubCatLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    <?php } ?>
+    </select>
+    </td>
+    <td class="data">Limit of entries that each participant can enter into a single sub-category. Leave blank if no limit.</td>
+  </tr>
+  <tr rel="user_entry_limit">
+    <td class="dataLabel">Exceptions to Entry Limit<br />Per Sub-category:</td>
+    <td class="data" colspan="2">
+    <table class="dataTableCompact">
+    <?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
+	do {
+    	if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+    ?>
+            	<td width="1%"><input name="prefsUSCLEx[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_prefs['prefsUSCLEx']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
+                <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
+                <td><?php echo $row_styles['brewStyle']; ?></td>
+            <?php  $endRow++;
+	if ($endRow >= $columns) {
+  	?>
+  </tr>
+  <?php
+ 	$endRow = 0;
+  		}
+	} while ($row_styles = mysql_fetch_assoc($styles));
+	if ($endRow != 0) {
+	while ($endRow < $columns) {
+    echo("<td>&nbsp;</td>");
+    $endRow++;
+	}
+	echo("</tr>");
+	}
+	?>
+        </table>
+    </td>
+  </tr>
+  <tr rel="user_entry_limit">
+  	<td class="dataLabel">Entry Limit For <em>Excepted</em><br />Sub-categories:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsUSCLExLimit" />
+    	<option value="" rel="none" <?php ($row_prefs['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
+    <?php for ($i=1; $i <= 50; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    <?php } ?>
+    </select>
+    </td>
+    <td class="data">Limit of entries that each participant can enter into one of the above sub-categories that <em>have been checked</em>. Leave blank if no limit for these sub-categories.</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Hide Entry Recipe Section:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($row_prefs['prefsHideRecipe'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($row_prefs['prefsHideRecipe'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+  	<td class="data">Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</td>
   </tr>
 </table>
 <h3>Performance</h3>
@@ -239,7 +301,7 @@ $totalRows_themes = mysql_num_rows($themes);
 </table>
 <h3>Currency and Payment</h3>
 <table>
-  	<td class="dataLabel">Currency</td>
+  	<td class="dataLabel">Currency:</td>
     <td class="data">
     <select name="prefsCurrency">
     <option value="$"  <?php if ($row_prefs['prefsCurrency'] == "$") echo "SELECTED"; ?>>$ - Dollar</option>
@@ -309,7 +371,7 @@ $totalRows_themes = mysql_num_rows($themes);
 <table>
   <tr>
   	<td class="dataLabel">Sponsor Display:</td>
-   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefsSponsors_0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefsSponsors_1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
+   	<td nowrap="nowrap" class="data"><input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($row_prefs['prefsSponsors'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if ($row_prefs['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Do you want to display the competition sponsors?</td>
   </tr>
   <tr>

@@ -233,6 +233,7 @@ if ($action == "update") {
 }
 
 // --------------------------------------- Adding a Participant ----------------------------------------
+
 if ($action == "add") {
 	if ($_POST['brewerJudge'] == "Y") {
 		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
@@ -265,51 +266,102 @@ if ($action == "add") {
 	
 	else {
 
-	  $insertSQL = sprintf("INSERT INTO $brewer_db_table (
-	  uid,
-	  brewerFirstName, 
-	  brewerLastName, 
-	  brewerAddress, 
-	  brewerCity, 
-	  brewerState, 
 	  
-	  brewerZip,
-	  brewerCountry,
-	  brewerPhone1, 
-	  brewerPhone2, 
-	  brewerClubs, 
-	  brewerEmail, 
-	  
-	  brewerSteward, 
-	  brewerJudge,
-	  brewerJudgeID,
-	  brewerJudgeMead,
-	  brewerJudgeRank,
-	  brewerJudgeLocation,
-	  brewerStewardLocation,
-	  brewerAHA
-	) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-				   GetSQLValueString($_POST['uid'], "int"),
-				   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-				   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
-				   GetSQLValueString($_POST['brewerState'], "text"),
-				   GetSQLValueString($_POST['brewerZip'], "text"),
-				   GetSQLValueString($_POST['brewerCountry'], "text"),
-				   GetSQLValueString($_POST['brewerPhone1'], "text"),
-				   GetSQLValueString($_POST['brewerPhone2'], "text"),
-				   GetSQLValueString($_POST['brewerClubs'], "text"),
-				   GetSQLValueString($_POST['brewerEmail'], "text"),
-				   GetSQLValueString($_POST['brewerSteward'], "text"),
-				   GetSQLValueString($_POST['brewerJudge'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeID'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-				   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
-				   GetSQLValueString($location_pref1, "text"),
-				   GetSQLValueString($location_pref2, "text"),
-				   GetSQLValueString($_POST['brewerAHA'], "int")
-				   );
+	  	// Numbers 999999994 through 999999999 are reserved for NHC applications.
+		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
+			
+			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
+			  uid,
+			  brewerFirstName, 
+			  brewerLastName, 
+			  brewerAddress, 
+			  brewerCity, 
+			  brewerState, 
+			  
+			  brewerZip,
+			  brewerCountry,
+			  brewerPhone1, 
+			  brewerPhone2, 
+			  brewerClubs, 
+			  brewerEmail, 
+			  
+			  brewerSteward, 
+			  brewerJudge,
+			  brewerJudgeID,
+			  brewerJudgeMead,
+			  brewerJudgeRank,
+			  brewerJudgeLocation,
+			  brewerStewardLocation,
+			  brewerAHA
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+						   GetSQLValueString($_POST['uid'], "int"),
+						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($_POST['brewerState'], "text"),
+						   GetSQLValueString($_POST['brewerZip'], "text"),
+						   GetSQLValueString($_POST['brewerCountry'], "text"),
+						   GetSQLValueString($_POST['brewerPhone1'], "text"),
+						   GetSQLValueString($_POST['brewerPhone2'], "text"),
+						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($_POST['brewerEmail'], "text"),
+						   GetSQLValueString($_POST['brewerSteward'], "text"),
+						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($location_pref1, "text"),
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($_POST['brewerAHA'], "int")
+						   );
+		}
+		
+		else {
+			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
+			  uid,
+			  brewerFirstName, 
+			  brewerLastName, 
+			  brewerAddress, 
+			  brewerCity, 
+			  brewerState, 
+			  
+			  brewerZip,
+			  brewerCountry,
+			  brewerPhone1, 
+			  brewerPhone2, 
+			  brewerClubs, 
+			  brewerEmail, 
+			  
+			  brewerSteward, 
+			  brewerJudge,
+			  brewerJudgeID,
+			  brewerJudgeMead,
+			  brewerJudgeRank,
+			  brewerJudgeLocation,
+			  brewerStewardLocation
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+						   GetSQLValueString($_POST['uid'], "int"),
+						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
+						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($_POST['brewerState'], "text"),
+						   GetSQLValueString($_POST['brewerZip'], "text"),
+						   GetSQLValueString($_POST['brewerCountry'], "text"),
+						   GetSQLValueString($_POST['brewerPhone1'], "text"),
+						   GetSQLValueString($_POST['brewerPhone2'], "text"),
+						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($_POST['brewerEmail'], "text"),
+						   GetSQLValueString($_POST['brewerSteward'], "text"),
+						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
+						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($location_pref1, "text"),
+						   GetSQLValueString($location_pref2, "text")
+						   );
+		}
 
 		mysql_select_db($database, $brewing);
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
@@ -327,7 +379,6 @@ if ($action == "add") {
 
 // --------------------------------------- Editing a Participant ----------------------------------------
 if ($action == "edit") {
-        
     if ($_POST['brewerJudge'] == "Y") {
 		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
         elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
@@ -367,10 +418,8 @@ if ($action == "edit") {
 		brewerJudgeLikes=%s, 
 		brewerJudgeDislikes=%s, 
 		brewerJudgeLocation=%s, 
-		brewerStewardLocation=%s,
-		
-		brewerAHA=%s
-		WHERE id=%s",
+		brewerStewardLocation=%s	
+		",
 						   GetSQLValueString($_POST['uid'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -391,11 +440,16 @@ if ($action == "edit") {
 						   GetSQLValueString($likes, "text"),
 						   GetSQLValueString($dislikes, "text"),
 						   GetSQLValueString($location_pref1, "text"),
-						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($location_pref2, "text")
 						   //GetSQLValueString($_POST['brewerAssignment'], "text"),
 						   //GetSQLValueString($_POST['brewerAssignmentStaff'], "text"),
-						   GetSQLValueString($_POST['brewerAHA'], "text"),
-						   GetSQLValueString($id, "int"));
+						   );
+	// Numbers 999999994 through 999999999 are reserved for NHC applications.
+	if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
+	$updateSQL .= sprintf(", brewerAHA=%s",GetSQLValueString($_POST['brewerAHA'], "text"));
+	}
+	
+	$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));
 	  
 	if ($_POST['brewerAssignment'] == "J") $updateSQL2 = "UPDATE $brewer_db_table SET brewerNickname='judge' WHERE id='".$id."'"; 
 	elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 

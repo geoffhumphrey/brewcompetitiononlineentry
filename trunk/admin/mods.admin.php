@@ -4,25 +4,21 @@
  * Description: Add, edit, and delete any custom modules that extend core functions.
  */
 
-$query_mods = "SELECT * FROM $mods_db_table";
-if ($action == "edit") $query_mods .= sprintf(" WHERE id='%s'",$id);
-$mods = mysql_query($query_mods, $brewing) or die(mysql_error());
-$row_mods = mysql_fetch_assoc($mods);
-$totalRows_mods = mysql_num_rows($mods); 
+//require(DB.'mods.db.php');
 
 function mod_info($info,$method) {
 	if ($method == 1) {
 		switch($info) {
-			case "0": $output = "Informational"; break;
+			case "0": $output = "Informational (Basic HTML)"; break;
 			case "1": $output = "Report"; break;
 			case "2": $output = "Export"; break;
-			case "3": $output = "Other"; break;
+			case "3": $output = "PHP Code or Function"; break;
 		}
 	}
 	
 	if ($method == 2) {
 		switch($info) {
-			case "0": $output = "None"; break;
+			case "0": $output = "All"; break;
 			case "1": $output = "Home Page"; break;
 			case "2": $output = "Rules"; break;
 			case "3": $output = "Volunteer Info"; break;
@@ -62,12 +58,13 @@ function mod_info($info,$method) {
     	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods">Back to the Custom Modules List</a></span>
         <?php } else { ?>
         <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">Add a Custom Module</a></span>
+<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick_add.png" alt="Upload the Custom Module file"></span><a href="<?php echo $base_url; ?>/admin/upload_mod.admin.php" title="Upload the Custom Module file" id="modal_window_link" class="data">Upload a Custom Module file</a></span>
    		<?php } ?>
     </span>
 </div>
 <?php if ($action == "default") { ?>
     <p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are templates for reports (both on-screen and printed) and simple HTML files. These are located in the &ldquo;Mods&rdquo; sub-folder. A complete guide to adding and using custom modules is provided in the BCOE&amp;M help site.</p>
-    <p>Below is a list of the custom modules added to the database. For the program to use any custom module, its information MUST be added into the database and the file uploaded to the &ldquo;Mods&rdquo; sub-folder.</p>
+    <p>Below is a list of the custom modules added to the database. For the program to use any custom module, its information MUST be added into the database and the file uploaded to the &ldquo;Mods&rdquo; sub-folder.<em> <strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
 	<?php if ($totalRows_mods > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {
@@ -147,13 +144,13 @@ if (($action == "add") || ($action == "edit")) { ?>
     <td class="dataLabel">Type:</td>
     <td class="data">
     <select name="mod_type">
-    	<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational</option>
+    	<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational (Basic HTML)</option>
         <option value="1" <?php if (($action == "edit") && ($row_mods['mod_type'] == "1")) echo " SELECTED"; ?>>Report</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_type'] == "2")) echo " SELECTED"; ?>>Export</option>
-        <option value="3" <?php if (($action == "edit") && ($row_mods['mod_type'] == "3")) echo " SELECTED"; ?>>Other</option>
+        <option value="3" <?php if (($action == "edit") && ($row_mods['mod_type'] == "3")) echo " SELECTED"; ?>>PHP Code or Function</option>
     </select>
     </td>
-    <td class="data">&nbsp;</td>
+    <td class="data">If informational or PHP code, where will the module's contents be displayed or executed?</td>
   </tr>
   
   
@@ -168,13 +165,13 @@ if (($action == "add") || ($action == "edit")) { ?>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "2")) echo " SELECTED"; ?>>All Users</option>
     </select>
     </td>
-    <td class="data">If informational, where will the module's contents be displayed?</td>
+    <td class="data">Who has permission to view or access?</td>
   </tr>
   <tr>
-    <td class="dataLabel">Core Function Extends:</td>
+    <td class="dataLabel">Extends Core Function:</td>
     <td class="data">
     <select name="mod_extend_function" id="mod_extend_function">
-    	<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>None</option>
+    	<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>All</option>
 		<option rel="none" value="1" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "1")) echo " SELECTED"; ?>>Home Page</option>
 		<option rel="none" value="2" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "2")) echo " SELECTED"; ?>>Rules</option>
 		<option rel="none" value="3" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "3")) echo " SELECTED"; ?>>Volunteer Info</option>
@@ -188,13 +185,13 @@ if (($action == "add") || ($action == "edit")) { ?>
 		<option rel="admin" value="9" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "9")) echo " SELECTED"; ?>>Administration</option>
     </select>
     </td>
-    <td class="data">&nbsp;</td>
+    <td class="data">Where should the module be placed?</td>
   </tr>
   <tr rel="admin">
     <td class="dataLabel">Extends Admin Function:</td>
     <td class="data">
     <select name="mod_extend_function_admin" id="mod_extend_function_admin">
-    	<option value=""></option>
+    	<option value="default" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "default")) echo " SELECTED"; ?>>Administration Dashboard</option>
         <option value="archives" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "archives")) echo " SELECTED"; ?>>Archives</option>
     	<option value="entries" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "entries")) echo " SELECTED"; ?>>Entry Administration</option>
         <option value="judging_scores" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "judging_scores")) echo " SELECTED"; ?>>Scoring</option>

@@ -159,3 +159,10 @@ textarea {
 	vertical-align: top;
 	padding: 2px;
 }
+
+label {
+	border: 0;
+	font-weight: bold;
+	padding: 6px;
+	cursor: pointer;
+}

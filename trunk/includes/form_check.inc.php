@@ -1,5 +1,6 @@
 <script type="text/javascript" language="JavaScript">
-<!-- Javascript code copyright 2003 Bontrager Connection, LLC // Code obtained from http://WillMaster.com/
+<!-- Javascript code copyright 2003 Bontrager Connection, LLC 
+// Code obtained from http://WillMaster.com/
 <?php if (($section == "step3") || (($section == "admin") && ($go == "preferences"))) { ?>
 function CheckRequiredFields() {
 var errormessage = new String();

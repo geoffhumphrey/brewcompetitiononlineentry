@@ -57,7 +57,7 @@ session_start();
 		//echo $_SESSION["loginUsername"];
   		// If the username/password combo is OK, relocate to the "protected" content index page
 		if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."/index.php?section=list"));
-		elseif (($section != "update") && ($row_login['userLevel'] == "1")) header(sprintf("Location: %s", $base_url."/index.php?section=admin"));
+		elseif (($section != "update") && ($row_login['userLevel'] <= "1")) header(sprintf("Location: %s", $base_url."/index.php?section=admin"));
 		else header("Location: ../update.php");
   		exit;
 	}

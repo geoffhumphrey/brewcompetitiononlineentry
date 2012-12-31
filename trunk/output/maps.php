@@ -3,6 +3,7 @@ require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 $address = rtrim($id,"&amp;KeepThis=true");
 $address1 = str_replace(' ', '+', $address);
+$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address1;
 
 if ($section == "map") {
 ?>
@@ -11,18 +12,17 @@ if ($section == "map") {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Maps</title>
-<link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
 </head>
-<body style="background-color:#fff;">
-<div align="center">
-<img style="border:1px solid #999;" http://maps.google.com/maps/api/staticmap?center=<?php echo $address1; ?>&zoom=13&size=900x500&markers=color:red|<?php echo $address1; ?>&sensor=false" />
+<body style="background-color:#fff; margin:0; padding:20px;">
+<div align="center" style="padding:0 0 10px 0; margin:0;">
+<a href="<?php echo $driving; ?>" target="_blank"><img style="border:1px solid #999;" src="http://maps.google.com/maps/api/staticmap?center=<?php echo $address1; ?>&zoom=13&size=900x500&markers=color:red|<?php echo $address1; ?>&sensor=false" /></a>
 </div>
-<p align="center"><?php echo $address; ?></p>
+<p align="center"><a href="<?php echo $driving; ?>" target="_blank"><?php echo $address; ?></a></p>
 </body>
 </html>
 <?php } 
-if ($section == "driving") {
-$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address1;
+if ($section == "driving") { 
 //echo $driving;
 header(sprintf("Location: %s", $driving));
 }

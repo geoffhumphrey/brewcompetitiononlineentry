@@ -7,7 +7,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 require(DB.'common.db.php');
 require(INCLUDES.'headers.inc.php');
-$current_version = "1.2.1.3";
+$current_version = "1.2.2.0";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -81,7 +81,7 @@ if (file_exists($filename)) {
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
-		if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "1")) {
+		if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "0")) {
 			
 			if ($current_version != $version) {
 				
@@ -179,7 +179,7 @@ if (file_exists($filename)) {
 		
 		// if user is not logged in or a admin...
 		else {
-			echo "<div class='info'>Only website administrators are able to access and run this update script.</div>";
+			echo "<div class='info'>Only top level website administrators are able to access and run this update script.</div>";
 			if (!isset($_SESSION["loginUsername"])) {
 				echo "<p>If you are an administrator of this site, log in and try again.</p>";
 				include (SECTIONS.'login.sec.php');	
