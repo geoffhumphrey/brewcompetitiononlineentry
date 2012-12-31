@@ -22,13 +22,13 @@ function check_setup($tablename, $database) {
 
 }
 
-if ((!check_setup($prefix."system",$database)) && (!check_setup($prefix."users",$database)) && (!check_setup($prefix."preferences",$database))) header ("Location: setup.php?section=step0"); 
-if ((!check_setup($prefix."system",$database)) && (check_setup($prefix."users",$database)) && (check_setup($prefix."preferences",$database)) && (check_setup($prefix."mods",$database))) header ("Location: update.php"); 
+if (!check_setup($prefix."system",$database)) header ("Location: setup.php?section=step0"); 
+elseif (!check_setup($prefix."mods",$database)) header ("Location: update.php"); 
 
 // If all setup or update has taken place, run normally
 else 
 {
-
+/*
 function version_check($version) {
 	// Current version is 1.2.2.0, change version in system table if not
 	// There are NO database structure or data updates for version 1.2.1.3
@@ -44,7 +44,7 @@ function version_check($version) {
 }
 	
 version_check($version);
-
+*/
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');

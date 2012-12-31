@@ -1180,7 +1180,7 @@ if ($setup_free_access == TRUE) {
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
 	echo "<li><strong>System</strong> table installed successfully.</li>";
 	
-	$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.0', '2012-09-01', NOW( ),'0');";
+	$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.2.0', '2012-01-31', NOW( ),'0');";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";

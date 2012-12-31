@@ -81,7 +81,7 @@ if (file_exists($filename)) {
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
-		if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] == "0")) {
+		if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) {
 			
 			if ($current_version != $version) {
 				
