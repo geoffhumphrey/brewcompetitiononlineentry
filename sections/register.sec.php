@@ -116,7 +116,7 @@ httpxml.send(null);
 </script>
 <?php 
 if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
-if ($section != "admin") include(INCLUDES.'mods_top.inc.php');
+if ($section != "admin") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
 <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
 <p>Our competition entry system is completely electronic.
@@ -383,5 +383,5 @@ if ($section != "admin") {
 <?php } ?>
 </form>
 <?php } 
-if ($section != "admin") include(INCLUDES.'mods_bottom.inc.php');
+if ($section != "admin") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

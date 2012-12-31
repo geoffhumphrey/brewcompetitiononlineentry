@@ -20,7 +20,7 @@ else
 $total_not_paid = total_not_paid_brewer($row_user['id']);
 include(DB.'judging_locations.db.php');
 if (($action != "print") && ($msg != "default")) echo $msg_output;
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
@@ -442,5 +442,5 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 <?php 
 } else { echo "<p>You do not have any entries.</p>"; if ($registration_open == "0") echo "<p>You can add your entries on or after $reg_open.</p>"; } 
 
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

@@ -37,7 +37,7 @@ $totalRows_tables = mysql_num_rows($tables);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <?php 
@@ -130,16 +130,16 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
+    <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Round</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Round</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -240,16 +240,16 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $random; ?>">
+    <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Round</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Round</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -344,15 +344,15 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -432,15 +432,15 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 			} );
 		} );
 	</script>
-    <table class="dataTable" width="100%" id="sortable<?php echo $row_tables_edit['id']; ?>">
+    <table class="dataTable" id="sortable<?php echo $row_tables_edit['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -536,15 +536,15 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			} );
 		} );
 	</script>
-<table class="dataTable" width="100%" id="sortable<?php echo $type; ?>">
+<table class="dataTable" id="sortable<?php echo $type; ?>">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
 <tbody>
@@ -636,15 +636,15 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			} );
 		} );
 	</script>
-<table class="dataTable" width="100%" id="sortable">
+<table class="dataTable" id="sortable">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="10%">Pull Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="49%">Style/Sub-Style</th>
-        <th class="dataHeading bdr1B" width="10%">Location/Box</th>
-        <th class="dataHeading bdr1B" width="10%">Score</th>
-        <th class="dataHeading bdr1B" width="10%">Place</th>
+        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="1%">Score</th>
+        <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
     </thead>
 <tbody>

@@ -11,11 +11,10 @@ error_reporting(0);
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
+require(INCLUDES.'db_tables.inc.php'); 
 require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(DB.'entries.db.php');
-require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
 ?>
@@ -25,7 +24,7 @@ require(INCLUDES.'constants.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
 <body onload="javascript:window.print()">
@@ -48,7 +47,9 @@ require(INCLUDES.'constants.inc.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers") 	include (SECTIONS.'volunteers.sec.php');	
 	if (isset($_SESSION['loginUsername'])) {
-		if ($row_user['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
+		//if ($row_user['userLevel'] <= "1") { 
+		if ($section == "admin")	include (ADMIN.'default.admin.php'); 
+		//}
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');

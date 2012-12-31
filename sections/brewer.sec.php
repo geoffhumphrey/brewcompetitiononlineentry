@@ -43,7 +43,7 @@ $row_countries = mysql_fetch_assoc($countries);
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
-<?php include(INCLUDES.'mods_top.inc.php'); ?>
+<?php if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); ?>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
 <tr>
@@ -226,5 +226,5 @@ $row_clubs = mysql_fetch_assoc($clubs);
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

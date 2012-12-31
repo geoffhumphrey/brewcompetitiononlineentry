@@ -201,7 +201,7 @@ function custom_modules($type,$method) {
 	}
 }
 
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 function total_discount() { 
@@ -827,7 +827,7 @@ if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php
 if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
 if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
-include(INCLUDES.'mods_bottom.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

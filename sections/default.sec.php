@@ -18,7 +18,7 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_
 <?php } ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php 
-include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] <= "1") && ($section == "admin")) { 
 if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
@@ -129,6 +129,6 @@ else { ?>
 <?php 
 		} // end if no logos 
 	} // end if (totalRows_sponsors > 0)
-	include(INCLUDES.'mods_bottom.inc.php');
+	if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 } // end if prefs dictate display sponsors 
 ?>
