@@ -1,6 +1,7 @@
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/toggle.js"></script>
 <?php 
 /**
  * Module:      default.admin.php
@@ -227,13 +228,7 @@ function total_discount() {
 	return $return;
 }
 
-
-
-?>
-
-
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/toggle.js"></script>
-<?php } ?>
+} ?>
 
 <?php 
 if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";

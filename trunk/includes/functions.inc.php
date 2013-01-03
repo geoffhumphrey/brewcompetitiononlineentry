@@ -8,8 +8,8 @@
 
 include (INCLUDES.'date_time.inc.php');
 
-function build_public_url($section="default",$go="default",$action="default",$sef="true",$base_url) {
-	if ($sef = "true") {
+function build_public_url($section="default",$go="default",$action="default",$sef,$base_url) {
+	if ($sef == "true") {
 		$url = $base_url."/";
 		if ($section != "default") $url .= $section."/";
 		if ($go != "default") $url .= $go."/";

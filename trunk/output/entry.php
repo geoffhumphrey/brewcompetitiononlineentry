@@ -46,7 +46,7 @@ $row_prefs = mysql_fetch_assoc($prefs);
 
 // Check access restrictions
 if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
-      $row_logged_in_user['userLevel'] != 1) { 
+      $row_logged_in_user['userLevel'] > 1) { 
   echo "<html><head><title>Error</title></head><body>";
   echo "<p>You do not have sufficient access priveliges to view this page.</p>";
   echo "</body>";

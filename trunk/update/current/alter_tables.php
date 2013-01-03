@@ -47,6 +47,18 @@ $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
 echo "<ul><li>Brewing table updated.</li></ul>";
 
+$updateSQL = "ALTER TABLE  `".$prefix."brewer` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+
+echo "<ul><li>Brewer table updated.</li></ul>";
+
+$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` ADD `scoreMiniBOS` INT(4) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+
+echo "<ul><li>Brewer table updated.</li></ul>";
+
 // -----------------------------------------------------------
 // Alter Tables: archived brewing tables
 // -----------------------------------------------------------
@@ -62,6 +74,14 @@ if ($totalRows_archive > 0) {
 	
 	foreach ($a as $suffix) {
 		$updateSQL = "ALTER TABLE `".$prefix."brewing_".$suffix."` ADD `brewBoxNum` VARCHAR(10) NULL DEFAULT NULL COMMENT 'The box where the entry is located after sorting';";
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+		
+		$updateSQL = "ALTER TABLE  `".$prefix."brewer_".$suffix."` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+		
+		$updateSQL = "ALTER TABLE  `".$prefix."judging_scores_".$suffix."` ADD `scoreMiniBOS` INT(4) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
 		mysql_select_db($database, $brewing);
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}

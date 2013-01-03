@@ -30,7 +30,7 @@ if ($go != "mods") {
 	do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysql_fetch_assoc($mods));
 }
 
-function mod_display($id,$section,$go,$user_level,$page_location,$section) {
+function mod_display($id,$section,$go,$user_level,$page_location) {
 	
 	require(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);

@@ -13,14 +13,16 @@ if ($action == "add") {
 	scoreTable,
 	scoreEntry,
 	scorePlace,
-	scoreType
-  	) VALUES (%s, %s, %s, %s, %s, %s)",
+	scoreType,
+	scoreMiniBOS
+  	) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
 					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
-					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreMiniBOS'.$score_id], "int")
 					   );
 
 	//echo $insertSQL."<br>";
@@ -42,7 +44,8 @@ if ($action == "edit") {
 	scoreTable=%s,
 	scoreEntry=%s,
 	scorePlace=%s,
-	scoreType=%s
+	scoreType=%s,
+	scoreMiniBOS=%s
 	WHERE id=%s",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
@@ -50,6 +53,7 @@ if ($action == "edit") {
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
 					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreMiniBOS'.$score_id], "int"),
 					   GetSQLValueString($score_id, "text")
 					   );
 
@@ -64,14 +68,16 @@ if ($action == "edit") {
 	scoreTable,
 	scoreEntry,
 	scorePlace,
-	scoreType
-  	) VALUES (%s, %s, %s, %s, %s, %s)",
+	scoreType,
+	scoreMiniBOS
+  	) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                        GetSQLValueString($_POST['eid'.$score_id], "text"),
 					   GetSQLValueString($_POST['bid'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
 					   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
 					   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
-					   GetSQLValueString($_POST['scoreType'.$score_id], "text")
+					   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
+					   GetSQLValueString($_POST['scoreMiniBOS'.$score_id], "int")
 					   );
 
 	//echo $insertSQL."<br>";

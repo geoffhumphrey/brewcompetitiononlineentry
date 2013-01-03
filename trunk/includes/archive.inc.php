@@ -71,7 +71,7 @@ $row_name = mysql_fetch_assoc($name);
 $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
 
 
-// For hosted accounts, limit the table creation to the users, brewer, brewing, judging_tables, judging_assignments, judging_scores, and judging_scores_bos, and style_types tables
+// For hosted accounts, limit the table creation to the users, brewer, brewing, judging_tables, judging_assignments, judging_scores, judging_scores_bos, and style_types tables
 //$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
 
 foreach ($tables_array as $table) { 
@@ -142,7 +142,8 @@ INSERT INTO $brewer_db_table (
 	brewerAssignment,
 	brewerAHA,
 	brewerDiscount,
-	brewerJudgeBOS
+	brewerJudgeBOS,
+	brewerDropOff
 ) 
 VALUES (
 	NULL, 
@@ -171,6 +172,7 @@ VALUES (
 	NULL,
 	NULL,
 	'$brewerAHA',
+	NULL,
 	NULL,
 	NULL
 );";

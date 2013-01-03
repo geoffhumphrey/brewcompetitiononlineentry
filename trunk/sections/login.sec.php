@@ -6,7 +6,7 @@
  * 
  */
  
-if ($section != "update") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
 
 	if (!isset($_SESSION['loginUsername'])) { 
@@ -81,7 +81,8 @@ if ($go == "verify") {
 	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
 	</form>
 	<?php }
-	} 
+	}
+if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 }
-if ($section != "update") if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+
 ?>
