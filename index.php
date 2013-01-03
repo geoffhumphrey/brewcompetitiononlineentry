@@ -9,7 +9,11 @@ require('paths.php');
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
-if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else $sef = "false"; 
+// Comment out the following line if experiencing problems with the clean URLs
+if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else
+
+// Leave the following line alone if experiencing problems with the clean URLs
+$sef = "false"; 
 
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
@@ -183,7 +187,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   }
   // Check if registration close date has passed. If so, display "registration end" message.
   if ($registration_open == "2") {
-	if ((($section != "admin") || ($row_user['userLevel'] != "1")) && (judging_date_return() > 0)) { ?>
+	if ((($section != "admin") || ($row_user['userLevel'] > "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
     <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
 	<?php }  

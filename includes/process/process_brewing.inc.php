@@ -116,6 +116,9 @@ if ($action == "add") {
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
 	
+	// Mark as paid if free entry fee
+	if ($row_contest_info['contestEntryFee'] == 0) $brewPaid = "1"; else $brewPaid = "0";
+	
 	$insertSQL = sprintf("
 		INSERT INTO $brewing_db_table (
 		brewName,
@@ -500,7 +503,7 @@ if ($action == "add") {
 						   GetSQLValueString(generate_judging_num($styleTrim), "text"),
 						   "NOW( )",
 						   GetSQLValueString($_POST['brewConfirmed'], "int"),
-						   GetSQLValueString("0", "int"),
+						   GetSQLValueString($brewPaid, "int"),
 						   GetSQLValueString("0", "int")
 						   );
 	
