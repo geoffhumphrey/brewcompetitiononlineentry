@@ -595,6 +595,11 @@ if ($go == "default") { ?>
             <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  /></span>Printing and Reporting</h4>
             <div class="toggle_container">
 			<p class="admin_default_header">Before Judging</p>
+            <ul class="admin_default">
+				<li>Print Drop Off Location Reports:</li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/dropoff.php"  title="Print Total Entries by Location">Entry Totals by Location</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/dropoff.php?section=check"  title="Print Entries By Drop-Off Location">Entries By Drop-Off Location</li>
+            </ul>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Entry</em> Numbers):</li>

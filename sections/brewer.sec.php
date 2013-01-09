@@ -106,6 +106,21 @@ $row_countries = mysql_fetch_assoc($countries);
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
+<tr>
+  <td class="dataLabel">Drop-Off Location:</td>
+  <td class="data">
+  <select name="brewerDropOff">
+    <?php 
+	include (DB."dropoff.db.php");
+	do { ?>
+    <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
+    <option disabled="disabled">-------------</option>
+    <option value="0">I'm Shipping My Entries</option>
+    <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+  </select>
+  </td>
+  <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
+  </tr>
 <?php if (table_exists("nhcClubs")) { 
 
 // Custom code for AHA - possiblity of inclusion in a future version

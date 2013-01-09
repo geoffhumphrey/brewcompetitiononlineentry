@@ -16,7 +16,7 @@ function build_public_url($section="default",$go="default",$action="default",$se
 		if ($action != "default") $url .= $action."/";
 		return rtrim($url,"/");		
 	}
-	else {
+	if ($sef == "false") {
 		$url = $base_url."/index.php?section=".$section;
 		if ($go != "default") $url .= "&amp;go=".$go;
 		if ($action != "default") $url .= "&amp;action=".$action;
@@ -46,7 +46,6 @@ function build_admin_url ($section="default",$go="default",$action="default",$id
 	}
 }
 */
-
 
 $pg = "default";
 if (isset($_GET['pg'])) {
@@ -142,14 +141,22 @@ function random_generator($digits,$method){
 	//Array of alphabet
 	if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
 	if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
+	if ($method == "3") $input = array ("1","2","3","4");
 
 	$random_generator = "";// Initialize the string to store random numbers
 	for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
-		if(rand(1,2) == 1){// to decide the digit should be numeric or alphabet
+		if(rand(1,2) == 1){ // to decide the digit should be numeric or alphabet
 		// Add one random alphabet 
 		$rand_index = array_rand($input);
 		$random_generator .=$input[$rand_index]; // One char is added
 		}
+		
+		if ($method == "3")
+		{
+		// Add one numeric digit between 1 and 10
+		$random_generator = rand(1,4); // one number is added
+		}
+		
 		else {
 		// Add one numeric digit between 1 and 10
 		$random_generator .=rand(1,10); // one number is added
@@ -1876,6 +1883,18 @@ function score_check($id,$judging_scores_db_table) {
 	return $r;
 }
 
+function minibos_check($id,$judging_scores_db_table) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_scores = sprintf("SELECT scoreMiniBOS FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
+	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+	$row_scores = mysql_fetch_assoc($scores);
+	
+	if ($row_scores['scoreMiniBOS'] == "1") return TRUE;
+	else return FALSE;
+	mysql_free_result($scores);
+}
+
 function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -2367,5 +2386,12 @@ function limit_subcategory($style,$pref_num,$pref_sub_num,$pref_sub_array,$uid) 
 		else return FALSE;
 	}
 
-
+function dropoff_location($input) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_dropoff = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."drop_off",$input);
+	$dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
+	$row_dropoff = mysql_fetch_assoc($dropoff);
+	return $row_dropoff['dropLocationName'];
+}
 ?>

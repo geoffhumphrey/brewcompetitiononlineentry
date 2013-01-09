@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Module:      winners.sec.php 
@@ -16,7 +17,6 @@ if ($entry_count > 0) {
 <div id="header">	
 	<div id="header-inner">
 	<?php } ?>
-		<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")"; ?></h3>
 <?php 
 	if ($action == "print") { 
 	?>

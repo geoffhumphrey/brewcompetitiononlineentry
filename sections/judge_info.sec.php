@@ -43,35 +43,61 @@
     </tr>
 	<tr>
       <td width="10%" class="dataLabel">Preferred:</td>
-      <td class="data" colspan="2">
+      <td class="data" colspan="3">
+      Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that your available to judge.</span></p>
       	<table class="dataTableCompact">
-        	<tr>
-            	<td colspan="3">Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that your available to judge.</span></p></td>
-            </tr>
-        	<?php do { 	?>
-            <tr>
+        		<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
+				do {
+    			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+    			?>
             	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
-                <td><?php echo $row_styles['brewStyle']; ?></td>
-            </tr>
-            <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+                <td nowrap="nowrap"><?php echo $row_styles['brewStyle']; ?></td>
+           		<?php  $endRow++;
+				if ($endRow >= $columns) {
+  				?>
+  				</tr>
+  				<?php $endRow = 0;
+  				}
+				} while ($row_styles = mysql_fetch_assoc($styles));
+				if ($endRow != 0) {
+				while ($endRow < $columns) {
+   				echo("<td>&nbsp;</td>");
+    			$endRow++;
+				}
+				echo("</tr>");
+				}
+				?>
         </table>
       </td>
 	</tr>
 	<tr>
       <td width="10%" class="dataLabel">Not Preferred:</td> 
-      <td class="data" colspan="2">
+      <td class="data" colspan="3">
+      Check all styles that you <em>do not wish</em> to judge.<p><span class="required">There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table  where you have entries.</span></p>
       	<table class="dataTableCompact">
-            <tr>
-            	<td colspan="3">Check all styles that you <em>do not wish</em> to judge.<p><span class="required">There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table  where you have entries.</span></p></td>
-            </tr>
-        	<?php do { ?>
-            <tr>
+        	<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
+				do {
+    			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+    			?>
             	<td width="1%"><input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].":"; ?></td>
                 <td><?php echo $row_styles2['brewStyle']; ?></td>
-            </tr>
-            <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>
+            <?php  $endRow++;
+				if ($endRow >= $columns) {
+  				?>
+  				</tr>
+  				<?php $endRow = 0;
+  				}
+				} while ($row_styles2 = mysql_fetch_assoc($styles2));
+				if ($endRow != 0) {
+				while ($endRow < $columns) {
+   				echo("<td>&nbsp;</td>");
+    			$endRow++;
+				}
+				echo("</tr>");
+				}
+				?>
         </table>
       </td>
 	</tr>

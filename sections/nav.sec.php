@@ -36,6 +36,10 @@ if (strstr($section,"step")) { ?>
 <!-- Admin Main Link -->
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin">Admin Dashboard</a>
 <?php if ($row_user['userLevel'] == "0") { ?>
+<?php if ($row_prefs['prefsUseMods'] == "Y") { ?>
+<!-- Defining Preferences Menu -->
+	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Custom');"><span class="menuItemText">Custom Modules</span><span class="menuItemArrow">&#9654;</span></a>
+<?php } ?>
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
 
@@ -67,6 +71,12 @@ if (strstr($section,"step")) { ?>
 <a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
 </div>
 
+<?php if ($row_prefs['prefsUseMods'] == "Y") { ?>
+<div id="adminMenuCat_Custom" class="menu">
+	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Custom_Manage');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
+	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Custom_Add');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+</div>
+<?php } ?>
 
 <div id="adminMenuCat_Prefs" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Prefs_Define');"><span class="menuItemText">Define</span><span class="menuItemArrow">&#9654;</span></a>
@@ -124,6 +134,15 @@ if (strstr($section,"step")) { ?>
 </div>
     
 <!-- Third Tier Menus -->
+
+<?php if ($row_prefs['prefsUseMods'] == "Y") { ?>
+<div id="adminMenu_Custom_Manage" class="menu">
+	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods">Custom Modules</a>
+</div>
+<div id="adminMenu_Custom_Add" class="menu">
+	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">A Custom Module</a>
+</div>
+<?php } ?>
 
 <div id="adminMenu_Prefs_Define" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=preferences">Site Preferences</a>
