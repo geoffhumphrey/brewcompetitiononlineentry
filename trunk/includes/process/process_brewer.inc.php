@@ -292,8 +292,9 @@ if ($action == "add") {
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
-			  brewerAHA
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerAHA,
+			  brewerDropOff
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($_POST['uid'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -313,7 +314,8 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($_POST['brewerAHA'], "int")
+						   GetSQLValueString($_POST['brewerAHA'], "int"),
+						   GetSQLValueString($_POST['brewerDropOff'], "int")
 						   );
 		}
 		
@@ -339,8 +341,9 @@ if ($action == "add") {
 			  brewerJudgeMead,
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
-			  brewerStewardLocation
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerStewardLocation,
+			  brewerDropOff
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($_POST['uid'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -359,7 +362,8 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 						   GetSQLValueString($location_pref1, "text"),
-						   GetSQLValueString($location_pref2, "text")
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($_POST['brewerDropOff'], "int")
 						   );
 		}
 
@@ -418,7 +422,8 @@ if ($action == "edit") {
 		brewerJudgeLikes=%s, 
 		brewerJudgeDislikes=%s, 
 		brewerJudgeLocation=%s, 
-		brewerStewardLocation=%s	
+		brewerStewardLocation=%s,
+		brewerDropOff=%s
 		",
 						   GetSQLValueString($_POST['uid'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
@@ -440,7 +445,8 @@ if ($action == "edit") {
 						   GetSQLValueString($likes, "text"),
 						   GetSQLValueString($dislikes, "text"),
 						   GetSQLValueString($location_pref1, "text"),
-						   GetSQLValueString($location_pref2, "text")
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($_POST['brewerDropOff'], "int")
 						   //GetSQLValueString($_POST['brewerAssignment'], "text"),
 						   //GetSQLValueString($_POST['brewerAssignmentStaff'], "text"),
 						   );

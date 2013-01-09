@@ -78,6 +78,10 @@ if ($action != "print") { ?>
     	<td class="data"><?php  if ($row_brewer['brewerPhone1'] != "") echo $row_brewer['brewerPhone1']." (1) ";  if ($row_brewer['brewerPhone2'] != "") echo "<br>".$row_brewer['brewerPhone2']." (2)"; ?></td>
   	</tr>
   	<tr>
+  	  <td class="dataLabel">Drop Off Location:</td>
+  	  <td class="data"><?php echo dropoff_location($row_brewer['brewerDropOff']); ?></td>
+  </tr>
+  	<tr>
     	<td class="dataLabel">Club:</td>
     	<td class="data"><?php if ($row_brewer['brewerClubs'] != "") echo $row_brewer['brewerClubs']; else echo "None entered"; ?></td>
   	</tr>
@@ -288,7 +292,7 @@ if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have 
 <?php if ($action != "print") { ?>
 
 
-<?php if ($row_prefs['prefsUserEntryLimit'] != "") { 
+<?php if (($row_prefs['prefsUserEntryLimit'] != "") && (judging_date_return() > 0)) { 
 $remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
 ?>
 <div class="adminSubNavContainer">
@@ -351,7 +355,8 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 				null,
 				null,
 				null<?php if ($action != "print") { ?>,
-				<?php if (judging_date_return() == 0) { ?>
+				<?php if ((judging_date_return() == 0) && ($row_prefs['prefsDisplayWinners'] == "Y")) { ?>
+				null,
 				null,
 				null,
 				<?php } ?>
@@ -373,10 +378,10 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
   	<th class="dataHeading bdr1B" width="8%">Confirmed?</th>
   	<th class="dataHeading bdr1B" width="8%">Paid?</th> 
     <th class="dataHeading bdr1B" width="12%">Updated</th>
-  	<?php if (judging_date_return() == 0) { ?>
+  	<?php if ((judging_date_return() == 0) && ($row_prefs['prefsDisplayWinners'] == "Y")) { ?>
   	<th class="dataHeading bdr1B" width="8%">Score</th>
+    <th class="dataHeading bdr1B" width="8%">Mini-BOS?</th>
   	<th class="dataHeading bdr1B">Winner?</th>
-  	
   	<?php } ?>
     <?php if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
@@ -422,13 +427,10 @@ if (($totalRows_log > 0) && ($registration_open > 0) && ($judge_window_open > 0)
 		<?php if ($row_log['brewPaid'] == "1")  { if ($action != "print") echo "<img src='".$base_url."/images/tick.png'>"; else echo "Y"; } else { if ($action != "print") echo "<img src='".$base_url."/images/cross.png'>"; else echo "N"; } ?>
     </td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
-  <?php if (judging_date_return() == 0) { ?>
-  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>">
-  <?php if ($row_prefs['prefsDisplayWinners'] == "Y") echo score_check($row_log['id'],$judging_scores_db_table);
-	else echo "&nbsp;"; ?>
-    </td>
-    <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($row_prefs['prefsDisplayWinners'] == "Y") { if ($action == "print") echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); else echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); } else echo "&nbsp;"; ?>
-    </td>
+  	<?php if ((judging_date_return() == 0) && ($row_prefs['prefsDisplayWinners'] == "Y")) { ?>
+  	<td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php echo score_check($row_log['id'],$judging_scores_db_table); ?></td>
+    <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) { if ($action != "print") echo "<img src='".$base_url."/images/tick.png'>"; else echo "Y"; }?></td>
+    <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action == "print") echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); else echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); ?></td>
     <?php } if ($action != "print") { ?>
     <?php if (judging_date_return() > 0) { ?>
   <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; if ($row_log['brewConfirmed'] == 0) echo "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>&nbsp;&nbsp;<span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>&nbsp;&nbsp;<?php if (pay_to_print($row_prefs['prefsPayToPrint'],$row_log['brewPaid'])) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a><?php } ?>

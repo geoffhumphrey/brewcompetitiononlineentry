@@ -5,6 +5,8 @@ IndexIgnore *
 DirectoryIndex index.php
 
 RewriteEngine on
+# If storing your installation in a sub-folder, uncomment the following line and replace [subfolder] with the name of your subfolder
+# RewriteBase /[subfolder] 
 RewriteRule ^$ index.php [L]
 RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]

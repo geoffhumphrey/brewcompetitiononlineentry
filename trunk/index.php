@@ -172,11 +172,11 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
 		if ($row_user['userLevel'] <= "1") {
-			if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+			if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
@@ -202,7 +202,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
 		if ($row_user['userLevel'] <= "1") {
@@ -237,7 +237,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($row_user['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 		if ($section == "user") 	include (SECTIONS.'user.sec.php');

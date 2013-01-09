@@ -113,8 +113,27 @@ LEAVE the $base_url variable below untouched.
 
 */
 
+// IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
+// Otherwise, the URLs will not be generated correctly
+// Directions are in the .htaccess file
 $sub_directory = "";
+
 $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory;
+
+/*
+******************************************************************************
+Search Engine Friendly (SEF) URLs - the following lines are for use with installations
+that can accomodate Search Engine Friendly (SEF) or "Clean" URLs
+
+If not functioning, the URLs for "Rules", "Entry Info", "Volunteer Info", "Contact", "Login" and "My Info and Entries"
+will all result in a 404 error. See below.
+*/
+
+// Comment out the following line if experiencing problems with SEF URLs
+if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else
+
+// Leave the following line alone if experiencing problems with SEF URLs
+$sef = "false"; 
 
 
 ?>
