@@ -5,7 +5,7 @@
 		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a></td>
   	</span>
 </div>
-<p> Top-level admins are able have full access to add, change, and delete all information in the database, including preferences, competition information, and archive.  Admin users are able to add, edit, and most information in the database, including participants, entries, tables, scores, etc.</p>
+<p>Top-level admins are able have full access to add, change, and delete all information in the database, including preferences, competition information, and archival data.  Admin users are able to add, edit, and most information in the database, including participants, entries, tables, scores, etc.</p>
 <table class="dataTable">
 <tr>
   <td class="dataHeading" width="5%">Update User Level For:</td>

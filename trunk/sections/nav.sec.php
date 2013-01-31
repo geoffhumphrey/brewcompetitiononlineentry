@@ -42,10 +42,10 @@ if (strstr($section,"step")) { ?>
 <?php } ?>
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
-
+<?php } ?>
 <!-- Preparing Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Preparing');"><span class="menuItemText">Preparing</span><span class="menuItemArrow">&#9654;</span></a>	
-<?php } ?>
+
 <!-- Entry and Data Gathering Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Entry');"><span class="menuItemText">Entry and Data Gathering</span><span class="menuItemArrow">&#9654;</span></a>
 
@@ -85,8 +85,10 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenuCat_Preparing" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Preparing_Manage');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Preparing_Add');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php if ($row_user['userLevel'] == "0") { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Preparing_Edit');"><span class="menuItemText">Edit</span><span class="menuItemArrow">&#9654;</span></a>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Preparing_Upload');"><span class="menuItemText">Upload</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
 </div>
 
 <div id="adminMenuCat_Entry" class="menu">
@@ -98,8 +100,12 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenuCat_Sorting" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Manage');"><span class="menuItemText">Manage/View</span><span class="menuItemArrow">&#9654;</span></a>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Add');"><span class="menuItemText">Add</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php if (($row_user['userLevel'] == "0") && (!NHC)) { ?>
     <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Regenerate');"><span class="menuItemText">Regenerate</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
+    <?php if (!NHC) { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Print');"><span class="menuItemText">Print</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
 </div>
 
 <div id="adminMenuCat_Organizing" class="menu">
@@ -123,9 +129,13 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenuCat_Exporting" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Email');"><span class="menuItemText">Email Addresses (CSV Files)</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php if (!NHC) { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Tab');"><span class="menuItemText">Tab Delimited Files</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_CSV');"><span class="menuItemText">CSV Files</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php if (!NHC) { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Promo');"><span class="menuItemText">Promo Materials</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
 </div>
 
 <div id="adminMenuCat_Archiving" class="menu">
@@ -143,31 +153,39 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">A Custom Module</a>
 </div>
 <?php } ?>
-
+<?php if ($row_user['userLevel'] == "0") { ?>
 <div id="adminMenu_Prefs_Define" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=preferences">Site Preferences</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a>
 </div>
-
+<?php } ?>
 
 <div id="adminMenu_Preparing_Manage" class="menu">
+	<?php if ($row_user['userLevel'] == "0") { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">Style Types</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">Accepted Style Categories</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">Custom Winning Categories</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data">Custom Winning Category Entries</a>
+    <?php } ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging">Judging Locations &amp; Dates</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts">Competition Contacts</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a>
+    <?php if ($row_user['userLevel'] == "0") { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Sponsors</a>
+    <?php } ?>
 </div>
 <div id="adminMenu_Preparing_Add" class="menu">
+	<?php if ($row_user['userLevel'] == "0") { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">A Custom Winning Category</a>
+    <?php } ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
-    <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
-    <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
+    <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a>
+    <?php if ($row_user['userLevel'] == "0") { ?>
+    <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a>
+    <?php } ?>
 </div>
 <div id="adminMenu_Preparing_Edit" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contest_info">Competition Info</a>
@@ -200,7 +218,6 @@ if (strstr($section,"step")) { ?>
 <?php } ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
-	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 <?php if ($row_user['userLevel'] == "0") { ?>	
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a>
@@ -218,13 +235,14 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=entries">Entries</a>
 </div>
+<?php if (($row_user['userLevel'] == "0") && (!NHC)) { ?>
 <div id="adminMenu_Sorting_Regenerate" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>/includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Judging Numbers</a>
 </div>
+<?php } ?>
 <div id="adminMenu_Sorting_Add" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin">A Participant's Entry</a>
 </div>
 <div id="adminMenu_Sorting_Print" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo $base_url; ?>/output/sorting.php?section=admin&amp;go=default&amp;filter=default">Sorting Sheets - All Categories</a>
@@ -239,7 +257,9 @@ if (strstr($section,"step")) { ?>
     <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights">Flights</a>
     <?php } ?>
+    <?php if ($row_user['userLevel'] == "0") { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=styles&filter=orphans">Styles Without a Valid Style Type</a>
+    <?php } ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_tables&filter=orphans">Styles Not Assigned to Tables</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a>
@@ -247,7 +267,6 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenu_Organizing_Add" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=entrant&action=register">A Participant</a>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
-	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=brew&go=entries&action=add&filter=admin">A Participant's Entry</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_tables&action=add">A Table</a>
     <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&go=judging_tables&action=add">Flights to Tables</a>

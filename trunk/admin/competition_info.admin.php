@@ -277,6 +277,7 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
 </table>
 <h3>Awards</h3>
+<br /><b>Warning</b>:  date() expects parameter 2 to be long, string given in <b>/home5/brewcomp/public_html/bcoetest/includes/date_time.inc.php</b> on line <b>98</b><br />
 <table>
   <tr>
     <td class="dataLabel">Awards Date:</td>

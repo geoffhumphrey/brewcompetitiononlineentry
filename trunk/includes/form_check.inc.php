@@ -170,8 +170,10 @@ return true;
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
+<?php if (!NHC) { ?>
 if(WithoutContent(document.form1.brewName.value))
 	{ errormessage += "\nThe name of the brew"; }
+<?php } ?>
 if(WithoutSelectionValue(document.form1.brewStyle))
 	{ errormessage += "\nA style from the drop-down list."; }
 // Put field checks above this point.
@@ -188,6 +190,8 @@ var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.user_name.value))
 	{ errormessage += "\nAn email for your user name"; }
+if(WithoutContent(document.form1.user_name2.value))
+	{ errormessage += "\nRe-entry of your email address"; }
 if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nA password"; }
 if(WithoutContent(document.form1.userQuestionAnswer.value))

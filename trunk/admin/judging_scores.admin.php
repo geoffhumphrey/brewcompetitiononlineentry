@@ -243,10 +243,9 @@ $totalRows_entry_count = total_paid_received($go,"default");
           <option value="1" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "1")) echo "selected"; ?>>1st</option>
           <option value="2" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "2")) echo "selected"; ?>>2nd</option>
           <option value="3" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "3")) echo "selected"; ?>>3rd</option>
+          <?php if (!NHC) { ?>
           <option value="4" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "4")) echo "selected"; ?>>4th</option>
           <option value="5" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "5")) echo "selected"; ?>>Hon. Men.</option>
-          <?php if (table_exists("nhcClubs")) { // custom for NHC //  ?>
-          <option value="6" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "6")) echo "selected"; ?>>Admin Advance</option>
           <?php } ?>
         </select>
         </td>

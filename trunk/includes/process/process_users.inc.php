@@ -156,7 +156,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 				$_SESSION["loginUsername"] = $username;
 	
 				// If the username/password combo is OK, relocate to the "protected" content index page
-				header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
+				header(sprintf("Location: %s", $base_url."/index.php?section=list&msg=3"));
 				exit;
 				}
 			else

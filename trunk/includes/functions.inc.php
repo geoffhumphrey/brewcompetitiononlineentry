@@ -402,8 +402,6 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			} // endif ($totalRows_entries > 0)
 			else $total_calc = 0;
 			$total_array[] = $total_calc;
-			mysql_free_result($entries);
-			mysql_free_result($brewer);
 		} // end foreach
 	$total_fees = array_sum($total_array);
    	return $total_fees;
@@ -459,8 +457,6 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			else $total_calc = 0;
 			//echo $total_calc."<br>";
 			$total_array[] = $total_calc;
-			mysql_free_result($entries);
-			mysql_free_result($brewer);
 	$total_fees = array_sum($total_array);
    	return $total_fees;
 	} // end if (($bid != "default") && ($filter == "default")) 
@@ -522,8 +518,6 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			} // endif ($totalRows_entries > 0)
 			else $total_calc = 0;
 			$total_array[] = $total_calc;
-			mysql_free_result($entries);
-			mysql_free_result($brewer);
 		} // end foreach
 	$total_fees = array_sum($total_array);
    	return $total_fees;
@@ -634,9 +628,6 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			} // end if ($totalRows_entries > 0)
 			else $total_calc_paid = 0;
 			$total_array_paid[] = $total_calc_paid;
-			mysql_free_result($entries);
-			mysql_free_result($paid);
-			mysql_free_result($brewer);
 		} // end foreach
 		$total_fees_paid = array_sum($total_array_paid);
    		return $total_fees_paid;
@@ -732,9 +723,6 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		} // end if ($totalRows_entries > 0)
 		else $total_calc_paid = 0;
 		$total_array_paid[] = $total_calc_paid;
-		mysql_free_result($entries);
-		mysql_free_result($paid);
-		mysql_free_result($brewer);
 		//echo "Total Paid: ".$total_calc_paid."<br>";	
 		$total_fees_paid = array_sum($total_array_paid);
    		return $total_fees_paid;
@@ -838,9 +826,6 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			} // end if ($totalRows_entries > 0)
 			else $total_calc_paid = 0;
 			$total_array_paid[] = $total_calc_paid;
-			mysql_free_result($entries);
-			mysql_free_result($paid);
-			mysql_free_result($brewer);
 		} // end foreach
 		$total_fees_paid = array_sum($total_array_paid);
    		return $total_fees_paid;
@@ -1428,7 +1413,6 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	} while ($row_tables = mysql_fetch_assoc($tables));
 	
 	$table_choose .= '</div>';
-	mysql_free_result($tables);
 	return $table_choose;
 	
 }
@@ -1453,7 +1437,6 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row = mysql_fetch_array($result);
 		//if ($num == $filter) $selected = ' "selected"'; else $selected = '';
 		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
-		mysql_free_result($result);
 	}
 	
 	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
@@ -1467,12 +1450,10 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row = mysql_fetch_array($result);
 		//if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
 		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].$suffix.'" title="Print '.$row_styles['brewStyle'].'">'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</a>'; } 
-		mysql_free_result($result);
 	} while ($row_styles = mysql_fetch_assoc($styles));
 	
 	
 	$style_choose .= '</div>';
-	mysql_free_result($styles);
 	return $style_choose;   			
 }
 
@@ -1499,10 +1480,8 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 			$table_location = $row_location['judgingLocName']." - ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
 		}
 		else $table_location = ""; 
-		mysql_free_result($location);
 	}
 	
-	mysql_free_result($table);
 	return $table_location;
 }
 
@@ -1520,7 +1499,6 @@ function flight_count($table_id,$method) {
 		case "2": return $row_flights['count'];
 		break;
 	}
-	mysql_free_result($flights);
 }
 
 function score_count($table_id,$method) {
@@ -1537,8 +1515,6 @@ function score_count($table_id,$method) {
 		case "2": return $row_scores['count'];
 		break;
 	}
-	
-	mysql_free_result($scores);
 	
 }
 
@@ -1567,8 +1543,6 @@ function orphan_styles() {
 		} while ($row_styles = mysql_fetch_assoc($styles));
 	}
 	if ($return == "") $return .= "<p>All custom styles have a valid style type associated with them.</p>";
-	mysql_free_result($styles);
-	mysql_free_result($style_types);
 	return $return;
 
 }
@@ -1678,7 +1652,6 @@ function get_contact_count() {
 	$result = mysql_query($query_contact_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
 	$contactCount = $row["count"];
-	mysql_free_result($result);
 	return $contactCount;
 }
 
@@ -1689,7 +1662,6 @@ function brewer_info($bid) {
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid']."^".$row_brewer_info['brewerClubs'];
-	mysql_free_result($brewer_info);
 	return $r;
 }
 
@@ -1706,7 +1678,6 @@ function get_entry_count($method) {
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
 	return $r;
-	mysql_free_result($row_paid);
 }
 
 function get_participant_count($type) {
@@ -1719,8 +1690,6 @@ function get_participant_count($type) {
 	$row_participant_count = mysql_fetch_assoc($participant_count);
 	
 	return $row_participant_count['count'];
-	
-	mysql_free_result($participant_count);
 
 }
 
@@ -1785,7 +1754,6 @@ function entry_info($id) {
 	$entry_info = mysql_query($query_entry_info, $brewing) or die(mysql_error());
 	$row_entry_info = mysql_fetch_assoc($entry_info);
 	$r = $row_entry_info['brewName']."^".$row_entry_info['brewCategorySort']."^".$row_entry_info['brewSubCategory']."^".$row_entry_info['brewStyle']."^".$row_entry_info['brewCoBrewer']."^".$row_entry_info['brewCategory']."^".$row_entry_info['brewJudgingNumber'];
-	mysql_free_result($entry_info);
 	return $r;
 }
 
@@ -1836,12 +1804,10 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable,"default")) { 
         	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>";
 		 	} 
-		    mysql_free_result($scores);
 		} while ($row_tables = mysql_fetch_assoc($tables));
      $r .= "</select>";
 	} 
 	 else $r = "No tables have been defined.";
-	 mysql_free_result($tables);
 	 return $r;
 }
 
@@ -1862,12 +1828,10 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
         	$r .= "<option value=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</option>";
-		    mysql_free_result($scores);
 		} while ($row_sbi = mysql_fetch_assoc($sbi));
      $r .= "</select>";
 	} 
 	else $r = "No custom winning cateories have been defined.";
-	 mysql_free_result($sbi);
 	 return $r;
 }
 
@@ -1878,8 +1842,7 @@ function score_check($id,$judging_scores_db_table) {
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
 	
-	$r = $row_scores['scoreEntry']; 
-	mysql_free_result($scores);
+	$r = $row_scores['scoreEntry'];
 	return $r;
 }
 
@@ -1892,7 +1855,6 @@ function minibos_check($id,$judging_scores_db_table) {
 	
 	if ($row_scores['scoreMiniBOS'] == "1") return TRUE;
 	else return FALSE;
-	mysql_free_result($scores);
 }
 
 function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method) {
@@ -1911,7 +1873,6 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$table = mysql_query($query_table, $brewing) or die(mysql_error());
 		$row_table = mysql_fetch_assoc($table);
 		$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
-		mysql_free_result($table);
 		} 
 		
 		if ($method == "1") {  // Display by Category
@@ -1920,7 +1881,6 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
 		$row_entry = mysql_fetch_assoc($entry);
 		$r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
-		mysql_free_result($entry);
 		}
 		
 		if ($method == "2") {  // Display by Category
@@ -1934,12 +1894,9 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$row_style = mysql_fetch_assoc($style);
 		
 		$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
-		mysql_free_result($entry);
-		mysql_free_result($style);
 		}
 	} 
 	else $r = "-";
-	mysql_free_result($scores);
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
@@ -1980,7 +1937,6 @@ function entries_unconfirmed($user_id) {
 	$totalRows_entry_check = mysql_num_rows($entry_check); 
 	
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
-	mysql_free_result($entry_check);
 }
 
 function entries_no_special($user_id) {
@@ -2007,7 +1963,6 @@ function entries_no_special($user_id) {
 	$row_entry_check = mysql_fetch_assoc($entry_check);
 	$totalRows_entry_check = mysql_num_rows($entry_check); 
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
-	mysql_free_result($entry_check);
 }
 
 
@@ -2050,7 +2005,6 @@ function data_integrity_check() {
 					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
 			}
-			mysql_free_result($brewer_entries);
 		} // end if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1))
 		
 		
@@ -2071,9 +2025,7 @@ function data_integrity_check() {
 					$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());		
 				} while ($row_brewer_entries = mysql_fetch_assoc($brewer_entries));
 			}
-			mysql_free_result($brewer_entries);
 		} // end if ($totalRows_brewer == 0)
-		mysql_free_result($brewer);
 	} while ($row_user_check = mysql_fetch_assoc($user_check));
 	
 	// Check if there are "blank" entries. If so, delete.
@@ -2143,11 +2095,9 @@ function data_integrity_check() {
 				
 					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores", $row_duplicate['id']);
 					$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
-					mysql_free_result($duplicate);
 				}
 				
 			}
-			mysql_free_result($duplicates);
 		}
 	}
 	
@@ -2172,18 +2122,11 @@ function data_integrity_check() {
 				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_assignments", $row_org_judging['id']);
 				$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
 			} while ($row_org_judging = mysql_fetch_assoc($org_judging));
-		
-		mysql_free_result($org_judging);
-		
+
 		}
 		
 	}
-		
-	mysql_free_result($org);
-	mysql_free_result($judging_duplicates);
-	mysql_free_result($blank);
-	mysql_free_result($blank1);
-	mysql_free_result($user_check);
+
 	
 	// Next, purge all entries that are unconfirmed
 	purge_entries("unconfirmed", 1);
@@ -2306,8 +2249,6 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format) {
 			
 		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
 	}
-	
-	mysql_free_result($table_assignments);
 	return $output;
 }
 
@@ -2339,9 +2280,6 @@ function available_at_location($location,$role,$round) {
 	$return = array_sum($count);
 	//$return = print_r;
 	return $return;
-	
-	mysql_free_result($available);
-	
 }
 
 function str_osplit($string, $offset){
@@ -2349,42 +2287,19 @@ function str_osplit($string, $offset){
  }
  
 function readable_judging_number($style,$number) {
-	if ($style < 10) $number = "0".$number;
-  	else $number = $number;
-	$judging_number = str_osplit($number, 2);
-	return $judging_number[0]."-".$judging_number[1];
-}
-
-
-function limit_subcategory($style,$pref_num,$pref_sub_num,$pref_sub_array,$uid) {
-		if ($pref_num != "") {
-			$style_break = explode("-",$style);
-			
-			require(CONFIG.'config.php');
-			mysql_select_db($database, $brewing);
-			
-			$pref_sub_array = explode(",",$pref_sub_array);
-			
-			$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",ltrim($style_break['0'],"0"),$style_break['1']); 
-			$style = mysql_query($query_style, $brewing) or die(mysql_error());
-			$row_style = mysql_fetch_assoc($style);
-			
-			$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_break['0'],$style_break['1']);
-			$check = mysql_query($query_check, $brewing) or die(mysql_error());
-			$row_check = mysql_fetch_assoc($check);
-						
-			if (in_array($row_style['id'],$pref_sub_array)) {
-				if (($row_check['count'] >= $pref_sub_num)) return TRUE;
-				else return FALSE;
-			}
-			
-			if (!in_array($row_style['id'],$pref_sub_array)) {
-				if (($row_check['count'] >= $pref_num)) return TRUE;
-				else return FALSE;
-			}
-		}
-		else return FALSE;
+	
+	if (strlen($number) == 5) {
+		if ($style < 10) $number = "0".$number;
+		else $number = $number;
+		$judging_number = str_osplit($number, 2);
+		return $judging_number[0]."-".$judging_number[1];
 	}
+	
+	else {
+		$judging_number = str_osplit($number, 2);
+		return $judging_number[0]."-".$judging_number[1];
+	}
+}
 
 function dropoff_location($input) {
 	require(CONFIG.'config.php');
@@ -2392,6 +2307,7 @@ function dropoff_location($input) {
 	$query_dropoff = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."drop_off",$input);
 	$dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
 	$row_dropoff = mysql_fetch_assoc($dropoff);
-	return $row_dropoff['dropLocationName'];
+	if ($input > 0)	return $row_dropoff['dropLocationName'];
+	else return "Shipping Entries";
 }
 ?>

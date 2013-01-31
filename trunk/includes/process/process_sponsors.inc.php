@@ -8,11 +8,11 @@ $sponsor_name = capitalize($_POST['sponsorName']);
 
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
-                       GetSQLValueString(strtr($sponsor_name,$html_string), "text"),
+                       GetSQLValueString($sponsor_name, "text"),
                        GetSQLValueString($sponsorURL, "text"), 
                        GetSQLValueString($_POST['sponsorImage'], "text"),
-                       GetSQLValueString(strtr($_POST['sponsorText'],$html_string), "text"),
-					   GetSQLValueString(strtr($_POST['sponsorLocation'],$html_string), "text"),
+                       GetSQLValueString($_POST['sponsorText'], "text"),
+					   GetSQLValueString($_POST['sponsorLocation'], "text"),
 					   GetSQLValueString($_POST['sponsorLevel'], "int")
 					   );
 
@@ -25,11 +25,11 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s WHERE id=%s",
-                       GetSQLValueString(strtr($sponsor_name,$html_string), "text"),
+                       GetSQLValueString($sponsor_name, "text"),
                        GetSQLValueString($sponsorURL, "text"), 
                        GetSQLValueString($_POST['sponsorImage'], "text"),
-                       GetSQLValueString(strtr($_POST['sponsorText'],$html_string), "text"),
-					   GetSQLValueString(strtr($_POST['sponsorLocation'],$html_string), "text"),
+                       GetSQLValueString($_POST['sponsorText'], "text"),
+					   GetSQLValueString($_POST['sponsorLocation'], "text"),
 					   GetSQLValueString($_POST['sponsorLevel'], "int"),
 					   GetSQLValueString($id, "int"));
 

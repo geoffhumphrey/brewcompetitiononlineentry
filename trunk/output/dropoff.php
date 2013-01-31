@@ -220,10 +220,10 @@ require(DB.'dropoff.db.php');
     <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
     	<tr>
-        	<th class="bdr1B">Entry #</th>
-            <th class="bdr1B">Entry Name</th>
-            <th class="bdr1B">Participant Name</th>
-            <th class="bdr1B" width="1%" nowrap="nowrap">Picked Up?</th>
+        	<th class="bdr1B" width="5%" nowrap="nowrap">Entry #</th>
+            <th class="bdr1B" width="45%" nowrap="nowrap">Entry Name</th>
+            <th class="bdr1B" width="45%" nowrap="nowrap">Participant Name</th>
+            <th class="bdr1B" width="5%" nowrap="nowrap">Picked Up?</th>
         </tr>
     </thead>
     <tbody>

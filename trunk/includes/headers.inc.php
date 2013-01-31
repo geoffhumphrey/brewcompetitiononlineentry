@@ -45,11 +45,13 @@ switch($section) {
 	break;
 	
 	case "register":
-	$header_output = "Register";
+	$header_output = $row_contest_info['contestName'];
 	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt. Please try again.";
 	elseif ($msg == "2") { $output = "Sorry, the user name you entered is already in use."; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "The user name provided is not a valid email address. Please enter a valid email address.";
 	elseif ($msg == "4") $output = "The characters you entered in the CAPTCHA section below were not correct. Please try again.";
+	elseif ($msg == "5") $output = "The email addresses you entered do not match. Please check and try again.";
+	elseif ($msg == "6") $output = "The AHA number you entered is already in the system. Please check the number and try again.";
 	else $output = "";
 	break;
 

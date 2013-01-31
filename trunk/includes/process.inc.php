@@ -117,6 +117,17 @@ function strip_newline($input) {
 	return $output;
 }
 
+function table_exists($table_name) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	// taken from http://snippets.dzone.com/posts/show/3369
+	$query_exists = "SHOW TABLES LIKE '".$table_name."'";
+	$exists = mysql_query($query_exists, $brewing) or die(mysql_error());
+	$totalRows_exists = mysql_num_rows($exists);
+	if ($totalRows_exists > 0) return TRUE;
+	else return FALSE;
+}
+
 // --------------------------- // -------------------------------- //
 
 if ($action != "purge") {

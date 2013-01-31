@@ -35,6 +35,10 @@ $updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUseMods` CHAR(1) N
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
+$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsSEF` CHAR(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.';";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+
 $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N' WHERE id='1'";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
@@ -57,7 +61,12 @@ $updateSQL = "ALTER TABLE  `".$prefix."judging_scores` ADD `scoreMiniBOS` INT(4)
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
-echo "<ul><li>Brewer table updated.</li></ul>";
+$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` CHANGE  `scoreEntry`  `scoreEntry` DECIMAL( 11, 2 ) NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+
+echo "<ul><li>Judging Scores table updated.</li></ul>"; 
+
 
 // -----------------------------------------------------------
 // Alter Tables: archived brewing tables

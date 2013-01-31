@@ -12,17 +12,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 if ($entry_count > 0) { 
 	if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
 		if (score_count($row_tables['id'],"1"))	{
-			if ($action == "print") { 
 ?>
-<div id="header">	
-	<div id="header-inner">
-	<?php } ?>
-<?php 
-	if ($action == "print") { 
-	?>
-	</div>
-</div>
-<?php } ?>
+
 
 
  <script type="text/javascript" language="javascript">
@@ -46,6 +37,7 @@ if ($entry_count > 0) {
 		} );
 	} );
 </script>
+<div id="header-inner"><?php echo "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3></div>"; ?>
 <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
 <thead>
 <tr>

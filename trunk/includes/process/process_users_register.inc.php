@@ -4,6 +4,69 @@
  * Description: This module does all the heavy lifting for adding a user's info to the "users" and
  *              the "brewer" tables upon registration
  */
+ 
+// Custom Code for AHA NHC
+
+if (NHC) {
+	$email = $_POST['user_name'];
+
+	$query_user_exists = "SELECT * FROM nhcEntrant WHERE email = '$email'";
+	$user_exists = mysql_query($query_user_exists, $brewing) or die(mysql_error());
+	$row_user_exists = mysql_fetch_assoc($user_exists);
+	$totalRows_user_exists = mysql_num_rows($user_exists);
+	
+	// Email in the nhcEntrants table. They have already been warned about its existance. Redirect.
+	if ($totalRows_user_exists > 0) {
+		//echo $totalRows_user_exists."<br>";
+		header(sprintf("Location: %s", "http://www.brewingcompetition.com/index.php?msg=5"));
+		exit();
+	}
+	
+	$aha = $_POST['brewerAHA'];
+	if ($aha != "") {
+		$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcEntrant WHERE AHANumber = '$aha'";
+		$aha_exists = mysql_query($query_aha_exists, $brewing) or die(mysql_error());
+		$row_aha_exists = mysql_fetch_assoc($aha_exists);
+		
+		if ($row_aha_exists['count'] > 0) $aha_exists = TRUE; else $aha_exists = FALSE;
+	}
+	
+	if ($aha == "") $aha_exists = FALSE;
+	//echo $aha_exists;
+	//exit();
+	// If the AHA number is in the DB, redirect.
+	if ($aha_exists) {
+		setcookie("user_name", $_POST['user_name'], 0, "/");
+		setcookie("user_name2", $_POST['user_name2'], 0, "/");
+		setcookie("password", $_POST['password'], 0, "/");
+		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+		setcookie("brewerState", $_POST['brewerState'], 0, "/");
+		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+		setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
+		setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
+		setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+		setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
+		setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+		//echo "AHA exists!";
+		header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&msg=6"));
+		exit();
+		
+	}
+	/*
+	// If AHA is blank or doesn't exist, perform other checks and redirect if needed.
+	if (!$aha_exists) {  }
+	*/
+	mysql_free_result($user_exists);
+	
+	// ...and proceed normally with registration at the Region level.
+}
 
 // CAPCHA check
 include_once  (ROOT.'captcha/securimage.php');
@@ -11,6 +74,7 @@ $securimage = new Securimage();
 
 if (($securimage->check($_POST['captcha_code']) == false) && ($filter != "admin")) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
+	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
 	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
 	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
@@ -30,6 +94,28 @@ if (($securimage->check($_POST['captcha_code']) == false) && ($filter != "admin"
 	header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&msg=4"));
 }
 
+elseif ($_POST['user_name'] != $_POST['user_name2']) {
+	setcookie("user_name", $_POST['user_name'], 0, "/");
+	setcookie("user_name2", $_POST['user_name2'], 0, "/");
+	setcookie("password", $_POST['password'], 0, "/");
+	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+	setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+	setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+	setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+	setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+	setcookie("brewerState", $_POST['brewerState'], 0, "/");
+	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+	setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
+	setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
+	setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
+	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+	header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&msg=5"));
+}
+
 else {
 
 // Check to see if email address is already in the system. If so, redirect.
@@ -45,6 +131,23 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	$totalRows_userCheck = mysql_num_rows($userCheck);
 
 	if ($totalRows_userCheck > 0) {
+		
+		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+		setcookie("brewerState", $_POST['brewerState'], 0, "/");
+		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+		setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
+		setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
+		setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+		setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
+		setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+		
 		if ($filter == "admin") header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=".$go."&action=register&msg=10"));
 		else header(sprintf("Location: %s", $base_url."/index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
 	  }
