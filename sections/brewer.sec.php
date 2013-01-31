@@ -111,17 +111,17 @@ $row_countries = mysql_fetch_assoc($countries);
   <td class="data">
   <select name="brewerDropOff">
     <?php 
-	include (DB."dropoff.db.php");
+	include (DB.'dropoff.db.php');
 	do { ?>
     <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-    <option disabled="disabled">-------------</option>
-    <option value="0">I'm Shipping My Entries</option>
     <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+    <option disabled="disabled">-------------</option>
+    <option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>>I'm Shipping My Entries</option>
   </select>
   </td>
   <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
   </tr>
-<?php if (table_exists("nhcClubs")) { 
+<?php if (NHC) { 
 
 // Custom code for AHA - possiblity of inclusion in a future version
 $query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
@@ -157,7 +157,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
   <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
   <?php } ?>
   </td>
-  <td colspan="2" class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
+  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
 </tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>

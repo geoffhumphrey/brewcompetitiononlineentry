@@ -48,10 +48,12 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
   <?php } ?>
 </div>
 <?php if ($dbTable == "default") { ?>
+<!--
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-    <span class="icon"><img src="<?php echo $base_url; ?>/images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php echo style_choose($section,$go,$action,$filter,$view,"index.php","none"); ?></span>
+    <span class="icon"><img src="<?php //echo $base_url; ?>/images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php //echo style_choose($section,$go,$action,$filter,$view,"index.php","none"); ?></span>
 </div>
+-->
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 
@@ -125,6 +127,8 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 			"aaSorting": [[3,'asc']],
 			"bProcessing" : true,
 			"aoColumns": [
+				null,
+				null,
 				null,
 				null,
 				null,
@@ -221,7 +225,11 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
   <?php echo sprintf("%04s",$row_log['id']); ?>
   <?php if (($row_log['brewConfirmed'] == "0") && ($action != "print")) echo " <span class='icon'><img src='".$base_url."/images/exclamation.png'  border='0' alt='Unconfirmed entry!' title='Unconfirmed entry!'></span>"; ?>
   </td>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);  ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
+  <?php if (NHC) { ?>
+  <?php if ($action != "print") { ?><input id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo $row_log['brewJudgingNumber']; ?>" /><?php } else echo $row_log['brewJudgingNumber']; ?>
+  <?php } else echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);  ?>
+  </td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($row_brewer['brewerFirstName'] != "") && ($row_brewer['brewerLastName'] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?></td>
@@ -253,4 +261,4 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 </form>
 
 <?php } 
-} else echo "<div class=\"error\">There are no entires.</div>"; ?>
+} else echo "<p class=\"error\">There are no entires.</p>"; ?>

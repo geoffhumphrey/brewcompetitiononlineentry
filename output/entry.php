@@ -144,7 +144,7 @@ if ($row_prefs['prefsEntryForm'] == "N") {
 	$barcode = $brewing_info['id'];
 
 	// Using code from http://www.barcodephp.com
-	$barcode_link = $base_url."/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=2&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=30&checksum=&code=BCGi25";
+	$barcode_link = $base_url."/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=30&checksum=&code=BCGcode39";
 
 }
 

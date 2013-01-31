@@ -27,8 +27,8 @@ html, body {
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-size: 10px;
-	font-family: Helvetica, Geneva, sans-serif;
+	font-size: 11px;
+	font-family: Arial,Helvetica, Geneva, sans-serif;
 }
 
 option {

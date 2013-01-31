@@ -72,6 +72,14 @@ $totalRows_themes = mysql_num_rows($themes);
   	<td class="data">&nbsp;</td>
   </tr>
   <tr>
+    <td class="dataLabel">Use Search Engine Friendly URLs:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($row_prefs['prefsSEF'] == "Y") echo "CHECKED"; ?> />
+      Yes&nbsp;&nbsp;
+  <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($row_prefs['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>
+      No</td>
+    <td class="data">Generally, the default is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs.</td>
+    </tr>
+  <tr>
     <td class="dataLabel">Use Custom Modules:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
   	<td class="data">FOR ADVANCED USERS. Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
@@ -92,7 +100,9 @@ $totalRows_themes = mysql_num_rows($themes);
         <option value="B" <?php if (($section == "step3") || ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
         <option value="M" <?php if ($row_prefs['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
         <option value="U" <?php if ($row_prefs['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
-        <option value="N" <?php if ($row_prefs['prefsEntryForm'] == "N") echo " SELECTED"; ?> />NHC Style - 1 Page with Barcode</option>
+        <?php if (NHC) { ?>
+        <option value="N" <?php if ($row_prefs['prefsEntryForm'] == "N") echo " SELECTED"; ?> />NHC - 1 Page with Barcode</option>
+        <?php } ?>
     </select>
     </td>
   	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>

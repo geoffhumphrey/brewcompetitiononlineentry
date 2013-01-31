@@ -21,21 +21,40 @@ $totalRows_styles = mysql_num_rows($styles);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Styles</title>
 <link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js"></script>
+
+
+<style type="text/css">
+<!--
+/* Links */
+
+a:link {
+	color: #00F;
+}
+
+a:visited {
+	color: #00F;
+}
+
+a:hover, a:focus {
+	color: #900;
+	text-decoration: underline;
+}
+
+a:active {
+	color: #060;
+}
+-->
+</style>
 </head>
-<body>
+<body style="font-size: 12px">
 <div id="container">
 <div id="content">
 	<div id="content-inner-no-nav">
     	<div id="header">
-        	<div id="header-inner"><h1>Accepted Styles</h1></div>
+        	<div id="header-inner"><a name="top"></a><h1>Accepted Styles</h1></div>
         </div>
-    <table>
-	<tr>
-  	<td class="dataLabel">Filter By Style Name</td>
-  	<td class="data"><?php echo style_choose($section,"default","default",$filter,$view,"index.php","none"); ?></td>
-    </tr>
-  </table>
+        <p>Skip to Category: <?php for ($i=1; $i <= 28; $i++) { ?><a href="#<?php echo $i; ?>" title="Skip to <?php if ($i > 10) $s = "0".$i; else $s = $i; echo style_convert($s,1); ?>"><?php echo $i; ?></a>&nbsp;&nbsp;<?php } ?></p>
 <?php if ($totalRows_styles > 0) { ?>
 <?php do { 
     if (($sort == "brewStyleSRM") 	&& (($row_styles['brewStyleSRM'] == "") || ($row_styles['brewStyleSRM'] == "N/A"))) echo ""; 
@@ -45,11 +64,13 @@ elseif (($sort == "brewStyleFG") 	&& ($row_styles['brewStyleFG'] == "")) echo ""
 elseif (($sort == "brewStyleABV") 	&& ($row_styles['brewStyleABV'] == "")) echo "";
 else { 
 ?>
-<h2><?php echo $row_styles['brewStyle']; ?></h2>
+<div class="bdr1B_gray" style="padding-bottom: 40px">
+<?php if ($row_styles['brewStyleNum'] == "A") { ?><a name="<?php if ($row_styles['brewStyleGroup'] < 10) echo ltrim($row_styles['brewStyleGroup'],"0"); else echo $row_styles['brewStyleGroup']; ?>"></a><?php } ?><h2><?php echo $row_styles['brewStyle']; ?></h2>
+
 <table>
   <tr>
   	 <td class="dataLabel">Category:</td>
-	 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],1)?>
+	 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],1);?>
 	 </td>
   </tr>
   </tr>
@@ -64,13 +85,13 @@ else {
 </table>
 <table class="dataTable">
   <tr>
-  	<th class="dataLabel">OG Range</th>
-    <th class="dataLabel data">FG Range</th>
-    <th class="dataLabel data">ABV Range</th>
-    <th class="dataLabel data">Bitterness Range</th>
-    <th class="dataLabel data">Color Range</th>
+  	<th class="dataLabel data bdr1B">OG Range</th>
+    <th class="dataLabel data bdr1B">FG Range</th>
+    <th class="dataLabel data bdr1B">ABV Range</th>
+    <th class="dataLabel data bdr1B">Bitterness Range</th>
+    <th class="dataLabel data bdr1B">Color Range</th>
   </tr>
-  <tr>
+  <tr bgcolor="#ddd">
   	<td class="data-left" nowrap="nowrap">
   	<?php 
 						  if ($row_styles['brewStyleOG'] == "") { echo "Varies"; }
@@ -107,9 +128,9 @@ else {
 							if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 							if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
 						  		echo "
-								<table width='100%'>
+								<table width='75%'>
 								<tr>
-								<td style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td>
+								<td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td>
 								</tr>
 								</table>
 								"; 
@@ -119,11 +140,17 @@ else {
     </td>
    </tr>
   </table>
-<table>
+<table class="dataTable">
    <tr>
     <td class="data-left"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></td>
    </tr>
-  </table>
+</table>
+</div>
+<table>
+	<tr>
+    	<td class="data-left"><a href="#top">Top of Page</a></td>
+	</tr>
+</table>
 <?php } 
  } while ($row_styles = mysql_fetch_assoc($styles)); ?>
 <?php } else echo "<p>Styles in this category are not accepted in this competition.</p>"; ?>

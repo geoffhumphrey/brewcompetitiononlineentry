@@ -9,12 +9,6 @@ require('paths.php');
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
-// Comment out the following line if experiencing problems with the clean URLs
-if (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) $sef = "true"; else
-
-// Leave the following line alone if experiencing problems with the clean URLs
-$sef = "false"; 
-
 function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
 	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
@@ -60,11 +54,14 @@ require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
 require(DB.'winners.db.php');
 
+if ($row_prefs['prefsSEF'] == "Y") $sef = "true";
+else $sef = "false";
+
 // Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
 if ($today > ($data_check_date + 86400)) data_integrity_check();
 
 // check to see if all judging numbers have been generated. If not, generate
-if (!check_judging_numbers()) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
+if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 
 /*
 // Automatically purge all unconfirmed entries
@@ -92,6 +89,7 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
@@ -125,7 +123,6 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 
 		});
 	</script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
@@ -153,7 +150,6 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	</div>
   <?php  }
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
-  
   if ($registration_open == "0") { 
   	if ($section != "admin") {
   	?>
@@ -163,7 +159,6 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
-	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
@@ -172,12 +167,15 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
+		if ($section == "pay") {
+				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
+				else include (SECTIONS.'pay.sec.php');
+			}
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
 		if ($row_user['userLevel'] <= "1") {
-			if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
+			if ($section == "register")	include (SECTIONS.'register.sec.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "user") 	include (SECTIONS.'user.sec.php');
@@ -192,7 +190,6 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
     <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
@@ -202,11 +199,15 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
+		if ($section == "pay") {
+				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
+				else include (SECTIONS.'pay.sec.php');
+			}
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
 		if ($row_user['userLevel'] <= "1") {
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
+			if ($section == "register") include (SECTIONS.'register.sec.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "user") 	include (SECTIONS.'user.sec.php');
@@ -221,7 +222,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	$entry_limit = mysql_query($query_entry_limit, $brewing) or die(mysql_error());
 	$row_entry_limit = mysql_fetch_assoc($entry_limit);
 
-	echo "<div class='closed'>The limit of ".readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].") entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_log['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " Judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register</a>, but entries will no longer be accepted."; echo "</div>"; 
+	echo "<div class='closed'>The limit of ".readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].") entries was reached on ".getTimeZoneDateTime($row_prefs['prefsTimeZone'], strtotime($row_entry_limit['brewUpdated']), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt").". No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " However, judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>."; echo "</div>"; 
 	}
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
@@ -231,13 +232,15 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
-	// if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($row_user['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
-		if ($section == "pay") 		include (SECTIONS.'nhc_pay.sec.php');
+		if ($section == "pay") {
+				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
+				else include (SECTIONS.'pay.sec.php');
+			}
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 		if ($section == "user") 	include (SECTIONS.'user.sec.php');

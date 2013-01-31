@@ -118,21 +118,24 @@ httpxml.send(null);
 if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
 if ($section != "admin") { if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); }
 ?>
+<h2>Register</h2>
 <?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
-<p>Our competition entry system is completely electronic.
+<p>Entry into our competition is conducted completely online.
 	<ul>
-		<li>If you have already registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>"> log in here</a>. </li>
+		<?php if (!NHC) { ?>
+        <li>If you have already registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in here</a>. </li>
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>
+        <?php } ?>
     	<li>Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct. </li>
     	<li>Once you have registered, you can proceed through the entry process. </li>
-  	    <li>Each brew you enter will automatically be assigned a number by the system.</li>
+  	    <li>Each entry you add will automatically be assigned a number by the system.</li>
 	</ul>
 </p>
 <?php } if ($go == "default") { ?>
 <form name="judgeChoice" id="judgeChoice">
 <table>
 	<tr>
-    	<td class="dataLabel" width="5%">Are you registering as a judge or steward?</td>
+    	<td class="dataLabel" width="5%">Are you registering as a judge or steward as well?</td>
     	<td class="data" width="5%">
        	  <select name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)">
     		<option value=""></option>
@@ -153,6 +156,9 @@ $row_countries = mysql_fetch_assoc($countries);
 if ($section != "admin") { 
 ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
+
+<?php if (NHC) echo "<div class=\"closed\">Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>"; ?>
+
 <?php } 
 if ($section == "admin") { 
 echo "<h2>Add";
@@ -163,29 +169,37 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
-    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg == "4") echo $_COOKIE['user_name']; ?>"><div id="msg_email">Email Format:</div><div id="status"></div></td>
+    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg > 0) echo $_COOKIE['user_name']; ?>"><div id="msg_email">Email Format:</div><div id="status"></div></td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
+        <td class="data">Your email address is your user name.</td>
+  	</tr>
+    <tr>
+    	<td class="dataLabel">Re-Enter Email Address:</td>
+    	<td class="data"><input name="user_name2" id="user_name2" type="text" class="submit" size="40" value="<?php if ($msg > 0) echo $_COOKIE['user_name2']; ?>"></td>
+        <td class="data"><span class="required">Required</span></td>
+        <td>&nbsp;</td>
   	</tr>
   	<tr>
     	<td class="dataLabel">Password:</td>
-    	<td class="data"><input name="password" id="password" type="password" class="submit" size="25"  value="<?php if ($msg == "4") echo $_COOKIE['password']; ?>"></td>
+    	<td class="data"><input name="password" id="password" type="password" class="submit" size="25"  value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>"></td>
         <td class="data"><span class="required">Required</span></td>
+        <td>&nbsp;</td>
   	</tr>
 <?php if ($section != "admin") { ?>
     <tr> 
     	<td class="dataLabel">Security Question:</td>
     	<td class="data" nowrap="nowrap">
-        <input type="radio" name="userQuestion" value="What is your favorite all-time beer to drink?" id="userQuestion_0" <?php if (($msg == "4") && ($_COOKIE['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?> />What is your favorite all-time beer to drink?<br />
-    	    <input type="radio" name="userQuestion" value="What was the name of your first pet?" id="userQuestion_1" <?php if (($msg == "4") && ($_COOKIE['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?>  />What was the name of your first pet?<br />
-			<input type="radio" name="userQuestion" value="What was the name of the street you grew up on?" id="userQuestion_2" <?php if (($msg == "4") && ($_COOKIE['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?>  />What was the name of the street you grew up on?<br />
-    	    <input type="radio" name="userQuestion" value="What was your high school mascot?" id="userQuestion_3" <?php if (($msg == "4") && ($_COOKIE['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?>  />What was your high school mascot?<br />
+        <input type="radio" name="userQuestion" value="What is your favorite all-time beer to drink?" id="userQuestion_0" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?> />What is your favorite all-time beer to drink?<br />
+    	    <input type="radio" name="userQuestion" value="What was the name of your first pet?" id="userQuestion_1" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?>  />What was the name of your first pet?<br />
+			<input type="radio" name="userQuestion" value="What was the name of the street you grew up on?" id="userQuestion_2" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?>  />What was the name of the street you grew up on?<br />
+    	    <input type="radio" name="userQuestion" value="What was your high school mascot?" id="userQuestion_3" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?>  />What was your high school mascot?<br />
         </td>
         <td class="data"><span class="required">Required</span></td>
       	<td>Choose one. This question will be used to verify your identity should you forget your password.</td>
   	</tr>
     <tr>
     	<td class="dataLabel">Security Question Answer:</td>
-    	<td class="data"><input name="userQuestionAnswer" type="text" class="submit" size="30"  value="<?php if ($msg == "4") echo $_COOKIE['userQuestionAnswer']; ?>"></td>
+    	<td class="data"><input name="userQuestionAnswer" type="text" class="submit" size="30"  value="<?php if ($msg > 0) echo $_COOKIE['userQuestionAnswer']; ?>"></td>
         <td class="data"><span class="required">Required</span></td>
         <td class="data">&nbsp;</td>
   	</tr>
@@ -199,37 +213,37 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
     -->
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
-      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($msg == "4") echo $_COOKIE['brewerFirstName']; ?>" size="32" maxlength="20"></td>
+      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($msg > 0) echo $_COOKIE['brewerFirstName']; ?>" size="32" maxlength="20"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />
       You will be able to identify a co-brewer when adding your entries.</td>
 </tr>
 <tr>
       <td class="dataLabel">Last Name:</td>
-      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($msg == "4") echo $_COOKIE['brewerLastName']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($msg > 0) echo $_COOKIE['brewerLastName']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
     </tr>
 <tr>
       <td class="dataLabel">Street Address:</td>
-      <td class="data"><input type="text" name="brewerAddress" value="<?php if ($msg == "4") echo $_COOKIE['brewerAddress']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerAddress" value="<?php if ($msg > 0) echo $_COOKIE['brewerAddress']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">City:</td>
-      <td class="data"><input type="text" name="brewerCity" value="<?php if ($msg == "4") echo $_COOKIE['brewerCity']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerCity" value="<?php if ($msg > 0) echo $_COOKIE['brewerCity']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">State or Province:</td>
-      <td class="data"><input type="text" name="brewerState" value="<?php if ($msg == "4") echo $_COOKIE['brewerState']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerState" value="<?php if ($msg > 0) echo $_COOKIE['brewerState']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Zip or Postal Code:</td>
-      <td class="data"><input type="text" name="brewerZip" value="<?php if ($msg == "4") echo $_COOKIE['brewerZip']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerZip" value="<?php if ($msg > 0) echo $_COOKIE['brewerZip']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
@@ -238,7 +252,7 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
   	<td class="data">
     <select name="brewerCountry">
     	<?php do { ?>
-        <option value="<?php echo $row_countries['name']; ?>" <?php if (($msg == "4") && ($_COOKIE['brewerCountry'] == $row_countries['name'])) echo "selected"; ?>><?php echo $row_countries['name']; ?></option>
+        <option value="<?php echo $row_countries['name']; ?>" <?php if (($msg > 0) && ($_COOKIE['brewerCountry'] == $row_countries['name'])) echo "selected"; ?>><?php echo $row_countries['name']; ?></option>
         <?php } while ($row_countries = mysql_fetch_assoc($countries)); ?>
     </select>
     </td>
@@ -246,18 +260,35 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
   	<td class="data">&nbsp;</td>
 </tr>
 <tr>
+  <td class="dataLabel">Drop-Off Location:</td>
+  <td class="data">
+  <select name="brewerDropOff">
+    <?php 
+	include (DB.'dropoff.db.php');
+	if ($totalRows_dropoff > 0) {
+	do { ?>
+    <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
+    <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+    <option disabled="disabled">-------------</option>
+    <?php } ?>
+    <option value="0">I'm Shipping My Entries</option>
+  </select>
+  </td>
+  <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
+</tr>
+<tr>
       <td class="dataLabel">Phone 1:</td>
-      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($msg == "4") echo $_COOKIE['brewerPhone1']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($msg > 0) echo $_COOKIE['brewerPhone1']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 2:</td>
-      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($msg == "4") echo $_COOKIE['brewerPhone2']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($msg > 0) echo $_COOKIE['brewerPhone2']; ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
-<?php if (table_exists("nhcClubs")) { 
+<?php if (NHC) { 
 
 // Custom code for AHA - possiblity of inclusion in a future version
 $query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
@@ -270,7 +301,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
       <td class="data" colspan="3">
       <select name="brewerClubs" id="brewerClubs">
       <?php do { ?>
-      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
+      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if (($msg > 0) && ($row_clubs['ClubName'] == $_COOKIE['brewerClubs'])) echo "SELECTED"; if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
       <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
       </select>
       </td>
@@ -285,7 +316,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
 <?php } ?>
 <tr>
   <td class="dataLabel">AHA Member Number:</td>
-  <td class="data"><input type="text" name="brewerAHA" value="<?php if ($msg == "4") echo $_COOKIE['brewerAHA']; ?>" size="11" maxlength="11" /></td>
+  <td class="data"><input type="text" name="brewerAHA" value="<?php if ($msg > 0) echo $_COOKIE['brewerAHA']; ?>" size="11" maxlength="11" /></td>
   <td class="data">&nbsp;</td>
   <td class="data">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</td>
 </tr>
@@ -293,7 +324,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" />Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg == "4") && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" />Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
       <td class="data">&nbsp;</td>
 </tr>
 	<?php if ($totalRows_judging > 1) { ?>
@@ -319,7 +350,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg == "4") && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg == "4") && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
+      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; ?> rel="none" /> No</td>
       <td class="data">&nbsp;</td>
 </tr>
 
@@ -377,6 +408,7 @@ if ($section != "admin") {
 </script>
 <input type="hidden" name="userLevel" value="2" />
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
 <input type="hidden" name="brewerSteward" value="N" />

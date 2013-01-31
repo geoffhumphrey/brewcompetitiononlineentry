@@ -200,6 +200,69 @@ if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "defaul
 	
 }
 
+if (($go == "entries") && ($action == "nhc") && ($view == "default")) {
+	
+	$query_log = sprintf("SELECT id FROM %s ORDER BY brewName ASC",$prefix."brewing");
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
+
+	$filename = str_replace(" ","_",$row_contest_info['contestName'])."_Round_Bottle_Labels";
+	if ($filter != "default") $filename .= "_Category_".$filter;
+	$filename .= ".pdf";
+	$pdf = new PDF_Label('OL32'); 
+	
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','',7);
+
+	// Print labels
+	for($i=1; $i<=999; $i++) {
+		for($z=0; $z<6; $z++) {
+			//$barcode_link = $base_url."/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=2&rotation=0&font_family=Arial.ttf&font_size=8&text=".$i."&thickness=30&checksum=&code=BCGi25";
+			$barcode_link = $base_url."/images/barcodes/0111.png";
+			$image = $pdf->Image($barcode_link);
+			$text = sprintf("\n%s\n%s",$i,$image);
+			$pdf->Add_Label($text);
+		}
+	}
+
+	$pdf->Output($filename,'D');
+	
+}
+
+if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "OL5275WR")) {
+	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
+	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log = mysql_fetch_assoc($log);
+	$totalRows_log = mysql_num_rows($log);
+
+	$filename = str_replace(" ","_",$row_contest_info['contestName'])."_Round_Bottle_Labels";
+	if ($filter != "default") $filename .= "_Category_".$filter;
+	$filename .= ".pdf";
+	$pdf = new PDF_Label($view); 
+	
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','',7);
+
+	// Print labels
+	do {
+		for($i=0; $i<$sort; $i++) {
+			$entry_no = sprintf("%04s",$row_log['id']);																						  
+			
+			$text = sprintf("\n%s (%s)",
+			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
+			);
+			
+			$pdf->Add_Label($text);
+		}
+	} while ($row_log = mysql_fetch_assoc($log));
+
+	$pdf->Output($filename,'D');
+	
+}
+
 if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
 	$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
 	if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
@@ -345,20 +408,18 @@ if (($go == "participants") && ($action == "address_labels")) {
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$filename .= str_replace(" ","_",$row_contest_info['contestName'])."_All_Participant_Address_Labels.pdf";
-	
+
 	do {
-		if (total_paid_received("default",$row_brewer['id']) > 0) {
+			if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
 			$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
 			strtr($row_brewer['brewerFirstName'],$html_remove)." ".strtr($row_brewer['brewerLastName'],$html_remove), 
 			strtr($row_brewer['brewerAddress'],$html_remove),
 			strtr($row_brewer['brewerCity'],$html_remove),
 			$row_brewer['brewerState'],
 			$row_brewer['brewerZip'],
-			$row_brewer['brewerCountry']
+			$brewer_country
 			);
-		
 			$pdf->Add_Label($text);
-		}
 	} while ($row_brewer = mysql_fetch_assoc($brewer));
 	
 	$pdf->Output($filename,'D');

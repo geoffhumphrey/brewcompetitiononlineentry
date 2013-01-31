@@ -6,7 +6,48 @@
  *
  */
 include(DB.'styles.db.php'); 
-include(DB.'entries.db.php');
+include(DB.'entries.db.php'); 
+
+function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
+	/*
+	$style = Style category and subcategory number
+	$pref_num = Subcategory limit number from preferences
+	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
+	$pref_exception_sub_array = Array of EXCEPTED subcategories
+	*/
+	
+	$style_break = explode("-",$style);
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
+	
+	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",ltrim($style_break[0],"0"),$style_break[1]); 
+	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	
+	// Check if the user has a entry in the system in the subcategory
+	
+	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,ltrim($style_break[0],"0"),$style_break[1]);
+	$check = mysql_query($query_check, $brewing) or die(mysql_error());
+	$row_check = mysql_fetch_assoc($check);
+	
+	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
+	else $return = "";
+	
+	if (($return == "DISABLED") && ($pref_exception_sub_array != "")) {
+		if (in_array($row_style['id'],$pref_exception_sub_array)) {
+			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
+			if (($row_check['count'] >= $pref_exception_sub_num)) $return = "DISABLED";
+			elseif ($pref_exception_sub_num == "") $return = "";
+			else $return = "";
+		}
+	}
+	
+	return $return;
+	
+}
 
 function highlight_required($msg,$method) {
 	
@@ -54,8 +95,9 @@ function highlight_required($msg,$method) {
 	}
 }
 ?>
-
+<?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/toggle.js"></script>
+<?php } ?>
 <script type="text/javascript">
 // Based upon http://www.9lessons.info/2010/04/live-character-count-meter-with-jquery.html
 $(document).ready(function()
@@ -77,6 +119,92 @@ $(document).ready(function()
 }
 );
 </script>
+<?php 
+
+// Show/hide special ingredients depending upon the style chosen...
+
+$special_beer = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A");
+$mead = array("24-A","24-B","24-C","25-A","25-B","26-B","27-A","27-B","27-C","27-D","28-A","26-A","26-C","27-E","28-B","28-C","28-D");
+$special_mead = array("26-A","26-C","27-E","28-B","28-C","28-D"); 
+
+// Get all custom cats
+$query_custom_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
+$custom_styles = mysql_query($query_custom_styles, $brewing) or die(mysql_error());
+$row_custom_styles = mysql_fetch_assoc($custom_styles);
+$totalRows_custom_styles = mysql_num_rows($custom_styles); 
+if ($totalRows_custom_styles > 0) {
+	do { $a[] = $row_custom_styles['brewStyleGroup']."-A"; } while ($row_custom_styles = mysql_fetch_assoc($custom_styles)); 
+}
+
+?>
+<script type="text/javascript">//<![CDATA[
+
+$(document).ready(function() {
+	<?php if (($action == "edit") && ($msg != "")) { ?>				   
+		<?php if (highlight_required($msg,1)) { ?>
+		$("#special").show("slow");
+		$("#mead-cider").hide();
+		<?php } ?>
+		<?php if ((highlight_required($msg,2)) || (highlight_required($msg,3))) { ?>
+		$("#mead-cider").show("slow");
+		<?php } ?>
+	<?php } else { ?>
+	$("#special").hide();
+	$("#mead-cider").hide();
+	<?php } ?>
+	$("#type").change(function() {				   
+		if ( 
+			$("#type").val() == "25-C"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#special").show("slow");
+			$("#mead-cider").show("slow");
+			
+		}
+		<?php foreach ($mead as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo $value; ?>"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			<?php if (in_array($value,$special_mead)) { ?>
+			$("#special").show("slow");
+			<?php } ?>
+			$("#mead-cider").show("slow");
+			
+		}
+		<?php } ?>
+		<?php foreach ($special_beer as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo $value; ?>"){
+			$("#mead-cider").hide("fast");
+			$("#special").show("slow");
+		}
+		<?php } ?>
+		
+		<?php 
+		if ($totalRows_custom_styles > 0) {
+		foreach ($a as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo $value; ?>"){
+			$("#mead-cider").hide("fast");
+			$("#special").show("slow");
+			
+		}
+		<?php } 
+		}
+		?>
+		
+		else{
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			
+		}	
+	}
+	);
+}
+);
+</script>
+
 <?php 
 
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
@@ -117,7 +245,7 @@ function admin_relocate($user_level,$go,$referrer) {
 
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" /></p>
 <table>
-<?php if ($row_user['userLevel'] <= 1) { 
+<?php
 if (($filter == "admin") || ($filter == "default")) $brewer_id = $row_user['id']; else $brewer_id = $filter; 
 
 $query_brewer = sprintf("SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'",$brewer_id);
@@ -125,43 +253,59 @@ $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 
 ?>
-
 <tr>
    <td class="dataLabel">Brewer:</td>
    <td class="data">
-   <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>
+   <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>
    <input type="hidden" name="brewBrewerID" value="<?php echo $row_brewer['uid']; ?>">
    </td>
    <td class="data">&nbsp;</td>
 </tr>
-<?php } ?>
+<tr>
+  <td class="dataLabel">Co-Brewer:</td>
+  <td class="data"><input type="text"  name="brewCoBrewer" value="<?php if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" size="30"></td>
+</tr>
 <tr>
    <td class="dataLabel">Entry Name:</td>
    <td class="data"><input type="text"  name="brewName" value="<?php if ($action == "edit") echo $row_log['brewName']; ?>" size="30"></td>
-   <td class="data"><span class="required">Required for all entires</span></td>
+   <td class="data"><?php if (!NHC) { ?><span class="required">Required for all entires</span><?php } ?></td>
 </tr>
 <tr>
    <td class="dataLabel">Style:</td>
    <td class="data">
-   <select name="brewStyle">
+   
+   <select name="brewStyle" id="type">
    	 <option value=""></option>
-    <?php
-	do {  
+	 <?php
+	do { 
+	if ($row_prefs['prefsUserSubCatLimit'] == "") { ?>
+		<option value="<?php echo $style_value; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory'])) echo "SELECTED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
+	<?php	
+	}
+	else {
 	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
+	
 	if ($row_user['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_user['id']);
 	elseif (($row_user['userLevel'] <= 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$filter);
 	elseif (($row_user['userLevel'] <= 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_log['brewBrewerID']);
 	elseif (($row_user['userLevel'] <= 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_prefs['prefsUserSubCatLimit'],$row_prefs['prefsUSCLExLimit'],$row_prefs['prefsUSCLEx'],$row_user['id']);
-	else $subcat_limit = FALSE;
+	//else $subcat_limit = FALSE;
 	?>
-     <option value="<?php echo $style_value; ?>" <?php if ($action == "edit")  if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; if ($subcat_limit) echo " DISABLED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) echo " [disabled - subcategory entry limit reached]" ?></option>
-    <?php 
-	} while ($row_styles = mysql_fetch_assoc($styles)); $rows = mysql_num_rows($styles); if($rows > 0) { mysql_data_seek($styles, 0); $row_styles = mysql_fetch_assoc($styles); } ?>
+   <option value="<?php echo $style_value; ?>" <?php if ($action == "edit") { 
+	   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; 
+	   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo $subcat_limit; 
+   } 
+   if ($action == "add") echo $subcat_limit; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($action == "edit") { if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit == "DISABLED")) echo " [disabled - subcategory entry limit reached]"; } if (($action == "add") && ($subcat_limit == "DISABLED")) echo " [disabled - subcategory entry limit reached]"; ?></option>
+    <?php }
+	} while ($row_styles = mysql_fetch_assoc($styles)); 
+
+	?>
    </select>
    </td>
    <td class="data"><span class="required">Required for all entires</span><span class="icon"><img src="<?php echo $base_url; ?>/images/information.png" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/styles.php">View Accepted Styles</a></td>
 </tr>
 </table>
+<div id="special">
 <table>
 <tr>
    <td class="dataLabel">Special Ingredients and/or Classic Style:</td>
@@ -180,17 +324,8 @@ $row_brewer = mysql_fetch_assoc($brewer);
    <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold">150</span></td>
 </tr>
 </table>
-<table>
-    <tr>
-       <td class="dataLabel">Brewer's Specifics:</td>
-    </tr>
-    <tr>
-   		<td class="dataLeft"><em>Use to record special procedures, brewing techniques, etc.</em></td>
-	</tr>
-    <tr>
-    	<td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
-    </tr>
-</table>
+</div>
+<div id="mead-cider">
 <table <?php if (highlight_required($msg,"2")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99; margin-bottom: 10px;\""; ?>>
 <tr>
    <td class="dataLabel" colspan="2">For Mead and Cider:</td>
@@ -222,12 +357,13 @@ $row_brewer = mysql_fetch_assoc($brewer);
    <td>&nbsp;</td>
 </tr>
 </table>
+</div>
 <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
 <h2>Optional Information</h2>
 <p>The information below is not required to process your entry. However, the more information you provide about your entry, the more complete the required entry documentation will be.</p>
 <p>Click the headings below to expand and collapse each category.</p>
-<div id="menu_container">
-<div id="outer">
+<div id="menu_container"> 
+<div id="outer"> 
 <div class="menus">
 <h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/add.png"  /><?php } ?></span>General</h4>
 <div class="toggle_container">
@@ -242,6 +378,17 @@ $row_brewer = mysql_fetch_assoc($brewer);
   <td class="data"><input type="text"  name="brewCoBrewer" value="<?php if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" size="30"></td>
   <td class="data">&nbsp;</td>
 </tr>
+</table>
+<table>
+    <tr>
+       <td class="dataLabel">Brewer's Specifics:</td>
+    </tr>
+    <tr>
+   		<td class="dataLeft"><em>Only use to record special procedures, brewing techniques, etc.</em></td>
+	</tr>
+    <tr>
+    	<td><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
+    </tr>
 </table>
 </div>
 <h4 class="trigger"><?php if ($action == "edit") { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  /></span><?php } else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/add.png"  /><?php } ?></span>Dates</h4>
