@@ -106,10 +106,10 @@ $(document).ready(function()
 	{
 		var box=$(this).val();
 		var main = box.length *100;
-		var value= (main / 150);
-		var count= 150 - box.length;
+		var value= (main / 50);
+		var count= 50 - box.length;
 		
-		if(box.length <= 150)
+		if(box.length <= 50)
 		{
 		$('#count').html(count);
 		}
@@ -125,8 +125,7 @@ $(document).ready(function()
 
 $special_beer = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A");
 $mead = array("24-A","24-B","24-C","25-A","25-B","26-B","27-A","27-B","27-C","27-D","28-A","26-A","26-C","27-E","28-B","28-C","28-D");
-$special_mead = array("26-A","26-C","27-E","28-B","28-C","28-D"); 
-
+$special_mead = array("26-A","26-C","27-E","28-B","28-C","28-D");
 // Get all custom cats
 $query_custom_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
 $custom_styles = mysql_query($query_custom_styles, $brewing) or die(mysql_error());
@@ -313,15 +312,15 @@ $row_brewer = mysql_fetch_assoc($brewer);
 <tr>
    <td class="dataLeft">
    <em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, 28B-D, and all custom styles</em><br />
-(150 character limit - use keywords)
+(50 character limit - use keywords and abbreviations)
   </td>
 </tr>
 <tr>
-   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99;\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo']; ?>" maxlength="150" size="75">
+   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "style=\"border: 2px solid #FF0000; background-color: #FFFF99;\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo']; ?>" maxlength="50" size="50">
    </td>
 </tr>
 <tr>
-   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold">150</span></td>
+   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold">50</span></td>
 </tr>
 </table>
 </div>

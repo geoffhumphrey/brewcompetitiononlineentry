@@ -10,6 +10,7 @@ require(INCLUDES.'version.inc.php');
 require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 $special_ingredients = array("6D", "16E", "17F", "20A", "21A", "21B", "22B", "22C", "23A", "25C", "26A", "26B", "26C", "27E", "28B", "28C", "28D");
+$mead = array("24A","24B","24C","25A","25B","26B","27A","27B","27C","27D","28A","26A","26C","27E","28B","28C","28D");
 
 function truncate($string, $limit, $break=".", $pad="")
 {
@@ -273,6 +274,7 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 
 	$filename = str_replace(" ","_",$row_contest_info['contestName'])."_Bottle_Labels";
 	if ($filter != "default") $filename .= "_Category_".$filter;
+	$filename .= "_Special_Mead-Cider";
 	$filename .= ".pdf";
 	$pdf = new PDF_Label('5160'); 
 	
@@ -282,14 +284,19 @@ if (($go == "entries") && ($action == "bottle-judging") && ($view == "special"))
 	// Print labels
 	do {
 		
-		$entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+		if (!NHC) $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+		else $entry_no = $row_log['brewJudgingNumber'];
 		
 		$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
+		
+		$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
+		$special = strtr($special,$html_remove);
 				
 		if (in_array($style,$special_ingredients)) {
-			$text = sprintf("\n%s (%s) Special: %s",
-			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
-			str_replace("\n"," ",truncate($row_log['brewInfo'],120)));
+			$text = sprintf("\n%s (%s) %s\nS/C: %s", $entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], $row_log['brewStyle'], $special);
+			if (in_array($style,$mead)) {
+				$text .= sprintf("\nM/C: %s %s %s",$row_log['brewMead1'],$row_log['brewMead2'],$row_log['brewMead3']);
+			}
 			$pdf->Add_Label($text);
 		}
 		

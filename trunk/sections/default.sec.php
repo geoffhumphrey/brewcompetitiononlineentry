@@ -23,10 +23,10 @@ if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] <= "1") && ($
 if ($totalRows_dropoff == 0) echo "<div class=\"error\">No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
 if ($totalRows_judging == 0) echo "<div class=\"error\">No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
 	} 
-if (judging_date_return() > 0) { ?>
+?>
 <p>Thank you for your interest in the <?php echo $row_contest_info['contestName']; ?> organized by <?php if ($row_contest_info['contestHostWebsite'] != "") { ?><a href="<?php echo $row_contest_info['contestHostWebsite']; ?>" target="_blank"><?php } echo $row_contest_info['contestHost']; if ($row_contest_info['contestHostWebsite'] != "") { ?></a><?php } if ($row_contest_info['contestHostLocation'] != "") echo ", ".$row_contest_info['contestHostLocation']; ?>.  Be sure to read the <a href="<?php echo build_public_url("rules","default","default",$sef,$base_url); ?>">competition rules</a>.</p>
-<?php }
-if (judging_date_return() == 0) { 
+<?php
+if ((judging_date_return() == 0) && ($registration_open == "2")) { 
 	include ('judge_closed.sec.php'); 
 	if ($row_prefs['prefsDisplayWinners'] == "Y") {  
 		function judging_winner_display($delay) {

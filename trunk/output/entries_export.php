@@ -109,7 +109,7 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 
 else {
 
-if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a [] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
+if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
 if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
 if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
 
@@ -119,9 +119,13 @@ $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
 $brewName = strtr($row_sql['brewName'],$html_remove);
 $brewInfo = strtr($row_sql['brewInfo'],$html_remove);
 $entryNo = sprintf("%04s",$row_sql['id']);
-	// Winner download
 	
-	if (($action == "default") && ($filter == "winners")) {
+	
+	// Winner Downloads
+	
+	if (($action == "default") && ($filter == "winners") && ($row_prefs['prefsWinnerMethod'] == 0)) {
+		
+		// BY TABLE		
 		$query_scores = sprintf("SELECT eid,scorePlace FROM $judging_scores_db_table WHERE scoreTable='%s' AND scorePlace IS NOT NULL ORDER BY scorePlace ASC", $row_sql['id']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
@@ -143,7 +147,10 @@ $entryNo = sprintf("%04s",$row_sql['id']);
 				
 			} while ($row_scores = mysql_fetch_assoc($scores)); 
 		}
-	}	
+		
+		
+		
+	} // end if (($action == "default") && ($filter == "winners"))
 	
 	// No participant email addresses
 	
@@ -162,6 +169,94 @@ $entryNo = sprintf("%04s",$row_sql['id']);
 	}
 
 } while ($row_sql = mysql_fetch_assoc($sql));
+
+if (($action == "default") && ($filter == "winners") && ($row_prefs['prefsWinnerMethod'] > 0)) {
+	// BY CATEGORY
+	if ($row_prefs['prefsWinnerMethod'] == 1) {
+		
+		$query_styles = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup ASC";
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		$totalRows_styles = mysql_num_rows($styles);
+		do { $z[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
+		
+		foreach (array_unique($z) as $style) {
+			$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $brewing_db_table,  $style);
+			$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+			$row_entry_count = mysql_fetch_assoc($entry_count);
+			
+			$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+			if (($action == "print") && ($view == "winners")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
+			if (($action == "default") && ($view == "default")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
+			$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
+			$row_score_count = mysql_fetch_assoc($score_count);
+			
+			if ($row_score_count['count'] > "0")   {
+				
+				$query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
+				$query_scores .= " AND a.scorePlace IS NOT NULL";
+				$query_scores .= " ORDER BY b.brewCategory,a.scorePlace ASC";
+				//echo $query_scores."<br>";
+				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+				$row_scores = mysql_fetch_assoc($scores);
+				$totalRows_scores = mysql_num_rows($scores);
+						
+				do { 
+					$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$judging_tables_db_table,$row_scores['scoreTable']);
+					$table_name = mysql_query($query_table_name, $brewing) or die(mysql_error());
+					$row_table_name = mysql_fetch_assoc($table_name);
+				
+					$a[] = array($row_table_name['tableNumber'],$row_table_name['tableName'],$row_scores['brewCategory'],$row_scores['brewSubCategory'],$row_scores['brewStyle'],$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_brewer['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+				} while ($row_scores = mysql_fetch_assoc($scores));
+			}
+		}	
+	} // end if ($row_prefs['prefsWinnerMethod'] == 1)
+	
+	
+	// BY SUB-CATEGORY
+	
+	if ($row_prefs['prefsWinnerMethod'] == 2) {
+		
+		$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		$totalRows_styles = mysql_num_rows($styles);
+		do { $b[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']; } while ($row_styles = mysql_fetch_assoc($styles));
+		
+		foreach (array_unique($b) as $style) {
+			$style = explode("-",$style);
+			
+			$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
+			$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
+			$row_score_count = mysql_fetch_assoc($score_count);
+			
+			//echo $row_score_count['count'];
+			//echo $query_score_count;
+			if ($row_score_count['count'] > 0)   {
+			
+				$query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
+				$query_scores .= " AND a.scorePlace IS NOT NULL";
+				$query_scores .= " ORDER BY b.brewCategory,b.brewSubCategory,a.scorePlace";
+				//echo $query_scores;
+				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
+				$row_scores = mysql_fetch_assoc($scores);
+				$totalRows_scores = mysql_num_rows($scores);
+						
+				do { 
+				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+				if ($row_scores['brewCategorySort'] > 28) $style_long = style_convert($row_scores['brewCategorySort'],1);
+				else $style_long = $row_scores['brewStyle'];
+				
+					$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$judging_tables_db_table,$row_scores['scoreTable']);
+					$table_name = mysql_query($query_table_name, $brewing) or die(mysql_error());
+					$row_table_name = mysql_fetch_assoc($table_name);
+				
+					$a[] = array($row_table_name['tableNumber'],$row_table_name['tableName'],$row_scores['brewCategory'],$row_scores['brewSubCategory'],$style_long,$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_brewer['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+				} while ($row_scores = mysql_fetch_assoc($scores));
+			}
+		}
+	} // end if ($row_prefs['prefsWinnerMethod'] == 2)
+}
 
 header('Content-type: application/x-msdownload');
 header('Content-Disposition: attachment;filename='.$filename);
