@@ -467,7 +467,7 @@ if ($go == "default") { ?>
 			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 			    <li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
-      <?php if (!NHC) { ?>
+      <?php if (NHC) { ?>
       <p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
             	<li>Entry Judging Numbers:</li>
@@ -538,6 +538,12 @@ if ($go == "default") { ?>
                     <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> labels per entry</li>
+                <li>All Added by Admins (After Reg. Close): <select name="round_entry_recent" id="round_entry_recent" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> labels per entry</li>
             </ul>
             <ul class="admin_default">
             	<li>Round Bottle Labels (Using <em>Judging</em> Numbers - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>):</li>
@@ -545,6 +551,12 @@ if ($go == "default") { ?>
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
                     <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> labels per entry</li>
+                <li>All Added by Admins (After Reg. Close): <select name="round_judging_recent" id="round_judging_recent" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> labels per entry</li>
             </ul>

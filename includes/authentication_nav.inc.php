@@ -16,7 +16,7 @@ function authenticateUserNav($connection, $username, $password)
             AND password = '{$password}'";
 
   	// Execute the query
-  	if (!$result = @ mysql_query ($query, $connection))
+  	if (!$result = @ mysql_query ($query, $connection)) 
     showerror();
 
   	// Is the returned result exactly one row? If so, then we have found the user

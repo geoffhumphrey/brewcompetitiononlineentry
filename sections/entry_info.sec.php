@@ -49,13 +49,13 @@ if ($contact_count > 0) { ?><a href="#officials">Competition Official<?php if ($
 <a name="entry_window"></a><h2>Entry Window</h2>
 <p>Entries will be accepted at our shipping and drop-off location<?php if ($totalRows_dropoff > 1) echo "s"; ?> beginning <?php echo $entry_open." through ".$entry_closed; ?>.</p>
 <a name="entry"></a><h2>Entry Fees</h2>
-<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'],2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after the ".addOrdinalNumberSuffix($row_contest_info['contestEntryFeeDiscountNum'])." entry. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'],2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after the ".addOrdinalNumberSuffix($row_contest_info['contestEntryFeeDiscountNum'])." entry. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; if (NHC) echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFeePasswordNum'],2)." for AHA members."; ?></p>
 <?php if ($row_prefs['prefsEntryLimit'] != "") { ?>
 <a name="entry_limit"></a><h2>Entry Limit</h2>
-<p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.  Currently, <?php echo $totalRows_log; if ($totalRows_log == 1) echo " entry has"; else echo " entries have"; ?>  been logged.</p>
+<p>There is a limit of <?php echo readable_number($row_prefs['prefsEntryLimit'])." (".$row_prefs['prefsEntryLimit'].")"; ?> entries for this competition.  Currently, <?php echo readable_number($totalRows_log)." (".$totalRows_log.")"; if ($totalRows_log == 1) echo " entry has"; else echo " entries have"; ?>  been logged.</p>
 <?php } ?>
 <a name="payment"></a><h2>Payment</h2>
-<p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>
+<p>After registering and inputting entries, all participants must pay their entry fee(s).</p>
     <ul>
     	<?php 
 		if ($row_prefs['prefsCash'] == "Y") echo "<li>Cash</li>";
