@@ -1,581 +1,1161 @@
-@charset "utf-8";
-/* CSS Document 
-*        Document Name: bruxellensis.css
-*        Description:   A custom theme that expands upon default.css
-*		 Color scheme:  #394a59 (dark blue)
-                        #acc0c7 (medium-light blue)
-						#bec8d8 (light blue)
-						#DFE4EC (ultra-light blue)
-*/
-
-@import url("html_elements.css");
-@import url("common.css");
-@import url("messages.css");
-@import url("menus.css");
-@import url("sorting.css");
-@import url(http://fonts.googleapis.com/css?family=Istok+Web|Tienne:900);
-
-/* --------------------- html_elements.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in  
-   html_lements.css. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-html, body {
-	background-color: #eeeeee;
-}
-
-body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: 'Istok Web', Tahoma, Geneva, sans-serif;
-	font-size: 13px;
-	text-transform: none;
-	text-decoration: none;
-	letter-spacing: 0em;
-	word-spacing: 0.004em;
-	line-height: 1.5;
-}
-
-option {
-}
-
-th, td {
-	font-family: inherit;
-	font-size: inherit;
-}
-
-pre, code {
-}
-
-p {
-	margin: 1.25em 0 1.25em 0;
-}
-
-/* Links */
-
-a:link {
-}
-
-a:visited {
-}
-
-a:hover, a:focus {
-}
-
-a:active {
-}
-
-/** headings **/
-h1 {
-	font-family: 'Tienne', Georgia, serif;
-	font-size: 1.9em;
-	color: #394a59;
-	margin: 1em 0 1.5em 0;
-}
-
-h2 {
-	font-family: 'Tienne', Georgia, serif;
-	font-size: 1.5em;
-	color: #394a59;
-	margin: 1em 0 1em 0;
-	
-}
-
-h3 {
-	font-family: 'Tienne', Georgia, serif;
-	font-size: 1.3em;
-	color: #394a59;
-	margin: 1em 0 1em 0;
-}
-
-h4, h5, h6 {
-	font-family: 'Tienne', Georgia, serif;
-	margin: 1em 0 1em 0;
-}
-
-/** lists **/
-ul, ol {
-}
-
-ul ul, ul ol, ol ol, ol ul {
-}
-
-li {
-}
-
-ul { 
-}
-
-ul ul { 
-}
-
-ul ul ul { 
-}
-
-ul ul ul ul { 
-}
-
-ol { 
-}
-
-ol ol { 
-}
-
-ol ol ol { 
-}
-
-dt  {
-}
-
-dd {
-}
-
-
-/** tables **/
-table {
-}
-
-td {
-	padding: .5em 2em .5em .5em;
-}
-
-th {
-	padding: 1em .5em 1em .5em;
-	text-align: left;
-	background-color: #acc0c7;
-	color:  #394a59;
-}
-
-/** images **/
-img  {
-}
-
-/** horizontal rules **/
-hr  {
-}
-
-/** forms **/
-form {
-}
-
-button, menu, textarea, label, submit, .submit, select, input {
-	border: 1px solid #aaaaaa;
-	background-color: #dedede;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-}
-
-select, optgroup, option  {
-}
-
-textarea {
-}
-
-
-/* --------------------- common.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in common.css. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-/* ------------------------------- Content ------------------------------- */
-
-#content {
-}
-
-#content-inner {
-
-}
-
-#content-inner-no-nav {
-	padding: 1em;
-}
-
-#content-inner h2 { 
-}
-
-#content-inner-no-nav h2 {
-	border-bottom: 1px solid #394a59;
-}
-
-#content-inner .menu {
-	border: 1px solid #acc0c7;
-	background-color: #eeeeee;
-}
-
-
-#content-inner .menu a {
-	color: #394a59;
-}
-
-#content-inner .menu a.menuItem:hover, 
-#content-inner .menu a.menuItemHighlight {
-	background-color: #acc0c7;
-	color: #1C242C;
-}
-
-#container {
-	position: relative;
-	min-height: 95%;
-	background-color: #ffffff;
-}
-
-/* ------------------------------- Nav ------------------------------- */
-
-#navigation { 
-	width: 100%;
-}
-
-#navigation-inner
-{
-	border-bottom: 1px solid #394a59;
-	padding: 1em;
-	vertical-align:middle;
-	background-image: url(../images/bruxellensis/nav.png);
-	background-repeat: repeat-x;
-	font-weight: bold;
-	color: #1C242C;
-	background-color:#394a59;
-}
-
-#navigation-inner a {
-	color: #1C242C;
-	font-weight: normal;
-}
-
-#navigation-inner .menu {
-	border: 1px solid #394a59;
-	background-color: #DFE4EC;
-}
-
-#navigation-inner .menu a {
-	color: #394a59;
-	font-weight: normal;
-}
-
-#navigation-inner .menu a.menuItem:hover, 
-#navigation-inner .menu a.menuItemHighlight {
-	background-color: #394a59;
-	color: #FFF;
-}
-
-#nav {
-	margin: 0;
-	padding: 0;
-}
-
-#nav ul {
-	padding-left: 0;	
-}
-
-#nav li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 1em 0 0;
-	margin: 0;
-}
-
-#break {
-	display: inline;
-	vertical-align: middle;
-	float: right;
-	font-weight:normal;
-	font-style: italic;
-	font-size: .8em;
-}
-
-/* ------------------------------- Header ------------------------------- */
-#header {
-	width: auto;
-	height: auto;
-}
-
-#header-inner {
-}
-
-#header-inner h1 {
-	border-bottom: 1px dashed #394a59;
-}
-
-
-/* ------------------------------- Footer ------------------------------- */
-#footer {
-	width: 100%;
-	background-color: #eeeeee;
-	border-top: 1px solid #000000;
-	background-image: url(../images/bruxellensis/footer.png);
-}
-
-#footer-inner {
-	vertical-align: middle;
-	text-align: center;
-	padding: 1em;
-}
-
-#footer-inner a {
-	color:#FFF;
-}
-
-/* ------------------------------- Data Display ------------------------------- */
-
-.dataTable {
-}
-
-.dataTable th {
-	background-color: #acc0c7;
-}
-
-.dataTable td {
-}
-
-.dataHeading {
-}
-
-.dataList {
-}
-
-.dataLabel {
-}
-
-.data {
-}
-
-.data-left {
-}
-
-.icon {
-}
-
-.dataTableCompact  { 
-}
-
-.dataTableCompact td { 
-}
-
-.dataTableCompact th {
-	background-color: #acc0c7;
-}
-
-/* ------------------------------- Forms ------------------------------- */
-
-.button { 
-	border: 1px solid #aaaaaa;
-	font-weight: bold;
-} 
-
-.button:hover {
-	border: 1px solid #aaaaaa;
-	background-color: #DFE4EC;
-}
-
-.paypal {
-}
-
-/* ------------------------------- Collapse jquery ------------------------------- */
-
-.trigger {
-	color: #394a59;
-}
-
-.trigger a {
-}
-
-.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
-}
-
-.toggle_container {
-/* Use the following for accordian */
-/* display: none */
-}
-
-.toggle_container a {
-/* Use the following for accordian */
-/* display: block */
-}
-
-
-/* ------------------------------- Admin ------------------------------- */
-
-.admin {
-}
-
-.admin_default {
-	margin: 0 0 1.5em 0;
-	padding: 0 .5em 0 0;
-}
-
-.admin_default ul {
-	display: inline;
-}
-
-.admin_default li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 1.5em 0 0;
-	margin: 0;
-}
-
-.admin_default li li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 1.5em 0 0;
-	margin: 0;
-}
-
-.admin_default_header {
-	font-family: 'Tienne', Georgia, serif;
-	font-size: 1em;
-	font-weight: bold;
-	margin: 1.5em 0 .5em 0;
-	padding: 0 0 .5em 0;
-}
-
-/* -- Admin Menu -- */
-
-.menu {	
-}
-
-/* -- Admin Sub-Navigation -- */
-
-.adminSubNavContainer {
-}
-
-.adminSubNav {
-}
-
-/* ------------------------------- Sponsor Display ------------------------------- */
-
-#sponsor {
-}
-
-#sponsor li {
-}
-
-.looper {
-}
-
-.looper_large {
-}
-
-.looper_large th {
-}
-
-.looper_large .location {
-}
-
-.looper_large .logo {
-}
-
-.looper_large .info {
-}
-
-
-/* ------------------------------- Setup ------------------------------- */
-
-.setupTitle {
-}
-
-/* ------------------------------- Colors ------------------------------- */
-
-.red {
-}
-
-.green {
-}
-
-.yellow {
-}
-
-.orange {
-}
-
-.blue { 
-}
-
-/* ------------------------------- Borders ------------------------------- */
-
-.bdr1 {
-	border: 1px solid #394a59;
-}
-
-.bdr1T {
-	border-top: 1px solid #394a59;
-}
-
-.bdr1B {
-	border-bottom: 1px solid #394a59;
-}
-
-.bdr1B_dashed {
-}
-
-.bdr1T_dashed {
-}
-
-/* --------------------- messages.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in messages.css - 
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-.info {
-}
-
-.closed {
-}
-
-.error {
-}
-
-.required {
-}
-
-.judge-alert {
-}
-
-.bos {
-}
-
-.at-a-glance {
-	background-color: #DFE4EC;
-	border: 1px solid #394a59;
-}
-
-/* --------------------- menus.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the menus.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- sorting.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the sorting.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
+@charset "utf-8";
+
+/* CSS Document 
+
+*        Document Name: bruxellensis.css
+
+*        Description:   A custom theme that expands upon default.css
+
+*		 Color scheme:  #394a59 (dark blue)
+
+                        #acc0c7 (medium-light blue)
+
+						#bec8d8 (light blue)
+
+						#DFE4EC (ultra-light blue)
+
+*/
+
+
+
+@import url("html_elements.css");
+
+@import url("common.css");
+
+@import url("messages.css");
+
+@import url("menus.css");
+
+@import url("sorting.css");
+
+@import url(http://fonts.googleapis.com/css?family=Istok+Web|Tienne:900);
+
+
+
+/* --------------------- html_elements.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in  
+
+   html_lements.css. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+html, body {
+
+	background-color: #eeeeee;
+
+}
+
+
+
+body, caption, input, textarea, select, option, legend, fieldset  {
+
+	font-family: 'Istok Web', Tahoma, Geneva, sans-serif;
+
+	font-size: 13px;
+
+	text-transform: none;
+
+	text-decoration: none;
+
+	letter-spacing: 0em;
+
+	word-spacing: 0.004em;
+
+	line-height: 1.5;
+
+}
+
+
+
+option {
+
+}
+
+
+
+th, td {
+
+	font-family: inherit;
+
+	font-size: inherit;
+
+}
+
+
+
+pre, code {
+
+}
+
+
+
+p {
+
+	margin: 1.25em 0 1.25em 0;
+
+}
+
+
+
+/* Links */
+
+
+
+a:link {
+
+}
+
+
+
+a:visited {
+
+}
+
+
+
+a:hover, a:focus {
+
+}
+
+
+
+a:active {
+
+}
+
+
+
+/** headings **/
+
+h1 {
+
+	font-family: 'Tienne', Georgia, serif;
+
+	font-size: 1.9em;
+
+	color: #394a59;
+
+	margin: 1em 0 1.5em 0;
+
+}
+
+
+
+h2 {
+
+	font-family: 'Tienne', Georgia, serif;
+
+	font-size: 1.5em;
+
+	color: #394a59;
+
+	margin: 1em 0 1em 0;
+
+	
+
+}
+
+
+
+h3 {
+
+	font-family: 'Tienne', Georgia, serif;
+
+	font-size: 1.3em;
+
+	color: #394a59;
+
+	margin: 1em 0 1em 0;
+
+}
+
+
+
+h4, h5, h6 {
+
+	font-family: 'Tienne', Georgia, serif;
+
+	margin: 1em 0 1em 0;
+
+}
+
+
+
+/** lists **/
+
+ul, ol {
+
+}
+
+
+
+ul ul, ul ol, ol ol, ol ul {
+
+}
+
+
+
+li {
+
+}
+
+
+
+ul { 
+
+}
+
+
+
+ul ul { 
+
+}
+
+
+
+ul ul ul { 
+
+}
+
+
+
+ul ul ul ul { 
+
+}
+
+
+
+ol { 
+
+}
+
+
+
+ol ol { 
+
+}
+
+
+
+ol ol ol { 
+
+}
+
+
+
+dt  {
+
+}
+
+
+
+dd {
+
+}
+
+
+
+
+
+/** tables **/
+
+table {
+
+}
+
+
+
+td {
+
+	padding: .5em 2em .5em .5em;
+
+}
+
+
+
+th {
+
+	padding: 1em .5em 1em .5em;
+
+	text-align: left;
+
+	background-color: #acc0c7;
+
+	color:  #394a59;
+
+}
+
+
+
+/** images **/
+
+img  {
+
+}
+
+
+
+/** horizontal rules **/
+
+hr  {
+
+}
+
+
+
+/** forms **/
+
+form {
+
+}
+
+
+
+button, menu, textarea, submit, .submit, select, input {
+
+	border: 1px solid #aaaaaa;
+
+	background-color: #dedede;
+
+	-webkit-border-radius: 3px;
+
+	-moz-border-radius: 3px;
+
+	border-radius: 3px;
+
+}
+
+
+
+select, optgroup, option  {
+
+}
+
+
+
+textarea {
+
+}
+
+
+
+
+
+/* --------------------- common.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in common.css. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+
+
+/* ------------------------------- Content ------------------------------- */
+
+
+
+#content {
+
+}
+
+
+
+#content-inner {
+
+
+
+}
+
+
+
+#content-inner-no-nav {
+
+	padding: 1em;
+
+}
+
+
+
+#content-inner h2 { 
+
+}
+
+
+
+#content-inner-no-nav h2 {
+
+	border-bottom: 1px solid #394a59;
+
+}
+
+
+
+#content-inner .menu {
+
+	border: 1px solid #acc0c7;
+
+	background-color: #eeeeee;
+
+}
+
+
+
+
+
+#content-inner .menu a {
+
+	color: #394a59;
+
+}
+
+
+
+#content-inner .menu a.menuItem:hover, 
+
+#content-inner .menu a.menuItemHighlight {
+
+	background-color: #acc0c7;
+
+	color: #1C242C;
+
+}
+
+
+
+#container {
+
+	position: relative;
+
+	min-height: 95%;
+
+	background-color: #ffffff;
+
+}
+
+
+
+/* ------------------------------- Nav ------------------------------- */
+
+
+
+#navigation { 
+
+	width: 100%;
+
+}
+
+
+
+#navigation-inner
+
+{
+
+	border-bottom: 1px solid #394a59;
+
+	padding: 1em;
+
+	vertical-align:middle;
+
+	background-image: url(../images/bruxellensis/nav.png);
+
+	background-repeat: repeat-x;
+
+	font-weight: bold;
+
+	color: #1C242C;
+
+	background-color:#394a59;
+
+}
+
+
+
+#navigation-inner a {
+
+	color: #1C242C;
+
+	font-weight: normal;
+
+}
+
+
+
+#navigation-inner .menu {
+
+	border: 1px solid #394a59;
+
+	background-color: #DFE4EC;
+
+}
+
+
+
+#navigation-inner .menu a {
+
+	color: #394a59;
+
+	font-weight: normal;
+
+}
+
+
+
+#navigation-inner .menu a.menuItem:hover, 
+
+#navigation-inner .menu a.menuItemHighlight {
+
+	background-color: #394a59;
+
+	color: #FFF;
+
+}
+
+
+
+#nav {
+
+	margin: 0;
+
+	padding: 0;
+
+}
+
+
+
+#nav ul {
+
+	padding-left: 0;	
+
+}
+
+
+
+#nav li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 1em 0 0;
+
+	margin: 0;
+
+}
+
+
+
+#break {
+
+	display: inline;
+
+	vertical-align: middle;
+
+	float: right;
+
+	font-weight:normal;
+
+	font-style: italic;
+
+	font-size: .8em;
+
+}
+
+
+
+/* ------------------------------- Header ------------------------------- */
+
+#header {
+
+	width: auto;
+
+	height: auto;
+
+}
+
+
+
+#header-inner {
+
+}
+
+
+
+#header-inner h1 {
+
+	border-bottom: 1px dashed #394a59;
+
+}
+
+
+
+
+
+/* ------------------------------- Footer ------------------------------- */
+
+#footer {
+
+	width: 100%;
+
+	background-color: #eeeeee;
+
+	border-top: 1px solid #000000;
+
+	background-image: url(../images/bruxellensis/footer.png);
+
+}
+
+
+
+#footer-inner {
+
+	vertical-align: middle;
+
+	text-align: center;
+
+	padding: 1em;
+
+}
+
+
+
+#footer-inner a {
+
+	color:#FFF;
+
+}
+
+
+
+/* ------------------------------- Data Display ------------------------------- */
+
+
+
+.dataTable {
+
+}
+
+
+
+.dataTable th {
+
+	background-color: #acc0c7;
+
+}
+
+
+
+.dataTable td {
+
+}
+
+
+
+.dataHeading {
+
+}
+
+
+
+.dataList {
+
+}
+
+
+
+.dataLabel {
+
+}
+
+
+
+.data {
+
+}
+
+
+
+.data-left {
+
+}
+
+
+
+.icon {
+
+}
+
+
+
+.dataTableCompact  { 
+
+}
+
+
+
+.dataTableCompact td { 
+
+}
+
+
+
+.dataTableCompact th {
+
+	background-color: #acc0c7;
+
+}
+
+
+
+/* ------------------------------- Forms ------------------------------- */
+
+
+
+.button { 
+
+	border: 1px solid #aaaaaa;
+
+	font-weight: bold;
+
+} 
+
+
+
+.button:hover {
+
+	border: 1px solid #aaaaaa;
+
+	background-color: #DFE4EC;
+
+}
+
+
+
+.paypal {
+
+}
+
+
+
+/* ------------------------------- Collapse jquery ------------------------------- */
+
+
+
+.trigger {
+
+	color: #394a59;
+
+}
+
+
+
+.trigger a {
+
+}
+
+
+
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
+
+}
+
+
+
+.toggle_container {
+
+/* Use the following for accordian */
+
+/* display: none */
+
+}
+
+
+
+.toggle_container a {
+
+/* Use the following for accordian */
+
+/* display: block */
+
+}
+
+
+
+
+
+/* ------------------------------- Admin ------------------------------- */
+
+
+
+.admin {
+
+}
+
+
+
+.admin_default {
+
+	margin: 0 0 1.5em 0;
+
+	padding: 0 .5em 0 0;
+
+}
+
+
+
+.admin_default ul {
+
+	display: inline;
+
+}
+
+
+
+.admin_default li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 1.5em 0 0;
+
+	margin: 0;
+
+}
+
+
+
+.admin_default li li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 1.5em 0 0;
+
+	margin: 0;
+
+}
+
+
+
+.admin_default_header {
+
+	font-family: 'Tienne', Georgia, serif;
+
+	font-size: 1em;
+
+	font-weight: bold;
+
+	margin: 1.5em 0 .5em 0;
+
+	padding: 0 0 .5em 0;
+
+}
+
+
+
+/* -- Admin Menu -- */
+
+
+
+.menu {	
+
+}
+
+
+
+/* -- Admin Sub-Navigation -- */
+
+
+
+.adminSubNavContainer {
+
+}
+
+
+
+.adminSubNav {
+
+}
+
+
+
+/* ------------------------------- Sponsor Display ------------------------------- */
+
+
+
+#sponsor {
+
+}
+
+
+
+#sponsor li {
+
+}
+
+
+
+.looper {
+
+}
+
+
+
+.looper_large {
+
+}
+
+
+
+.looper_large th {
+
+}
+
+
+
+.looper_large .location {
+
+}
+
+
+
+.looper_large .logo {
+
+}
+
+
+
+.looper_large .info {
+
+}
+
+
+
+
+
+/* ------------------------------- Setup ------------------------------- */
+
+
+
+.setupTitle {
+
+}
+
+
+
+/* ------------------------------- Colors ------------------------------- */
+
+
+
+.red {
+
+}
+
+
+
+.green {
+
+}
+
+
+
+.yellow {
+
+}
+
+
+
+.orange {
+
+}
+
+
+
+.blue { 
+
+}
+
+
+
+/* ------------------------------- Borders ------------------------------- */
+
+
+
+.bdr1 {
+
+	border: 1px solid #394a59;
+
+}
+
+
+
+.bdr1T {
+
+	border-top: 1px solid #394a59;
+
+}
+
+
+
+.bdr1B {
+
+	border-bottom: 1px solid #394a59;
+
+}
+
+
+
+.bdr1B_dashed {
+
+}
+
+
+
+.bdr1T_dashed {
+
+}
+
+
+
+/* --------------------- messages.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in messages.css - 
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+.info {
+
+}
+
+
+
+.closed {
+
+}
+
+
+
+.error {
+
+}
+
+
+
+.required {
+
+}
+
+
+
+.judge-alert {
+
+}
+
+
+
+.bos {
+
+}
+
+
+
+.at-a-glance {
+
+	background-color: #DFE4EC;
+
+	border: 1px solid #394a59;
+
+}
+
+
+
+/* --------------------- menus.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Copy and paste the elements you wish to override from 
+
+   the menus.css file below. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------- sorting.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Copy and paste the elements you wish to override from 
+
+   the sorting.css file below. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
 */

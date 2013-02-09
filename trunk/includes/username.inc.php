@@ -12,7 +12,7 @@ if(isSet($_POST['user_name'])) {
 	// Custom Code for AHA NHC
 	// Check master entrant db table for email address
 	if (NHC) { 
-		$sql_check = mysql_query("SELECT email FROM nhcEntrant WHERE Email='$user_name'");
+		$sql_check = mysql_query("SELECT email FROM nhcentrant WHERE Email='$user_name'");
 	}
 	
 	else {

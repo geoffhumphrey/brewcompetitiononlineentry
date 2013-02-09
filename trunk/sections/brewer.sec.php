@@ -124,7 +124,7 @@ $row_countries = mysql_fetch_assoc($countries);
 <?php if (NHC) { 
 
 // Custom code for AHA - possiblity of inclusion in a future version
-$query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
+$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";
 $clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
 $row_clubs = mysql_fetch_assoc($clubs);
 

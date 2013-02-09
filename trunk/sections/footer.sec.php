@@ -4,5 +4,10 @@
  * Description: This module houses the footer displayed on all pages. 
  * 
  */
+ 
+if (NHC) {
 ?>
+<a href="http://www.brewcompetition.com" target="_blank">BCOE&amp;M</a> - NHC Edition &copy;<?php echo date('Y'); ?> by Geoff Humphrey for <a href="http://www.betterbeerscores.com" target="_blank">Better Beer Scores, LLC</a>
+<?php }  else { ?>
 <a href="http://www.brewcompetition.com" target="_blank">BCOE&amp;M</a> v<?php echo $version; ?> &copy;<?php  echo "2009-".date('Y'); ?> by <a href="http://www.zkdigital.com" target="_blank">zkdigital.com</a>.
+<?php } ?>
