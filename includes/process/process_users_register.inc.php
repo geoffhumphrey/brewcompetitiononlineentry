@@ -10,21 +10,21 @@
 if (NHC) {
 	$email = $_POST['user_name'];
 
-	$query_user_exists = "SELECT * FROM nhcEntrant WHERE email = '$email'";
+	$query_user_exists = "SELECT * FROM nhcentrant WHERE email = '$email'";
 	$user_exists = mysql_query($query_user_exists, $brewing) or die(mysql_error());
 	$row_user_exists = mysql_fetch_assoc($user_exists);
 	$totalRows_user_exists = mysql_num_rows($user_exists);
 	
-	// Email in the nhcEntrants table. They have already been warned about its existance. Redirect.
+	// Email in the nhcentrants table. They have already been warned about its existance. Redirect.
 	if ($totalRows_user_exists > 0) {
 		//echo $totalRows_user_exists."<br>";
 		header(sprintf("Location: %s", "http://www.brewingcompetition.com/index.php?msg=5"));
 		exit();
 	}
 	
-	$aha = $_POST['brewerAHA'];
+	$aha = $_POST['brewerAHA']; 
 	if ($aha != "") {
-		$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcEntrant WHERE AHANumber = '$aha'";
+		$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcentrant WHERE AHANumber = '$aha'";
 		$aha_exists = mysql_query($query_aha_exists, $brewing) or die(mysql_error());
 		$row_aha_exists = mysql_fetch_assoc($aha_exists);
 		
@@ -280,6 +280,25 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 						   );
 		}
 		
+		if((NHC) && ($filter == "admin")) {
+			$updateSQL =  sprintf("INSERT INTO nhcentrant (
+			uid, 
+			firstName, 
+			lastName, 
+			email,
+			AHAnumber,
+			regionPrefix
+			) 
+			VALUES 
+			(%s, %s, %s, %s, %s, %s)",
+							   GetSQLValueString($row_user['id'], "int"),
+							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+							   GetSQLValueString($username, "text"),
+							   GetSQLValueString($_POST['brewerAHA'], "text"),
+							   GetSQLValueString($prefix, "text"));
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		}
 		
 		
 		//echo $insertSQL;
@@ -315,7 +334,6 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
   		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   		header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
-		
 	  } // end if ($filter == "admin")
 	}
   }

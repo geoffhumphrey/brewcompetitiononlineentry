@@ -316,7 +316,28 @@ if ($action == "add") {
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($_POST['brewerAHA'], "int"),
 						   GetSQLValueString($_POST['brewerDropOff'], "int")
-						   );
+			);
+			
+			// only if added by an admin.
+			if((NHC) && ($section == "admin")) {
+			$updateSQL =  sprintf("INSERT INTO nhcentrant (
+			uid, 
+			firstName, 
+			lastName, 
+			email,
+			AHAnumber,
+			regionPrefix
+			) 
+			VALUES 
+			(%s, %s, %s, %s, %s, %s)",
+							   GetSQLValueString($_POST['uid'], "int"),
+							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
+							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+							   GetSQLValueString($_POST['brewerEmail'], "text"),
+							   GetSQLValueString($_POST['brewerAHA'], "text"),
+							   GetSQLValueString($prefix, "text"));
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			}
 		}
 		
 		else {

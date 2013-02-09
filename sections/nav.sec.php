@@ -25,7 +25,7 @@ if (strstr($section,"step")) { ?>
   <li><?php if ($section != "list") { ?><a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li>
   <?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
-  <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>/index.php?section=admin" onclick="<?php echo $base_url; ?>/index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');">Admin</a></div></li>
+  <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>/index.php?section=admin" onclick="<?php echo $base_url; ?>/index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');"><?php if ($section == "admin") echo "<strong>Admin</strong>"; else echo "Admin"; ?></a></div></li>
 <?php } ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
   <li><?php sessionAuthenticateNav(); ?></li>

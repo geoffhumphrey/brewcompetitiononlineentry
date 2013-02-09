@@ -291,7 +291,7 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
 <?php if (NHC) { 
 
 // Custom code for AHA - possiblity of inclusion in a future version
-$query_clubs = "SELECT * FROM nhcClubs ORDER BY IDClub ASC";
+$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";
 $clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
 $row_clubs = mysql_fetch_assoc($clubs);
 
@@ -301,7 +301,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
       <td class="data" colspan="3">
       <select name="brewerClubs" id="brewerClubs">
       <?php do { ?>
-      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if (($msg > 0) && ($row_clubs['ClubName'] == $_COOKIE['brewerClubs'])) echo "SELECTED"; if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
+      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if (($msg > 0) && ($row_clubs['ClubName'] == $_COOKIE['brewerClubs'])) echo "SELECTED"; if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; if (($section == "register") && ($row_clubs['ClubName'] == "***NONE***")) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
       <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
       </select>
       </td>

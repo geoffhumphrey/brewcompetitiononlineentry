@@ -94,7 +94,7 @@ if ($go == "participants") {
 		$Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
 		
 		if (NHC) {
-			$deleteNHCEntrant = sprintf("DELETE FROM nhcEntrant WHERE uid='%s' AND regionPrefix='%s'", $row_delete_brewer['id'],$prefix);
+			$deleteNHCEntrant = sprintf("DELETE FROM nhcentrant WHERE uid='%s' AND regionPrefix='%s'", $row_delete_brewer['id'],$prefix);
 			mysql_select_db($database, $brewing);
 			$Result = mysql_query($deleteNHCEntrant, $brewing) or die(mysql_error());
 		}
