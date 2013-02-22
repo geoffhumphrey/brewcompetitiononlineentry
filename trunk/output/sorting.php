@@ -34,7 +34,14 @@ body {
 -->
 </style>
 </head>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script>
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 

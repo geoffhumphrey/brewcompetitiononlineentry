@@ -18,7 +18,7 @@ if (NHC) {
 	// Email in the nhcentrants table. They have already been warned about its existance. Redirect.
 	if ($totalRows_user_exists > 0) {
 		//echo $totalRows_user_exists."<br>";
-		header(sprintf("Location: %s", "http://www.brewingcompetition.com/index.php?msg=5"));
+		header(sprintf("Location: %s", $nhc_landing_url."/index.php?msg=5"));
 		exit();
 	}
 	

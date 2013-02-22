@@ -41,7 +41,7 @@ $count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEnt
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($view == "name") { ?>
-			"aaSorting": [[0,'asc'],[2,'asc'],[4,'asc'],[5,'asc']],
+			"aaSorting": [[0,'asc'],[2,'asc'],[5,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "table") { ?>

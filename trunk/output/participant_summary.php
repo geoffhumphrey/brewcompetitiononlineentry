@@ -31,7 +31,14 @@ $total_entries_judged = get_entry_count('received');
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script> 
 <div id="content">
 <?php do { 
 // Check for Entries
@@ -64,6 +71,7 @@ if ($totalRows_log > 0) { ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -73,6 +81,7 @@ if ($totalRows_log > 0) { ?>
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="5%">Entry #</th>
+        <th class="dataHeading bdr1B" width="5%">Judging #</th>
         <th class="dataHeading bdr1B" width="25%">Entry Name</th>
         <th class="dataHeading bdr1B">Style</th>
         <th class="dataHeading bdr1B" width="5%">Score</th>
@@ -83,6 +92,7 @@ if ($totalRows_log > 0) { ?>
     <?php do { ?>
     <tr>
     	<td class="bdr1B_gray"><?php echo sprintf("%04s",$row_log['id']); ?></td>
+        <td class="data bdr1B_gray"><?php echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']); ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'] ?></td>
         <td class="data bdr1B_gray"><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>

@@ -48,7 +48,14 @@ echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " f
 } 
 else {
 ?>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script>
 <?php 
 // Use the following if not using queued judging - delinieates by flight and round
  if ($row_judging_prefs['jPrefsQueued'] == "N") {

@@ -10,7 +10,8 @@ include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
-
+if (NHC) $totalRows_log = $totalRows_entry_count;
+else $totalRows_log = $totalRows_log;
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
@@ -119,7 +120,9 @@ if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $
 if ($section != "admin") { if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); }
 ?>
 <h2>Register</h2>
-<?php if (($registration_open < "2") && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) { ?>
+<?php
+if ((($registration_open < 2) || ($judge_window_open < 2)) && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open))) { 
+?>
 <p>Entry into our competition is conducted completely online.
 	<ul>
 		<?php if (!NHC) { ?>
@@ -263,15 +266,15 @@ if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>
   <td class="dataLabel">Drop-Off Location:</td>
   <td class="data">
   <select name="brewerDropOff">
+    <option value="0">I'm Shipping My Entries</option> 
+  	<option disabled="disabled">-------------</option>
     <?php 
 	include (DB.'dropoff.db.php');
 	if ($totalRows_dropoff > 0) {
 	do { ?>
     <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
     <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
-    <option disabled="disabled">-------------</option>
     <?php } ?>
-    <option value="0">I'm Shipping My Entries</option>
   </select>
   </td>
   <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
@@ -301,7 +304,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
       <td class="data" colspan="3">
       <select name="brewerClubs" id="brewerClubs">
       <?php do { ?>
-      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if (($msg > 0) && ($row_clubs['ClubName'] == $_COOKIE['brewerClubs'])) echo "SELECTED"; if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; if (($section == "register") && ($row_clubs['ClubName'] == "***NONE***")) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
+      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php	if (($msg > 0) && ($row_clubs['ClubName'] == $_COOKIE['brewerClubs'])) echo "SELECTED"; if (($action == "edit") && ($row_brewer['brewerClubs'] == $row_clubs['ClubName'])) echo "SELECTED"; if (($action == "default") && ($row_clubs['ClubName'] == "***NONE***")) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
       <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
       </select>
       </td>

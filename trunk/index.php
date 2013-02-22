@@ -78,6 +78,17 @@ $tz = date_default_timezone_get();
 // Check for Daylight Savings Time (DST) - if true, add one hour to the offset
 $bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
 else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
+
+$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
+$msie_key = array_search('MSIE', $ua_array);
+if($msie_key !== false) { // you found MSIE browser
+    $msie_version_key = $msie_key + 1;
+    $msie_version = intval($ua_array[$msie_version_key]);
+    if ($msie_version <= 7) {
+        $ua = "unsupported";
+    }
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -95,10 +106,10 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.tabs.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.position.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 <link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 <link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js"></script>
 	<script type="text/javascript">
@@ -126,7 +137,7 @@ else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
-<?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
+<?php if (isset($_SESSION["loginUsername"])) { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/menu.js"></script>
 <?php } 
 if ($section == "admin") { ?>
@@ -150,7 +161,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
   	</div>
   <?php  }
   // Check if registration open date has not passed. If so, display "registration not open yet" message.
-  if ($registration_open == "0") { 
+  if (($registration_open == "0") && ($ua != "unsupported")) { 
   	if ($section != "admin") {
   	?>
     <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
@@ -184,10 +195,10 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   }
   // Check if registration close date has passed. If so, display "registration end" message.
-  if ($registration_open == "2") {
+  if (($registration_open == "2") && ($ua != "unsupported")) {
 	if ((($section != "admin") || ($row_user['userLevel'] > "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
+    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
 	<?php }  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
@@ -197,6 +208,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
+	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "pay") {
@@ -207,7 +219,6 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			
 		if ($row_user['userLevel'] <= "1") {
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
-			if ($section == "register") include (SECTIONS.'register.sec.php');
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "user") 	include (SECTIONS.'user.sec.php');
@@ -215,8 +226,9 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 			}
 		}
   } 
-  if ($registration_open == "1") { // If registration is currently open
-  	if (open_limit(get_entry_count("default"),$row_prefs['prefsEntryLimit'],$registration_open)) { 
+  if (($registration_open == "1") && ($ua != "unsupported")) { // If registration is currently open
+  	if ((NHC) && ($section == "default")) echo "<div class='error'>".$totalRows_log." of ".$row_prefs['prefsEntryLimit']." entries have been logged for this region.</div>";
+  	if (open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) { 
 	
 	$query_entry_limit = "SELECT brewUpdated FROM $brewing_db_table ORDER BY brewUpdated DESC LIMIT 1";
 	$entry_limit = mysql_query($query_entry_limit, $brewing) or die(mysql_error());
@@ -247,6 +259,12 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 	}
   } // End registration date check.
+
+  if ($ua == "unsupported") { 
+  	echo "<div class='error'>Unsupported browser.</div><p>Your version of Internet Explorer, as detected by our scripting, is not supported by "; if (NHC) 	echo "the NHC online registration system."; else echo "BCOE&amp;M.</p>"; echo "<p>Please <a href='http://windows.microsoft.com/en-US/internet-explorer/download-ie'>download and install the latest version</a> for your operating system. Alternatively, you can use the latest version of another browser (<a href='http://www.google.com/chrome'>Chrome</a>, <a href='http://www.mozilla.org/en-US/firefox/new/'>Firefox</a>, <a href='http://www.apple.com/safari/'>Safari</a>, etc.).</p>"; 
+  	echo "<p>The information provided by your browser and used by our script is: ".$_SERVER['HTTP_USER_AGENT']."</p>";
+  }
+  
   if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
   <?php if ($section == "admin") { ?>
   <div id="header">	

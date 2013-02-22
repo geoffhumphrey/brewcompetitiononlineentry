@@ -86,11 +86,10 @@ http://www.tinybutstrong.com/
   <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
   <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
 </ul>
-
+<div>
 <h2>Recipe</h2>
-
+[onshow_b;block=div;when [var.totalFermentables]!='0']
 <h3>Grains and Fermentables</h3>
-
 <table>
   <tr>
     <th>Amount</th>
@@ -109,9 +108,10 @@ http://www.tinybutstrong.com/
     <td>[extracts.name]</td>
   </tr>
 </table>
-
+</div>
+<div>
+[onshow_b;block=div;when [var.totalHops]!='0']
 <h3>Hops</h3>
-
 <table>
   <tr>
     <th>Amount (oz)</th>
@@ -128,11 +128,15 @@ http://www.tinybutstrong.com/
     <td>[hops.minutes]</td>
   </tr>
 </table>
-
+</div>
+<div>
+[onshow_b;block=div;when [var.brewing_info.brewYeast]!='']
 <h3>Yeast</h3>
 
 <p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
-
+</div>
+<div>
+[onshow_b;block=div;when [var.brewing_info.brewOG]!='']
 <h3>Processes</h3>
 
 <ul>
@@ -143,6 +147,9 @@ http://www.tinybutstrong.com/
 <p>Fermented at [onshow.brewing_info.brewPrimaryTemp.f]&deg;F for [onshow.brewing_info.brewPrimary]
 days and [onshow.brewing_info.brewSecondaryTemp.f]&deg;F for [onshow.brewing_info.brewSecondary]
 days.</p>
+</div>
+<div>
+[onshow_b;block=div;when [var.totalMash]!='0']
 <table>
   <tr>
     <th width="40%">Mash temperature</th>
@@ -153,8 +160,8 @@ days.</p>
     <td>[mashSteps.minutes]</td>
   </tr>
 </table>
-<br style="page-break-after:always;">
-<br />
+</div>
+<div style="page-break-after:always;"></div>
 <a name="labels" id="labels"></a>
 <h1>Bottle Labels</h1>
 <table align="center" class="bottleLabel">

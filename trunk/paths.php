@@ -21,7 +21,9 @@ define('IMAGES',ROOT.'images'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 define('MODS',ROOT.'mods'.DIRECTORY_SEPARATOR);
 define('NHC',TRUE); // constant for specialized NHC functionality. Set to FALSE for general release.
+define('HTTPS',FALSE); // constant for using https:// (SSL).
 require(CONFIG.'config.php');
 $php_version = phpversion();
 $current_page = $base_url."/index.php?".$_SERVER['QUERY_STRING']; 
+$nhc_landing_url = "http://www.brewingcompetition.com";
 ?>

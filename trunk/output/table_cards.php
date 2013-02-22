@@ -42,7 +42,14 @@ else {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 ?>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script>
 <?php if ($id == "default") { ?>
 
     <?php do { 
