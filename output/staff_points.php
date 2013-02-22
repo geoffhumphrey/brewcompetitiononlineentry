@@ -498,7 +498,14 @@ if ($view == "default") { // printing from browser ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
 </head>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script>
 <div id="content">
 	<div id="content-inner">
     <div id="header">	

@@ -70,7 +70,7 @@ else
 	You can even pay your entry fees online if you wish.
 	<?php } ?></p>
 <?php } 
-if (($registration_open == "2") || (open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open))) include('reg_closed.sec.php');
+if (($registration_open == "2") || (open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open))) include('reg_closed.sec.php');
 else include('reg_open.sec.php');
 // echo "Today: ".strtotime("now")."<br>"; 
 // echo "Deadline: ".strtotime($row_contest_info['contestRegistrationDeadline'])."<br>";

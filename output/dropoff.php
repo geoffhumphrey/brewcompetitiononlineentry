@@ -44,7 +44,14 @@ require(DB.'dropoff.db.php');
 <!-- jquery plugin - required for use with DataTables, FancyBox, DatePicker, TimePicker etc. -->
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
 </head>
-<body onload="javascript:window.print()">
+<body>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',200);
+</script>
 <?php if ($section == "default") { ?>
 <div id="content">
 	<div id="content-inner">

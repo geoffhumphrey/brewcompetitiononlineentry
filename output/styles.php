@@ -91,33 +91,33 @@ else {
     <th class="dataLabel data bdr1B">Bitterness Range</th>
     <th class="dataLabel data bdr1B">Color Range</th>
   </tr>
-  <tr bgcolor="#ddd">
-  	<td class="data-left" nowrap="nowrap">
+  <tr>
+  	<td class="data-left" nowrap="nowrap" style="background-color:#ddd;">
   	<?php 
 						  if ($row_styles['brewStyleOG'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleOG'] != "") { echo $row_styles['brewStyleOG']." &ndash; ".$row_styles['brewStyleOGMax']; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data" nowrap="nowrap">
+    <td class="data" nowrap="nowrap" style="background-color:#ddd;">
 	<?php 
 						  if ($row_styles['brewStyleFG'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleFG'] != "") { echo $row_styles['brewStyleFG']." &ndash; ".$row_styles['brewStyleFGMax']; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data" nowrap="nowrap">
+    <td class="data" nowrap="nowrap" style="background-color:#ddd;">
 	<?php 
 						  if ($row_styles['brewStyleABV'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleABV'] != "" ) { echo $row_styles['brewStyleABV']."% &ndash; ".$row_styles['brewStyleABVMax']."%"; } 
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data" nowrap="nowrap">
+    <td class="data" nowrap="nowrap" style="background-color:#ddd;">
 	<?php 
 						  if ($row_styles['brewStyleIBU'] == "")  { echo "Varies"; }
 						  elseif ($row_styles['brewStyleIBU'] == "N/A") { echo "N/A"; }
 						  elseif ($row_styles['brewStyleIBU'] != "") { echo ltrim($row_styles['brewStyleIBU'], "0")." &ndash; ".ltrim($row_styles['brewStyleIBUMax'], "0")." IBU"; }
 						  else { echo "&nbsp;"; }
 						  ?>    </td>
-    <td class="data">
+    <td class="data" style="background-color:#ddd;">
 	<?php
 						  if ($row_styles['brewStyleSRM'] == "") { echo "Varies"; }
 						  elseif ($row_styles['brewStyleSRM'] == "N/A") { echo "N/A"; }

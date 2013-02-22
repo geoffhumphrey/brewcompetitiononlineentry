@@ -25,13 +25,19 @@ include (DB.'entries.db.php');
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 $total_entry_fees = total_fees($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 
-
 $total_paid_entry_fees = total_fees_paid($row_contest_info['contestEntryFee'], $row_contest_info['contestEntryFee2'], $row_contest_info['contestEntryFeeDiscount'], $row_contest_info['contestEntryFeeDiscountNum'], $row_contest_info['contestEntryCap'], $row_contest_info['contestEntryFeePasswordNum'], $bid, $filter);
 $total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
 $total_not_paid = total_not_paid_brewer($row_user['id']);
 
+$unconfirmed = entries_unconfirmed($row_user['id']);
+
+if (($row_prefs['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) echo "<div class='error'>You cannot pay for your entries because one or more of your entries is unconfirmed.</div><p>Click &ldquo;My Info and Entries&rdquo; above to review your unconfirmed entries.</p>"; 
+
+else {
+
 if ($total_entry_fees > 0) { 
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data.<br />Unconfirmed entry data will be deleted every 24 hours.</div>";
+if (($row_prefs['prefsPayToPrint'] == "N") && ($unconfirmed > 0)) echo "<div class='error'>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data.<br />Unconfirmed entry data will be deleted every 24 hours.</div>";
+
 ?>
 
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/pay_my_fees.html" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
@@ -144,5 +150,6 @@ else $payment_amount = number_format($total_to_pay, 2);
 </form>
 <?php } ?>
 <?php } 
+}
 if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

@@ -1,9 +1,10 @@
 <?php
-$totalRows_entry_count = total_paid_received($go,"default");
+if(NHC) $totalRows_entry_count = total_paid_received($go,0);
+else $totalRows_entry_count = total_paid_received($go,"default");
 if ($section == "list") { 
 	$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']); 
-	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' AND NOT brewPaid='1'"; 
-	$query_log_confirmed = "SELECT * FROM $brewing_db_table  WHERE brewBrewerID = '%s' AND brewConfirmed='1'";
+	$query_log_paid = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' AND NOT brewPaid='1'", $row_name['uid']); 
+	$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table  WHERE brewBrewerID = '%s' AND brewConfirmed='1'", $row_name['uid']);
 	}
 		
 elseif ($section == "pay") { 
@@ -12,6 +13,12 @@ elseif ($section == "pay") {
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 	}
 	
+elseif (($section == "brew") && ($action == "add")) {  
+	$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s'", $row_name['uid']); 
+	$query_log_paid = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1'", $row_name['uid']); 
+	$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'", $row_name['uid']);
+	}
+
 elseif (($section == "brew") && ($action == "edit")) {  
 	$query_log = "SELECT * FROM $brewing_db_table WHERE id = '$id'"; 
 	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
@@ -24,6 +31,7 @@ elseif (($section == "admin") && ($go == "entries") && ($filter == "default") &&
 	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'";
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 	}
+	
 elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "paid")) { 
 	$query_log = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'";
 	if (($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_log .= " LIMIT $start, $display";
@@ -59,7 +67,8 @@ elseif (($section == "admin") && ($go == "entries") && ($filter == "default") &&
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewConfirmed='1'";
 	}
 else { 
-	$query_log = "SELECT * FROM $brewing_db_table";
+	if (isset($_SESSION['loginUsername'])) $query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $row_name['uid']);
+	else $query_log = "SELECT * FROM $brewing_db_table";
 	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 	}
@@ -80,5 +89,7 @@ $log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error(
 $row_log_confirmed = mysql_fetch_assoc($log_confirmed);
 $totalRows_log_confirmed = mysql_num_rows($log_confirmed);
 
+if ($row_prefs['prefsUserEntryLimit'] != "") $remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
+else $remaining_entries = 1;
 
 ?>

@@ -17,12 +17,13 @@ if (strstr($section,"step")) { ?>
   <?php if (get_contact_count() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
-  <?php if (($registration_open < "2") && ($registration_open >= "1")  && (!open_limit($totalRows_log,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
+  <?php if (($registration_open == 1) && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php } ?>
   <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?> 
   <?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
-  <li><?php if ($section != "list") { ?><a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">My Info and Entries</a><?php } else { ?>My Info and Entries<?php } ?></li>
+  
+  <li><div class="menuBar"><a class="menuButton" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onclick="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onmouseover="buttonMouseover(event, 'myInfoMenu');"><?php if ($section == "list") echo "<strong>My Info and Entries</strong>"; else echo "My Info and Entries"; ?></a></div></li>
   <?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>/index.php?section=admin" onclick="<?php echo $base_url; ?>/index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');"><?php if ($section == "admin") echo "<strong>Admin</strong>"; else echo "Admin"; ?></a></div></li>
@@ -30,6 +31,22 @@ if (strstr($section,"step")) { ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
   <li><?php sessionAuthenticateNav(); ?></li>
 </ul>
+<?php } ?>
+<?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?> 
+<div id="myInfoMenu" class="menu" onmouseover="menuMouseover(event)">
+	<a class="menuItem" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">Info and List of Entries</a>
+    <a class="menuItem"  href="<?php echo $base_url; ?>/index.php?<?php if ($row_brewer['id'] != "") echo "section=brewer&amp;action=edit&amp;id=".$row_brewer['id']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
+    <?php if (!NHC) { ?>
+    <a class="menuItem"  href="<?php echo $base_url; ?>/index.php?section=user&amp;action=username&amp;id=<?php echo $row_user['id']; ?>">Change Your Email Address</a>
+	<?php } ?>
+    <a class="menuItem"  href="<?php echo $base_url; ?>/index.php?section=user&amp;action=password&amp;id=<?php echo $row_user['id']; ?>">Change Your Password</a>
+    <?php if ($remaining_entries > 0) { ?>
+	<a class="menuItem" href="<?php if ($row_user['userLevel'] <= "1") echo "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; else echo "index.php?section=brew&amp;action=add"; ?>">Add an Entry</a>
+    <?php } ?>
+    <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>
+    <a class="menuItem" href="<?php echo build_public_url("beerxml","default","default",$sef,$base_url); ?>">Import Entries Using BeerXML</a>
+    <?php } ?>
+</div>
 <?php } ?>
 <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>
 <div id="adminMenu" class="menu" onmouseover="menuMouseover(event)">

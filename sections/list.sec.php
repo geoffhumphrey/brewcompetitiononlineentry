@@ -25,7 +25,7 @@ if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <?php } ?>
-<p>Thank you for entering the <?php echo $row_contest_info['contestName'].", ".$row_name['brewerFirstName']."."; if ($totalRows_log > 0) { ?> <a href="#list">View your entries</a>.<?php } ?></p>
+<p>Thank you for entering the <?php echo $row_contest_info['contestName'].", ".$row_name['brewerFirstName']."."; if (($totalRows_log > 0) && ($action != "print")) { ?> <a href="#list">View your entries</a>.<?php } ?></p>
 <h2>Info</h2>
 <?php 
 if ($action != "print") { ?>
@@ -46,7 +46,7 @@ if ($action != "print") { ?>
 <?php } 
 //echo "Query: ".$query_brewer;
 ?>
-<table class="dataTable">
+<table class="dataTableCompact">
   	<tr>
     	<td class="dataLabel" width="5%">Name:</td>
     	<td class="data"><?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></td>
@@ -107,8 +107,8 @@ if ($action != "print") { ?>
   	<?php 
 	if (($row_brewer['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   	<tr>
-    	<td class="dataLabel">Judging Availability<br />Locations:</td>
-    	<td class="data">
+    	<td class="dataLabel">Judging Availability:</td>
+    	<td>
         <script type="text/javascript" language="javascript">
 			 $(document).ready(function() {
 				$('#sortable_judge').dataTable( {
@@ -125,7 +125,7 @@ if ($action != "print") { ?>
 					} );
 				} );
 		</script> 
-    	<table class="dataTable bdr1" id="sortable_judge">
+    	<table id="sortable_judge" class="dataTable" style="width:50%;float:left;">
         <thead>
         <tr>
         	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
@@ -189,7 +189,7 @@ if ($action != "print") { ?>
     	<td class="data"><?php  if ($row_brewer['brewerJudgeID'] != "0") echo $row_brewer['brewerJudgeID']; else echo "N/A"; ?></td>
 	</tr>
     <tr>
-      <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
+      <td width="10%" class="dataLabel">Mead Judge Endorsement:</td>
       <td colspan="2" class="data"><?php echo $row_brewer['brewerJudgeMead']; ?></td>
     </tr>
   	<tr>
@@ -206,7 +206,7 @@ if ($action != "print") { ?>
         </td>
   	</tr>
   	<tr>
-    	<td class="dataLabel">Catagories Not Preferred:</td>
+    	<td class="dataLabel">Categories Not Preferred:</td>
     	<td class="data">
         <?php 
 		if ($row_brewer['brewerJudgeDislikes'] != "") echo rtrim(display_array_content(style_convert($row_brewer['brewerJudgeDislikes'],4),2),", "); 
@@ -222,8 +222,8 @@ if ($action != "print") { ?>
   	</tr>
   	<?php  if (($row_brewer['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
   	<tr>
-    	<td class="dataLabel">Stewarding Availability<br />Locations:</td>
-    	<td class="data">
+    	<td class="dataLabel">Stewarding Availability:</td>
+    	<td>
     	<script type="text/javascript" language="javascript">
 			 $(document).ready(function() {
 				$('#sortable_steward').dataTable( {
@@ -239,8 +239,8 @@ if ($action != "print") { ?>
 						]
 					} );
 				} );
-		</script> 
-    	<table class="dataTable bdr1" id="sortable_steward">
+		</script>
+        <table id="sortable_steward" class="dataTable"  style="width:50%;float:left;">
         <thead>
         <tr>
         	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
@@ -280,16 +280,10 @@ if ($action != "print") { ?>
   <?php } ?>
   <?php } ?>
 </table>
-<?php } 
-
-$remaining_entries = ($row_prefs['prefsUserEntryLimit'] - $totalRows_log);
-
-?>
+<?php } ?>
 <h2>Entries</h2>
-
 <?php if (($totalRows_log > 0) && ($registration_open > 0)) { 
-
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. For each unconfirmed entry below marked in yellow and with a <span class='icon'><img src='".$base_url."/images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours.</div>";
+if (entries_unconfirmed($row_user['id']) > 0) { echo "<div class='error'>You have unconfirmed entries. For each unconfirmed entry below marked in yellow and with a <span class='icon'><img src='".$base_url."/images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours."; if ($row_prefs['prefsPayToPrint'] == "Y") echo " You CANNOT pay for your entries until all entries are confirmed."; echo "</div>"; }
 
 if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have entries that require you to define special ingredients. For each entry below marked in orange and with a <span class='icon'><img src='".$base_url."/images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
 ?>
@@ -301,7 +295,7 @@ if (entries_no_special($row_user['id']) > 0) echo "<div class='error2'>You have 
 <?php } ?>
 <?php if ($action != "print") { ?>
 <?php if (($registration_open == "1") && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
-<?php if (($row_prefs['prefsUserEntryLimit'] != "") && (judging_date_return() > 0)) { ?>
+<?php if (($row_prefs['prefsUserEntryLimit'] != "") && ($registration_open == "1")) { ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
         <span class="icon"><img src="<?php echo $base_url; ?>/images/information.png"  border="0" alt="Entry Limit" title="Entry Limit" /></span><?php if ($remaining_entries > 0) { ?>You have <strong><?php echo readable_number($remaining_entries)." (".$remaining_entries.")"; ?></strong> <?php if ($remaining_entries == 1) echo "entry"; else echo "entries"; ?> left before you reach the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit'])." (".$row_prefs['prefsUserEntryLimit'].")"; if ($row_prefs['prefsUserEntryLimit'] > 1) echo " entries"; else echo " entry"; ?> per participant in this competition.<?php } if ($totalRows_log == $row_prefs['prefsUserEntryLimit']) { ?><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit'])." (".$row_prefs['prefsUserEntryLimit'].")"; if ($row_prefs['prefsUserEntryLimit'] > 1) echo " entries"; else echo " entry"; ?>  per participant in this competition.</strong><?php } ?>
@@ -332,7 +326,7 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo readable_number($total_not_paid); ?> <strong>unpaid, confirmed</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees; if ((NHC) && ($row_brewer['brewerDiscount'] != "Y")) echo " (as a non-AHA member)"; echo ". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?>
+		<span class="icon"><img src="<?php echo $base_url; ?>/images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo readable_number($total_not_paid); ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry. "; else echo "entries. "; ?> Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees; if ((NHC) && ($row_brewer['brewerDiscount'] != "Y")) echo " (as a non-AHA member)"; echo ". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?>
 	</span>
     <?php if (($row_brewer['brewerDiscount'] == "Y") && ($row_contest_info['contestEntryFeePasswordNum'] != "")) { ?>
 	<span class="adminSubNav">
@@ -342,13 +336,22 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 </div>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
-        <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" border="0" alt="Entry Fees" title="Entry Fees"></span><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay Your Fees</a><?php if ($row_prefs['prefsPayToPrint'] == "Y") echo " <em>** Please note that you will not be able to print your entry documentation until you pay for your entries.</em>"; ?><?php } elseif ($totalRows_log == 0) echo ""; else { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
+        <?php if (($total_not_paid > 0) && ($row_contest_info['contestEntryFee'] > 0)) { ?>
+        <?php if (($row_prefs['prefsPayToPrint'] == "Y") && ($totalRows_log_confirmed == $totalRows_log)) { ?>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" border="0" alt="Entry Fees" title="Entry Fees"></span><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay Your Fees</a><?php if ($row_prefs['prefsPayToPrint'] == "Y") echo " <em>** Please note that you will not be able to print your bottle labels and entry forms until you pay for your entries.</em>"; ?>
+        <?php } ?>
+        <?php if (($row_prefs['prefsPayToPrint'] == "Y") && ($totalRows_log_confirmed != $totalRows_log)) { ?>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" border="0" alt="Entry Fees" title="Entry Fees"></span><span class="red">You have unconfirmed entries. <strong>You cannot pay for your entries until ALL are confirmed</strong>.</span> Confirm each entry by clicking its corresponding &ldquo;Edit&rdquo; link.
+        <?php } ?>
+		<?php } elseif ($totalRows_log == 0) echo ""; else { ?>
+        <span class="icon"><img src="<?php echo $base_url; ?>/images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!
+		<?php } ?>
     </span>
 </div>
 <?php if (NHC) { ?>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" border="0" alt="NHC Paid" title="NHC Paid"></span>Your entries are not completely entered until the entry fees have been paid.  Entry fees not paid within 24 hours of registration will be deleted from the competition database.
+    	<span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" border="0" alt="NHC Paid" title="NHC Paid"></span>Your entries are not completely entered until they have been confirmed and entry fees have been paid.  Entries not paid within 24 hours of registration will be deleted from the competition database.
     </span>
 </div>
 <?php } ?>
@@ -375,7 +378,7 @@ if (($totalRows_log > 0) && ($registration_open > 0)) { ?>
 				null,
 				null,
 				<?php } ?>
-				<?php if (judging_date_return() > 0)  { ?>
+				<?php if (($registration_open == "1") || (($registration_open == "2") && (judging_date_return() > 0))) { ?>
 				{ "asSorting": [  ] }
 				<?php } ?>
   				<?php } ?>
@@ -399,7 +402,7 @@ if (($totalRows_log > 0) && ($registration_open > 0)) { ?>
   	<th class="dataHeading bdr1B">Winner?</th>
   	<?php } ?>
     <?php if ($action != "print") { ?>
-    <?php if (judging_date_return() > 0) { ?>
+    <?php if (($registration_open == "1") || (($registration_open == "2") && (judging_date_return() > 0))) { ?>
   	<th class="dataHeading bdr1B">Actions</th>
     <?php } ?>
   	<?php } ?>
@@ -447,8 +450,9 @@ if (($totalRows_log > 0) && ($registration_open > 0)) { ?>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) { if ($action != "print") echo "<img src='".$base_url."/images/tick.png'>"; else echo "Y"; }?></td>
     <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>"><?php if ($action == "print") echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); else echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_prefs['prefsWinnerMethod']); ?></td>
     <?php } if ($action != "print") { ?>
-    <?php if (judging_date_return() > 0) { ?>
-  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; if ($row_log['brewConfirmed'] == 0) echo "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>&nbsp;&nbsp;<span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>&nbsp;&nbsp;<?php if (pay_to_print($row_prefs['prefsPayToPrint'],$row_log['brewPaid'])) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a><?php } ?>
+    <?php if (($registration_open == "1") || (($registration_open == "2") && (judging_date_return() > 0))) {  ?>
+  <td class="dataList<?php if ($action == "print") echo " bdr1B"; ?>" nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></span><a href="<?php echo $base_url; ?>/index.php?section=brew&amp;action=edit&amp;id=<?php echo $row_log['id']; if ($row_log['brewConfirmed'] == 0) echo "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; else echo "&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']; ?>" title="Edit <?php echo $row_log['brewName']; ?>">Edit</a>&nbsp;&nbsp;<?php if ((NHC) && ($row_log['brewPaid'] != 1)) { ?>
+  <span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>?"></span><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete your entry called <?php echo str_replace("'", "\'", $row_log['brewName']); ?>? This cannot be undone.');" title="Delete <?php echo $row_log['brewName']; ?>?">Delete</a>&nbsp;&nbsp;<?php } if (pay_to_print($row_prefs['prefsPayToPrint'],$row_log['brewPaid'])) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>"></span><a id="modal_window_link" href="<?php echo $base_url; ?>/output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_brewer['uid']; ?>" title="Print Entry Forms and Bottle Labels for <?php echo $row_log['brewName']; ?>">Print Entry Forms and Bottle Labels</a><?php } ?>
   </td>
   <?php } ?>
   <?php } ?>

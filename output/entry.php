@@ -79,13 +79,13 @@ if ($brewing_info['brewCarbonationMethod'] == "N") {
 // Various mead and cider info
 switch ($brewing_info['brewMead1']) {
   case "Still":
-    $brewing_info['sparkling'] = 'no';
+    $brewing_info['sparkling'] = 'still';
     break;
   case "Petillant":
     $brewing_info['sparkling'] = 'petillant';
     break;
   case "Sparkling":
-    $brewing_info['sparkling'] = 'yes';
+    $brewing_info['sparkling'] = 'sparkling';
     break;
   default:
     $brewing_info['sparkling'] = '';
@@ -96,7 +96,7 @@ switch ($brewing_info['brewMead2']) {
     $brewing_info['sweetness'] = 'dry';
     break;
   case "Semi-Sweet":
-    $brewing_info['sweetness'] = 'semiSweet';
+    $brewing_info['sweetness'] = 'semi-sweet';
     break;
   case "Sweet":
     $brewing_info['sweetness'] = 'sweet';
@@ -137,7 +137,8 @@ if ($row_prefs['prefsEntryForm'] == "N") {
 	
 	if (strstr($prefix,"region")) {  // Only for NHC - comment out in general release
 		include (MODS.'nhc_region.php');
-		$region = nhc_region($prefix,1);
+		$region_city = nhc_region($prefix,1);
+		$region = nhc_region($prefix,3);
 	}
 	
 	// Barcode for nhc-entry.html template
@@ -181,7 +182,8 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 //
 
 	$totalFermentables=0;
-	
+	$totalHops=0;
+	$totalMash=0;
 	// Grains
 	$brewing_info['grains']=array();
 	for ($i=1; $i <= 9; $i++) {
@@ -276,7 +278,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 		$brewing_info['hops'][$i]['minutes']=$brewing_info['brewHops'.$i.'Time'];
 		$brewing_info['hops'][$i]['use']=$brewing_info['brewHops'.$i.'Use'];
 		$brewing_info['hops'][$i]['form']=$brewing_info['brewHops'.$i.'Form'];
-	
+		$totalHops+=$brewing_info['hops'][$i]['alphaAcid'];
 		// Metric/US conversion
 		if ($row_prefs['prefsWeight1'] == "grams") {
 		  $brewing_info['hops'][$i]['weight']['g'] = $brewing_info['brewHops'.$i.'Weight'];
@@ -296,7 +298,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	  if ($brewing_info['brewMashStep'.$i.'Temp'] != 0) {
 		$brewing_info['mashSteps'][$i]['name']=$brewing_info['brewMashStep'.$i.'Name'];
 		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
-	
+		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];
 		// Metric/US conversion
 		if ($row_prefs['prefsTemp'] == "Celsius") {
 		  $brewing_info['mashSteps'][$i]['temp']['c'] = $brewing_info['brewMashStep'.$i.'Temp'];

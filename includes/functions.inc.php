@@ -139,7 +139,7 @@ function random_generator($digits,$method){
 	srand ((double) microtime() * 10000000);
 
 	//Array of alphabet
-	if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+	if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9");
 	if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
 	if ($method == "3") $input = array ("1","2","3","4");
 
@@ -361,7 +361,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		foreach ($user_id_1 as $id_1) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'",$prefix."brewing", $id_1);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$prefix."brewing", $id_1);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
@@ -412,7 +412,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	if (($bid != "default") && ($filter == "default")) { 
 	// Get each entrant's number of entries
 	mysql_select_db($database, $brewing);
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $bid);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_array($entries);
 		$totalRows_entries = $row_entries['count'];
@@ -477,7 +477,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		foreach ($user_id_1 as $id_1) {
 			// Get each entrant's number of entries
 			mysql_select_db($database, $brewing);
-			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$id_1,$filter);
+			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s'",$prefix."brewing",$id_1,$filter);
 			$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
@@ -894,12 +894,12 @@ function total_not_paid_brewer($bid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 
-	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
+	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $bid);
 	$all = mysql_query($query_all, $brewing) or die(mysql_error());
 	$row_all = mysql_fetch_assoc($all);
 	$totalRows_all = $row_all['count'];
 
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND brewConfirmed='1'", $prefix."brewing", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewPaid='1'", $prefix."brewing", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -915,7 +915,8 @@ function total_paid_received($go,$id) {
 	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
 	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
 	//if (($go == "entries") && ($id != "default")) $query_entry_count .= " WHERE brewCategorySort='$id'"; 
-	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
+	if ($id == 0)  $query_entry_count .= " WHERE brewPaid='1'";
+	elseif ($id > 0) $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	return $row['count'];
