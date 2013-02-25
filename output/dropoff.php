@@ -40,9 +40,9 @@ require(DB.'dropoff.db.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
-<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
 <!-- jquery plugin - required for use with DataTables, FancyBox, DatePicker, TimePicker etc. -->
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
 </head>
 <body>
 <script type="text/javascript">
@@ -60,8 +60,8 @@ setTimeout('selfPrint()',200);
 	</div><!-- end header -->
     <!-- BEGIN content -->
     <!-- For use with the DataTables jquery plugin -->
-    <link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
-    <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
+    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
     <script type="text/javascript" language="javascript">
     // The following is for demonstration purposes only. 
     // Complete documentation and usage at http://www.datatables.net
@@ -203,8 +203,8 @@ setTimeout('selfPrint()',200);
     <p><?php echo $row_dropoff['dropLocation']; ?></p>
     <p>Total Entries at this Location: <?php echo array_sum($location_count); ?></p>
     <!-- For use with the DataTables jquery plugin -->
-    <link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
-    <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
+    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
     <script type="text/javascript" language="javascript">
     // The following is for demonstration purposes only. 
     // Complete documentation and usage at http://www.datatables.net

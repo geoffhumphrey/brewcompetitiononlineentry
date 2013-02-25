@@ -6,33 +6,33 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 </h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">ack to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">ack to Admin Dashboard</a>
   	</span>
     <?php if  ($dbTable != "default") { ?>
 	<span class="adminSubNav">
-        <span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=archive">Back to Archives</a>
+        <span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Back to Archives</a>
      </span> 
 	<?php } ?>
     <?php if ($dbTable == "default") { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Back to Tables List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Back to Tables List</a>
     </span>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores">Back to Scores List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Back to Scores List</a>
     </span>
     <?php if ($action != "default") { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores_bos">Back to BOS Entries and Places List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Back to BOS Entries and Places List</a>
     </span>
 	<?php } ?>
     <?php if ($action == "default") { ?>
     <span class="adminSubNav">
-    <span class="icon"><img src="<?php echo $base_url; ?>/images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
+    <span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
 		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_2');">Enter/Edit...</a></div>
 		<div id="scoresMenu_bos_2" class="menu" onmouseover="menuMouseover(event)">
 		<?php do { 
 			if ($row_style_types_2['styleTypeBOS'] == "Y") { ?>
-			<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places - <?php echo $row_style_types_2['styleTypeName']; ?></a>
+			<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places - <?php echo $row_style_types_2['styleTypeName']; ?></a>
 		<?php 
 			}
 		} while ($row_style_types_2 = mysql_fetch_assoc($style_types_2));
@@ -45,16 +45,16 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/note.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">View Accepted Styles</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/note.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">View Accepted Styles</a>
     </span>
 	<span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/note_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/note_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a>
     </span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/page.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">View Style Types</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/page.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">View Style Types</a>
     </span>
     <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/page_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/page_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a>
     </span>
 </div>
 <?php } if ($action == "default") { 
@@ -82,7 +82,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <span class="adminSubNav">
-<span class="icon"><img src="<?php echo $base_url; ?>/images/rosette_add.png" alt="Enter/Edit BOS Entries and Places" title="Enter/Edit BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></a></span>
+<span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit BOS Entries and Places" title="Enter/Edit BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></a></span>
 </span> 
 </div>
 <?php } ?>
@@ -184,7 +184,7 @@ $totalRows_tables = mysql_num_rows($tables_1);
 <?php } // end if ($action == "default") ?>
 
 <?php if ($action == "enter") { ?>
-<form name="scores" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
+<form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {

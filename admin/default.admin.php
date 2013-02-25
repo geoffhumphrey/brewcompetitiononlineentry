@@ -1,7 +1,7 @@
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/toggle.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php 
 /**
  * Module:      default.admin.php
@@ -195,7 +195,7 @@ function custom_modules($type,$method) {
 		$row_custom_mod = mysql_fetch_assoc($custom_mod);
 		$output = "";
 		do {
-			$output .= "<li><a ".$modal." href='".$base_url."/mods/".$row_custom_mod['mod_filename']."'>".$row_custom_mod['mod_name']."</a></li>";
+			$output .= "<li><a ".$modal." href='".$base_url."mods/".$row_custom_mod['mod_filename']."'>".$row_custom_mod['mod_name']."</a></li>";
 			//$output = $query_custom_mod;
 		} while ($row_custom_mod = mysql_fetch_assoc($custom_mod));
 		
@@ -243,13 +243,13 @@ if (($action != "print") && ($go != "default")) echo admin_help($go,$header_outp
     	<td colspan="6">As of <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?></td>
 	</tr>
     <tr>
-		<td class="dataLabel"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a> (Confirmed/Unconfirmed):</td>
+		<td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a> (Confirmed/Unconfirmed):</td>
         <td class="data"><?php echo $totalRows_log_confirmed."/".$entries_unconfirmed; ?></td>
         <?php if (!NHC) { ?>
 		<td class="dataLabel">Total Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees; ?></td>
         <?php } ?>
-        <td class="dataLabel"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Total Participants</a>:</td>
+        <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Total Participants</a>:</td>
         <td class="data"><?php echo get_participant_count('default'); ?></td>
 	</tr>
     <tr>
@@ -259,7 +259,7 @@ if (($action != "print") && ($go != "default")) echo admin_help($go,$header_outp
 		<td class="dataLabel">Total Paid Fees:</td>
         <td class="data"><?php echo $row_prefs['prefsCurrency'].$total_fees_paid; ?></td>
         <?php } ?>
-        <td class="dataLabel"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
+        <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
         <td class="data"><?php echo get_participant_count('judge'); ?></td>
 	</tr>
     <?php if (($row_contest_info['contestEntryFeePassword'] != "") && ($row_contest_info['contestEntryFeePasswordNum'] != "")) { ?>
@@ -284,7 +284,7 @@ if ($go == "default") { ?>
 <div id="outer">
 <p>Click the headings below to expand and collapse each category.</p>
 	<div class="menus">
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span>Help</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span>Help</h4>
         <div class="toggle_container">
         	<p class="admin_default_header">Quick Links</p>
             <?php if ($row_user['userLevel'] == "0") { ?>
@@ -315,70 +315,70 @@ if ($go == "default") { ?>
     		</ul>
         </div>
         <?php if (($row_prefs['prefsUseMods'] == "Y") && ($row_user['userLevel'] == "0")) { ?>
-        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick.png"  /></span>Custom Modules</h4>
+        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/brick.png"  /></span>Custom Modules</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods">Custom Modules</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods">Custom Modules</a></li>
             </ul>
             <p class="admin_default_header">Add</p>
 			<ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">A Custom Module</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">A Custom Module</a></li>
             </ul>
         </div>
         <?php } ?>
         <?php if ($row_user['userLevel'] == "0") { ?>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png"  /></span>Defining Preferences</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png"  /></span>Defining Preferences</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Define</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=preferences">Site Preferences</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Site Preferences</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a></li>
 			</ul>
 		</div>
         <?php } ?>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/wrench.png"  /></span>Preparing</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/wrench.png"  /></span>Preparing</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
             <?php if ($row_user['userLevel'] == "0") { ?>
 			<ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">Style Types</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>   
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Style Types</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>   
 			</ul>
             <ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">Custom Winner Categories</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Custom Winner Categories</a></li>
 			</ul>
             <?php } ?>
             <ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging">Judging Locations</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
-                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts">Competition Contacts</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Judging Locations</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
+                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Competition Contacts</a></li>
     			<?php if ($row_user['userLevel'] == "0") { ?>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
                 <?php } ?>
 			</ul>
             <p class="admin_default_header">Add</p>
             <?php if ($row_user['userLevel'] == "0") { ?>
 			<ul class="admin_default">
-   			 	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
-                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
+   			 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
+                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
 			</ul>
             <ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best&amp;action=add">A Custom Winning Category</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">A Custom Winning Category</a></li>
 			</ul>
             <?php } ?>
 			<ul class="admin_default">
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></li>
-                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></li>
+                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
                 <?php if ($row_user['userLevel'] == "0") { ?>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
                 <?php } ?>
 			</ul>
             <?php if ($row_user['userLevel'] == "0") { ?>
 			<p class="admin_default_header">Edit</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contest_info">Competition Info</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Competition Info</a></li>
 			</ul>
 			<p class="admin_default_header">Upload</p>
 			<ul class="admin_default">
@@ -387,73 +387,73 @@ if ($go == "default") { ?>
 			</ul>
             <?php } ?>
 		</div>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/note.png"  /></span>Entry and Data Gathering</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/note.png"  /></span>Entry and Data Gathering</h4>
 		<div class="toggle_container">
         	<?php if ($row_user['userLevel'] == "0") { ?>
 			<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">Style Types</a></li>
-                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Style Types</a></li>
+                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>
 			</ul>
             <?php } ?>
             <ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Participants</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a></li>
             </ul>
 			<ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging">Judging Locations</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Judging Locations</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a></li>
             </ul>
             <ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts">Competition Contacts</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Competition Contacts</a></li>
 			</ul>
 			<ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Drop-Off Locations</a></li>
                 <?php if ($row_user['userLevel'] == "0") { ?>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Sponsors</a></li>
                 <?php } ?>
 			</ul>
 			<p class="admin_default_header">Add</p>
             <?php if ($row_user['userLevel'] == "0") { ?>
 			<ul class="admin_default">
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">A Style Type</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
 			</ul>
             <?php } ?>
             <ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li></li>
    			 	<li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
             
             <ul class="admin_default">
-		      <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
+		      <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">A Judging Location</a></li>
             </ul>
             <ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add">A Competition Contact</a></li>
             </ul>
             <ul class="admin_default">
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff&amp;action=add">A Drop-Off Location</a></li>
                 <?php if ($row_user['userLevel'] == "0") { ?>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add">A Sponsor</a></li>
                 <?php } ?>
 			</ul>
 			<p class="admin_default_header">Assign</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
 			    <?php if ($row_user['userLevel'] == "0") { ?>
-                <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
+                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
                 <?php } ?>
 			</ul>
 		</div>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_refresh.png"  /></span>Sorting Received Entries</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_refresh.png"  /></span>Sorting Received Entries</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Participants</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a></li>
 			</ul>
             <!-- SIGNIFICANT performance issues if enabled
 			<ul class="admin_default">
@@ -463,8 +463,8 @@ if ($go == "default") { ?>
             -->
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=regiser">A Participant</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=regiser">A Participant</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 			    <li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
       <?php if (NHC) { ?>
@@ -475,10 +475,10 @@ if ($go == "default") { ?>
                 <div class="menuBar">
                 <a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'menu_generate');">Key Off Of... (Select One)</a>
                 <div id="menu_generate" class="menu" onmouseover="menuMouseover(event)">
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>/includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>/includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>/includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>/includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
                 </div>
                 </div>
                 </li>
@@ -487,12 +487,12 @@ if ($go == "default") { ?>
 			<p class="admin_default_header">Print</p>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
                 <!-- SIGNIFICANT performance issues if enabled
                 <li>For Category:</li>
 				<li><?php //echo style_choose($section,"default",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
                 -->
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;view=entry">All Categories</a> (Entry Numbers Only)</li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/sorting.php?section=admin&amp;go=default&amp;filter=default&amp;view=entry">All Categories</a> (Entry Numbers Only)</li>
                 <!--
                 <li>For Category (Entry Numbers Only):</li>
 				<li><?php //echo style_choose($section,"default",$action,$filter,"entry","output/sorting.php","thickbox"); ?></li>
@@ -500,7 +500,7 @@ if ($go == "default") { ?>
             </ul>
             <ul class="admin_default">
             	<li>Entry Number / Judging Number Cheat Sheets:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/sorting.php?section=admin&amp;go=cheat&amp;filter=default">All Categories</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/sorting.php?section=admin&amp;go=cheat&amp;filter=default">All Categories</a></li>
                 <!-- SIGNIFICANT performance issues if enabled
                 <li>For Category:</li>
 				<li><?php //echo style_choose($section,"cheat",$action,$filter,$view,"output/sorting.php","thickbox"); ?></li>
@@ -508,7 +508,7 @@ if ($go == "default") { ?>
             </ul>
 			<ul class="admin_default">
 				<li>Bottle Labels (Using <em>Entry</em> Numbers - Avery 5160):</li>
-			    <li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">All Categories</a></li>
+			    <li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">All Categories</a></li>
                 <!-- SIGNIFICANT performance issues if enabled
                 <li>For Category:</li>
 				<li><?php // echo style_choose($section,"entries","bottle-entry",$filter,$view,"output/labels.php","none"); ?></li>
@@ -516,7 +516,7 @@ if ($go == "default") { ?>
 			</ul>
             <ul class="admin_default">
 				<li>Bottle Labels (Using <em>Judging</em> Numbers - Avery 5160):</li>
-			    <li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
+			    <li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
                 <!-- SIGNIFICANT performance issues if enabled
                 <li>For Category:</li>
 				<li><?php //echo style_choose($section,"entries","bottle-judging",$filter,$view,"output/labels.php","none"); ?></li>
@@ -524,7 +524,7 @@ if ($go == "default") { ?>
 			</ul>
             <ul class="admin_default">
 				<li>Bottle Labels with Special Ingredients (Using <em>Judging</em> Numbers - Avery 5160 - 1 entry per label):</li>
-			    <li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special">All Categories</a></li>
+			    <li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special">All Categories</a></li>
                 <!-- SIGNIFICANT performance issues if enabled
                 <li>For Category:</li>
 				<li><?php //echo style_choose($section,"entries","bottle-judging",$filter,"special","output/labels.php","none"); ?></li>
@@ -563,79 +563,79 @@ if ($go == "default") { ?>
              <?php } ?>
 		</div>
        
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/book.png" alt="" /></span>Organizing</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/book.png" alt="" /></span>Organizing</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Participants</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a></li>
 			</ul>
 	  		
 			<ul class="admin_default">
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables">Tables</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Tables</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-   			 	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights">Flights</a></li>
+   			 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Flights</a></li>
                 <?php } ?>
 			</ul>
 			<ul class="admin_default">
              	<?php if ($row_user['userLevel'] == "0") { ?>
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;filter=orphans">Styles Without a Valid Style Type</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;filter=orphans">Styles Without a Valid Style Type</a></li>
                 <?php } ?>
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">Styles Not Assigned to Tables</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">Styles Not Assigned to Tables</a></li>
 			</ul>
 			
 			<ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=assignJudges">Assigned Judges</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=assignStewards">Assigned Stewards</a></li>
 			</ul>
 			<p class="admin_default_header">Add</p>
 			<ul class="admin_default">
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
     			<li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
   			
 	  		<ul class="admin_default">
-   			 	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></li>
+   			 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">A Table</a></li>
                 <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
-    			<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Flights to Tables</a></li>
                 <?php } ?>
 			</ul>
   			<p class="admin_default_header">Assign</p>
   			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
-			    <li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Participants as Judges</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Participants as Stewards</a></li>
+			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Participants as Staff</a></li>
 			</ul>
   			<?php if ($totalRows_tables > 1) { ?>
 			<ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds"><?php echo $assign_to; ?> to Rounds</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds"><?php echo $assign_to; ?> to Rounds</a></li>
             </ul>
             <ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables&amp;action=assign">Judges or Stewards to a Table</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Judges or Stewards to a Table</a></li>
             </ul>
             <ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Best of Show Judges</a></li>
 			</ul>
   			<?php } ?>
             </div>
-            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/rosette.png"  /></span>Scoring</h4>
+            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/rosette.png"  /></span>Scoring</h4>
             <div class="toggle_container">
             <p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=participants">Participants</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">Entries</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables">Tables</a></li> 
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Participants</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Tables</a></li> 
 			</ul>
 			<ul class="admin_default">
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores">Scores by Table</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Scores by Table</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a></li>
 			</ul>
             <?php if ($row_user['userLevel'] == "0") { ?>
             <ul class="admin_default">
-  				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best">Custom Winning Categories</a></li>
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=special_best_data">Custom Winning Category Entries</a></li>
+  				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Custom Winning Categories</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">Custom Winning Category Entries</a></li>
 			</ul>
             <?php } ?>
 			<p class="admin_default_header">Add</p>
@@ -650,18 +650,18 @@ if ($go == "default") { ?>
             </ul>
             <?php } ?>
             </div>
-            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/printer.png"  /></span>Printing and Reporting</h4>
+            <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/printer.png"  /></span>Printing and Reporting</h4>
             <div class="toggle_container">
 			<p class="admin_default_header">Before Judging</p>
             <ul class="admin_default">
 				<li>Print Drop Off Location Reports:</li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/dropoff.php"  title="Print Total Entries by Location">Entry Totals by Location</a></li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/dropoff.php?section=check"  title="Print Entries By Drop-Off Location">Entries By Drop-Off Location</li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php"  title="Print Total Entries by Location">Entry Totals by Location</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php?section=check"  title="Print Entries By Drop-Off Location">Entries By Drop-Off Location</li>
             </ul>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Entry</em> Numbers):</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_tables&amp;view=entry&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
 				<li><?php echo table_choose($section,"judging_tables",$action,$filter,"entry","output/pullsheets.php","thickbox"); ?></li>
                 <li>
                     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc');">For Location...</a></div>
@@ -670,14 +670,14 @@ if ($go == "default") { ?>
 					 $location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
 					 
 					 ?>
-                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
                     <?php }} while ($row_judging = mysql_fetch_assoc($judging)); ?>
                     </div>
                 </li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Pullsheets (Using <em>Judging</em> Numbers):</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print All Table Pullsheets">All Tables</a></li>
 				<li><?php echo table_choose($section,"judging_tables",$action,$filter,$view,"output/pullsheets.php","thickbox"); ?></li>
                 <li>
                     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc_judging');">For Location...</a></div>
@@ -686,14 +686,14 @@ if ($go == "default") { ?>
 					 $location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging1['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
 					 
 					 ?>
-                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                    <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
                     <?php }} while ($row_judging1 = mysql_fetch_assoc($judging1)); ?>
                     </div>
                 </li>
 			</ul>
             <ul class="admin_default">
 				<li>Print Table Cards:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/table_cards.php?section=admin&amp;go=judging_tables&amp;id=default" title="Print Table Cards">All Tables</a></li>
                 <li><?php echo table_choose($section,"judging_tables",$action,$filter,$view,"output/table_cards.php","thickbox"); ?></li>
                 <li>
                 <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'table_cardsloc');">For Location...</a></div>
@@ -701,41 +701,41 @@ if ($go == "default") { ?>
                         <?php  do { for ($round=1; $round <= $row_judging2['judgingRounds']; $round++) { 
 						$location_date = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging2['judgingDate'], $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time-no-gmt");
 						?>
-                        <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>/output/table_cards.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a>
+                        <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>output/table_cards.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a>
                         <?php }} while ($row_judging2 = mysql_fetch_assoc($judging2));   ?>
                     </div>
     				</li>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Judge Assignments:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">By Table</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">By Judge Last Name</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">By Table</a></li>
    				<?php if ($totalRows_judging > 1) { ?>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location" title="Print Judge Assignments by Location">By Location</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=location" title="Print Judge Assignments by Location">By Location</a></li>
     			<?php } ?>
 			</ul>
 			<ul class="admin_default">
 				<li>Print Steward Assignments:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" title="Print Steward Assignments by Table">By Table</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" title="Print Steward Assignments by Name">By Steward Last Name</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" title="Print Steward Assignments by Table">By Table</a></li>
     			<?php if ($totalRows_judging > 1) { ?>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" title="Print Steward Assignments by Location">By Location</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" title="Print Steward Assignments by Location">By Location</a></li>
 				<?php } ?>
 			</ul>
             <?php } ?>
 			<ul class="admin_default">
 				<li>Print Sign-in Sheets:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Print a Judge Sign-in Sheet">Judges</a></li>   
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" title="Print a Judge Sign-in Sheet">Judges</a></li>   
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" title="Print a Steward Sign-in Sheet">Stewards</a></li>   
 			</ul>
             <ul class="admin_default">
 				<li>Judge Scoresheet Labels (Avery 5150):</li>
-            	<li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&go=participants&action=judging_labels">Download PDF</a> (All Assigned Judges, 30 Labels per Judge)</li>
+            	<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&go=participants&action=judging_labels">Download PDF</a> (All Assigned Judges, 30 Labels per Judge)</li>
             </ul>
             
             <ul class="admin_default">
 				<li>Judge, Steward and Staff Name Tags (Avery 5395):</li>
-            	<li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&go=participants&action=judging_nametags">Download PDF</a></li>
+            	<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&go=participants&action=judging_nametags">Download PDF</a></li>
             </ul>
             
 			<?php if ($row_scores['count'] > 0) { ?>
@@ -743,9 +743,9 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 				<li>Print BOS Pullsheets:
     			<ul>
-        			<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>
+        			<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>
     	  			<?php do { ?>
-          			<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
+          			<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
           			<?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
         		</ul>
     			</li>
@@ -755,41 +755,41 @@ if ($go == "default") { ?>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
 				<li>Results Report <?php echo $method; ?> (with Scores):</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print (All)</a></li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only with Scores)">Print (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only with Scores)">Print (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>Results Report by <?php echo $method; ?> (without Scores):</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print (All)</a></li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only without Scores)">Print (Winners Only)</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html">Download HTML (Winners Only)</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print (All)</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only without Scores)">Print (Winners Only)</a></li>
+				<li><a href="<?php echo $base_url; ?>output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF (Winners Only)</a></li>
+				<li><a href="<?php echo $base_url; ?>output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html">Download HTML (Winners Only)</a></li>
 			</ul>
 			<ul class="admin_default">
 				<li>BOS Round(s) Results Report:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">Download HTML</a></li>	
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+				<li><a href="<?php echo $base_url; ?>output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
+				<li><a href="<?php echo $base_url; ?>output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">Download HTML</a></li>	
 			</ul>
 			<ul class="admin_default">
 				<li>BJCP Judge/Steward/Staff Points Report:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" title="BJCP Judge/Steward/Staff Points Report">Print</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Download XML</a></li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" title="BJCP Judge/Steward/Staff Points Report">Print</a></li>
+				<li><a href="<?php echo $base_url; ?>output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf">Download PDF</a></li>
+				<li><a href="<?php echo $base_url; ?>output/staff_points.php?section=admin&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Download XML</a></li>
 			</ul>
             <?php if ($row_scores['count'] > 0) { ?>
 			<ul class="admin_default">
 				<li>Award Labels (Avery 5160):</li>
-				<li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Download PDF</a></li>
+				<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default">Download PDF</a></li>
 			</ul>
             <?php } } ?>
 			<ul class="admin_default">
 				<li>Participant Address Labels (Avery 5160):</li>
-				<li><a href="<?php echo $base_url; ?>/output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Download PDF</a></li>
+				<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default">Download PDF</a></li>
 			</ul>
             <ul class="admin_default">
 				<li>Participant Summaries:</li>
-				<li><a id="modal_window_link" href="<?php echo $base_url; ?>/output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a> (All Participants with Entries)</li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a> (All Participants with Entries)</li>
 			</ul>
             
             <?php if (custom_modules("reports",1)) { ?>
@@ -799,52 +799,52 @@ if ($go == "default") { ?>
 			</ul>
             <?php } ?>
 </div>
-<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/page_go.png"  /></span>Exporting</h4>
+<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/page_go.png"  /></span>Exporting</h4>
 <div class="toggle_container">
 <p class="admin_default_header">Email Addresses (CSV Files)</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/output/email_export.php">All Participants</a></li>          
-				<li><a href="<?php echo $base_url; ?>/output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Judges</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Stewards</a></li>
-                <li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
+				<li><a href="<?php echo $base_url; ?>output/email_export.php">All Participants</a></li>          
+				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Judges</a></li>
+				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Stewards</a></li>
+                <li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
             </ul>
             <ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a></li>
-            	<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid & Received Entries</a><a href="<?php echo $base_url; ?>/output/email_export.php?section=admin&amp;filter=judges"></a></li>
-                <li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;view=all">All Non-Paid Entries</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a></li>
+            	<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a></li>
+            	<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid & Received Entries</a><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;filter=judges"></a></li>
+                <li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;view=all">All Non-Paid Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid & Received Entries</a></li>
 			</ul>
             <?php if (!NHC) { ?>
   			<p class="admin_default_header">Tab Delimited Files</li>
 <p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/output/participants_export.php?section=admin&amp;go=tab&amp;action=hccp">All Participants</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid&amp;action=hccp">Paid & Received Entries</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=tab&amp;action=hccp">All Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=tab&amp;action=hccp">All Participants</a></li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid&amp;action=hccp">Paid & Received Entries</a></li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;action=hccp">All Entries</a></li>
 			</ul>
             <?php } ?>
   			<p class="admin_default_header">CSV Files</p>
 			<ul class="admin_default">
-                <li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a> (All Data)</li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
+                <li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a> (All Data)</li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv">All Entries</a> (Limited Data)</li>
             </ul>
 			<ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a> (Limited Data)</li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a> (Limited Data)</li>
-                <li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a> (Limited Data)</li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay">Non-Paid & Received Entries</a> (Limited Data)</li>
+            	<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a> (Limited Data)</li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid & Received Entries</a> (Limited Data)</li>
+                <li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a> (Limited Data)</li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay">Non-Paid & Received Entries</a> (Limited Data)</li>
 			</ul>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>
-				<li><a href="<?php echo $base_url; ?>/output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
+				<li><a href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=csv">All Participants</a></li>
+				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
 			</ul>
             <?php if (!NHC) { ?>
 			<p class="admin_default_header">Promo Materials</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=html&amp;action=html">HTML</a> (.html)</li>
-				<li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a> (.doc)</li>
-                <li><a href="<?php echo $base_url; ?>/output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a> (.txt)</li>
+				<li><a href="<?php echo $base_url; ?>output/promo_export.php?section=admin&amp;go=html&amp;action=html">HTML</a> (.html)</li>
+				<li><a href="<?php echo $base_url; ?>output/promo_export.php?section=admin&amp;go=word&amp;action=word">Word</a> (.doc)</li>
+                <li><a href="<?php echo $base_url; ?>output/promo_export.php?section=admin&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a> (.txt)</li>
 			</ul>
             <?php } ?>
             <?php if (custom_modules("exports",1)) { ?>
@@ -855,11 +855,11 @@ if ($go == "default") { ?>
             <?php } ?>
 		</div>
         <?php if ($row_user['userLevel'] == "0") { ?>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>/images/camera_add.png" /></span>Archiving</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/camera_add.png" /></span>Archiving</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=archive">Archives</a></li>
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Archives</a></li>
 			</ul>
 		</div>
         <?php } ?>

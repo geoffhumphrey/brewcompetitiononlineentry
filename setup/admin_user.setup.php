@@ -1,9 +1,9 @@
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/email_check.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/email_check.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/username_check.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
 <script type="text/javascript">
 pic1 = new Image(16, 16); 
-pic1.src = "<?php echo $base_url; ?>/images/loader.gif";
+pic1.src = "<?php echo $base_url; ?>images/loader.gif";
 
 $(document).ready(function(){
 
@@ -13,11 +13,11 @@ var usr = $("#user_name").val();
 
 if(usr.length >= 3)
 {
-$("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/loader.gif" align="absmiddle"><span>Checking availability...');
+$("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/loader.gif" align="absmiddle"><span>Checking availability...');
 
     $.ajax({  
     type: "POST",  
-    url: "<?php echo $base_url; ?>/includes/username.inc.php",  
+    url: "<?php echo $base_url; ?>includes/username.inc.php",  
     data: "user_name="+ usr,  
     success: function(msg){  
    
@@ -27,7 +27,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
 		$("#user_name").addClass("object_ok");
-		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>/images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
+		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
 	}  
 	else  
 	{  
@@ -90,7 +90,7 @@ document.getElementById("msg_email").innerHTML=httpxml.responseText;
 
 }
 }
-var url="<?php echo $base_url; ?>/includes/email.inc.php";
+var url="<?php echo $base_url; ?>includes/email.inc.php";
 url=url+"?email="+email;
 url=url+"&sid="+Math.random();
 httpxml.onreadystatechange=stateck;
@@ -103,7 +103,7 @@ httpxml.send(null);
 </script>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p class="info">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions. The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</p>
-<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="userLevel" type="hidden" value="0" />
 <table>
 	<tr>

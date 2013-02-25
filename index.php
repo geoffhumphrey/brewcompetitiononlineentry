@@ -6,6 +6,7 @@
  */
 
 require('paths.php');
+
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
@@ -96,22 +97,22 @@ if($msie_key !== false) { // you found MSIE browser
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
-<link href="<?php echo $base_url; ?>/css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.tabs.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.position.min.js"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js"></script>
+<link href="<?php echo $base_url; ?>css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery-ui-1.8.18.custom.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.position.min.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.pack.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
@@ -134,15 +135,15 @@ if($msie_key !== false) { // you found MSIE browser
 
 		});
 	</script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/delete.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jump_menu.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/smoothscroll.js" ></script>
 <?php if (isset($_SESSION["loginUsername"])) { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/menu.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/menu.js"></script>
 <?php } 
 if ($section == "admin") { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce.init.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce.init.js"></script>
 <?php } 
 if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include(INCLUDES.'form_check.inc.php'); ?>
 </head>

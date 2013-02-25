@@ -11,6 +11,8 @@ ini_set('display_errors', '1');
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 
+if (NHC) $base_url = "../";
+else $base_url = $base_url;
 
 if ($section != "setup")  { 
 	require(DB.'common.db.php');
@@ -158,7 +160,7 @@ if ($action != "purge") {
 		$referer = stripslashes($referer);	
 		
 		// Reconstruct the URL
-		$output = $base_url."/index.php?".$referer;
+		$output = $base_url."index.php?".$referer;
 		return $output;
 	}
 
@@ -218,7 +220,7 @@ function clean_up_url($referer) {
 	$referer = stripslashes($referer);	
 	
 	// Reconstruct the URL
-	$reconstruct = $base_url."/index.php?".$referer;
+	$reconstruct = $base_url."index.php?".$referer;
 	return $reconstruct;
 	
 }
@@ -234,11 +236,11 @@ else {
 	$updateGoTo = $_POST['relocate']."&msg=2";
 	$massUpdateGoTo = $_POST['relocate']."&msg=9";
 }
-if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."/list"))  		$deleteGoTo = $base_url."/index.php?section=list&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/rules")) 		$deleteGoTo = $base_url."/index.php?section=rules&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/volunteers")) $deleteGoTo = $base_url."/index.php?section=volunteers&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/sponsors")) 	$deleteGoTo = $base_url."/index.php?section=sponsors&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."/pay")) 		$deleteGoTo = $base_url."/index.php?section=pay&msg=5"; 
+if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) $deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 		$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
 else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 
 //echo $insertGoTo;
@@ -390,7 +392,7 @@ if ($action == "purge") {
 	}
 	purge_entries("unconfirmed", 0);
 	purge_entries("special", 0); 
-	header(sprintf("Location: %s", $base_url."/index.php?section=admin&go=entries&purge=true"));
+	header(sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&purge=true"));
 }
 
 if ($action == "check_discount") {
@@ -408,9 +410,9 @@ if ($action == "check_discount") {
 		//echo $updateSQL;
   		mysql_select_db($database, $brewing);
   		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  		header(sprintf("Location: %s", $base_url."/index.php?section=pay&bid=".$id."&msg=12"));
+  		header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
 	}
-	else header(sprintf("Location: %s", $base_url."/index.php?section=pay&bid=".$id."&msg=13"));
+	else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
 }
 
 
@@ -443,8 +445,8 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-if ($go == "hidden") $updateGoTo = $base_url."/index.php"; 
-else $updateGoTo = $base_url."/index.php?section=admin&msg=14";
+if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
+else $updateGoTo = $base_url."index.php?section=admin&msg=14";
 header(sprintf("Location: %s", $updateGoTo));		
 }
 

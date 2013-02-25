@@ -1,8 +1,8 @@
-<form action="<?php echo $base_url; ?>/includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
+<form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users top-level admin and admin access with caution.</div>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a></td>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></td>
   	</span>
 </div>
 <p>Top-level admins are able have full access to add, change, and delete all information in the database, including preferences, competition information, and archival data.  Admin users are able to add, edit, and most information in the database, including participants, entries, tables, scores, etc.</p>

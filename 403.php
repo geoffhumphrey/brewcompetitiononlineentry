@@ -11,7 +11,7 @@ $section = "403";
 <html>
 <head>
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; Error 403: Permission Denied"; ?></title>
-<link href="<?php echo $base_url; ?>/css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="container">

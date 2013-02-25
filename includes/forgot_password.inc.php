@@ -7,6 +7,8 @@ require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'functions.inc.php'); 
 require(DB.'common.db.php');
 $username = $_POST['loginUsername'];
+if (NHC) $base_url = "../";
+else $base_url = $base_url;
 
 mysql_select_db($database, $brewing);
 $query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
@@ -14,7 +16,7 @@ $forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
 $row_forgot = mysql_fetch_assoc($forgot);
 $totalRows_forgot = mysql_num_rows($forgot);
 
-if ($totalRows_forgot == 0) { header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=1")); }
+if ($totalRows_forgot == 0) { header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); }
 if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { //if answer is correct
 
 /*
@@ -36,11 +38,11 @@ $updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE user_name='
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
-  $updateGoTo = $base_url."/index.php?section=login&go=".$key."&msg=2";
+  $updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
   header(sprintf("Location: %s", $updateGoTo)); 
 
 } else {
-header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
+header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
 }
 
 /*
@@ -53,11 +55,11 @@ $headers 	= "Content-Type: text/html; charset=iso-8859-1\n".$headers;// for html
 if (mail("$em","Password Reset","This is in response to your request for a password reset at from the ".$row_contest_info['contestName']." entry site. \n \nYour user name: $row->userid \n Your new password: ".$key."\n\n
 \n\n Thank You \n \n The ".$row_contest_info['contestName']." Staff","$headers")) 
 {
-header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=2"));
+header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=2"));
 }
 else
 { 
-header(sprintf("Location: %s", $base_url."/index.php?section=login&action=forgot&msg=3"));
+header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=3"));
 }
 */
 

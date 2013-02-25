@@ -12,7 +12,7 @@ if (($action == "default") || ($action == "login") || ($action == "logout")) {
 	if (!isset($_SESSION['loginUsername'])) { 
 	if (($action != "print") && ($msg != "default")) echo $msg_output; 
 ?>
-<form action="<?php echo $base_url; ?>/includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
+<form action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Email Address:</td>
@@ -26,9 +26,9 @@ if (($action == "default") || ($action == "login") || ($action == "logout")) {
 <p><input type="submit" class="button" value="Login"></p>
 </form>
 <?php if (($section != "update") && ($registration_open < "2")) {
- if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p>
+ if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p>
 <?php } } ?>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="<?php echo build_public_url("login","password","forgot",$sef,$base_url); ?>">click here to reset it</a>.</span></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="<?php echo build_public_url("login","password","forgot",$sef,$base_url); ?>">click here to reset it</a>.</span></p>
 <?php
 } 
 if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are already logged in.</div>";
@@ -63,7 +63,7 @@ if ($go == "verify") {
 		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href='".build_public_url("login","password","forgot",$sef,$base_url)."'>Try again?</a>";
 		} 
 	else { ?>
-	<form action="<?php echo $base_url; ?>/includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
+	<form action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 	<table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">ID Verification Question:</td>

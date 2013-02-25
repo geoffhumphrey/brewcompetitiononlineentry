@@ -53,12 +53,12 @@ function mod_info($info,$method) {
  ?>
 <h2><?php if ($action == "add") echo "Add a Custom Module"; elseif ($action == "edit") echo "Edit a Custom Module"; else echo "Custom Modules"; ?></h2>
 <div class="adminSubNavContainer">
-   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a></span>
+   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
     	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods">Back to the Custom Modules List</a></span>
+    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods">Back to the Custom Modules List</a></span>
         <?php } else { ?>
-        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=mods&amp;action=add">Add a Custom Module</a></span>
-<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick_add.png" alt="Upload the Custom Module file"></span><a href="<?php echo $base_url; ?>/admin/upload_mod.admin.php" title="Upload the Custom Module file" id="modal_window_link" class="data">Upload a Custom Module file</a></span>
+        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add a Custom Module</a></span>
+<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/brick_add.png" alt="Upload the Custom Module file"></span><a href="<?php echo $base_url; ?>admin/upload_mod.admin.php" title="Upload the Custom Module file" id="modal_window_link" class="data">Upload a Custom Module file</a></span>
    		<?php } ?>
     </span>
 </div>
@@ -116,7 +116,7 @@ function mod_info($info,$method) {
       <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_permission'],3); ?></td>
       <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_display_rank'],4); ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_mods['mod_name']; ?>" title="Edit <?php echo $row_mods['mod_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete','id',<?php echo $row_mods['id']; ?>,'Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_mods['mod_name']; ?>" title="Delete <?php echo $row_mods['mod_name']; ?>"></a></span>
+      <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_mods['mod_name']; ?>" title="Edit <?php echo $row_mods['mod_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete','id',<?php echo $row_mods['id']; ?>,'Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_mods['mod_name']; ?>" title="Delete <?php echo $row_mods['mod_name']; ?>"></a></span>
       </td>
      </tr>
     <?php } while($row_mods = mysql_fetch_assoc($mods)) ?>
@@ -125,8 +125,8 @@ function mod_info($info,$method) {
     <?php } else echo "<p>There are no custom modules were found in the database.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
-<form method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
+<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <table>
   <tr>
     <td class="dataLabel">Custom Module Name:</td>
@@ -139,7 +139,7 @@ if (($action == "add") || ($action == "edit")) { ?>
   <tr>
     <td class="dataLabel">File Name:</td>
     <td class="data"><input name="mod_filename" type="text" size="30" maxlength="255" value="<?php if ($action == "edit") echo $row_mods['mod_filename']; ?>"></td>
-    <td class="data"><span class="icon"><img src="<?php echo $base_url; ?>/images/brick_add.png" alt="Upload the Custom Module file"></span><a href="<?php echo $base_url; ?>/admin/upload_mod.admin.php" title="Upload the Custom Module file" id="modal_window_link" class="data">Upload the Custom Module file</a></td>
+    <td class="data"><span class="icon"><img src="<?php echo $base_url; ?>images/brick_add.png" alt="Upload the Custom Module file"></span><a href="<?php echo $base_url; ?>admin/upload_mod.admin.php" title="Upload the Custom Module file" id="modal_window_link" class="data">Upload the Custom Module file</a></td>
   </tr>
   <tr>
     <td class="dataLabel">Type:</td>

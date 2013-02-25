@@ -3,6 +3,10 @@ require('../paths.php');
 require(CONFIG.'config.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
+
+if (NHC) $base_url = "../";
+else $base_url = $base_url;
+
 //require 'authentication.inc.php';
 //require 'login_check.inc.php';
 /* Debug
@@ -56,14 +60,14 @@ session_start();
   		$_SESSION['loginUsername'] = $loginUsername;
 		//echo $_SESSION["loginUsername"];
   		// If the username/password combo is OK, relocate to the "protected" content index page
-		if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."/index.php?section=list"));
-		elseif (($section != "update") && ($row_login['userLevel'] <= "1")) header(sprintf("Location: %s", $base_url."/index.php?section=admin"));
+		if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."index.php?section=list"));
+		elseif (($section != "update") && ($row_login['userLevel'] <= "1")) header(sprintf("Location: %s", $base_url."index.php?section=admin"));
 		else header("Location: ../update.php");
   		exit;
 	}
 else {
   		// If the username/password combo is incorrect or not found, relocate to the login error page
-  		header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
+  		header(sprintf("Location: %s", $base_url."index.php?section=login&msg=1"));
   		session_destroy();
   		exit;
 	}

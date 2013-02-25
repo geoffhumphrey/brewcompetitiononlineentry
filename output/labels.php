@@ -219,8 +219,8 @@ if (($go == "entries") && ($action == "nhc") && ($view == "default")) {
 	// Print labels
 	for($i=1; $i<=999; $i++) {
 		for($z=0; $z<6; $z++) {
-			//$barcode_link = $base_url."/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=2&rotation=0&font_family=Arial.ttf&font_size=8&text=".$i."&thickness=30&checksum=&code=BCGi25";
-			$barcode_link = $base_url."/images/barcodes/0111.png";
+			//$barcode_link = $base_url."includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=2&rotation=0&font_family=Arial.ttf&font_size=8&text=".$i."&thickness=30&checksum=&code=BCGi25";
+			$barcode_link = $base_url."images/barcodes/0111.png";
 			$image = $pdf->Image($barcode_link);
 			$text = sprintf("\n%s\n%s",$i,$image);
 			$pdf->Add_Label($text);

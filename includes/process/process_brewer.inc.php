@@ -255,7 +255,7 @@ if ($action == "add") {
 	$totalRows_user = mysql_num_rows($user);
 	
 	if ($totalRows_user == 0) { 
-		//header(sprintf("Location: %s", $base_url."/index.php?section=brewer&go=".$go."&msg=2"));
+		//header(sprintf("Location: %s", $base_url."index.php?section=brewer&go=".$go."&msg=2"));
 		$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'", 
 					   GetSQLValueString($_POST['brewerEmail'], "text"),
 					   GetSQLValueString($_POST['uid'], "text"));
@@ -392,8 +392,8 @@ if ($action == "add") {
 		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		//echo $insertSQL;
 		if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
-		elseif (($_POST['brewerJudge'] == "Y") || ($_POST['brewerSteward'] == "Y")) $insertGoTo = $base_url."/index.php?section=judge&go=judge";
-		elseif ($section == "admin") $insertGoTo = $base_url."/index.php?section=admin&go=participants&msg=1&username=".$username;
+		elseif (($_POST['brewerJudge'] == "Y") || ($_POST['brewerSteward'] == "Y")) $insertGoTo = $base_url."index.php?section=judge&go=judge";
+		elseif ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=1&username=".$username;
 		else $insertGoTo = $insertGoTo; 
 	
 	$pattern = array('\'', '"');
@@ -487,10 +487,10 @@ if ($action == "edit") {
 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$Result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 	
-	if ($go == "register") $updateGoTo = $base_url."/index.php?section=brew&msg=2";	
-	elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."/index.php?section=list&go=".$go."&filter=default&msg=7";
-	elseif (($go == "judge") && ($filter != "default")) $updateGoTo = $base_url."/index.php?section=admin&go=participants&msg=2";
-	elseif ($go == "default") $updateGoTo = $base_url."/index.php?section=list&go=".$go."&filter=default&msg=2";
+	if ($go == "register") $updateGoTo = $base_url."index.php?section=brew&msg=2";	
+	elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=7";
+	elseif (($go == "judge") && ($filter != "default")) $updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
+	elseif ($go == "default") $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=2";
 	else $updateGoTo = $updateGoTo;
 	
 	$pattern = array('\'', '"');

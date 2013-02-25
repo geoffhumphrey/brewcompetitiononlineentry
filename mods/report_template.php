@@ -35,31 +35,31 @@ require(DB.'common.db.php');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
-<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
 <!-- jquery plugin - required for use with DataTables, FancyBox, DatePicker, TimePicker etc. -->
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
 
 <!-- Required for jquery DatePicker -->
 <!--
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.tabs.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.position.min.js"></script>
 -->
 
 <!-- Required for jquery DatePicker -->
 <!--
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
 -->
 
 <!-- Required for Fancybox -->
 <!--
-<link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.pack.js"></script>
 // To call a fancybox modal window, add id="modal_window_link" to the <a> tag
 // For example: <a href="example.html" id="modal_window_link">Click for Popup</a>
 	<script type="text/javascript">
@@ -84,8 +84,8 @@ require(DB.'common.db.php');
 -->
 <!-- For use with the DataTables jquery plugin -->
 <!--
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/sorting.css" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript">
 // The following is for demonstration purposes only. 
 // Complete documentation and usage at http://www.datatables.net
