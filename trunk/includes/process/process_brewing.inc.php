@@ -79,7 +79,7 @@ if ($row_prefs['prefsUserEntryLimit'] != "") {
 	$row_brews = mysql_fetch_assoc($brews);
 	
 		if ($row_brews['count'] >= $row_prefs['prefsUserEntryLimit']) {
-			$insertGoTo = $base_url."/index.php?section=list&msg=8";
+			$insertGoTo = $base_url."index.php?section=list&msg=8";
 			$pattern = array('\'', '"');
   			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   			header(sprintf("Location: %s", stripslashes($insertGoTo)));
@@ -513,11 +513,11 @@ if ($action == "add") {
 	  mysql_select_db($database, $brewing);
 	  $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
-	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."/index.php?section=list&msg=1";
+	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."index.php?section=list&msg=1";
 	
-	elseif ($section == "admin") $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=1";
-	else $insertGoTo = $base_url."/index.php?section=list&msg=1"; 
+	elseif ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
+	else $insertGoTo = $base_url."index.php?section=list&msg=1"; 
 	
 	if ($id == "default") {
 		mysql_select_db($database, $brewing);
@@ -538,13 +538,13 @@ if ($action == "add") {
 		}
 		
 		if ($section == "admin") {
-			if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=list&msg=2";
+			if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -560,13 +560,13 @@ if ($action == "add") {
 		}
 		
 		if ($section == "admin") {
-			if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=list&msg=2";
+			if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=list&msg=2";
 		}
 	}
 	  
@@ -579,13 +579,13 @@ if ($action == "add") {
 		}
 		
 		if ($section == "admin") {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=list&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -599,13 +599,13 @@ if ($action == "add") {
 		}
 		
 		if ($section == "admin") {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $insertGoTo = $base_url."/index.php?section=list&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $insertGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -846,10 +846,10 @@ if ($action == "edit") {
 	
 	
 	// Build updade url
-	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
-	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $updateGoTo = $base_url."/index.php?section=list&msg=2";
-	elseif ($section == "admin") $updateGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
-	else $updateGoTo = $base_url."/index.php?section=list&msg=2";
+	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $updateGoTo = $base_url."index.php?section=list&msg=2";
+	elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+	else $updateGoTo = $base_url."index.php?section=list&msg=2";
 	
 	if (!NHC) {  // NOT for NHC
 		// Check if style has been changed. If so, regenerate judging number.
@@ -880,13 +880,13 @@ if ($action == "edit") {
 		}
 		
 		if ($section == "admin") {
-			if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=list&msg=2";
+			if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -903,13 +903,13 @@ if ($action == "edit") {
 		}
 		
 		if ($section == "admin") {
-			if ($_POST['brewMead3'] != "")$updateGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
-			else $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			if ($_POST['brewMead3'] != "")$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+			else $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
 		}
 		
 		else {
-			if ($_POST['brewMead3'] != "") $updateGoTo = $base_url."/index.php?section=list&msg=2";
-			else $updateGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			if ($_POST['brewMead3'] != "") $updateGoTo = $base_url."index.php?section=list&msg=2";
+			else $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
 		}
 	}
 	  
@@ -922,13 +922,13 @@ if ($action == "edit") {
 		}
 		
 		if ($section == "admin") {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=list&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -943,13 +943,13 @@ if ($action == "edit") {
 		}
 		
 		if ($section == "admin") {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."/index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=admin&go=entries&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		}
 		
 		else {
-			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."/index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-			else $updateGoTo = $base_url."/index.php?section=list&msg=2";
+			if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+			else $updateGoTo = $base_url."index.php?section=list&msg=2";
 		}
 		  
 	 }
@@ -996,7 +996,7 @@ if ($action == "update") {
 	}
 	} 
 	//echo $massUpdateGoTo;
-	$massUpdateGoTo = $base_url."/index.php?section=admin&go=entries&msg=9";
+	$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
 	$pattern = array('\'', '"');
   	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 

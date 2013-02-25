@@ -9,7 +9,7 @@ require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-$imageSrc = $base_url."/images/";
+$imageSrc = $base_url."images/";
 
 $fileCornfirm = "default";
 if (isset($_GET['fileConfirm'])) {
@@ -121,15 +121,15 @@ function do_upload($upload_dir, $upload_url) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload Image</title>
-<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $base_url; ?>/css/sorting.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/sorting.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link rel="stylesheet" href="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
@@ -152,7 +152,7 @@ function do_upload($upload_dir, $upload_url) {
 
 		});
 	</script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript">
  $(document).ready(function() {
 	$('#sortable').dataTable( {

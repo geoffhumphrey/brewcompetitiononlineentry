@@ -117,8 +117,8 @@ LEAVE the $base_url variable below untouched.
 // Otherwise, the URLs will not be generated correctly
 // Directions are in the .htaccess file
 $sub_directory = "";
-if (HTTPS) $base_url = "https://".$_SERVER['SERVER_NAME'].$sub_directory;
-else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory;
+if (NHC) $base_url = "";
+else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 
 /*
 ******************************************************************************

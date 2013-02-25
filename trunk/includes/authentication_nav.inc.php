@@ -1,5 +1,4 @@
 <?php
-
 $username = strtolower($username);
 function authenticateUserNav($connection, $username, $password)
 {
@@ -10,6 +9,7 @@ function authenticateUserNav($connection, $username, $password)
   	// Test the username and password parameters
   	if (!isset($username) || !isset($password))
     return false;
+	
 
   	// Formulate the SQL find the user
   	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}'
@@ -31,9 +31,13 @@ function authenticateUserNav($connection, $username, $password)
 function sessionAuthenticateNav()
 {
 	require(CONFIG.'config.php');
+	
+	if (NHC) $base_url = "../";
+	else $base_url = $base_url;
+	
   // Check if the user hasn't logged in
-  if (!isset($_SESSION["loginUsername"])) echo "<a href=\"".$base_url."/index.php?section=login\">Log In</a>"; 
-  if (isset($_SESSION["loginUsername"]))  echo "<a href=\"".$base_url."/includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION["loginUsername"]."</div>";
+  if (!isset($_SESSION["loginUsername"])) echo "<a href=\"".$base_url."index.php?section=login\">Log In</a>"; 
+  if (isset($_SESSION["loginUsername"]))  echo "<a href=\"".$base_url."includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION["loginUsername"]."</div>";
 }
 
 ?>

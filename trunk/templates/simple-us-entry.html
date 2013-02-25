@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js"></script>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
 <style type="text/css">
 <!--
-body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; }
+body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
 table					{ border-collapse: collapse; width: 100%; }
 table td				{ padding: 2px; }
 table th				{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
@@ -53,7 +53,7 @@ http://www.tinybutstrong.com/
 
 <!-- div for non-print header -->
 <div>
-[onshow_b;block=div;when [var.action]!='print']
+[onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
     <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
@@ -65,30 +65,46 @@ http://www.tinybutstrong.com/
 
 <h1>Entry Form, [onshow.contest_info.contestName]</h1>
 
-<h2>Brewer</h2>
+<table border="0">
+  <tr>
+    <td width="50%">
+    <h2>Brewer</h2>
 
-<ul>
-  <li>Name(s): [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</li>
-  <li>Address: [onshow.brewer_info.brewerAddress], [onshow.brewer_info.brewerCity], 
-       [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip],
-      </li>
-   <li>Phone: [onshow.brewer_info.brewerPhone1]</li>
-   <li>Club: [onshow.brewer_info.brewerClubs]</li>
-</ul>
+    <ul>
+      <li>Name(s): [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</li>
+      <li>Address: [onshow.brewer_info.brewerAddress], [onshow.brewer_info.brewerCity], 
+           [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip],
+          </li>
+       <li>Phone: [onshow.brewer_info.brewerPhone1]</li>
+       <div>
+      [onshow;block=div;when [var.brewer_info.brewerClubs]!='']
+       <li>Club: [onshow.brewer_info.brewerClubs]</li>
+       </div>
+    </ul>
+    </td>
+    <td>
+    <h2>Style Entered</h2>
+    <ul>
+      <li>Style number: [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
+      <li>Style name: [onshow.brewing_info.styleName]</li>
+      
+      <!-- Better formatting and/or conditional display would greatly improve layout here -->
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+      <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
+      </div>
+      <div>
+      [onshow;block=div;when [var.brewing_info.sweetness]!='']
+      <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
+      </div>
+    </ul>
+</td>
+  </tr>
+</table>
 
-<h2>Style Entered</h2>
-
-<ul>
-  <li>Style number: [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
-  <li>Style name: [onshow.brewing_info.styleName]</li>
-  
-  <!-- Better formatting and/or conditional display would greatly improve layout here -->
-  <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
-  <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
-</ul>
 <div>
 <h2>Recipe</h2>
-[onshow_b;block=div;when [var.totalFermentables]!='0']
+[onshow;block=div;when [var.totalFermentables]!='0']
 <h3>Grains and Fermentables</h3>
 <table>
   <tr>
@@ -110,7 +126,7 @@ http://www.tinybutstrong.com/
 </table>
 </div>
 <div>
-[onshow_b;block=div;when [var.totalHops]!='0']
+[onshow;block=div;when [var.totalHops]!='0']
 <h3>Hops</h3>
 <table>
   <tr>
@@ -130,26 +146,28 @@ http://www.tinybutstrong.com/
 </table>
 </div>
 <div>
-[onshow_b;block=div;when [var.brewing_info.brewYeast]!='']
+[onshow;block=div;when [var.brewing_info.brewYeast]!='']
 <h3>Yeast</h3>
 
 <p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
 </div>
 <div>
-[onshow_b;block=div;when [var.brewing_info.brewOG]!='']
+[onshow;block=div;when [var.brewing_info.brewOG]!='']
 <h3>Processes</h3>
 
 <ul>
   <li>OG: [onshow.brewing_info.brewOG;frm='0.000']</li>
   <li>FG: [onshow.brewing_info.brewFG;frm='0.000']</li>
 </ul>
-
+<div>
+[onshow;block=div;when [var.brewing_info.brewPrimaryTemp]>0]
 <p>Fermented at [onshow.brewing_info.brewPrimaryTemp.f]&deg;F for [onshow.brewing_info.brewPrimary]
 days and [onshow.brewing_info.brewSecondaryTemp.f]&deg;F for [onshow.brewing_info.brewSecondary]
 days.</p>
 </div>
+</div>
 <div>
-[onshow_b;block=div;when [var.totalMash]!='0']
+[onshow;block=div;when [var.totalMash]!='0']
 <table>
   <tr>
     <th width="40%">Mash temperature</th>
@@ -173,7 +191,7 @@ days.</p>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
       </tr>
       <tr>
@@ -227,7 +245,7 @@ days.</p>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
       </tr>
       <tr>
@@ -282,7 +300,7 @@ days.</p>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
       </tr>
       <tr>
@@ -336,7 +354,7 @@ days.</p>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
       </tr>
       <tr>

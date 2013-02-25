@@ -494,9 +494,9 @@ if ($view == "default") { // printing from browser ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brew Competition Online Entry and Management - brewcompetition.com</title>
-<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
+<link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 </head>
 <body>
 <script type="text/javascript">

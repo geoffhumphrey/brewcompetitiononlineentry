@@ -11,9 +11,9 @@ $section = "500";
 <html>
 <head>
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; Error 500: Internal Server Error"; ?></title>
-<link href="<?php echo $base_url; ?>/css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <?php if ($action == "default") { ?>
-<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>/500.php?action=error" />
+<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>500.php?action=error" />
 <?php } ?>
 </head>
 <body>

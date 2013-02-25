@@ -3,7 +3,7 @@ require('../paths.php');
 require(INCLUDES.'functions.inc.php');
 
 if (NHC) $logout_location = $nhc_landing_url."/index.php?msg=3";
-else $logout_location = $base_url."/index.php?section=login&action=logout&msg=3";
+else $logout_location = $base_url."index.php?section=login&action=logout&msg=3";
 
 session_start();
 $requested_logout = true;

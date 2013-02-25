@@ -22,21 +22,21 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Set Up Your Brew Competition Online Entry Site</title>
-<link href="<?php echo $base_url; ?>/css/html_elements.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/html_elements.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/default.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.tabs.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.position.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
-<link href="<?php echo $base_url; ?>/css/jquery.ui.timepicker.css?v=0.3.0" rel="stylesheet"  type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<link href="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.css?v=2.0.2" rel="stylesheet"  type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+<link href="<?php echo $base_url; ?>css/jquery.ui.timepicker.css?v=0.3.0" rel="stylesheet"  type="text/css" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
+<link href="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.css?v=2.0.2" rel="stylesheet"  type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#modal_window_link").fancybox({
@@ -56,12 +56,12 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 
 		});
 	</script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/delete.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jump_menu.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce.init.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/delete.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jump_menu.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/smoothscroll.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce.init.js"></script>
 <?php include(INCLUDES.'form_check.inc.php'); ?>
 </head>
 <body>

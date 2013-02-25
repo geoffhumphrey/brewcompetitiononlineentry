@@ -3,16 +3,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js"></script>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
 <style type="text/css">
 <!--
-body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; }
+body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt;  word-spacing: 0.008em; line-height:normal; }
 table					{ border-collapse: collapse; width: 100%; }
 table td				{ padding: 2px; }
 .headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
 .headerTitleSm 			{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
-.bottle, .medium 		{ font-size: .9em; } 
-.small 					{ font-size: .7em; margin: 0; } 
+.bottle, .medium 		{ font-size: 9px; } 
+.small 					{ font-size: 8px; margin: 0; } 
 #printContainer 		{ width: 100%; }
 .bdr1_thick	 			{ border: 5px solid #000000; }
 .bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
@@ -46,7 +46,7 @@ onload="javascript:window.print()"
 
 <!-- div for non-print header -->
 <div>
-[onshow_b;block=div;when [var.action]!='print']
+[onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
     <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
@@ -68,7 +68,7 @@ onload="javascript:window.print()"
         <td class="headerTitle">ENTRY/RECIPE FORM</td>
       </tr>
     </table>    </td>
-    <td class="bdr1B_thick" width="10%" valign="top"><img src="../images/aha_logo.jpg" alt="AHA Logo" width="110" height="60" border="0" align="right" /></td>
+    <td class="bdr1B_thick" width="10%" valign="top"><img src="../images/aha_logo.jpg" alt="AHA Logo" height="60" border="0" align="right" /></td>
   </tr>
 </table>
 <table>
@@ -373,11 +373,11 @@ onload="javascript:window.print()"
           
           <td width="5%">
              <img src="../images/check.jpg" border="0">
-             [onshow_bcarb;block=td;when [var.brewing_info.carbonation]='bottleConditioned']
+             [onshow_carb;block=td;when [var.brewing_info.carbonation]='bottleConditioned']
           </td>
           <td width="5%">
              <img src="../images/box.jpg" border="0">
-             [onshow_bcarb;block=td;default]
+             [onshow_carb;block=td;default]
           </td>
           
           <td>Bottle Conditioned</td>
@@ -459,6 +459,8 @@ onload="javascript:window.print()"
       </table></td>
     <td width="2%" rowspan="4" align="left" valign="top">&nbsp;</td>
     <td width="49%" align="left" valign="top">
+    <div>
+    [onshow;block=div;when [var.totalFermentables]!='0']
     <table class="small">
       <tr>
         <td colspan="3" class="bdr1B"><strong>FERMENTABLES</strong> (MALT, MALT EXTRACT, ADJUNCTS, HONEY OR OTHER SUGARS)</td>
@@ -468,44 +470,77 @@ onload="javascript:window.print()"
         <td align="left" valign="top" class="headerItalic bdr1B bdr1L">TYPE/BRAND</td>
         <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1R">USE (MASH/STEEP)</td>
       </tr>
-      <tr>
-        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [grains.weight.lb;block=tr]
-        </td>
-        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [grains.name]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">
-           [grains.use]
-        </td>
+     <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">[grains.weight.lb;block=tr]</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">[grains.name]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">[grains.use]</td>
       </tr>
       <tr>
-        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [extracts.weight.lb;block=tr]
-        </td>
-        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [extracts.name]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">
-           [extracts.use]
-        </td>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">[extracts.weight.lb;block=tr]</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">[extracts.name]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">[extracts.use]</td>
       </tr>
       <tr>
-        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [adjuncts.weight.lb;block=tr]
-        </td>
-        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">
-           [adjuncts.name]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">
-           [adjuncts.use]
-        </td>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">[adjuncts.weight.lb;block=tr]</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">[adjuncts.name]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">[adjuncts.use]</td>
       </tr>
     </table>
+    </div>
+    <div>
+    [onshow;block=div;when [var.totalFermentables]=='0']
+    <table class="small">
+      <tr>
+        <td colspan="3" class="bdr1B"><strong>FERMENTABLES</strong> (MALT, MALT EXTRACT, ADJUNCTS, HONEY OR OTHER SUGARS)</td>
+        </tr>
+      <tr>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L">AMOUNT (LB.)</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L">TYPE/BRAND</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1R">USE (MASH/STEEP)</td>
+      </tr>
+     <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="30%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="35%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+    </table>
+    </div>
     </td>
   </tr>
   <tr>
     <td width="49%" align="left" valign="top">
+    <div>
+    [onshow;block=div;when [var.totalHops]!='0']
     <table class="small">
       <tr>
         <td colspan="6" align="left" valign="top"><strong>HOPS</strong></td>
@@ -519,32 +554,97 @@ onload="javascript:window.print()"
         <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T bdr1R">MIN. FROM<br />END OF BOIL</td>
       </tr>
       <tr>
-        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">
-          [hops.weight.oz;block=tr]
-        </td>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">[hops.weight.oz;block=tr]</td>
         <td align="left" valign="top" class="medium bdr1B bdr1L">
           [hops.form; if [val]='Pellets'; then 'Pellets'; else '']
           [hops.form; if [val]='Leaf'; then 'Whole'; else '']
           [hops.form; if [val]='Plug'; then 'Whole'; else '']
         </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L">
-          [hops.name]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L">
-          [hops.alphaAcid]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L">
-          [hops.use]
-        </td>
-        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">
-          [hops.minutes]
-        </td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">[hops.name]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">[hops.alphaAcid]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">[hops.use]</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">[hops.minutes]</td>
       </tr>
     </table>
+    </div>
+    <div>
+    [onshow;block=div;when [var.totalHops]=='0']
+    <table class="small">
+      <tr>
+        <td colspan="6" align="left" valign="top"><strong>HOPS</strong></td>
+        </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T">AMOUNT (OZ.)</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T">PELLETS OR<br /> WHOLE?</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T">TYPE</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T">%A ACID</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T">USE (BOIL,<br />STEEP, DRY, ETC.)</td>
+        <td align="left" valign="top" class="headerItalic bdr1B bdr1L bdr1T bdr1R">MIN. FROM<br />END OF BOIL</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="20%" align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td align="left" valign="top" class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+    </table>
+    </div>
     </td>
   </tr>
   <tr>
     <td width="49%" align="left" valign="top">
+    <div>
+    [onshow;block=div;when [var.totalMash]!='0']
     <table class="small">
       <tr>
         <td colspan="3"><strong>MASH SCHEDULE</strong></td>
@@ -555,17 +655,50 @@ onload="javascript:window.print()"
         <td width="33%" class="headerItalic bdr1B bdr1L bdr1T bdr1R">TIME</td>
       </tr>
       <tr>
-        <td class="medium bdr1B bdr1L">
-           [mashSteps.name;block=tr] &nbsp;
-        </td>
-        <td width="34%" class="medium bdr1B bdr1L">
-          [mashSteps.temp.f]
-        </td>
-        <td class="medium bdr1B bdr1L bdr1R">
-          [mashSteps.minutes]
-        </td>
+        <td class="medium bdr1B bdr1L">[mashSteps.name;block=tr]</td>
+        <td width="34%" class="medium bdr1B bdr1L">[mashSteps.temp.f]</td>
+        <td class="medium bdr1B bdr1L bdr1R">[mashSteps.minutes]</td>
       </tr>
     </table>
+    </div>
+    <div>
+    [onshow;block=div;when [var.totalMash]=='0']
+    <table class="small">
+      <tr>
+        <td colspan="3"><strong>MASH SCHEDULE</strong></td>
+        </tr>
+      <tr>
+        <td width="33%" class="headerItalic bdr1B bdr1L bdr1T">STEP</td>
+        <td width="34%" class="headerItalic bdr1B bdr1L bdr1T">TEMPERATURE</td>
+        <td width="33%" class="headerItalic bdr1B bdr1L bdr1T bdr1R">TIME</td>
+      </tr>
+      <tr>
+        <td class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="34%" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="34%" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="34%" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="34%" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="medium bdr1B bdr1L">&nbsp;</td>
+        <td width="34%" class="medium bdr1B bdr1L">&nbsp;</td>
+        <td class="medium bdr1B bdr1L bdr1R">&nbsp;</td>
+      </tr>
+    </table>
+    </div>
     </td>
   </tr>
   <tr>
@@ -586,10 +719,8 @@ onload="javascript:window.print()"
 <br style="page-break-after:always;">
 <p>[onshow.brewing_info.brewComments]</p>
 [onshow_comments;block=end]
-
-<p class="small">This form is emulates the BJCP Entry/Recipe Form Copyright ©2006 Beer Judge
-Certification Program rev. 070307</p>
-<br style="page-break-after:always;">
+<p class="small">This form is emulates the BJCP Entry/Recipe Form Copyright ©2006 Beer Judge Certification Program rev. 070307</p>
+<div style="page-break-after:always;"></div>
 <br />
 <a name="labels" id="labels"></a>
 <table align="center" class="bottleLabel">
@@ -597,7 +728,7 @@ Certification Program rev. 070307</p>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">BOTTLE ID FORM</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Competition:</td>
@@ -650,13 +781,13 @@ Certification Program rev. 070307</p>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div></td>
       </tr>
     </table></td>
     <td align="center">
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">BOTTLE ID FORM</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Competition:</td>
@@ -709,14 +840,14 @@ Certification Program rev. 070307</p>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div></td>
       </tr>
     </table></td>
   </tr>
   <tr>
     <td align="center"><table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">BOTTLE ID FORM</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Competition:</td>
@@ -769,13 +900,15 @@ Certification Program rev. 070307</p>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">
+          <div align="center">ATTACH ONE FORM TO EACH BOTTLE</div>
+        </div></td>
       </tr>
     </table></td>
     <td align="center">
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID.jpg" alt="Bottle ID Form" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">BOTTLE ID FORM</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Competition:</td>
@@ -828,7 +961,9 @@ Certification Program rev. 070307</p>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
-        <td colspan="4"><div align="center"><img src="../images/bottleID_attach.jpg" alt="Attach To Each Bottle" width="230" height="20" /></div></td>
+        <td colspan="4"><div align="center">
+          <div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div>
+        </div></td>
       </tr>
     </table>
     </td>

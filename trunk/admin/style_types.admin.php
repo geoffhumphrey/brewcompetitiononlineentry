@@ -4,13 +4,13 @@
 
   	<span class="adminSubNav">
 
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a>
 
   	</span>
 
     <span class="adminSubNav">
 
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles">Back to Accepted Style Categories</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Back to Accepted Style Categories</a>
 
     </span>
 
@@ -18,13 +18,13 @@
 
     <span class="adminSubNav">
 
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/note_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/note_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add a Custom Style Category</a>
 
     </span>
 
     <span class="adminSubNav">
 
-    	<span class="icon"><img src="<?php echo $base_url; ?>/images/page_add.png"  /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/page_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a>
 
     </span>
 
@@ -34,7 +34,7 @@
 
     <span class="adminSubNav">
 
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=style_types">Back to Style Types List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Back to Style Types List</a>
 
     </span>
 
@@ -106,21 +106,21 @@
 
     	<td><?php echo $row_style_type['styleTypeName']; ?></td>
 
-        <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<img src='".$base_url."/images/tick.png' alt='Y'>"; else echo "<img src='".$base_url."/images/cross.png' alt='Y'>"; ?></td>
+        <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<img src='".$base_url."images/tick.png' alt='Y'>"; else echo "<img src='".$base_url."images/cross.png' alt='Y'>"; ?></td>
 
         <td class="data"><?php echo bos_method($row_style_type['styleTypeBOSMethod']); ?></td>
 
         <td class="data">
 
-        <span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit <?php echo $row_style_type['styleTypeName']; ?>" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"></a></span>
+        <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_style_type['styleTypeName']; ?>" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"></a></span>
 
   		<?php if ($row_style_type['styleTypeOwn'] != "bcoe") { ?>
 
-  		<span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete','id',<?php echo $row_style_type['id']; ?>,'Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>/images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style_type['styleTypeName']; ?>" title="Delete <?php echo $row_style_type['styleTypeName']; ?>"></a></span></td>
+  		<span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete','id',<?php echo $row_style_type['id']; ?>,'Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style_type['styleTypeName']; ?>" title="Delete <?php echo $row_style_type['styleTypeName']; ?>"></a></span></td>
 
   		<?php } else { ?>
 
- 		<span class="icon"><img src="<?php echo $base_url; ?>/images/bin_closed_fade.png"  border="0" /></span>
+ 		<span class="icon"><img src="<?php echo $base_url; ?>images/bin_closed_fade.png"  border="0" /></span>
 
   		<?php } ?>
 
@@ -138,7 +138,7 @@
 
 <?php if (($action == "add") || ($action == "edit")) { ?>
 
-<form name="scores" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>">
+<form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>">
 
 <table>
 

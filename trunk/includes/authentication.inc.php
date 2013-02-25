@@ -1,7 +1,5 @@
 <?php
-
-function authenticateUser($connection, strtolower($username), $password)
-{
+function authenticateUser($connection, strtolower($username), $password) {
 	
 	include('../paths.php');
     require(CONFIG.'config.php');
@@ -46,14 +44,14 @@ function authenticateUser($connection, strtolower($username), $password)
 }
 
 // Connects to a session and checks that the user has authenticated and that the remote IP address matches the address used to create the session.
-function sessionAuthenticate()
-{
+function sessionAuthenticate() {
+  require(CONFIG.'config.php');
+  if (NHC) $base_url = "../";
+	else $base_url = $base_url;
   // Check if the user hasn't logged in
-  if (!isset($_SESSION["loginUsername"]))
-  {
-    header(sprintf("Location: %s", $base_url."/index.php?section=login&msg=1"));
+  if (!isset($_SESSION["loginUsername"])) {
+    header(sprintf("Location: %s", $base_url."index.php?section=login&msg=1"));
     exit;
   }
-
 }
 ?>

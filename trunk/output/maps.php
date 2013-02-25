@@ -12,7 +12,7 @@ if ($section == "map") {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Maps</title>
-<link href="<?php echo $base_url; ?>/css/print.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
 </head>
 <body style="background-color:#fff; margin:0; padding:20px;">
 <div align="center" style="padding:0 0 10px 0; margin:0;">

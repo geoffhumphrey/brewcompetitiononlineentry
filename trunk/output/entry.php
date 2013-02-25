@@ -10,6 +10,12 @@ include(INCLUDES.'headers.inc.php');
 include(INCLUDES.'scrubber.inc.php');
 include(INCLUDES.'constants.inc.php');
 
+function pay_to_print($prefs_pay,$entry_paid) { 
+	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
+	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
+	elseif ($prefs_pay == "N") return TRUE;
+}
+
 $entry_closed = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],$row_prefs['prefsTimeFormat'], "long", "date-no-gmt");
 
 include_once(INCLUDES.'tbs_class_php5.php');
@@ -47,10 +53,17 @@ $row_prefs = mysql_fetch_assoc($prefs);
 // Check access restrictions
 if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
       $row_logged_in_user['userLevel'] > 1) { 
-  echo "<html><head><title>Error</title></head><body>";
-  echo "<p>You do not have sufficient access priveliges to view this page.</p>";
-  echo "</body>";
-  exit();
+  	echo "<html><head><title>Error</title></head><body>";
+  	echo "<p>You do not have sufficient access priveliges to view this page.</p>";
+  	echo "</body>";
+  	exit();
+}
+
+if (!pay_to_print($row_prefs['prefsPayToPrint'],$brewing_info['brewPaid'])) {
+	echo "<html><head><title>Error</title></head><body>";
+  	echo "<p>You must pay for your entry to print its entry form and bottle labels.</p>";
+  	echo "</body>";
+  	exit();
 }
 $brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
@@ -121,8 +134,10 @@ switch ($brewing_info['brewMead3']) {
 }
 
 // Style name
-if ($brewing_info['brewCategory'] < 29) 
-  $brewing_info['styleName'] = $brewing_info['brewStyle'];
+if ($brewing_info['brewCategory'] < 29) { 
+  	$brewing_info['styleName'] = $brewing_info['brewStyle'];
+ 	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
+}
 else
   $brewing_info['styleName'] = $row_contest_info['contestName']." Style: ".$brewing_info['brewStyle']; 
 
@@ -145,7 +160,7 @@ if ($row_prefs['prefsEntryForm'] == "N") {
 	$barcode = $brewing_info['id'];
 
 	// Using code from http://www.barcodephp.com
-	$barcode_link = $base_url."/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=30&checksum=&code=BCGcode39";
+	$barcode_link = "../includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=30&checksum=&code=BCGcode39";
 
 }
 
@@ -188,7 +203,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	$brewing_info['grains']=array();
 	for ($i=1; $i <= 9; $i++) {
 	  if ($brewing_info['brewGrain'.$i] != "") {
-		$brewing_info['grains'][$i]['name']=$brewing_info['brewGrain'.$i];
+		$brewing_info['grains'][$i]['name']=strtr($brewing_info['brewGrain'.$i],$html_remove);;
 	
 		// Metric/US conversion
 		if ($row_prefs['prefsWeight2'] == "kilograms") {
@@ -210,7 +225,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	$brewing_info['extracts']=array();
 	for ($i=1; $i <= 9; $i++) {
 	  if ($brewing_info['brewExtract'.$i] != "") {
-		$brewing_info['extracts'][$i]['name']=$brewing_info['brewExtract'.$i];
+		$brewing_info['extracts'][$i]['name']=strtr($brewing_info['brewExtract'.$i],$html_remove);;
 	
 		// Metric/US conversion
 		if ($row_prefs['prefsWeight2'] == "kilograms") {
@@ -232,7 +247,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	$brewing_info['adjuncts']=array();
 	for ($i=1; $i <= 9; $i++) {
 	  if ($brewing_info['brewAddition'.$i] != "") {
-		$brewing_info['adjuncts'][$i]['name']=$brewing_info['brewAddition'.$i];
+		$brewing_info['adjuncts'][$i]['name']=strtr($brewing_info['brewAddition'.$i],$html_remove);;
 	
 		// Metric/US conversion
 		if ($row_prefs['prefsWeight2'] == "kilograms") {
@@ -273,7 +288,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 9; $i++) {
 	  if ($brewing_info['brewHops'.$i] != "") {
-		$brewing_info['hops'][$i]['name']=$brewing_info['brewHops'.$i];
+		$brewing_info['hops'][$i]['name']=strtr($brewing_info['brewHops'.$i],$html_remove);;
 		$brewing_info['hops'][$i]['alphaAcid']=$brewing_info['brewHops'.$i.'IBU'];
 		$brewing_info['hops'][$i]['minutes']=$brewing_info['brewHops'.$i.'Time'];
 		$brewing_info['hops'][$i]['use']=$brewing_info['brewHops'.$i.'Use'];
@@ -296,7 +311,7 @@ if ($row_prefs['prefsEntryForm'] != "N") {
 	$brewing_info['mashSteps']=array();
 	for ($i=1; $i <= 9; $i++) {
 	  if ($brewing_info['brewMashStep'.$i.'Temp'] != 0) {
-		$brewing_info['mashSteps'][$i]['name']=$brewing_info['brewMashStep'.$i.'Name'];
+		$brewing_info['mashSteps'][$i]['name']=strtr($brewing_info['brewMashStep'.$i.'Name']);
 		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
 		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];
 		// Metric/US conversion

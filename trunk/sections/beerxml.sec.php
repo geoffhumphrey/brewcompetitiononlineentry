@@ -59,7 +59,7 @@ if ($_FILES['userfile']) {
         $insertedRecipes = $input->insertBlogs();
         $recipes = '';
         foreach($insertedRecipes as $id=>$name){
-            $recipes .= "<tr><td><a href=\"".$base_url."/index.php?page=brewBlogDetail&amp;id=" .$id . "\">" . $name . "</a></td></tr>";
+            $recipes .= "<tr><td><a href=\"".$base_url."index.php?page=brewBlogDetail&amp;id=" .$id . "\">" . $name . "</a></td></tr>";
         }
         $message = count($insertedRecipes) . " BrewBlogs Inserted";
     }
@@ -88,7 +88,7 @@ $query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'
 			
 if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
 <?php if ($row_check['count'] < $row_prefs['prefsUserEntryLimit']) { ?>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
@@ -107,7 +107,7 @@ if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>" />
 </form>
 <?php } else { ?>
-<span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png"  /></span><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong>
+<span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong>
 <?php } ?>
 <?php } else { ?>
 <div id="header">

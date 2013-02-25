@@ -13,11 +13,11 @@ include(DB.'brewer.db.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/username_check.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/usable_forms.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/username_check.js" ></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
 <script type="text/javascript">
 pic1 = new Image(16, 16); 
-pic1.src = "<?php echo $base_url; ?>/images/loader.gif";
+pic1.src = "<?php echo $base_url; ?>images/loader.gif";
 
 $(document).ready(function(){
 
@@ -27,11 +27,11 @@ var usr = $("#user_name").val();
 
 if(usr.length >= 3)
 {
-$("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/loader.gif" align="absmiddle"><span>Checking availability...');
+$("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/loader.gif" align="absmiddle"><span>Checking availability...');
 
     $.ajax({  
     type: "POST",  
-    url: "<?php echo $base_url; ?>/includes/username.inc.php",  
+    url: "<?php echo $base_url; ?>includes/username.inc.php",  
     data: "user_name="+ usr,  
     success: function(msg){  
    
@@ -41,7 +41,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>/images/
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
 		$("#user_name").addClass("object_ok");
-		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>/images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
+		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
 	}  
 	else  
 	{  
@@ -104,7 +104,7 @@ document.getElementById("msg_email").innerHTML=httpxml.responseText;
 
 }
 }
-var url="<?php echo $base_url; ?>/includes/email.inc.php";
+var url="<?php echo $base_url; ?>includes/email.inc.php";
 url=url+"?email="+email;
 url=url+"&sid="+Math.random();
 httpxml.onreadystatechange=stateck;
@@ -168,7 +168,7 @@ echo "<h2>Add";
 if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>";
 } 
 ?> 
-<form action="<?php echo $base_url; ?>/includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
@@ -387,15 +387,15 @@ if ($section != "admin") {
 <tr>
 	<td class="dataLabel">CAPTCHA:</td>
     <td class="data">
-    <img id="captcha" src="<?php echo $base_url; ?>/captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
+    <img id="captcha" src="<?php echo $base_url; ?>captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
 	<p>
-    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
-	<param name="movie" value="<?php echo $base_url; ?>/captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>/captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
+    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
+	<param name="movie" value="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
 	</object>
     &nbsp;Play audio
     </p>
 	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
-    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>/captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
+    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
     </td>
     <td class="data"><span class="required">Required</span></td>
     <td class="data">&nbsp;</td>

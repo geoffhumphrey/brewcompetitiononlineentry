@@ -13,26 +13,26 @@ $totalRows_entry_count = total_paid_received($go,"default");
 ?></h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin">Back to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a>
   	</span>
     <?php if  ($dbTable != "default") { ?>
 	<span class="adminSubNav">
-        <span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=archive">Back to Archives</a>
+        <span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Back to Archives</a>
      </span> 
 	<?php } ?>
     <?php if ($dbTable == "default") { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_tables">Back to Tables List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Back to Tables List</a>
     </span>
 	<?php if ($action != "default") { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores">Back to Scores List</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Back to Scores List</a>
     </span>
 	<?php } ?>
    	<?php if ($action == "default") { ?>
     <?php if ($totalRows_tables > 0) { ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
     		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     		<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
     			<?php do { 
@@ -41,14 +41,14 @@ $totalRows_entry_count = total_paid_received($go,"default");
 				$row_scores_1 = mysql_fetch_assoc($scores_1);
 				$totalRows_scores_1 = $row_scores_1['count'];
 				?>
-   				<a class="menuItem" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_1  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
+   				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_1  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
    			 	<?php mysql_free_result($scores_1); } while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
     		</div>
   	</span>
     <?php } // end if ($totalRows_tables > 0) 
 	} ?>
     <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>/images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
     <?php } // end if ($dbTable == "default") ?>
 </div>
@@ -151,7 +151,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; elseif ($row_scores['scorePlace'] == "6") echo "Admin Avance"; elseif ($row_scores['scorePlace'] == "") echo "<span style='display:none'>N/A</span>"; else echo $row_scores['scorePlace']; ?></td>  
         <td class="data"><?php if ($row_scores['scoreMiniBOS'] == "1") echo "X"; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>/images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>/images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
+        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
         </td>
         <?php } ?>
     </tr>
@@ -165,7 +165,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 
 <?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { ?>
 <?php if ($id != "default") { ?>
-<form name="scores" method="post" action="<?php echo $base_url; ?>/includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>">
+<form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>">
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {

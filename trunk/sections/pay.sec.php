@@ -40,12 +40,12 @@ if (($row_prefs['prefsPayToPrint'] == "N") && ($unconfirmed > 0)) echo "<div cla
 
 ?>
 
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/pay_my_fees.html" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo readable_number($total_not_paid); ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry:"; else echo "entries:"; ?></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/pay_my_fees.html" title="BCOE&amp;M Help: Pay My Fees">Pay My Fees Help</a></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your total entry fees are <?php echo $row_prefs['prefsCurrency'].$total_entry_fees.". You need to pay ".$row_prefs['prefsCurrency'].$total_to_pay."."; ?></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>You currently have <?php echo readable_number($total_not_paid); ?> <strong>unpaid</strong> <?php if ($total_not_paid == "1") echo "entry:"; else echo "entries:"; ?></p>
 <ul>
     <?php 
-	$return = $base_url."/index.php?section=pay&msg=10&view=";
+	$return = $base_url."index.php?section=pay&msg=10&view=";
 	$entries = "";
 	do { if ($row_log['brewPaid'] != "1") { ?> 
     	<li><?php echo "Entry #".sprintf("%04s",$row_log['id']).": ".$row_log['brewName']." (Category ".$row_log['brewCategory'].$row_log['brewSubCategory'].")"; ?></li>
@@ -56,18 +56,18 @@ if (($row_prefs['prefsPayToPrint'] == "N") && ($unconfirmed > 0)) echo "<div cla
 	} while ($row_log = mysql_fetch_assoc($log)); 
 	?>
     </ul>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'],2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after the ".addOrdinalNumberSuffix($row_contest_info['contestEntryFeeDiscountNum'])." entry. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/money.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Fees are <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee'],2); ?> per entry. <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFee2'], 2)." per entry after the ".addOrdinalNumberSuffix($row_contest_info['contestEntryFeeDiscountNum'])." entry. "; if ($row_contest_info['contestEntryCap'] != "") echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryCap'], 2)." for unlimited entries. "; ?></p>
 <?php if ($row_brewer['brewerDiscount'] == "Y") { ?>
-<p><span class="icon"><img src="<?php echo $base_url; ?>/images/star.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been discounted to <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFeePasswordNum'], 2)." per entry."; ?></p>
+<p><span class="icon"><img src="<?php echo $base_url; ?>images/star.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been discounted to <?php echo $row_prefs['prefsCurrency'].number_format($row_contest_info['contestEntryFeePasswordNum'], 2)." per entry."; ?></p>
 <?php } ?>
 <?php } ?>
-<?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="<?php echo $base_url; ?>/images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
+<?php if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) { ?><span class="icon"><img src="<?php echo $base_url; ?>images/thumb_up.png"  border="0" alt="Entry Fees" title="Entry Fees"></span>Your fees have been paid. Thank you!<?php } ?>
 <?php if ($total_entry_fees == 0) echo "You have not logged any entries yet."; ?>
 
 <?php if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) { ?>
 <h2>Discounted Entry Fee</h2>
 <p>Enter the code supplied by the competition organizers for a discounted entry fee.</p>
-<form action="<?php echo $base_url; ?>/includes/process.inc.php?action=check_discount&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;id=<?php echo $row_brewer['uid']; ?>" method="POST" name="form1" id="form1">
+<form action="<?php echo $base_url; ?>includes/process.inc.php?action=check_discount&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;id=<?php echo $row_brewer['uid']; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">Discount Code:</td>
@@ -125,7 +125,7 @@ $fee = number_format((($total_to_pay * .03) + .30), 2, '.', '');
 <input type="hidden" name="no_shipping" value="1">
 <input type="hidden" name="rm" value="1">
 <input type="hidden" name="return" value="<?php echo rtrim($return, "-"); ?>">
-<input type="hidden" name="cancel_return" value="<?php echo $base_url."/index.php?section=pay&msg=11"; ?>">
+<input type="hidden" name="cancel_return" value="<?php echo $base_url."index.php?section=pay&msg=11"; ?>">
 <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted">
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" class="paypal" alt="Pay your competition entry fees with PayPal" title="Pay your compeition entry fees with PayPal">
 </form>
