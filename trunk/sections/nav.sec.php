@@ -9,7 +9,7 @@ if (strstr($section,"step")) { ?>
 <div class="setupTitle">Set Up Your Brew Competition Online Entry and Management Site</div>
 <?php } else { ?>
 <ul id="nav">
-  <li><?php if ($section != "default") { ?><a href="<?php echo $base_url; ?>">Home</a><?php } else { ?> Home<?php } ?></li>
+  <li><?php if ($section != "default") { ?><a href="<?php if ($base_url == "") echo "index.php"; else echo $base_url; ?>">Home</a><?php } else { ?> Home<?php } ?></li>
   <li><?php if ($section != "rules") { ?><a href="<?php echo build_public_url("rules","default","default",$sef,$base_url); ?>">Rules</a><?php } else { ?>Rules<?php } ?></li>
   <li><?php if ($section != "entry") { ?><a href="<?php echo build_public_url("entry","default","default",$sef,$base_url); ?>">Entry Info</a><?php } else { ?>Entry Info<?php } ?></li>
   <li><?php if ($section != "volunteers") { ?><a href="<?php echo build_public_url("volunteers","default","default",$sef,$base_url); ?>">Volunteer Info</a><?php } else { ?>Volunteer Info<?php } ?></li>
@@ -20,9 +20,12 @@ if (strstr($section,"step")) { ?>
   <?php if (($registration_open == 1) && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION["loginUsername"])) { ?><li><?php if ($section != "register") { ?><a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php } ?>
-  <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?> 
-  <?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
-  
+  <?php if (($registration_open > "0") && (isset($_SESSION["loginUsername"])))  { ?>
+  		<?php if (NHC) { ?>
+  			<?php if (($row_contest_info['contestEntryFee'] > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
+  		<?php } else { ?> 
+  			<?php if (($row_contest_info['contestEntryFee'] > 0) && (judging_date_return() > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
+  		<?php } ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onclick="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onmouseover="buttonMouseover(event, 'myInfoMenu');"><?php if ($section == "list") echo "<strong>My Info and Entries</strong>"; else echo "My Info and Entries"; ?></a></div></li>
   <?php } ?>
   <?php if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) { ?>

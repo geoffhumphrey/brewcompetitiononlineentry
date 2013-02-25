@@ -32,12 +32,13 @@ function sessionAuthenticateNav()
 {
 	require(CONFIG.'config.php');
 	
-	if (NHC) $base_url = "../";
-	else $base_url = $base_url;
+	
 	
   // Check if the user hasn't logged in
   if (!isset($_SESSION["loginUsername"])) echo "<a href=\"".$base_url."index.php?section=login\">Log In</a>"; 
-  if (isset($_SESSION["loginUsername"]))  echo "<a href=\"".$base_url."includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION["loginUsername"]."</div>";
+  if (isset($_SESSION["loginUsername"])) { 
+  	echo "<a href=\"".$base_url."includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION["loginUsername"]."</div>";
+  }
 }
 
 ?>
