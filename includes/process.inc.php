@@ -225,16 +225,27 @@ function clean_up_url($referer) {
 	
 }
 
-if (strpos($_POST['relocate'],"?") === false) { 
-	$insertGoTo = $_POST['relocate']."?msg=1"; 
-	$updateGoTo = $_POST['relocate']."?msg=2";
-	$massUpdateGoTo = $_POST['relocate']."?msg=9";
+if (NHC) {
+		$insertGoTo = "../";
+		$updateGoTo = "../";
+		$massUpdateGoTo = "../";
+	} 
+	else {
+		$insertGoTo = "";
+		$updateGoTo = "";
+		$massUpdateGoTo = "../";
+	}
+
+if (strpos($_POST['relocate'],"?") === false) {
+	$insertGoTo .= $_POST['relocate']."?msg=1"; 
+	$updateGoTo .= $_POST['relocate']."?msg=2";
+	$massUpdateGoTo .= $_POST['relocate']."?msg=9";
 }
 
 else { 
-	$insertGoTo = $_POST['relocate']."&msg=1";
-	$updateGoTo = $_POST['relocate']."&msg=2";
-	$massUpdateGoTo = $_POST['relocate']."&msg=9";
+	$insertGoTo .= $_POST['relocate']."&msg=1";
+	$updateGoTo .= $_POST['relocate']."&msg=2";
+	$massUpdateGoTo .= $_POST['relocate']."&msg=9";
 }
 if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 

@@ -90,6 +90,19 @@ if($msie_key !== false) { // you found MSIE browser
     }
 }
 
+if (NHC) {
+	// ONLY for NHC application
+	// Check to see if SSL is in place and redirect to non SSL instance if not on pay screens
+	if ($section != "pay") {
+		$https = ((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off')) ? true : false;
+		if ($https)  {
+			$location = "http://www.brewingcompetition.com".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+			header("Location: $location");
+			exit;
+		}
+	}
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -228,7 +241,7 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		}
   } 
   if (($registration_open == "1") && ($ua != "unsupported")) { // If registration is currently open
-  	if ((NHC) && ($section == "default")) echo "<div class='error'>".$totalRows_log." of ".$row_prefs['prefsEntryLimit']." entries have been logged for this region.</div>";
+  	if ((NHC) && ($section == "default")) echo "<div class='error'>".$totalRows_entry_count." of ".$row_prefs['prefsEntryLimit']." entries have been logged for this region.</div>";
   	if (open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open)) { 
 	
 	$query_entry_limit = "SELECT brewUpdated FROM $brewing_db_table ORDER BY brewUpdated DESC LIMIT 1";
