@@ -8,62 +8,77 @@
 // Custom Code for AHA NHC
 
 if (NHC) {
-	$email = $_POST['user_name'];
-
-	$query_user_exists = "SELECT * FROM nhcentrant WHERE email = '$email'";
-	$user_exists = mysql_query($query_user_exists, $brewing) or die(mysql_error());
-	$row_user_exists = mysql_fetch_assoc($user_exists);
-	$totalRows_user_exists = mysql_num_rows($user_exists);
 	
-	// Email in the nhcentrants table. They have already been warned about its existance. Redirect.
-	if ($totalRows_user_exists > 0) {
-		//echo $totalRows_user_exists."<br>";
-		header(sprintf("Location: %s", $nhc_landing_url."/index.php?msg=5"));
-		exit();
+	include (DB.'common.db.php');
+	function open_or_closed($now,$date1,$date2) {
+		if ($now < $date1) $output = "0";
+		elseif (($now >= $date1) && ($now <= $date2)) $output = "1";
+		else $output = "2";
+		return $output;
 	}
 	
-	$aha = $_POST['brewerAHA']; 
-	if ($aha != "") {
-		$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcentrant WHERE AHANumber = '$aha'";
-		$aha_exists = mysql_query($query_aha_exists, $brewing) or die(mysql_error());
-		$row_aha_exists = mysql_fetch_assoc($aha_exists);
+	$registration_open = open_or_closed(strtotime("now"),$_SESSION['contestRegistrationOpen'],$_SESSION['contestRegistrationDeadline']);
+	
+	
+	if ($registration_open == 1) {
+		$email = $_POST['user_name'];
+	
+		$query_user_exists = "SELECT * FROM nhcentrant WHERE email = '$email'";
+		$user_exists = mysql_query($query_user_exists, $brewing) or die(mysql_error());
+		$row_user_exists = mysql_fetch_assoc($user_exists);
+		$totalRows_user_exists = mysql_num_rows($user_exists);
 		
-		if ($row_aha_exists['count'] > 0) $aha_exists = TRUE; else $aha_exists = FALSE;
-	}
-	
-	if ($aha == "") $aha_exists = FALSE;
-	//echo $aha_exists;
-	//exit();
-	// If the AHA number is in the DB, redirect.
-	if ($aha_exists) {
-		setcookie("user_name", $_POST['user_name'], 0, "/");
-		setcookie("user_name2", $_POST['user_name2'], 0, "/");
-		setcookie("password", $_POST['password'], 0, "/");
-		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
-		setcookie("brewerState", $_POST['brewerState'], 0, "/");
-		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
-		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-		setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
-		setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
-		setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
-		setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
-		setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
-		//echo "AHA exists!";
-		header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&msg=6"));
-		exit();
+		// Email in the nhcentrants table. They have already been warned about its existance. Redirect.
+		if ($totalRows_user_exists > 0) {
+			//echo $totalRows_user_exists."<br>";
+			header(sprintf("Location: %s", $nhc_landing_url."/index.php?msg=5"));
+			exit();
+		}
 		
+		
+		$aha = $_POST['brewerAHA']; 
+		if ($aha != "") {
+			$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcentrant WHERE AHANumber = '$aha'";
+			$aha_exists = mysql_query($query_aha_exists, $brewing) or die(mysql_error());
+			$row_aha_exists = mysql_fetch_assoc($aha_exists);
+			
+			if ($row_aha_exists['count'] > 0) $aha_exists = TRUE; else $aha_exists = FALSE;
+		}
+		
+		if ($aha == "") $aha_exists = FALSE;
+		//echo $aha_exists;
+		//exit();
+		// If the AHA number is in the DB, redirect.
+		if ($aha_exists) {
+			setcookie("user_name", $_POST['user_name'], 0, "/");
+			setcookie("user_name2", $_POST['user_name2'], 0, "/");
+			setcookie("password", $_POST['password'], 0, "/");
+			setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+			setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+			setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+			setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+			setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+			setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+			setcookie("brewerState", $_POST['brewerState'], 0, "/");
+			setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+			setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+			setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+			setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
+			setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
+			setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+			setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
+			setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+			//echo "AHA exists!";
+			header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&msg=6"));
+			exit();
+			
+		}
+		/*
+		// If AHA is blank or doesn't exist, perform other checks and redirect if needed.
+		if (!$aha_exists) {  }
+		*/
+		mysql_free_result($user_exists);
 	}
-	/*
-	// If AHA is blank or doesn't exist, perform other checks and redirect if needed.
-	if (!$aha_exists) {  }
-	*/
-	mysql_free_result($user_exists);
 	
 	// ...and proceed normally with registration at the Region level.
 }
@@ -280,7 +295,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 						   );
 		}
 		
-		if((NHC) && ($filter == "admin")) {
+		if(NHC) {
 			$updateSQL =  sprintf("INSERT INTO nhcentrant (
 			uid, 
 			firstName, 
@@ -308,7 +323,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	if ($filter == "default") {
 	    // Log in the user and redirect
 		session_start();
-		$_SESSION["loginUsername"] = $username;
+		$_SESSION['loginUsername'] = $username;
 		
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
@@ -327,18 +342,20 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
-			header(sprintf("Location: %s", $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge"));
+			$insertGoTo = $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge";
+			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
 		else { 
 		$pattern = array('\'', '"');
   		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   		header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
+		//echo $insertGoTo;
 	  } // end if ($filter == "admin")
 	}
   }
   //if ($filter == "admin") header(sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=3"));
-  else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=3"));
+ // else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=3"));
 } // End CAPCHA check
 
 ?>

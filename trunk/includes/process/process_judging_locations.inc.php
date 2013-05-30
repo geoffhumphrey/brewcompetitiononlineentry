@@ -33,7 +33,7 @@ if ($action == "edit") {
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
-	//echo $judgingDate; echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$row_prefs['prefsTimeZone'];
+	//echo $judgingDate; echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 

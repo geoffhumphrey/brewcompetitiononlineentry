@@ -8,7 +8,9 @@ require_once(DB.'common.db.php');
 include_once(DB.'admin_common.db.php');
 require_once(INCLUDES.'version.inc.php');
 require_once(INCLUDES.'headers.inc.php');
-
+require(INCLUDES.'constants.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (NHC) $base_url = "../";
 function check_flight_round($flight_round,$round) {
 
 	if ($round == "default") {
@@ -49,16 +51,10 @@ echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " f
 else {
 ?>
 <body>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',200);
-</script>
-<?php 
+<?php
+//print_r($_SESSION);
 // Use the following if not using queued judging - delinieates by flight and round
- if ($row_judging_prefs['jPrefsQueued'] == "N") {
+ if ($_SESSION['jPrefsQueued'] == "N") {
 
 function number_of_flights($table_id) { 
     require(CONFIG.'config.php');
@@ -102,7 +98,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <p>** Please Note:</p>
             <ul>
@@ -140,10 +136,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc /<br />
+            Box</th>
         <th class="dataHeading bdr1B" width="1%">Round</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
@@ -170,13 +167,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray" nowrap>
 		<?php 
-		if ($view == "entry") echo $row_entries['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -212,7 +210,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
+            <h2><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
             <p>** Please Note:</p>
@@ -250,10 +248,10 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc/Box</th>
         <th class="dataHeading bdr1B" width="1%">Round</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
@@ -280,12 +278,13 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray" nowrap>
         <?php 
-		if ($view == "entry") echo $row_entries['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -305,15 +304,22 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 <div style="page-break-after:always;"></div>
 <?php 	
 	} // end if (($go == "judging_tables") && ($id != "default")) 
-} // end if ($row_judging_prefs['jPrefsQueued'] == "N") 
+} // end if ($_SESSION['jPrefsQueued'] == "N") 
 ?>
 
 
 
-<?php if ($row_judging_prefs['jPrefsQueued'] == "Y") { ?>
+<?php if ($_SESSION['jPrefsQueued'] == "Y") { ?>
 <?php if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id == "default"))  
 do { 
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+
+$query_table_round = sprintf("SELECT COUNT(*) as count from $judging_flights_db_table WHERE flightTable='%s' AND flightRound='%s'",$row_tables['id'],$round);
+$table_round  = mysql_query($query_table_round, $brewing) or die(mysql_error());
+$row_table_round = mysql_fetch_assoc($table_round);
+$round_count[] = $row_table_round['count'];
+
+if (($row_table_round['count'] >= 1) || ($round == "default")) {
 ?>
 <div id="content">
 	<div id="content-inner">
@@ -325,7 +331,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <p>** Note: if there are no entries below, this table has not been assigned to a round.</p>
             <?php } ?>
@@ -354,10 +360,10 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc/Box</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
@@ -380,12 +386,13 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray" nowrap>
         <?php 
-		if ($view == "entry") echo $row_entries['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -400,7 +407,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 </div>
 <div style="page-break-after:always;"></div>
 <?php 	} 
-	while ($row_tables = mysql_fetch_assoc($tables)); 
+} while ($row_tables = mysql_fetch_assoc($tables)); 
+if (($round != "default") && (array_sum($round_count) == 0)) echo "<h2>No tables have been assigned to this round at this location</h2>";
 if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "default")) { 
 $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 ?>
@@ -414,7 +422,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h2>
+            <h2><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>
@@ -442,10 +450,10 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <table class="dataTable" id="sortable<?php echo $row_tables_edit['id']; ?>">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc/Box</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
@@ -469,12 +477,13 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray" nowrap>
         <?php 
-		if ($view == "entry") echo $row_entries['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."<br>"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."<br>"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -489,7 +498,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 </div>
 <?php 	
 	} // end if (($go == "judging_tables" && ($id != "default"))
-} // end if ($row_judging_prefs['jPrefsQueued'] == "Y") 
+} // end if ($_SESSION['jPrefsQueued'] == "Y") 
 ?>
 
 <?php 
@@ -546,10 +555,10 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <table class="dataTable" id="sortable<?php echo $type; ?>">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc/Box</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
@@ -570,12 +579,13 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray" nowrap>
 		<?php 
-		if ($view == "entry") echo $row_entries_1['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries_1['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries_1['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -646,10 +656,10 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <table class="dataTable" id="sortable">
 <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="1%">Pull<br>Order</th>
+    	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
         <th class="dataHeading bdr1B" width="1%">#</th>
-        <th class="dataHeading bdr1B" width="90%">Style / Sub-Style</th>
-        <th class="dataHeading bdr1B" width="1%">Loc /<br>Box</th>
+        <th class="dataHeading bdr1B" width="95%">Style/Sub-Style</th>
+        <th class="dataHeading bdr1B" width="1%">Loc/Box</th>
         <th class="dataHeading bdr1B" width="1%">Score</th>
         <th class="dataHeading bdr1B" width="1%">Place</th>
     </tr>
@@ -670,12 +680,13 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
     	<td class="bdr1B_gray"><p class="box">&nbsp;</p></td>
        	<td class="data bdr1B_gray" nowrap>
 		<?php 
-		if ($view == "entry") echo $row_entries_1['id']; 
+		if ($view == "entry") echo sprintf("%04s",$row_entries_1['id']); 
+		elseif ((NHC) && ($view != "entry")) echo $row_entries_1['brewJudgingNumber'];
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 
 		?>
 		</td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p style='margin-top: 5px;'><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p style='margin-top: 5px;'>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if (style_convert($style,"3")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
+        <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
     </tr>
@@ -696,5 +707,15 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 <?php } // end if (($go == "judging_scores_bos") && ($id != "default")) 
 }
 ?>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+</script>
 </body>
 </html>
+<?php } 
+else echo "<p>Not available.</p>";
+?>

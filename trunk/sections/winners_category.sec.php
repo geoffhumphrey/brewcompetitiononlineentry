@@ -44,7 +44,9 @@ if ($row_score_count['count'] > "0")   {
 		"aoColumns": [
 			{ "asSorting": [  ] },
 			{ "asSorting": [  ] },
+			<?php if (!NHC) { ?>
 			{ "asSorting": [  ] },
+			<?php } ?>
 			{ "asSorting": [  ] },
 			{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
 			{ "asSorting": [  ] }
@@ -58,7 +60,9 @@ if ($row_score_count['count'] > "0")   {
 <tr>
 	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
 	<th class="dataList bdr1B" width="25%">Brewer(s)</th>
+    <?php if (!NHC) { ?>
 	<th class="dataList bdr1B" width="25%">Entry Name</th>
+    <?php } ?>
 	<th class="dataList bdr1B" width="25%">Style</th>
 	<th class="dataList bdr1B">Club</th>
 	<?php if ($filter == "scores") { ?>
@@ -82,7 +86,9 @@ if ($row_score_count['count'] > "0")   {
 <tr>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_scores['scorePlace'],2); else echo display_place($row_scores['scorePlace'],1); ?></td>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewerFirstName']." ".$row_scores['brewerLastName']; if ($row_scores['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_scores['brewCoBrewer']; ?></td>
-	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewName']; ?></td>
+	<?php if (!NHC) { ?>
+    <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewName']; ?></td>
+    <?php } ?>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$row_scores['brewStyle']; ?></td>
 	<td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_scores['brewerClubs']; ?></td>
 	<?php if ($filter == "scores") { ?>

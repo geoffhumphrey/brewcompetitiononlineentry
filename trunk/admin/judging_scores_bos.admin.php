@@ -6,7 +6,7 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 </h2>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">ack to Admin Dashboard</a>
+		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a>
   	</span>
     <?php if  ($dbTable != "default") { ?>
 	<span class="adminSubNav">
@@ -92,7 +92,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"bPaginate" : false,
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
-		"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
+		"iDisplayLength" :  <?php echo round($_SESSION['prefsRecordPaging']); ?>,
 			"sDom": 'irti',
 			"bStateSave" : false,
 			"aaSorting": [[2,'asc'],[6,'asc'],[7,'asc']],
@@ -184,6 +184,7 @@ $totalRows_tables = mysql_num_rows($tables_1);
 <?php } // end if ($action == "default") ?>
 
 <?php if ($action == "enter") { ?>
+<?php if ($totalRows_enter_bos > 0) { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -243,7 +244,7 @@ $totalRows_tables = mysql_num_rows($tables_1);
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
-          <?php for($i=1; $i<$row_judging_prefs['jPrefsMaxBOS']+1; $i++) { ?>
+          <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
           <option value="<?php echo $i; ?>" <?php if ($row_scores['scorePlace'] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
           <?php } ?>
         </select>
@@ -258,4 +259,7 @@ $totalRows_tables = mysql_num_rows($tables_1);
 <p><input type="submit" class="button" value="Enter"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } // end if ($id != "default"); ?>
+<?php } 
+else echo "<p>There are no qualifying entries available.</p>";
+}
+?>

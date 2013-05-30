@@ -9,7 +9,13 @@ if ($action == "add") {
 }
 
 if (($action == "edit") || ($section == "step8")) {
-	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $row_judging_prefs['jPrefsFlightEntries'];
+	
+	// Empty the prefs session variable
+	// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+	session_start();
+	unset($_SESSION['prefs'.$prefix_session]);
+	
+	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $_SESSION['jPrefsFlightEntries'];
 $updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 					 
 jPrefsQueued=%s,

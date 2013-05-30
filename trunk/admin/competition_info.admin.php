@@ -17,17 +17,17 @@ $row_name = mysql_fetch_assoc($name);
 <table>
   <tr>
     <td class="dataLabel">Competition Coordinator's First Name:</td>
-    <td class="data"><input name="contactFirstName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerFirstName']; ?>"></td>
+    <td class="data"><input name="contactFirstName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['brewerFirstName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Competition Coordinator's Last Name:</td>
-    <td class="data"><input name="contactLastName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerLastName']; ?>"></td>
+    <td class="data"><input name="contactLastName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['brewerLastName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Contact Email:</td>
-    <td class="data"><input name="contactEmail" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_name['brewerEmail']; ?>"></td>
+    <td class="data"><input name="contactEmail" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['brewerEmail']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
@@ -38,38 +38,45 @@ $row_name = mysql_fetch_assoc($name);
 <?php } ?>
 <?php if (($section != "step4") && (get_contact_count() == 0)) { ?>
 <div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="<?php echo $base_url; ?>index.php?section=admin&go=contacts">add a contact</a>?</div>
-<?php } ?>
+<?php } 
+
+$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
+$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+$row_contest_info = mysql_fetch_assoc($contest_info);
+$totalRows_contest_info = mysql_num_rows($contest_info); 
+
+?>
 <h3>General</h3>
 <table>
   <tr>
     <td class="dataLabel">Competition Name:</td>
-    <td class="data"><input name="contestName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestName']; ?>"></td>
+    <td class="data"><input name="contestName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['contestName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">BJCP Competition ID:</td>
-    <td class="data"><input name="contestID" type="text" class="submit" size="10" maxlength="255" value="<?php echo $row_contest_info['contestID']; ?>"></td>
+    <td class="data"><input name="contestID" type="text" class="submit" size="10" maxlength="255" value="<?php echo $_SESSION['contestID']; ?>"></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel">Hosted By:</td>
-    <td class="data"><input name="contestHost" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHost']; ?>"></td>
+    <td class="data"><input name="contestHost" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['contestHost']; ?>"></td>
 
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>
     <td class="dataLabel">Host Location:</td>
-    <td class="data"><input name="contestHostLocation" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostLocation']; ?>"></td>
+    <td class="data"><input name="contestHostLocation" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['contestHostLocation']; ?>"></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel">Host Website Address:</td>
-    <td class="data"><input name="contestHostWebsite" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestHostWebsite']; ?>"></td>
+    <td class="data"><input name="contestHostWebsite" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['contestHostWebsite']; ?>"></td>
     <td class="data"><em>Provide the entire website address including the http://</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
-    <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
+    <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $_SESSION['contestLogo']; ?>" />
     <br /><br /><span class="icon"><img src="<?php echo $base_url; ?>images/picture_add.png" ></span><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
@@ -101,56 +108,56 @@ $row_name = mysql_fetch_assoc($name);
     <td class="dataLabel">Entry Window Open Date:</td>
     <td class="data">
     <input id="contestEntryOpen" name="contestEntryOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" />
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" />
    </td>
     <td class="dataLabel">Time: </td>
     <td class="data"><input id="contestEntryOpenTime" name="contestEntryOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required</span> <em>The date/time drop-off and mail-in locations will begin receiving entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Window Close Date:</td>
     <td class="data"><input id="contestEntryDeadline" name="contestEntryDeadline" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestEntryDeadlineTime" name="contestEntryDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required</span> <em>The final date/time drop-off and mail-in locations will receive entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Open Date:</td>
     <td class="data"><input id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" /></td>
     <td class="dataLabel"> Time:</td>
     <td class="data"><input id="contestRegistrationOpenTime" name="contestRegistrationOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Close Date:</td>
     <td class="data"><input id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" class="submit" size="20"  value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestRegistrationDeadlineTime" name="contestRegistrationDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Judge/Steward Registration Open Date:</td>
     <td class="data"><input id="contestJudgeOpen" name="contestJudgeOpen" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" /></td>
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestJudgeOpenTime" name="contestJudgeOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open judge/steward registrations.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Judge/Steward Registration Close Date:</td>
     <td class="data"><input id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" class="submit" size="20"  value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestJudgeDeadlineTime" name="contestJudgeDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>" /></td>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
     <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close judge/steward registrations.</em></td>
   </tr>
 </table>
@@ -160,7 +167,7 @@ $row_name = mysql_fetch_assoc($name);
     <td class="dataLabel">Competition Rules:</td>
     <td class="data">
     	<textarea name="contestRules" cols="90" rows="15">
-		<?php if ($section != "step4") echo $row_contest_info['contestRules']; else { ?>
+		<?php if ($section != "step4") echo $_SESSION['contestRules']; else { ?>
         <p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>
 		<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>
 		<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>
@@ -189,7 +196,7 @@ $row_name = mysql_fetch_assoc($name);
     <td class="dataLabel">Volunteer Info:</td>
     <td class="data">
     	<textarea name="contestVolunteers" cols="90" rows="15">
-		<?php if ($section != "step4") echo $row_contest_info['contestVolunteers']; else { ?>
+		<?php if ($section != "step4") echo $_SESSION['contestVolunteers']; else { ?>
         <p>Volunteer information coming soon!</p>
         <?php } ?>
         </textarea>
@@ -206,49 +213,49 @@ $row_name = mysql_fetch_assoc($name);
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Entry Fee:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee']; ?>"></td>
-    <td class="data style1"> <span class="required">Required </span>Fee for a single entry (<?php echo $row_prefs['prefsCurrency']; ?>) - please enter a zero (0) for a free entry fee.</td>
+    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFee" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryFee']; ?>"></td>
+    <td class="data style1"> <span class="required">Required </span>Fee for a single entry (<?php echo $_SESSION['prefsCurrency']; ?>) - please enter a zero (0) for a free entry fee.</td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Fee Cap:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryCap" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryCap']; ?>"></td>
-    <td class="data"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php echo $row_prefs['prefsCurrency']; ?>X for the first X number of entries, <?php echo $row_prefs['prefsCurrency']; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
+    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryCap" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryCap']; ?>"></td>
+    <td class="data"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php echo $_SESSION['prefsCurrency']; ?>X for the first X number of entries, <?php echo $_SESSION['prefsCurrency']; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Discount Multiple Entries:</td>
     <td nowrap="nowrap" class="data">
-    <input type="radio" name="contestEntryFeeDiscount" value="Y" id="contestEntryFeeDiscount_0"  <?php if ($row_contest_info['contestEntryFeeDiscount'] == "Y") echo "CHECKED"; ?> /> 
+    <input type="radio" name="contestEntryFeeDiscount" value="Y" id="contestEntryFeeDiscount_0"  <?php if ($_SESSION['contestEntryFeeDiscount'] == "Y") echo "CHECKED"; ?> /> 
     Yes&nbsp;&nbsp;
-    <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if ($row_contest_info['contestEntryFeeDiscount'] == "N") echo "CHECKED"; if ($section == "step4") echo "CHECKED"; ?>/> 
+    <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if ($_SESSION['contestEntryFeeDiscount'] == "N") echo "CHECKED"; if ($section == "step4") echo "CHECKED"; ?>/> 
     No    </td>
     <td class="data"><em>Designate Yes or No if your competition offers a discounted entry fee after a certain number is reached.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Minimum Entries for Discount:</td>
-    <td class="data"><input name="contestEntryFeeDiscountNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeeDiscountNum']; ?>"></td>
+    <td class="data"><input name="contestEntryFeeDiscountNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryFeeDiscountNum']; ?>"></td>
     <td class="data"><em>The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Discounted Entry Fee:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFee2']; ?>"></td>
-    <td class="data"><em>Fee for a single, </em>discounted<em> entry (<?php echo $row_prefs['prefsCurrency']; ?>).</em></td>
+    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryFee2']; ?>"></td>
+    <td class="data"><em>Fee for a single, </em>discounted<em> entry (<?php echo $_SESSION['prefsCurrency']; ?>).</em></td>
   </tr>
    <tr>
     <td class="dataLabel">Member Discount Password:</td>
-    <td class="data"><input name="contestEntryFeePassword" type="text" class="submit" size="10" maxlength="30" value="<?php echo $row_contest_info['contestEntryFeePassword']; ?>"></td>
+    <td class="data"><input name="contestEntryFeePassword" type="text" class="submit" size="10" maxlength="30" value="<?php echo $_SESSION['contestEntryFeePassword']; ?>"></td>
     <td class="data"><em>Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Member Discount Fee:</td>
-    <td class="data"><?php echo $row_prefs['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
-    <td class="data"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $row_prefs['prefsCurrency']; ?>). If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</em></td>
+    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryFeePasswordNum']; ?>"></td>
+    <td class="data"><em>Fee for a single, </em>discounted<em> member entry (<?php echo $_SESSION['prefsCurrency']; ?>). If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</em></td>
   </tr>
 </table>
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Bottle Acceptance Rules:</td>
     <td class="data">
-    	<textarea name="contestBottles" cols="90" rows="15"><?php if ($section != "step4") echo $row_contest_info['contestBottles']; else { ?>
+    	<textarea name="contestBottles" cols="90" rows="15"><?php if ($section != "step4") echo $_SESSION['contestBottles']; else { ?>
         <p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>
 		<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>
 		<p>Bottles will not be returned to contest entrants.</p>
@@ -267,12 +274,12 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
   <tr>
     <td class="dataLabel">Name of Shipping Location:</td>
-    <td class="data"><input name="contestShippingName" type="text" class="submit" value="<?php echo $row_contest_info['contestShippingName']; ?>" size="30" /></td>
+    <td class="data"><input name="contestShippingName" type="text" class="submit" value="<?php echo $_SESSION['contestShippingName']; ?>" size="30" /></td>
     <td class="data">&nbsp;</td>
   </tr>
   <tr>
     <td class="dataLabel">Shipping Address:</td>
-    <td class="data"><input name="contestShippingAddress" type="text" class="submit mceNoEditor" value="<?php echo $row_contest_info['contestShippingAddress']; ?>" size="50" /></td>
+    <td class="data"><input name="contestShippingAddress" type="text" class="submit mceNoEditor" value="<?php echo $_SESSION['contestShippingAddress']; ?>" size="50" /></td>
     <td class="data">&nbsp;</td>
   </tr>
 </table>
@@ -281,22 +288,22 @@ $row_name = mysql_fetch_assoc($name);
 <table>
   <tr>
     <td class="dataLabel">Awards Date:</td>
-    <td class="data"><input id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date"); ?>"></td>
+    <td class="data"><input id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" class="submit" size="20" value="<?php if ($section != "step4") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>"></td>
     <td class="data"><em>Provide even if the date of judging is the same.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Start Time:</td>
-    <td class="data"><input id="contestAwardsLocTime" name="contestAwardsLocTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "time"); ?>"></td>
+    <td class="data"><input id="contestAwardsLocTime" name="contestAwardsLocTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>"></td>
     <td class="data"><em>The approximate time the awards ceremony will begin.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Location Name:</td>
-    <td class="data"><input name="contestAwardsLocName" type="text" class="submit" size="30" value="<?php echo $row_contest_info['contestAwardsLocName']; ?>"></td>
+    <td class="data"><input name="contestAwardsLocName" type="text" class="submit" size="30" value="<?php echo $_SESSION['contestAwardsLocName']; ?>"></td>
     <td class="data"><em>Provide the name of the awards location.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Awards Location Address:</td>
-    <td class="data"><input name="contestAwardsLocation" type="text" class="submit mceNoEditor" value="<?php echo $row_contest_info['contestAwardsLocation']; ?>" size="50" /></td>
+    <td class="data"><input name="contestAwardsLocation" type="text" class="submit mceNoEditor" value="<?php echo $_SESSION['contestAwardsLocation']; ?>" size="50" /></td>
     <td class="data"><em>Provide the address of the award location. The more complete (e.g., street address, city, state, zip) the better.</em></td>
   </tr> 
 </table>
@@ -305,7 +312,7 @@ $row_name = mysql_fetch_assoc($name);
     <td class="dataLabel">Awards Structure:</td>
     <td class="data">
     <textarea name="contestAwards" class="submit" cols="90" rows="15">
-		<?php if ($section != "step4") echo $row_contest_info['contestAwards']; else { ?>
+		<?php if ($section != "step4") echo $_SESSION['contestAwards']; else { ?>
         <p>The awards ceremony will take place once judging is completed.</p>
 		<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>
 		<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>
@@ -323,7 +330,7 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
   <tr>
     <td class="dataLabel">Best of Show Award:</td>
-    <td class="data"><textarea name="contestBOSAward" class="submit" cols="90" rows="15"><?php echo $row_contest_info['contestBOSAward']; ?></textarea></td>
+    <td class="data"><textarea name="contestBOSAward" class="submit" cols="90" rows="15"><?php echo $_SESSION['contestBOSAward']; ?></textarea></td>
     <td class="data"><em>Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</em></td>
   </tr>
   <tr>
@@ -333,7 +340,7 @@ $row_name = mysql_fetch_assoc($name);
   </tr>
   <tr>
     <td class="dataLabel">Circuit Qualifying Events:</td>
-    <td class="data"><textarea name="contestCircuit" class="submit" cols="90" rows="15"><?php echo $row_contest_info['contestCircuit']; ?></textarea></td>
+    <td class="data"><textarea name="contestCircuit" class="submit" cols="90" rows="15"><?php echo $_SESSION['contestCircuit']; ?></textarea></td>
     <td class="data"><em>Indicate whether your competition is a qualifier for any national or regional competitions.</em></td>
   </tr>
   <tr>
@@ -347,7 +354,7 @@ $row_name = mysql_fetch_assoc($name);
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Complete Winners List:</td>
-    <td class="data"><textarea name="contestWinnersComplete" class="submit" cols="90" rows="15"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea></td>
+    <td class="data"><textarea name="contestWinnersComplete" class="submit" cols="90" rows="15"><?php echo $_SESSION['contestWinnersComplete']; ?></textarea></td>
     <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in <strong>HTML format</strong> and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
       <p>If you paste using the editor to the left, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>

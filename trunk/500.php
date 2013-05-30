@@ -10,12 +10,12 @@ $section = "500";
 ?>
 <html>
 <head>
-<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; Error 500: Internal Server Error"; ?></title>
-<link href="<?php echo $base_url; ?>css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+<title><?php echo $_SESSION['contestName']; ?> Organized By <?php echo $_SESSION['contestHost']." &gt; Error 500: Internal Server Error"; ?></title>
+<link href="<?php echo $base_url; ?>/css/<?php echo $_SESSION['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <?php if ($action == "default") { ?>
-<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>500.php?action=error" />
+<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>/500.php?action=error" />
 <?php } ?>
-</head>
+
 <body>
 <?php if ($action == "error") { ?>
 <div id="container">
@@ -29,7 +29,7 @@ $section = "500";
             </div>
 			<p>Oh, hey! Apparently, there was some sort of error...</p>
 			<p>Please use the main navigation above to get where you want to go.</p>
-            <p>Cheers!<br>The <?php echo $row_contest_info['contestName']; ?> Site Server</p>
+            <p>Cheers!<br>The <?php echo $_SESSION['contestName']; ?> Site Server</p>
         </div>
     </div>
 </div>

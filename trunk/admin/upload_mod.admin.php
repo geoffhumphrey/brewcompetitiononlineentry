@@ -88,7 +88,7 @@ while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
 		$filelist .= "<td width=\"25%\" nowrap class=\"data-left\">".$file."</td>\n";
       	$filelist .= "<td width=\"25%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
-	    if ($row_user['userLevel'] <= "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
+	    if ($_SESSION['userLevel'] <= "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
 		else $filelist .="<td>&nbsp;</td>\n";
 		$filelist .= "</tr>\n";
    }
@@ -212,7 +212,7 @@ function do_upload($upload_dir, $upload_url) {
 	<div id="content-inner">
     <?php if ($message != "") { ?><p class="error"><?=$_REQUEST[message]?></p><?php } ?>
 	<h2>Upload Custom Module Files</h2>
-    <?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] <= "1")) { ?>
+    <?php if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) { ?>
 	<?php if ($section == "default") { ?>
 	<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 	<table class="dataTable">

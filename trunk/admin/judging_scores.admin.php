@@ -1,6 +1,6 @@
 <?php if ($action != "print") { 
-	if (($dbTable == "default") && ($totalRows_entry_count > $row_prefs['prefsRecordLimit']) && ($totalRows_scores > $row_prefs['prefsRecordPaging']))	{ 
-			echo "<div class='info'>The DataTables recordset paging limit of ".$row_prefs['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$row_prefs['prefsRecordPaging']." entries.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries ($totalRows_entry_count).</div>";
+	if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']) && ($totalRows_scores > $_SESSION['prefsRecordPaging']))	{ 
+			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." entries.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries ($totalRows_entry_count).</div>";
 	}
 }
 ?>
@@ -47,17 +47,18 @@ $totalRows_entry_count = total_paid_received($go,"default");
   	</span>
     <?php } // end if ($totalRows_tables > 0) 
 	} ?>
+    <?php if (((NHC) && ($prefix == "_final")) || (!NHC)) { ?>
     <span class="adminSubNav">
 		<span class="icon"><img src="<?php echo $base_url; ?>images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
-    <?php } // end if ($dbTable == "default") ?>
+    <?php } } // end if ($dbTable == "default") ?>
 </div>
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-<?php echo winner_method($row_prefs['prefsWinnerMethod'],2); ?> 
+<?php if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
 </div>
- <?php } // end if ($dbTable == "default") ?>
+<?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -66,7 +67,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			"bPaginate" : true,
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
-			"iDisplayLength" :  <?php echo round($row_prefs['prefsRecordPaging']); ?>,
+			"iDisplayLength" :  <?php echo round($_SESSION['prefsRecordPaging']); ?>,
 			"sDom": 'ipfrtip',
 			"bStateSave" : false,
 			<?php if ($filter == "category") { ?>
@@ -149,7 +150,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <?php } ?>
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
         <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; elseif ($row_scores['scorePlace'] == "6") echo "Admin Avance"; elseif ($row_scores['scorePlace'] == "") echo "<span style='display:none'>N/A</span>"; else echo $row_scores['scorePlace']; ?></td>  
-        <td class="data"><?php if ($row_scores['scoreMiniBOS'] == "1") echo "X"; ?></td>
+        <td class="data"><?php if ($row_scores['scoreMiniBOS'] == "1") echo "<img src='".$base_url."images/tick.png' /></span>"; ?></td>
 		<?php if ($dbTable == "default") { ?>
         <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
         </td>
@@ -160,31 +161,45 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	} while ($row_scores = mysql_fetch_assoc($scores)); ?>
 </tbody>
 </table>
-<?php } else echo "<p>No scores have been entered.</p>"; ?>
+<?php } else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Enter/Edit Scores for...&rdquo; menu above to add scores.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
-<?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { ?>
+<?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { 
+if (NHC) echo "<div class='error'>A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";
+?>
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>">
 <script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[2,'asc']],
-			"bProcessing" : false,
-			"aoColumns": [
-				null,
-				null,
-				null,
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-			]
-			} );
-		} );
+$('.fDrop').live('change', function (event) {
+    var cI = $(this);
+    $('.fDrop option:selected').each(function (i, e) {
+        //Check if values match AND if not default AND not match changed item to self
+        if ($(e).val() == cI.val() && $(e).val() != '' && $(e).parent().index() != cI.index()) {
+            alert('Duplicate place detected. Is this correct?');
+            // cI.val('');
+        }
+    });
+}); 
+</script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+	$('#sortable').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'irt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[2,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null,
+			null,
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] }
+		]
+	} );
+} );
 </script>
 <table class="dataTable" id="sortable">
 <thead>
@@ -211,10 +226,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
+		$totalRows_entries = mysql_num_rows($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		
 		do {
-
+		if ($totalRows_entries > 0) {
 			if ($action == "edit") {
 				$query_scores = sprintf("SELECT * FROM $judging_scores_db_table WHERE eid='%s'", $row_entries['id']);
 				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
@@ -231,14 +247,14 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td><?php if ($prefix == "final_") echo sprintf("%06s",$row_entries['id']); else echo sprintf("%04s",$row_entries['id']); ?></td>
         <td class="data"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
         <td class="data"><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($row_scores['scoreMiniBOS'] == "1")) echo "CHECKED"; ?> /></td>
         
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>
-        <select name="scorePlace<?php echo $score_id; ?>">
+        <select class="fDrop" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <option value="1" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "1")) echo "selected"; ?>>1st</option>
           <option value="2" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "2")) echo "selected"; ?>>2nd</option>
@@ -250,7 +266,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
         </select>
         </td>
 	</tr>
-    <?php } while ($row_entries = mysql_fetch_assoc($entries));
+    <?php }
+	} while ($row_entries = mysql_fetch_assoc($entries));
 	mysql_free_result($styles);
 	mysql_free_result($entries);
 	} // end foreach ?>
@@ -260,5 +277,5 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } // end if ($id != "default"); 
-
+else echo "<p><strong>Add Scores For:</strong> ".score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table)."</p>";
 } ?>

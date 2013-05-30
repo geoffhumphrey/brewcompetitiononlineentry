@@ -6,7 +6,8 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(INCLUDES.'version.inc.php');
-
+require(INCLUDES.'constants.inc.php');
+if (NHC) $base_url = "../";
 $query_styles = "SELECT * FROM $styles_db_table";
 if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 else $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
@@ -23,11 +24,9 @@ $totalRows_styles = mysql_num_rows($styles);
 <link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/smoothscroll.js"></script>
 
-
 <style type="text/css">
 <!--
 /* Links */
-
 a:link {
 	color: #00F;
 }
@@ -140,17 +139,9 @@ else {
     </td>
    </tr>
   </table>
-<table class="dataTable">
-   <tr>
-    <td class="data-left"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></td>
-   </tr>
-</table>
+<p><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
 </div>
-<table>
-	<tr>
-    	<td class="data-left"><a href="#top">Top of Page</a></td>
-	</tr>
-</table>
+<p><a href="#top">Top of Page</a></p>
 <?php } 
  } while ($row_styles = mysql_fetch_assoc($styles)); ?>
 <?php } else echo "<p>Styles in this category are not accepted in this competition.</p>"; ?>

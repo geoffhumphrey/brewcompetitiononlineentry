@@ -27,7 +27,7 @@ if ($section == "step2")  {
 	$totalRows_brewerID = mysql_num_rows($brewerID);
 }
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION["loginUsername"] == $row_brewerID['brewerEmail'])) || ($row_user['userLevel'] <= "1")))  { ?>
+if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { ?>
 <?php if ($section == "step2") { ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
 <input name="brewerSteward" type="hidden" value="N" />
@@ -42,20 +42,24 @@ $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
+
+<?php if ($go != "admin") { ?>
 <div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
-<?php if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); ?>
+<?php }
+
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); ?>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <table class="dataTable">
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
-      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" size="32" maxlength="20"></td>
+      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" size="32" maxlength="20" <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly style='color:#666; background-color: #eee; border: 1px solid #666;'"; ?>></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />
       You will be able to identify a co-brewer when adding your entries.</td>
 </tr>
 <tr>
       <td class="dataLabel">Last Name:</td>
-      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32" maxlength="20"  <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly style='color:#666; background-color: #eee; border: 1px solid #666;'"; ?></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
     </tr>
 <tr>
@@ -96,13 +100,13 @@ $row_countries = mysql_fetch_assoc($countries);
 </tr>
 <tr>
       <td class="dataLabel">Phone 1:</td>
-      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone1']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") echo format_phone_us($row_brewer['brewerPhone1']); ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 2:</td>
-      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone2']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") echo format_phone_us($row_brewer['brewerPhone2']); ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>
@@ -157,7 +161,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
   <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
   <?php } ?>
   </td>
-  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$row_prefs['prefsCurrency'].$row_contest_info['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
+  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
 </tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>
@@ -177,11 +181,11 @@ $row_clubs = mysql_fetch_assoc($clubs);
     	<tr>
         	<td width="1%" nowrap="nowrap">
                 <select name="brewerStewardLocation[]" id="brewerStewardLocation">
+                	<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
 					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
-                    <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
                 </select>
             </td>
-            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_stewarding['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
@@ -205,11 +209,11 @@ $row_clubs = mysql_fetch_assoc($clubs);
     	<tr>
         	<td width="1%" nowrap="nowrap">
             <select name="brewerJudgeLocation[]" id="brewerJudgeLocation">
-				<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
-                <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-      		</select>
+				<option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+      			<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+            </select>
             </td>
-            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
         </tr>
     </table>
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
@@ -219,7 +223,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
     <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
     <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
 <?php } } ?>
-<?php if (($go == "judge") || ($go == "admin")) { ?>
+<?php if (($go == "judge") || (($go == "admin") && ($action == "add"))) { ?>
 <tr>
 	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
 </tr>
@@ -228,8 +232,8 @@ $row_clubs = mysql_fetch_assoc($clubs);
 </table>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <?php if ($section != "step2") { ?>
-	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $row_user['user_name']; ?>" />
-	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($row_user['userLevel'] <= "1") && (($_SESSION["loginUsername"]) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $row_user['id']; ?>" />
+	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewerID['brewerEmail']; else echo $_SESSION['user_name']; ?>" />
+	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewerID['uid'] != "")) echo  $row_brewerID['uid']; elseif (($action == "edit") && ($_SESSION['userLevel'] <= "1") && (($_SESSION['loginUsername']) != $row_brewerID['brewerEmail'])) echo $row_user_level['id']; else echo $_SESSION['user_id']; ?>" />
     <input name="brewerJudgeAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeAssignedLocation'];?>" />
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />
     <?php if ($go == "entrant") { ?>
@@ -241,5 +245,5 @@ $row_clubs = mysql_fetch_assoc($clubs);
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

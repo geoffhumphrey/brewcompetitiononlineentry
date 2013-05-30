@@ -1,12 +1,16 @@
 <?php
+
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
+require(DB.'admin_common.db.php');
+require(INCLUDES.'headers.inc.php');
+require(INCLUDES.'constants.inc.php');
 require(INCLUDES.'scrubber.inc.php');
-
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
 $judging = mysql_query($query_judging, $brewing) or die(mysql_error());
@@ -20,7 +24,7 @@ $row_brewerID = mysql_fetch_assoc($brewerID);
 
 if ($go == "csv") { $separator = ","; $extension = ".csv"; }
 if ($go == "tab") { $separator = "\t"; $extension = ".tab"; }
-$contest = str_replace(' ', '_', $row_contest_info['contestName']);
+$contest = str_replace(' ', '_', $_SESSION['contestName']);
 if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
 else $loc = "";
 $date = date("m-d-Y");
@@ -57,7 +61,7 @@ brewer.brewerAssignment,
 brewer.id,
 brewing.brewBrewerID,
 brewing.brewJudgingLocation
-FROM $brewer_db_table, brewing
+FROM $brewer_db_table, $brewing_db_table
 WHERE brewer.uid = brewing.brewbrewerID
 AND brewing.brewJudgingLocation = '$bid'
 ORDER BY brewer.brewerLastName ASC
@@ -89,6 +93,8 @@ $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
 $a[] = array('First Name','Last Name','Address','City','State','Zip','Country','Phone','Assignment','Email','Judge ID','Judge Rank','Clubs','Likes','Dislikes');
 
+//echo $query_sql;
+
 do { 
 $brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
 $brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
@@ -100,7 +106,7 @@ $a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sq
 
 $filename = $contest."_participants_".$date.$loc.$extension;
 header('Content-type: application/x-msdownload');
-header('Content-Disposition: attachment;filename='.$filename);
+header('Content-Disposition: attachment;filename="'.$filename.'"');
 header('Pragma: no-cache');
 header('Expires: 0');
 $fp = fopen('php://output', 'w');
@@ -108,4 +114,5 @@ foreach ($a as $fields) {
     fputcsv($fp, $fields,$separator);
 }
 fclose($fp);
+}
 ?>

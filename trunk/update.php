@@ -14,9 +14,9 @@ $current_version = "1.2.2.0";
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $row_contest_info['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
-<link href="<?php echo $base_url; ?>css/default.css" rel="stylesheet" type="text/css" />
-</head>
+<title><?php echo $_SESSION['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
+<link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
+
 <body>
 <div id="container">
 <div id="navigation">
@@ -81,14 +81,14 @@ if (file_exists($filename)) {
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
-		if ((isset($_SESSION["loginUsername"])) && ($row_user['userLevel'] <= "1")) {
+		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) {
 			
 			if ($current_version != $version) {
 				
 				if ($action == "default") { ?>
 				<h2>This script will update your BCOE&amp;M database from its current version, <?php echo $version; ?>, to the latest version, <?php echo $current_version; ?>.</h2>
-				<p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
-				<p><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>		
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>		
 				<?php }
 			
 				if ($action == "update") {
@@ -180,7 +180,7 @@ if (file_exists($filename)) {
 		// if user is not logged in or a admin...
 		else {
 			echo "<div class='info'>Only top level website administrators are able to access and run this update script.</div>";
-			if (!isset($_SESSION["loginUsername"])) {
+			if (!isset($_SESSION['loginUsername'])) {
 				echo "<p>If you are an administrator of this site, log in and try again.</p>";
 				include (SECTIONS.'login.sec.php');	
 			}

@@ -9,7 +9,7 @@ function open_or_closed($now,$date1,$date2) {
 		else $output = "2";
 		return $output;
 }
-
+ 
 
 function open_limit($total_entries,$limit,$registration_open) {
 	if ($limit != "") {
@@ -19,17 +19,17 @@ function open_limit($total_entries,$limit,$registration_open) {
 	else return false;
 }
 
-$registration_open = open_or_closed(strtotime("now"),$row_contest_info['contestRegistrationOpen'],$row_contest_info['contestRegistrationDeadline']);
-$entry_window_open = open_or_closed(strtotime("now"),$row_contest_info['contestEntryOpen'],$row_contest_info['contestEntryDeadline']);
-$judge_window_open = open_or_closed(strtotime("now"),$row_contest_info['contestJudgeOpen'],$row_contest_info['contestJudgeDeadline']);
+$registration_open = open_or_closed(strtotime("now"),$_SESSION['contestRegistrationOpen'],$_SESSION['contestRegistrationDeadline']);
+$entry_window_open = open_or_closed(strtotime("now"),$_SESSION['contestEntryOpen'],$_SESSION['contestEntryDeadline']);
+$judge_window_open = open_or_closed(strtotime("now"),$_SESSION['contestJudgeOpen'],$_SESSION['contestJudgeDeadline']);
  
-$reg_open = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");
-$reg_closed = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestRegistrationDeadline'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time");;
+$reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+$reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");;
 
-$entry_open = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time"); ;
-$entry_closed = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestEntryDeadline'], $row_prefs['prefsDateFormat'],$row_prefs['prefsTimeFormat'], "long", "date-time");
+$entry_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); ;
+$entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-time");
 
-$judge_open = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeOpen'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time"); ;
-$judge_closed = getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_contest_info['contestJudgeDeadline'], $row_prefs['prefsDateFormat'],$row_prefs['prefsTimeFormat'], "long", "date-time");
+$judge_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); ;
+$judge_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-time");
 
 ?>

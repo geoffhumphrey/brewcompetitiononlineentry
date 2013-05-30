@@ -43,6 +43,7 @@ $totalRows_login = mysql_num_rows($login);
 $loginUsername = strtolower($loginUsername);
 
 session_start();
+session_regenerate_id(true); 
 // Authenticate the user
 	if ($totalRows_login == 1) {
   		// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
@@ -58,7 +59,7 @@ session_start();
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
   		$_SESSION['loginUsername'] = $loginUsername;
-		//echo $_SESSION["loginUsername"];
+		//echo $_SESSION['loginUsername'];
   		// If the username/password combo is OK, relocate to the "protected" content index page
 		if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."index.php?section=list"));
 		elseif (($section != "update") && ($row_login['userLevel'] <= "1")) header(sprintf("Location: %s", $base_url."index.php?section=admin"));

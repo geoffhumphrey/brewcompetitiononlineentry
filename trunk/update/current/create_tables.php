@@ -1,4 +1,25 @@
 <?php
+
+// -----------------------------------------------------------
+// Create Table: staff
+//   Table to house information about staff.
+// -----------------------------------------------------------
+
+$updateSQL = "CREATE TABLE IF NOT EXISTS `$staff_db_table` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
+  `staff_judge` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_judge_bos` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_steward` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_organizer` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_staff` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+//echo $updateSQL."<br>";
+echo "<ul><li>Staff table created.</li></ul>";
+
 // -----------------------------------------------------------
 // Create Table: mods
 //   Table to house information about custom module files.
@@ -7,8 +28,8 @@
 $updateSQL = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
 	  `id` int(11) NOT NULL AUTO_INCREMENT,
 	  `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
-	  `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
-	  `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
+	  `mod_type` tinyint(2) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
+	  `mod_extend_function` tinyint(2) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
 	  `mod_extend_function_admin` varchar(255) DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
 	  `mod_filename` varchar(255) DEFAULT NULL COMMENT 'File name of the custom module',
 	  `mod_description` text COMMENT 'Short description of the custom module',
@@ -25,8 +46,6 @@ echo "<ul><li>Custom Modules table created.</li></ul>";
 
 
 /*
-
-Save for next version.
 
 // -----------------------------------------------------------
 // Create Tables: Styles Index, BJCP 2008, BA 2012
@@ -63,7 +82,6 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `styles_custom` (`id` int(11) NOT NULL 
 mysql_select_db($database, $brewing);
 //$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 echo $updateSQL."<br>";
-
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `ba_2012` (`id` int(11) NOT NULL AUTO_INCREMENT, `style_name` varchar(255) DEFAULT NULL, `style_cat` varchar(255) DEFAULT NULL, `style_subcat` varchar(255) DEFAULT NULL, `style_og_min` float DEFAULT NULL, `style_og_max` float DEFAULT NULL, `style_fg_min` float DEFAULT NULL, `style_fg_max` float DEFAULT NULL, `style_abv_min` float DEFAULT NULL, `style_abv_max` float DEFAULT NULL, `style_ibu_min` float DEFAULT NULL, `style_ibu_max` float DEFAULT NULL, `style_srm_min` float DEFAULT NULL, `style_srm_max` float DEFAULT NULL, `style_type` int(11) DEFAULT NULL COMMENT 'relational to the style_types table', `style_info` text, `style_link` varchar(255) DEFAULT NULL, `style_active` tinyint(1) DEFAULT '1', `style_location` int(11) NULL, `style_spec_ingred` tinyint(1) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM;";
 mysql_select_db($database, $brewing);

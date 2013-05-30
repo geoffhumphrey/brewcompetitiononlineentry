@@ -7,7 +7,7 @@
  */
 
 include(DB.'sponsors.db.php');
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
@@ -24,7 +24,7 @@ if ($action != "print") { ?>
     ?>
     <td class="looper_large">
     <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } echo $row_sponsors['sponsorName']; ?><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } if ($row_sponsors['sponsorLocation'] != "") echo "<br>".$row_sponsors['sponsorLocation']; ?></p>
-    <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } ?><img src="<?php if (($row_sponsors['sponsorImage'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) echo $base_url."user_images/".$row_sponsors['sponsorImage']; /* elseif ($row_contest_info['contestLogo'] != "") echo $base_url."user_images/".$row_contest_info['contestLogo']; */ else echo $base_url."images/no_image_large.png"; ?>" width="<?php echo $row_prefs['prefsSponsorLogoSize']; ?>" border="0" /><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } ?></p>
+    <p><?php if ($row_sponsors['sponsorURL'] != "") { ?><a href="<?php echo $row_sponsors['sponsorURL']; ?>" target="_blank"><?php } ?><img src="<?php if (($row_sponsors['sponsorImage'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) echo $base_url."user_images/".$row_sponsors['sponsorImage']; /* elseif ($_SESSION['contestLogo'] != "") echo $base_url."user_images/".$_SESSION['contestLogo']; */ else echo $base_url."images/no_image_large.png"; ?>" width="<?php echo $_SESSION['prefsSponsorLogoSize']; ?>" border="0" /><?php if ($row_sponsors['sponsorURL'] != "") { ?></a><?php } ?></p>
     <?php if ($row_sponsors['sponsorText'] != "") echo "<p>".$row_sponsors['sponsorText']."</p>"; ?>
     </td>
     <?php  $sponsors_endRow++;
@@ -44,4 +44,4 @@ if ($action != "print") { ?>
 	}
 	?>
 </table>
-<?php if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); ?>
+<?php if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); ?>

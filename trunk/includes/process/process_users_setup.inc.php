@@ -25,7 +25,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
   	header(sprintf("Location: %s", stripslashes($insertGoTo)));	
 	
 	session_start();
-	$_SESSION["loginUsername"] = $username;
+	$_SESSION['loginUsername'] = $username;
 }
 else header("Location: ../setup.php?section=step1&msg=1");
 
