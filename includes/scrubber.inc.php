@@ -360,5 +360,12 @@ $space_remove = array(
 "&nbsp;" => ""
 );
 
+$bjcp_num_replace = array( 
+"(" => "9", 
+")" => "0", 
+"o" => "0", 
+"O" => "0",
+"-" => ""
+);
 
 ?>

@@ -1,4 +1,5 @@
 <?php 
+
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'config.php');
@@ -9,7 +10,10 @@ require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
-
+require(INCLUDES.'constants.inc.php');
+require(INCLUDES.'scrubber.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel']<= 1)) {
+if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
 $query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignment='%s'", $filter);
@@ -18,7 +22,7 @@ $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 $totalRows_assignments = mysql_num_rows($assignments);
 
-$count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEntries'])),0); 
+$count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0); 
 
 ?>
 
@@ -58,7 +62,7 @@ $count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEnt
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }<?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>,
+				{ "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
 				{ "asSorting": [  ] }<?php } ?>
 				]
 			} );
@@ -81,7 +85,7 @@ $count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEnt
         <th class="dataHeading bdr1B" width="5%">Table #</th>
         <th class="dataHeading bdr1B" width="20%">Table Name</th>
         <th class="dataHeading bdr1B" width="5%">Round #</th>
-        <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+        <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
         <th class="dataHeading bdr1B" width="5%">Flight #</th>
         <?php } ?>
     </tr>
@@ -93,13 +97,13 @@ $count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEnt
 	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
 	?>
     <tr>
-    	<td class="bdr1B_gray"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
+    	<td class="bdr1B_gray"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
-        <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></td>
+        <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignRound']; ?></td>
-        <?php if ($row_judging_prefs['jPrefsQueued'] == "N") { ?>
+        <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignFlight']; ?></td>
 		<?php } ?>
     </tr>
@@ -111,8 +115,11 @@ $count = round((get_entry_count('received')/($row_judging_prefs['jPrefsFlightEnt
 </div>
 <?php } // end if ($view != "sign-in") 
 else { 
-
-$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE brewerAssignment='%s'", $filter);
+$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid";
+if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
+else $query_brewer .= " AND b.staff_judge='1'"; 
+$query_brewer .= " ORDER BY a.brewerLastName ASC";
+//$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE brewerAssignment='1'", $filter);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);
@@ -135,7 +142,7 @@ if ($totalRows_brewer > 0) { ?>
 	<div id="content-inner">
     <div id="header">	
 		<div id="header-inner">
-        	<h1><?php echo $row_contest_info['contestName']; ?></h1>
+        	<h1><?php echo $_SESSION['contestName']; ?></h1>
         	<h2><?php if ($filter == "S") echo "Steward "; else echo "Judge "; ?>Sign In</h2>
         </div>
     </div>
@@ -159,7 +166,7 @@ if ($totalRows_brewer > 0) { ?>
     <tr>
     	<td class="bdr1B_gray" nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
         <?php if ($filter == "J") { ?>
-    	<td class="data bdr1B_gray bdr1L_gray"><?php echo $row_brewer['brewerJudgeID']; ?></td>
+    	<td class="data bdr1B_gray bdr1L_gray"><?php echo strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace)); ?></td>
         <td class="data bdr1B_gray bdr1L_gray">Yes / No</td>
         <?php } ?>
         <td class="data bdr1B_gray bdr1L_gray">&nbsp;</td>
@@ -226,3 +233,4 @@ if ($totalRows_brewer > 0) { ?>
 <?php } ?>
 </body>
 </html>
+<?php } else echo "<p>Not available.</p>"; ?>

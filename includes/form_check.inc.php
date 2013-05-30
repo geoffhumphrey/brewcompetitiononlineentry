@@ -43,8 +43,6 @@ if(WithoutContent(document.form1.contestRegistrationDeadline.value))
 	{ errormessage += "\nThe competition registration deadline"; }
 if(WithoutContent(document.form1.contestEntryFee.value))
 	{ errormessage += "\nThe entry fee - enter a zero for a free entry fee"; }
-if(WithoutContent(document.form1.contestShippingAddress.value))
-	{ errormessage += "\nThe shipping address"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('The following information is required:\n' + errormessage);
@@ -173,18 +171,20 @@ var errormessage = new String();
 <?php if (!NHC) { ?>
 if(WithoutContent(document.form1.brewName.value))
 	{ errormessage += "\nThe name of the brew"; }
-<?php } ?>
+<?php } 
+if ((NHC) && ($prefix != "final_")) { ?>
 if(WithoutSelectionValue(document.form1.brewStyle))
 	{ errormessage += "\nA style from the drop-down list."; }
+<?php } ?>
 // Put field checks above this point.
 if(errormessage.length > 2) {
-	alert('To enter your brew, the following information is required:\n' + errormessage <?php if ($row_prefs['prefsHideRecipe'] == "N") { ?>+ '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.'<?php } ?>);
+	alert('To enter your brew, the following information is required:\n' + errormessage <?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>+ '\n\nAlso, to make print-outs of your recipe and bottle labels more complete, you should consider filling out all applicable items.'<?php } ?>);
 	return false;
 	}
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
-<?php if ($section == "register") { ?>
+<?php if (($section == "register") || ($action == "register"))  { ?>
 function CheckRequiredFields() {
 var errormessage = new String();
 // Put field checks below this point.
@@ -194,8 +194,10 @@ if(WithoutContent(document.form1.user_name2.value))
 	{ errormessage += "\nRe-entry of your email address"; }
 if(WithoutContent(document.form1.password.value))
 	{ errormessage += "\nA password"; }
+<?php if ($section == "register") { ?>
 if(WithoutContent(document.form1.userQuestionAnswer.value))
 	{ errormessage += "\nAn answer to your security question"; }
+<?php } ?>
 if(WithoutContent(document.form1.brewerFirstName.value))
 	{ errormessage += "\nFirst name"; }
 if(WithoutContent(document.form1.brewerLastName.value))
@@ -210,8 +212,10 @@ if(WithoutContent(document.form1.brewerZip.value))
 	{ errormessage += "\nZip or postal code"; }
 if(WithoutContent(document.form1.brewerPhone1.value))
 	{ errormessage += "\nAt least one phone number"; }
+<?php if ($section == "register") { ?>
 if(WithoutContent(document.form1.captcha_code.value))
 	{ errormessage += "\nThe CAPTCHA code"; }
+<?php } ?>
 // Put field checks above this point.
 if(errormessage.length > 2) {
 	alert('To register, the following information is required:\n' + errormessage);

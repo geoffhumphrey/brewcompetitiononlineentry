@@ -6,11 +6,11 @@
  * 
  */
  
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
-
+if (($action != "print") && ($msg != "default")) echo $msg_output; 
 	if (!isset($_SESSION['loginUsername'])) { 
-	if (($action != "print") && ($msg != "default")) echo $msg_output; 
+	
 ?>
 <form action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
@@ -36,7 +36,7 @@ if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are alread
 if ($action == "forgot") { 
 	//if (($action != "print") && ($msg != "default")) echo $msg_output; 
 	if ($go == "password") {  ?>
-<p>To reset your password, enter your email address below.</p>
+<p>To reset your password, enter the email address you used when you registered.</p>
 <form action="<?php echo build_public_url("login","verify","forgot",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
 <table class="dataTable">
 	<tr>
@@ -79,10 +79,11 @@ if ($go == "verify") {
   	</tr>
 	</table>
 	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
+    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $row_userCheck['id']; ?>">Get it via email.</p><?php } ?>
 	</form>
 	<?php }
 	}
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 }
 
 ?>

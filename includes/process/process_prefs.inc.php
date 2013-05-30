@@ -124,6 +124,12 @@ if ($action == "add") {
 
 if ($action == "edit") {
 	
+	// Empty the prefs session variable
+	// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+	session_start();
+	unset($_SESSION['prefs'.$prefix_session]);
+	
+	
 	$updateSQL = sprintf("UPDATE $preferences_db_table SET 
 	prefsTemp=%s, 
 	prefsWeight1=%s, 

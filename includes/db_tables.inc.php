@@ -27,6 +27,7 @@ if ($dbTable == "default") {
 	$special_best_data_db_table = $prefix."special_best_data";
 	$special_best_info_db_table = $prefix."special_best_info";
 	$sponsors_db_table = $prefix."sponsors";
+	$staff_db_table = $prefix."staff";
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types";
 	$system_db_table = $prefix."system";
@@ -55,6 +56,7 @@ else {
 	$special_best_data_db_table = $prefix."special_best_data".$suffix;
 	$special_best_info_db_table = $prefix."special_best_info".$suffix;
 	$sponsors_db_table = $prefix."sponsors";
+	$staff_db_table = $prefix."staff";
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types".$suffix;
 	$system_db_table = $prefix."system";

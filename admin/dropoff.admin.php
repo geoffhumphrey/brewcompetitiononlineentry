@@ -136,7 +136,7 @@ if ($totalRows_dropoff > 0) { ?>
 
 			"bLengthChange" : true,
 
-			"iDisplayLength" : <?php echo round($row_prefs['prefsRecordPaging']); ?>,
+			"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
 
 			"sDom": 'irtip',
 

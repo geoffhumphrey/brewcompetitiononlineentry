@@ -76,20 +76,20 @@ else
 
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php 
-if (entries_unconfirmed($row_user['id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
+if (entries_unconfirmed($_SESSION['user_id']) > 0) echo "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
 
 //$return = "index.php?section=brew&action=edit&id=".$row_entry_check['id']."&msg=10";
 //echo $return;	
 
-$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'", $prefix."brewing",$row_user['id']);
+$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'", $prefix."brewing",$_SESSION['user_id']);
 			$check = mysql_query($query_check, $brewing) or die(mysql_error());
 			$row_check = mysql_fetch_assoc($check);
 			
 			
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
-<?php if ($row_check['count'] < $row_prefs['prefsUserEntryLimit']) { ?>
+<?php if ($row_check['count'] < $row_limits['prefsUserEntryLimit']) { ?>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>
@@ -102,12 +102,12 @@ if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
     <td class="data"><input name="upload" type="submit" class="button" value="Upload" /></td>
 </table>
 <input type="hidden" name="insert_type" value="recipes" />
-<input type="hidden" name="brewBrewerID" value="<?php echo $row_user['id']; ?>" />
-<input type="hidden" name="brewBrewerFirstName" value="<?php echo $row_name['brewerFirstName']; ?>" />
-<input type="hidden" name="brewBrewerLastName" value="<?php echo $row_name['brewerLastName']; ?>" />
+<input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>" />
+<input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>" />
+<input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>" />
 </form>
 <?php } else { ?>
-<span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><strong>You have reached the limit of <?php echo readable_number($row_prefs['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong>
+<span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><strong>You have reached the limit of <?php echo readable_number($row_limits['prefsUserEntryLimit']); ?> entries per participant in this competition.</strong>
 <?php } ?>
 <?php } else { ?>
 <div id="header">
@@ -116,5 +116,5 @@ if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 <div class="error">Your server's version of PHP does not support the BeerXML import feature.</div>
 <p>PHP version 5.x or higher is required &mdash; this server is running PHP version <?php echo $php_version; ?>.</p>
 <?php } 
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

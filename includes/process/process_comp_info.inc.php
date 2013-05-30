@@ -15,7 +15,7 @@ $contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['con
 $contestHostWebsite = check_http($_POST['contestHostWebsite']);
 
 //echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 
-//echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$row_prefs['prefsTimeZone'];
+//echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
   	
 
 // --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
@@ -137,6 +137,12 @@ if ($action == "add") {
 
 // --------------------------------------- Editing  ----------------------------------------
 if ($action == "edit") {
+	
+	// Empty the contest_info_general session variable
+	// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+	session_start();
+	unset($_SESSION['contest_info_general'.$prefix_session]);
+	
 	if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
 	if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 	

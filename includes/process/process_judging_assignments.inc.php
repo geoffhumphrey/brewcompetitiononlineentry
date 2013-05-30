@@ -5,7 +5,7 @@
  */
 
 if ($action == "update") {
-	if ($row_judging_prefs['jPrefsQueued'] == "N") {
+	if ($_SESSION['jPrefsQueued'] == "N") {
 	foreach ($_POST['random'] as $random) {
 		// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 		if (($_POST['unassign'.$random] == 0) && ($_POST['assignFlight'.$random] > 0)) {
@@ -61,9 +61,9 @@ if ($action == "update") {
 				}	
 			}
 		} // end foreach
-  } // end if ($row_judging_prefs['jPrefsQueued'] == "N")
+  } // end if ($_SESSION['jPrefsQueued'] == "N")
   
-  if ($row_judging_prefs['jPrefsQueued'] == "Y") {
+  if ($_SESSION['jPrefsQueued'] == "Y") {
 		foreach ($_POST['random'] as $random) {
 			// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 			if (($_POST['unassign'.$random] == 0) && ($_POST['assignRound'.$random] > 0))  {
@@ -119,7 +119,7 @@ if ($action == "update") {
 			//	}	
 			}
 		} // end foreach	  
- }  // end if ($row_judging_prefs['jPrefsQueued'] == "Y")
+ }  // end if ($_SESSION['jPrefsQueued'] == "Y")
 header(sprintf("Location: %s", $base_url."index.php?section=admin&go=judging_tables&msg=2"));
 }
 ?>

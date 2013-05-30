@@ -20,7 +20,7 @@ include(DB.'styles.db.php');
 </table>
 <input type="hidden" name="register" value="Y" />
 <input type="hidden" name="uid" value="<?php echo $row_brewer['uid']; ?>">
-<input type="hidden" name="brewerEmail" value="<?php echo $_SESSION["loginUsername"]; ?>" />
+<input type="hidden" name="brewerEmail" value="<?php echo $_SESSION['loginUsername']; ?>" />
 <input type="hidden" name="brewerFirstName" value="<?php echo $row_brewer['brewerFirstName']; ?>">
 <input type="hidden" name="brewerLastName" value="<?php echo $row_brewer['brewerLastName']; ?>">
 <input type="hidden" name="brewerAddress" value="<?php echo $row_brewer['brewerAddress']; ?>">

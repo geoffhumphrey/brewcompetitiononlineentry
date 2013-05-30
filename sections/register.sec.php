@@ -117,11 +117,11 @@ httpxml.send(null);
 </script>
 <?php 
 if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
-if ($section != "admin") { if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); }
+if ($section != "admin") { if ($_COOKIE['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); }
 ?>
-<h2>Register</h2>
+<h2>Register <?php if ($section == "admin") { if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant"; } ?></h2>
 <?php
-if ((($registration_open < 2) || ($judge_window_open < 2)) && (!open_limit($totalRows_entry_count,$row_prefs['prefsEntryLimit'],$registration_open))) { 
+if ((($registration_open < 2) || ($judge_window_open < 2)) && ($section != "admin") && (!open_limit($totalRows_entry_count,$_COOKIE['prefsEntryLimit'],$registration_open))) { 
 ?>
 <p>Entry into our competition is conducted completely online.
 	<ul>
@@ -130,8 +130,10 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && (!open_limit($tota
     	<li>To enter your brews or indicate that you are willing to judge or steward, you will need to create an account on our system using the fields below.</li>
         <?php } ?>
     	<li>Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct. </li>
-    	<li>Once you have registered, you can proceed through the entry process. </li>
+    	<?php if ((!NHC) || ((NHC) && ($prefix != "final_"))) { ?>
+        <li>Once you have registered, you can proceed through the entry process. </li>
   	    <li>Each entry you add will automatically be assigned a number by the system.</li>
+        <?php } ?>
 	</ul>
 </p>
 <?php } if ($go == "default") { ?>
@@ -162,12 +164,7 @@ if ($section != "admin") {
 
 <?php if (NHC) echo "<div class=\"closed\">Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>"; ?>
 
-<?php } 
-if ($section == "admin") { 
-echo "<h2>Add";
-if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant</h2>";
-} 
-?> 
+<?php } ?> 
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
@@ -339,11 +336,11 @@ $row_clubs = mysql_fetch_assoc($clubs);
             <tr>
                 <td width="1%" nowrap="nowrap">
                     <select name="brewerStewardLocation[]" id="brewerStewardLocation">
-                        <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                         <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                        <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                     </select>
                 </td>
-                <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_stewarding['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+                <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_COOKIE['prefsTimeZone'], $row_stewarding['judgingDate'], $_COOKIE['prefsDateFormat'],  $_COOKIE['prefsTimeFormat'], "long", "date-time").")"; ?></td>
             </tr>
         </table>
     <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
@@ -366,11 +363,11 @@ $row_clubs = mysql_fetch_assoc($clubs);
             <tr>
                 <td width="1%" nowrap="nowrap">
                 <select name="brewerJudgeLocation[]" id="brewerJudgeLocation">
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                     <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                 </select>
                 </td>
-                <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging3['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+                <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_COOKIE['prefsTimeZone'], $row_judging3['judgingDate'], $_COOKIE['prefsDateFormat'],  $_COOKIE['prefsTimeFormat'], "long", "date-time").")"; ?></td>
             </tr>
         </table>
     <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
@@ -410,7 +407,7 @@ if ($section != "admin") {
 	});
 </script>
 <input type="hidden" name="userLevel" value="2" />
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<!-- <input type="hidden" name="relocate" value="<?php //echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>"> -->
 <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
@@ -418,5 +415,5 @@ if ($section != "admin") {
 <?php } ?>
 </form>
 <?php } 
-if ($section != "admin") { if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); }
+if ($section != "admin") { if ($_COOKIE['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); }
 ?>

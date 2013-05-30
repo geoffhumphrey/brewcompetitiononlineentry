@@ -19,13 +19,13 @@ if ($section != "setup")  {
 	require(INCLUDES.'date_time.inc.php');
 	
 	// Set timezone globals for the site
-	$timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
+	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
 	date_default_timezone_set($timezone_prefs);
 	$tz = date_default_timezone_get();
 	
 	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
-	else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
+	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
+	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 	
 	
 }
@@ -70,13 +70,13 @@ if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable 
 	require(INCLUDES.'date_time.inc.php');
 	
 	// Set timezone globals for the site
-	$timezone_prefs = get_timezone($row_prefs['prefsTimeZone']);
+	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
 	date_default_timezone_set($timezone_prefs);
 	$tz = date_default_timezone_get();
 	
 	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($row_prefs['prefsTimeZone'] + 1.000),0); 
-	else $timezone_offset = number_format($row_prefs['prefsTimeZone'],0);
+	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
+	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 	
 }
 
@@ -172,7 +172,7 @@ if ($action != "purge") {
 	  
 		case "text":
 		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-		  break;    
+		  break;     
 		case "long":
 		case "int":
 		  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
@@ -197,6 +197,8 @@ if ($action != "purge") {
 function clean_up_url($referer) {
 	
 	include(CONFIG."config.php");
+	
+	if (NHC) $base_url = "../";
 	
 	// Break URL into an array
 	$parts = parse_url($referer);
@@ -247,9 +249,10 @@ else {
 	$updateGoTo .= $_POST['relocate']."&msg=2";
 	$massUpdateGoTo .= $_POST['relocate']."&msg=9";
 }
+
 if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) $deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) 	$deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 		$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
 else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
@@ -413,7 +416,7 @@ if ($action == "check_discount") {
 	$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
 	$row_contest_info = mysql_fetch_assoc($contest_info);
 					
-	if ($_POST['brewerDiscount'] == $row_contest_info['contestEntryFeePassword']) {
+	if ($_POST['brewerDiscount'] == $_SESSION['contestEntryFeePassword']) {
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
 					   GetSQLValueString("Y", "text"),
                        GetSQLValueString($id, "text"));	

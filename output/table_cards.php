@@ -7,12 +7,14 @@ require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
-
-if ( $go == "judging_tables" ) {
+require(INCLUDES.'constants.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (NHC) $base_url = "../";
+if ($go == "judging_tables") {
    $query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";       
 }
 
-if ( $go == "judging_locations" ) {
+if ($go == "judging_locations") {
    $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);       
 }
 
@@ -36,20 +38,14 @@ $totalRows_tables = mysql_num_rows($tables);
 <?php
 if ($totalRows_tables == 0) { 
 echo "<body>";
-echo "<h1>No judge/steward assignments have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>"; 
+echo "<h1>No judge/steward assignments have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>";
+echo "<p>If you would like to print blank table cards, close this window and choose &ldquo;Print Table Cards: All Tables&rdquo; from the <em>Printing and Reporting</em> menu, under the <em>Before Judging</em> heading.</p>";
 } 
 else {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 ?>
 <body>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',200);
-</script>
 <?php if ($id == "default") { ?>
 
     <?php do { 
@@ -63,7 +59,7 @@ setTimeout('selfPrint()',200);
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h4>
+    <h4><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {
@@ -98,7 +94,7 @@ setTimeout('selfPrint()',200);
                 <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo $flight; ?></td>
+            <td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
                 </tr>
                 <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
@@ -130,7 +126,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
 <div class="table_card">
     <h1>Table <?php echo $row_tables_edit['tableNumber']; ?></h1>
     <h2><?php echo $row_tables_edit['tableName']; ?></h2>
-    <h4><?php echo table_location($row_tables_edit['id'],$row_prefs['prefsDateFormat'],$row_prefs['prefsTimeZone'],$row_prefs['prefsTimeFormat'],"default"); ?></h4>
+    <h4><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {
@@ -165,7 +161,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
                 <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php if ($row_judging_prefs['jPrefsQueued'] == "N")  echo $flight; ?></td>
+            <td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
                 </tr>
                 <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
@@ -182,5 +178,15 @@ $totalRows_assignments = mysql_num_rows($assignments);
 <?php } 
 }
 ?>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+</script>
 </body>
 </html>
+<?php } 
+else echo "<p>Not available.</p>";
+?>

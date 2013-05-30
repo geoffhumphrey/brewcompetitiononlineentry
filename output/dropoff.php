@@ -16,6 +16,9 @@ require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'constants.inc.php'); // if used, must also use functions.inc.php
 require(DB.'common.db.php');
 require(DB.'dropoff.db.php');
+if (NHC) $base_url = "../";
+
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 /*
 	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
@@ -27,7 +30,7 @@ require(DB.'dropoff.db.php');
 						 brewerDropOff='%s'
 						 WHERE id='%s'", 
 						 $random,
-						 $row_brewer['id']);
+					 $row_brewer['id']);
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	
@@ -39,19 +42,12 @@ require(DB.'dropoff.db.php');
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
+<title><?php echo $_SESSION['contestName']; ?> organized by <?php echo $_SESSION['contestHost']; ?></title>
 <link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
 <!-- jquery plugin - required for use with DataTables, FancyBox, DatePicker, TimePicker etc. -->
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
 </head>
 <body>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',200);
-</script>
 <?php if ($section == "default") { ?>
 <div id="content">
 	<div id="content-inner">
@@ -102,7 +98,8 @@ setTimeout('selfPrint()',200);
 		if ($totalRows_dropoffs > 0) {
 			unset($location_count);
 			do {
-				$query_dropoff_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$brewing_db_table,$row_dropoffs['uid']);
+
+			$query_dropoff_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$brewing_db_table,$row_dropoffs['uid']);
 				$dropoff_count = mysql_query($query_dropoff_count, $brewing) or die(mysql_error());
 				$row_dropoff_count = mysql_fetch_assoc($dropoff_count);
 				$location_count[] = $row_dropoff_count['count'];
@@ -114,8 +111,8 @@ setTimeout('selfPrint()',200);
 			$row_location_info = mysql_fetch_assoc($location_info);
 	?>
     	<tr>
-        	<td class="data"><?php if ($row_location_info['id'] < 1) echo $row_contest_info['contestShippingName']; else echo $row_location_info['dropLocationName']; ?></td>
-            <td class="data"><?php if ($row_location_info['id'] < 1) echo $row_contest_info['contestShippingAddress']; else echo $row_location_info['dropLocation']; ?></td>
+        	<td class="data"><?php if ($row_location_info['id'] < 1) echo $_SESSION['contestShippingName']; else echo $row_location_info['dropLocationName']; ?></td>
+            <td class="data"><?php if ($row_location_info['id'] < 1) echo $_SESSION['contestShippingAddress']; else echo $row_location_info['dropLocation']; ?></td>
             <td class="data"><?php echo array_sum($location_count); ?></td> 
         </tr>
     <?php 
@@ -146,7 +143,7 @@ setTimeout('selfPrint()',200);
 			} while ($row_dropoffs = mysql_fetch_assoc($dropoffs));
 	?>
     <h1>Entry Totals at the Shipping Location</h1>
-    <p><?php echo $row_contest_info['contestShippingName']; ?><br /><?php echo $row_contest_info['contestShippingAddress']; ?></p>
+    <p><?php echo $_SESSION['contestShippingName']; ?><br /><?php echo $_SESSION['contestShippingAddress']; ?></p>
     <p>Total entries at the shipping location: <?php echo array_sum($location_count); ?></p>
     <?php } 
 	mysql_free_result($dropoff_count);
@@ -156,7 +153,7 @@ setTimeout('selfPrint()',200);
     </div><!-- end content-inner -->
 </div><!-- end content -->
 <div id="footer">
-	<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?>.</div>
+	<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>.</div>
 </div>
 <?php } ?>
 <?php if ($section == "check") { ?>
@@ -238,7 +235,7 @@ setTimeout('selfPrint()',200);
     </tbody>
     </table>
     <div id="footer">
-		<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], time(), $row_prefs['prefsDateFormat'], $row_prefs['prefsTimeFormat'], "long", "date-time"); ?>.</div>
+		<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>.</div>
 	</div>
     <div style="page-break-after:always;"></div>
     <?php } // end if ($totalRows_dropoffs > 0) ?>
@@ -247,5 +244,13 @@ setTimeout('selfPrint()',200);
     </div><!-- end content-inner -->
 </div><!-- end content -->
 <?php } ?>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+</script> 
 </body>
 </html>
+<?php } else echo "<p>Not available.</p>"; ?>

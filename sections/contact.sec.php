@@ -6,11 +6,11 @@
  * 
  */
 include(DB.'contacts.db.php');
-if ($row_prefs['prefsContact'] == "Y") {
+if ($_SESSION['prefsContact'] == "Y") {
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if ($msg != "1") {
-//if (!isset($_SESSION["loginUsername"])) { session_start(); }
+//if (!isset($_SESSION['loginUsername'])) { session_start(); }
 ?>
 <p>Use the form below to contact individuals involved with coordinating this competition.</p>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
@@ -25,7 +25,7 @@ if ($msg != "1") {
 		$row_contacts = mysql_fetch_assoc($contacts);
 		do { 
     	?>
-    	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_COOKIE['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
+    	<option value="<?php echo $row_contact['id']; ?>" <?php if(isset($COOKIE['to'])) { if ($row_contact['id'] == $_SESSION['to']) echo " SELECTED"; } ?>><?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']; ?></option>
         <?php } while ($row_contact = mysql_fetch_assoc($contacts)); 
 		mysql_free_result($contacts);
 		?>
@@ -36,22 +36,22 @@ if ($msg != "1") {
 </tr>
 <tr>
 	<td class="dataLabel">Your Name (First and Last):</td>
-	<td class="data"><input name="from_name" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_name']; ?>"></td>
+	<td class="data"><input name="from_name" type="text" size="50" value="<?php if ($msg == "2") echo $_SESSION['from_name']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
 	<td class="dataLabel">Your Email Address:</td>
-	<td class="data"><input name="from_email" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_email']; ?>"></td>
+	<td class="data"><input name="from_email" type="text" size="50" value="<?php if ($msg == "2") echo $_SESSION['from_email']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
 	<td class="dataLabel">Subject:</td>
-	<td class="data"><input name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; else echo $row_contest_info['contestName']; ?>" size="50"></td>
+	<td class="data"><input name="subject" type="text" value="<?php if ($msg == "2") echo $_SESSION['subject']; else echo $_SESSION['contestName']; ?>" size="50"></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
 	<td class="dataLabel">Message:</td>
-	<td class="data"><textarea name="message" cols="100" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea></td>
+	<td class="data"><textarea name="message" cols="100" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_SESSION['message']; ?></textarea></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
@@ -98,5 +98,5 @@ if ($msg == "1")
 <?php } while ($row_contact = mysql_fetch_assoc($contact)); ?>
 </ul>
 <?php } 
-if ($row_prefs['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

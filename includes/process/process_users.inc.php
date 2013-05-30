@@ -56,7 +56,7 @@ if ($totalRows_userCheck > 0) {
 		if ($totalRows_login == 1)
 			{
   			// Register the loginUsername
-  			$_SESSION["loginUsername"] = $username;
+  			$_SESSION['loginUsername'] = $username;
 
   			// If the username/password combo is OK, relocate to the "protected" content index page
   			header(sprintf("Location: %s", $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1"));
@@ -153,7 +153,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 			if ($totalRows_login == 1)
 				{
 				// Register the loginUsername
-				$_SESSION["loginUsername"] = $username;
+				$_SESSION['loginUsername'] = $username;
 	
 				// If the username/password combo is OK, relocate to the "protected" content index page
 				header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
@@ -187,14 +187,14 @@ if ($go == "password") {
 	$passwordOld = md5($_POST['passwordOld']);
 	$passwordNew = md5($_POST['password']);
 	mysql_select_db($database, $brewing);
-	$query_userPass = "SELECT password FROM $users_db_table WHERE password = '$passwordOld'";
+	$query_userPass = "SELECT password FROM $users_db_table WHERE id = '$id'";
 	$userPass = mysql_query($query_userPass, $brewing) or die(mysql_error());
 	$row_userPass = mysql_fetch_assoc($userPass);
 	$totalRows_userPass = mysql_num_rows($userPass);
 
 	if ($passwordOld != $row_userPass['password']) header(sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id));
 	
-	else {  
+	if ($passwordOld == $row_userPass['password'])  {  
   		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
                        GetSQLValueString($passwordNew, "text"),
                        GetSQLValueString($id, "text")); 

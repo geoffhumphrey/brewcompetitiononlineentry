@@ -1,14 +1,17 @@
 <?php 
+
 session_start(); 
+
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 require(DB.'admin_common.db.php');
-require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-
+require(INCLUDES.'constants.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (NHC) $base_url = "../";
 $query_style = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y'";
 if ($filter !="default") $query_style .= " AND brewStyleGroup='$filter'";
 $style = mysql_query($query_style, $brewing) or die(mysql_error());
@@ -35,13 +38,6 @@ body {
 </style>
 </head>
 <body>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',200);
-</script>
 <div id="content">
 	<div id="content-inner">
 <?php foreach (array_unique($s) as $style) { 
@@ -119,7 +115,8 @@ if ($totalRows_entries > 0) {
         <td class="data bdr1B_gray"><?php if ($row_entries['brewReceived'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box"></p></td>
     </tr>
-    <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
+
+   <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
     </tbody>
     </table>
 <div style="page-break-after:always;"></div>
@@ -171,3 +168,13 @@ if ($totalRows_entries > 0) {
 } // end foreach ?>
 </div>
 </div>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+</script>
+</body>
+</html>
+<?php } else echo "<p>Not available.</p>"; ?>

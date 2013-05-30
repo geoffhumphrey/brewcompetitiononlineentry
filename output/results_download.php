@@ -1,4 +1,5 @@
 <?php 
+
 session_start(); 
 require('../paths.php'); 
 require(INCLUDES.'functions.inc.php');
@@ -7,6 +8,9 @@ require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 require(INCLUDES.'scrubber.inc.php');
+
+require(INCLUDES.'constants.inc.php');
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');
@@ -21,7 +25,7 @@ if ($view == "html") {
 	$header .= '<html xmlns="http://www.w3.org/1999/xhtml">';
 	$header .= '<head>';
 	$header .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-	$header .= '<title>Results - '.$row_contest_info['contestName'].'</title>';
+	$header .= '<title>Results - '.$_SESSION['contestName'].'</title>';
 	$header .= '</head>';
 	$header .= '<body>';
 }
@@ -29,14 +33,14 @@ if ($view == "html") {
 if ($go == "judging_scores_bos") { 
 if ($view == "pdf") {
 	$pdf->SetFont('Arial','B',16);
-	$pdf->Write(5,'Best of Show Results - '.$row_contest_info['contestName']);
+	$pdf->Write(5,'Best of Show Results - '.$_SESSION['contestName']);
 	$pdf->SetFont('Arial','',7);	
 }
-$filename = str_replace(" ","_",$row_contest_info['contestName']).'_BOS_Results.'.$view;
+$filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
 
 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 $html == '';
-if ($view == "html") $html .= '<h1>BOS - '.$row_contest_info['contestName'].'</h1>';
+if ($view == "html") $html .= '<h1>BOS - '.$_SESSION['contestName'].'</h1>';
 sort($a);
 foreach (array_unique($a) as $type) {
 	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
@@ -136,14 +140,14 @@ if ($totalRows_bos > 0) {
 if ($go == "judging_scores") {
 if ($view == "pdf") {
 	$pdf->SetFont('Arial','B',16);
-	$pdf->Write(5,'Results - '.$row_contest_info['contestName']);
+	$pdf->Write(5,'Results - '.$_SESSION['contestName']);
 	$pdf->SetFont('Arial','',7);	
 }
-$filename = str_replace(" ","_",$row_contest_info['contestName']).'_Results.'.$view;
+$filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
 $html = '';
-if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].'</h1>';
+if ($view == "html") $html .= '<h1>Results - '.$_SESSION['contestName'].'</h1>';
 
-	if ($row_prefs['prefsWinnerMethod'] == "1") {
+	if ($_SESSION['prefsWinnerMethod'] == "1") {
 		
 		$query_styles = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup ASC";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -196,9 +200,9 @@ if ($view == "html") $html .= '<h1>Results - '.$row_contest_info['contestName'].
 			$html .= '</table>';
 			} 
 		} 
-	} // end if ($row_prefs['prefsWinnerMethod'] == "1") 
+	} // end if ($_SESSION['prefsWinnerMethod'] == "1") 
 	
-	elseif ($row_prefs['prefsWinnerMethod'] == "2") {
+	elseif ($_SESSION['prefsWinnerMethod'] == "2") {
 		
 		$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -307,6 +311,7 @@ if ($view == "pdf") {
 	$pdf->Output($filename,'D');
 	//echo $html;
 	}
+
 if ($view == "html") { 
 	$footer = '</body>';
 	$footer .= '</html>';
@@ -317,4 +322,8 @@ if ($view == "html") {
 	echo $header.$html.$footer;
 	exit();
 	}
+
+}
+
+else echo "<p>Not available.</p>";
 ?>

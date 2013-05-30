@@ -10,9 +10,9 @@ $section = "400";
 ?>
 <html>
 <head>
-<title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; Error 400: Bad Request"; ?></title>
-<link href="<?php echo $base_url; ?>css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-</head>
+<title><?php echo $_SESSION['contestName']; ?> Organized By <?php echo $_SESSION['contestHost']." &gt; Error 400: Bad Request"; ?></title>
+<link href="<?php echo $base_url; ?>/css/<?php echo $_SESSION['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
+
 <body>
 <div id="container">
 <div id="navigation">
@@ -26,7 +26,7 @@ $section = "400";
 			<p>Unfortunately, an invalid request has been received.</p>
 			<p>Please use the main navigation above to get where you want to go.</p>
             <p>Cheers!<br>
-          The <?php echo $row_contest_info['contestName']; ?> Site Server</p>
+          The <?php echo $_SESSION['contestName']; ?> Site Server</p>
         </div>
     </div>
 </div>

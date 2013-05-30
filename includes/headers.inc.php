@@ -7,7 +7,7 @@
  * 
  */
 
-if ($row_judging_prefs['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 
 $header_output = "";
 $output = "";
@@ -16,7 +16,7 @@ $output_extend = "";
 switch($section) {
 	
 	case "default":
-	$header_output = $row_contest_info['contestName'];
+	$header_output = $_SESSION['contestName'];
 	if ($msg == "success") { 
 		$output = "Setup was successful.";
 		$output_extend = "<p class='info'>You are now logged in and ready to further customize your competition's site.</p>"; 
@@ -45,7 +45,7 @@ switch($section) {
 	break;
 	
 	case "register":
-	$header_output = $row_contest_info['contestName'];
+	$header_output = $_SESSION['contestName'];
 	if     ($msg == "1") $output = "Sorry, there was a problem with your last login attempt. Please try again.";
 	elseif ($msg == "2") { $output = "Sorry, the user name you entered is already in use."; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "The user name provided is not a valid email address. Please enter a valid email address.";
@@ -75,6 +75,7 @@ switch($section) {
 	elseif ($msg == "2") { $output = "Your password has been randomly generated and reset to ".$go."."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
 	elseif ($msg == "3") $output = "You have been logged out. Log in again?"; 
 	elseif ($msg == "4") $output = "Your verification question does not match what is in the database. Please try again."; 
+	elseif ($msg == "5") $output = "Your ID verification information has been sent to the email address associated with your account."; 
 	else $output = ""; 
 	break;
 	
@@ -83,7 +84,7 @@ switch($section) {
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
-	$header_output = $row_contest_info['contestName']." Entry Info";
+	$header_output = $_SESSION['contestName']." Entry Info";
 	break;
 	
 	case "sponsors":
@@ -91,7 +92,7 @@ switch($section) {
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
-	$header_output = $row_contest_info['contestName']." Sponsors";
+	$header_output = $_SESSION['contestName']." Sponsors";
 	break;
 	
 	case "rules":
@@ -99,7 +100,7 @@ switch($section) {
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
-	$header_output = $row_contest_info['contestName']." Rules";
+	$header_output = $_SESSION['contestName']." Rules";
 	break;
 	
 	case "volunteers":
@@ -107,7 +108,7 @@ switch($section) {
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
 	else $output = "";
-	$header_output = $row_contest_info['contestName']." Volunteer Info";
+	$header_output = $_SESSION['contestName']." Volunteer Info";
 	break;	
 	
 	case "past_winners":
@@ -250,7 +251,7 @@ switch($section) {
 
 	case "admin":
 	if ($action != "print") $header_output = "Administration"; 
-	else $header_output = $row_contest_info['contestName'];
+	else $header_output = $_SESSION['contestName'];
 	
 		switch($go) {
 			

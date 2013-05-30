@@ -49,7 +49,7 @@ function sessionAuthenticate() {
   if (NHC) $base_url = "../";
 	else $base_url = $base_url;
   // Check if the user hasn't logged in
-  if (!isset($_SESSION["loginUsername"])) {
+  if (!isset($_SESSION['loginUsername'])) {
     header(sprintf("Location: %s", $base_url."index.php?section=login&msg=1"));
     exit;
   }

@@ -34,7 +34,7 @@ else {
 
 // Gather current User's information from the current "users" AND current "brewer" tables and store in variables
 mysql_select_db($database, $brewing);
-$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION["loginUsername"]);
+$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
 $user = mysql_query($query_user, $brewing) or die(mysql_error());
 $row_user = mysql_fetch_assoc($user);
 
@@ -45,29 +45,29 @@ $row_user = mysql_fetch_assoc($user);
 	  $userQuestionAnswer = strtr($row_user['userQuestionAnswer'], $html_string);
 	  $userCreated = $row_user['userCreated'];
   
-$query_name = sprintf("SELECT * FROM %s WHERE brewerEmail='%s'", $prefix."brewer", $_SESSION["loginUsername"]);
+$query_name = sprintf("SELECT * FROM %s WHERE brewerEmail='%s'", $prefix."brewer", $_SESSION['loginUsername']);
 $name = mysql_query($query_name, $brewing) or die(mysql_error());
 $row_name = mysql_fetch_assoc($name);
 
-	  $brewerFirstName = strtr($row_name['brewerFirstName'],$html_string);
-	  $brewerLastName = strtr($row_name['brewerLastName'],$html_string);
-	  $brewerAddress = strtr($row_name['brewerAddress'],$html_string);
-	  $brewerCity = strtr($row_name['brewerCity'],$html_string);
-	  $brewerState = $row_name['brewerState'];
-	  $brewerZip = $row_name['brewerZip'];
-	  $brewerCountry = $row_name['brewerCountry'];
-	  $brewerPhone1 = $row_name['brewerPhone1'];
-	  $brewerPhone2 = $row_name['brewerPhone2'];
-	  $brewerClubs = $row_name['brewerClubs'];
-	  $brewerEmail = $row_name['brewerEmail'];
-	  $brewerNickname = $row_name['brewerNickname'];
-	  $brewerSteward = $row_name['brewerSteward'];
-	  $brewerJudge = $row_name['brewerJudge'];
-	  $brewerJudgeID = $row_name['brewerJudgeID'];
-	  $brewerJudgeRank = $row_name['brewerJudgeRank'];
-	  $brewerJudgeLikes = $row_name['brewerJudgeLikes'];
-	  $brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
-	  $brewerAHA = $row_name['brewerAHA'];
+	  $brewerFirstName = strtr($_SESSION['brewerFirstName'],$html_string);
+	  $brewerLastName = strtr($_SESSION['brewerLastName'],$html_string);
+	  $brewerAddress = strtr($_SESSION['brewerAddress'],$html_string);
+	  $brewerCity = strtr($_SESSION['brewerCity'],$html_string);
+	  $brewerState = $_SESSION['brewerState'];
+	  $brewerZip = $_SESSION['brewerZip'];
+	  $brewerCountry = $_SESSION['brewerCountry'];
+	  $brewerPhone1 = $_SESSION['brewerPhone1'];
+	  $brewerPhone2 = $_SESSION['brewerPhone2'];
+	  $brewerClubs = $_SESSION['brewerClubs'];
+	  $brewerEmail = $_SESSION['brewerEmail'];
+	  $brewerNickname = $_SESSION['brewerNickname'];
+	  $brewerSteward = $_SESSION['brewerSteward'];
+	  $brewerJudge = $_SESSION['brewerJudge'];
+	  $brewerJudgeID = $_SESSION['brewerJudgeID'];
+	  $brewerJudgeRank = $_SESSION['brewerJudgeRank'];
+	  $brewerJudgeLikes = $_SESSION['brewerJudgeLikes'];
+	  $brewerJudgeDislikes = $_SESSION['brewerJudgeDislikes'];
+	  $brewerAHA = $_SESSION['brewerAHA'];
 
 // Second, rename current tables and recreate new ones.
 $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
@@ -197,7 +197,7 @@ session_start();
 	// Authenticate the user
 	if ($row_login['count'] == 1) {
   		// Register the loginUsername
- 		$_SESSION["loginUsername"] = $user_name;
+ 		$_SESSION['loginUsername'] = $user_name;
 		// If the username/password combo is OK, relocate to the "protected" content index page
   		header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
   		exit;

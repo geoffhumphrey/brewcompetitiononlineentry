@@ -122,7 +122,7 @@ $staff_points = number_format(total_points($total_entries,"Staff"), 1);
 $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
-$query_assignments = "SELECT COUNT(*) as 'count' FROM $brewer_db_table WHERE brewerAssignmentStaff='1'";
+$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'",$staff_db_table);
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 //echo $staff_points."<br>";
@@ -134,30 +134,30 @@ elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_poi
 else $staff_points = 0;
 
 // Organizer
-$query_organizer = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignmentOrganizer='1'";
+$query_organizer = "SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
 
 // Judges
-$query_judges = "SELECT bid FROM $judging_assignments_db_table WHERE assignment='J'";
+$query_judges = sprintf("SELECT uid FROM %s WHERE staff_judge='1'",$staff_db_table);
 $judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_judges = mysql_fetch_assoc($judges);
 $totalRows_judges = mysql_num_rows($judges);
 
-$query_bos_judges = "SELECT id FROM $brewer_db_table WHERE brewerJudgeBOS='1'";
+$query_bos_judges = sprintf("SELECT uid FROM %s WHERE staff_judge_bos='1'",$staff_db_table);
 $bos_judges = mysql_query($query_judges, $brewing) or die(mysql_error());
 $row_bos_judges = mysql_fetch_assoc($bos_judges);
 $totalRows_bos_judges = mysql_num_rows($bos_judges);
 
 // Stewards
-$query_stewards = "SELECT bid FROM $judging_assignments_db_table WHERE assignment='S'";
+$query_stewards = sprintf("SELECT uid FROM %s WHERE staff_steward='1'",$staff_db_table);
 $stewards = mysql_query($query_stewards, $brewing) or die(mysql_error());
 $row_stewards = mysql_fetch_assoc($stewards);
 $totalRows_stewards = mysql_num_rows($stewards);
 
 // Staff
-$query_staff = "SELECT brewerFirstName,brewerLastName,brewerJudgeID FROM $brewer_db_table WHERE brewerAssignmentStaff='1'";
+$query_staff = sprintf("SELECT uid FROM %s WHERE staff_staff='1'",$staff_db_table);
 $staff = mysql_query($query_staff, $brewing) or die(mysql_error());
 $row_staff = mysql_fetch_assoc($staff);
 $totalRows_staff = mysql_num_rows($staff);

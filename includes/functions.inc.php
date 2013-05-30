@@ -473,7 +473,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	// ----------------------------------------------------------------------
 	
 	// ----------------------------------------------------------------------
-	if (($bid == "default") && ($filter != "default")) { 
+	if (($bid == "default") && ($filter != "default")) {  
 	
 	mysql_select_db($database, $brewing);
 		$query_users = sprintf("SELECT id,user_name FROM %s",$prefix."users");
@@ -923,7 +923,7 @@ function total_paid_received($go,$id) {
 	mysql_select_db($database, $brewing);
 	
 	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
-	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
+	if (($go == "judging_scores") || ($go == "judging_tables")) $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
 	//if (($go == "entries") && ($id != "default")) $query_entry_count .= " WHERE brewCategorySort='$id'"; 
 	if ($id == 0)  $query_entry_count .= "";
 	elseif ($id > 0) $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
@@ -1068,7 +1068,7 @@ function style_convert($number,$type) {
 			$row_style = mysql_fetch_assoc($style);
 			$style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
 		}
-		$style_convert = rtrim(display_array_content($style_convert1,'3'),",");
+		$style_convert = rtrim(implode(", ",$style_convert1),", ");
 		break;
 	}
 	return $style_convert;
@@ -1234,7 +1234,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'",$row_style['brewStyle']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
 	// echo $query;
@@ -1349,17 +1349,17 @@ function style_type($type,$method,$source) {
 	}
 	return $type;
 }
-
+/*
 function check_bos_loc($id) { 
 	require(CONFIG.'config.php');
 	$query_judging = sprintf("SELECT judgingLocName,judgingDate FROM %s WHERE id='$id'", $prefix."judging_locations");
 	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 	$row_judging = mysql_fetch_assoc($judging);
 	$totalRows_judging = mysql_num_rows($judging);
-	$bos_loc = $row_judging['judgingLocName']." (".getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_judging['judgingDate'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "long", "date-time").")";
+	$bos_loc = $row_judging['judgingLocName']." (".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")";
 	return $bos_loc;
 }
-
+*/
 function bos_method($value) {
 	switch($value) {
 		case "1": $bos_method = "1st place only";
@@ -1666,10 +1666,10 @@ function get_contact_count() {
 	return $contactCount;
 }
 
-function brewer_info($bid) {
+function brewer_info($uid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs FROM %s WHERE uid='%s'", $prefix."brewer", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid']."^".$row_brewer_info['brewerClubs'];
@@ -1812,9 +1812,7 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable,"default")) { 
-        	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>";
-		 	} 
+        	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>"; 
 		} while ($row_tables = mysql_fetch_assoc($tables));
      $r .= "</select>";
 	} 
@@ -1872,6 +1870,16 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
+	if ($method == 6) { // reserved for NHC admin advance
+		$r = "Administrative Advance";
+	}
+	
+	if ($method == "") {
+		$r = "";	
+	}
+	
+	
+	if ($method < 6) {
 	$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
@@ -1907,35 +1915,53 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
 		}
 	} 
-	else $r = "-";
+	else $r = "";
+	}
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
 }
 
-function brewer_assignment($a,$method){ 
-	switch($method) {
-	case "1": // 
-		if ($a == "J") $r = "Judge"; 
-		elseif ($a == "S") $r = "Steward"; 
-		elseif ($a == "X") $r = "Staff";
-		elseif ($a == "O") $r = "Organizer"; 
-		else $r = "";
-	break;
-	case "2": // for $filter URL variable
-		if ($a == "judges") $r = "J"; 
-		elseif ($a == "stewards") $r = "S"; 
-		elseif ($a == "staff") $r = "X";
-		elseif ($a == "bos") $r = "Y";
-		else $r = "";
-	break;
-	case "3": // for $filter URL variable
-		if ($a == "judges") $r = "Judges"; 
-		elseif ($a == "stewards") $r = "Stewards"; 
-		elseif ($a == "staff") $r = "Staff";
-		elseif ($a == "bos") $r = "BOS Judges";
-		else $r = "";
-	break;
+function brewer_assignment($uid,$method){
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);	
+	$query_staff_check = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."staff", $uid);
+	$staff_check = mysql_query($query_staff_check, $brewing) or die(mysql_error());
+	$row_staff_check = mysql_fetch_assoc($staff_check);
+	$totalRows_staff_check = mysql_num_rows($staff_check);
+	
+	if ($totalRows_staff_check > 0) {
+	$r[] = "";
+		switch($method) {
+			case "1": // 
+				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
+				if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
+				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS Judge";
+				if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward"; 
+				if ($row_staff_check['staff_staff'] == "1") $r[] .= "Staff";
+			break;
+			case "staff_judge": // for $filter URL variable
+				if ($row_staff_check['staff_judge'] == "1") $r = "CHECKED";  
+				elseif ($a == "stewards") $r = "S"; 
+				elseif ($a == "staff") $r = "X";
+				elseif ($a == "bos") $r = "Y";
+				else $r = "";
+			break;
+		}
+	if (!empty($r)) $r = implode(", ",$r);
+	$r = rtrim($r,", ");
+	$r = ltrim($r,", ");
 	}
+	else $r = "";
+	
+	if ($method == "3") {
+		if ($uid == "judges") $r = "Judges"; 
+		elseif ($uid == "stewards") $r = "Stewards"; 
+		elseif ($uid == "staff") $r = "Staff";
+		elseif ($uid == "bos") $r = "BOS Judges";
+		else $r = "";
+	}
+
 return $r;
 }
 
@@ -2112,7 +2138,7 @@ function data_integrity_check() {
 		}
 	}
 	
-	// Erase judging and stewarding assignments of the organizer if any
+	/* Erase judging and stewarding assignments of the organizer if any
 	// INTERIM MEASURE. Incorporate this check once the 
 	// judging/stewarding/staff methodology is reworked
 	$query_org = sprintf("SELECT uid FROM %s WHERE brewerAssignment='O'",$prefix."brewer");
@@ -2137,7 +2163,7 @@ function data_integrity_check() {
 		}
 		
 	}
-
+	*/
 	
 	// Next, purge all entries that are unconfirmed
 	purge_entries("unconfirmed", 1);
@@ -2306,6 +2332,10 @@ function readable_judging_number($style,$number) {
 		return $judging_number[0]."-".$judging_number[1];
 	}
 	
+	elseif (strlen($number) == 6) {
+		return $number;
+	}
+	
 	else {
 		$judging_number = str_osplit($number, 2);
 		return $judging_number[0]."-".$judging_number[1];
@@ -2315,10 +2345,129 @@ function readable_judging_number($style,$number) {
 function dropoff_location($input) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_dropoff = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."drop_off",$input);
+	$query_dropoff = sprintf("SELECT dropLocationName FROM %s WHERE id='%s'",$prefix."drop_off",$input);
 	$dropoff = mysql_query($query_dropoff, $brewing) or die(mysql_error());
 	$row_dropoff = mysql_fetch_assoc($dropoff);
 	if ($input > 0)	return $row_dropoff['dropLocationName'];
 	else return "Shipping Entries";
+}
+
+
+function judge_steward_availability($input,$method) {
+	if (($input == "Y-") || ($input == "")) {
+		if ($method == "1") $return = "No availability defined.";
+		else $return = "";
+	}
+	else {
+		$a = explode(",",$input);
+		arsort($a);
+		foreach ($a as $value) {
+		if ($value != "") {
+			$b = substr($value, 2);
+			$c = substr($value, 0, 1);
+				if ($c == "Y") {
+				require(CONFIG.'config.php');
+				$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $b);
+				$location = mysql_query($query_location, $brewing) or die(mysql_error());
+				$row_location = mysql_fetch_assoc($location);
+				$return .= $row_location['judgingLocName']." ";
+				//$return .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+				if ($method == "1") $return .= "<br>";
+				elseif ($method == "2") $return .= " | ";
+				else $return .= " ";
+				}
+			}
+		}
+	}
+	if ($method == "1")	return rtrim($return,"<br>");
+	elseif ($method == "2") return rtrim($return," | ");
+	else return $return;
+}
+
+function judge_entries($uid,$method) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_judge_entries = sprintf("SELECT brewStyle, brewCategory, brewSubCategory, brewCategorySort FROM %s WHERE brewBrewerID='%s' ORDER BY brewCategorySort ASC",$prefix."brewing",$uid);
+	$judge_entries = mysql_query($query_judge_entries, $brewing) or die(mysql_error());
+	$row_judge_entries = mysql_fetch_assoc($judge_entries);
+	$totalRows_judge_entries = mysql_num_rows($judge_entries);
+	
+	if ($totalRows_judge_entries > 0) {
+		do { 
+			if ($method == 1) $entries[] = "<a href='".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."' title='View the ".$row_judge_entries['brewStyle']." Entries'>".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>"; 
+			else $entries[] = $row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory'];
+			} 
+			while ($row_judge_entries = mysql_fetch_assoc($judge_entries));
+		$return = implode(", ",$entries);
+		$return = rtrim($return,", ");
+	}
+	else $return = "";
+	return $return;
+}
+
+function judging_winner_display($delay) {
+			include(CONFIG.'config.php');
+			mysql_select_db($database, $brewing);
+			$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
+			$check = mysql_query($query_check, $brewing) or die(mysql_error());
+			$row_check = mysql_fetch_assoc($check);
+			$today = strtotime("now");
+			$r = $row_check['judgingDate'] + $delay;
+			if ($r > $today) return FALSE; else return TRUE;
+		}
+		
+		
+function format_phone_us($phone = '', $convert = true, $trim = true) {
+	// If we have not entered a phone number just return empty
+	if (empty($phone)) {
+		return false;
+	}
+
+	// Strip out any extra characters that we do not need only keep letters and numbers
+	$phone = preg_replace("/[^0-9A-Za-z]/", "", $phone);
+	// Keep original phone in case of problems later on but without special characters
+	$OriginalPhone = $phone;
+
+	// If we have a number longer than 11 digits cut the string down to only 11
+	// This is also only ran if we want to limit only to 11 characters
+	if ($trim == true && strlen($phone)>11) {
+		$phone = substr($phone, 0, 11);
+	}
+
+	// Do we want to convert phone numbers with letters to their number equivalent?
+	// Samples are: 1-800-TERMINIX, 1-800-FLOWERS, 1-800-Petmeds
+	if ($convert == true && !is_numeric($phone)) {
+		$replace = array('2'=>array('a','b','c'),
+						 '3'=>array('d','e','f'),
+						 '4'=>array('g','h','i'),
+						 '5'=>array('j','k','l'),
+						 '6'=>array('m','n','o'),
+						 '7'=>array('p','q','r','s'),
+						 '8'=>array('t','u','v'),
+						 '9'=>array('w','x','y','z'));
+
+		// Replace each letter with a number
+		// Notice this is case insensitive with the str_ireplace instead of str_replace 
+		foreach($replace as $digit=>$letters) {
+			$phone = str_ireplace($letters, $digit, $phone);
+		}
+	}
+
+	$length = strlen($phone);
+	// Perform phone number formatting here
+	switch ($length) {
+		case 7:
+			// Format: xxx-xxxx
+			return preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1-$2", $phone);
+		case 10:
+			// Format: (xxx) xxx-xxxx
+			return preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "($1) $2-$3", $phone);
+		case 11:
+			// Format: x(xxx) xxx-xxxx
+			return preg_replace("/([0-9a-zA-Z]{1})([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1($2) $3-$4", $phone);
+		default:
+			// Return original phone if not 7, 10 or 11 digits long
+			return $OriginalPhone;
+	}
 }
 ?>

@@ -6,11 +6,62 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'functions.inc.php'); 
 require(DB.'common.db.php');
-$username = $_POST['loginUsername'];
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
-
 mysql_select_db($database, $brewing);
+
+if (($action == "email") && ($id != "default")) {
+	
+	$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
+	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+	$row_forgot = mysql_fetch_assoc($forgot);
+	$totalRows_forgot = mysql_num_rows($forgot);
+	
+	$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
+
+	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
+	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
+	
+	$to_recipient = $first_name." ".$last_name;
+	$to_email = $row_forgot['user_name'];
+	$subject = $_SESSION['contestName'].": ID Verification Request";
+	$message = "<html>" . "\r\n";
+	$message .= "<body>" . "\r\n";
+	$message .= "<p>".$first_name.",</p>";
+	$message .= "<p>A request was made to verify the account at the ".$_SESSION['contestName']." competition website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.</p>";
+	$message .= "<table cellpadding='0' border='0'><tr><td><strong>ID Verfication Question:</strong></td><td>".$row_forgot['userQuestion']."</td>";
+	$message .= "<tr><td><strong>ID Verfication Answer:</strong></td><td>".$row_forgot['userQuestionAnswer']."</td></tr></table>";
+	$message .= "<p><em>*The ID Verification Answer is case sensitive.</em></p>";
+	$message .= "<p>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</p>";
+	$message .= "</body>" . "\r\n";
+	$message .= "</html>";
+	
+	//$parse = parse_url($_SERVER['SERVER_NAME']);
+	//print_r($parse);
+	//$url = $parse['host'];
+	//$url = preg_replace('#^www\.(.+\.)#i', '$1', $parse['host']);
+	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+	
+	$headers  = "MIME-Version: 1.0" . "\r\n";
+	$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+	$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
+	$headers .= "From: Competition Server <noreply@".$url. ">\r\n";
+	
+	$emails = $to_email;
+	mail($emails, $subject, $message, $headers);
+	
+	//echo $headers."<br>";
+	//echo $subject."<br>";
+	//echo $message;
+	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=5&username=".$to_email));
+}
+
+else {
+$username = $_POST['loginUsername'];
+
 $query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 $forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
 $row_forgot = mysql_fetch_assoc($forgot);
@@ -33,7 +84,7 @@ $em = $row->username;// email is stored to a variable
 $key = random_generator(10,1);
 
 $password = md5($key);
-$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE user_name='%s'", $password, $username);
+$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $password, $row_forgot['id']);
 					   
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -46,14 +97,14 @@ header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&
 }
 
 /*
-$headers4	 = $row_contest_info['contestContactEmail'];
+$headers4	 = $_SESSION['contestContactEmail'];
 $headers	.= "Reply-to: $headers4\n";
 $headers 	.= "From: $headers4\n"; 
 $headers 	.= "Errors-to: $headers4\n"; 
 $headers 	= "Content-Type: text/html; charset=iso-8859-1\n".$headers;// for html mail
  
-if (mail("$em","Password Reset","This is in response to your request for a password reset at from the ".$row_contest_info['contestName']." entry site. \n \nYour user name: $row->userid \n Your new password: ".$key."\n\n
-\n\n Thank You \n \n The ".$row_contest_info['contestName']." Staff","$headers")) 
+if (mail("$em","Password Reset","This is in response to your request for a password reset at from the ".$_SESSION['contestName']." entry site. \n \nYour user name: $row->userid \n Your new password: ".$key."\n\n
+\n\n Thank You \n \n The ".$_SESSION['contestName']." Staff","$headers")) 
 {
 header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=2"));
 }
@@ -64,4 +115,5 @@ header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&
 */
 
 //}
+}
 ?>
