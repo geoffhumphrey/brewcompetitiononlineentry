@@ -89,30 +89,30 @@ $totalRows_themes = mysql_num_rows($themes);
   <tr>
     <td class="dataLabel">Use Custom Modules:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">FOR ADVANCED USERS. Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
+  	<td class="data"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
   </tr>
 </table>
 <h3>Entries</h3>
 <table>
-	<tr>
+  <!-- Deprecated 
+  <tr>
     <td class="dataLabel">Require Special Ingredients<br />
       for Custom Styles:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php if ($_SESSION['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php if ($_SESSION['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php //if ($_SESSION['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php //if ($_SESSION['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
     <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
   </tr>
+  -->
   <tr>
     <td class="dataLabel">Printed Entry Form to Use:</td>
     <td nowrap="nowrap" class="data">
     <select name="prefsEntryForm">
         <option value="B" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
+        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> /><?php if (NHC) echo "NHC - 1 Page with Barcode"; else echo "BJCP Official - With Barcode"; ?></option>
         <option value="M" <?php if ($_SESSION['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
         <option value="U" <?php if ($_SESSION['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
-        <?php if (NHC) { ?>
-        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />NHC - 1 Page with Barcode</option>
-        <?php } ?>
     </select>
     </td>
-  	<td class="data">The BJCP Official form displays U.S. weights and measures.</td>
+  	<td class="data">The BJCP Official form displays U.S. weights and measures. <?php if (!NHC) { ?>The<em> BJCP Official - With Barcode</em> option displays the official BJCP recipe form with four bottle labels that feature a scannable barcode. This option is intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a>&nbsp;to generate all barcodes</strong>. Please make sure your scanner recognizes this type of barcode&nbsp;<em>before</em>&nbsp;implementing in your competition.  	    <?php } ?></td>
   </tr> 
   <tr>
   	<td class="dataLabel">Total Entry Limit:</td>
@@ -196,7 +196,7 @@ $totalRows_themes = mysql_num_rows($themes);
   <tr>
   	<td class="dataLabel">DataTables Record Threshold:</td>
     <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "750"; else echo $_SESSION['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possiblity for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
+    <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possibility for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
   </tr>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
@@ -304,14 +304,14 @@ $totalRows_themes = mysql_num_rows($themes);
     <td class="data">
     <select name="prefsLiquid1">
     <option value="ounces" <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "SELECTED"; ?>>ounces</option>
-    <option value="millilitres" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "SELECTED"; ?>>millilitres</option>
+    <option value="millilitres" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "SELECTED"; ?>>milliliters</option>
     </select>    </tr>
   <tr>
     <td class="dataLabel">Liquid (Large):</td>
     <td class="data">
     <select name="prefsLiquid2">
     <option value="gallons" <?php if ($_SESSION['prefsLiquid1'] == "gallons") echo "SELECTED"; ?>>gallons</option>
-    <option value="litres" <?php if ($_SESSION['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>litres</option>
+    <option value="litres" <?php if ($_SESSION['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>liters</option>
     </select>    </td>
     </tr>
   

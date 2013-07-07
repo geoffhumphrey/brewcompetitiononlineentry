@@ -1,0 +1,10 @@
+<?php 
+require(INCLUDES.'functions.inc.php');
+require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'db_tables.inc.php');
+require(DB.'common.db.php');
+include(INCLUDES.'version.inc.php');
+include(INCLUDES.'headers.inc.php');
+include(INCLUDES.'scrubber.inc.php');
+include(INCLUDES.'constants.inc.php');
+?>

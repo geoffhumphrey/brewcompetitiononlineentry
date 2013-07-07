@@ -1,11 +1,24 @@
 <?php 
 /*
- * Module:      process_special_best_info.inc.php
- * Description: This module does all the heavy lifting for adding/editing info in the "special_best_info" table
+ * Module:      process_mods.inc.php
+ * Description: This module does all the heavy lifting for adding/editing info in the "mods" table
  */
 
 if (($_POST['mod_extend_function_admin'] == "") && ($_POST['mod_extend_function'] == 9)) $mod_extend_function_admin = "default"; 
 else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
+
+if ($action == "update") {
+	foreach($_POST['id'] as $id) {  
+		if ($_POST['mod_enable'.$id] == 1) $enable = 1; else $enable = 0;
+		$updateSQL = sprintf("UPDATE %s SET mod_enable='%s' WHERE id='%s'",$mods_db_table,$enable,$id);
+		//echo $updateSQL."<br>";
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	}
+	$massUpdateGoTo = $base_url."index.php?section=admin&go=mods&msg=9"; 
+	$pattern = array('\'', '"');
+  	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+}
 
 if ($action == "add") {
 	$insertSQL = sprintf("

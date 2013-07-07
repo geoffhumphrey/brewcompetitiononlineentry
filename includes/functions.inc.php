@@ -1203,6 +1203,17 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	return $d; 
   	}
 	
+	
+	if (($method == "score_total") && ($param == "default")) {
+		
+		$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
+		$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
+		$row_score_count = mysql_fetch_assoc($score_count);
+		$totalRows_score_count = $row_score_count['count'];
+		
+		return $totalRows_score_count; 
+  	}
+	
 	if (($method == "count_total") && ($param != "default")) {
 	
 	do {	
@@ -2180,14 +2191,9 @@ function readable_number($a){
 
 // http://www.iamcal.com/publish/articles/php/readable_numbers/
 
-	$bits_a = array("thousand", "million", "billion", "trillion",
-		"quadrillion");
-	$bits_b = array("ten", "twenty", "thirty", "forty", "fifty", 
-		"sixty", "seventy", "eighty", "ninety");
-	$bits_c = array("one", "two", "three", "four", "five", "six", 
-		"seven", "eight", "nine", "ten", "eleven", "twelve", 
-		"thirteen", "fourteen", "fifteen", "sixteen", "seventeen", 
-		"eighteen", "nineteen");
+	$bits_a = array("thousand", "million", "billion", "trillion", "quadrillion");
+	$bits_b = array("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety");
+	$bits_c = array("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen");
 
 	if ($a==0){return 'zero';}
 
@@ -2324,15 +2330,17 @@ function str_osplit($string, $offset){
  }
  
 function readable_judging_number($style,$number) {
-	
+	/*
 	if (strlen($number) == 5) {
 		if ($style < 10) $number = "0".$number;
 		else $number = $number;
 		$judging_number = str_osplit($number, 2);
 		return $judging_number[0]."-".$judging_number[1];
 	}
+	*/
 	
-	elseif (strlen($number) == 6) {
+	// NHC and Barcode usage
+	if (strlen($number) == 6) {
 		return $number;
 	}
 	
@@ -2469,5 +2477,31 @@ function format_phone_us($phone = '', $convert = true, $trim = true) {
 			// Return original phone if not 7, 10 or 11 digits long
 			return $OriginalPhone;
 	}
+}
+
+
+function check_judging_flights() {
+	// Checks if the count of received entries is the same as the count in judging_flights table
+	// If so, return TRUE
+	// If not, return FALSE
+	
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_check_tables = sprintf("SELECT COUNT(*) AS 'count' FROM %s", $prefix."judging_tables");
+	$check_tables = mysql_query($query_check_tables, $brewing) or die(mysql_error());
+	$row_check_tables = mysql_fetch_assoc($check_tables);
+	
+	$query_check_received = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewReceived='1'", $prefix."brewing");
+	$check_received = mysql_query($query_check_received, $brewing) or die(mysql_error());
+	$row_check_received = mysql_fetch_assoc($check_received);
+	
+	$query_check_flights = sprintf("SELECT COUNT(*) AS 'count' FROM %s", $prefix."judging_flights");
+	$check_flights = mysql_query($query_check_flights, $brewing) or die(mysql_error());
+	$row_check_flights = mysql_fetch_assoc($check_flights);
+	
+	if (($row_check_received['count'] > 0) && ($row_check_flights['count'] > 0) && ($row_check_tables['count'] > 0) && ($row_check_received['count'] == $row_check_flights['count'])) return TRUE;
+	if (($row_check_received['count'] > 0) && ($row_check_flights['count'] > 0) && ($row_check_tables['count'] > 0) && ($row_check_received['count'] != $row_check_flights['count'])) return FALSE; 
+
 }
 ?>

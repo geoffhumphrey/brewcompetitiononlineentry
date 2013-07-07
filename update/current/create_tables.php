@@ -36,6 +36,7 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
 	  `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
 	  `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
 	  `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
+	  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '0=no 1=yes',
 	  PRIMARY KEY (`id`)
 	) ENGINE=MyISAM";
 mysql_select_db($database, $brewing);

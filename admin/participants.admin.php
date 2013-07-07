@@ -73,7 +73,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
   			<div id="views" class="menu" onmouseover="menuMouseover(event)">
   				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">All Participants</a>
   				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
-  				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Aavailable Stewards</a>
+  				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
   			</div>
   	</span>
     <span class="adminSubNav">

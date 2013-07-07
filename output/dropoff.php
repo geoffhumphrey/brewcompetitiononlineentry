@@ -250,7 +250,8 @@ function selfPrint(){
     self.print();
 }
 setTimeout('selfPrint()',2000);
-</script> 
+html.push('');
+</script>
 </body>
 </html>
 <?php } else echo "<p>Not available.</p>"; ?>

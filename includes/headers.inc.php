@@ -275,12 +275,11 @@ switch($section) {
 			$header_output .= ": Entries";
 			break;
 			
-			/* placeholder for later
+			// placeholder for later
 			case "contest_info":
 			$header_output .= ""; 
 			break;
-			*/
-			
+						
 			case "preferences":
 			$header_output .= ": Preferences";
 			break;
@@ -337,6 +336,7 @@ switch($section) {
 	if     ($msg == "1") $output = "Info added successfully."; 
 	elseif ($msg == "2") $output = "Info edited successfully.";
 	elseif ($msg == "3") $output = "There was an error. Please try again.";
+	elseif ($msg == "4") $output = "All received entries have been checked and those not assigned to tables have been assigned."; 
 	elseif ($msg == "5") $output = "Info deleted successfully.";
 	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a different one."; 
 	elseif ($msg == "7") $output = "Archives created successfully. Click the archive name to view.";
@@ -362,14 +362,10 @@ switch($section) {
 	elseif ($msg == "15") $output = "One or more pieces of required data are missing - outlined in red below. Please check your data and enter again.";
 	else $output = "";
 	break;
-	
-	
-
 }
+
 if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
 if ($msg == "16") $output = "Your installation has been set up successfully!";
 if ($msg == "17") $output = "Your installation has been updated successfully!";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
-
-
 ?>

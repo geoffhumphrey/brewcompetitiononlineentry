@@ -184,6 +184,7 @@ function selfPrint(){
     self.print();
 }
 setTimeout('selfPrint()',2000);
+html.push(''); 
 </script>
 </body>
 </html>

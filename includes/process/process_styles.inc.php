@@ -82,13 +82,14 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
   
   brewStyleGroup, 
   brewStyleActive, 
-  brewStyleOwn
+  brewStyleOwn,
+  brewStyleReqSpec
   ) 
   VALUES (
   %s, %s, %s, %s, %s, 
   %s, %s, %s, %s, %s, 
   %s, %s, %s, %s, %s, 
-  %s, %s, %s)",
+  %s, %s, %s, %s)",
                        GetSQLValueString("A", "text"),
                        GetSQLValueString($_POST['brewStyle'], "scrubbed"),
                        GetSQLValueString($_POST['brewStyleOG'], "text"),
@@ -106,7 +107,8 @@ $style_add_one = $row_style_name['brewStyleGroup'] + 1;
                        GetSQLValueString($_POST['brewStyleLink'], "text"),
                        GetSQLValueString($style_add_one, "text"),
 					   GetSQLValueString($_POST['brewStyleActive'], "text"),
-					   GetSQLValueString($_POST['brewStyleOwn'], "text")
+					   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+					   GetSQLValueString($_POST['brewStyleReqSpec'], "text")
 					   );
 
 
@@ -140,7 +142,8 @@ if ($action == "edit") {
 	  
 	  brewStyleGroup=%s,
 	  brewStyleActive=%s, 
-	  brewStyleOwn=%s
+	  brewStyleOwn=%s,
+	  brewStyleReqSpec=%s
 	  
 	  WHERE id=%s",
                        GetSQLValueString($_POST['brewStyleNum'], "text"),
@@ -161,6 +164,7 @@ if ($action == "edit") {
                        GetSQLValueString($_POST['brewStyleGroup'], "text"),
 					   GetSQLValueString($_POST['brewStyleActive'], "text"),
 					   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+					   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
                        GetSQLValueString($id, "int"));
 
   mysql_select_db($database, $brewing);

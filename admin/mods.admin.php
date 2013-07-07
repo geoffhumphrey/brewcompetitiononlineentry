@@ -48,7 +48,7 @@ function mod_info($info,$method) {
 	}
 	
 	return $output;
-}
+} 
 
  ?>
 <h2><?php if ($action == "add") echo "Add a Custom Module"; elseif ($action == "edit") echo "Edit a Custom Module"; else echo "Custom Modules"; ?></h2>
@@ -63,6 +63,7 @@ function mod_info($info,$method) {
     </span>
 </div>
 <?php if ($action == "default") { ?>
+<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
     <p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are templates for reports (both on-screen and printed) and simple HTML files. These are located in the &ldquo;Mods&rdquo; sub-folder. A complete guide to adding and using custom modules is provided in the BCOE&amp;M help site.</p>
     <p>Below is a list of the custom modules added to the database. For the program to use any custom module, its information MUST be added into the database and the file uploaded to the &ldquo;Mods&rdquo; sub-folder.<em> <strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
 	<?php if ($totalRows_mods > 0) { ?>
@@ -86,10 +87,12 @@ function mod_info($info,$method) {
 					null,
 					null,
 					{ "asSorting": [  ] },
+					{ "asSorting": [  ] }
                     ]
                 } );
             } );
         </script>
+<p><input type="submit" name="Submit" class="button" value="Update Custom Modules" />&nbsp;<span class="required">Click "Update Custom Modules" <em>before</em> paging through records.</span></p>
     <table class="dataTable" id="sortable">
      <thead>
      <tr>
@@ -101,6 +104,7 @@ function mod_info($info,$method) {
       <th class="dataHeading bdr1B">File Name</th>
       <th class="dataHeading bdr1B">Permission</th>
       <th class="dataHeading bdr1B">Display</th>
+      <th class="dataHeading bdr1B">Enabled</th>
       <th class="dataHeading bdr1B">Actions</th>
      </tr>
      </thead>
@@ -108,13 +112,14 @@ function mod_info($info,$method) {
      <?php do { ?>
      <tr>
       <td width="15%" class="dataList"><?php echo $row_mods['mod_name']; ?></td>
-      <td width="20%" class="dataList"><?php echo $row_mods['mod_description']; ?></td>
-      <td width="5%" class="dataList"><?php echo mod_info($row_mods['mod_type'],1); ?></td>
+      <td width="15%" class="dataList"><?php echo $row_mods['mod_description']; ?></td>
+      <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_type'],1); ?></td>
       <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_extend_function'],2); ?></td>
       <td width="10%" class="dataList"><?php echo ucfirst(str_replace("_"," ",$row_mods['mod_extend_function_admin'])); ?></td>
       <td width="10%" class="dataList"><?php echo $row_mods['mod_filename']; ?></td>
       <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_permission'],3); ?></td>
       <td width="10%" class="dataList"><?php echo mod_info($row_mods['mod_display_rank'],4); ?></td>
+      <td width="5%" class="dataList"><input id="mod_enable" type="checkbox" name="mod_enable<?php echo $row_mods['id']; ?>" value="1" <?php if ($row_mods['mod_enable'] == 1) echo 'checked="checked"'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_mods['id']; ?>" /></td>
       <td class="dataList" nowrap="nowrap">
       <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_mods['mod_name']; ?>" title="Edit <?php echo $row_mods['mod_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete','id',<?php echo $row_mods['id']; ?>,'Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_mods['mod_name']; ?>" title="Delete <?php echo $row_mods['mod_name']; ?>"></a></span>
       </td>
@@ -122,6 +127,9 @@ function mod_info($info,$method) {
     <?php } while($row_mods = mysql_fetch_assoc($mods)) ?>
      </tbody>
     </table>
+<p><input type="submit" name="Submit" class="button" value="Update Custom Modules" />&nbsp;<span class="required">Click "Update Custom Modules" <em>before</em> paging through records.</span></p>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+</form>
     <?php } else echo "<p>There are no custom modules were found in the database.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>

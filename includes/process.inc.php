@@ -93,7 +93,7 @@ function generate_judging_num($style_cat_num) {
 	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
 	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
 	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return $output;
+	return sprintf("%05s",$output) ;
 }
 
 function ucwordspecific($str,$delimiter) {
@@ -228,15 +228,15 @@ function clean_up_url($referer) {
 }
 
 if (NHC) {
-		$insertGoTo = "../";
-		$updateGoTo = "../";
-		$massUpdateGoTo = "../";
-	} 
-	else {
-		$insertGoTo = "";
-		$updateGoTo = "";
-		$massUpdateGoTo = "../";
-	}
+	$insertGoTo = "../";
+	$updateGoTo = "../";
+	$massUpdateGoTo = "../";
+} 
+else {
+	$insertGoTo = "";
+	$updateGoTo = "";
+	$massUpdateGoTo = "../";
+}
 
 if (strpos($_POST['relocate'],"?") === false) {
 	$insertGoTo .= $_POST['relocate']."?msg=1"; 
@@ -349,6 +349,8 @@ if ($action == "delete")						include_once (PROCESS.'process_delete.inc.php');
 
 if ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
 
+if ($action == "update_judging_flights")		include_once (PROCESS.'process_judging_flight_check.inc.php'); 
+
 if ($action == "purge") {
 	
 	function purge_entries($type, $interval) {
@@ -459,9 +461,8 @@ if ($action == "generate_judging_numbers") {
 		} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 		
 	}
-if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
-else $updateGoTo = $base_url."index.php?section=admin&msg=14";
-header(sprintf("Location: %s", $updateGoTo));		
+	if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
+	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
+	header(sprintf("Location: %s", $updateGoTo));		
 }
-
 ?>
