@@ -124,6 +124,9 @@ if (strstr($section,"step")) { ?>
     <?php if (($_SESSION['userLevel'] == "0") && (!NHC)) { ?>
     <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Regenerate');"><span class="menuItemText">Regenerate</span><span class="menuItemArrow">&#9654;</span></a>
     <?php } ?>
+    <?php if ($_SESSION['prefsEntryForm'] == "N") { ?>
+    <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_CheckIn');"><span class="menuItemText">Check-In</span><span class="menuItemArrow">&#9654;</span></a>
+    <?php } ?>
     <?php if (!NHC) { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Sorting_Print');"><span class="menuItemText">Print</span><span class="menuItemArrow">&#9654;</span></a>
     <?php } ?>
@@ -260,7 +263,7 @@ if (strstr($section,"step")) { ?>
 </div>
 <?php if (($_SESSION['userLevel'] == "0") && (!NHC)) { ?>
 <div id="adminMenu_Sorting_Regenerate" class="menu" onmouseover="menuMouseover(event)">
-	<a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Judging Numbers</a>
+	<a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Judging Numbers</a>
 </div>
 <?php } ?>
 <div id="adminMenu_Sorting_Add" class="menu" onmouseover="menuMouseover(event)">
@@ -272,6 +275,11 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default">Bottle Labels Using Entry Numbers - All Categories</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">Bottle Labels Using Judging Numbers - All Categories</a>
 </div>
+<?php if ($_SESSION['prefsEntryForm'] == "N") { ?>
+<div id="adminMenu_Sorting_CheckIn" class="menu" onmouseover="menuMouseover(event)">
+	<a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entries with a Barcode Reader/Scanner</a>
+</div>
+<?php } ?>
 
 <div id="adminMenu_Organizing_Manage" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Participants</a>

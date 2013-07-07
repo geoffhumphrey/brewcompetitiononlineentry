@@ -60,28 +60,34 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	
 	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 	
-	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",ltrim($style_break[0],"0"),$style_break[1]); 
+	//$style_trimmed = ltrim($style_break[0],"0");
+	
+	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
+	else $style_num = $style_break[0];
+	
+	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_num,$style_break[1]); 
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
 	// Check if the user has a entry in the system in the subcategory
 	
-	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,ltrim($style_break[0],"0"),$style_break[1]);
+	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_num,$style_break[1]);
 	$check = mysql_query($query_check, $brewing) or die(mysql_error());
 	$row_check = mysql_fetch_assoc($check);
 	
 	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
 	else $return = "";
 	
-	if (($return == "DISABLED") && ($pref_exception_sub_array != "")) {
+	
+	// Check for exceptions
+	if (($return == "DISABLED") && (!empty($pref_exception_sub_array))) {
 		if (in_array($row_style['id'],$pref_exception_sub_array)) {
 			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
-			if (($row_check['count'] >= $pref_exception_sub_num)) $return = "DISABLED";
-			elseif ($pref_exception_sub_num == "") $return = "";
+			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $return = "DISABLED";
 			else $return = "";
 		}
 	}
-	
+	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
 	return $return;
 	
 }
@@ -185,21 +191,23 @@ $(document).ready(function()
 <?php 
 
 // Show/hide special ingredients depending upon the style chosen...
-
 $special_beer = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A");
 $cider = array("27-A","27-D");
 $special_mead = array("24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C");
 $special_cider = array("27-B","27-C","27-E","28-A","28-B","28-C","28-D");
 $all_execptions = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A","27-A","27-D","24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C","27-B","27-C","27-E","28-A","28-B","28-C","28-D");
-// Get all custom cats
-$query_custom_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
-$custom_styles = mysql_query($query_custom_styles, $brewing) or die(mysql_error());
-$row_custom_styles = mysql_fetch_assoc($custom_styles);
-$totalRows_custom_styles = mysql_num_rows($custom_styles); 
-if ($totalRows_custom_styles > 0) {
-	do { $a[] = $row_custom_styles['brewStyleGroup']."-A"; } while ($row_custom_styles = mysql_fetch_assoc($custom_styles)); 
+
+if ($totalRows_styles2 > 0) {
+
+	do { 
+		$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
+		$special_required[] = $style_special."-".$row_styles2['brewStyleNum']; 
+	}  while ($row_styles2 = mysql_fetch_assoc($styles2));
+
+//print_r ($special_required);
+
 }
-//$view = ltrim($view,"1-");
+
 ?>
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
@@ -231,6 +239,11 @@ $(document).ready(function() {
 		$("#special").show("slow");
 		$("#mead-cider").show("slow");
 		$("#mead").hide();
+	<?php } ?>
+	<?php if (($action == "edit") && (in_array($view,$special_required))) { ?>
+		$("#special").show("slow");
+		$("#mead-cider").show("slow");
+		$("#mead").show("slow");
 	<?php } ?>
 	<?php if (($action == "edit") && ($msg != "")) { ?>	
 		<?php if (highlight_required($msg,0)) { ?>
@@ -284,6 +297,16 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
+		<?php foreach ($special_required as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo $value; ?>"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+			$("#special").show("slow");
+		}
+		<?php } ?>
+		
 		<?php foreach ($special_cider as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
@@ -332,6 +355,7 @@ $(document).ready(function() {
 <?php 
 
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
+
 if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($action == "add") || (($action == "edit") && (($_SESSION['user_id'] == $row_log['brewBrewerID']) || ($_SESSION['userLevel'] <= 1)))) {
 	if ($filter == "default") { ?>
@@ -360,8 +384,6 @@ function admin_relocate($user_level,$go,$referrer) {
 
 if ($action == "edit") $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/pencil.png"  /></span>';
 else $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/add.png" /></span>';
-
-
 ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($_SESSION['userLevel'] == 2) { ?>
@@ -370,7 +392,6 @@ else $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/add.png"
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>">
 <?php } ?> 
 <h2>Required Information</h2>
-<?php if (($action == "add") && ($remaining_entries == 0)) ?>
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" <?php if (($action == "add") && ($remaining_entries == 0)) echo "DISABLED"; ?> /></p>
 <table>
 <?php
@@ -415,38 +436,39 @@ $row_brewer = mysql_fetch_assoc($brewer);
    <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
    <input type="hidden" name="brewStyle" id="type" value="<?php echo $view; ?>"><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; ?>
    <?php } elseif (((NHC) && ($prefix == "final_") && ($_SESSION['userLevel'] < 2) && (($action == "add") || ($action == "edit"))) || ((NHC) && ($prefix != "final_")) || (!NHC)) { ?>
-   <select name="brewStyle" id="type">
-   	 <option value=""></option>
-	 <?php
-	do { 
-	if ($row_limits['prefsUserSubCatLimit'] == "") { 
-	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-	
-	?>
-		<option value="<?php echo $style_value; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory'])) echo "SELECTED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; ?></option>
-	<?php	
-	}
-	else {
-	$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-	
-	if ($_SESSION['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-	elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$filter);
-	elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$row_log['brewBrewerID']);
-	elseif (($_SESSION['userLevel'] <= 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-	//else $subcat_limit = FALSE;
-	?>
-   	<option value="<?php echo $style_value; ?>" <?php if ($action == "edit") { 
-	   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo "SELECTED"; 
-	   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) echo $subcat_limit; 
-   	} 
-   	if (($action == "add") && ($remaining_entries > 0)) echo $subcat_limit; if ((($action == "add") && ($remaining_entries == 0)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] > 1))) echo "DISABLED"; ?>><?php echo ltrim($row_styles['brewStyleGroup'], "0"); echo $row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($action == "edit") { if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit == "DISABLED")) echo " [disabled - subcategory entry limit reached]"; } if (($action == "add") && ($subcat_limit == "DISABLED")) echo " [disabled - subcategory entry limit reached]"; ?></option>
-    <?php }
-	} while ($row_styles = mysql_fetch_assoc($styles)); 
-	?>
-   </select>
-   <?php } ?>
-   </td>
-   <td class="data"><span class="required">Required for all entries</span><span class="icon"><img src="<?php echo $base_url; ?>images/information.png" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/styles.php">View Accepted Styles</a></td>
+	<select name="brewStyle" id="type">
+   	 	<option value=""></option>
+	 	<?php
+		do {
+			// Build style drop-down
+			
+			// Option value variable
+			$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
+			
+			// Determine if the subcategory limit has been reached for various conditions
+			if ($_SESSION['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+			elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$filter);
+			elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$row_log['brewBrewerID']);
+			elseif (($_SESSION['userLevel'] <= 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$row_limits['prefsUserSubCatLimit'],$row_limits['prefsUSCLExLimit'],$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+			
+			// Build selected/disabled variable
+			if ($action == "edit") { 
+			   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED"; 
+			   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit; 
+			} 
+			if (($action == "add") && ($remaining_entries > 0)) $selected_disabled = $subcat_limit; 
+			if ((($action == "add") && ($remaining_entries == 0)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] > 1))) $selected_disabled = "DISABLED";
+			
+			// Build selection variable
+			$selection = ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+			if ($selected_disabled == "DISABLED") $selection .= " [disabled - subcategory entry limit reached]";
+		?>
+		<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
+   		<?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+   	</select>
+   	<?php } ?>
+   	</td>
+   	<td class="data"><span class="required">Required for all entries</span><span class="icon"><img src="<?php echo $base_url; ?>images/information.png" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/styles.php">View Accepted Styles</a></td>
 </tr>
 </table>
 <div id="special">
@@ -466,18 +488,18 @@ $row_brewer = mysql_fetch_assoc($brewer);
 <tr>
    <td class="dataLeft">
    
-   	<span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, 28B-D, and all custom styles.</em></span><br />
-    <span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;). 
-    
-    <ul>
-    	<li>50 character limit - use keywords and abbreviations.</li>
+   	<p>
+    <span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, and 28B-D.</em></span><br />
+   	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;). 	  </p>
+   	<ul>
+   	  <li><strong>50 character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the <a href='#specifics'>Brewer's Specifics</a> field below to add information <strong>NOT essential to judging your entry</strong>."; ?></li>
     	<li>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
-            <ul>
-                <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
-                <li>Mead example: <em>wildflower honey, blueberries</em> or <em>traditional tej with gesho</em>, etc.</li>
-                <li>Cider example: <em>golden russet apples, clove, cinnamon</em> or <em>strawberry and rhubarb</em>, etc.</li>
-            </ul>
-        </li>
+    	    <ul>
+    	        <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
+    	        <li>Mead example: <em>wildflower honey, blueberries</em> or <em>traditional tej with gesho</em>, etc.</li>
+    	        <li>Cider example: <em>golden russet apples, clove, cinnamon</em> or <em>strawberry and rhubarb</em>, etc.</li>
+    	        </ul>
+	    </li>
     </ul>
    
   </td>
@@ -577,7 +599,7 @@ if (NHC) { ?>
   <td class="data"><input name="brewWinnerCat" type="text" size="10" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" /></td>
 </tr>
     <tr>
-       <td class="dataLabel">Brewer's Specifics:</td>
+       <td class="dataLabel"><a name="specifics"></a>Brewer's Specifics:</td>
        <td class="data"><em>Only use to record special procedures, brewing techniques, etc.</em></td>
 	</tr>
     <tr>

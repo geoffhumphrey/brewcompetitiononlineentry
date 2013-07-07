@@ -188,7 +188,9 @@ if ($action == "update") {
 	}
 	
 	$pattern = array('\'', '"');
+	$massUpdateGoTo = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
 	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+	//echo $massUpdateGoTo;
 	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
 	
 } // end if ($action == "update")

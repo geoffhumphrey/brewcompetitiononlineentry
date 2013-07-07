@@ -8,17 +8,17 @@
 
 $query_mods = "SELECT * FROM $mods_db_table";
 
-if ($section == "default") $query_mods .= " WHERE mod_extend_function='1' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "rules") $query_mods .= " WHERE mod_extend_function='2' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "volunteer") $query_mods .= " WHERE mod_extend_function='3' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "sponsors") $query_mods .= " WHERE mod_extend_function='4' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "contact") $query_mods .= " WHERE mod_extend_function='5' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "register") $query_mods .= " WHERE mod_extend_function='6' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "pay") $query_mods .= " WHERE mod_extend_function='7' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif ($section == "list") $query_mods .= " WHERE mod_extend_function='8' OR mod_extend_function='0' ORDER BY mod_rank ASC";
-elseif (($section == "admin") && ($action == "default") && ($go != "mods")) $query_mods .= " WHERE mod_extend_function='9' OR mod_extend_function='0' ORDER BY mod_rank ASC";
+if ($section == "default") 		$query_mods .= " WHERE (mod_extend_function='1' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "rules") 	$query_mods .= " WHERE (mod_extend_function='2' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "volunteer")$query_mods .= " WHERE (mod_extend_function='3' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "sponsors") $query_mods .= " WHERE (mod_extend_function='4' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "contact") 	$query_mods .= " WHERE (mod_extend_function='5' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "register") $query_mods .= " WHERE (mod_extend_function='6' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "pay") 		$query_mods .= " WHERE (mod_extend_function='7' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif ($section == "list") 	$query_mods .= " WHERE (mod_extend_function='8' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
+elseif (($section == "admin") && ($action == "default") && ($go != "mods")) $query_mods .= " WHERE (mod_extend_function='9' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
 elseif (($section == "admin") && ($action == "default") && ($go == "mods")) $query_mods .= " ORDER BY mod_name ASC";
-elseif (($section == "admin") && ($action == "edit") && ($go == "mods")) $query_mods .= sprintf(" WHERE id='%s'",$id);
+elseif (($section == "admin") && ($action == "edit") && ($go == "mods")) 	$query_mods .= sprintf(" WHERE id='%s'",$id);
 
 $mods = mysql_query($query_mods, $brewing) or die(mysql_error());
 $row_mods = mysql_fetch_assoc($mods);

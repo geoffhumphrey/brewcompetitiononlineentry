@@ -3,6 +3,14 @@ include(DB.'judging_locations.db.php');
 include(DB.'styles.db.php');
 //include(DB.'brewer.db.php');
 
+// Sanity check.
+
+if (!check_judging_flights()) { 
+$location = "Location: ".$base_url."includes/process.inc.php?action=update_judging_flights&go=hidden";
+//echo $location;
+header(sprintf("Location: %s", $location)); 
+}
+
 function received_entries() {
 	include(CONFIG.'config.php');
 	//include(INCLUDES.'db_tables.inc.php');
@@ -284,6 +292,7 @@ if ($totalRows_tables > 0) { ?>
 				null,
 				null,
 				null,
+				null,
 				null<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>,
 				null
 				<?php } ?>
@@ -302,7 +311,8 @@ if ($totalRows_tables > 0) { ?>
     	<th class="dataHeading bdr1B">#</th>
         <th class="dataHeading bdr1B">Name</th>
         <th class="dataHeading bdr1B">Style(s)</th>
-        <th class="dataHeading bdr1B"><em>Received</em> Entries</th>
+        <th class="dataHeading bdr1B"><em>Rec'd</em><br />Entries</th>
+        <th class="dataHeading bdr1B"><em>Scored</em><br />Entries</th>
         <th class="dataHeading bdr1B">Judges</th>
         <th class="dataHeading bdr1B">Stewards</th>
         <?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>
@@ -314,14 +324,23 @@ if ($totalRows_tables > 0) { ?>
     </tr>
     </thead>
     <tbody>
-    <?php do { ?>
+    <?php do { 
+	$a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); 
+	$styles = display_array_content($a,1);
+	$received = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+	$scored =  get_table_info(1,"score_total",$row_tables['id'],$dbTable,"default");
+	if ($received > $scored) $scored = "<span style='color:red;' title='Not all received entries have been scored!'>".$scored."</span>"; else $scored = $scored;
+	$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
+	$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+	?>
     <tr>
     	<td <?php if ($action == "print") echo "class='bdr1B'"; ?>width="5%"><?php echo $row_tables['tableNumber']; ?></td>
         <td class="data" width="10%"><?php echo $row_tables['tableName']; ?></td>
-        <td class="data" width="15%"><?php $a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); echo display_array_content($a,1); ?></td>
-        <td class="data" width="12%"><?php echo get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"); ?></td>
-        <td class="data" width="8%"><?php echo assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table); ?></td>
-        <td class="data" width="8%"><?php echo assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table); ?></td>
+        <td class="data" width="15%"><?php echo $styles; ?></td>
+        <td class="data" width="8%"><?php echo $received; ?></td>
+        <td class="data" width="8%"><?php echo $scored; ?></td>
+        <td class="data" width="8%"><?php echo $assigned_judges; ?></td>
+        <td class="data" width="8%"><?php echo $assigned_stewards; ?></td>
 		<?php if (($totalRows_judging > 1) && ($dbTable == "default")) { ?>
         <td class="data"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default") ?></td>
         <?php } ?>

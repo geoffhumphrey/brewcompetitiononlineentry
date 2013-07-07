@@ -3,7 +3,7 @@
 //include(INCLUDES.'db_tables.inc.php');
 if (table_exists($style_types_db_table)) {
 	
-	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables")) {
+	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging")) {
 		$query_style_type = "SELECT * FROM $style_types_db_table"; 
 		if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 		if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";

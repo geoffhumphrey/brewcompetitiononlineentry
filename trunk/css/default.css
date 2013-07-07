@@ -1,580 +1,1161 @@
-@charset "utf-8";
-/* CSS Document 
-*        Document Name: default.css
-*        Description:   BCOE&M default theme
-*		 Color scheme:  #37517B (dark blue)
-                        #acc0c7 (medium-light blue)
-						#bec8d8 (light blue)
-*/
-
-@import url("html_elements.css");
-@import url("common.css");
-@import url("messages.css");
-@import url("menus.css");
-@import url("sorting.css");
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
-
-/* --------------------- html_elements.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in  
-   html_lements.css. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-html, body {
-	font-size: 11px;
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	background-color: #eeeeee;
-}
-
-body, caption, input, textarea, select, option, legend, fieldset  {
-	font-family: "Open Sans", Verdana, Geneva, sans-serif;
-	font-size: 13px;
-}
-
-option {
-}
-
-th, td {
-}
-
-pre, code {
-}
-
-p {
-	margin: 1.25em 0 1.25em 0;
-}
-
-/* Links */
-
-a:link {
-	color: #990000;
-	text-decoration: none;
-}
-
-a:visited {
-	color: #990000;
-	text-decoration: none;
-}
-
-a:hover, a:focus {
-	color: #0000CC;
-	text-decoration: underline;
-}
-
-a:active {
-	color: #0000CC;
-	text-decoration: underline;
-}
-
-/** headings **/
-h1 {
-	font-family: "Open Sans", Verdana, Geneva, sans-serif;
-	font-weight: 800;
-	color: #37517B;
-	margin: 1em 0 1.5em 0;
-}
-
-h2 {
-	font-family: "Open Sans", Verdana, Geneva, sans-serif;
-	font-weight: 800;
-	color: #37517B;
-	margin: 1em 0 1em 0;
-}
-
-h3 {
-	font-family: "Open Sans", Verdana, Geneva, sans-serif;
-	font-weight: 800;
-	color: #37517B;
-	margin: 1em 0 1em 0;
-}
-
-h4, h5, h6 {
-	font-family: "Open Sans", Verdana, Geneva, sans-serif;
-	font-weight: 800;
-	color: #37517B;
-	margin: 1em 0 1em 0;
-}
-
-/** lists **/
-ul, ol {
-}
-
-ul ul, ul ol, ol ol, ol ul {
-}
-
-li {
-}
-
-ul { 
-}
-
-ul ul { 
-}
-
-ul ul ul { 
-}
-
-ul ul ul ul { 
-}
-
-ol { 
-}
-
-ol ol { 
-}
-
-ol ol ol { 
-}
-
-dt  {
-}
-
-dd {
-}
-
-
-/** tables **/
-table {
-}
-
-td {
-	padding: .5em 2em .5em .5em;
-}
-
-th {
-	padding: 1em .5em 1em .5em;
-	text-align: left;
-}
-
-/** images **/
-img  {
-}
-
-/** horizontal rules **/
-hr  {
-}
-
-/** forms **/
-form {
-}
-
-button, menu, textarea, label, submit, .submit, select, input {
-	font-size: 1em;
-	border: 1px solid #aaa;
-	background-color: #eee;
-}
-
-select, optgroup, option  {
-}
-
-textarea {
-}
-
-
-/* --------------------- common.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in common.css. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-/* ------------------------------- Content ------------------------------- */
-
-#container {
-	position: relative;
-	min-height: 95%;
-	background-color: #ffffff;
-}
-
-#content {
-}
-
-#content-inner {
-	padding: 15px 1em;
-}
-
-#content-inner-no-nav {
-	padding: 1em;
-}
-
-#content-inner h2 {
-	font-size: 1.25em;
-	font-weight: bold;
-	color: #37517B;
-	padding: 1em 0 .5em 0;
-}
-
-#content-inner-no-nav h2 {
-	padding: 1.5em 0 .25em 0;
-	font-size: 1.25em;
-	font-weight: bold;
-	color: #37517B;
-	border-bottom: 1px solid #37517B;
-}
-
-#content-inner .menu {
-	border: 1px solid #acc0c7;
-	background-color: #ddd;
-}
-
-
-#content-inner .menu a {
-	color: #394a59;
-}
-
-#content-inner .menu a.menuItem:hover, 
-#content-inner .menu a.menuItemHighlight {
-	background-color: #acc0c7;
-	color: #1C242C;
-}
-
-/* ------------------------------- Nav ------------------------------- */
-
-#navigation { 
-	width: 100%;
-	margin-bottom: 0;
-}
-
-#navigation-inner {
-	background-color: #ddd;
-	border-bottom: 1px solid #37517B;
-	min-height: 20px;
-	padding: 8px;
-}
-
-#navigation-inner a {
-}
-
-#navigation-inner .menu {
-}
-
-#navigation-inner .menu a {
-
-}
-
-#navigation-inner .menu a.menuItem:hover, 
-#navigation-inner .menu a.menuItemHighlight {
-}
-
-#nav {
-	margin: 0;
-	padding: 0;
-	font-size: .9em;
-}
-
-#nav ul {
-
-}
-
-#nav li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 8px 0 0;
-	margin: 0;
-}
-
-#break {
-	display: inline;
-	vertical-align: middle;
-	float: right;
-	font-weight: normal;
-	font-style: italic;
-	font-size: .9em;
-}
-
-/* ------------------------------- Header ------------------------------- */
-#header {
-}
-
-#header-inner {
-	margin: 1em 0 1em 0;
-	padding: 0;
-}
-
-#header-inner h1 {
-	font-size: 1.6em;
-	padding: 0 0 .25em 0;
-	color: #37517B;
-	border-bottom: 1px dashed #37517B;
-}
-
-
-/* ------------------------------- Footer ------------------------------- */
-#footer {
-	width: 100%;
-}
-
-#footer-inner {
-	text-align: center;
-	background-color: #ddd;
-	border-top: 1px solid #37517B;
-	padding: 1em;
-	font-size: .9em;
-	color: #000;
-	min-height: 15px;
-}
-
-#footer-inner a {
-}
-
-/* ------------------------------- Data Display ------------------------------- */
-
-.dataTable {
-}
-
-.dataTable th {
-	background-color: #bec8d8;
-}
-
-.dataTable td {
-}
-
-.dataHeading {
-}
-
-.dataList {
-}
-
-.dataLabel {
-}
-
-.data {
-}
-
-.data-left {
-}
-
-.icon {
-}
-
-.dataTableCompact  { 
-}
-
-.dataTableCompact td { 
-}
-
-.dataTableCompact th {
-	background-color: #bec8d8;
-}
-
-/* ------------------------------- Forms ------------------------------- */
-
-.button { 
-	border: 1px solid #aaaaaa;
-	font-weight: bold;
-} 
-
-.button:hover {
-	border: 1px solid #aaaaaa;
-	background-color: #bec8d8;
-}
-
-.paypal {
-}
-
-/* ------------------------------- Collapse jquery ------------------------------- */
-
-.trigger {
-}
-
-.trigger a {
-}
-
-.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
-}
-
-.toggle_container {
-/* Use the following for accordian */
-/* display: none */
-}
-
-.toggle_container a {
-/* Use the following for accordian */
-/* display: block */
-}
-
-
-/* ------------------------------- Admin ------------------------------- */
-
-.admin {
-}
-
-.admin_default {
-	margin: 0 0 1.5em 0;
-	padding: 0 .5em 0 0;
-}
-
-.admin_default ul {
-	display: inline;
-}
-
-.admin_default li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 1.5em 0 0;
-	margin: 0;
-}
-
-.admin_default li li {
-	display: inline;
-	list-style-type: none;
-	padding: 0 1.5em 0 0;
-	margin: 0;
-}
-
-.admin_default_header {
-	font-size: 1em;
-	font-weight: bold;
-	margin: 1.5em 0 .5em 0;
-	padding: 0 0 .5em 0;
-}
-
-/* -- Admin Menu -- */
-
-.menu {	
-}
-
-/* -- Admin Sub-Navigation -- */
-
-.adminSubNavContainer {
-}
-
-.adminSubNav {
-}
-
-/* ------------------------------- Sponsor Display ------------------------------- */
-
-#sponsor {
-}
-
-#sponsor li {
-}
-
-.looper {
-}
-
-.looper_large {
-}
-
-.looper_large th {
-}
-
-.looper_large .location {
-}
-
-.looper_large .logo {
-}
-
-.looper_large .info {
-}
-
-
-/* ------------------------------- Setup ------------------------------- */
-
-.setupTitle {
-}
-
-/* ------------------------------- Colors ------------------------------- */
-
-.red {
-}
-
-.green {
-}
-
-.yellow {
-}
-
-.orange {
-}
-
-.blue { 
-}
-
-/* ------------------------------- Borders ------------------------------- */
-
-.bdr1 {
-	border: 1px solid #394a59;
-}
-
-.bdr1T {
-	border-top: 1px solid #394a59;
-}
-
-.bdr1B {
-	border-bottom: 1px solid #394a59;
-}
-
-.bdr1B_dashed {
-}
-
-.bdr1T_dashed {
-}
-
-/* --------------------- messages.css Overrides -------------------- */
-
-/* **************************************************************
-   Customize below the various default elements in messages.css - 
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-.info {
-}
-
-.closed {
-}
-
-.error {
-}
-
-.required {
-}
-
-.judge-alert {
-}
-
-.bos {
-}
-
-.at-a-glance {
-}
-
-
-/* --------------------- menus.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the menus.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
-*/
-
-
-
-
-
-/* --------------------- sorting.css Overrides -------------------- */
-
-/* **************************************************************
-   Copy and paste the elements you wish to override from 
-   the sorting.css file below. 
-   
-   Use the file for reference, however, it is suggested that you 
-   NOT edit the file itself!
-   **************************************************************
+@charset "utf-8";
+
+/* CSS Document 
+
+*        Document Name: default.css
+
+*        Description:   BCOE&M default theme
+
+*		 Color scheme:  #37517B (dark blue)
+
+                        #acc0c7 (medium-light blue)
+
+						#bec8d8 (light blue)
+
+*/
+
+
+
+@import url("html_elements.css");
+
+@import url("common.css");
+
+@import url("messages.css");
+
+@import url("menus.css");
+
+@import url("sorting.css");
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+
+
+/* --------------------- html_elements.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in  
+
+   html_lements.css. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+html, body {
+
+	font-size: 11px;
+
+	margin: 0;
+
+	padding: 0;
+
+	height: 100%;
+
+	background-color: #eeeeee;
+
+}
+
+
+
+body, caption, input, textarea, select, option, legend, fieldset  {
+
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+
+	font-size: 13px;
+
+}
+
+
+
+option {
+
+}
+
+
+
+th, td {
+
+}
+
+
+
+pre, code {
+
+}
+
+
+
+p {
+
+	margin: 1.25em 0 1.25em 0;
+
+}
+
+
+
+/* Links */
+
+
+
+a:link {
+
+	color: #990000;
+
+	text-decoration: none;
+
+}
+
+
+
+a:visited {
+
+	color: #990000;
+
+	text-decoration: none;
+
+}
+
+
+
+a:hover, a:focus {
+
+	color: #0000CC;
+
+	text-decoration: underline;
+
+}
+
+
+
+a:active {
+
+	color: #0000CC;
+
+	text-decoration: underline;
+
+}
+
+
+
+/** headings **/
+
+h1 {
+
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+
+	font-weight: 800;
+
+	color: #37517B;
+
+	margin: 1em 0 1.5em 0;
+
+}
+
+
+
+h2 {
+
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+
+	font-weight: 800;
+
+	color: #37517B;
+
+	margin: 1em 0 1em 0;
+
+}
+
+
+
+h3 {
+
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+
+	font-weight: 800;
+
+	color: #37517B;
+
+	margin: 1em 0 1em 0;
+
+}
+
+
+
+h4, h5, h6 {
+
+	font-family: "Open Sans", Verdana, Geneva, sans-serif;
+
+	font-weight: 800;
+
+	color: #37517B;
+
+	margin: 1em 0 1em 0;
+
+}
+
+
+
+/** lists **/
+
+ul, ol {
+
+}
+
+
+
+ul ul, ul ol, ol ol, ol ul {
+
+}
+
+
+
+li {
+
+}
+
+
+
+ul { 
+
+}
+
+
+
+ul ul { 
+
+}
+
+
+
+ul ul ul { 
+
+}
+
+
+
+ul ul ul ul { 
+
+}
+
+
+
+ol { 
+
+}
+
+
+
+ol ol { 
+
+}
+
+
+
+ol ol ol { 
+
+}
+
+
+
+dt  {
+
+}
+
+
+
+dd {
+
+}
+
+
+
+
+
+/** tables **/
+
+table {
+
+}
+
+
+
+td {
+
+	padding: .5em 2em .5em .5em;
+
+}
+
+
+
+th {
+
+	padding: 1em .5em 1em .5em;
+
+	text-align: left;
+
+}
+
+
+
+/** images **/
+
+img  {
+
+}
+
+
+
+/** horizontal rules **/
+
+hr  {
+
+}
+
+
+
+/** forms **/
+
+form {
+
+}
+
+
+
+button, menu, textarea, label, submit, .submit, select, input {
+
+	font-size: 1em;
+
+	border: 1px solid #aaa;
+
+	background-color: #eee;
+
+}
+
+
+
+select, optgroup, option  {
+
+}
+
+
+
+textarea {
+
+}
+
+
+
+
+
+/* --------------------- common.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in common.css. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+
+
+/* ------------------------------- Content ------------------------------- */
+
+
+
+#container {
+
+	position: relative;
+
+	min-height: 95%;
+
+	background-color: #ffffff;
+
+}
+
+
+
+#content {
+
+}
+
+
+
+#content-inner {
+
+	padding: 15px 1em;
+
+}
+
+
+
+#content-inner-no-nav {
+
+	padding: 1em;
+
+}
+
+
+
+#content-inner h2 {
+
+	font-size: 1.25em;
+
+	font-weight: bold;
+
+	color: #37517B;
+
+	padding: 1em 0 .5em 0;
+
+}
+
+
+
+#content-inner-no-nav h2 {
+
+	padding: 1.5em 0 .25em 0;
+
+	font-size: 1.25em;
+
+	font-weight: bold;
+
+	color: #37517B;
+
+	border-bottom: 1px solid #37517B;
+
+}
+
+
+
+#content-inner .menu {
+
+	border: 1px solid #acc0c7;
+
+	background-color: #ddd;
+
+}
+
+
+
+
+
+#content-inner .menu a {
+
+	color: #394a59;
+
+}
+
+
+
+#content-inner .menu a.menuItem:hover, 
+
+#content-inner .menu a.menuItemHighlight {
+
+	background-color: #acc0c7;
+
+	color: #1C242C;
+
+}
+
+
+
+/* ------------------------------- Nav ------------------------------- */
+
+
+
+#navigation { 
+
+	width: 100%;
+
+	margin-bottom: 0;
+
+}
+
+
+
+#navigation-inner {
+
+	background-color: #ddd;
+
+	border-bottom: 1px solid #37517B;
+
+	min-height: 20px;
+
+	padding: 8px;
+	
+	box-shadow: 0 6px 6px -4px #000S;
+
+}
+
+
+
+#navigation-inner a {
+
+}
+
+
+
+#navigation-inner .menu {
+
+}
+
+
+
+#navigation-inner .menu a {
+
+
+
+}
+
+
+
+#navigation-inner .menu a.menuItem:hover, 
+
+#navigation-inner .menu a.menuItemHighlight {
+
+}
+
+
+
+#nav {
+
+	margin: 0;
+
+	padding: 0;
+
+	font-size: .9em;
+
+}
+
+
+
+#nav ul {
+
+
+
+}
+
+
+
+#nav li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 8px 0 0;
+
+	margin: 0;
+
+}
+
+
+
+#break {
+
+	display: inline;
+
+	vertical-align: middle;
+
+	float: right;
+
+	font-weight: normal;
+
+	font-style: italic;
+
+	font-size: .9em;
+
+}
+
+
+
+/* ------------------------------- Header ------------------------------- */
+
+#header {
+
+}
+
+
+
+#header-inner {
+
+	margin: 1em 0 1em 0;
+
+	padding: 0;
+
+}
+
+
+
+#header-inner h1 {
+
+	font-size: 1.6em;
+
+	padding: 0 0 .25em 0;
+
+	color: #37517B;
+
+	border-bottom: 1px dashed #37517B;
+
+}
+
+
+
+
+
+/* ------------------------------- Footer ------------------------------- */
+
+#footer {
+
+	width: 100%;
+
+}
+
+
+
+#footer-inner {
+
+	text-align: center;
+
+	background-color: #ddd;
+
+	border-top: 1px solid #37517B;
+
+	padding: 1em;
+
+	font-size: .9em;
+
+	color: #000;
+
+	min-height: 15px;
+
+}
+
+
+
+#footer-inner a {
+
+}
+
+
+
+/* ------------------------------- Data Display ------------------------------- */
+
+
+
+.dataTable {
+
+}
+
+
+
+.dataTable th {
+
+	background-color: #bec8d8;
+
+}
+
+
+
+.dataTable td {
+
+}
+
+
+
+.dataHeading {
+
+}
+
+
+
+.dataList {
+
+}
+
+
+
+.dataLabel {
+
+}
+
+
+
+.data {
+
+}
+
+
+
+.data-left {
+
+}
+
+
+
+.icon {
+
+}
+
+
+
+.dataTableCompact  { 
+
+}
+
+
+
+.dataTableCompact td { 
+
+}
+
+
+
+.dataTableCompact th {
+
+	background-color: #bec8d8;
+
+}
+
+
+
+/* ------------------------------- Forms ------------------------------- */
+
+
+
+.button { 
+
+	border: 1px solid #aaaaaa;
+
+	font-weight: bold;
+
+} 
+
+
+
+.button:hover {
+
+	border: 1px solid #aaaaaa;
+
+	background-color: #bec8d8;
+
+}
+
+
+
+.paypal {
+
+}
+
+
+
+/* ------------------------------- Collapse jquery ------------------------------- */
+
+
+
+.trigger {
+
+}
+
+
+
+.trigger a {
+
+}
+
+
+
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
+
+}
+
+
+
+.toggle_container {
+
+/* Use the following for accordian */
+
+/* display: none */
+
+}
+
+
+
+.toggle_container a {
+
+/* Use the following for accordian */
+
+/* display: block */
+
+}
+
+
+
+
+
+/* ------------------------------- Admin ------------------------------- */
+
+
+
+.admin {
+
+}
+
+
+
+.admin_default {
+
+	margin: 0 0 1.5em 0;
+
+	padding: 0 .5em 0 0;
+
+}
+
+
+
+.admin_default ul {
+
+	display: inline;
+
+}
+
+
+
+.admin_default li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 1.5em 0 0;
+
+	margin: 0;
+
+}
+
+
+
+.admin_default li li {
+
+	display: inline;
+
+	list-style-type: none;
+
+	padding: 0 1.5em 0 0;
+
+	margin: 0;
+
+}
+
+
+
+.admin_default_header {
+
+	font-size: 1em;
+
+	font-weight: bold;
+
+	margin: 1.5em 0 .5em 0;
+
+	padding: 0 0 .5em 0;
+
+}
+
+
+
+/* -- Admin Menu -- */
+
+
+
+.menu {	
+
+}
+
+
+
+/* -- Admin Sub-Navigation -- */
+
+
+
+.adminSubNavContainer {
+
+}
+
+
+
+.adminSubNav {
+
+}
+
+
+
+/* ------------------------------- Sponsor Display ------------------------------- */
+
+
+
+#sponsor {
+
+}
+
+
+
+#sponsor li {
+
+}
+
+
+
+.looper {
+
+}
+
+
+
+.looper_large {
+
+}
+
+
+
+.looper_large th {
+
+}
+
+
+
+.looper_large .location {
+
+}
+
+
+
+.looper_large .logo {
+
+}
+
+
+
+.looper_large .info {
+
+}
+
+
+
+
+
+/* ------------------------------- Setup ------------------------------- */
+
+
+
+.setupTitle {
+
+}
+
+
+
+/* ------------------------------- Colors ------------------------------- */
+
+
+
+.red {
+
+}
+
+
+
+.green {
+
+}
+
+
+
+.yellow {
+
+}
+
+
+
+.orange {
+
+}
+
+
+
+.blue { 
+
+}
+
+
+
+/* ------------------------------- Borders ------------------------------- */
+
+
+
+.bdr1 {
+
+	border: 1px solid #394a59;
+
+}
+
+
+
+.bdr1T {
+
+	border-top: 1px solid #394a59;
+
+}
+
+
+
+.bdr1B {
+
+	border-bottom: 1px solid #394a59;
+
+}
+
+
+
+.bdr1B_dashed {
+
+}
+
+
+
+.bdr1T_dashed {
+
+}
+
+
+
+/* --------------------- messages.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Customize below the various default elements in messages.css - 
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+.info {
+
+}
+
+
+
+.closed {
+
+}
+
+
+
+.error {
+
+}
+
+
+
+.required {
+
+}
+
+
+
+.judge-alert {
+
+}
+
+
+
+.bos {
+
+}
+
+
+
+.at-a-glance {
+
+}
+
+
+
+
+
+/* --------------------- menus.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Copy and paste the elements you wish to override from 
+
+   the menus.css file below. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------- sorting.css Overrides -------------------- */
+
+
+
+/* **************************************************************
+
+   Copy and paste the elements you wish to override from 
+
+   the sorting.css file below. 
+
+   
+
+   Use the file for reference, however, it is suggested that you 
+
+   NOT edit the file itself!
+
+   **************************************************************
+
 */

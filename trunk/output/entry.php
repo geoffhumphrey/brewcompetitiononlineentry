@@ -273,22 +273,25 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 20; $i++) {
 	  if ($brewing_info['brewHops'.$i] != "") {
-		$brewing_info['hops'][$i]['name']=strtr($brewing_info['brewHops'.$i],$html_remove);
-		$brewing_info['hops'][$i]['alphaAcid']=$brewing_info['brewHops'.$i.'IBU'];
-		$brewing_info['hops'][$i]['minutes']=$brewing_info['brewHops'.$i.'Time'];
-		$brewing_info['hops'][$i]['use']=$brewing_info['brewHops'.$i.'Use'];
-		$brewing_info['hops'][$i]['form']=$brewing_info['brewHops'.$i.'Form'];
-		$totalHops+=$brewing_info['hops'][$i]['alphaAcid'];
+		$brewing_info['hops'][$i]['name'] = strtr($brewing_info['brewHops'.$i],$html_remove);
+		$brewing_info['hops'][$i]['alphaAcid'] = $brewing_info['brewHops'.$i.'IBU'];
+		$brewing_info['hops'][$i]['minutes'] = $brewing_info['brewHops'.$i.'Time'];
+		$brewing_info['hops'][$i]['use'] = $brewing_info['brewHops'.$i.'Use'];
+		$brewing_info['hops'][$i]['form'] = $brewing_info['brewHops'.$i.'Form'];
+		
 		// Metric/US conversion
 		if ($_SESSION['prefsWeight1'] == "grams") {
 		  $brewing_info['hops'][$i]['weight']['g'] = $brewing_info['brewHops'.$i.'Weight'];
-		  $brewing_info['hops'][$i]['weight']['oz'] = 
-			   round($brewing_info['brewHops'.$i.'Weight']/28.3495,2);
+		  $brewing_info['hops'][$i]['weight']['oz'] = round($brewing_info['brewHops'.$i.'Weight']/28.3495,2);
+			   
+		  
 		 } else {
 		   $brewing_info['hops'][$i]['weight']['oz'] = $brewing_info['brewHops'.$i.'Weight'];
-		   $brewing_info['hops'][$i]['weight']['g'] = 
-			   round($brewing_info['brewHops'.$i.'Weight']*28.3495,1);
+		   $brewing_info['hops'][$i]['weight']['g'] = round($brewing_info['brewHops'.$i.'Weight']*28.3495,1);
 		 }
+		
+		$totalHops+=$brewing_info['brewHops'.$i.'Weight'];	 
+
 	  }
 	}
 	
@@ -334,8 +337,9 @@ if ($go == "default") {
 		$drop_off['drop_off_location'] = $row_drop_off['dropLocationName'].$row_drop_off['dropLocation'].$row_drop_off['dropLocationNotes'];	
 	} while ($row_drop_off = mysql_fetch_assoc($drop_off));
 	*/
-	if ($prefix == "final_") $TBS->LoadTemplate(TEMPLATES.'nhc-entry-final-round.html');
-	else $TBS->LoadTemplate(TEMPLATES.'nhc-entry.html');
+	if ((NHC) && ($prefix == "final_")) $TBS->LoadTemplate(TEMPLATES.'nhc-entry-final-round.html');
+	elseif (NHC) $TBS->LoadTemplate(TEMPLATES.'nhc-entry.html');
+	else $TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
 	$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 }

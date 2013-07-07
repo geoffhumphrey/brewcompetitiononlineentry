@@ -35,7 +35,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 </head>
-<body <?php if ($tb != "view") { ?>onload="javascript:window.print()"<?php } ?>>
+<body>
 <?php if ($view != "sign-in") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -231,6 +231,14 @@ if ($totalRows_brewer > 0) { ?>
     </div>
 </div>
 <?php } ?>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+html.push('');
+</script>
 </body>
 </html>
 <?php } else echo "<p>Not available.</p>"; ?>

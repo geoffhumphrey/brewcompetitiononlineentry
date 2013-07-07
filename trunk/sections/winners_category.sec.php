@@ -78,7 +78,7 @@ if ($row_score_count['count'] > "0")   {
 	//echo $query_scores."<br>";
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 	$row_scores = mysql_fetch_assoc($scores);
-	$totalRows_scores = mysql_num_rows($scores);
+	$totalRows_scores = mysql_num_rows($scores); 
 			
 	do { 
 	$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];

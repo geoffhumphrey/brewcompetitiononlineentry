@@ -6,147 +6,7 @@
  */
 
 require('paths.php');
-define('MAINT',FALSE);
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set('display_errors', '1');
-
-function check_setup($tablename, $database) {
-	require(CONFIG.'config.php');
-	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-
-    if ($row_log['count'] == 0) return FALSE;
-	else return TRUE;
-
-}
-
-if (!check_setup($prefix."system",$database)) { header ("Location: setup.php?section=step0");  exit; }
-elseif (!check_setup($prefix."mods",$database)) { header ("Location: update.php");  exit; }
-elseif (MAINT) { header ("Location: maintenance.php"); exit; }
-
-// If all setup or update has taken place, run normally
-else 
-{
-/*
-function version_check($version) {
-	// Current version is 1.2.2.0, change version in system table if not
-	// There are NO database structure or data updates for version 1.2.1.3
-	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
-	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
-	require(CONFIG.'config.php');
-	
-	if ($version != "1.2.2.0") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.2.2.0","2013-01-31","1");
-		mysql_select_db($database, $brewing);
-		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
-	}
-}
-	
-version_check($version);
-*/
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-
-if ((isset($_SESSION['prefix'])) && ($_SESSION['prefix'] != $prefix)) {
-	session_unset();
-	session_destroy();
-	session_write_close();
-	setcookie(session_name(),'',0,'/');
-	session_regenerate_id(true);
-	header("Location: index.php");
-	exit;
-}
-
-/*
-if (empty($_SESSION['prefs'])) { 
-	if (NHC) $location = "index.php";
-	else $location = $base_url;
-	header(sprintf("Location: %s",$location));
-}
-
-if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_session]))) { 
-
-	if (($_SESSION['userLevel'] <= 1) && ($section == "list") && ($msg == "2")) $location = "index.php?section=list";
-	elseif (($_SESSION['userLevel'] <= 1) && ($msg == "default")) $location = "index.php?section=admin";
-	else $location = build_public_url("list","default","default",$sef,$base_url);
-	
-	header(sprintf("Location: %s",$location));
-}
-*/
-require(DB.'brewer.db.php');
-require(DB.'entries.db.php');
-require(INCLUDES.'headers.inc.php');
-require(INCLUDES.'constants.inc.php');
-//require(DB.'winners.db.php');
-
-if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
-else $sef = "false";
-
-// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
-if ((!NHC) && ($today > ($_SESSION['dataCheck'] + 86400))) data_integrity_check();
-
-// check to see if all judging numbers have been generated. If not, generate
-if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
-
-
-/*
-// Automatically purge all unconfirmed entries
-purge_entries("unconfirmed", 1);
-
-// Purge entries without defined special ingredients designated to particular styles that require them
-purge_entries("special", 1);
-*/
-
-
-// Set timezone globals for the site
-$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
-date_default_timezone_set($timezone_prefs);
-$tz = date_default_timezone_get();
-
-// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
-else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
-
-$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
-$msie_key = array_search('MSIE', $ua_array);
-if($msie_key !== false) { // you found MSIE browser
-    $msie_version_key = $msie_key + 1;
-    $msie_version = intval($ua_array[$msie_version_key]);
-    if ($msie_version <= 7) {
-        $ua = "unsupported";
-    }
-}
-
-if (NHC) {
-	if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) {
-		// compare region prefix to the actual region that the user is registered to
-		// if they do not match, destroy the session - saves confusion and cheating
-		
-		if ($_SESSION['userLevel'] == 2) {
-		$query_check_region = sprintf("SELECT email,regionPrefix FROM nhcentrant WHERE email='%s'", $_SESSION['loginUsername']);
-		$check_region = mysql_query($query_check_region, $brewing) or die(mysql_error());
-		$row_check_region = mysql_fetch_assoc($check_region);
-		
-		if (($row_check_region['regionPrefix'] != $prefix) && ($_SESSION['loginUsername'] != "geoff@zkdigital.com") && ($_SESSION['loginUsername'] != "janis@brewersassociation.org")) session_destroy();
-		}
-		
-	}
-	// ONLY for NHC application
-	// Check to see if SSL is in place and redirect to non SSL instance if not on pay screens
-	if ($section != "pay") {
-		$https = ((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off')) ? true : false;
-		if ($https)  {
-			$location = "http://www.brewingcompetition.com".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
-			header("Location: $location");
-			exit;
-		}
-	}
-}
-
+require(CONFIG.'bootstrap.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -204,11 +64,11 @@ if ($section == "admin") { ?>
 <?php } 
 if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include(INCLUDES.'form_check.inc.php'); 
 ?>
-
+<!--
 <script type="text/javascript">
 var _gaq = _gaq || [];
   //_gaq.push(['_setAccount', '<?php // echo $google_analytics; ?>']);
-  _gaq.push(['_setAccount', 'UA-7085721-23']);
+  //_gaq.push(['_setAccount', 'UA-7085721-23']);
   _gaq.push(['_trackPageview']);
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -216,7 +76,7 @@ var _gaq = _gaq || [];
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
-
+-->
 </head>
 <body>
 <a name="top"></a>
@@ -237,7 +97,6 @@ var _gaq = _gaq || [];
   echo "Comp Info: ".$row_contest_info."<br>";
   echo "Tables: ".$query_tables."<br>";
   */
-  
   
   if ($section != "admin") { ?>
 	<div id="header">	
@@ -281,7 +140,7 @@ var _gaq = _gaq || [];
   }
   
   // Check if registration close date has passed. If so, display "registration end" message.
-  if (($registration_open == "2") && ($ua != "unsupported")) {
+  if (($registration_open == "2") && (!$ua)) {
 	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { ?>
     <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
     <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
@@ -305,10 +164,11 @@ var _gaq = _gaq || [];
 			}
 		
 		if ($section == "user") 	include (SECTIONS.'user.sec.php');
-		if ($entry_window_open < 2) {
+		if (($entry_window_open < 2) && ($_SESSION['userLevel'] == "2")) {
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');	
 		}
 		if ($_SESSION['userLevel'] <= "1") {
+			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
@@ -317,7 +177,7 @@ var _gaq = _gaq || [];
   }
   
   // If registration is currently open
-  if (($registration_open == "1") && ($ua != "unsupported")) {
+  if (($registration_open == "1") && (!$ua)) {
   	//if ((NHC) && ($section == "default")) echo "<div class='error'>".$totalRows_entry_count." of ".$row_limits['prefsEntryLimit']." entries have been logged for this region.</div>";
   	if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) { 
 		if ($section != "admin") { 
@@ -348,7 +208,7 @@ var _gaq = _gaq || [];
 	}
   } // End registration date check.
 
-  if ($ua == "unsupported") { 
+  if ($ua) { 
   	echo "<div class='error'>Unsupported browser.</div><p>Your version of Internet Explorer, as detected by our scripting, is not supported by "; if (NHC) 	echo "the NHC online registration system."; else echo "BCOE&amp;M.</p>"; echo "<p>Please <a href='http://windows.microsoft.com/en-US/internet-explorer/download-ie'>download and install the latest version</a> for your operating system. Alternatively, you can use the latest version of another browser (<a href='http://www.google.com/chrome'>Chrome</a>, <a href='http://www.mozilla.org/en-US/firefox/new/'>Firefox</a>, <a href='http://www.apple.com/safari/'>Safari</a>, etc.).</p>"; 
   	echo "<p>The information provided by your browser and used by our script is: ".$_SERVER['HTTP_USER_AGENT']."</p>";
   }
@@ -370,4 +230,3 @@ var _gaq = _gaq || [];
 </div>
 </body>
 </html>
-<?php } ?>

@@ -29,6 +29,11 @@ session_name($session_name);
 
 session_start();
 
+$query_version1 = sprintf("SELECT * FROM %s WHERE id=1", $prefix."system");
+$version1 = mysql_query($query_version1, $brewing) or die(mysql_error());
+$row_version1 = mysql_fetch_assoc($version1);
+$version = $row_version1['version'];
+
 if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_set_'.$prefix_session] != $prefix_session)) || (empty($_SESSION['session_set_'.$prefix_session]))) {
 
 session_unset();
@@ -40,15 +45,10 @@ $_SESSION['session_set_'.$prefix_session] = $prefix_session;
 
 }
 
-
 if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 	if (strstr($url['path'],"index.php")) { 
 		
 		// only for version 1.2.1.0; REMOVE for subsequent version
-		$query_version1 = sprintf("SELECT * FROM %s WHERE id=1", $prefix."system");
-		$version1 = mysql_query($query_version1, $brewing) or die(mysql_error());
-		$row_version1 = mysql_fetch_assoc($version1);
-		$version = $row_version1['version'];
 		$data_check_date = strtotime($row_version1['data_check']); 
 		$_SESSION['dataCheck'.$prefix_session] = $data_check_date;
 	}
@@ -239,7 +239,7 @@ session_write_close();
 
 // Some limits may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsUserSubCatLimit,prefsUSCLEx FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysql_query($query_limits, $brewing) or die(mysql_error());
 $row_limits = mysql_fetch_assoc($limits);	
 

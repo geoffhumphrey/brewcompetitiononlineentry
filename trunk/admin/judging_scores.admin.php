@@ -135,8 +135,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		//if ($row_tables_1['id'] != "") { // if table is erased.
 	?>
 	<tr>
-    	<td><?php echo sprintf("%04s",$row_entries_1['id']); ?></td>
-        <td class="data"><?php echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']);  ?></td>
+    	<td><?php if ((NHC) && ($prefix == "final_")) echo sprintf("%06s",$row_entries_1['id']); else echo sprintf("%04s",$row_entries_1['id']); ?></td>
+        <td class="data"><?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries_1['brewJudgingNumber']; else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']);  ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
@@ -247,8 +247,8 @@ $(document).ready(function() {
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php if ($prefix == "final_") echo sprintf("%06s",$row_entries['id']); else echo sprintf("%04s",$row_entries['id']); ?></td>
-        <td class="data"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
+        <td><?php if ((NHC) && ($prefix == "final_")) echo sprintf("%06s",$row_entries['id']); else echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td class="data"><?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber']; else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
         <td class="data"><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($row_scores['scoreMiniBOS'] == "1")) echo "CHECKED"; ?> /></td>
         

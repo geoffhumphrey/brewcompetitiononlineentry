@@ -28,17 +28,11 @@ function authenticateUserNav($connection, $username, $password)
 
 // Connects to a session and checks that the user has authenticated and that the remote IP address matches the address used to create the session.
 
-function sessionAuthenticateNav()
-{
+function sessionAuthenticateNav() {
 	require(CONFIG.'config.php');
-	
-	
-	
-  // Check if the user hasn't logged in
-  if (!isset($_SESSION['loginUsername'])) echo "<a href=\"".$base_url."index.php?section=login\">Log In</a>"; 
-  if (isset($_SESSION['loginUsername'])) { 
-  	echo "<a href=\"".$base_url."includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION['loginUsername']."</div>";
-  }
+	// Check if the user hasn't logged in
+  	if (!isset($_SESSION['loginUsername'])) echo "<a href=\"".$base_url."index.php?section=login\">Log In</a>"; 
+  	if (isset($_SESSION['loginUsername']))  echo "<a href=\"".$base_url."includes/logout.inc.php\">Log Out</a><div id=\"break\">Logged in as ".$_SESSION['loginUsername']."</div>";
 }
 
 ?>

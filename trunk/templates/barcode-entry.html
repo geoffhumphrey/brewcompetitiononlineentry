@@ -2,49 +2,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>[onshow.brewing_info.brewName] Recipe Form</title>
+<title>[onshow.brewing_info.brewName] Entry/Recipe Form with Barcode</title>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
 <style type="text/css">
 <!--
-body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt;  word-spacing: 0.008em; line-height:normal; }
-table					{ border-collapse: collapse; width: 100%; }
-table td				{ padding: 2px; }
-.headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
-.headerTitleSm 			{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
-.bottle, .medium 		{ font-size: 9px; } 
-.small 					{ font-size: 8px; margin: 0; } 
-#printContainer 		{ width: 100%; }
-.bdr1_thick	 			{ border: 5px solid #000000; }
-.bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
-.bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
-.bdr1B 					{ border-bottom: 1px solid #000000; }
-.bdr1L 					{ border-left: 1px solid #000000; }
-.bdr1R 					{ border-right: 1px solid #000000; }
-.bdr1T 					{ border-top: 1px solid #000000; }
-.bdr1R_dashed			{ border-right: 1px dashed #000000; }
-.bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
-.headerItalic 		    { font-size: 8px; font-style: italic; }
-table.small	td			{ padding: 1px 2px 1px 2px; }
-table.bottleLabel		{ border-collapse: collapse; width: 100%; }
-table.bottleLabel-inner	{ margin: 15px; width: 300px; }
-table.bottleLabel-inner	td { padding: 5px; text-align: left; }
-.error 					{ color: #FF0000; font-size: 1.3em; font-weight: bold; margin: 1em 0 1em 0; padding: .5em .5em .5em 2.2em; background-position:.5em; background-image: url(../images/error.png); background-repeat: no-repeat; background-color: #FFFF99; border: 1px solid #FF0000; border-radius: 5px; }
+body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt; word-spacing: 0.008em; line-height:normal; }
+h1							{ font-size: 1.8em; }
+h2							{ font-size: 1.5em; }
+table						{ border-collapse: collapse; width: 100%; }
+table td					{ padding: 2px; }
+table th					{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
+.headerTitle 				{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+.headerTitleSm 				{ font-size: 12px; font-weight: bold; margin: 0; padding: 0 0 8px 0; }
+.bottle, .medium 			{ font-size: 9px; } 
+.small 						{ font-size: .7em; margin: 0; } 
+#printContainer 			{ width: 100%; }
+.bdr1_thick	 				{ border: 5px solid #000000; }
+.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
+.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
+.bdr1B 						{ border-bottom: 1px solid #000000; }
+.bdr1L 						{ border-left: 1px solid #000000; }
+.bdr1R 						{ border-right: 1px solid #000000; } 
+.bdr1T 						{ border-top: 1px solid #000000; }
+.bdr1R_dashed				{ border-right: 1px dashed #000000; }
+.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
+.headerItalic 		    	{ font-size: 8px; font-style: italic; }
+table.small	td				{ padding: 1px 2px 1px 3px; }
+table.bottleLabel			{ border-collapse: collapse; width: 600px; vertical-align:top; }
+table.bottleLabel-inner		{ margin: 5px; width: 280px; padding: 2px; }
+table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
+.box						{ border: 1px solid #bbb; width: 100%; height: 60px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+	border-radius: 5px;}
 -->
 </style>
 </head>
 <body>
-<div id="printContainer">
 <a name="labels_top" id="labelsOtop"></a>
+<div id="printContainer">
 <!-- div for non-print header -->
 <div>
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td>If any items are missing, close this window and edit the entry.</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="?go=recipe&amp;action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+    <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/eye.png"  />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
   </tr>
 </table>
-<div class="error">THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please <u>DO NOT</u> include a copy of it with your entry shipment.</div>
-</div> <!-- end non-print header-->
+</div>
+<!-- end non-print header-->
+
 <table style="margin-bottom: 10px">
  <tr>
    <td class="bdr1B_thick" width="10%" valign="top"><img src="../images/bjcp_logo.jpg" alt="BJCP Logo" width="65" height="60" align="left" vspace="10px" /></td>
@@ -691,12 +698,309 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
     </td>
   </tr>
 </table>
-<p class="small" style="margin-top:10px;">This form is emulates the BJCP Entry/Recipe Form Copyright ©2006 Beer Judge Certification Program rev. 070307</p>
 <div>
 [onshow;block=div;when [var.brewing_info.brewComments]!='']
-<div style="page-break-after:always;"></div>
-<h2>Brewer's Specifics</h2>
-<p>[onshow.brewing_info.brewComments]</p>
+<p><strong>Brewer's Specifics: </strong>[onshow.brewing_info.brewComments]</p>
+</div>
+<p class="small" style="margin-top:10px;">This form is emulates the BJCP Entry/Recipe Form Copyright ©2006 Beer Judge Certification Program rev. 070307</p>
+<div style="page-break-after:always; margin-bottom: 20px;"></div>
+<a name="labels" id="labels"></a>
+<table align="center" class="bottleLabel">
+  <tr>
+    <td align="center" class="bdr1_thick">
+     <table class="bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4" nowrap="nowrap"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH RUBBER BAND ONLY</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
+      </tr>
+      <div>
+        [onshow;block=div;when [var.brewing_info.brewCoBrewer]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Co-Brewer:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Address:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />[onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewName]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Cat/Sub:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] - [onshow.brewing_info.styleCat]: [onshow.brewing_info.styleName]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+      <tr>
+          <td nowrap="nowrap">Special/Classic:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+      </tr>
+      </div>
+      <div>
+      [onshow;block=div;when [var.brewing_info.sparkling]!='']
+      <tr>
+          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</td>
+      </tr>
+      </div>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]"></div></td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+      </tr>
+    </table>
+    </td>
+    <td>&nbsp;</td>
+    <td align="center" class="bdr1_thick">
+     <table class="bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4" nowrap="nowrap"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH RUBBER BAND ONLY</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
+      </tr>
+      <div>
+        [onshow;block=div;when [var.brewing_info.brewCoBrewer]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Co-Brewer:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Address:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />[onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewName]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Cat/Sub:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] - [onshow.brewing_info.styleCat]: [onshow.brewing_info.styleName]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+      <tr>
+          <td nowrap="nowrap">Special/Classic:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+      </tr>
+      </div>
+      <div>
+      [onshow;block=div;when [var.brewing_info.sparkling]!='']
+      <tr>
+          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</td>
+      </tr>
+      </div>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]"></div></td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<table align="center" class="bottleLabel" style="margin-top: 15px;">
+  <tr>
+    <td align="center" class="bdr1_thick">
+     <table class="bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4" nowrap="nowrap"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH RUBBER BAND ONLY</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
+      </tr>
+      <div>
+        [onshow;block=div;when [var.brewing_info.brewCoBrewer]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Co-Brewer:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Address:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />[onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewName]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Cat/Sub:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] - [onshow.brewing_info.styleCat]: [onshow.brewing_info.styleName]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+      <tr>
+          <td nowrap="nowrap">Special/Classic:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+      </tr>
+      </div>
+      <div>
+      [onshow;block=div;when [var.brewing_info.sparkling]!='']
+      <tr>
+          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</td>
+      </tr>
+      </div>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]"></div></td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+      </tr>
+    </table>
+    </td>
+    <td>&nbsp;</td>
+    <td align="center" class="bdr1_thick">
+     <table class="bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4" nowrap="nowrap"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH RUBBER BAND ONLY</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
+      </tr>
+      <div>
+        [onshow;block=div;when [var.brewing_info.brewCoBrewer]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Co-Brewer:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Address:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />[onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewName]!='']
+      <tr>
+        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      </div>
+      <tr>
+        <td width="5%" nowrap="nowrap">Cat/Sub:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] - [onshow.brewing_info.styleCat]: [onshow.brewing_info.styleName]</td>
+      </tr>
+      <div>
+      [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+      <tr>
+          <td nowrap="nowrap">Special/Classic:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+      </tr>
+      </div>
+      <div>
+      [onshow;block=div;when [var.brewing_info.sparkling]!='']
+      <tr>
+          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</td>
+      </tr>
+      </div>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club:</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]"></div></td>
+      </tr>
+      <tr>
+       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<div>
+[onshow_c;block=div;when [var.action]!='print']
+<table>
+  <tr>
+  	<td>&nbsp;</td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/arrow_up.png"  /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;</td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  </tr>
+</table>
+</div> <!-- end non-print header -->
 </div>
 <div>
 [onshow;block=div;when [var.action]=='print']
@@ -709,3 +1013,5 @@ setTimeout('selfPrint()',2000);
 html.push('');
 </script>
 </div>
+</body>
+</html>

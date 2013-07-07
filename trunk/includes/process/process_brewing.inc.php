@@ -1,35 +1,23 @@
 <?php 
 /*
- * Module:      process_entry_add.inc.php
+ * Module:      process_brewing.inc.php
  * Description: This module does all the heavy lifting for adding entries to the DB
  */
 session_start(); 
 
 function check_special_ingredients($style) {
-	switch($style) {
-		case "6-D":		
-		case "16-E":
-		case "17-F":
-		case "20-A":
-		case "21-A":
-		case "21-B":
-		case "22-B":
-		case "22-C":
-		case "23-A":
-		case "25-C":
-		case "26-A":
-		case "26-C":
-		case "27-E":
-		case "28-B":
-		case "28-C":
-		case "28-D":
-		return TRUE;
-		break;
+	
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
 		
-		default:
-		return FALSE;
-		break;
-	}
+	$style = explode("-",$style);
+
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $style[0], $style[1]);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
+	else return FALSE;
 }
 	  
 function check_carb_sweetness($style) {
@@ -356,10 +344,10 @@ if ($action == "add") {
 	mysql_select_db($database, $brewing);
 	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
-	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
-	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."index.php?section=list&msg=1";
+	//if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+	//elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."index.php?section=list&msg=1";
 	
-	elseif ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
+	if ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
 	else $insertGoTo = $base_url."index.php?section=list&msg=1"; 
 	
 	if ($id == "default") {
@@ -706,7 +694,7 @@ if ($action == "update") {
 	if ($_POST["brewPaid".$id] == "1") $brewPaid = "1"; else $brewPaid = "0";
 	if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
 	
-	if (NHC) {
+	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) {
 		$updateSQL = "UPDATE $brewing_db_table SET 
 		brewPaid='".$brewPaid."',
 		brewReceived='".$brewReceived."',

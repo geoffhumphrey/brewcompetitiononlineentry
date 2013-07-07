@@ -1,7 +1,3 @@
-<div id="header">	
-	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-</div>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php 
 /**
  * Module:      default.admin.php
@@ -12,9 +8,15 @@ include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
-//include(DB.'entries.db.php'); 
-//include(DB.'brewer.db.php');
+include(DB.'entries.db.php'); 
+include(DB.'brewer.db.php');
 include(DB.'contacts.db.php');
+
+// Check if judging flights are up-to-date
+if (!check_judging_flights()) { 
+$location = $base_url."includes/process.inc.php?action=update_judging_flights&go=admin_dashboard";
+header(sprintf("Location: %s", $location)); 
+}
 
 function participant_choose($brewer_db_table) {
 	require(CONFIG.'config.php');	
@@ -233,8 +235,13 @@ function total_discount() {
 	return $return;
 }
 
-} ?>
+}
 
+?>
+<div id="header">	
+	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+</div>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php 
 /*
 echo "Tables: ".$query_tables."<br>";
@@ -245,7 +252,9 @@ echo "Total tables: ".$totalRows_tables;
 
 if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter); ?>
+if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter);
+
+?>
 <?php if (($section == "admin") && ($go == "default")) { ?>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 
@@ -269,22 +278,21 @@ if (($action != "print") && ($go != "default")) echo admin_help($go,$header_outp
     <tr>
       <td class="dataLabel">Participants with Entries:</td>
       <td class="data"><?php echo $row_with_entries['count']; ?></td>
-      <td class="dataLabel">&nbsp;</td>
-      <td class="data">&nbsp;</td>
-      <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
-      <td class="data"><?php echo get_participant_count('judge'); ?></td>
-    </tr>
-    <tr>
-    	<td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=paid">Paid, Rec'd &amp; Confirmed Entries</a>:</td>
-        <td class="data"><?php echo get_entry_count("paid-received"); ?></td>
-        <?php if (!NHC) { ?>
+      <?php if (!NHC) { ?>
 		<td class="dataLabel">Total Paid Fees:</td>
         <td class="data"><?php echo $_SESSION['prefsCurrency'].$total_fees_paid; ?></td>
         <?php } else { ?>
         <td class="dataLabel">&nbsp;</td>
         <td class="data">&nbsp;</td>
         <?php } ?>
-        <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Availabe Stewards</a>:</td>
+      <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>:</td>
+      <td class="data"><?php echo get_participant_count('judge'); ?></td>
+    </tr>
+    <tr>
+    	<td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=paid">Paid, Rec'd &amp; Confirmed Entries</a>:</td>
+        <td class="data"><?php echo get_entry_count("paid-received"); ?></td>
+        <td class="dataLabel" colspan="2"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style">Entry Counts by Style</a></td>
+        <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>:</td>
         <td class="data"><?php echo get_participant_count('steward'); ?></td>
 	</tr>
     <?php if (($_SESSION['contestEntryFeePassword'] != "") && ($_SESSION['contestEntryFeePasswordNum'] != "")) { ?>
@@ -492,24 +500,32 @@ if ($go == "default") { ?>
 			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Participant as a Judge/Steward</a></li>
 			    <li>An Entry For: <?php echo participant_choose($brewer_db_table); ?></li>
 			</ul>
-          <?php if (!NHC) { ?>
-        <p class="admin_default_header">Regenerate</p>
+          	<?php if (!NHC) { ?>
+        	<p class="admin_default_header">Regenerate</p>
 			<ul class="admin_default">
             	<li>Entry Judging Numbers:</li>
                 <li>
                 <div class="menuBar">
                 <a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'menu_generate');">Key Off Of... (Select One)</a>
                 <div id="menu_generate" class="menu" onmouseover="menuMouseover(event)">
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
-                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
+                <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
                 </div>
                 </div>
                 </li>
 			</ul>
-            
+        	<?php } ?>
+            <?php if ($_SESSION['prefsEntryForm'] == "N") { ?>
+            <p class="admin_default_header">Check-In</p>
+            <ul class="admin_default">
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Check-In Entries with a Barcode Reader/Scanner</a></li>
+                <li>This function is intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank">available for download at brewcompetition.com</a>. Also available are <a href="http://www.brewcompetition.com/downloads/entry_check-in.pdf" target="_blank">suggested usage instructions</a>.</li>
+                </ul>
+            <?php } ?>
 			<p class="admin_default_header">Print</p>
+            <?php if (!NHC) { ?>
             <ul class="admin_default">
             	<li>Sorting Sheets:</li>
                 <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/sorting.php?section=admin&amp;go=default&amp;filter=default">All Categories</a></li>
@@ -539,6 +555,7 @@ if ($go == "default") { ?>
 				<li><?php // echo style_choose($section,"entries","bottle-entry",$filter,$view,"output/labels.php","none"); ?></li>
                 -->
 			</ul>
+            
             <ul class="admin_default">
 				<li>Bottle Labels (Using <em>Judging</em> Numbers - Avery 5160):</li>
 			    <li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default">All Categories</a></li>
@@ -582,36 +599,105 @@ if ($go == "default") { ?>
 			</ul>
             <?php if (!NHC) { ?>
             <ul class="admin_default">
-            	<li>Round Bottle Labels (Using <em>Entry</em> Numbers - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>)</li>
-                <li>All Categories: <select name="round_entry" id="round_entry" onchange="jumpMenu('self',this,0)">
+            	<li>Round Bottle Labels (Using <em>Entry</em> Numbers)</li>
+            </ul>
+            <ul class="admin_default">
+                <li><a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com 0.50 Inch Labels</a>, All Categories: <select name="round_entry" id="round_entry" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
-                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
-                    <?php } ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></option>
+                    <?php } ?>                    
                 </select> label(s) per entry</li>
                 <li>All Added by Admins (After Reg. Close): <select name="round_entry_recent" id="round_entry_recent" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
-                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> label(s) per entry</li>
             </ul>
             <ul class="admin_default">
-            	<li>Round Bottle Labels (Using <em>Judging</em> Numbers - <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com OL32</a>)</li>
-                <li>All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                <li><a href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank">OnlineLabels.com 0.75 Inch Labels</a>, All Categories: <select name="round_entry" id="round_entry" onchange="jumpMenu('self',this,0)">
                 	<option value=""></option>
                     <?php for($i=1; $i<=12; $i++) { ?>
-                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> label(s) per entry</li>
-                <li>All Added by Admins (After Reg. Close): <select name="round_judging_recent" id="round_judging_recent" onchange="jumpMenu('self',this,0)">
-                	<option value=""></option>
+                <li>All Added by Admins (After Reg. Close): <select name="round_entry_recent" id="round_entry_recent" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>                    
                     <?php for($i=1; $i<=12; $i++) { ?>
-                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></option>
                     <?php } ?>
                 </select> label(s) per entry</li>
             </ul>
             <?php } ?>
+            <ul class="admin_default">
+            	<li>Round Bottle Labels (Using <em>Judging</em> Numbers)</li>
+            </ul>
+            <ul class="admin_default">
+                <li><a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com 0.50 Inch Labels</a>, All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></option>
+                    <?php } ?>                    
+                </select> label(s) per entry</li>
+                <li>All Added by Admins (After Reg. Close): <select name="round_judging_recent" id="round_judging_recent" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> label(s) per entry</li>
+            </ul>
+            <ul class="admin_default">
+                <li><a href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank">OnlineLabels.com 0.75 Inch Labels</a>, All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> label(s) per entry</li>
+                <li>All Added by Admins (After Reg. Close): <select name="round_judging_recent" id="round_judging_recent" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>                    
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> label(s) per entry</li>
+            </ul>
+            
+             <ul class="admin_default">
+            	<li>Round Bottle Labels (Category Number and Subcategory Letter Only)</li>
+             </ul>
+            <ul class="admin_default">
+                <li><a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank">OnlineLabels.com 0.50 Inch Labels</a>, All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> label(s) per entry
+             	</li>
+                <!--
+                <li>Category: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php 
+					/*
+					$query_style_count = sprintf("SELECT brewStyleGroup FROM %s ORDER BY brewStyleGroup DESC LIMIT 1", $prefix."styles");
+					$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
+					$row_style_count = mysql_fetch_assoc($style_count);
+
+					for($i=1; $i<=$row_style_count['brewStyleGroup']; $i++) { 
+					*/ ?>
+                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=default&amp;view=<?php //echo $i; ?>"><?php // echo $i; ?></option>
+                    <?php // } ?>
+                </select></li>
+                -->
+            </ul>
+            <ul class="admin_default">
+             	<li><a href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank">OnlineLabels.com 0.75 Inch Labels</a>, All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
+                	<option value=""></option>
+                    <?php for($i=1; $i<=12; $i++) { ?>
+                    <option value="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></option>
+                    <?php } ?>
+                </select> label(s) per entry
+             	</li>
+            </ul>
 		</div>
        
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/book.png" alt="" /></span>Organizing</h4>
@@ -794,9 +880,9 @@ if ($go == "default") { ?>
             	<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&go=participants&action=judging_nametags">Download PDF</a></li>
             </ul>
             
-			<?php if ($row_scores['count'] > 0) { ?>
+			
 <p class="admin_default_header">During Judging</p>
-			<?php if (((NHC) && ($prefix == "_final")) || (!NHC)) { ?>
+			<?php if (((NHC) && ($prefix == "final_")) || (!NHC)) { ?>
             <ul class="admin_default">
 				<li>Print BOS Pullsheets:
     			<ul>
@@ -807,16 +893,21 @@ if ($go == "default") { ?>
         		</ul>
     			</li>
 			</ul>
-            <?php } } ?>
+            <ul class="admin_default">
+				<li>BOS Cup Mats:</li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Matss">Print</a></li>
+                <li><em>For the mats to print properly, set your browser's printing margins to .25 inch and the orientation to landscape.</em></li>
+            </ul>
+            <?php } ?>
 			<p class="admin_default_header">After Judging</p>
 			<?php if ($totalRows_tables > 0) { ?>
             <ul class="admin_default">
-				<li>Results Report <?php echo $method; ?> (with Scores):</li>
+				<li>Results Report  (with Scores):</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print</a> (All)</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only with Scores)">Print</a> (Winners Only)</li>
 			</ul>
 			<ul class="admin_default">
-				<li>Results Report by <?php echo $method; ?> (without Scores):</li>
+				<li>Results Report  (without Scores):</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" title="Results Report <?php echo $method; ?> (All with Scores)">Print</a> (All)</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/results.php?section=admin&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" title="Results Report <?php echo $method; ?> (Winners Only without Scores)">Print</a> (Winners Only)</li>
 				<li><a href="<?php echo $base_url; ?>output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf">Download PDF</a> (Winners Only)</li>
@@ -939,6 +1030,8 @@ if ($go == "participants") 				include (ADMIN.'participants.admin.php');
 if ($go == "entries") 					include (ADMIN.'entries.admin.php');
 if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
+if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
+if ($go == "count_by_style")			include (ADMIN.'entries_by_style.admin.php');
 if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
 
