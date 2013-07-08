@@ -36,61 +36,30 @@ All Admin pages have certain variables in common that build the page:
   
   $output_datatables_head = the output for DataTables placed in the <thead> tag
   $output_datatables_body = the output for DataTables placed in the <tbody> tag
-  $output_datatables_edit_link = 
-  $output_datatables_delete_link = 
-  $output_datatables_print_link = 
+  $output_datatables_edit_link = the link to edit the record
+  $output_datatables_delete_link = the link to delete the record
+  $output_datatables_print_link = the link to print the record or output to print
+  $output_datatables_view = the link to view the record's detail
   $output_datatables_actions = compiles all of the "actions" links (edit, delete, print, view, etc.)
   
-  ADD/EDIT SCREENS VARIABLES
-  $output_add_edit
-
-
+  ADD/EDIT SCREENS VARIABLE
+  $output_add_edit = whether to run/display the add/edit functions
 
 
 */
 
 
-
-function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
-
-	$return = "";
-	$return .= "<span class='icon'>";
-
-	if ($icon == "bin_closed") {
-		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;dbTable=".$brewing_db_table."&amp;action=".$action."','id',".$id.",'".$alt_title.".');\" title=\"".$alt_title."\">";
-	}
-
-	else {
-		$return .= "<a href='".$base_url."index.php?section=".$section;
-		if ($go != "default") $return .= "&amp;go=".$go;
-		if ($action != "default") $return .= "&amp;action=".$action;
-		if ($filter != "default") $return .= "&amp;filter=".$filter;
-		if ($id != "default") $return .= "&amp;id=".$id;
-		$return .= "' title='".$alt_title."'>";	
-	}
-	$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'></a>";
-	$return .= "</span>";
-
-	return $return;
-}
-
-
-
-function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_reqired) {
-	$return = "";
-	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=admin&amp;dbTable=".$dbTable;
-	if ($go != "default") $return .= "&amp;go=".$go;
-	if ($action != "default") $return .= "&amp;action=".$action;
-	if ($filter != "default") $return .= "&amp;filter=".$filter;
-	if ($id != "default") $return .= "&amp;id=".$id;
-	$return .= "'";
-	if ($check_reqired) $return .= " onsubmit='return CheckRequiredFields()'";
-	$return .= ">";
-	
-	return $return;
-}
-
-
+// Set Vars
+$output_datatables_head = "";
+$output_datatables_body = "";
+$output_add_edit = "";
+$filter_readable = "";
+$primary_page_info = "";
+$secondary_nav = "";
+$secondary_page_info = "";
+$form_submit_url = "";
+$form_submit_button = "";
+$output_no_records = "";
 
 // Make DB Connections
 if ($section != "step5") include(DB.'judging_locations.db.php');
@@ -114,17 +83,6 @@ if ($filter == "staff") {
 	$row_brewers = mysql_fetch_assoc($brewers);
 }
 
-// Set Vars
-$output_datatables_head = "";
-$output_datatables_body = "";
-$output_add_edit = "";
-$filter_readable = "";
-$primary_page_info = "";
-$secondary_nav = "";
-$secondary_page_info = "";
-$form_submit_url = "";
-$form_submit_button = "";
-$output_no_records = "";
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";
 if ($filter == "stewards") 	$staff_row_field = "staff_steward";
@@ -162,6 +120,9 @@ function bos_judge_eligible($uid) {
 
 
 
+// *****************************************************************************
+// ---------------------- Top of Page Vars -------------------------------------
+// *****************************************************************************
 
 
 // Build Subtitle
@@ -334,6 +295,11 @@ if ($totalRows_brewer == 0) {
 }
 
 
+
+// *****************************************************************************
+// ---------------------- List Judging Locations ---------------------------
+// *****************************************************************************
+
 if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign"))) { 
 
 	$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
@@ -467,6 +433,9 @@ if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default")
 
 } // end if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")))
 
+// *****************************************************************************
+// ---------------------- Add/Edit Judging Locations ---------------------------
+// *****************************************************************************
 
 if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	$output_add_edit = TRUE;
@@ -535,11 +504,14 @@ if (!empty($output_datatables_body)) {
 <?php echo $output_datatables_body; ?>
 </tbody>
 </table>
-<?php if (!empty($form_submit_url)) echo $form_submit_button."</form>"; 
-} // end if (($action == "default") && (!empty($output_datatables_body)))
-?>
+<?php if (!empty($form_submit_url)) echo $form_submit_button."</form>"; ?>
 
-<?php if ($output_add_edit) { ?>
+<?php } // end if (($action == "default") && (!empty($output_datatables_body)))
+
+
+// -------------------------------- Add/Edit Form ---------------------------------------------
+
+if ($output_add_edit) { ?>
 <script>
 $(function() {
 	$('#judgingDate').datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });

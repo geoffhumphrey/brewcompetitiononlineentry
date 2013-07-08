@@ -65,7 +65,7 @@ $brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
 $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2);
 $steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2);
 
-	if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],bjcp_rank($row_sql['brewerJudgeRank'],1),strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace)),$judge_avail,style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'),judge_entries($row_sql['uid'],0));
+	if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],bjcp_rank($row_sql['brewerJudgeRank'],1),strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),$judge_avail,style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'),judge_entries($row_sql['uid'],0));
 	elseif ($filter == "staff") $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],judge_entries($row_sql['uid'],0));
 	else $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$row_sql['brewerJudge'],$judge_avail,$row_sql['brewerSteward'],$steward_avail,judge_entries($row_sql['uid'],0));
 } while ($row_sql = mysql_fetch_assoc($sql)); 

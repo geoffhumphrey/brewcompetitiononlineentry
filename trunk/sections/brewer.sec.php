@@ -27,7 +27,10 @@ if ($section == "step2")  {
 	$totalRows_brewerID = mysql_num_rows($brewerID);
 }
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
-if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { ?>
+if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { 
+
+
+?>
 <?php if ($section == "step2") { ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
 <input name="brewerSteward" type="hidden" value="N" />
@@ -40,6 +43,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
+if ($row_brewer['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 
@@ -100,13 +104,13 @@ if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); ?>
 </tr>
 <tr>
       <td class="dataLabel">Phone 1:</td>
-      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") echo format_phone_us($row_brewer['brewerPhone1']); ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") { if ($us_phone) echo format_phone_us($row_brewer['brewerPhone1']); else echo $row_brewer['brewerPhone1']; } ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
       <td class="data">&nbsp;</td>
 </tr>
 <tr>
       <td class="dataLabel">Phone 2:</td>
-      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") echo format_phone_us($row_brewer['brewerPhone2']); ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") { if ($us_phone) echo format_phone_us($row_brewer['brewerPhone2']); else echo $row_brewer['brewerPhone2']; } ?>" size="32"></td>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 </tr>

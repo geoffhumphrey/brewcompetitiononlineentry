@@ -254,6 +254,24 @@ if(errormessage.length > 2) {
 return true;
 } // end of function CheckRequiredFields()
 <?php } ?>
+
+
+<?php if (($section == "user") && ($action == "username")) { ?>
+function CheckRequiredFields() {
+var errormessage = new String();
+// Put field checks below this point.
+if(WithoutContent(document.form1.user_name.value))
+	{ errormessage += "\nA valid user name"; }
+if(WithoutCheck(document.form1.sure))
+	{ errormessage += "\nCheck the Are You Sure? checkbox"; }
+// Put field checks above this point.
+if(errormessage.length > 2) {
+	alert('To process, the following information is required:\n' + errormessage);
+	return false;
+	}
+return true;
+} // end of function CheckRequiredFields()
+<?php } ?>
 <?php if ($section == "contact") { ?>
 function CheckRequiredFields() {
 var errormessage = new String();

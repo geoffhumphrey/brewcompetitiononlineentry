@@ -4,6 +4,7 @@ $total_cat = count(array_unique($total_cat));
 for($cat=1; $cat<=$total_cat; $cat++)  { 
 if ($cat <= 9) $cat_convert = "0".$cat; else $cat_convert = $cat;
 $cat_name = style_convert($cat_convert,1);
+
 	// Perform query in appropriate db table rows
 	$query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$cat_convert);
 	$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
@@ -27,17 +28,20 @@ $cat_name = style_convert($cat_convert,1);
 		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 		
 	}
-	$html .= "<tr>";
-	$html .= "<td width=\"10%\" nowrap=\"nowrap\""; 
-	if ($action == "print") $html.= "class=\"bdr1B_gray\""; 
-	$html .= ">".$cat_convert." - ".$cat_name; 
-	$html .= "</td>";
-    $html .= "<td width=\"10%\" nowrap=\"nowrap\""; 
-	if ($action == "print") $html.= "class=\"bdr1B_gray\""; 
-	$html .= ">".$row_style_count['count'];
-	$html .= "</td>";
-	$html .= "<td class=\"data\">".$style_type."</td>";
-	$html .= "</tr>";
+	
+	if (!empty($cat_name)) { 
+		$html .= "<tr>";
+		$html .= "<td width=\"10%\" nowrap=\"nowrap\""; 
+		if ($action == "print") $html.= "class=\"bdr1B_gray\""; 
+		$html .= ">".$cat_convert." - ".$cat_name; 
+		$html .= "</td>";
+		$html .= "<td width=\"10%\" nowrap=\"nowrap\""; 
+		if ($action == "print") $html.= "class=\"bdr1B_gray\""; 
+		$html .= ">".$row_style_count['count'];
+		$html .= "</td>";
+		$html .= "<td class=\"data\">".$style_type."</td>";
+		$html .= "</tr>";
+	}
 	
 } 
 
@@ -108,9 +112,9 @@ $total_style_count = (array_sum($style_beer_count) + array_sum($style_mead_count
 </table>
 <div style="margin-bottom: 20px;"></div>
 <?php } ?>
+
+<h3>Breakdown By Style</h3>
 <script type="text/javascript" language="javascript">
-// The following is for demonstration purposes only. 
-// Complete documentation and usage at http://www.datatables.net
 	$(document).ready(function() {
 		$('#sortable2').dataTable( {
 			"bPaginate" : false,

@@ -8,6 +8,67 @@
  *
  */
 
+/* ---------------- Rebuild Info ---------------------
+
+Beginning with the 1.3.0 release, an effort was begun to separate the programming
+layer from the presentation layer for all scripts with this header.
+
+All Admin pages have certain variables in common that build the page:
+  $subtitle = the <h2> subtitle of the page
+  $primary_page_info = any information related to the page
+  $goto_nav = the "Back to Admin Dashboard" and other "Back to..." navigation
+  $secondary_nav = other navigation elements related to the subpage
+  $secondary_page_info = detailed information that comes after the nav elements
+  
+  $form_submit_url = the processing url for the form
+  $form_submit_button = the form submit button element
+  
+  DEFAULTS for all of the following are defined in constants.inc.php but can be overridden by defining on the page 
+  $output_datatables_bPaginate = whether or not to paginate the DT output - default is true
+  $output_datatables_sPaginationType = type of pagination links output - default is full_numbers
+  $output_datatables_bLengthChange = whether or not the DT output will allow length changes - default is true
+  $output_datatables_iDisplayLength = limiting of the number of items the DT displays - default is round($_SESSION['prefsRecordPaging'])
+  $output_datatables_sDom = the order of DT elements - default is irftip
+  $output_datatables_bStateSave = true or false to save the state of the DT after refresh - default is false
+  $output_datatables_bProcessing = true or false to show a "processing" message -default is false
+  $output_datatables_aaSorting = the output in the DataTables JS for sort order - always customized for each display
+  $output_datatables_aoColumns = the output in the DataTables JS for columns - always customized for each display
+  
+  $output_datatables_head = the output for DataTables placed in the <thead> tag
+  $output_datatables_body = the output for DataTables placed in the <tbody> tag
+  $output_datatables_add_link = the link to add a record
+  $output_datatables_edit_link = the link to edit the record
+  $output_datatables_delete_link = the link to delete the record
+  $output_datatables_print_link = the link to print the record or output to print
+  $output_datatables_other_link = misc use link
+  $output_datatables_view_link = the link to view the record's detail
+  $output_datatables_actions = compiles all of the "actions" links (edit, delete, print, view, etc.)
+  
+  ADD/EDIT SCREENS VARIABLE
+  $output_add_edit = whether to run/display the add/edit functions - default is FALSE
+
+ * ---------------- END Rebuild Info --------------------- */
+
+// Set Vars
+$subtitle = "";
+$primary_page_info = "";
+$goto_nav = "";
+$secondary_nav = "";
+$secondary_page_info = "";
+$form_submit_url = "";
+$form_submit_button = "";
+$output_datatables_head = "";
+$output_datatables_body = "";
+$output_add_edit = "";
+$filter_readable = "";
+$primary_page_info = "";
+$secondary_nav = "";
+$secondary_page_info = "";
+$form_submit_url = "";
+$form_submit_button = "";
+$output_no_records = "";
+$output_add_edit = FALSE;
+
 $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewer");
 $result_participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 $row_participant_count = mysql_fetch_assoc($result_participant_count);
@@ -35,270 +96,255 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 	else $result = "&nbsp;";
 	return $result;
 }
+
 if ($action != "print") { 
 	if (($dbTable == "default") && ($row_participant_count['count'] > $_SESSION['prefsRecordLimit']))	{ 
 			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." participants.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of participants (".$row_participant_count['count'].").</div>";
 	}
 }
-?>
-<h2><?php 
-if ($filter == "judges") { echo "Available Judges"; $csv = "avail_judges"; }
-elseif ($filter == "stewards") { echo "Available Stewards"; $csv = "avail_stewards"; }
-elseif ($action == "add") echo "Add Participant"; 
-else echo "Participants"; 
-if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
-<?php if ($action != "print") { ?>
-<div class="adminSubNavContainer">
-  	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a>
-    </span>
-  	<?php if ($action != "add") { ?>
-  	<?php if ($dbTable != "default") { ?>
- 	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Back to Archives</a>
-  	</span>
-	<?php } ?>
-    <?php if ($dbTable == "default") { ?>
-  	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/user_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">Add a Participant</a>
-    </span>
-    <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/user_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">Add a Participant as a Judge/Steward</a>
-    </span>
-</div>
-<div class="adminSubNavContainer">
-    <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/page.png" /></span>
-  			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'views');">View...</a></div>
-  			<div id="views" class="menu" onmouseover="menuMouseover(event)">
-  				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">All Participants</a>
-  				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a>
-  				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>
-  			</div>
-  	</span>
-    <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" /></span>
-  			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants');">Print <em>This</em> List</a></div>
-  			<div id="printMenu_participants" class="menu" onmouseover="menuMouseover(event)">
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=brewer_name">By Last Name</a>
-                <?php if (($filter == "judges") || ($filter == "stewards")) { ?>
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=club">By Club</a>
-                <?php } if ($filter == "judges") { ?>
-                <a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a>
-				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a>
-				<?php } ?>
-            </div>
-  	</span>
-  	<span class="adminSubNav">
-		<?php if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($filter == "default")) { ?>
-  		<span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" /></span>
-  			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants_all');">Print <em>All</em></a></div>
-  			<div id="printMenu_participants_all" class="menu" onmouseover="menuMouseover(event)">
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name">By Last Name</a>
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=club">By Club</a>
-            </div>
-    </span>
-  <span class="adminSubNav">
-        <?php } if ($filter != "default") { ?>
-        <span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" /></span>
-  			<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_participants_all');">Print <em>All</em></a></div>
-  <div id="printMenu_participants_all" class="menu" onmouseover="menuMouseover(event)">
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name">By Last Name</a>
-  				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=club">By Club</a>
-  				<?php if ($filter == "judges") { ?>
-                <a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=judge_id">By Judge ID</a>
-				<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=judge_rank">By Judge Rank</a>
-				<?php } ?>
-          </div>
-		  <?php } else echo "&nbsp;"; ?>
-  </span>
-    <?php if ($filter != "default") { ?>
-    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/page_excel_go.png" /></span><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=<?php echo $csv; ?>&amp;action=email">Export</a></span>
-	<?php }
-	} // end 1.2 ?>
-</div>
-<div class="adminSubNavContainer">
-	<?php if (($action != "add") && ($dbTable == "default")) { // 2  ?>
- 	<span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a>
- 	</span>
-    <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a>
- 	</span>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Assign Staff</a>
- 	</span>
-    <?php if ($totalRows_tables > 1) { ?>
-    <span class="adminSubNav">
-		<span class="icon"><img src="<?php echo $base_url; ?>images/user_edit.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges/Stewards to Tables</a>
-	</span>
-	<?php }  ?>
- <?php } // end 2 ?>
-</div>
-<?php } 
-}
-if (($action == "default") || ($action == "print")) { 
-if ($row_participant_count['count'] > 0) { 
-	if ($action != "print") { ?>
-	<?php 
-		if ($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) {
-		$of = $start + $totalRows_brewer;
-		echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of." of ".$row_participant_count['count']." entries</div>";
-		}
-	?>
-	<link href="<?php echo $base_url; ?>css/sorting.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable').dataTable( {
-		<?php if ($row_participant_count['count'] <= $_SESSION['prefsRecordLimit']) { ?>
-		"bPaginate" : true,
-		"sPaginationType" : "full_numbers",
-		"bLengthChange" : false,
-		"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
-		"sDom": 'ifrtip',
-		"bStateSave" : false,
-		<?php } else { ?>
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		<?php } ?>
-		"aaSorting": [[0,'asc']],
-		"bProcessing" : true,
-		
-		<?php if ($filter == "default") { ?>
-		"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				null,
-				null<?php if ($dbTable == "default") { ?>, 
-				{ "asSorting": [  ] }
-				<?php } ?>
-			]
-		<?php } ?>
-		
-		<?php if ($filter == "judges") { ?>
-		"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				{ "asSorting": [  ] }
-			]
-		<?php } ?>
-		
-		
-		<?php if ($filter == "stewards") { ?>
-		"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				null,
-				{ "asSorting": [  ] }
-			]
-		<?php } ?>
-		
-		} );
-	} );
-	</script>
-   <?php } ?>
-   <?php if ($action == "print") { ?>
-   <script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			<?php if ($psort == "judge_rank") { ?>"aaSorting": [[5,'asc']],<?php } ?>
-			<?php if ($psort == "judge_id") { ?>"aaSorting": [[4,'asc']],<?php } ?>
-			<?php if ($psort == "club") { ?>"aaSorting": [[3,'asc']],<?php } ?>
-			<?php if ($psort == "default") { ?>"aaSorting": [[0,'asc']],<?php } ?>
-			"bProcessing" : false,
-			
-		<?php if ($filter == "default") { ?>
-			"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				null,
-				null
-			]
-		<?php } ?>
-		
-		<?php if ($filter == "judges") { ?>
-		"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				null,
-				null,
-				{ "asSorting": [  ] }
-			]
-		<?php } ?>
-		
-		
-		<?php if ($filter == "stewards") { ?>
-		"aoColumns": [
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				null
 
-			]
-		<?php } ?>
-			} );
-		} );
-	</script>
-   <?php } ?>
-<table class="dataTable" id="sortable">
-<thead>
-  <tr>
-    <th class="dataHeading bdr1B" width="5%">Last</th>
-    <th class="dataHeading bdr1B" width="5%">First</th>
-    <th class="dataHeading bdr1B" width="15%">Info</th>
-    <th class="dataHeading bdr1B" width="22%"><?php if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) echo "Location(s) Available"; else echo "Club"; ?></th>
-  <?php if ($filter == "default") { ?>
-    <th class="dataHeading bdr1B" width="8%">Steward?</th>
-    <th class="dataHeading bdr1B" width="8%">Judge?</th>
-  <?php }  ?>
-  	<th class="dataHeading bdr1B" width="15%">Assigned As</th>
-  <?php if ($filter != "default") { ?>
-    <?php if ($filter == "judges") { ?>
-    <th class="dataHeading bdr1B" width="8%">ID</th>
-    <th class="dataHeading bdr1B" width="10%">Rank</th>
-    <?php } ?>
-    <th class="dataHeading bdr1B" width="15%">Has Entries In...</th>
-    <?php } ?>
-    <th class="dataHeading bdr1B" width="10%">Date Created</th>
-  <?php if (($action != "print") && ($dbTable == "default")) { ?>
-    <th class="dataHeading bdr1B">Actions</th>
-  <?php } ?>
-  </tr>
-</thead>
-<tbody>
-<?php do { 	
+
+
+// *****************************************************************************
+// ---------------------- Top of Page Vars -------------------------------------
+// *****************************************************************************
+
+// Build Subtitle
+$subtitle .= "<h2>";
+if ($filter == "judges") { 
+	$subtitle .= "Available Judges"; 
+	$csv = "avail_judges"; 
+	}
+elseif ($filter == "stewards") { 
+	$subtitle .= "Available Stewards";
+	$csv = "avail_stewards"; 
+	}
+elseif ($action == "add") $subtitle .= "Add Participant"; 
+else $subtitle .= "Participants"; 
+if ($dbTable != "default") $subtitle .= ": ".get_suffix($dbTable); 
+$subtitle .= "</h2>";
+
+
+if ($action != "print") {
+	
+	$goto_nav .= "<div class='adminSubNavContainer'>";
+	// Back to Dashboard
+	$goto_nav .= "<span class='adminSubNav'>";
+	$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin'>Back to Admin Dashboard</a>";
+	$goto_nav .= "</span>";
+	
+	
+	if ($filter != "default") {
+		$goto_nav .= "<span class='adminSubNav'>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=participants'>Back to Participants</a>";
+		$goto_nav .= "</span>";	
+	}
+		
+	if ($dbTable == "default") {
+		
+		$goto_nav .= "<span class='adminSubNav'>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=entrant&amp;action=register'>Add a Participant</a>";
+		$goto_nav .= "</span>";
+		
+		$goto_nav .= "<span class='adminSubNav'>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=judge&amp;action=register'>Add a Judge/Steward</a>";
+		$goto_nav .= "</span>";
+	
+	} // end if ($dbTable == "default")
+	
+	else { 
+		$goto_nav .= "<span class='adminSubNav'>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=archive'>Back to Archives</a>";
+		$goto_nav .= "</span>";
+		
+	} // end if ($dbTable != "default")
+	
+	$goto_nav .= "</div>";
+	
+	if ($dbTable == "default") {
+		
+		$secondary_nav .= "<div class='adminSubNavContainer'>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page_excel_go.png' alt='Export' title='Export'></span>";
+		$secondary_nav .= "<a href='".$base_url."output/email_export.php?section=admin&amp;go=csv&amp;filter=".$csv."&amp;action=email'>Export</a>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page.png' alt='View' title='View'></span>";
+		$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"views\");'>View...</a></div>";
+		$secondary_nav .= "<div id='views' class='menu' onmouseover='menuMouseover(event)'>";
+		$secondary_nav .= "<a class='menuItem' href='".$base_url."index.php?section=admin&amp;go=participants'>All Participants</a>";
+  		$secondary_nav .= "<a class='menuItem' href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges'>Available Judges</a>";
+  		$secondary_nav .= "<a class='menuItem' href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards'>Available Stewards</a>";
+  		$secondary_nav .= "</div>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print This List' title='Print This List'></span>";
+		$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants\");'>Print This List</a></div>";
+		$secondary_nav .= "<div id='printMenu_participants' class='menu' onmouseover='menuMouseover(event)'>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=brewer_name'>By Last Name</a>";
+		if (($filter == "judges") || ($filter == "stewards")) $secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=club'>By Club</a>";
+		if ($filter == "judges")$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=judge_id'>By Judge ID</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=psort=judge_rank'>By Judge Rank</a>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "</div>";
+		$secondary_nav .= "</div>";
+		
+		if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($filter == "default")) { 
+			$secondary_nav .= "<div class='adminSubNavContainer'>";
+			$secondary_nav .= "<span class='adminSubNav'>";
+			$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print All' title='Print All'></span>";
+			$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants_all\");'>Print All</a></div>";
+			$secondary_nav .= "<div id='printMenu_participants_all' class='menu' onmouseover='menuMouseover(event)'>";
+			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
+			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
+			$secondary_nav .= "</div>";
+			$secondary_nav .= "</span>";
+			$secondary_nav .= "</div>";
+		} // end if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($filter == "default"))
+		
+	} // end if ($dbTable == "default")
+	
+	if ($dbTable != "default") {
+		
+		$secondary_nav .= "<div class='adminSubNavContainer'>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print All' title='Print All'></span>";
+		$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants_all\");'>Print All</a></div>";
+		$secondary_nav .= "<div id='printMenu_participants_all' class='menu' onmouseover='menuMouseover(event)'>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
+		if ($filter == "judges") {
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=judge_id'>By Judge ID</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=judge_rank>By Judge Rank</a>";
+		}
+		$secondary_nav .= "</div>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "</div>";
+		
+	} // end if ($dbTable != "default")
+	
+	
+	if (($action != "add") && ($dbTable == "default")) { 
+		$secondary_nav .= "<div class='adminSubNavContainer'>";
+ 		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign Judges</a>";
+ 		$secondary_nav .= "</span>";
+    	$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign Judges</a>";
+ 		$secondary_nav .= "</span>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign Staff</a>";
+ 		$secondary_nav .= "</span>";
+		if ($totalRows_tables > 1) {
+            $secondary_nav .= "<span class='adminSubNav'>";
+			$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
+			$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables'>Assign Judges/Stewards to Tables</a>";
+		}
+		$secondary_nav .= "</div>";
+	
+	} // end if (($action != "add") && ($dbTable == "default")) 
+	
+} // end if ($action != "print")
+
+
+
+// *****************************************************************************
+// ---------------------- List Participants ---------------------------
+// *****************************************************************************
+
+$output_datatables_aaSorting = "";
+$output_datatables_aaColumns = "";
+
+if ($action == "print") {
+	
+	$output_datatables_aaSorting .= "";
+	if ($psort == "judge_rank") $output_datatables_aaSorting .= "[6,'desc']";
+	if ($psort == "judge_id")  $output_datatables_aaSorting .= "[5,'asc']";
+	if ($psort == "club") $output_datatables_aaSorting .= "[3,'asc']";
+	if ($psort == "default") $output_datatables_aaSorting .= "[0,'asc']";
+	
+	
+	
+	if ($filter == "default") 	{ 
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null, null";
+	}
+	
+	if ($filter == "judges") 	{ 
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null, null, { \"asSorting\": [  ] }";
+	}
+	
+	if ($filter == "stewards") 	{
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null";
+	}
+	
+
+} // end if ($action == "print")
+
+else {
+
+	if ($filter == "default") 	{ 
+		$output_datatables_aaSorting .= "[0,'asc']";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
+		if ($dbTable == "default") 	
+		$output_datatables_aoColumns .= ",  { \"asSorting\": [  ] }";
+	}
+	
+	if ($filter == "judges") 	{ 
+		$output_datatables_aaSorting .= "[0,'asc']";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, null, null, { \"asSorting\": [  ] }";
+	}
+	
+	if ($filter == "stewards") 	{
+		$output_datatables_aaSorting .= "[0,'asc']";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, { \"asSorting\": [  ] }";
+	}
+
+}
+
+
+$output_datatables_head .= "<tr>";
+$output_datatables_head .= "<th width='5%' class='dataHeading bdr1B'>Last</th>";
+$output_datatables_head .= "<th width='5%' class='dataHeading bdr1B'>First</th>";
+$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Info</th>";
+$output_datatables_head .= "<th width='22%' class='dataHeading bdr1B'>";
+if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "Location(s) Available"; 
+else $output_datatables_head .= "Club";
+$output_datatables_head .= "</th>";
+if ($filter == "default") { 
+	$output_datatables_head .= "<th width='8%' class='dataHeading bdr1B'>Steward?</th>";
+	$output_datatables_head .= "<th width='8%' class='dataHeading bdr1B'>Judge?</th>";
+}
+$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Assigned As</th>";
+if ($filter != "default") { 
+	if ($filter == "judges") {
+		$output_datatables_head .= "<th width='8%' class='dataHeading bdr1B'>ID</th>";
+		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Rnak</th>";
+	}
+	
+	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
+}
+$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Date Created</th>";
+if (($action != "print") && ($dbTable == "default")) $output_datatables_head .= "<th class='dataHeading bdr1B'>Actions</th>";
+$output_datatables_head .= "</tr>";
+
+$email_subject = "";
+if ($filter == "judges") $email_subject .= "Judging at ".$_SESSION['contestName']; 
+elseif ($filter == "stewards") $email_subject .= "Stewarding at ".$_SESSION['contestName']; 
+else $email_subject .= $_SESSION['contestName'];  
+
+do {
+	
+	$output_datatables_add_link = "";
+	$output_datatables_edit_link = "";
+	$output_datatables_delete_link = "";
+	$output_datatables_print_link = "";
+	$output_datatables_other_link .= "";
+	$output_datatables_view_link .= "";
+	$output_datatables_actions = "";
+	
 	$query_user1 = sprintf("SELECT id,userLevel FROM $users_db_table WHERE id = '%s'", $row_brewer['uid']);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
@@ -306,46 +352,147 @@ if ($row_participant_count['count'] > 0) {
 	if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
 	if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
 	
+	if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+	unset($brewer_assignment);
 	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1");
-	$judge_array = str_replace(", ",",",$brewer_assignment);
-	$judge_array = explode(",",$judge_array);
-	if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
-?>
-  <tr>
-    <td class="dataList"><?php echo $row_brewer['brewerLastName']; ?></td>
-    <td class="dataList"><?php echo $row_brewer['brewerFirstName']; ?></td>
-    <td class="dataList"><a href="mailto:<?php echo $row_brewer['brewerEmail']; ?>?Subject=<?php if ($filter == "judges") echo "Judging at ".$_SESSION['contestName']; elseif ($filter == "stewards") echo "Stewarding at ".$_SESSION['contestName']; else echo $_SESSION['contestName'];  ?>"><?php echo $row_brewer['brewerEmail']; ?></a><br /><?php if ($row_brewer['brewerPhone1'] != "") echo  format_phone_us($row_brewer['brewerPhone1'])." (1)<br>";  if ($row_brewer['brewerPhone2'] != "") echo  format_phone_us($row_brewer['brewerPhone2'])." (2)"; ?></td>
-    <td class="dataList"><?php if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) //echo $locations; 
-	echo judge_steward_availability($locations,1); else echo $row_brewer['brewerClubs']; ?></td>
-  	<?php if ($filter == "default") { ?>
-    	<td class="dataList"><?php if ($row_brewer['brewerSteward'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='".$base_url."images/tick.png'>"; } if ($row_brewer['brewerSteward'] == "N") {  if ($action == "print") echo ""; else echo "<img src='".$base_url."images/cross.png'>"; } ?></td>
-    	<td class="dataList"><?php if ($row_brewer['brewerJudge'] == "Y") { if ($action == "print")echo "X"; else echo "<img src='".$base_url."images/tick.png'>"; } if ($row_brewer['brewerJudge'] == "N") {  if ($action == "print") echo ""; else echo "<img src='".$base_url."images/cross.png'>"; } ?></td>
-  	<?php } ?>
-	<td class="dataList"><?php echo $brewer_assignment; ?></td>
-	<?php if ($filter != "default") { ?>
-    	<?php if ($filter == "judges") { ?>
-    	<td class="dataList"><?php echo $row_brewer['brewerJudgeID']; ?></td>
-    	<td class="dataList"><?php echo bjcp_rank($row_brewer['brewerJudgeRank'],1); if ($row_brewer['brewerJudgeMead'] == "Y") { echo "<br />Certified Mead Judge"; } ?></td>
-	  	<?php } ?>
-        <td class="dataList"><?php echo judge_entries($row_brewer['uid'],1); ?></td>
-	<?php }?>
-    <td class="dataList" nowrap="nowrap"><?php echo date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable); ?></td>
- <?php  if (($action != "print") && ($dbTable == "default")) { ?>
-    <td class="dataList" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=brew&amp;go=entries&amp;filter=<?php echo $row_brewer['uid']; ?>&amp;action=add"><img src="<?php echo $base_url; ?>images/book_add.png"  border="0" alt="Add an entry for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>" title="Add an entry for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>"></a></span><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=brewer&amp;go=admin&amp;filter=<?php echo $row_brewer['uid']; ?>&amp;action=edit&amp;id=<?php echo $row_brewer['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Edit <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span><?php if ($_SESSION['userLevel'] == "0") { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=make_admin&amp;username=<?php echo urlencode($row_brewer['brewerEmail']);?>"><img src="<?php echo $base_url; ?>images/<?php if ($row_user1['userLevel'] <= "1") echo "lock_open.png"; else echo "lock_edit.png"; ?>" border="0" alt="Change <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>'s User Level" title="Change <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>'s User Level"></a></span><?php } ?><?php if ($brewer_judge) { ?><span class="icon"><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $row_brewer['id']; ?>"><img src="<?php echo $base_url; ?>images/page_white_acrobat.png"  border="0" alt="Download judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>" title="Download judging labels for <?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?>"></a></span><?php } ?><span class="icon"><?php if ($row_brewer['brewerEmail'] == $_SESSION['loginUsername']) echo "&nbsp;"; else { ?><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;action=delete&amp;uid=<?php echo $row_brewer['uid'];?>','id',<?php echo $row_brewer['id']; ?>,'Are you sure you want to delete the participant <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>?\nALL entries for this participant WILL BE DELETED as well.\nThis cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>" title="Delete <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>"></a><?php } ?></span>
-    </td> 
-  <?php } ?> 
-  </tr>
-<?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
-</tbody>
-</table>
-<?php if ($action != "print") {  
-	if ($row_participant_count['count'] >= $_SESSION['prefsRecordLimit']) { 
-	if (($filter == "default") && ($bid == "default")) $total_paginate = $row_participant_count['count'];
-	else $total_paginate = $totalRows_brewer;
-	paginate($display, $pg, $total_paginate);
+	//$judge_array = str_replace(", ",",",$brewer_assignment);
+	//$judge_array = explode(",",$judge_array);
+	//if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
+
+	$output_datatables_body .= "<tr>";
+	
+	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName']."</td>";
+	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerFirstName']."</td>";
+	
+	$output_datatables_body .= "<td class='dataList'>";
+	$output_datatables_body .= "<a href='mailto:".$row_brewer['brewerEmail']."?Subject=$email_subject'>".$row_brewer['brewerEmail']."</a><br />";
+	if ($row_brewer['brewerPhone1'] != "") {
+		if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone1'])." (1)<br>"; 
+		else $output_datatables_body .= $row_brewer['brewerPhone1']." (1)<br>"; 
+	}
+	if ($row_brewer['brewerPhone2'] != "") {
+		if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone2'])." (2)<br>"; 
+		else $output_datatables_body .= $row_brewer['brewerPhone2']." (2)<br>"; 
+	}
+	$output_datatables_body .= "</td>";
+	
+	$output_datatables_body .= "<td class='dataList'>";
+	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_body .= judge_steward_availability($locations,1); else $output_datatables_body .= $row_brewer['brewerClubs'];
+	//else $output_datatables_body .= "&nbsp;";
+	$output_datatables_body .= "</td>";
+	
+	if ($filter == "default") {
+		$output_datatables_body .= "<td class='dataList'>";
+		if ($row_brewer['brewerSteward'] == "Y") { 
+				if ($action == "print") $output_datatables_body .= "Y"; 
+				else $output_datatables_body .= "<img src='".$base_url."images/tick.png'>"; 
+			} 
+			if ($row_brewer['brewerSteward'] == "N") {  
+				if ($action == "print") $output_datatables_body .= "N"; 
+				else $output_datatables_body .= "<img src='".$base_url."images/cross.png'>"; 
+			}
+		$output_datatables_body .= "</td>";
+		$output_datatables_body .= "<td class='dataList'>";
+		if ($row_brewer['brewerJudge'] == "Y") { 
+				if ($action == "print") $output_datatables_body .= "Y"; 
+				else $output_datatables_body .= "<img src='".$base_url."images/tick.png'>"; 
+			} 
+			if ($row_brewer['brewerJudge'] == "N") {  
+				if ($action == "print") $output_datatables_body .= "N"; 
+				else $output_datatables_body .= "<img src='".$base_url."images/cross.png'>"; 
+			}
+		$output_datatables_body .= "</td>";
+		
+	}
+	
+	$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
+	
+	if ($filter != "default") { 
+		if ($filter == "judges") { 
+			$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerJudgeID']."</td>";
+			$output_datatables_body .= "<td class='dataList'>".bjcp_rank($row_brewer['brewerJudgeRank'],1); 
+			if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br />Certified Mead Judge";
+			$output_datatables_body .= "</td>";
+		}
+		$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
+	}
+	
+	
+	$output_datatables_body .= "<td class='dataList' nowrap='nowrap'>".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
+	
+	if (($action != "print") && ($dbTable == "default")) { 
+	
+	
+	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
+
+		$output_datatables_add_link = build_action_link("book_add",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
+		$output_datatables_edit_link = build_action_link("pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"Edit the user record for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
+		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['id'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."\nALL entries for this participant WILL BE DELETED as well.\nThis cannot be undone.");
+		else $output_datatables_delete_link = "<span class='icon'><img src='".$base_url."images/bin_closed_fade.png' title='You cannot delete yourself!'></span>";
+		if ($row_user1['userLevel'] <= "1") $change_icon = "lock_open"; else $change_icon = "lock_edit";
+		$output_datatables_other_link = build_action_link($change_icon,$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s User Level");
+		$output_datatables_view_link = "";
+		if (strpos($brewer_assignment,'Judge') !== false)  {
+			$output_datatables_view_link = build_output_link("page_white_acrobat",$base_url,"labels.php","admin","participants","judging_labels","default",$row_brewer['id'],"default","Download judging labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],FALSE);
+		}
+		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link2 = build_action_link("page_edit",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
+		else $output_datatables_other_link2 = "<span class='icon'><img src='".$base_url."images/page_edit_fade.png' title='Use the Change Your Email Link from the My Info and Entries page to change your email.'></span>";
+		$output_datatables_actions = $output_datatables_add_link.$output_datatables_edit_link.$output_datatables_other_link2.$output_datatables_other_link.$output_datatables_delete_link.$output_datatables_view_link;
+		
+		$output_datatables_body .= "<td class='dataList' nowrap='nowrap'>".$output_datatables_actions."</td>";
+	}
+	
+
+	
+	$output_datatables_body .= "</tr>";
+
+
+} while ($row_brewer = mysql_fetch_assoc($brewer));
+
+// ----------------------------------------- Presentation ------------------------------------------
+
+
+// Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
+echo $subtitle;
+echo $primary_page_info;
+echo $goto_nav;
+echo $secondary_nav;
+echo $secondary_page_info;
+
+if ($action != "print") { 
+	if (($dbTable == "default") && ($row_participant_count['count'] > $_SESSION['prefsRecordLimit']))	{ 
+			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." participants.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of participants (".$row_participant_count['count'].").</div>";
 	}
 }
-?>
+
+
+
+
+if (($action == "default") || ($action == "print")) { 
+if ($row_participant_count['count'] > 0) { ?>
+	<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
+			"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
+			"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
+			"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+			"sDom": '<?php echo $output_datatables_sDom; ?>',
+			"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
+			"aaSorting": [<?php echo $output_datatables_aaSorting; ?>],
+			"bProcessing" : <?php echo $output_datatables_bProcessing; ?>,
+			"aoColumns": [ <?php echo $output_datatables_aoColumns; ?> ]
+			} );
+		} );
+</script>
+<table class="dataTable" id="sortable">
+<thead>
+<?php echo $output_datatables_head; ?>
+</thead>
+<tbody>
+<?php  echo $output_datatables_body; ?>
+</tbody>
+</table>
 <?php } if ($totalRows_brewer == 0) { ?>
 
 <?php 
@@ -506,4 +653,5 @@ if (($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] =
 	  }  
    }
 } 
+
 ?>

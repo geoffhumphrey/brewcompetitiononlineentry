@@ -124,54 +124,58 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	if ($totalRows_userCheck > 0) {
 	  header("Location: ".$base_url."index.php?section=user&action=username&id=".$id."&msg=1");
 	  }
-	  else 
-	  {  
-	  $updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s, userLevel=%s WHERE id=%s", 
-						   GetSQLValueString($_POST['user_name'], "text"),
-						   GetSQLValueString($_POST['userLevel'], "text"),
-						   GetSQLValueString($id, "text")); 
-	
-	  mysql_select_db($database, $brewing);
-	  $Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	
-	  $update2SQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE brewerEmail=%s", 
-						   GetSQLValueString($_POST['user_name'], "text"),
-						   GetSQLValueString($usernameOld, "text")); 
-	
-	  mysql_select_db($database, $brewing);
-	  $Result2 = mysql_query($update2SQL, $brewing) or die(mysql_error());
-	
+	  else  {  
 		mysql_select_db($database, $brewing);
+		$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s WHERE id=%s", 
+						   GetSQLValueString($_POST['user_name'], "text"),
+						   GetSQLValueString($id, "text")); 
+		
+		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		//echo $updateSQL."<br>";
+		
+		$update2SQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
+						   GetSQLValueString($_POST['user_name'], "text"),
+						   GetSQLValueString($id, "text")); 
+		
+		$Result2 = mysql_query($update2SQL, $brewing) or die(mysql_error());
+		//echo $update2SQL."<br>";
+		
+		if ($filter == "admin") {
+			$pattern = array('\'', '"');
+			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+			header(sprintf("Location: %s", stripslashes($updateGoTo)));	
+		}
+	
+		else {	
 		$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
 		$login = mysql_query($query_login, $brewing) or die(mysql_error());
 		$row_login = mysql_fetch_assoc($login);
 		$totalRows_login = mysql_num_rows($login);
-		
+		//echo $query_login;
 		session_destroy;
 		session_start();
 			// Authenticate the user
-			if ($totalRows_login == 1)
-				{
+			if ($totalRows_login == 1) {
 				// Register the loginUsername
 				$_SESSION['loginUsername'] = $username;
 	
 				// If the username/password combo is OK, relocate to the "protected" content index page
 				header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
 				exit;
-				}
-			else
-				{
+			}
+			else {
 				// If the username/password combo is incorrect or not found, relocate to the login error page
 				header(sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2"));
 				session_destroy();
 				exit;
-				}
-	/*
-	  	$insertGoTo = $base_url."index.php?section=login&username=".$username;
-	  	$pattern = array('\'', '"');
-  		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
-  		header(sprintf("Location: %s", stripslashes($insertGoTo)));
-	*/
+			}
+		
+	
+			$insertGoTo = $base_url."index.php?section=login&username=".$username;
+			$pattern = array('\'', '"');
+			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+			header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		} //end if ($filter !="admin")
 	  }
 	 }
 }

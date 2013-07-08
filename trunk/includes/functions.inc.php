@@ -8,6 +8,63 @@
 
 include (INCLUDES.'date_time.inc.php');
 
+function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
+
+	$return = "";
+	$return .= "<span class='icon'>";
+
+	if ($icon == "bin_closed") {
+		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable."&amp;action=".$action."','id',".$id.",'".$alt_title.".');\" title=\"".$alt_title."\">";
+	}
+
+	else {
+		$return .= "<a href='".$base_url."index.php?section=".$section;
+		if ($go != "default") $return .= "&amp;go=".$go;
+		if ($action != "default") $return .= "&amp;action=".$action;
+		if ($filter != "default") $return .= "&amp;filter=".$filter;
+		if ($id != "default") $return .= "&amp;id=".$id;
+		$return .= "' title='".$alt_title."'>";	
+	}
+	$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'></a>";
+	$return .= "</span>";
+
+	return $return;
+}
+
+function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$modal_window) {
+
+	$return = "";
+	
+	$return .= "<a href='".$base_url."output/".$filename."?section=".$section;
+	if ($go != "default") $return .= "&amp;go=".$go;
+	if ($action != "default") $return .= "&amp;action=".$action;
+	if ($filter != "default") $return .= "&amp;filter=".$filter;
+	if ($id != "default") $return .= "&amp;id=".$id;
+	$return .= "' title='".$alt_title."'";
+	if ($modal_window) $return .= " id='modal_window_link'";
+	$return .= ">";	
+	$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'></a>";
+	$return .= "</span>";
+
+	return $return;
+}
+
+
+
+function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_reqired) {
+	$return = "";
+	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=admin&amp;dbTable=".$dbTable;
+	if ($go != "default") $return .= "&amp;go=".$go;
+	if ($action != "default") $return .= "&amp;action=".$action;
+	if ($filter != "default") $return .= "&amp;filter=".$filter;
+	if ($id != "default") $return .= "&amp;id=".$id;
+	$return .= "'";
+	if ($check_reqired) $return .= " onsubmit='return CheckRequiredFields()'";
+	$return .= ">";
+	
+	return $return;
+}
+
 function build_public_url($section="default",$go="default",$action="default",$sef,$base_url) {
 	
 	include(CONFIG.'config.php');

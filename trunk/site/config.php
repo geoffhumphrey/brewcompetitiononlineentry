@@ -96,17 +96,8 @@ After finishing the upgrade, be sure to open this file again and change the TRUE
 
 $setup_free_access = FALSE;
 
-$setup_key = "default";
+//$setup_key = "default";
 
-
-/*
-******************************************************************************
-Global definitions
-*/
-
-define('MAINT',FALSE); 	// constant for maintenance mode. Set to TRUE to perform code updates.
-define('HOSTED',FALSE); // constant for use in a hosted enviroment and shared db tables
-define('NHC',FALSE); 	// constant for specialized NHC functionality. Set to FALSE for general release.
 
 /*
 ******************************************************************************
@@ -119,18 +110,13 @@ Add the name of the subdirectory between the quotes of the $sub_directory variab
 For example:
 $sub_directory = "/bcoe"; 
 
-LEAVE the $base_url variable below untouched.
+WARNING!!!
+IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
+Otherwise, the URLs will not be generated correctly
+Directions are in the .htaccess file
 
 */
 
-// IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
-// Otherwise, the URLs will not be generated correctly
-// Directions are in the .htaccess file
 $sub_directory = "";
-if (NHC) $base_url = "";
-else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
-
-
-
 
 ?>
