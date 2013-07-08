@@ -12,6 +12,7 @@ if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordN
 if (($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $assigned_as_judge = TRUE; else $assigned_as_judge = FALSE;
 
 
+
 // Build Thank You Message
 $thank_you = "<p>Thank you for entering the ".$_SESSION['contestName'].", ".$_SESSION['brewerFirstName']."."; 
 if (($totalRows_log > 0) && ($action != "print")) $thank_you .= "<a href='#list'>View your entries</a>.</p>";
@@ -64,9 +65,16 @@ if (!empty($_SESSION['brewerCity'])) $city = $_SESSION['brewerCity']; else $city
 if (!empty($_SESSION['brewerState'])) $state = $_SESSION['brewerState']; else $state = "None entered";
 if (!empty($_SESSION['brewerZip'])) $zip = $_SESSION['brewerZip']; else $zip = "None entered";
 if (!empty($_SESSION['brewerCountry'])) $country = $_SESSION['brewerCountry']; else $country = "None entered";
+if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 $phone = "";
-if (!empty($_SESSION['brewerPhone1'])) $phone .= format_phone_us($_SESSION['brewerPhone1'])." (1)";  
-if (!empty($_SESSION['brewerPhone2'])) $phone .= "<br>".format_phone_us($_SESSION['brewerPhone2'])." (2)";
+if (!empty($_SESSION['brewerPhone1'])) {
+	if ($us_phone) $phone .= format_phone_us($_SESSION['brewerPhone1'])." (1)"; 
+	else $phone .= $_SESSION['brewerPhone1']." (1)"; 
+}
+if (!empty($_SESSION['brewerPhone2'])) {
+	if ($us_phone) $phone .= "<br>".format_phone_us($_SESSION['brewerPhone2'])." (2)";
+	else $phone .= "<br>".$_SESSION['brewerPhone2']." (2)";
+}
 if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; else $club = "None entered";
 $discount = "Yes (".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry)";
 if (!empty($_SESSION['brewerAHA'])) {

@@ -167,8 +167,8 @@ elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewa
 	}
 
 // Make a participant an admin query
-elseif (($section == "admin") && ($go == "make_admin")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerEmail='$username'";
+elseif ((($section == "admin") && ($go == "make_admin")) || (($section == "user") && ($filter == "admin") && ($action == "username"))){
+	$query_brewer = "SELECT * FROM $brewer_db_table WHERE id='$id'";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);

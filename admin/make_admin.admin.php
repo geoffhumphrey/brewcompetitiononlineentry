@@ -1,3 +1,10 @@
+<?php 
+$query_username = sprintf("SELECT user_name FROM %s WHERE id='%s'",$users_db_table,$row_brewer['uid']);
+$username = mysql_query($query_username, $brewing) or die(mysql_error());
+$row_username = mysql_fetch_assoc($username);
+
+?>
+
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users top-level admin and admin access with caution.</div>
 <div class="adminSubNavContainer">
@@ -22,7 +29,7 @@
   </td>
 </table>
 <p><input name="Submit" type="submit" class="button" value="Submit"></p>
-<input type="hidden" name="user_name" value="<?php echo $username; ?>">
+<input type="hidden" name="user_name" value="<?php echo $row_username['user_name']; ?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 

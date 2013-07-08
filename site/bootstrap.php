@@ -6,14 +6,20 @@
  * 
  */
 
-/*
-******************************************************************************
-Error reporting
-*/
+//Error reporting
 
-//error_reporting(0);		// comment out to debug
-error_reporting(E_ALL); 	// uncomment to debug
+//error_reporting(0);	// comment out to debug
+error_reporting(E_ALL); // uncomment to debug
 
+//Global definitions
+define('MAINT',FALSE); 	// constant for maintenance mode. Set to TRUE to perform code updates.
+define('HOSTED',FALSE); // constant for use in a hosted enviroment and shared db tables
+define('NHC',FALSE); 	// constant for specialized NHC functionality. Set to FALSE for general release.
+define('TESTING',TRUE); // constant for testing functionality. Set to FALSE for general release.
+
+// Define Base URL
+if (NHC) $base_url = "";
+else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 
 // Define Global Variables
 $php_version = phpversion();
@@ -54,23 +60,21 @@ if (!$setup_success) {
 // If all setup or update has taken place, run normally
 if ($setup_success) {
 
-define('NHC',FALSE); 	// constant for specialized NHC functionality. Set to FALSE for general release.
 
-/*
 function version_check($version) {
-	// Current version is 1.2.2.0, change version in system table if not
+	// Current version is 1.3.0.0, change version in system table if not
 	// There are NO database structure or data updates for version 1.2.1.3
-	// USE THIS FUNCTION ONLY IF THERE ARE NOT ANY DB TABLE OR DATA UPDATES
-	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE FUNCTION
+	// USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
+	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.2.2.0") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.2.2.0","2013-01-31","1");
+	if ($version != "1.3.0.0") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.0","2013-08-31","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
-	
+/*	
 version_check($version);
 */
 

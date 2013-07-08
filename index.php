@@ -7,6 +7,14 @@
 
 require('paths.php');
 require(CONFIG.'bootstrap.php');
+
+if (TESTING) {
+	$mtime = microtime(); 
+	$mtime = explode(" ",$mtime); 
+	$mtime = $mtime[1] + $mtime[0]; 
+	$starttime = $mtime; 
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -221,12 +229,22 @@ var _gaq = _gaq || [];
   <?php } ?>
   <div class="error">Please register or log in to access this area.</div>
   <?php } ?>
-  </div>
+  	</div>
 </div>
 </div>
 <a name="bottom"></a>
 <div id="footer">
-	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?></div>
+	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?>
+     <?php if (TESTING) {
+		$mtime = microtime(); 
+		$mtime = explode(" ",$mtime); 
+		$mtime = $mtime[1] + $mtime[0]; 
+		$endtime = $mtime; 
+		$totaltime = ($endtime - $starttime); 
+		echo "<br>This page was created in ".number_format($totaltime, 4)." seconds."; 
+	}
+	?>
+    </div>
 </div>
 </body>
 </html>
