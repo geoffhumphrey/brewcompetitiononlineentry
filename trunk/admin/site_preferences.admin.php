@@ -116,7 +116,7 @@ $totalRows_themes = mysql_num_rows($themes);
   </tr> 
   <tr>
   	<td class="dataLabel">Total Entry Limit:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_limits['prefsEntryLimit']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_limits['prefsEntryLimit']; ?>" size="5" maxlength="6" /></td>
     <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
   </tr>
   <tr>
@@ -124,7 +124,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <td nowrap="nowrap" class="data">
     <select name="prefsUserEntryLimit" />
     	<option value="" rel="none" <?php ($row_limits['prefsUserEntryLimit'] == ""); echo "SELECTED"; ?>></option>
-    <?php for ($i=1; $i <= 50; $i++) { ?>
+    <?php for ($i=1; $i <= 100; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserEntryLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
     </select>
@@ -136,7 +136,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <td nowrap="nowrap" class="data">
     <select name="prefsUserSubCatLimit" />
     	<option value="" rel="none" <?php ($row_limits['prefsUserSubCatLimit'] == ""); echo "SELECTED"; ?>></option>
-    <?php for ($i=1; $i <= 50; $i++) { ?>
+    <?php for ($i=1; $i <= 100; $i++) { ?>
     	<option value="<?php echo $i; ?>" rel="user_entry_limit" <?php if ($row_limits['prefsUserSubCatLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
     </select>
@@ -150,11 +150,14 @@ $totalRows_themes = mysql_num_rows($themes);
     <?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 	do {
     	if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+		if ($row_styles['id'] != "") {
     ?>
             	<td width="1%"><input name="prefsUSCLEx[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_limits['prefsUSCLEx']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
                 <td><?php echo $row_styles['brewStyle']; ?></td>
-            <?php  $endRow++;
+            <?php  }
+			
+			$endRow++;
 	if ($endRow >= $columns) {
   	?>
   </tr>
@@ -178,12 +181,12 @@ $totalRows_themes = mysql_num_rows($themes);
     <td nowrap="nowrap" class="data">
     <select name="prefsUSCLExLimit" />
     	<option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
-    <?php for ($i=1; $i <= 50; $i++) { ?>
+    <?php for ($i=1; $i <= 100; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
     </select>
     </td>
-    <td class="data">Limit of entries that each participant can enter into one of the above sub-categories that <em>have been checked</em>. Leave blank if no limit for these sub-categories.</td>
+    <td class="data">Limit of entries that each participant can enter into one of the above sub-categories that <em>have been checked</em>. Leave blank if no limit <strong>for the sub-categories that have been checked above</strong>.</td>
   </tr>
   <tr>
     <td class="dataLabel">Hide Entry Recipe Section:</td>
@@ -193,14 +196,18 @@ $totalRows_themes = mysql_num_rows($themes);
 </table>
 <h3>Performance</h3>
 <table>
+<!--
   <tr>
   	<td class="dataLabel">DataTables Record Threshold:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php if ($section == "step3") echo "750"; else echo $_SESSION['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php //if ($section == "step3") echo "1000"; else echo $_SESSION['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possibility for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
   </tr>
+-->
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $_SESSION['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
+    <td nowrap="nowrap" class="data">
+    <input type="hidden" name="prefsRecordLimit" id="prefsRecordLimit" value="9999" />
+    <input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $_SESSION['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
 </table>

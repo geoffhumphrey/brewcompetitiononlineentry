@@ -43,9 +43,11 @@ if (($filter == "staff") && ($section == "admin")) $query_sql = "SELECT a.brewer
 //if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
 //if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
 
-if ($filter == "avail_judges") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table ORDER BY brewerLastName ASC";
-if (($filter == "avail_judges") && ($section == "admin"))   $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
-if (($filter == "avail_stewards") && ($section == "admin"))   $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerSteward='Y' ORDER BY brewerLastName ASC";
+//if ($filter == "avail_judges") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table ORDER BY brewerLastName ASC";
+//if ($filter == "avail_stewards") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table ORDER BY brewerLastName ASC";
+if ($filter == "avail_judges")   $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+elseif ($filter == "avail_stewards") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerSteward='Y' ORDER BY brewerLastName ASC";
+else $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table ORDER BY brewerLastName ASC";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
 //echo $query_sql."<br>";
@@ -83,10 +85,6 @@ foreach ($a as $fields) {
     fputcsv($fp,$fields,$separator);
 }
 fclose($fp);
-
-
-
-
 
 }
 

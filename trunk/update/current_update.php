@@ -1,5 +1,5 @@
 <?php 
-echo "<h2>Performing Updates for Version ".$current_version."...</h2>";
+$output .= "<h2>Performing Updates for Version ".$current_version."...</h2>";
 	
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 	

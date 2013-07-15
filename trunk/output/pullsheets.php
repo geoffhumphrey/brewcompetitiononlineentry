@@ -1,16 +1,9 @@
 <?php 
 session_start(); 
-require_once('../paths.php'); 
-require_once(INCLUDES.'functions.inc.php');
-require_once(INCLUDES.'url_variables.inc.php');
-require_once(INCLUDES.'db_tables.inc.php');
-require_once(DB.'common.db.php');
-include_once(DB.'admin_common.db.php');
-require_once(INCLUDES.'version.inc.php');
-require_once(INCLUDES.'headers.inc.php');
-require(INCLUDES.'constants.inc.php');
+require('../paths.php'); 
+require(CONFIG.'bootstrap_output.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-if (NHC) $base_url = "../";
+
 function check_flight_round($flight_round,$round) {
 
 	if ($round == "default") {

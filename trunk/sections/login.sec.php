@@ -26,10 +26,9 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 <p><input type="submit" class="button" value="Login"></p>
 </form>
 <?php if (($section != "update") && ($registration_open < "2")) {
- if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p>
-<?php } } ?>
+if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p><?php } ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="<?php echo build_public_url("login","password","forgot",$sef,$base_url); ?>">click here to reset it</a>.</span></p>
-<?php
+<?php }
 } 
 if (isset($_SESSION['loginUsername'])) echo "<div class=\"error\">You are already logged in.</div>";
  } 
@@ -79,7 +78,7 @@ if ($go == "verify") {
   	</tr>
 	</table>
 	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
-    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $row_userCheck['id']; ?>">Get it via email.</p><?php } ?>
+    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $row_userCheck['id']; ?>">Get it via email</a>.</p><?php } ?>
 	</form>
 	<?php }
 	}

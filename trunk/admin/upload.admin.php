@@ -1,14 +1,7 @@
 <?php 
-error_reporting(0);
-include('../paths.php');
-require(CONFIG.'config.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'functions.inc.php'); 
-require(INCLUDES.'url_variables.inc.php');
-require(DB.'common.db.php');
-require(INCLUDES.'version.inc.php');
-require(INCLUDES.'headers.inc.php');
-if (NHC) $base_url = "../";
+require('../paths.php');
+require(CONFIG.'bootstrap_output.php');
+
 $imageSrc = $base_url."images/";
 
 $fileCornfirm = "default";

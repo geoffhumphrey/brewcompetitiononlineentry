@@ -567,8 +567,8 @@ if ($action == "edit") {
 	
 	
 	// Build updade url
-	if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
-	elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $updateGoTo = $base_url."index.php?section=list&msg=2";
+	if ((check_special_ingredients($styleBreak)) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+	//elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $updateGoTo = $base_url."index.php?section=list&msg=2";
 	elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 	else $updateGoTo = $base_url."index.php?section=list&msg=2";
 	

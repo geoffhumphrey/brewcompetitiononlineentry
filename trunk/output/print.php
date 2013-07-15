@@ -7,18 +7,9 @@
  * 
  */
 
-require('../paths.php');
-//error_reporting(0);
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
-require(DB.'common.db.php');
-require(DB.'brewer.db.php');
-require(DB.'entries.db.php');
-require(INCLUDES.'headers.inc.php');
-require(INCLUDES.'constants.inc.php');
-if (NHC) $base_url = "../";
+session_start(); 
+require('../paths.php'); 
+require(CONFIG.'bootstrap_output.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

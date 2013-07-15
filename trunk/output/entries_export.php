@@ -8,6 +8,7 @@ require(DB.'common.db.php');
 require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'scrubber.inc.php');
 require(INCLUDES.'constants.inc.php');
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 $type = "entries";
 
@@ -57,7 +58,6 @@ function filename($input) {
 	else return "_".ucfirst($input);
 }
 
-include (INCLUDES.'scrubber.inc.php');
 $filename = $contest."_Entries".filename($filter).filename($action).filename($view).filename($date).$loc.$extension;
 
 
@@ -215,7 +215,7 @@ if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerM
 					$table_name = mysql_query($query_table_name, $brewing) or die(mysql_error());
 					$row_table_name = mysql_fetch_assoc($table_name);
 				
-					$a[] = array($row_table_name['tableNumber'],$row_table_name['tableName'],$row_scores['brewCategory'],$row_scores['brewSubCategory'],$row_scores['brewStyle'],$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+					$a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],$row_scores['brewStyle'],$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
 				} while ($row_scores = mysql_fetch_assoc($scores));
 			}
 		}	
@@ -260,7 +260,7 @@ if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerM
 					$table_name = mysql_query($query_table_name, $brewing) or die(mysql_error());
 					$row_table_name = mysql_fetch_assoc($table_name);
 				
-					$a[] = array($row_table_name['tableNumber'],$row_table_name['tableName'],$row_scores['brewCategory'],$row_scores['brewSubCategory'],$style_long,$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_brewer['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+					$a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],$style_long,$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_brewer['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
 				} while ($row_scores = mysql_fetch_assoc($scores));
 			}
 		}

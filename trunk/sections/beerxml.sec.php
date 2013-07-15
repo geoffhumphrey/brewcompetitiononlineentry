@@ -82,14 +82,14 @@ if (entries_unconfirmed($_SESSION['user_id']) > 0) echo "<div class='error'>You 
 //echo $return;	
 
 $query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'", $prefix."brewing",$_SESSION['user_id']);
-			$check = mysql_query($query_check, $brewing) or die(mysql_error());
-			$row_check = mysql_fetch_assoc($check);
+$check = mysql_query($query_check, $brewing) or die(mysql_error());
+$row_check = mysql_fetch_assoc($check);
 			
 			
 if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
-<?php if ($row_check['count'] < $row_limits['prefsUserEntryLimit']) { ?>
+<?php if (((!empty($row_limits['prefsUserEntryLimit'])) && ($row_check['count'] < $row_limits['prefsUserEntryLimit'])) || (empty($row_limits['prefsUserEntryLimit']))) { ?>
 <p>Browse for your BeerXML compliant file on your hard drive that you exported from BeerSmith, BrewBlogger, etc. and click <em>Upload</em>.</p>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 <table>

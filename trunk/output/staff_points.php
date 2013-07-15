@@ -167,7 +167,7 @@ function judge_points($uid,$bos) {
 	
 	$points = array_sum($b);
 		
-	if (NHC) $days = 1; else $days = number_format(total_days(),1);
+	$days = number_format(total_days(),1);
 	
 	// Cannot exceed more than 1.5 points per day
 	if ($points > $days) $points = $days; else $points = $points;
@@ -179,6 +179,7 @@ function judge_points($uid,$bos) {
 	if (($bos == "Y") && ($points <= .5)) $points = 1.0; 
 	else $points = $points;
 	*/
+	
 	return number_format($points,1);
 	
 }
@@ -204,6 +205,13 @@ function steward_points($uid) {
 	}
 	
 	$points = array_sum($b);
+	
+	$days = number_format(total_days(),1);
+	
+	// Cannot exceed more than 0.5 points per day
+	if ($points > $days) $points = $days; else $points = $points;
+	
+	// Cannot exceed more than 1.0 points per competition
 	if ($points >= 1.0) $points = 1.0; else $points = $points;
 	return number_format($points,1);
 }

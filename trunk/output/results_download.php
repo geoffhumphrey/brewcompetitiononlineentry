@@ -8,8 +8,8 @@ require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
 include(DB.'admin_common.db.php');
 require(INCLUDES.'scrubber.inc.php');
-
 require(INCLUDES.'constants.inc.php');
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 if ($view == "pdf") {

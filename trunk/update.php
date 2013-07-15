@@ -1,20 +1,31 @@
 <?php 
 require('paths.php');
 mysql_select_db($database, $brewing);
-require(INCLUDES.'functions.inc.php');
+//require(INCLUDES.'functions.inc.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
-require(DB.'common.db.php');
+//require(DB.'common.db.php');
 require(INCLUDES.'headers.inc.php');
-$current_version = "1.2.2.0";
+$current_version = "1.3.0.0";
+$section = "update";
+
+$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
+$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+$row_contest_info = mysql_fetch_assoc($contest_info); 
+
+$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
+$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+$row_prefs = mysql_fetch_assoc($prefs);
+
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $_SESSION['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
+<title><?php echo $row_contest_info['contestName']; ?> Update to BCOE&amp;M <?php echo $current_version; ?></title>
 <link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
 
 <body>
@@ -62,8 +73,6 @@ if (file_exists($filename)) {
 	$row_log = mysql_fetch_assoc($log);
 	$totalRows_log = mysql_num_rows($log); 
 	
-	$section = "update";
-	
 	// check to see if the "system" db table is present, if not, use the legacy hard-coded version
 	if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php');
 	
@@ -81,7 +90,7 @@ if (file_exists($filename)) {
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
-		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) {
+		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			
 			if ($current_version != $version) {
 				
@@ -92,7 +101,7 @@ if (file_exists($filename)) {
 				<?php }
 			
 				if ($action == "update") {
-					
+				
 					// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
 						if ($version < "113") {
@@ -101,7 +110,7 @@ if (file_exists($filename)) {
 							<p>Please update your database and files manually through version 1.1.2 to utilize the update feature.</p>
 							";
 						}
-						if ($version == "113") {
+						if (($version == "113") || ($version == "1130")) {
 							include (UPDATE.'1.1.4.0_update.php');
 							include (UPDATE.'1.1.5.0_update.php');
 							include (UPDATE.'1.1.6.0_update.php');
@@ -111,7 +120,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version == "114") {
+						if (($version == "114") || ($version == "1140"))  {
 							include (UPDATE.'1.1.5.0_update.php');
 							include (UPDATE.'1.1.6.0_update.php');
 							include (UPDATE.'1.2.0.0_update.php');
@@ -120,7 +129,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version == "115") {
+						if (($version == "115") || ($version == "1150"))  {
 							include (UPDATE.'1.1.6.0_update.php');
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
@@ -128,7 +137,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version == "116") || ($version == "1161")) {
+						if (($version == "116") || ($version == "1160") || ($version == "1161")) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
@@ -143,26 +152,38 @@ if (file_exists($filename)) {
 						
 						if ($version >= "1210")  {
 							// last verion to have a db update was 1.2.1.0
-							// if 1.2.1.0 later, update only with the 1.2.2.0 changes
+							// if 1.2.1.0 later, update only with the 1.3.0.0 changes
 							include (UPDATE.'current_update.php');
 						}
-						
+				
+				
+				
+					
 					if ($version >= "113") {
 						
-					echo "<p class='error' style='width:230px; margin-top:20px;'>Update to ".$current_version." Complete!</p>";	
+					// Due to session caching introduced in 1.3.0.0, need to destroy the session.	
+					
+					session_unset();
+					session_destroy();
+					session_write_close();
+					session_regenerate_id(true);
+						
+					echo "<div class='error'>Update to ".$current_version." Complete!</div>";
+					echo $output;
 					
 					// -----------------------------------------------------------
 					//  Finish and Clean Up
 					// -----------------------------------------------------------
 					
-					echo "<p>To take advanage of this version's added feaures, go to your <a href='index.php?section=admin&amp;go=preferences'>site's preferences</a> and customize your installation.</p>";
+					echo "<p>To take advanage of this version's added feaures, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update:.</p>";
 					echo "<ul>";
-					echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
-					echo "<li>Go to the <a href='index.php?section=admin'>Admin Dashboard</a>.</li>";
+					echo "<li>Your site preferences by going to: Admin &gt; Preparing &gt; Define &gt; Site Preferences.</li>";
+					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Judging Preferences.</li>";
+					echo "<li>Your competition's specific information by going to: Admin &gt; Preparing &gt; Edit &gt; Competition Info.</li>";
 					echo "</ul>";
 					
 					}
-					
+				
 				} // end if ($action == "update")
 				
 			} // end compare versions
