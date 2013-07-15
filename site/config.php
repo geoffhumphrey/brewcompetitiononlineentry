@@ -108,7 +108,7 @@ Add the name of the subdirectory between the quotes of the $sub_directory variab
 * Be sure to INCLUDE a leading slash [/] and NO trailing slash [/]!
 
 For example:
-$sub_directory = "/bcoe"; 
+$sub_directory = "/bcoem"; 
 
 WARNING!!!
 IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
@@ -118,5 +118,19 @@ Directions are in the .htaccess file
 */
 
 $sub_directory = "";
+
+/*
+******************************************************************************
+Set the base URL of your installation. In most cases the default will be OK. 
+
+*/
+
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+
+//Global definitions
+define('MAINT',FALSE); 	// constant for maintenance mode. Set to TRUE to perform code updates.
+define('HOSTED',FALSE); // constant for use in a hosted enviroment and shared db tables
+define('NHC',FALSE); 	// constant for specialized NHC functionality. Set to FALSE for production.
+define('TESTING',TRUE); // constant for testing functionality. Set to FALSE for production 
 
 ?>

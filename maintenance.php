@@ -7,6 +7,8 @@
 
 require('paths.php');
 require(DB.'common.db.php');
+if (NHC) $base_url = "";
+else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 
 ?>
 
@@ -29,7 +31,7 @@ require(DB.'common.db.php');
 		<div id="header-inner"><h1>Maintenance</h1></div>
   	</div>
   	<p>The <?php echo $_SESSION['contestName']; ?> site administrator has taken the site offline. It is currently undergoing maintenance.</p>
-    <p>Please check back shortly.</p>
+    <p>Please <a href="<?php echo $base_url; ?>">check back</a> shortly.</p>
   </div>
 </div>
 </div>

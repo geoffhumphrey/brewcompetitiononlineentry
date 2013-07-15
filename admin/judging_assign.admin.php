@@ -51,6 +51,21 @@ function already_assigned($bid,$tid,$flight,$round) {
 	else return FALSE;
 	}
 
+function at_table($bid,$tid) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s'", $prefix."judging_assignments", $bid);
+	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+	$row_assignments = mysql_fetch_assoc($assignments);
+	$a = array();
+	do {
+		$a[] .= $row_assignments['assignTable']; 
+	} while ($row_assignments = mysql_fetch_assoc($assignments));
+	if (in_array($tid,$a)) return TRUE;
+	else return FALSE;
+	//return implode(",",$a);
+}
+
 function unavailable($bid,$location,$round,$tid) { 
     // returns true a person is unavailable if they are already assigned to a table/flight in the same round at the same location
 	require(CONFIG.'config.php');
@@ -173,7 +188,7 @@ $r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.
 //if ($disabled == "disabled") $r .= '<div class="disabled">Disabled - Participant has an Entry in this Round</div>'; 
 if ($queued == "Y") { 
 	if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; } 
-	if ($selected == 'checked') echo '<div class="purple judge-alert">Assigned to this Table</div>';
+	//if ($selected == 'checked') echo '<div class="purple judge-alert">Assigned to this Table</div>';
 }
 
 if ($unassign > 0) {
@@ -207,7 +222,7 @@ if ($queued == "N") { // Non-queued judging
 	}
 return $r;
 }
-
+/*
 function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {
 	if (table_round($tid,$round)) {
 		$unavailable = unavailable($bid,$location,$round,$tid);
@@ -220,7 +235,22 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 	else $r = '';
 	return $r;
 }
+*/
 
+function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {
+	if (table_round($tid,$round)) {
+		$unavailable = unavailable($bid,$location,$round,$tid);
+		$entry_conflict = entry_conflict($bid,$table_styles);
+		$at_table = at_table($bid,$tid,$flight,$round);
+		//if (strpos($at_table,$tid) !== false) $already = TRUE;
+		if ($unavailable) $r = '<div class="orange judge-alert">Already Assigned to This Round as a Judge or Steward</div>';
+		//if ($already) $r = '<div class="purple judge-alert">Already Assigned to this Table</div>';
+		if ($entry_conflict) $r = '<div class="blue judge-alert">Disabled - Participant has an Entry at this Table</div>';
+		if ((!$unavailable) && (!$entry_conflict)) $r = like_dislike($likes,$dislikes,$table_styles);
+	}
+	else $r = '';
+	return $r;
+}
 ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
@@ -391,7 +421,7 @@ If no judges are listed below, no judge indicated that they are available for th
 					$judge_info = explode("^",brewer_info($row_assignments['bid']));
 					?>
                     <tr>
-                        <td width="15%" nowrap="nowrap"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); ?></td>
+                        <td width="15%" nowrap="nowrap"><?php echo ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0'])); ?></td>
                         <td class="data" width="10%"><?php if ($row_assignments['assignment'] == "S") echo "Steward"; else echo "Judge"; ?></td>
                         <td class="data"><?php echo $judge_info['3']; ?></td>
                     </tr>
@@ -444,7 +474,11 @@ if (in_array($table_location,$locations)) {
 			    if  (table_round($row_tables_edit['id'],$i)) {  
 		?>
         <td class="data">
-        <?php echo judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$row_judge_info['brewerJudgeLikes'],$row_judge_info['brewerJudgeDislikes'],$row_tables_edit['tableStyles'],$id); ?>
+        <?php 
+		
+		if (at_table($row_brewer['uid'],$id)) echo '<div class="purple judge-alert">Already Assigned to this Table</div>'; 
+		else echo judge_alert($i,$row_brewer['uid'],$id,$location,$row_judge_info['brewerJudgeLikes'],$row_judge_info['brewerJudgeDislikes'],$row_tables_edit['tableStyles'],$id);
+		?>
         <?php echo assign_to_table($id,$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
         </td>
 		<?php }

@@ -226,7 +226,7 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
 	$entry_style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 	
 	?>
- <tr<?php if (($row_log['brewConfirmed'] == "0") && ($action != "print")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; if ((style_convert($entry_style,"3") == TRUE) && ($row_log['brewInfo'] == "")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; ?>>
+ <tr<?php if (($row_log['brewConfirmed'] == "0") && ($action != "print")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; // if ((style_convert($entry_style,"3") == TRUE) && ($row_log['brewInfo'] == "")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; ?>>
   <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td class="dataList ">
   <?php 

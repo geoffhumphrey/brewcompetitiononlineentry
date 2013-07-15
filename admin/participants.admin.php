@@ -166,7 +166,8 @@ if ($action != "print") {
 		$secondary_nav .= "<div class='adminSubNavContainer'>";
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page_excel_go.png' alt='Export' title='Export'></span>";
-		$secondary_nav .= "<a href='".$base_url."output/email_export.php?section=admin&amp;go=csv&amp;filter=".$csv."&amp;action=email'>Export</a>";
+		if (($filter == "judges") || ($filter == "stewards")) $secondary_nav .= "<a href='".$base_url."output/email_export.php?section=admin&amp;go=csv&amp;filter=".$csv."&amp;action=email'>Export</a>";
+		else $secondary_nav .= "<a href='".$base_url."output/email_export.php'>Export</a>";
 		$secondary_nav .= "</span>";
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page.png' alt='View' title='View'></span>";
@@ -341,8 +342,8 @@ do {
 	$output_datatables_edit_link = "";
 	$output_datatables_delete_link = "";
 	$output_datatables_print_link = "";
-	$output_datatables_other_link .= "";
-	$output_datatables_view_link .= "";
+	$output_datatables_other_link = "";
+	$output_datatables_view_link = "";
 	$output_datatables_actions = "";
 	
 	$query_user1 = sprintf("SELECT id,userLevel FROM $users_db_table WHERE id = '%s'", $row_brewer['uid']);
@@ -358,9 +359,8 @@ do {
 	//$judge_array = str_replace(", ",",",$brewer_assignment);
 	//$judge_array = explode(",",$judge_array);
 	//if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
-
-	$output_datatables_body .= "<tr>";
-	
+	if ($action == "print") $output_datatables_body .= "<tr class='bdr1B_gray'>";
+	else $output_datatables_body .= "<tr>";
 	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName']."</td>";
 	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerFirstName']."</td>";
 	
@@ -435,7 +435,7 @@ do {
 		if (strpos($brewer_assignment,'Judge') !== false)  {
 			$output_datatables_view_link = build_output_link("page_white_acrobat",$base_url,"labels.php","admin","participants","judging_labels","default",$row_brewer['id'],"default","Download judging labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],FALSE);
 		}
-		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link2 = build_action_link("page_edit",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
+		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link2 = build_action_link("email_edit",$base_url,"user","default","username","admin",$row_brewer['id'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
 		else $output_datatables_other_link2 = "<span class='icon'><img src='".$base_url."images/page_edit_fade.png' title='Use the Change Your Email Link from the My Info and Entries page to change your email.'></span>";
 		$output_datatables_actions = $output_datatables_add_link.$output_datatables_edit_link.$output_datatables_other_link2.$output_datatables_other_link.$output_datatables_delete_link.$output_datatables_view_link;
 		
@@ -516,7 +516,7 @@ $("#user_name").change(function() {
 
 var usr = $("#user_name").val();
 
-if(usr.length >= 3)
+if(usr.length >= 6)
 {
 $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/loader.gif" align="absmiddle"><span>Checking availability...');
 
@@ -532,7 +532,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
 		$("#user_name").addClass("object_ok");
-		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
+		$(this).html('<span style="color:green;">Email address not in use.</span>');
 	}  
 	else  
 	{  
@@ -550,7 +550,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
 }
 else
 	{
-	$("#status").html('<font color="red">The username should have at least <strong>3</strong> characters.</font>');
+	$("#status").html('<font color="red">The username should have at least <strong>6</strong> characters.</font>');
 	$("#user_name").removeClass('object_ok'); // if necessary
 	$("#user_name").addClass("object_error");
 	}

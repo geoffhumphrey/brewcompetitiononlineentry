@@ -23,12 +23,12 @@ do {
 }  
 while ($row_admin_users = mysql_fetch_assoc($admin_users));
 
-echo "<ul><li>Updates to user's table completed.</li></ul>";
+$output .=  "<li>Updates to user's table completed.</li>";
 
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.0","2013-08-01","1");
 mysql_select_db($database, $brewing);
 $result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
-echo "<ul><li>Updates to system table completed.</li></ul>";
+$output .= "<li>Updates to system table completed.</li>";
 
 ?>

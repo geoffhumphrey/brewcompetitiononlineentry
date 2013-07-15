@@ -9,17 +9,11 @@
 //Error reporting
 
 //error_reporting(0);	// comment out to debug
-error_reporting(E_ALL); // uncomment to debug
-
-//Global definitions
-define('MAINT',FALSE); 	// constant for maintenance mode. Set to TRUE to perform code updates.
-define('HOSTED',FALSE); // constant for use in a hosted enviroment and shared db tables
-define('NHC',FALSE); 	// constant for specialized NHC functionality. Set to FALSE for general release.
-define('TESTING',TRUE); // constant for testing functionality. Set to FALSE for general release.
+error_reporting(E_ALL); // uncomment to debug 
 
 // Define Base URL
 if (NHC) $base_url = "";
-else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+else $base_url = $base_url;
 
 // Define Global Variables
 $php_version = phpversion();
@@ -39,11 +33,11 @@ function check_setup($tablename, $database) {
 
 $setup_success = TRUE;
 
-if (!check_setup($prefix."system",$database)) { 
+if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) { 
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
 	}
-elseif (!check_setup($prefix."mods",$database)) { 
+if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) { 
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."update.php";
 	}

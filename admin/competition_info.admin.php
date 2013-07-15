@@ -238,7 +238,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
   <tr>
     <td class="dataLabel">Discounted Entry Fee:</td>
     <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php echo $_SESSION['contestEntryFee2']; ?>"></td>
-    <td class="data"><em>Fee for a single, </em>discounted<em> entry (<?php echo $_SESSION['prefsCurrency']; ?>).</em></td>
+    <td class="data"><em>Fee for a single, </em>discounted<em> entry.</em></td>
   </tr>
    <tr>
     <td class="dataLabel">Member Discount Password:</td>
@@ -284,7 +284,6 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
   </tr>
 </table>
 <h3>Awards</h3>
-<br /><b>Warning</b>:  date() expects parameter 2 to be long, string given in <b>/home5/brewcomp/public_html/bcoetest/includes/date_time.inc.php</b> on line <b>98</b><br />
 <table>
   <tr>
     <td class="dataLabel">Awards Date:</td>

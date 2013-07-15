@@ -322,7 +322,10 @@ if ($go == "default") { ?>
         	<p class="admin_default_header">Quick Links</p>
             <?php if ($_SESSION['userLevel'] == "0") { ?>
         	<ul class="admin_default">
+            	<li><a href="http://help.brewcompetition.com/files/whatsnew.html" title="Help" id="modal_window_link">What&rsquo;s New in Version <?php echo $version; ?>?</a></li>
 				<li><a href="http://help.brewcompetition.com/files/gone_through.html" title="Help" id="modal_window_link">I've Gone Through Set Up, What Do I Do Now?</a></li>
+            </ul>
+            <ul class="admin_default">
     			<li><a href="http://help.brewcompetition.com/files/comp_contacts.html" title="Help" id="modal_window_link">How Do I Add More Contacts?</a></li>
                 <li><a href="http://help.brewcompetition.com/files/drop_off.html" title="Help" id="modal_window_link">How Do I Add More Drop Off Locations?</a></li>
     			<li><a href="http://help.brewcompetition.com/files/sponsors.html" title="Help" id="modal_window_link">How Do I Display Sponsors?</a></li>			

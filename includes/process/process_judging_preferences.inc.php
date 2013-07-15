@@ -59,6 +59,12 @@ WHERE id=%s",
 		
 		mail($to_email, $subject, $message, $headers);
 		*/
+		
+		session_unset();
+		session_destroy();
+		session_write_close();
+		session_regenerate_id(true);
+		
 		header(sprintf("Location: %s", $base_url."index.php?msg=16")); 
 	}
 	

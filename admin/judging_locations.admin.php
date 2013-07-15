@@ -289,7 +289,7 @@ if (($totalRows_judging_locs > 0) && ($action == "default") && ($section != "ste
 	
 } // end if (($totalRows_judging_locs > 0) && ($action == "default") && ($section != "step5"))
 
-if ($totalRows_brewer == 0) { 
+if (($totalRows_brewer == 0) && ($filter != "default")) { 
 	if ($action == "update") $output_no_records .= "<p>No $filter have been assigned.</p>"; 
 	else $output_no_records .= "<p>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</p>";
 }
@@ -511,7 +511,7 @@ if (!empty($output_datatables_body)) {
 
 // -------------------------------- Add/Edit Form ---------------------------------------------
 
-if ($output_add_edit) { ?>
+if (($output_add_edit) && ($msg != 9)) { ?>
 <script>
 $(function() {
 	$('#judgingDate').datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });

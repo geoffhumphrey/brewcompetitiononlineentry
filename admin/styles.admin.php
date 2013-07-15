@@ -82,6 +82,7 @@ function checkUncheckAll(theElement) {
 		$row_judging2 = mysql_fetch_assoc($judging2);
 		$totalRows_judging2 = mysql_num_rows($judging2);
 		}
+	if ($row_styles['id'] != "") {
 	?>
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_styles['id']; ?>" />
@@ -105,7 +106,8 @@ function checkUncheckAll(theElement) {
   <span class="icon"><img src="<?php echo $base_url; ?>images/bin_closed_fade.png"  border="0" /></span>
   <?php } ?>
  </tr>
- <?php } while($row_styles = mysql_fetch_assoc($styles)) ?>
+ <?php }
+ } while($row_styles = mysql_fetch_assoc($styles)) ?>
  </tbody>
  </table>
  <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Style Categories"; ?>" /></p>

@@ -1,6 +1,8 @@
 <?php 
-echo "<h2>Performing Updates for Version 1.2.0.0...</h2>";
 
+
+$output .= "<h2>Performing Updates for Version 1.2.0.0...</h2>";
+$output .= "<ul>";
 $updateSQL = "RENAME TABLE `".$prefix."judging` TO `".$prefix."judging_locations`;"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -12,7 +14,7 @@ $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 $updateSQL = "INSERT INTO `".$prefix."judging_preferences` (`id` , `jPrefsQueued` , `jPrefsFlightEntries` , `jPrefsMaxBOS`, `jPrefsRounds`) VALUES ('1' , 'N', '12', '7', '3');"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-echo "<ul><li>Judging preferences added successfully.</li></ul>";
+$output .= "<li>Judging preferences added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_tables` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -58,7 +60,7 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_assignments` (
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
-echo "<ul><li>Judging-related tables added successfully.</li></ul>";
+$output .= "<li>Judging-related tables added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."style_types` (
 	`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -74,7 +76,7 @@ $updateSQL = "INSERT INTO `".$prefix."style_types` (`id` ,`styleTypeName`,`style
 VALUES ('1', 'Beer', 'bcoe', 'Y', '1'), ('2', 'Cider', 'bcoe', 'Y', '1'), ('3', 'Mead', 'boce', 'Y', '1');"; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-echo "<ul><li>Style Types table added successfully.</li></ul>";
+$output .= "<li>Style Types table added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."themes` (
 	`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -97,7 +99,7 @@ $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 $updateSQL = "INSERT INTO `".$prefix."themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Claussenii', 'claussenii'); "; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-echo "<ul><li>Themes table added successfully.</li></ul>";
+$output .= "<li>Themes table added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."countries` (
 	`id` INT( 11 ) NULL ,
@@ -355,7 +357,7 @@ $updateSQL = "INSERT INTO `".$prefix."countries` (`id`, `name`) VALUES
 "; 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-echo "<ul><li>Countries table and data added successfully.</li></ul>";
+$output .= "<li>Countries table and data added successfully.</li>";
 
 $updateSQL = "ALTER TABLE `".$prefix."brewing` ADD `brewScore` INT( 8 ) NULL ;"; 
 mysql_select_db($database, $brewing);
@@ -454,6 +456,92 @@ $updateSQL = "ALTER TABLE `".$prefix."styles` CHANGE  `brewStyleNum`  `brewStyle
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
-echo "<ul><li>All table data updated successfully.</li></ul>";
+$output .= "<li>All table data updated successfully.</li>";
+
+
+// Need to add "archive" tables for all judging organization tables
+
+$query_archive_1200 = "SELECT archiveSuffix FROM $archive_db_table";
+$archive_1200 = mysql_query($query_archive_1200, $brewing) or die(mysql_error());
+$row_archive_1200 = mysql_fetch_assoc($archive_1200);
+$totalRows_archive_1200 = mysql_num_rows($archive_1200);
+
+if ($totalRows_archive_1200 > 0) {
+	do { $a_1200[] = $row_archive_1200['archiveSuffix']; } while ($row_archive_1200 = mysql_fetch_assoc($archive_1200));
+	
+	foreach ($a_1200 as $suffix) {
+		
+		$suffix = rtrim($suffix, "_"); // HACK - could not isolate code where there's an extra "_"
+		if (strpos($suffix,'_') !== false) $suffix = $suffix;
+		//if (substr($suffix,0,1) == '_') !== false) $suffix = "_".$suffix;
+		else $suffix = "_".$suffix;
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_tables".$suffix."` (
+		  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		  `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
+		  `tableStyles` TEXT DEFAULT NULL COMMENT 'Array of ids from styles table',
+		  `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
+		  `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
+		  `tableJudges` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table',
+		  `tableStewards` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table'
+		) ENGINE=MyISAM ;"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_flights".$suffix."` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY , `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables', `flightNumber` int(11) DEFAULT NULL, `flightEntryID` TEXT NULL DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table', `flightRound` int(11) DEFAULT NULL) ENGINE=MyISAM ;"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores".$suffix."` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,`eid` INT(11) NULL COMMENT 'entry id from brewing table',`bid` INT(11) NULL COMMENT 'brewer id from brewer table',`scoreTable` INT(11) NULL COMMENT 'id of table from judging_tables table',`scoreEntry` INT(11) NULL COMMENT 'numerical score assigned by judges',`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles') ENGINE = MYISAM;"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores_bos".$suffix."` (
+			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			`eid` INT(11) NULL COMMENT 'entry id from brewing table',
+			`bid` INT(11) NULL COMMENT 'brewer id from brewer table',
+			`scoreEntry` INT(11) NULL COMMENT 'numerical score assigned by judges',
+			`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',
+			`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles'
+			) ENGINE = MYISAM;"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_assignments".$suffix."` (
+			`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`bid` INT( 11 ) NULL COMMENT 'id from brewer table',
+			`assignment` CHAR ( 1 ) NULL,
+			`assignTable` INT( 11 ) NULL COMMENT 'id from judging_tables table',
+			`assignFlight` INT( 11 ) NULL ,
+			`assignRound` INT( 11 ) NULL,
+			`assignLocation` INT ( 11 ) NULL
+			) ENGINE = MYISAM ;
+		"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."style_types".$suffix."` (
+			`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+			`styleTypeName` VARCHAR( 255 ) NULL,
+			`styleTypeOwn` VARCHAR( 255 ) NULL,
+			`styleTypeBOS` CHAR( 1 ) NULL,
+			`styleTypeBOSMethod` INT( 11 ) NULL
+			) ENGINE = MYISAM ;"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		$updateSQL = "INSERT INTO `".$prefix."style_types".$suffix."` (`id` ,`styleTypeName`,`styleTypeOwn`,`styleTypeBOS`,`styleTypeBOSMethod`)
+		VALUES ('1', 'Beer', 'bcoe', 'Y', '1'), ('2', 'Cider', 'bcoe', 'Y', '1'), ('3', 'Mead', 'boce', 'Y', '1');"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		
+		
+	}
+	$output .= "<li>Judging-related tables added successfully (archives).</li>";
+	$output .= "<li>Style Types table added successfully (archives).</li>";
+}
+
+$output .= "</ul>";
 
 ?>

@@ -21,7 +21,7 @@ if(isSet($_POST['user_name'])) {
 	}
 	
 		if(mysql_num_rows($sql_check)) {
-			echo '<span class="icon"><img src="'.$base_url.'/images/exclamation.png" align="absmiddle"></span><span style="color:red">The email address you entered is already in use. Please choose another.</span>';
+			echo '<span style="color:red">The email address you entered is already in use. Please choose another.</span>';
 		}
 		else {
 			echo 'OK';

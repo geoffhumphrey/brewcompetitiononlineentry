@@ -53,7 +53,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 
 function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_reqired) {
 	$return = "";
-	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=admin&amp;dbTable=".$dbTable;
+	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
 	if ($go != "default") $return .= "&amp;go=".$go;
 	if ($action != "default") $return .= "&amp;action=".$action;
 	if ($filter != "default") $return .= "&amp;filter=".$filter;
@@ -235,7 +235,7 @@ function random_generator($digits,$method){
 
 function relocate($referer,$page,$msg,$id) {
 	
-	include(CONFIG."config.php");
+	include(CONFIG.'config.php');
 	
 	// Break URL into an array
 	$parts = parse_url($referer);
@@ -1908,7 +1908,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 		} while ($row_sbi = mysql_fetch_assoc($sbi));
      $r .= "</select>";
 	} 
-	else $r = "No custom winning cateories have been defined.";
+	else $r = "No custom winning categories have been defined.";
 	 return $r;
 }
 
@@ -2044,30 +2044,41 @@ function entries_unconfirmed($user_id) {
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
 }
 
+function check_special_ingredients($style) {
+	
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+		
+	$style = explode("-",$style);
+
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $style[0], $style[1]);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
+	else return FALSE;
+}
+
 function entries_no_special($user_id) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);	
-	$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewInfo IS NULL 
-							   AND (
-									(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
-									(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
-									(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '22' AND brewSubCategory = 'B') OR 
-									(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
-									(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
-									(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'B') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
-									(brewCategorySort = '28' AND brewSubCategory = 'D') OR
-									brewCategorySort >  '28'
-									)
-							   ", $prefix."brewing", $user_id);
+	mysql_select_db($database, $brewing);
+	
+	$query_entry_check = sprintf("SELECT brewCategorySort, brewSubCategory FROM %s WHERE brewBrewerID='%s' AND brewInfo IS NULL", $prefix."brewing", $user_id);
 	$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
 	$row_entry_check = mysql_fetch_assoc($entry_check);
-	$totalRows_entry_check = mysql_num_rows($entry_check); 
-	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+	
+	do {
+		$brew_style[] = $row_entry_check['brewCategorySort']."-".$row_entry_check['brewSubCategory'];
+	} while ($row_entry_check = mysql_fetch_assoc($entry_check));
+	
+	foreach ($brew_style as $style) {
+		
+		if (check_special_ingredients($style)) $totalRows_entry_check[] = 1; else $totalRows_entry_check[] = 0;
+		
+	}
+	
+	if (array_sum($totalRows_entry_check) > 0)	return TRUE; 
+	else return FALSE;
 }
 
 

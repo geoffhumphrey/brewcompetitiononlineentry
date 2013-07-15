@@ -2,16 +2,8 @@
 
 session_start(); 
 require('../paths.php'); 
-require(CONFIG.'config.php');
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-include(DB.'admin_common.db.php');
-include(INCLUDES.'version.inc.php');
-include(INCLUDES.'headers.inc.php');
-require(INCLUDES.'constants.inc.php');
-require(INCLUDES.'scrubber.inc.php');
+require(CONFIG.'bootstrap_output.php');
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel']<= 1)) {
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
@@ -119,7 +111,6 @@ $query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,
 if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
 else $query_brewer .= " AND b.staff_judge='1'"; 
 $query_brewer .= " ORDER BY a.brewerLastName ASC";
-//$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE brewerAssignment='1'", $filter);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);

@@ -11,7 +11,7 @@ $("#user_name").change(function() {
 
 var usr = $("#user_name").val();
 
-if(usr.length >= 3)
+if(usr.length >= 6)
 {
 $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/loader.gif" align="absmiddle"><span>Checking availability...');
 
@@ -27,7 +27,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
 		$("#user_name").addClass("object_ok");
-		$(this).html('<span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" align="absmiddle"></span><span style="color:green;">Email address not in use.</span>');
+		$(this).html('<span style="color:green;">Email address not in use.</span>');
 	}  
 	else  
 	{  
@@ -45,7 +45,7 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
 }
 else
 	{
-	$("#status").html('<font color="red">The username should have at least <strong>3</strong> characters.</font>');
+	$("#status").html('<font color="red">The username should have at least <strong>6</strong> characters.</font>');
 	$("#user_name").removeClass('object_ok'); // if necessary
 	$("#user_name").addClass("object_error");
 	}

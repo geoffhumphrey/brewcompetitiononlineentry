@@ -38,8 +38,8 @@ if ($action == "add") {
 	prefsEntryForm,
 	prefsRecordLimit,
 	prefsRecordPaging,
-	prefsTheme,
 	
+	prefsTheme,
 	prefsDateFormat,
 	prefsContact,
 	prefsTimeZone,
@@ -50,6 +50,7 @@ if ($action == "add") {
 	prefsUserSubCatLimit,
 	prefsUSCLEx,
 	prefsUSCLExLimit,
+	
 	prefsPayToPrint,
 	prefsHideRecipe,
 	prefsUseMods,
@@ -63,7 +64,7 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s, %s, %s)",
+	%s, %s, %s, %s, %s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),

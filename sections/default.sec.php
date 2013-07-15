@@ -6,7 +6,7 @@
  *              winner display after all judging dates have passed.
  */
 include(DB.'dropoff.db.php');
-
+if (($action != "print") && ($msg != "default")) echo $msg_output;
 if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) {
 	if ((judging_date_return() > 0) || (NHC)) { ?>
 <img src="<?php echo $base_url; ?>user_images/<?php echo $_SESSION['contestLogo']; ?>" width="<?php echo $_SESSION['prefsCompLogoSize']; ?>" align="right" hspace="3" vspace="3" alt="Competition Logo" />
@@ -16,7 +16,7 @@ if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print General Information">Print This Page</a></p>
 <?php } ?>
-<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+
 <?php 
 if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($section == "admin")) { 

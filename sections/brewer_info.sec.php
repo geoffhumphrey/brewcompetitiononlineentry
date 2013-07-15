@@ -15,7 +15,7 @@ if (($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $assigned_as
 
 // Build Thank You Message
 $thank_you = "<p>Thank you for entering the ".$_SESSION['contestName'].", ".$_SESSION['brewerFirstName']."."; 
-if (($totalRows_log > 0) && ($action != "print")) $thank_you .= "<a href='#list'>View your entries</a>.</p>";
+if (($totalRows_log > 0) && ($action != "print")) $thank_you .= " <a href='#list'>View your entries</a>.</p>";
 
 $user_edit_links = "";
 

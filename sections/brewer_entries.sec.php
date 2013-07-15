@@ -7,7 +7,7 @@
  * 
  */
 
-if ($totalRows_log > 0) { 
+
 
 // Show Scores?
 if ((judging_date_return() == 0) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
@@ -22,12 +22,12 @@ if (judging_date_return() > 0) {
 $warnings = "";
 if (($totalRows_log > 0) && ($action != "print")) {
 	if (entries_unconfirmed($_SESSION['user_id']) > 0) { 
-		$warnings .= "<div class='error'>You have unconfirmed entries. For each unconfirmed entry below marked in yellow and with a <span class='icon'>";
-		$warnings .= "<img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours."; 
-		if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
-		$warnings .= "</div>"; 
+			$warnings .= "<div class='error'>";
+			$warnings .= "You have unconfirmed entries. For each highlighed entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours."; 
+			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
+			$warnings .= "</div>"; 
 		}
-	if (entries_no_special($_SESSION['user_id']) > 0) $warnings .= "<div class='error2'>You have entries that require you to define special ingredients. For each entry below marked in orange and with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
+	if (entries_no_special($_SESSION['user_id'])) $warnings .= "<div class='error2'>You have entries that require you to define special ingredients. For each highlighted entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
 }
 
 // Build Entry Message
@@ -58,8 +58,7 @@ if (($row_limits['prefsUserEntryLimit'] != "") && ($registration_open <= 1)) {
 		else $remaining_message .= " entries "; 
 		$remaining_message .= "per participant in this competition.";
 	}
-	
-	if ($totalRows_log == $row_limits['prefsUserEntryLimit']) {
+	if (((!empty($row_limits['prefsUserEntryLimit'])) && ($totalRows_log < $row_limits['prefsUserEntryLimit'])) || (empty($row_limits['prefsUserEntryLimit']))) {
 		$remaining_message .= "<strong>";
 		$remaining_message .= "You have reached the limit of ".readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")";
 		if ($row_limits['prefsUserEntryLimit'] > 1) $remaining_message .= "entry ";
@@ -78,7 +77,8 @@ $add_entry_link .= "<span class='adminSubNav'>";
 $add_entry_link .= "<span class='icon'><img src='".$base_url."images/book_add.png'  border='0' alt='Add Entry' title='Add Entry' /></span>";
 $add_entry_link .= "<a href='";
 if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; 
-$add_entry_link .=  "index.php?section=brew&amp;action=add'>Add an Entry</a>";
+else $add_entry_link .= "index.php?section=brew&amp;action=add'";
+$add_entry_link .= "'>Add an Entry</a>";
 $add_entry_link .= "</span>";
 
 // Build Beer XML Link
@@ -218,14 +218,15 @@ if (($totalRows_log > 0) && ($action != "print")) {
 if ($action != "print") { 
 
 	// Display Add Entry, Beer XML and Print List of Entries Links
-	if ((!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open))) echo $remaining_message;
-	if (($remaining_entries > 0) && ($registration_open < 2)) {
-		echo "<div class='adminSubNavContainer'>";
+	if ((judging_date_return() > 0) && (!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open))) echo $remaining_message;
+	echo "<div class='adminSubNavContainer'>";
+	if (($remaining_entries > 0) && ($registration_open < 2) && (judging_date_return() > 0)) {
 		echo $add_entry_link;
 		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) echo $beer_xml_link;
-		echo $print_list_link;
-		echo "</div>";
-	}
+		}
+	echo $print_list_link;
+	echo "</div>";
+
 
 	// Display Entry Fee and Discount Messages
 	if (judging_date_return() > 0) {
@@ -247,12 +248,13 @@ if ($action != "print") {
 
 } // end if ($action != "print") 
 
+if ($totalRows_log > 0) { 
 $entry_output = "";
 
 do {
 	
 	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
-	$entry_style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
@@ -260,8 +262,8 @@ do {
 	
 	// Build Entry Table Body
 	
-	if (($row_log['brewConfirmed'] == "0") && ($action != "print")) $entry_tr_style = " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 
-	elseif ((style_convert($entry_style,"3") == TRUE) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = " style='background-color: #f90; border-top: 1px solid #FF6600; border-bottom: 1px solid #FF6600;'";
+	if (($row_log['brewConfirmed'] == 0) && ($action != "print")) $entry_tr_style = " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 
+	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = " style='background-color: #f90; border-top: 1px solid #FF6600; border-bottom: 1px solid #FF6600;'";
 	else $entry_tr_style = "";
 	
 	$entry_output .= "<tr".$entry_tr_style.">";
@@ -284,7 +286,7 @@ do {
 	if ($row_log['brewConfirmed'] == "0") { 
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png' border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
-	elseif ((style_convert($entry_style,"3") == TRUE) && ($row_log['brewInfo'] == "")) { 
+	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "")) { 
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png'  border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
 	else { 
@@ -423,5 +425,5 @@ do {
 </tbody>
 </table>
 <?php } // end if ($totalRows_log > 0)
-else echo "<p>You do not have any entries.</p>"; if ($registration_open == "0") echo "<p>You can add your entries on or after $reg_open.</p>"; 
+if ($registration_open == "0") echo "<p>You can add your entries on or after $reg_open.</p>"; 
 ?>

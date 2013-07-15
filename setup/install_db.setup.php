@@ -26,18 +26,18 @@ if ($setup_free_access == TRUE) {
     <?php
 	
 	// ------------------- 
-	// Archive Table
+	// Archive Table (v1.3.0.0 done)
 	// ------------------- 
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$archive_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `archiveUserTableName` varchar(255) NULL DEFAULT NULL,
-	  `archiveBrewerTableName` varchar(255) NULL DEFAULT NULL,
-	  `archiveBrewingTableName` varchar(255) NULL DEFAULT NULL,
-	  `archiveSuffix` varchar(255) NULL DEFAULT NULL,
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`archiveUserTableName` varchar(255) DEFAULT NULL,
+		`archiveBrewerTableName` varchar(255) DEFAULT NULL,
+		`archiveBrewingTableName` varchar(255) DEFAULT NULL,
+		`archiveSuffix` varchar(255) DEFAULT NULL,
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -48,42 +48,43 @@ if ($setup_free_access == TRUE) {
 	
 	
 	// ------------------- 
-	// Brewer Table
+	// Brewer Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$brewer_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `uid` int(8) NULL DEFAULT NULL,
-	  `brewerFirstName` varchar(200) NULL DEFAULT NULL,
-	  `brewerLastName` varchar(200) NULL DEFAULT NULL,
-	  `brewerAddress` varchar(255) NULL DEFAULT NULL,
-	  `brewerCity` varchar(255) NULL DEFAULT NULL,
-	  `brewerState` varchar(255) NULL DEFAULT NULL,
-	  `brewerZip` varchar(255) NULL DEFAULT NULL,
-	  `brewerCountry` varchar(255) NULL DEFAULT NULL,
-	  `brewerPhone1` varchar(255) NULL DEFAULT NULL,
-	  `brewerPhone2` varchar(255) NULL DEFAULT NULL,
-	  `brewerClubs` text,
-	  `brewerEmail` varchar(255) NULL DEFAULT NULL,
-	  `brewerNickname` varchar(255) NULL DEFAULT NULL,
-	  `brewerSteward` char(1) NULL DEFAULT NULL,
-	  `brewerJudge` char(1) NULL DEFAULT NULL,
-	  `brewerJudgeID` varchar(255) NULL DEFAULT NULL,
-	  `brewerJudgeMead` char(1) NULL DEFAULT NULL,
-	  `brewerJudgeRank` varchar(255) NULL DEFAULT NULL,
-	  `brewerJudgeLikes` text,
-	  `brewerJudgeDislikes` text,
-	  `brewerJudgeLocation` text,
-	  `brewerStewardLocation` text,
-	  `brewerJudgeAssignedLocation` text,
-	  `brewerStewardAssignedLocation` text,
-	  `brewerAssignment` char(1) NULL DEFAULT NULL,
-	  `brewerAssignmentStaff` char(1) NULL DEFAULT NULL,
-	  `brewerAHA` int(11) NULL DEFAULT NULL,
-	  `brewerDiscount` char(1) NULL DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
-	  `brewerJudgeBOS` char(1) NULL DEFAULT NULL COMMENT 'Y if judged in BOS round',
-	  PRIMARY KEY (`id`)
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`uid` int(8) DEFAULT NULL,
+		`brewerFirstName` varchar(200) DEFAULT NULL,
+		`brewerLastName` varchar(200) DEFAULT NULL,
+		`brewerAddress` varchar(255) DEFAULT NULL,
+		`brewerCity` varchar(255) DEFAULT NULL,
+		`brewerState` varchar(255) DEFAULT NULL,
+		`brewerZip` varchar(255) DEFAULT NULL,
+		`brewerCountry` varchar(255) DEFAULT NULL,
+		`brewerPhone1` varchar(255) DEFAULT NULL,
+		`brewerPhone2` varchar(255) DEFAULT NULL,
+		`brewerClubs` text,
+		`brewerEmail` varchar(255) DEFAULT NULL,
+		`brewerNickname` varchar(255) DEFAULT NULL,
+		`brewerSteward` char(1) DEFAULT NULL,
+		`brewerJudge` char(1) DEFAULT NULL,
+		`brewerJudgeID` varchar(255) DEFAULT NULL,
+		`brewerJudgeMead` char(1) DEFAULT NULL,
+		`brewerJudgeRank` varchar(255) DEFAULT NULL,
+		`brewerJudgeLikes` text,
+		`brewerJudgeDislikes` text,
+		`brewerJudgeLocation` text,
+		`brewerStewardLocation` text,
+		`brewerJudgeAssignedLocation` text,
+		`brewerStewardAssignedLocation` text,
+		`brewerAssignment` char(1) DEFAULT NULL,
+		`brewerAssignmentStaff` char(1) DEFAULT NULL,
+		`brewerAHA` int(11) DEFAULT NULL,
+		`brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
+		`brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
+		`brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table',
+		PRIMARY KEY (`id`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
@@ -91,224 +92,376 @@ if ($setup_free_access == TRUE) {
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
 	
-	/*
-	// For hosted accounts on brewcompetition.com
-	$updateSQL = "INSERT INTO `$brewer_db_table` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
-	(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-	"; 
-	mysql_select_db($database, $brewing);
-	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	*/
+	
 	
 	echo "<li><strong>Participants</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Brewing Table
+	// Brewing Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$brewing_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `brewName` varchar(250) NULL DEFAULT NULL,
-	  `brewStyle` varchar(250) NULL DEFAULT NULL,
-	  `brewCategory` char(2) NULL DEFAULT NULL,
-	  `brewCategorySort` char(2) NULL DEFAULT NULL,
-	  `brewSubCategory` char(1) NULL DEFAULT NULL,
-	  `brewBottleDate` date NULL DEFAULT NULL,
-	  `brewDate` date NULL DEFAULT NULL,
-	  `brewYield` varchar(10) NULL DEFAULT NULL,
-	  `brewInfo` text,
-	  `brewMead1` varchar(255) NULL DEFAULT NULL,
-	  `brewMead2` varchar(255) NULL DEFAULT NULL,
-	  `brewMead3` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract1` varchar(100) NULL DEFAULT NULL,
-	  `brewExtract1Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewExtract2` varchar(100) NULL DEFAULT NULL,
-	  `brewExtract2Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewExtract3` varchar(100) NULL DEFAULT NULL,
-	  `brewExtract3Weight` varchar(4) NULL DEFAULT NULL,
-	  `brewExtract4` varchar(100) NULL DEFAULT NULL,
-	  `brewExtract4Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewExtract5` varchar(100) NULL DEFAULT NULL,
-	  `brewExtract5Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain1` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain1Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain2` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain2Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain3` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain3Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain4` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain4Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain5` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain5Weight` varchar(4) NULL DEFAULT NULL,
-	  `brewGrain6` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain6Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain7` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain7Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain8` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain8Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewGrain9` varchar(100) NULL DEFAULT NULL,
-	  `brewGrain9Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewAddition1` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition1Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition2` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition2Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition3` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition3Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition4` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition4Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition5` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition5Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition6` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition6Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition7` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition7Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition8` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition8Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewAddition9` varchar(100) NULL DEFAULT NULL,
-	  `brewAddition9Amt` varchar(20) NULL DEFAULT NULL,
-	  `brewHops1` varchar(100) NULL DEFAULT NULL,
-	  `brewHops1Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops1IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops1Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops2` varchar(100) NULL DEFAULT NULL,
-	  `brewHops2Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops2IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops2Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops3` varchar(100) NULL DEFAULT NULL,
-	  `brewHops3Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops3IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops3Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops4` varchar(100) NULL DEFAULT NULL,
-	  `brewHops4Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops4IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops4Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops5` varchar(100) NULL DEFAULT NULL,
-	  `brewHops5Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops5IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops5Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops6` varchar(100) NULL DEFAULT NULL,
-	  `brewHops6Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops6IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops6Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops7` varchar(100) NULL DEFAULT NULL,
-	  `brewHops7Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops7IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops7Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops8` varchar(100) NULL DEFAULT NULL,
-	  `brewHops8Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops8IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops8Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops9` varchar(100) NULL DEFAULT NULL,
-	  `brewHops9Weight` varchar(10) NULL DEFAULT NULL,
-	  `brewHops9IBU` varchar(10) NULL DEFAULT NULL,
-	  `brewHops9Time` varchar(25) NULL DEFAULT NULL,
-	  `brewHops1Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops2Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops3Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops4Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops5Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops6Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops7Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops8Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops9Use` varchar(25) NULL DEFAULT NULL,
-	  `brewHops1Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops2Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops3Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops4Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops5Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops6Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops7Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops8Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops9Type` varchar(25) NULL DEFAULT NULL,
-	  `brewHops1Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops2Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops3Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops4Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops5Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops6Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops7Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops8Form` varchar(25) NULL DEFAULT NULL,
-	  `brewHops9Form` varchar(25) NULL DEFAULT NULL,
-	  `brewYeast` varchar(250) NULL DEFAULT NULL,
-	  `brewYeastMan` varchar(250) NULL DEFAULT NULL,
-	  `brewYeastForm` varchar(25) NULL DEFAULT NULL,
-	  `brewYeastType` varchar(25) NULL DEFAULT NULL,
-	  `brewYeastAmount` varchar(25) NULL DEFAULT NULL,
-	  `brewYeastStarter` char(1) NULL DEFAULT NULL,
-	  `brewYeastNutrients` text,
-	  `brewOG` varchar(10) NULL DEFAULT NULL,
-	  `brewFG` varchar(10) NULL DEFAULT NULL,
-	  `brewPrimary` varchar(10) NULL DEFAULT NULL,
-	  `brewPrimaryTemp` varchar(10) NULL DEFAULT NULL,
-	  `brewSecondary` varchar(10) NULL DEFAULT NULL,
-	  `brewSecondaryTemp` varchar(10) NULL DEFAULT NULL,
-	  `brewOther` varchar(10) NULL DEFAULT NULL,
-	  `brewOtherTemp` varchar(10) NULL DEFAULT NULL,
-	  `brewComments` text,
-	  `brewMashStep1Name` varchar(250) NULL DEFAULT NULL,
-	  `brewMashStep1Temp` char(3) NULL DEFAULT NULL,
-	  `brewMashStep1Time` char(3) NULL DEFAULT NULL,
-	  `brewMashStep2Name` varchar(250) NULL DEFAULT NULL,
-	  `brewMashStep2Temp` char(3) NULL DEFAULT NULL,
-	  `brewMashStep2Time` char(3) NULL DEFAULT NULL,
-	  `brewMashStep3Name` varchar(250) NULL DEFAULT NULL,
-	  `brewMashStep3Temp` char(3) NULL DEFAULT NULL,
-	  `brewMashStep3Time` char(3) NULL DEFAULT NULL,
-	  `brewMashStep4Name` varchar(250) NULL DEFAULT NULL,
-	  `brewMashStep4Temp` char(3) NULL DEFAULT NULL,
-	  `brewMashStep4Time` char(3) NULL DEFAULT NULL,
-	  `brewMashStep5Name` varchar(250) NULL DEFAULT NULL,
-	  `brewMashStep5Temp` char(3) NULL DEFAULT NULL,
-	  `brewMashStep5Time` char(3) NULL DEFAULT NULL,
-	  `brewFinings` varchar(250) NULL DEFAULT NULL,
-	  `brewWaterNotes` varchar(250) NULL DEFAULT NULL,
-	  `brewBrewerID` varchar(250) NULL DEFAULT NULL,
-	  `brewCarbonationMethod` varchar(255) NULL DEFAULT NULL,
-	  `brewCarbonationVol` varchar(10) NULL DEFAULT NULL,
-	  `brewCarbonationNotes` text,
-	  `brewBoilHours` varchar(255) NULL DEFAULT NULL,
-	  `brewBoilMins` varchar(255) NULL DEFAULT NULL,
-	  `brewBrewerFirstName` varchar(255) NULL DEFAULT NULL,
-	  `brewBrewerLastName` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract1Use` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract2Use` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract3Use` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract4Use` varchar(255) NULL DEFAULT NULL,
-	  `brewExtract5Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain1Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain2Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain3Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain4Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain5Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain6Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain7Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain8Use` varchar(255) NULL DEFAULT NULL,
-	  `brewGrain9Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition1Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition2Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition3Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition4Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition5Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition6Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition7Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition8Use` varchar(255) NULL DEFAULT NULL,
-	  `brewAddition9Use` varchar(255) NULL DEFAULT NULL,
-	  `brewPaid` char(1) DEFAULT 'N',
-	  `brewWinner` char(1) NULL DEFAULT NULL,
-	  `brewWinnerCat` varchar(3) NULL DEFAULT NULL,
-	  `brewWinnerSubCat` varchar(3) NULL DEFAULT NULL,
-	  `brewWinnerPlace` varchar(3) NULL DEFAULT NULL,
-	  `brewBOSRound` char(1) NULL DEFAULT NULL,
-	  `brewBOSPlace` varchar(3) NULL DEFAULT NULL,
-	  `brewReceived` char(1) NULL DEFAULT NULL,
-	  `brewJudgingLocation` int(8) NULL DEFAULT NULL,
-	  `brewCoBrewer` varchar(255) NULL DEFAULT NULL,
-	  `brewUpdated` timestamp NULL NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated.',
-	  `brewJudgingNumber` varchar(10) NULL DEFAULT NULL,
-	  `brewConfirmed` tinyint(1) NULL DEFAULT NULL COMMENT '0 = false; 1 = true',
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`brewName` varchar(255) DEFAULT NULL,
+		`brewStyle` varchar(255) DEFAULT NULL,
+		`brewCategory` char(2) DEFAULT NULL,
+		`brewCategorySort` char(2) DEFAULT NULL,
+		`brewSubCategory` char(1) DEFAULT NULL,
+		`brewBottleDate` date DEFAULT NULL,
+		`brewDate` date DEFAULT NULL,
+		`brewYield` varchar(10) DEFAULT NULL,
+		`brewInfo` text,
+		`brewMead1` varchar(25) DEFAULT NULL,
+		`brewMead2` varchar(25) DEFAULT NULL,
+		`brewMead3` varchar(25) DEFAULT NULL,
+		`brewExtract1` varchar(100) DEFAULT NULL,
+		`brewExtract1Weight` varchar(10) DEFAULT NULL,
+		`brewExtract2` varchar(100) DEFAULT NULL,
+		`brewExtract2Weight` varchar(10) DEFAULT NULL,
+		`brewExtract3` varchar(100) DEFAULT NULL,
+		`brewExtract3Weight` varchar(10) DEFAULT NULL,
+		`brewExtract4` varchar(100) DEFAULT NULL,
+		`brewExtract4Weight` varchar(10) DEFAULT NULL,
+		`brewExtract5` varchar(100) DEFAULT NULL,
+		`brewExtract5Weight` varchar(10) DEFAULT NULL,
+		`brewGrain1` varchar(100) DEFAULT NULL,
+		`brewGrain1Weight` varchar(10) DEFAULT NULL,
+		`brewGrain2` varchar(100) DEFAULT NULL,
+		`brewGrain2Weight` varchar(10) DEFAULT NULL,
+		`brewGrain3` varchar(100) DEFAULT NULL,
+		`brewGrain3Weight` varchar(10) DEFAULT NULL,
+		`brewGrain4` varchar(100) DEFAULT NULL,
+		`brewGrain4Weight` varchar(10) DEFAULT NULL,
+		`brewGrain5` varchar(100) DEFAULT NULL,
+		`brewGrain5Weight` varchar(10) DEFAULT NULL,
+		`brewGrain6` varchar(100) DEFAULT NULL,
+		`brewGrain6Weight` varchar(10) DEFAULT NULL,
+		`brewGrain7` varchar(100) DEFAULT NULL,
+		`brewGrain7Weight` varchar(10) DEFAULT NULL,
+		`brewGrain8` varchar(100) DEFAULT NULL,
+		`brewGrain8Weight` varchar(10) DEFAULT NULL,
+		`brewGrain9` varchar(100) DEFAULT NULL,
+		`brewGrain10` varchar(100) DEFAULT NULL,
+		`brewGrain11` varchar(100) DEFAULT NULL,
+		`brewGrain12` varchar(100) DEFAULT NULL,
+		`brewGrain13` varchar(100) DEFAULT NULL,
+		`brewGrain14` varchar(100) DEFAULT NULL,
+		`brewGrain15` varchar(100) DEFAULT NULL,
+		`brewGrain16` varchar(100) DEFAULT NULL,
+		`brewGrain17` varchar(100) DEFAULT NULL,
+		`brewGrain18` varchar(100) DEFAULT NULL,
+		`brewGrain19` varchar(100) DEFAULT NULL,
+		`brewGrain20` varchar(100) DEFAULT NULL,
+		`brewGrain9Weight` varchar(10) DEFAULT NULL,
+		`brewGrain10Weight` varchar(10) DEFAULT NULL,
+		`brewGrain11Weight` varchar(10) DEFAULT NULL,
+		`brewGrain12Weight` varchar(10) DEFAULT NULL,
+		`brewGrain13Weight` varchar(10) DEFAULT NULL,
+		`brewGrain14Weight` varchar(10) DEFAULT NULL,
+		`brewGrain15Weight` varchar(10) DEFAULT NULL,
+		`brewGrain16Weight` varchar(10) DEFAULT NULL,
+		`brewGrain17Weight` varchar(10) DEFAULT NULL,
+		`brewGrain18Weight` varchar(10) DEFAULT NULL,
+		`brewGrain19Weight` varchar(10) DEFAULT NULL,
+		`brewGrain20Weight` varchar(10) DEFAULT NULL,
+		`brewAddition1` varchar(100) DEFAULT NULL,
+		`brewAddition1Amt` varchar(20) DEFAULT NULL,
+		`brewAddition2` varchar(100) DEFAULT NULL,
+		`brewAddition2Amt` varchar(20) DEFAULT NULL,
+		`brewAddition3` varchar(100) DEFAULT NULL,
+		`brewAddition3Amt` varchar(20) DEFAULT NULL,
+		`brewAddition4` varchar(100) DEFAULT NULL,
+		`brewAddition4Amt` varchar(20) DEFAULT NULL,
+		`brewAddition5` varchar(100) DEFAULT NULL,
+		`brewAddition5Amt` varchar(20) DEFAULT NULL,
+		`brewAddition6` varchar(100) DEFAULT NULL,
+		`brewAddition6Amt` varchar(20) DEFAULT NULL,
+		`brewAddition7` varchar(100) DEFAULT NULL,
+		`brewAddition7Amt` varchar(20) DEFAULT NULL,
+		`brewAddition8` varchar(100) DEFAULT NULL,
+		`brewAddition8Amt` varchar(20) DEFAULT NULL,
+		`brewAddition9` varchar(100) DEFAULT NULL,
+		`brewAddition10` varchar(100) DEFAULT NULL,
+		`brewAddition11` varchar(100) DEFAULT NULL,
+		`brewAddition12` varchar(100) DEFAULT NULL,
+		`brewAddition13` varchar(100) DEFAULT NULL,
+		`brewAddition14` varchar(100) DEFAULT NULL,
+		`brewAddition15` varchar(100) DEFAULT NULL,
+		`brewAddition16` varchar(100) DEFAULT NULL,
+		`brewAddition17` varchar(100) DEFAULT NULL,
+		`brewAddition18` varchar(100) DEFAULT NULL,
+		`brewAddition19` varchar(100) DEFAULT NULL,
+		`brewAddition20` varchar(100) DEFAULT NULL,
+		`brewAddition9Amt` varchar(20) DEFAULT NULL,
+		`brewAddition10Amt` varchar(10) DEFAULT NULL,
+		`brewAddition11Amt` varchar(10) DEFAULT NULL,
+		`brewAddition12Amt` varchar(10) DEFAULT NULL,
+		`brewAddition13Amt` varchar(10) DEFAULT NULL,
+		`brewAddition14Amt` varchar(10) DEFAULT NULL,
+		`brewAddition15Amt` varchar(10) DEFAULT NULL,
+		`brewAddition16Amt` varchar(10) DEFAULT NULL,
+		`brewAddition17Amt` varchar(10) DEFAULT NULL,
+		`brewAddition18Amt` varchar(10) DEFAULT NULL,
+		`brewAddition19Amt` varchar(10) DEFAULT NULL,
+		`brewAddition20Amt` varchar(10) DEFAULT NULL,
+		`brewHops1` varchar(100) DEFAULT NULL,
+		`brewHops1Weight` varchar(10) DEFAULT NULL,
+		`brewHops1IBU` varchar(10) DEFAULT NULL,
+		`brewHops1Time` varchar(25) DEFAULT NULL,
+		`brewHops2` varchar(100) DEFAULT NULL,
+		`brewHops2Weight` varchar(10) DEFAULT NULL,
+		`brewHops2IBU` varchar(10) DEFAULT NULL,
+		`brewHops2Time` varchar(25) DEFAULT NULL,
+		`brewHops3` varchar(100) DEFAULT NULL,
+		`brewHops3Weight` varchar(10) DEFAULT NULL,
+		`brewHops3IBU` varchar(10) DEFAULT NULL,
+		`brewHops3Time` varchar(25) DEFAULT NULL,
+		`brewHops4` varchar(100) DEFAULT NULL,
+		`brewHops4Weight` varchar(10) DEFAULT NULL,
+		`brewHops4IBU` varchar(10) DEFAULT NULL,
+		`brewHops4Time` varchar(25) DEFAULT NULL,
+		`brewHops5` varchar(100) DEFAULT NULL,
+		`brewHops5Weight` varchar(10) DEFAULT NULL,
+		`brewHops5IBU` varchar(10) DEFAULT NULL,
+		`brewHops5Time` varchar(25) DEFAULT NULL,
+		`brewHops6` varchar(100) DEFAULT NULL,
+		`brewHops6Weight` varchar(10) DEFAULT NULL,
+		`brewHops6IBU` varchar(10) DEFAULT NULL,
+		`brewHops6Time` varchar(25) DEFAULT NULL,
+		`brewHops7` varchar(100) DEFAULT NULL,
+		`brewHops7Weight` varchar(10) DEFAULT NULL,
+		`brewHops7IBU` varchar(10) DEFAULT NULL,
+		`brewHops7Time` varchar(25) DEFAULT NULL,
+		`brewHops8` varchar(100) DEFAULT NULL,
+		`brewHops8Weight` varchar(10) DEFAULT NULL,
+		`brewHops8IBU` varchar(10) DEFAULT NULL,
+		`brewHops8Time` varchar(25) DEFAULT NULL,
+		`brewHops9` varchar(100) DEFAULT NULL,
+		`brewHops10` varchar(100) DEFAULT NULL,
+		`brewHops11` varchar(100) DEFAULT NULL,
+		`brewHops12` varchar(100) DEFAULT NULL,
+		`brewHops13` varchar(100) DEFAULT NULL,
+		`brewHops14` varchar(100) DEFAULT NULL,
+		`brewHops15` varchar(100) DEFAULT NULL,
+		`brewHops16` varchar(100) DEFAULT NULL,
+		`brewHops17` varchar(100) DEFAULT NULL,
+		`brewHops18` varchar(100) DEFAULT NULL,
+		`brewHops19` varchar(100) DEFAULT NULL,
+		`brewHops20` varchar(100) DEFAULT NULL,
+		`brewHops9Weight` varchar(10) DEFAULT NULL,
+		`brewHops10Weight` varchar(10) DEFAULT NULL,
+		`brewHops11Weight` varchar(10) DEFAULT NULL,
+		`brewHops12Weight` varchar(10) DEFAULT NULL,
+		`brewHops13Weight` varchar(10) DEFAULT NULL,
+		`brewHops14Weight` varchar(10) DEFAULT NULL,
+		`brewHops15Weight` varchar(10) DEFAULT NULL,
+		`brewHops16Weight` varchar(10) DEFAULT NULL,
+		`brewHops17Weight` varchar(10) DEFAULT NULL,
+		`brewHops18Weight` varchar(10) DEFAULT NULL,
+		`brewHops19Weight` varchar(10) DEFAULT NULL,
+		`brewHops20Weight` varchar(10) DEFAULT NULL,
+		`brewHops9IBU` varchar(6) DEFAULT NULL,
+		`brewHops10IBU` varchar(6) DEFAULT NULL,
+		`brewHops11IBU` varchar(6) DEFAULT NULL,
+		`brewHops12IBU` varchar(6) DEFAULT NULL,
+		`brewHops13IBU` varchar(6) DEFAULT NULL,
+		`brewHops14IBU` varchar(6) DEFAULT NULL,
+		`brewHops15IBU` varchar(6) DEFAULT NULL,
+		`brewHops16IBU` varchar(6) DEFAULT NULL,
+		`brewHops17IBU` varchar(6) DEFAULT NULL,
+		`brewHops18IBU` varchar(6) DEFAULT NULL,
+		`brewHops19IBU` varchar(6) DEFAULT NULL,
+		`brewHops20IBU` varchar(6) DEFAULT NULL,
+		`brewHops9Time` varchar(25) DEFAULT NULL,
+		`brewHops10Time` varchar(25) DEFAULT NULL,
+		`brewHops11Time` varchar(25) DEFAULT NULL,
+		`brewHops12Time` varchar(25) DEFAULT NULL,
+		`brewHops13Time` varchar(25) DEFAULT NULL,
+		`brewHops14Time` varchar(25) DEFAULT NULL,
+		`brewHops15Time` varchar(25) DEFAULT NULL,
+		`brewHops16Time` varchar(25) DEFAULT NULL,
+		`brewHops17Time` varchar(25) DEFAULT NULL,
+		`brewHops18Time` varchar(25) DEFAULT NULL,
+		`brewHops19Time` varchar(25) DEFAULT NULL,
+		`brewHops20Time` varchar(25) DEFAULT NULL,
+		`brewHops1Use` varchar(25) DEFAULT NULL,
+		`brewHops2Use` varchar(25) DEFAULT NULL,
+		`brewHops3Use` varchar(25) DEFAULT NULL,
+		`brewHops4Use` varchar(25) DEFAULT NULL,
+		`brewHops5Use` varchar(25) DEFAULT NULL,
+		`brewHops6Use` varchar(25) DEFAULT NULL,
+		`brewHops7Use` varchar(25) DEFAULT NULL,
+		`brewHops8Use` varchar(25) DEFAULT NULL,
+		`brewHops9Use` varchar(25) DEFAULT NULL,
+		`brewHops10Use` varchar(25) DEFAULT NULL,
+		`brewHops11Use` varchar(25) DEFAULT NULL,
+		`brewHops12Use` varchar(25) DEFAULT NULL,
+		`brewHops13Use` varchar(25) DEFAULT NULL,
+		`brewHops14Use` varchar(25) DEFAULT NULL,
+		`brewHops15Use` varchar(25) DEFAULT NULL,
+		`brewHops16Use` varchar(25) DEFAULT NULL,
+		`brewHops17Use` varchar(25) DEFAULT NULL,
+		`brewHops18Use` varchar(25) DEFAULT NULL,
+		`brewHops19Use` varchar(25) DEFAULT NULL,
+		`brewHops20Use` varchar(25) DEFAULT NULL,
+		`brewHops1Type` varchar(25) DEFAULT NULL,
+		`brewHops2Type` varchar(25) DEFAULT NULL,
+		`brewHops3Type` varchar(25) DEFAULT NULL,
+		`brewHops4Type` varchar(25) DEFAULT NULL,
+		`brewHops5Type` varchar(25) DEFAULT NULL,
+		`brewHops6Type` varchar(25) DEFAULT NULL,
+		`brewHops7Type` varchar(25) DEFAULT NULL,
+		`brewHops8Type` varchar(25) DEFAULT NULL,
+		`brewHops9Type` varchar(25) DEFAULT NULL,
+		`brewHops10Type` varchar(25) DEFAULT NULL,
+		`brewHops11Type` varchar(25) DEFAULT NULL,
+		`brewHops12Type` varchar(25) DEFAULT NULL,
+		`brewHops13Type` varchar(25) DEFAULT NULL,
+		`brewHops14Type` varchar(25) DEFAULT NULL,
+		`brewHops15Type` varchar(25) DEFAULT NULL,
+		`brewHops16Type` varchar(25) DEFAULT NULL,
+		`brewHops17Type` varchar(25) DEFAULT NULL,
+		`brewHops18Type` varchar(25) DEFAULT NULL,
+		`brewHops19Type` varchar(25) DEFAULT NULL,
+		`brewHops20Type` varchar(25) DEFAULT NULL,
+		`brewHops1Form` varchar(25) DEFAULT NULL,
+		`brewHops2Form` varchar(25) DEFAULT NULL,
+		`brewHops3Form` varchar(25) DEFAULT NULL,
+		`brewHops4Form` varchar(25) DEFAULT NULL,
+		`brewHops5Form` varchar(25) DEFAULT NULL,
+		`brewHops6Form` varchar(25) DEFAULT NULL,
+		`brewHops7Form` varchar(25) DEFAULT NULL,
+		`brewHops8Form` varchar(25) DEFAULT NULL,
+		`brewHops9Form` varchar(25) DEFAULT NULL,
+		`brewHops10Form` varchar(25) DEFAULT NULL,
+		`brewHops11Form` varchar(25) DEFAULT NULL,
+		`brewHops12Form` varchar(25) DEFAULT NULL,
+		`brewHops13Form` varchar(25) DEFAULT NULL,
+		`brewHops14Form` varchar(25) DEFAULT NULL,
+		`brewHops15Form` varchar(25) DEFAULT NULL,
+		`brewHops16Form` varchar(25) DEFAULT NULL,
+		`brewHops17Form` varchar(25) DEFAULT NULL,
+		`brewHops18Form` varchar(25) DEFAULT NULL,
+		`brewHops19Form` varchar(25) DEFAULT NULL,
+		`brewHops20Form` varchar(25) DEFAULT NULL,
+		`brewYeast` varchar(100) DEFAULT NULL,
+		`brewYeastMan` varchar(100) DEFAULT NULL,
+		`brewYeastForm` varchar(25) DEFAULT NULL,
+		`brewYeastType` varchar(25) DEFAULT NULL,
+		`brewYeastAmount` varchar(25) DEFAULT NULL,
+		`brewYeastStarter` char(1) DEFAULT NULL,
+		`brewYeastNutrients` text,
+		`brewOG` varchar(10) DEFAULT NULL,
+		`brewFG` varchar(10) DEFAULT NULL,
+		`brewPrimary` varchar(10) DEFAULT NULL,
+		`brewPrimaryTemp` varchar(10) DEFAULT NULL,
+		`brewSecondary` varchar(10) DEFAULT NULL,
+		`brewSecondaryTemp` varchar(10) DEFAULT NULL,
+		`brewOther` varchar(10) DEFAULT NULL,
+		`brewOtherTemp` varchar(10) DEFAULT NULL,
+		`brewComments` text,
+		`brewMashStep1Name` varchar(10) DEFAULT NULL,
+		`brewMashStep1Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep1Time` varchar(10) DEFAULT NULL,
+		`brewMashStep2Name` varchar(10) DEFAULT NULL,
+		`brewMashStep2Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep2Time` varchar(10) DEFAULT NULL,
+		`brewMashStep3Name` varchar(10) DEFAULT NULL,
+		`brewMashStep3Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep3Time` varchar(10) DEFAULT NULL,
+		`brewMashStep4Name` varchar(10) DEFAULT NULL,
+		`brewMashStep4Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep4Time` varchar(10) DEFAULT NULL,
+		`brewMashStep5Name` varchar(10) DEFAULT NULL,
+		`brewMashStep6Name` varchar(100) DEFAULT NULL,
+		`brewMashStep7Name` varchar(100) DEFAULT NULL,
+		`brewMashStep8Name` varchar(100) DEFAULT NULL,
+		`brewMashStep9Name` varchar(100) DEFAULT NULL,
+		`brewMashStep10Name` varchar(100) DEFAULT NULL,
+		`brewMashStep5Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep6Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep7Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep8Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep9Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep10Temp` varchar(10) DEFAULT NULL,
+		`brewMashStep5Time` varchar(10) DEFAULT NULL,
+		`brewMashStep6Time` varchar(10) DEFAULT NULL,
+		`brewMashStep7Time` varchar(10) DEFAULT NULL,
+		`brewMashStep8Time` varchar(10) DEFAULT NULL,
+		`brewMashStep9Time` varchar(10) DEFAULT NULL,
+		`brewMashStep10Time` varchar(10) DEFAULT NULL,
+		`brewFinings` varchar(100) DEFAULT NULL,
+		`brewWaterNotes` varchar(255) DEFAULT NULL,
+		`brewBrewerID` varchar(8) DEFAULT NULL,
+		`brewCarbonationMethod` char(1) DEFAULT NULL,
+		`brewCarbonationVol` varchar(10) DEFAULT NULL,
+		`brewCarbonationNotes` text,
+		`brewBoilHours` varchar(5) DEFAULT NULL,
+		`brewBoilMins` varchar(5) DEFAULT NULL,
+		`brewBrewerFirstName` varchar(255) DEFAULT NULL,
+		`brewBrewerLastName` varchar(255) DEFAULT NULL,
+		`brewExtract1Use` varchar(25) DEFAULT NULL,
+		`brewExtract2Use` varchar(25) DEFAULT NULL,
+		`brewExtract3Use` varchar(25) DEFAULT NULL,
+		`brewExtract4Use` varchar(25) DEFAULT NULL,
+		`brewExtract5Use` varchar(25) DEFAULT NULL,
+		`brewGrain1Use` varchar(25) DEFAULT NULL,
+		`brewGrain2Use` varchar(25) DEFAULT NULL,
+		`brewGrain3Use` varchar(25) DEFAULT NULL,
+		`brewGrain4Use` varchar(25) DEFAULT NULL,
+		`brewGrain5Use` varchar(25) DEFAULT NULL,
+		`brewGrain6Use` varchar(25) DEFAULT NULL,
+		`brewGrain7Use` varchar(25) DEFAULT NULL,
+		`brewGrain8Use` varchar(25) DEFAULT NULL,
+		`brewGrain9Use` varchar(25) DEFAULT NULL,
+		`brewGrain10Use` varchar(25) DEFAULT NULL,
+		`brewGrain11Use` varchar(25) DEFAULT NULL,
+		`brewGrain12Use` varchar(25) DEFAULT NULL,
+		`brewGrain13Use` varchar(25) DEFAULT NULL,
+		`brewGrain14Use` varchar(25) DEFAULT NULL,
+		`brewGrain15Use` varchar(25) DEFAULT NULL,
+		`brewGrain16Use` varchar(25) DEFAULT NULL,
+		`brewGrain17Use` varchar(25) DEFAULT NULL,
+		`brewGrain18Use` varchar(25) DEFAULT NULL,
+		`brewGrain19Use` varchar(25) DEFAULT NULL,
+		`brewGrain20Use` varchar(25) DEFAULT NULL,
+		`brewAddition1Use` varchar(25) DEFAULT NULL,
+		`brewAddition2Use` varchar(25) DEFAULT NULL,
+		`brewAddition3Use` varchar(25) DEFAULT NULL,
+		`brewAddition4Use` varchar(25) DEFAULT NULL,
+		`brewAddition5Use` varchar(25) DEFAULT NULL,
+		`brewAddition6Use` varchar(25) DEFAULT NULL,
+		`brewAddition7Use` varchar(25) DEFAULT NULL,
+		`brewAddition8Use` varchar(25) DEFAULT NULL,
+		`brewAddition9Use` varchar(25) DEFAULT NULL,
+		`brewAddition10Use` varchar(25) DEFAULT NULL,
+		`brewAddition11Use` varchar(25) DEFAULT NULL,
+		`brewAddition12Use` varchar(25) DEFAULT NULL,
+		`brewAddition13Use` varchar(25) DEFAULT NULL,
+		`brewAddition14Use` varchar(25) DEFAULT NULL,
+		`brewAddition15Use` varchar(25) DEFAULT NULL,
+		`brewAddition16Use` varchar(25) DEFAULT NULL,
+		`brewAddition17Use` varchar(25) DEFAULT NULL,
+		`brewAddition18Use` varchar(25) DEFAULT NULL,
+		`brewAddition19Use` varchar(25) DEFAULT NULL,
+		`brewAddition20Use` varchar(25) DEFAULT NULL,
+		`brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
+		`brewWinner` char(1) DEFAULT NULL,
+		`brewWinnerCat` varchar(3) DEFAULT NULL,
+		`brewWinnerSubCat` varchar(3) DEFAULT NULL,
+		`brewWinnerPlace` varchar(3) DEFAULT NULL,
+		`brewBOSRound` char(1) DEFAULT NULL,
+		`brewBOSPlace` varchar(3) DEFAULT NULL,
+		`brewReceived` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
+		`brewJudgingLocation` int(8) DEFAULT NULL,
+		`brewCoBrewer` varchar(255) DEFAULT NULL,
+		`brewJudgingNumber` varchar(10) DEFAULT NULL,
+		`brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
+		`brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
+		`brewBoxNum` varchar(10) DEFAULT NULL,
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	
 	";
 	
@@ -325,13 +478,13 @@ if ($setup_free_access == TRUE) {
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$contacts_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `contactFirstName` varchar(255) NULL DEFAULT NULL,
-	  `contactLastName` varchar(255) NULL DEFAULT NULL,
-	  `contactPosition` varchar(255) NULL DEFAULT NULL,
-	  `contactEmail` varchar(255) NULL DEFAULT NULL,
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`contactFirstName` varchar(255) DEFAULT NULL,
+		`contactLastName` varchar(255) DEFAULT NULL,
+		`contactPosition` varchar(255) DEFAULT NULL,
+		`contactEmail` varchar(255) DEFAULT NULL,
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -342,49 +495,49 @@ if ($setup_free_access == TRUE) {
 	
 	
 	// ------------------- 
-	// Competition Info Table
+	// Competition Info Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$contest_info_db_table` (
-	`id` int(1) NOT NULL,
-	`contestName` varchar(255) NULL DEFAULT NULL,
-	`contestHost` varchar(255) NULL DEFAULT NULL,
-	`contestHostWebsite` varchar(255) NULL DEFAULT NULL,
-	`contestHostLocation` varchar(255) NULL DEFAULT NULL,
-	`contestRegistrationOpen` varchar(255) NULL DEFAULT NULL,
-	`contestRegistrationDeadline` varchar(255) NULL DEFAULT NULL,
-	`contestEntryOpen` varchar(255) NULL DEFAULT NULL,
-	`contestEntryDeadline` varchar(255) NULL DEFAULT NULL,
-	`contestJudgeOpen` varchar(255) NULL DEFAULT NULL,
-	`contestJudgeDeadline` varchar(255) NULL DEFAULT NULL,
-	`contestRules` text,
-	`contestAwardsLocation` text,
-	`contestAwardsLocName` varchar(255) NULL DEFAULT NULL,
-	`contestAwardsLocDate` date NULL DEFAULT NULL,
-	`contestAwardsLocTime` varchar(255) NULL DEFAULT NULL,
-	`contestContactName` varchar(255) NULL DEFAULT NULL,
-	`contestContactEmail` varchar(255) NULL DEFAULT NULL,
-	`contestEntryFee` int(11) NULL DEFAULT NULL,
-	`contestEntryFee2` int(11) NULL DEFAULT NULL,
-	`contestEntryFeeDiscount` char(1) NULL DEFAULT NULL,
-	`contestEntryFeeDiscountNum` char(4) NULL DEFAULT NULL,
-	`contestCategories` text,
-	`contestBottles` text,
-	`contestShippingAddress` text,
-	`contestShippingName` varchar(255) NULL DEFAULT NULL,
-	`contestAwards` text,
-	`contestLogo` varchar(255) NULL DEFAULT NULL,
-	`contestBOSAward` text,
-	`contestWinnersComplete` text,
-	`contestEntryCap` int(8) NULL DEFAULT NULL,
-	`contestEntryFeePassword` varchar(255) NULL DEFAULT NULL,
-	`contestEntryFeePasswordNum` int(11) NULL DEFAULT NULL,
-	`contestID` varchar(11) NULL DEFAULT NULL,
-	`contestCircuit` text,
-	`contestVolunteers` text,
-	PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(1) NOT NULL DEFAULT '0',
+		`contestName` varchar(255) DEFAULT NULL,
+		`contestHost` varchar(255) DEFAULT NULL,
+		`contestHostWebsite` varchar(255) DEFAULT NULL,
+		`contestHostLocation` varchar(255) DEFAULT NULL,
+		`contestRegistrationOpen` varchar(255) DEFAULT NULL,
+		`contestRegistrationDeadline` varchar(255) DEFAULT NULL,
+		`contestEntryOpen` varchar(255) DEFAULT NULL,
+		`contestEntryDeadline` varchar(255) DEFAULT NULL,
+		`contestJudgeOpen` varchar(255) DEFAULT NULL,
+		`contestJudgeDeadline` varchar(255) DEFAULT NULL,
+		`contestRules` text,
+		`contestAwardsLocation` text,
+		`contestAwardsLocName` varchar(255) DEFAULT NULL,
+		`contestAwardsLocDate` varchar(255) DEFAULT NULL,
+		`contestAwardsLocTime` varchar(255) DEFAULT NULL,
+		`contestContactName` varchar(255) DEFAULT NULL,
+		`contestContactEmail` varchar(255) DEFAULT NULL,
+		`contestEntryFee` int(11) DEFAULT NULL,
+		`contestEntryFee2` int(11) DEFAULT NULL,
+		`contestEntryFeeDiscount` char(1) DEFAULT NULL,
+		`contestEntryFeeDiscountNum` char(4) DEFAULT NULL,
+		`contestCategories` text,
+		`contestBottles` text,
+		`contestShippingAddress` text,
+		`contestShippingName` varchar(255) DEFAULT NULL,
+		`contestAwards` text,
+		`contestLogo` varchar(255) DEFAULT NULL,
+		`contestBOSAward` text,
+		`contestWinnersComplete` text,
+		`contestEntryCap` int(8) DEFAULT NULL,
+		`contestEntryFeePassword` varchar(255) DEFAULT NULL,
+		`contestEntryFeePasswordNum` int(11) DEFAULT NULL,
+		`contestID` varchar(11) DEFAULT NULL,
+		`contestCircuit` text,
+		`contestVolunteers` text,
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -395,7 +548,7 @@ if ($setup_free_access == TRUE) {
 	
 	
 	// ------------------- 
-	// Countries Table
+	// Countries Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -403,7 +556,7 @@ if ($setup_free_access == TRUE) {
 	  `id` int(11) NOT NULL DEFAULT '0',
 	  `name` varchar(255) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -673,7 +826,7 @@ if ($setup_free_access == TRUE) {
 	  `dropLocationWebsite` varchar(255) NULL DEFAULT NULL,
 	  `dropLocationNotes` varchar(255) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -688,13 +841,14 @@ if ($setup_free_access == TRUE) {
 	
 	$sql = "
 	CREATE TABLE `$judging_assignments_db_table` (
-	`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	`bid` INT( 11 ) NULL COMMENT 'id from brewer table',
-	`assignment` CHAR ( 1 ) NULL,
-	`assignTable` INT( 11 ) NULL COMMENT 'id from judging_tables table',
-	`assignFlight` INT( 11 ) NULL ,
-	`assignRound` INT( 11 ) NULL,
-	`assignLocation` INT ( 11 ) NULL
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`bid` int(11) DEFAULT NULL COMMENT 'id from brewer table',
+	`assignment` char(1) DEFAULT NULL,
+	`assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables table',
+	`assignFlight` int(11) DEFAULT NULL,
+	`assignRound` int(11) DEFAULT NULL,
+	`assignLocation` int(11) DEFAULT NULL,
+	PRIMARY KEY (`id`)
 	) ENGINE = MYISAM ;
 	";
 	
@@ -705,7 +859,7 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Judging Assignments</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Judging Flights Table
+	// Judging Flights Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -716,7 +870,7 @@ if ($setup_free_access == TRUE) {
 	  `flightEntryID` text COMMENT 'array of ids of each entry from the brewing table',
 	  `flightRound` int(11) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -726,19 +880,19 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Judging Flights</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Judging Locations Table
+	// Judging Locations Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$judging_locations_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `judgingDate` varchar(255) NULL DEFAULT NULL,
-	  `judgingTime` varchar(255) NULL DEFAULT NULL,
-	  `judgingLocName` varchar(255) NULL DEFAULT NULL,
-	  `judgingLocation` text NULL DEFAULT NULL,
-	  `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`judgingDate` varchar(255) NULL DEFAULT NULL,
+		`judgingTime` varchar(255) NULL DEFAULT NULL,
+		`judgingLocName` varchar(255) NULL DEFAULT NULL,
+		`judgingLocation` text NULL DEFAULT NULL,
+		`judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -749,7 +903,7 @@ if ($setup_free_access == TRUE) {
 	
 	
 	// ------------------- 
-	// Judging Preferences Table
+	// Judging Preferences Table (v1.3.3.0)
 	// -------------------
 	
 	$sql = "
@@ -760,7 +914,7 @@ if ($setup_free_access == TRUE) {
 	  `jPrefsMaxBOS` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
 	  `jPrefsRounds` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -782,15 +936,16 @@ if ($setup_free_access == TRUE) {
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$judging_scores_db_table` (
-	  `id` int(11) NOT NULL AUTO_INCREMENT,
-	  `eid` int(11) NULL DEFAULT NULL COMMENT 'entry id from brewing table',
-	  `bid` int(11) NULL DEFAULT NULL COMMENT 'brewer id from brewer table',
-	  `scoreTable` int(11) NULL DEFAULT NULL COMMENT 'id of table from judging_tables table',
-	  `scoreEntry` int(11) NULL DEFAULT NULL COMMENT 'numerical score assigned by judges',
-	  `scorePlace` float NULL DEFAULT NULL COMMENT 'place of entry as assigned by judges',
-	  `scoreType` char(1) NULL DEFAULT NULL COMMENT 'type of entry used for custom styles',
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
+		`bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
+		`scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
+		`scoreEntry` float DEFAULT NULL COMMENT 'numerical score assigned by judges',
+		`scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
+		`scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom styles',
+		`scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No',
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -813,7 +968,7 @@ if ($setup_free_access == TRUE) {
 	  `scorePlace` float NULL DEFAULT NULL COMMENT 'place of entry as assigned by judges',
 	  `scoreType` char(1) NULL DEFAULT NULL COMMENT 'type of entry used for custom stylesr',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -824,7 +979,7 @@ if ($setup_free_access == TRUE) {
 	
 	
 	// ------------------- 
-	// Judging Tables BOS Table
+	// Judging Tables BOS Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -837,7 +992,7 @@ if ($setup_free_access == TRUE) {
 	  `tableJudges` varchar(255) NULL DEFAULT NULL COMMENT 'Array of ids from brewer table',
 	  `tableStewards` varchar(255) NULL DEFAULT NULL COMMENT 'Array of ids from brewer table',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -851,70 +1006,72 @@ if ($setup_free_access == TRUE) {
 	// -------------------
 	
 	$sql = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
-	  `id` int(11) NOT NULL AUTO_INCREMENT,
-	  `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
-	  `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
-	  `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
-	  `mod_extend_function_admin` varchar(255) DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
-	  `mod_filename` varchar(255) DEFAULT NULL COMMENT 'File name of the custom module',
-	  `mod_description` text COMMENT 'Short description of the custom module',
-	  `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
-	  `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
-	  `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
+		`mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
+		`mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
+		`mod_extend_function_admin` varchar(255) DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
+		`mod_filename` varchar(255) DEFAULT NULL COMMENT 'File name of the custom module',
+		`mod_description` text COMMENT 'Short description of the custom module',
+		`mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
+		`mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
+		`mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM";
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
 	
 	// ------------------- 
-	// Preferences Table
+	// Preferences Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$preferences_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `prefsTemp` varchar(255) NULL DEFAULT NULL,
-	  `prefsWeight1` varchar(20) NULL DEFAULT NULL,
-	  `prefsWeight2` varchar(20) NULL DEFAULT NULL,
-	  `prefsLiquid1` varchar(20) NULL DEFAULT NULL,
-	  `prefsLiquid2` varchar(20) NULL DEFAULT NULL,
-	  `prefsPaypal` char(1) NULL DEFAULT NULL,
-	  `prefsPaypalAccount` varchar(255) NULL DEFAULT NULL,
-	  `prefsCurrency` varchar(20) NULL DEFAULT NULL,
-	  `prefsCash` char(1) NULL DEFAULT NULL,
-	  `prefsCheck` char(1) NULL DEFAULT NULL,
-	  `prefsCheckPayee` varchar(255) NULL DEFAULT NULL,
-	  `prefsTransFee` char(1) NULL DEFAULT NULL,
-	  `prefsGoogle` char(1) NULL DEFAULT NULL,
-	  `prefsGoogleAccount` int(20) NULL DEFAULT NULL COMMENT 'Google Merchant ID',
-	  `prefsSponsors` char(1) NULL DEFAULT NULL,
-	  `prefsSponsorLogos` char(1) NULL DEFAULT NULL,
-	  `prefsSponsorLogoSize` varchar(255) NULL DEFAULT NULL,
-	  `prefsCompLogoSize` varchar(255) NULL DEFAULT NULL,
-	  `prefsDisplayWinners` char(1) NULL DEFAULT NULL,
-	  `prefsWinnerDelay` int(11) NULL DEFAULT NULL COMMENT 'Hours after last judging date beginning time to delay displaying winners',
-	  `prefsWinnerMethod` int(11) NULL DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
-	  `prefsDisplaySpecial` char(1) NULL DEFAULT NULL,
-	  `prefsBOSMead` char(1) DEFAULT 'N',
-	  `prefsBOSCider` char(1) DEFAULT 'N',
-	  `prefsEntryForm` char(1) NULL DEFAULT NULL,
-	  `prefsRecordLimit` int(11) NULL DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
-	  `prefsRecordPaging` int(11) NULL DEFAULT '150' COMMENT 'User defined per page record limit',
-	  `prefsTheme` varchar(255) NULL DEFAULT NULL,
-	  `prefsDateFormat` char(1) NULL DEFAULT NULL,
-	  `prefsContact` char(1) NULL DEFAULT NULL,
-	  `prefsTimeZone` DECIMAL(10,3)  NULL DEFAULT NULL,
-	  `prefsEntryLimit` int(11) NULL DEFAULT NULL,
-	  `prefsTimeFormat` tinyint(1) NULL DEFAULT NULL,
-	  `prefsUserEntryLimit` int(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
-	  `prefsUserSubCatLimit` int(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
-	  `prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
-	  `prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form',
-	  `prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
-	  `prefsUSCLEx` varchar(255) DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
-	  `prefsUSCLExLimit` int(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted',
-	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+		`id` int(8) NOT NULL AUTO_INCREMENT,
+		`prefsTemp` varchar(255) DEFAULT NULL,
+		`prefsWeight1` varchar(20) DEFAULT NULL,
+		`prefsWeight2` varchar(20) DEFAULT NULL,
+		`prefsLiquid1` varchar(20) DEFAULT NULL,
+		`prefsLiquid2` varchar(20) DEFAULT NULL,
+		`prefsPaypal` char(1) DEFAULT NULL,
+		`prefsPaypalAccount` varchar(255) DEFAULT NULL,
+		`prefsCurrency` varchar(20) DEFAULT NULL,
+		`prefsCash` char(1) DEFAULT NULL,
+		`prefsCheck` char(1) DEFAULT NULL,
+		`prefsCheckPayee` varchar(255) DEFAULT NULL,
+		`prefsTransFee` char(1) DEFAULT NULL,
+		`prefsGoogle` char(1) DEFAULT NULL,
+		`prefsGoogleAccount` varchar(255) DEFAULT NULL COMMENT 'Google Merchant ID',
+		`prefsSponsors` char(1) DEFAULT NULL,
+		`prefsSponsorLogos` char(1) DEFAULT NULL,
+		`prefsSponsorLogoSize` varchar(255) DEFAULT NULL,
+		`prefsCompLogoSize` varchar(255) DEFAULT NULL,
+		`prefsDisplayWinners` char(1) DEFAULT NULL,
+		`prefsWinnerDelay` int(11) DEFAULT NULL COMMENT 'Hours after last judging date beginning time to delay displaying winners',
+		`prefsWinnerMethod` int(11) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
+		`prefsDisplaySpecial` char(1) DEFAULT NULL,
+		`prefsBOSMead` char(1) DEFAULT 'N',
+		`prefsBOSCider` char(1) DEFAULT 'N',
+		`prefsEntryForm` char(1) DEFAULT NULL,
+		`prefsRecordLimit` int(11) DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
+		`prefsRecordPaging` int(11) DEFAULT '100' COMMENT 'User defined per page record limit',
+		`prefsCompOrg` char(1) DEFAULT NULL,
+		`prefsTheme` varchar(255) DEFAULT NULL,
+		`prefsDateFormat` char(1) DEFAULT NULL,
+		`prefsContact` char(1) DEFAULT NULL,
+		`prefsTimeZone` decimal(10,3) DEFAULT NULL,
+		`prefsEntryLimit` int(11) DEFAULT NULL,
+		`prefsTimeFormat` tinyint(1) DEFAULT NULL,
+		`prefsUserEntryLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
+		`prefsUserSubCatLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
+		`prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
+		`prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form',
+		`prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
+		`prefsUSCLEx` varchar(255) DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
+		`prefsUSCLExLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted',
+		`prefsSEF` char(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs',
+	  	PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -924,7 +1081,7 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Preferences</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Special Best Data Table
+	// Special Best Data Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -936,7 +1093,7 @@ if ($setup_free_access == TRUE) {
 	  `sbd_place` int(11) NULL DEFAULT NULL,
 	  `sbd_comments` text,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -946,7 +1103,7 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Special Best Data</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Special Best Info Table
+	// Special Best Info Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -958,7 +1115,7 @@ if ($setup_free_access == TRUE) {
 	  `sbi_rank` int(11) NULL DEFAULT NULL,
 	  `sbi_display_places` int(1) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
@@ -968,7 +1125,7 @@ if ($setup_free_access == TRUE) {
 	echo "<li><strong>Special Best Info</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Sponsors Table
+	// Sponsors Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
@@ -981,43 +1138,67 @@ if ($setup_free_access == TRUE) {
 	  `sponsorLocation` text,
 	  `sponsorLevel` tinyint(1) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
 	
-	echo "<li><strong>Sponsors</strong> table installed successfully.</li>";	
+	echo "<li><strong>Sponsors</strong> table installed successfully.</li>";
 	
 	// ------------------- 
-	// Styles Table
+	// Staff Table (v1.3.0.0 done)
+	// -------------------
+	
+	$sql = "
+	CREATE TABLE IF NOT EXISTS `$staff_db_table` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
+		`staff_judge` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+		`staff_judge_bos` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+		`staff_steward` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+		`staff_organizer` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+		`staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+		PRIMARY KEY (`id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+	";
+	
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($sql, $brewing) or die(mysql_error());
+     //echo "<p>".$sql."</p>";
+	
+	echo "<li><strong>Staff</strong> table installed successfully.</li>";
+	
+	// ------------------- 
+	// Styles Table (v1.3.0.0 done)
 	// -------------------
 	
 	$sql = "
 	CREATE TABLE IF NOT EXISTS `$styles_db_table` (
-	  `id` int(8) NOT NULL AUTO_INCREMENT,
-	  `brewStyleNum` varchar(3) NULL DEFAULT NULL,
-	  `brewStyle` varchar(250) NULL DEFAULT NULL,
-	  `brewStyleOG` varchar(20) NULL DEFAULT NULL,
-	  `brewStyleOGMax` varchar(25) NULL DEFAULT NULL,
-	  `brewStyleFG` varchar(20) NULL DEFAULT NULL,
-	  `brewStyleFGMax` varchar(25) NULL DEFAULT NULL,
-	  `brewStyleABV` varchar(250) NULL DEFAULT NULL,
-	  `brewStyleABVMax` varchar(25) NULL DEFAULT NULL,
-	  `brewStyleIBU` varchar(250) NULL DEFAULT NULL,
-	  `brewStyleIBUMax` varchar(25) NULL DEFAULT NULL,
-	  `brewStyleSRM` varchar(250) NULL DEFAULT NULL,
-	  `brewStyleSRMMax` varchar(25) NULL DEFAULT NULL,
-	  `brewStyleType` varchar(25) NULL DEFAULT NULL,
+	`id` int(8) NOT NULL AUTO_INCREMENT,
+	  `brewStyleNum` varchar(3) DEFAULT NULL,
+	  `brewStyle` varchar(150) DEFAULT NULL,
+	  `brewStyleOG` varchar(20) DEFAULT NULL,
+	  `brewStyleOGMax` varchar(25) DEFAULT NULL,
+	  `brewStyleFG` varchar(20) DEFAULT NULL,
+	  `brewStyleFGMax` varchar(25) DEFAULT NULL,
+	  `brewStyleABV` varchar(10) DEFAULT NULL,
+	  `brewStyleABVMax` varchar(10) DEFAULT NULL,
+	  `brewStyleIBU` varchar(10) DEFAULT NULL,
+	  `brewStyleIBUMax` varchar(10) DEFAULT NULL,
+	  `brewStyleSRM` varchar(10) DEFAULT NULL,
+	  `brewStyleSRMMax` varchar(10) DEFAULT NULL,
+	  `brewStyleType` varchar(10) DEFAULT NULL,
 	  `brewStyleInfo` text,
-	  `brewStyleLink` varchar(200) NULL DEFAULT NULL,
-	  `brewStyleGroup` varchar(3) NULL DEFAULT NULL,
-	  `brewStyleActive` char(1) NULL DEFAULT 'Y',
+	  `brewStyleLink` varchar(255) DEFAULT NULL,
+	  `brewStyleGroup` varchar(3) DEFAULT NULL,
+	  `brewStyleActive` char(1) DEFAULT 'Y',
 	  `brewStyleOwn` varchar(255) DEFAULT 'bcoe',
-	  `brewStyleJudgingLoc` int(8) NULL DEFAULT NULL,
+	  `brewStyleJudgingLoc` int(8) DEFAULT NULL,
+	  `brewStyleReqSpec` tinyint(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1128,6 +1309,75 @@ if ($setup_free_access == TRUE) {
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
+	 
+	 // Designate all BJCP styles that require special ingredients
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 21;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 59;";
+	mysql_select_db($database, $brewing);
+	
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 65;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 74;";
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 75;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 76;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 78;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 79;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 80;";
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 86;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 87;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 89;";
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 94;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 95;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 96;";
+	mysql_select_db($database, $brewing);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 97;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 98;";
+	mysql_select_db($database, $brewing); 
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
 	echo "<li><strong>Styles</strong> data installed successfully.</li>";
 	
@@ -1143,7 +1393,7 @@ if ($setup_free_access == TRUE) {
 	  `styleTypeBOS` char(1) NULL DEFAULT NULL,
 	  `styleTypeBOSMethod` int(11) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1174,13 +1424,13 @@ if ($setup_free_access == TRUE) {
 	  `data_check` varchar(255) NULL DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
 	  `setup` tinyint(1) NULL DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
 	echo "<li><strong>System</strong> table installed successfully.</li>";
 	
-	$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.2.0', '2012-01-31', NOW( ),'0');";
+	$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.3.0.0', '2012-08-01', NOW( ),'0');";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
@@ -1198,7 +1448,7 @@ if ($setup_free_access == TRUE) {
 	  `themeTitle` varchar(255) NULL DEFAULT NULL,
 	  `themeFileName` varchar(255) NULL DEFAULT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
@@ -1231,22 +1481,14 @@ if ($setup_free_access == TRUE) {
 	  `userQuestionAnswer` varchar(255) NULL DEFAULT NULL,
 	  `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.',
 	  PRIMARY KEY (`id`)
-	) ENGINE=MyISAM ;
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 	";
 	
 	mysql_select_db($database, $brewing);
 	$result = mysql_query($sql, $brewing) or die(mysql_error());
      //echo "<p>".$sql."</p>";
 	
-	/*
-	// For hosted accounts on brewcompetition.com or brewcomp.com 
-	$sql = "
-	INSERT INTO `$users_db_table` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES
-	(1, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '1', 'What was your high school mascot?', 'spartan', NOW( ));
-	";
-	mysql_select_db($database, $brewing);
-	$result = mysql_query($sql, $brewing) or die(mysql_error());
-	*/
+	
 	
 	echo "<li><strong>Users</strong> table installed successfully.</li>";
 
@@ -1256,7 +1498,21 @@ if ($setup_free_access == TRUE) {
 	<p><strong>However, the setup process is not done!</strong></p>
 	<p>Click &ldquo;Continue&rdquo; below to setup and customize your installation.</p>
 	<div style='padding: 20px; margin: 30px 0 0 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; -webkit-border-radius: 3px;
-	-moz-border-radius: 3px; border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='setup.php?section=step1'>Continue</a></div>";
+	-moz-border-radius: 3px; border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='".$base_url."setup.php?section=step1'>Continue</a></div>";
+	}
+	
+	if (HOSTED) {
+		// For hosted accounts on brewcompetition.com and brewcomp.com
+		$updateSQL = "INSERT INTO `$brewer_db_table` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
+		(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+		"; 
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		
+		// For hosted accounts on brewcompetition.com or brewcomp.com 
+		$sql = "INSERT INTO `$users_db_table` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES (1, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '0', 'What was your high school mascot?', 'spartan', NOW( ));";
+		mysql_select_db($database, $brewing);
+		$result = mysql_query($sql, $brewing) or die(mysql_error());
 	}
 
 }
