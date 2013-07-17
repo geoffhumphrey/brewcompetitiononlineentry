@@ -147,6 +147,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	//$_SESSION['prefsUSCLEx'] = $row_prefs['prefsUSCLEx'];
 	//$_SESSION['prefsUSCLExLimit'] = $row_prefs['prefsUSCLExLimit'];
 	$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
+	$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
 	
 
 	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");

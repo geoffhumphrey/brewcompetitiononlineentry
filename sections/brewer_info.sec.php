@@ -11,8 +11,6 @@ if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordN
 
 if (($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $assigned_as_judge = TRUE; else $assigned_as_judge = FALSE;
 
-
-
 // Build Thank You Message
 $thank_you = "<p>Thank you for entering the ".$_SESSION['contestName'].", ".$_SESSION['brewerFirstName']."."; 
 if (($totalRows_log > 0) && ($action != "print")) $thank_you .= " <a href='#list'>View your entries</a>.</p>";

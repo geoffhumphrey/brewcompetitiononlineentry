@@ -55,7 +55,10 @@ if ($action == "add") {
 	prefsHideRecipe,
 	prefsUseMods,
 	prefsSEF,
+	prefsSpecialCharLimit,
+	
 	id
+	
 	) VALUES (
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s, 
@@ -64,7 +67,8 @@ if ($action == "add") {
 	%s, %s, %s, %s, %s, 
 	%s, %s, %s, %s, %s,
 	%s, %s, %s, %s, %s,
-	%s, %s, %s, %s, %s)",
+	%s, %s, %s, %s, %s,
+	%s)",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
 						   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -111,6 +115,7 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
 						   GetSQLValueString($_POST['prefsUseMods'], "text"),
 						   GetSQLValueString($_POST['prefsSEF'], "text"),
+						   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
 						   GetSQLValueString($id, "int"));
 						   
 		//echo $insertSQL;
@@ -173,10 +178,13 @@ if ($action == "edit") {
 	prefsUserSubCatLimit=%s,
 	prefsUSCLEx=%s,
 	prefsUSCLExLimit=%s,
+	
 	prefsPayToPrint=%s,
 	prefsHideRecipe=%s,
 	prefsUseMods=%s,
-	prefsSEF=%s
+	prefsSEF=%s,
+	prefsSpecialCharLimit=%s
+	
 	WHERE id=%s",
 						   GetSQLValueString($_POST['prefsTemp'], "text"),
 						   GetSQLValueString($_POST['prefsWeight1'], "text"),
@@ -224,6 +232,8 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['prefsHideRecipe'], "text"),
 						   GetSQLValueString($_POST['prefsUseMods'], "text"),
 						   GetSQLValueString($_POST['prefsSEF'], "text"),
+						   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
+						   
 						   GetSQLValueString($id, "int"));
 						   
 		mysql_select_db($database, $brewing);

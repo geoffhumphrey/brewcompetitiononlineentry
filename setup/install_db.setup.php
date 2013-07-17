@@ -1053,8 +1053,8 @@ if ($setup_free_access == TRUE) {
 		`prefsBOSMead` char(1) DEFAULT 'N',
 		`prefsBOSCider` char(1) DEFAULT 'N',
 		`prefsEntryForm` char(1) DEFAULT NULL,
-		`prefsRecordLimit` int(11) DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
-		`prefsRecordPaging` int(11) DEFAULT '100' COMMENT 'User defined per page record limit',
+		`prefsRecordLimit` int(11) DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
+		`prefsRecordPaging` int(11) DEFAULT '30' COMMENT 'User defined per page record limit',
 		`prefsCompOrg` char(1) DEFAULT NULL,
 		`prefsTheme` varchar(255) DEFAULT NULL,
 		`prefsDateFormat` char(1) DEFAULT NULL,
@@ -1064,13 +1064,14 @@ if ($setup_free_access == TRUE) {
 		`prefsTimeFormat` tinyint(1) DEFAULT NULL,
 		`prefsUserEntryLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
 		`prefsUserSubCatLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
-		`prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
-		`prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form',
-		`prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
 		`prefsUSCLEx` varchar(255) DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
 		`prefsUSCLExLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted',
-		`prefsSEF` char(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs',
-	  	PRIMARY KEY (`id`)
+		`prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
+		`prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?',
+		`prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
+		`prefsSEF` char(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
+		`prefsSpecialCharLimit` int(3) DEFAULT NULL,
+		PRIMARY KEY (`id`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 	";
 	

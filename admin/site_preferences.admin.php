@@ -113,7 +113,18 @@ $totalRows_themes = mysql_num_rows($themes);
     </select>
     </td>
   	<td class="data">The BJCP Official form displays U.S. weights and measures. <?php if (!NHC) { ?>The<em> BJCP Official - With Barcode</em> option displays the official BJCP recipe form with four bottle labels that feature a scannable barcode. This option is intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a>&nbsp;to generate all barcodes</strong>. Please make sure your scanner recognizes this type of barcode&nbsp;<em>before</em>&nbsp;implementing in your competition.  	    <?php } ?></td>
-  </tr> 
+  </tr>
+  <tr>
+  	<td class="dataLabel">Character Limit for Special Ingredients:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsSpecialCharLimit" />
+    <?php for ($i=25; $i <= 255; $i+=5) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    <?php } ?>
+    </select>
+    </td>
+    <td class="data">Limit of characters allowed for the Special Ingredients section when adding an entry. 50 characters is the maximum recommended when utilizing the &ldquo;Bottle Labels with Special Ingredients&rdquo; report (Avery 5160 labels).</td>
+  </tr>
   <tr>
   	<td class="dataLabel">Total Entry Limit:</td>
     <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_limits['prefsEntryLimit']; ?>" size="5" maxlength="6" /></td>

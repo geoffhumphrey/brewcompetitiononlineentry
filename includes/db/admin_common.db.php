@@ -18,7 +18,7 @@ if (table_exists($judging_tables_db_table)) {
 	if (($go == "default") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights")) {
 		
 		$query_tables = "SELECT * FROM $judging_tables_db_table";
-		if ($go == "judging_scores") $query_tables .= " ORDER BY tableNumber ASC";
+		if (($go == "judging_scores") || ($go == "judging_tables")) $query_tables .= " ORDER BY tableNumber ASC";
 		//if ($id != "default") $query_tables .= " WHERE id='$id'";
 		$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 		$row_tables = mysql_fetch_assoc($tables);

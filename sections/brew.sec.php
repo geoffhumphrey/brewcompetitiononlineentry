@@ -44,7 +44,7 @@ elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($
 }
 
 else {
-
+	
 function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
 	/*
 	$style = Style category and subcategory number
@@ -89,9 +89,8 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	}
 	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
 	return $return;
-	
 }
-
+	
 function highlight_required($msg,$method) {
 	
 	if ($method == "0") { // special ingredients OPTIONAL mead/cider
@@ -163,8 +162,8 @@ function highlight_required($msg,$method) {
 	
 	
 }
-?>
-<?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>
+
+if ($_SESSION['prefsHideRecipe'] == "N") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php } ?>
 <script type="text/javascript">
@@ -174,11 +173,11 @@ $(document).ready(function()
 	$("#brewInfo").keyup(function()
 	{
 		var box=$(this).val();
-		var main = box.length *100;
-		var value= (main / 50);
-		var count= 50 - box.length;
+		var main = box.length * 100;
+		var value= (main / <?php echo $_SESSION['prefsSpecialCharLimit']; ?>);
+		var count= <?php echo $_SESSION['prefsSpecialCharLimit']; ?> - box.length;
 		
-		if(box.length <= 50)
+		if(box.length <= <?php echo $_SESSION['prefsSpecialCharLimit']; ?>)
 		{
 		$('#count').html(count);
 		}
@@ -497,7 +496,7 @@ $row_brewer = mysql_fetch_assoc($brewer);
     <span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, and 28B-D.</em></span><br />
    	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;). 	  </p>
    	<ul>
-   	  <li><strong>50 character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the Brewer's Specifics field under &ldquo;General&rdquo; area below to add information <strong>NOT essential to judging your entry</strong>."; ?></li>
+   	  <li><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the Brewer's Specifics field under &ldquo;General&rdquo; area below to add information <strong>NOT essential to judging your entry</strong>."; ?></li>
     	<li>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
     	    <ul>
     	        <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
@@ -510,10 +509,10 @@ $row_brewer = mysql_fetch_assoc($brewer);
   </td>
 </tr>
 <tr>
-   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "class=\"special-required\"";    ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="50" size="50"></td>
+   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>"></td>
 </tr>
 <tr>
-   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold">50</span></td>
+   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
 </tr>
  <?php } ?>
 </table>
