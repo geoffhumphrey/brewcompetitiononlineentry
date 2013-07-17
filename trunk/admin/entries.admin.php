@@ -65,7 +65,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 <table class="dataTable">
 <?php if ($entries_unconfirmed > 0) { ?>
 <tr>
-   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are marked in <span class="yellow" style="padding: 2px 5px 2px 5px; border: 1px solid #F90;">yellow</span> and are not included in fee calculations.
+   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are <span style='background-color: #ff9; border: 1px solid #F90; padding: 2px 3px 2px 3px;'>highlighted below</span> and are not included in fee calculations.
    </td>
 </tr>
 <tr>
@@ -223,10 +223,10 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
 	
 	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
 	
-	$entry_style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 	
 	?>
- <tr<?php if (($row_log['brewConfirmed'] == "0") && ($action != "print")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; // if ((style_convert($entry_style,"3") == TRUE) && ($row_log['brewInfo'] == "")) echo " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; ?>>
+ <tr<?php if (($row_log['brewConfirmed'] == "0") && ($action != "print")) echo " style='background-color: #ff9; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "")) echo " style='background-color: #ff9; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; ?>>
   <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
   <td class="dataList ">
   <?php 
@@ -240,9 +240,9 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   <?php } else echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);  ?>
   </td>
   <td class="dataList "><?php echo $row_log['brewName']; ?></td>
-  <td class="dataList "><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
+  <td class="dataList "><?php if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if (!empty($row_log['brewCategorySort'])) echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; else echo "<span class='required'>Style NOT specified!</span>"; if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList "><?php if (($row_brewer['brewerFirstName'] != "") && ($row_brewer['brewerLastName'] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?></td>
-  <td class="dataList "><?php echo  $row_brewer['brewerClubs']; ?></td>
+  <td class="dataList "><?php echo $row_brewer['brewerClubs']; ?></td>
   <td class="dataList "><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
   <td nowrap="nowrap" class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='".$base_url."images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
   <td class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewReceived'] == "1") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "1") echo "X"; } ?></td>

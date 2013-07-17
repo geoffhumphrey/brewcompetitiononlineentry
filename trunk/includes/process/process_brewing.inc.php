@@ -473,7 +473,7 @@ if ($action == "edit") {
 	$styleBreak = $_POST['brewStyle'];
 	$style = explode('-', $styleBreak);
 	$styleTrim = ltrim($style[0], "0"); 
-	if ($style [0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
+	if ($style[0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
 	
 	// Get style name from broken parts
 	$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
@@ -558,12 +558,22 @@ if ($action == "edit") {
 		$insertSQL .= "brewCoBrewer=".GetSQLValueString(ucwords($_POST['brewCoBrewer']),"text").", ";	
 		
 		$insertSQL .= "brewUpdated="."NOW( ), ";
+		
+		if (!NHC) {
+			$judging_number = generate_judging_num($styleTrim);
+			$insertSQL .= "brewJudgingNumber=".GetSQLValueString($judging_number,"text").", ";
+		}
+		
 		$insertSQL .= "brewConfirmed=".GetSQLValueString($_POST['brewConfirmed'],"int");
+		
+		
 
 		$insertSQL .= " WHERE id ='".$id."'";
 	
 	mysql_select_db($database, $brewing);
 	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	
+	//echo $insertSQL."<br>";
 	
 	
 	// Build updade url
@@ -572,6 +582,7 @@ if ($action == "edit") {
 	elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 	else $updateGoTo = $base_url."index.php?section=list&msg=2";
 	
+	/*
 	if (!NHC) {  // NOT for NHC
 		// Check if style has been changed. If so, regenerate judging number.
 		mysql_select_db($database, $brewing);
@@ -580,16 +591,14 @@ if ($action == "edit") {
 		$row_style_changed = mysql_fetch_assoc($style_changed);
 		
 		$style_previous = $row_style_changed['brewCategory']."-".$row_style_changed['brewSubCategory'];
-		if ($style_previous != $styleBreak) $new_judging_number = TRUE; else $new_judging_number = FALSE;
-		
-		if ($new_judging_number) {
+		if (($style_previous != $styleBreak)) {
 			$judging_number = generate_judging_num($styleTrim);
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingNumber='%s' WHERE id=%s", $judging_number, GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 	}
-	
+	*/
 	
 	// Check if entry requires special ingredients or a classic style, if so, override the $updateGoTo variable with another and redirect
 	if (check_special_ingredients($styleBreak)) {

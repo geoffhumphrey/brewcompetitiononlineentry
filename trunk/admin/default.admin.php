@@ -883,10 +883,9 @@ if ($go == "default") { ?>
             	<li><a href="<?php echo $base_url; ?>output/labels.php?section=admin&go=participants&action=judging_nametags">Download PDF</a></li>
             </ul>
             
-			
-<p class="admin_default_header">During Judging</p>
-			<?php if (((NHC) && ($prefix == "final_")) || (!NHC)) { ?>
-            <ul class="admin_default">
+			<?php if (((NHC) && ($prefix == "final_")) || (!NHC)) { ?>			
+			<p class="admin_default_header">During Judging</p>
+			<ul class="admin_default">
 				<li>Print BOS Pullsheets:
     			<ul>
         			<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>

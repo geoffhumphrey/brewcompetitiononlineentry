@@ -51,7 +51,7 @@ if ($msg != "1") {
 </tr>
 <tr>
 	<td class="dataLabel">Message:</td>
-	<td class="data"><textarea name="message" cols="100" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_SESSION['message']; ?></textarea></td>
+	<td class="data"><textarea name="message" cols="50" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_SESSION['message']; ?></textarea></td>
     <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>

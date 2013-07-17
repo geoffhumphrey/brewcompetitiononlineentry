@@ -10,7 +10,7 @@
 
 
 // Show Scores?
-if ((judging_date_return() == 0) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
+if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
 
 // Get Entry Fees
 if (judging_date_return() > 0) {
@@ -181,7 +181,12 @@ if (NHC) {
 	$nhc_message_1 .= "<div class='adminSubNavContainer'>";
 	$nhc_message_1 .= "<span class='adminSubNav'>";
 	$nhc_message_1 .= "<span class='icon'><img src='".$base_url."images/exclamation.png' border='0' alt='NHC Paid' title='NHC Paid' /></span>";
+	if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) {
+	$nhc_message_1 .= "Please click the corresponding edit link below add the recipe for each of your entries.";
+	}
+	else {
 	$nhc_message_1 .= "Your entries are not completely entered until they have been confirmed and entry fees have been paid.  Entries not paid within 24 hours of registration will be deleted from the competition database.";
+	}
 	$nhc_message_1 .= "</span>";
 	$nhc_message_1 .= "</div>";
 	
@@ -262,7 +267,7 @@ do {
 	
 	// Build Entry Table Body
 	
-	if (($row_log['brewConfirmed'] == 0) && ($action != "print")) $entry_tr_style = " style='background-color: #fc3; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 
+	if (($row_log['brewConfirmed'] == 0) && ($action != "print")) $entry_tr_style = " style='background-color: #ff9; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 
 	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = " style='background-color: #f90; border-top: 1px solid #FF6600; border-bottom: 1px solid #FF6600;'";
 	else $entry_tr_style = "";
 	
@@ -277,7 +282,9 @@ do {
 	$entry_output .= "</td>";
 	
 	$entry_output .= "<td class='dataList'>";
-	if ($row_style['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; else $entry_output .= "<span class='required'>Style entered NOT accepted - Please change</span>";
+	if ($row_style['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; 
+	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<span class='required'>Style NOT entered</span>";
+	else $entry_output .= "<span class='required'>Style entered NOT accepted.</span>";
 	$entry_output .= "</td>";
 	
 	
@@ -368,6 +375,9 @@ do {
 	}
 	if ((judging_date_return() == 0) && ($action != "print")) {
 		$entry_output .= "<td class='dataList' nowrap='nowrap'>";
+		
+		// Display the edit link for NHC final round after judging has taken place
+		// Necessary to gather recipe data for first place winners in the final round
 		if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) $entry_output .= $edit_link;
 		$entry_output .= "</td>";
 	}
@@ -397,7 +407,10 @@ do {
 				{ "asSorting": [  ] },
 				null,
 				<?php } ?>
+				<?php if ($action != "print") { ?>
 				{ "asSorting": [  ] }
+				<?php } ?>
+				
 				]
 			} );
 		} );
@@ -417,7 +430,9 @@ do {
     <th class="dataHeading bdr1B" width="10%">Mini-BOS?</th>
   	<th class="dataHeading bdr1B" width="10%">Winner?</th>
   	<?php } ?>
+    <?php if ($action != "print") { ?>
   	<th class="dataHeading bdr1B">Actions</th>
+    <?php } ?>
  </tr>
 </thead>
 <tbody>

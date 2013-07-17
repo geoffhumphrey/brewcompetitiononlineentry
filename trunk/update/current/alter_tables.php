@@ -44,7 +44,11 @@ $updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsSEF` CHAR(1) NULL 
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
-$updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N' WHERE id='1'";
+$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD  `prefsSpecialCharLimit` INT(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field';";
+mysql_select_db($database, $brewing);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+
+$updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'";
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 			
@@ -150,7 +154,7 @@ $updateSQL = "ALTER TABLE  `".$prefix."brewer` ADD `brewerDropOff` INT(4) NULL D
 mysql_select_db($database, $brewing);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
-$updateSQL = "UPDATE `".$prefix."brewer` SET `brewerDropOf` = '0'";
+$updateSQL = "UPDATE `".$prefix."brewer` SET `brewerDropOff` = '0'";
 mysql_select_db($database, $brewing); 
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 
