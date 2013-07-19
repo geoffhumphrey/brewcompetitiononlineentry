@@ -408,10 +408,16 @@ do {
 	$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
 	
 	if ($filter != "default") { 
-		if ($filter == "judges") { 
+		if ($filter == "judges") {\
+			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+			$display_rank = bjcp_rank($bjcp_rank[0],1);
+			
 			$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerJudgeID']."</td>";
-			$output_datatables_body .= "<td class='dataList'>".bjcp_rank($row_brewer['brewerJudgeRank'],1); 
+			$output_datatables_body .= "<td class='dataList'>".$display_rank; 
 			if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br />Certified Mead Judge";
+			if (!empty($bjcp_rank[1])) {
+				$output_datatables_body .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
+			}
 			$output_datatables_body .= "</td>";
 		}
 		$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
@@ -427,7 +433,7 @@ do {
 
 		$output_datatables_add_link = build_action_link("book_add",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
 		$output_datatables_edit_link = build_action_link("pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"Edit the user record for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
-		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['id'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."\nALL entries for this participant WILL BE DELETED as well.\nThis cannot be undone.");
+		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['id'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.");
 		else $output_datatables_delete_link = "<span class='icon'><img src='".$base_url."images/bin_closed_fade.png' title='You cannot delete yourself!'></span>";
 		if ($row_user1['userLevel'] <= "1") $change_icon = "lock_open"; else $change_icon = "lock_edit";
 		$output_datatables_other_link = build_action_link($change_icon,$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s User Level");

@@ -4,33 +4,43 @@
       <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
 	</tr>
 	<tr>
-      <td width="10%" class="dataLabel">Mead Judge Rank/Endorsement:</td>
+      <td width="10%" class="dataLabel">Mead Judge Endorsement:</td>
       <td width="15%" class="data">Have you taken <strong>and passed</strong> the BJCP Mead Exam?</td>
       <td class="data">
       <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0"  <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED";  if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; elseif ((($action == "edit") || ($section == "register")) && ($go == "judge")) echo "CHECKED"; ?>/> No</td>
     </tr>
     <tr>
       <td width="10%" class="dataLabel">Judge Rank:</td>
-      <td class="data"><select name="brewerJudgeRank">
-        <option value="Novice" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Novice")) echo "SELECTED"; ?>>Non-BJCP - Novice</option>
-        <option value="Professional Brewer" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Professional Brewer")) echo "SELECTED"; ?>>Non-BJCP - Professional Brewer</option>
-        <option value="Beer Sommelier" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Beer Sommelier")) echo "SELECTED"; ?>>Non-BJCP - Beer Sommelier</option>
-        <option value="Certified Cicerone" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified Cicerone")) echo "SELECTED"; ?>>Non-BJCP - Certified Cicerone</option>
-        <option value="Master Cicerone" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified Cicerone")) echo "SELECTED"; ?>>Non-BJCP - Master Cicerone</option>
-        <option value="Judge with Sensory Training" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Judge with Sensory Training")) echo "SELECTED"; ?>>Non-BJCP - Judge with Sensory Training</option>
-        <option value="Rank Pending" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Rank Pending")) echo "SELECTED"; ?>>BJCP - Rank Pending</option>
-        <option value="Apprentice" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Apprentice")) echo "SELECTED"; ?>>BJCP - Apprentice</option>
-        <option value="Provisional" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Provisional")) echo "SELECTED"; ?>>BJCP - Provisional</option>
-        <option value="Recognized" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Recognized")) echo "SELECTED"; ?>>BJCP - Recognized</option>
-        <option value="Certified" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Certified")) echo "SELECTED"; ?>>BJCP - Certified</option>
-        <option value="National" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "National")) echo "SELECTED"; ?>>BJCP - National</option>
-        <option value="Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Master")) echo "SELECTED"; ?>>BJCP - Master</option>
-        <option value="Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Grand Master")) echo "SELECTED"; ?>>BJCP - Grand Master</option>
-        <option value="Honorary Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Master")) echo "SELECTED"; ?>>BJCP - Honorary Master</option>
-        <option value="Honorary Grand Master" <?php if (($action == "edit") && ($row_brewer['brewerJudgeRank'] == "Honorary Grand Master")) echo "SELECTED"; ?>>BJCP - Honorary Grand Master</option>
-      </select>
+      <td class="data" colspan="2">
+      	<table class="dataTableCompact">
+        	<tr>
+            	<td>BJCP Designations</td>
+                <td>Other Designations*</td>
+            </tr>
+            	<td nowrap="nowrap">
+                <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
+                <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice")) echo "CHECKED"; else echo "CHECKED" ?>>Novice<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>Rank Pending<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Apprentice" <?php if (($action == "edit") && in_array("Apprentice",$judge_array)) echo "CHECKED"; ?>>Apprentice<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>>Provisional<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Recognized" <?php if (($action == "edit") && in_array("Recognized",$judge_array)) echo "CHECKED"; ?>>Recognized<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Certified" <?php if (($action == "edit") && in_array("Certified",$judge_array)) echo "CHECKED"; ?>>Certified<br />
+                <input type="radio" name="brewerJudgeRank[]" value="National" <?php if (($action == "edit") && in_array("National",$judge_array)) echo "CHECKED"; ?>>National<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Master" <?php if (($action == "edit") && in_array("Master",$judge_array)) echo "CHECKED"; ?>>Master<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Grand Master" <?php if (($action == "edit") && in_array("Grand Master",$judge_array)) echo "CHECKED"; ?>>Grand Master<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Honorary Master" <?php if (($action == "edit") && in_array("Honorary Master",$judge_array)) echo "CHECKED"; ?>>Honorary Master<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Honorary Grand Master" <?php if (($action == "edit") && in_array("Honorary Grand Master",$judge_array)) echo "CHECKED"; ?>>Honorary Grand Master<br />
+                </td>
+                <td>
+                <input type="checkbox" name="brewerJudgeRank[]" value="Professional Brewer" <?php if (($action == "edit") && in_array("Professional Brewer",$judge_array)) echo "CHECKED"; ?>>Professional Brewer<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Beer Sommelier" <?php if (($action == "edit") && in_array("Beer Sommelier",$judge_array)) echo "CHECKED"; ?>>Beer Sommelier<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone" <?php if (($action == "edit") && in_array("Certified Cicerone",$judge_array)) echo "CHECKED"; ?>>Certified Cicerone<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Master Cicerone" <?php if (($action == "edit") && in_array("Master Cicerone",$judge_array)) echo "CHECKED"; ?>>Master Cicerone<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>>Judge with Sensory Training
+				<br /><em>* Only the first two checked will appear on your Judge Scoresheet Labels</em></td>
+            </tr>
+       </table>
       </td>
-      <td class="data">&nbsp;</td> 
 	</tr>
     <tr>
     	<td colspan="3">
@@ -49,6 +59,7 @@
         		<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 				do {
     			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+				if (!empty($row_styles['brewStyleGroup'])) {
     			?>
             	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
@@ -59,6 +70,7 @@
   				</tr>
   				<?php $endRow = 0;
   				}
+				}
 				} while ($row_styles = mysql_fetch_assoc($styles));
 				if ($endRow != 0) {
 				while ($endRow < $columns) {
@@ -79,6 +91,7 @@
         	<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 				do {
     			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+				if (!empty($row_styles2['brewStyleGroup'])) {
     			?>
             	<td width="1%"><input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
                 <td width="1%"><?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].":"; ?></td>
@@ -89,6 +102,7 @@
   				</tr>
   				<?php $endRow = 0;
   				}
+				}
 				} while ($row_styles2 = mysql_fetch_assoc($styles2));
 				if ($endRow != 0) {
 				while ($endRow < $columns) {

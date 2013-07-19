@@ -112,7 +112,8 @@ if ($action == "add") {
 						   GetSQLValueString($id, "int"));
 	
 	  mysql_select_db($database, $brewing);
-	  $Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	  mysql_real_escape_string($insertSQL);
+	  $result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	  //echo $insertSQL."<br>";
 	  $insertSQL = sprintf("INSERT INTO $contacts_db_table (
 		contactFirstName, 
@@ -128,7 +129,8 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['contactEmail'], "text"));
 						   
 		mysql_select_db($database, $brewing);
-		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($insertSQL);
+		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		$insertGoTo = "../setup.php?section=step5";
 		$pattern = array('\'', '"');
   		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -222,7 +224,8 @@ if ($action == "edit") {
 	//echo $updateSQL;
 	
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));

@@ -28,6 +28,7 @@ if ($action == "update") {
 			if ($_POST['staff_judge'.$uid] == "1") {
 				if ($row_staff['count'] == 0) $updateSQL1 = sprintf("INSERT INTO %s (uid,staff_judge) VALUES (%s,1)",$prefix."staff",$uid);
 				else $updateSQL1 = sprintf("UPDATE %s SET staff_judge=1 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL1);
 				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
 				//echo $updateSQL1."<br>";
 			}
@@ -37,6 +38,7 @@ if ($action == "update") {
 				if ($row_staff['count'] == 0) $updateSQL2 == "";
 				else { 
 					$updateSQL2 = sprintf("UPDATE %s SET staff_judge=0 WHERE uid=%s",$prefix."staff",$uid);
+					mysql_real_escape_string($updateSQL2);
 					$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 				}
 				//echo $updateSQL2."<br>";
@@ -73,6 +75,7 @@ if ($action == "update") {
 			if ($_POST['staff_steward'.$uid] == "1") {
 				if ($row_staff['count'] == 0) $updateSQL1 = sprintf("INSERT INTO %s (uid,staff_steward) VALUES (%s,1)",$prefix."staff",$uid);
 				else $updateSQL1 = sprintf("UPDATE %s SET staff_steward=1 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL1);
 				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
 				//echo $updateSQL1."<br>";
 			}
@@ -82,6 +85,7 @@ if ($action == "update") {
 				if ($row_staff['count'] == 0) $updateSQL2 == "";
 				else {  
 				$updateSQL2 = sprintf("UPDATE %s SET staff_steward=0 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL2);
 				$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 				}
 				//echo $updateSQL2."<br>";
@@ -113,6 +117,7 @@ if ($action == "update") {
 			if ($_POST['staff_staff'.$uid] == "1") {
 				if ($row_staff['count'] == 0) $updateSQL1 = sprintf("INSERT INTO %s (uid,staff_staff) VALUES (%s,1)",$prefix."staff",$uid);
 				else $updateSQL1 = sprintf("UPDATE %s SET staff_staff=1 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL1);
 				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
 				//echo $updateSQL1."<br>";
 			}
@@ -121,6 +126,7 @@ if ($action == "update") {
 				if ($row_staff['count'] == 0) $updateSQL2 == "";
 				else { 
 					$updateSQL2 = sprintf("UPDATE %s SET staff_staff=0 WHERE uid=%s",$prefix."staff",$uid);
+					mysql_real_escape_string($updateSQL2);
 					$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 				}
 				//echo $updateSQL2."<br>";
@@ -133,6 +139,7 @@ if ($action == "update") {
 			if ($_POST['staff_judge_bos'.$uid] == "1") {
 				if ($row_staff['count'] == 0) $updateSQL1 = sprintf("INSERT INTO %s (uid,staff_judge_bos) VALUES (%s,1)",$prefix."staff",$uid);
 				else $updateSQL1 = sprintf("UPDATE %s SET staff_judge_bos=1 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL1);
 				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
 				//echo $updateSQL."<br>";
 			}
@@ -141,6 +148,7 @@ if ($action == "update") {
 				if ($row_staff['count'] == 0) $updateSQL2 == "";
 				else { 
 				$updateSQL2 = sprintf("UPDATE %s SET staff_judge_bos=0 WHERE uid=%s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL2);
 				$result1 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 				}
 				//echo $updateSQL."<br>";
@@ -163,6 +171,7 @@ if ($action == "update") {
 			if ($_POST['Organizer'] != $row_org['uid']) {
 				
 				$updateSQL3 = sprintf("UPDATE %s SET staff_organizer='0' WHERE uid='%s'", $prefix."staff",$row_org['uid']);
+				mysql_real_escape_string($updateSQL3);
 				$result3 = mysql_query($updateSQL3, $brewing) or die(mysql_error());
 				//echo $updateSQL3."<br>";
 				
@@ -172,13 +181,15 @@ if ($action == "update") {
 				$totalRows_staff_org = mysql_num_rows($staff_org);
 				
 				if ($totalRows_staff_org > 0) $updateSQL4 = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", $_POST['Organizer']);
-				else $updateSQL4 = sprintf("INSERT INTO %s (uid,staff_organizer) VALUES (%s,1)",$prefix."staff",$_POST['Organizer']);;
+				else $updateSQL4 = sprintf("INSERT INTO %s (uid,staff_organizer) VALUES (%s,1)",$prefix."staff",$_POST['Organizer']);
+				mysql_real_escape_string($updateSQL4);
 				$result4 = mysql_query($updateSQL4, $brewing) or die(mysql_error());
 				//echo $updateSQL4."<br>";
 			}
 			
 			if ($_POST['Organizer'] == $row_org['uid']) {
 				$updateSQL5 = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", $_POST['Organizer']);
+				mysql_real_escape_string($updateSQL5);
 				$result5 = mysql_query($updateSQL5, $brewing) or die(mysql_error());
 				//echo $updateSQL5."<br>";
 			}
@@ -211,6 +222,8 @@ if ($action == "add") {
 	}
     else $location_pref2 = "";
 	
+	if ($_POST['brewerJudgeRank'] != "") $rank = implode(",",$_POST['brewerJudgeRank']); else $rank = "";
+	
 	mysql_select_db($database, $brewing);
 	$query_user = sprintf("SELECT id FROM $users_db_table WHERE id = '%s'", $_POST['uid']);
 	$user = mysql_query($query_user, $brewing) or die(mysql_error());
@@ -224,7 +237,8 @@ if ($action == "add") {
 					   GetSQLValueString($_POST['uid'], "text"));
 					   
 		mysql_select_db($database, $brewing);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	} 		
 	
 	else {
@@ -299,6 +313,7 @@ if ($action == "add") {
 							   GetSQLValueString($_POST['brewerEmail'], "text"),
 							   GetSQLValueString($_POST['brewerAHA'], "text"),
 							   GetSQLValueString($prefix, "text"));
+			mysql_real_escape_string($updateSQL);
 			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			}
 		}
@@ -344,7 +359,7 @@ if ($action == "add") {
 						   GetSQLValueString($_POST['brewerJudge'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($rank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($_POST['brewerDropOff'], "int")
@@ -352,6 +367,7 @@ if ($action == "add") {
 		}
 
 		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($insertSQL);
 		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		//echo $insertSQL;
 		if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
@@ -384,6 +400,8 @@ if ($action == "edit") {
 
 	if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
 	if ($_POST['brewerJudgeDislikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
+	
+	if ($_POST['brewerJudgeRank'] != "") $rank = implode(",",$_POST['brewerJudgeRank']); else $rank = "";
 	
 	$updateSQL = sprintf("UPDATE $brewer_db_table SET 
 		uid=%s,
@@ -427,7 +445,7 @@ if ($action == "edit") {
 						   GetSQLValueString($_POST['brewerJudge'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($rank, "text"),
 						   GetSQLValueString($likes, "text"),
 						   GetSQLValueString($dislikes, "text"),
 						   GetSQLValueString($location_pref1, "text"),
@@ -449,7 +467,9 @@ if ($action == "edit") {
 	
 	////echo $updateSQL."<br>";
 	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
 	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL2);
 	$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 	
 	if ($go == "register") $updateGoTo = $base_url."index.php?section=brew&msg=2";	

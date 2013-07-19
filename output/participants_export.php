@@ -102,7 +102,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
 		$brewerCity = strtr($row_sql['brewerCity'],$html_remove);
 		if ($go == "tab") $assignment = $row_sql['brewerNickname']; else $assignment = $row_sql['brewerAssignment'];
-		$a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$assignment,$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],$row_sql['brewerJudgeRank'],$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
+		$a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$row_sql['brewerPhone1'],$assignment,$row_sql['brewerEmail'],$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),$row_sql['brewerClubs'],style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
 	} while ($row_sql = mysql_fetch_assoc($sql));
 	
 	$filename = $contest."_participants_".$date.$loc.$extension;

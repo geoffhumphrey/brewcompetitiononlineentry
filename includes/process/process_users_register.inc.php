@@ -84,10 +84,11 @@ if (NHC) {
 }
 
 // CAPCHA check
-include_once  (ROOT.'captcha/securimage.php');
-$securimage = new Securimage();
+require_once(INCLUDES.'recaptchalib.inc.php');
+$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
+$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 
-if (($securimage->check($_POST['captcha_code']) == false) && ($filter != "admin")) {
+if (!$resp->is_valid) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
@@ -178,7 +179,8 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 					   "NOW( )"					   
 					   );
 		mysql_select_db($database, $brewing);
-		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($insertSQL);
+		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		//echo $insertSQL."<br />";
 	// Get the id from the "users" table to insert as the uid in the "brewer" table
 		$query_user= "SELECT id FROM $users_db_table WHERE user_name = '$username'";
@@ -312,13 +314,15 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 							   GetSQLValueString($username, "text"),
 							   GetSQLValueString($_POST['brewerAHA'], "text"),
 							   GetSQLValueString($prefix, "text"));
+			mysql_real_escape_string($updateSQL);
 			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		
 		//echo $insertSQL;
 		mysql_select_db($database, $brewing);
-		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
+		mysql_real_escape_string($insertSQL);
+		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
 	
 	if ($filter == "default") {
 	    // Log in the user and redirect

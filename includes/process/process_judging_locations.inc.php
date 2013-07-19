@@ -16,7 +16,8 @@ if ($action == "add") {
 
 	//echo $insertSQL;
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	if ($section == "step5") $insertGoTo = "../setup.php?section=step5&msg=9"; else $insertGoTo = $insertGoTo;
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -33,8 +34,9 @@ if ($action == "edit") {
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
 	//echo $judgingDate; echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));

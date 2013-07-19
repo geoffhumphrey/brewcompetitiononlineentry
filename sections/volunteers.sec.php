@@ -19,17 +19,17 @@ if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$
 <?php } 
 if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 ?>
-<!--
+
 <h2>Judging and Stewarding</h2>
 <?php if (($judge_window_open > 0) && (!isset($_SESSION['loginUsername']))) { ?>
-	<p>If you <em>have</em> registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
+	<p>If you <em>have</em> registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> and then choose <em>Edit My Info</em> to indicate that you are willing to judge or  steward.</p>
 	<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">please register</a>.</p>
 <?php } elseif (($judge_window_open > 0) && (isset($_SESSION['loginUsername']))) { ?>
 	<p>Since you have already registered, you can <a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
     <p>If you are willing to judge or steward, please return to register on or after <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?>.</p>
 <?php } ?>
--->
+
 <?php if ($_SESSION['contestVolunteers'] != "") { ?>
 <h2>Other Volunteer Info</h2>
 <?php echo $_SESSION['contestVolunteers']; ?>

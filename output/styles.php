@@ -14,6 +14,10 @@ else $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' O
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
+
+$query_styles_count = "SELECT brewStyleGroup FROM $styles_db_table ORDER BY brewStyleGroup DESC LIMIT 1";
+$styles_count = mysql_query($query_styles_count, $brewing) or die(mysql_error());
+$row_styles_count = mysql_fetch_assoc($styles_count);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -53,7 +57,7 @@ a:active {
     	<div id="header">
         	<div id="header-inner"><a name="top"></a><h1>Accepted Styles</h1></div>
         </div>
-        <p>Skip to Category: <?php for ($i=1; $i <= 28; $i++) { ?><a href="#<?php echo $i; ?>" title="Skip to <?php if ($i > 10) $s = "0".$i; else $s = $i; echo style_convert($s,1); ?>"><?php echo $i; ?></a>&nbsp;&nbsp;<?php } ?></p>
+        <p>Skip to Category: <?php for ($i=1; $i <= $row_styles_count['brewStyleGroup']; $i++) { ?><a href="#<?php echo $i; ?>" title="Skip to <?php if ($i > 10) $s = "0".$i; else $s = $i; echo style_convert($s,1); ?>"><?php echo $i; ?></a>&nbsp;&nbsp;<?php } ?></p>
 <?php if ($totalRows_styles > 0) { ?>
 <?php do { 
     if (($sort == "brewStyleSRM") 	&& (($row_styles['brewStyleSRM'] == "") || ($row_styles['brewStyleSRM'] == "N/A"))) echo ""; 
@@ -64,7 +68,9 @@ elseif (($sort == "brewStyleABV") 	&& ($row_styles['brewStyleABV'] == "")) echo 
 else { 
 ?>
 <div class="bdr1B_gray" style="padding-bottom: 40px">
-<?php if ($row_styles['brewStyleNum'] == "A") { ?><a name="<?php if ($row_styles['brewStyleGroup'] < 10) echo ltrim($row_styles['brewStyleGroup'],"0"); else echo $row_styles['brewStyleGroup']; ?>"></a><?php } ?><h2><?php echo $row_styles['brewStyle']; ?></h2>
+<?php if ($row_styles['brewStyleNum'] == "A") { ?><a name="<?php if ($row_styles['brewStyleGroup'] < 10) echo ltrim($row_styles['brewStyleGroup'],"0"); else echo $row_styles['brewStyleGroup']; ?>"></a><?php } ?>
+<a name="<?php if ($row_styles['brewStyleGroup'] < 10) echo ltrim($row_styles['brewStyleGroup'],"0"); else echo $row_styles['brewStyleGroup']; echo $row_styles['brewStyleNum']; ?>"></a>
+<h2><?php echo $row_styles['brewStyle']; ?></h2>
 
 <table>
   <tr>

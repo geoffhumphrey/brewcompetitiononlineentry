@@ -15,7 +15,7 @@ function pay_to_print($prefs_pay,$entry_paid) {
 	elseif ($prefs_pay == "N") return TRUE;
 }
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
-include_once(INCLUDES.'tbs_class_php5.php');
+include_once(CLASSES.'tiny_but_strong/tbs_class_php5.php');
 mysql_select_db($database, $brewing);
 $query_contest_info = "SELECT * FROM $contest_info_db_table WHERE id=1";
 $row_contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());

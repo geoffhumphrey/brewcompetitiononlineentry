@@ -16,7 +16,8 @@ if ($action == "add") {
 					   );
 
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	if ($section == "step6") $insertGoTo = "../setup.php?section=$section&msg=11"; else $insertGoTo = $insertGoTo;
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -34,7 +35,8 @@ if ($action == "edit") {
 					   GetSQLValueString($id, "int"));   
 					   
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));			

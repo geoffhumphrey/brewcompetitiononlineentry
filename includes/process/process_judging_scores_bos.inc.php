@@ -24,7 +24,8 @@ if ($action == "enter") {
 
 	//echo $updateSQL."<br>";
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
 	if (($_POST['scorePlace'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
 	$insertSQL = sprintf("INSERT INTO $judging_scores_bos_db_table (
@@ -43,7 +44,8 @@ if ($action == "enter") {
 
 	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
 		}
 	}
 	$pattern = array('\'', '"');

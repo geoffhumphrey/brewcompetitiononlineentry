@@ -12,6 +12,7 @@ if ($action == "update") {
 		if ($_POST['mod_enable'.$id] == 1) $enable = 1; else $enable = 0;
 		$updateSQL = sprintf("UPDATE %s SET mod_enable='%s' WHERE id='%s'",$mods_db_table,$enable,$id);
 		//echo $updateSQL."<br>";
+		mysql_real_escape_string($updateSQL);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
 	$massUpdateGoTo = $base_url."index.php?section=admin&go=mods&msg=9"; 
@@ -51,7 +52,8 @@ if ($action == "add") {
 				);
 
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   	header(sprintf("Location: %s", stripslashes($insertGoTo)));					   
@@ -82,7 +84,8 @@ if ($action == "edit") {
 			GetSQLValueString($id, "int"));
 
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));					   

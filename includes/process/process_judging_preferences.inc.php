@@ -30,7 +30,8 @@ WHERE id=%s",
                        GetSQLValueString($id, "int"));
 					   
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	if ($section == "step8") {
 		// Lock down the config file
 		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
@@ -38,16 +39,17 @@ WHERE id=%s",
 		
 		$updateSQL = sprintf("UPDATE %s SET setup='1' WHERE id='1'",$prefix."system");			   
 		mysql_select_db($database, $brewing);
-  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
-		/*
+		if (HOSTED) {
 		// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
 		$to_email = "prost@brewcompetition.com";
 		$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
 		$message = "<html>" . "\r\n";
 		$message .= "<body>
 					<p>BCOEM Setup Completed for http://".$_SERVER['SERVER_NAME']."</p>
-					<p><a href='https://box462.bluehost.com:2083/frontend/bluehost/filemanager/index.html?dirselect=domainrootselect&domainselect=".$_SERVER['SERVER_NAME']."'>Be sure to change setup_free_access to FALSE</a></p>
+					<p>Be sure to change setup_free_access to FALSE</p>
 					</body>" . "\r\n";
 		$message .= "</html>";
 		
@@ -58,7 +60,7 @@ WHERE id=%s",
 		
 		
 		mail($to_email, $subject, $message, $headers);
-		*/
+		}
 		
 		session_unset();
 		session_destroy();

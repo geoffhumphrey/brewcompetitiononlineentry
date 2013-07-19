@@ -119,7 +119,6 @@ function bos_judge_eligible($uid) {
 }
 
 
-
 // *****************************************************************************
 // ---------------------- Top of Page Vars -------------------------------------
 // *****************************************************************************
@@ -416,9 +415,16 @@ if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default")
 		}
 		
 		if (($filter == "judges") || ($filter == "bos")) {
+			
+			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+			$display_rank = bjcp_rank($bjcp_rank[0],1);
+		
 			$output_datatables_body .= "<td class='dataList'>".strtoupper($row_brewer['brewerJudgeID'])."</td>";
-			$output_datatables_body .= "<td class='dataList'>".bjcp_rank($row_brewer['brewerJudgeRank'],1);
+			$output_datatables_body .= "<td class='dataList'>".$display_rank;
 			if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+			if (!empty($bjcp_rank[1])) {
+				$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+			}
 			$output_datatables_body .= "</td>";		
 		}
 		

@@ -339,13 +339,13 @@ $html_remove = array(
 "&copy;" => "",
 "&reg;" => "",
 "<p>" => "",
-"“" => "\"",   // left side double smart quote
-"”" => "\"",  // right side double smart quote
-"‘" => "'",  // left side single smart quote
-"’" => "'",  // right side single smart quote
-"…" => "...",  // elipsis
-"—" => "--",  // em dash
-"–" => "-",  // en dash
+"“" => "\"",   	// left side double smart quote
+"”" => "\"",  	// right side double smart quote
+"‘" => "'",  	// left side single smart quote
+"’" => "'",  	// right side single smart quote
+"…" => "...",  	// elipsis
+"—" => "--",  	// em dash
+"–" => "-",  	// en dash
 );
 
 $space_remove = array( 

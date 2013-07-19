@@ -24,7 +24,8 @@ if ($action == "add") {
 					   );
 
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	//echo $insertSQL."<br>";
 		}
 	}
@@ -53,7 +54,8 @@ if ($action == "edit") {
 							   GetSQLValueString($id, "int"));
 		
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			//echo $updateSQL." (Entry Exists)<br>";
 		}
 		if (($_POST['entry_exists'.$id] == "N") && ($_POST['sbd_judging_no'.$id] != "")) {
@@ -66,7 +68,8 @@ if ($action == "edit") {
 						   );
 		
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($insertSQL);
+			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 			//echo $insertSQL."<br>";
 		}
 	}

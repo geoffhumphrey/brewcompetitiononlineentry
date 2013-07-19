@@ -6,10 +6,36 @@
  * 
  */
 
+include (DB.'judging_locations.db.php');
+
+// Functions unique to this script
+function yes_no($input,$base_url,$method=0) {
+	if ($method != 3) {
+		if (($input == "Y") || ($input == 1)) { 
+			$output = "<span class='icon'><img src='".$base_url."images/tick.png' alt='Yes' title='Yes'></span>";
+			if ($method == 0) $output .= "Yes";
+		}
+		else {
+			$output = "<span class='icon'><img src='".$base_url."images/cross.png' alt='No' title='No'></span>";
+			if ($method == 0) $output .= "No";
+		}
+	}
+	if ($method == 3) {
+		if (($input == "Y") || ($input == 1)) $output = "Yes";
+		else $output = "No";
+		
+	}
+	return $output;
+}
+
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
-
-if (($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $assigned_as_judge = TRUE; else $assigned_as_judge = FALSE;
+$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1");
+$assignment_array = str_replace(", ",",",$brewer_assignment);
+$assignment_array = explode(",", $assignment_array);
+if ((!in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $judge_available_not_assigned = TRUE; else $judge_available_not_assigned = FALSE;
+if ((!in_array("Steward",$assignment_array)) && ($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) $steward_available_not_assigned = TRUE; else $steward_available_not_assigned = FALSE;
+//echo $totalRows_judging3;
 
 // Build Thank You Message
 $thank_you = "<p>Thank you for entering the ".$_SESSION['contestName'].", ".$_SESSION['brewerFirstName']."."; 
@@ -30,7 +56,6 @@ if ($action != "print") {
 	
 	// Build Change My Email Address link
 	$edit_password_link = "<a href='".$base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID']."'>Change My Password</a>";
-	
 	
 	$user_edit_links .= "<div class='adminSubNavContainer'>";
 	
@@ -80,10 +105,9 @@ if (!empty($_SESSION['brewerAHA'])) {
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number = "Pending"; 
 } else $aha_number = "None entered";
 
-
-
 // Build Judge Info Display
-if ($assigned_as_judge) { 
+if ($judge_available_not_assigned) { 
+$judge_info = "";
 	$a = explode(",",$_SESSION['brewerJudgeLocation']);
 	arsort($a);
 	foreach ($a as $value) {
@@ -92,20 +116,46 @@ if ($assigned_as_judge) {
 			$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
 			$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 			$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-			echo "<tr>\n";
-			if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-			echo substr($value, 0, 1);
-			echo "</td>\n";
-			if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-			echo $row_judging_loc3['judgingLocName'];
-			echo "</td>\n";
-			if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-			echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
-			echo "</td>\n";
-			echo "</tr>";
+			$judge_info .= "<tr>\n";
+			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+			$judge_info .= yes_no(substr($value, 0, 1),$base_url);
+			$judge_info .= "</td>\n";
+			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+			$judge_info .= $row_judging_loc3['judgingLocName'];
+			$judge_info .= "</td>\n";
+			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+			$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+			$judge_info .= "</td>\n";
+			$judge_info .= "</tr>";
 			}
-		else echo "";
+		else $judge_info .= "";
 	}
+}
+
+// Build Steward Info Display
+if ($steward_available_not_assigned) { 
+$steward_info = "";
+	$a = explode(",",$_SESSION['brewerStewardLocation']);
+		arsort($a);
+		foreach ($a as $value) {
+			if ($value != "0-0") {
+				$b = substr($value, 2);
+				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
+				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
+				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
+				$steward_info .= "<tr>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				$steward_info .= yes_no(substr($value, 0, 1),$base_url);
+				$steward_info .= "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				$steward_info .= $row_judging_loc3['judgingLocName'];
+				$steward_info .= "</td>\n";
+				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+				$steward_info .= "</tr>";
+				}
+			else $steward_info .= "";
+			}
 }
 
 // ------------------------ Display -------------------------------
@@ -121,165 +171,205 @@ echo "<h2>Info</h2>";
 // Display User Edit Links
 echo $user_edit_links;
 
+/*
+echo $brewer_assignment."<br>";
+echo $judge_available_not_assigned."<br>";
+echo $steward_available_not_assigned."<br>";
+echo $_SESSION['brewerJudge']."<br>";
+echo $_SESSION['brewerSteward']."<br>";
+*/
 ?>
-<table class="dataTableCompact">
-  	<tr>
-    	<td class="dataLabel" width="5%">Name:</td>
-    	<td class="data"><?php echo $name; ?></td>
-  	</tr>
-  	<tr>
-   	 	<td class="dataLabel">Email:</td>
-   	 	<td class="data"><?php echo $email; ?></td>
-  	</tr>
-  	<tr>
-    	<td class="dataLabel">Address:</td>
-    	<td class="data"><?php echo $address; ?></td>
-  	</tr>
-  	<tr>
-  	  <td class="dataLabel">City:</td>
-  	  <td class="data"><?php echo $city; ?></td>
-  </tr>
-  	<tr>
-  	  <td class="dataLabel">State or Province:</td>
-  	  <td class="data"><?php echo $state; ?></td>
-  </tr>
-  	<tr>
-  	  <td class="dataLabel">Zip or Postal Code:</td>
-  	  <td class="data"><?php echo $zip; ?></td>
-  </tr>
-  	<tr>
-  	  <td class="dataLabel">Country:</td>
-  	  <td class="data"><?php echo $country; ?></td>
-  </tr>
-  	<tr>
-    	<td class="dataLabel">Phone Number(s):</td>
-    	<td class="data"><?php echo $phone; ?></td>
-  	</tr>
-  	<tr>
-  	  <td class="dataLabel">Drop Off Location:</td>
-  	  <td class="data"><?php echo dropoff_location($_SESSION['brewerDropOff']); ?></td>
-  </tr>
-  	<tr>
-    	<td class="dataLabel">Club:</td>
-    	<td class="data"><?php echo $club; ?></td>
-  	</tr>
-    <?php if ($entry_discount) { ?>
+
+<table class="dataTable">
+<tr>
+    <td class="dataLabel" width="5%">Name:</td>
+    <td class="data"><?php echo $name; ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Email:</td>
+    <td class="data"><?php echo $email; ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Address:</td>
+    <td class="data"><?php echo $address; ?></td>
+</tr>
+<tr>
+  <td class="dataLabel">City:</td>
+  <td class="data"><?php echo $city; ?></td>
+</tr>
+<tr>
+  <td class="dataLabel">State or Province:</td>
+  <td class="data"><?php echo $state; ?></td>
+</tr>
+<tr>
+  <td class="dataLabel">Zip or Postal Code:</td>
+  <td class="data"><?php echo $zip; ?></td>
+</tr>
+<tr>
+  <td class="dataLabel">Country:</td>
+  <td class="data"><?php echo $country; ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Phone Number(s):</td>
+    <td class="data"><?php echo $phone; ?></td>
+</tr>
+<tr>
+  <td class="dataLabel">Drop Off Location:</td>
+  <td class="data"><?php echo dropoff_location($_SESSION['brewerDropOff']); ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Club:</td>
+    <td class="data"><?php echo $club; ?></td>
+</tr>
+
+<?php if ($entry_discount) { ?>
+<tr>
+    <td class="dataLabel">Entry Fee Discount:</td>
+    <td class="data"><?php echo $discount; ?></td>
+</tr>
+<?php } // end if ($entry_discount)?>
+
+<?php if (!empty($brewer_assignment)) { ?>
+<tr>
+    <td class="dataLabel">Assigned As:</td>
+    <td class="data"><?php echo $brewer_assignment; ?></td>
+</tr>
+<?php } // end if (!empty($brewer_assignment))?>
+
+<?php if ((in_array("Judge",$assignment_array)) && ($action != "print")) { ?>
+<tr>
+    <td class="dataLabel">&nbsp;</td>
+    <td class="data"><span class="icon"><img src="<?php echo $base_url; ?>images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $_SESSION['brewerID']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
+</tr>
+<?php } // end if (in_array("Judge",$assignment_array)) && ($action != "print")) ?>
+
+
+<?php if ($_SESSION['brewerJudge'] == "Y") { 
+$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+$display_rank = bjcp_rank($bjcp_rank[0],2);
+if (!empty($bjcp_rank[1])) {
+	$display_rank .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
+		}
+?>
+<tr>
+    <td class="dataLabel">BJCP Judge ID:</td>
+    <td class="data"><?php  if ($_SESSION['brewerJudgeID'] != "0") echo $_SESSION['brewerJudgeID']; else echo "N/A"; ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Beer Judge Ranks and Designations:</td>
+ <td class="data"><?php  if ($_SESSION['brewerJudgeRank'] != "") echo str_replace("<br />",", ",$display_rank); else echo "N/A"; ?></td>
+</tr>
+<tr>
+  <td width="10%" class="dataLabel">Mead Judge Endorsement:</td>
+  <td colspan="2" class="data"><?php if ($action == "print") echo yes_no($_SESSION['brewerJudgeMead'],$base_url,3); else echo yes_no($_SESSION['brewerJudgeMead'],$base_url) ?></td>
+</tr>
+<tr>
+    <td class="dataLabel">Categories Preferred:</td>
+    <td class="data">
+    <?php 
+    if ($_SESSION['brewerJudgeLikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeLikes'],4),2),", ");
+    else echo "N/A";		
+    ?>
+    </td>
+</tr>
+<tr>
+    <td class="dataLabel">Categories Not Preferred:</td>
+    <td class="data">
+    <?php 
+    if ($_SESSION['brewerJudgeDislikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url),2),", "); 
+    else echo "N/A";		
+    ?>
+    </td>
+</tr>
+<?php } // end if ($_SESSION['brewerJudge'] == "Y") ?>
+<tr>
+    <td class="dataLabel">Available to Judge?</td>
+    <td class="data">
+    <?php if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) echo yes_no($_SESSION['brewerJudge'],$base_url); elseif ((!empty($_SESSION['brewerJudge'])) && ($action == "print")) echo yes_no($_SESSION['brewerJudge'],$base_url,3); else echo "None entered"; ?>
+    </td>
+</tr>
+<?php if ($judge_available_not_assigned) { ?>
+<tr>
+    <td class="dataLabel">Judging Availability:</td>
+    <td>
+    <script type="text/javascript" language="javascript">
+         $(document).ready(function() {
+            $('#sortable_judge').dataTable( {
+                "bPaginate" : false,
+                "sDom": 'rt',
+                "bStateSave" : false,
+                "bLengthChange" : false,
+                "aaSorting": [[1,'asc']],
+                "aoColumns": [
+                    null,
+                    null,
+                    null
+                    ]
+                } );
+            } );
+    </script> 
+    <table id="sortable_judge" class="dataTable" style="width:50%;float:left;">
+    <thead>
     <tr>
-    	<td class="dataLabel">Entry Fee Discount:</td>
-    	<td class="data"><?php echo $discount; ?></td>
-  	</tr>
-    <?php } ?>
-  	<tr>
-    	<td class="dataLabel">AHA Member Number:</td>
-    	<td class="data"><?php echo $aha_number; ?></td>
-  	</tr>
-  	<?php if ($_SESSION['brewerAssignment'] == "") { ?>
-  	<tr>
-    	<td class="dataLabel">Judge?</td>
-    	<td class="data">
-		<?php if ($_SESSION['brewerJudge'] != "") echo  $_SESSION['brewerJudge']; else echo "None entered"; ?>
-    	</td>
-  	</tr>
-  	<?php if ($assigned_as_judge) { ?>
-  	<tr>
-    	<td class="dataLabel">Judging Availability:</td>
-    	<td>
-        <script type="text/javascript" language="javascript">
-			 $(document).ready(function() {
-				$('#sortable_judge').dataTable( {
-					"bPaginate" : false,
-					"sDom": 'rt',
-					"bStateSave" : false,
-					"bLengthChange" : false,
-					"aaSorting": [[2,'asc']],
-					"aoColumns": [
-						null,
-						null,
-						null
-						]
-					} );
-				} );
-		</script> 
-    	<table id="sortable_judge" class="dataTable" style="width:50%;float:left;">
-        <thead>
-        <tr>
-        	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
-            <th class="dataHeading bdr1B" width="35%">Location</th>
-            <th class="dataHeading bdr1B">Date/Time</th>
-        </tr>
-        </thead>
-        <tbody>
-		<?php echo $judge_info;	?>
-        </tbody>
-    	</table>
-    	</td>
-  	</tr>
-  	<?php } ?>
-  	<?php } else { 
-	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1");
-	if ($brewer_assignment != "") {
-	?>
-  	<tr>
-    	<td class="dataLabel">Assigned As:</td>
-		<td class="data"><?php echo $brewer_assignment; ?></td>
-  	</tr>
-    <?php if (strstr($brewer_assignment,"Judge") && ($action != "print")) { ?>
-    <tr>
-    	<td class="dataLabel">&nbsp;</td>
-		<td class="data"><span class="icon"><img src="<?php echo $base_url; ?>images/page_white_acrobat.png"  border="0" alt="Print your judging scoresheet labels" title="Judging scoresheet labels"></span><a href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=<?php echo $_SESSION['brewerID']; ?>">Print Judging Scoresheet Labels</a></span><span class="data">(Avery 5160 PDF Download)</span></td>
-  	</tr>
-  	<?php } ?>
-	<?php 
-	$table_assignments = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat']);
-	if (($totalRows_judging3 > 1) && ($table_assignments != "")) { ?>
-  	<tr>
-    	<td class="dataLabel">Location<?php if ($totalRows_judging > 1) echo "(s)"; ?>:</td>
-    	<td>
-    	<?php echo $table_assignments; ?>
-    	</td>
-  	</tr>
-  	<?php } ?>
-  	<?php } // end if (strstr($brewer_assignment,"Judge"))?>
-    <?php } ?>
-  	<?php if ($_SESSION['brewerJudge'] == "Y") { ?>
-  	<tr>
-    	<td class="dataLabel">BJCP Judge ID:</td>
-    	<td class="data"><?php  if ($_SESSION['brewerJudgeID'] != "0") echo $_SESSION['brewerJudgeID']; else echo "N/A"; ?></td>
-	</tr>
-    <tr>
-      <td width="10%" class="dataLabel">Mead Judge Endorsement:</td>
-      <td colspan="2" class="data"><?php echo $_SESSION['brewerJudgeMead']; ?></td>
+        <th class="dataHeading bdr1B" width="15%">Yes/No</th>
+        <th class="dataHeading bdr1B" width="40%">Location</th>
+        <th class="dataHeading bdr1B">Date/Time</th>
     </tr>
-  	<tr>
-    	<td class="dataLabel">BJCP Judge Rank:</td>
-   	 <td class="data"><?php  if ($_SESSION['brewerJudgeRank'] != "") echo  $_SESSION['brewerJudgeRank']; else echo "N/A"; ?></td>
-  	</tr>
-  	<tr>
-    	<td class="dataLabel">Categories Preferred:</td>
-    	<td class="data">
-		<?php 
-		if ($_SESSION['brewerJudgeLikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeLikes'],4),2),", ");
-	    else echo "N/A";		
-		?>
-        </td>
-  	</tr>
-  	<tr>
-    	<td class="dataLabel">Categories Not Preferred:</td>
-    	<td class="data">
-        <?php 
-		if ($_SESSION['brewerJudgeDislikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeDislikes'],4),2),", "); 
-	    else echo "N/A";		
-		?>
-        </td>
-  	</tr>
-  	<?php } ?>
-  	<?php if ($_SESSION['brewerAssignment'] == "") { ?>
-  	<tr>
-    	<td class="dataLabel">Steward?</td>
-    	<td class="data"><?php if ($_SESSION['brewerSteward'] != "") echo $_SESSION['brewerSteward']; else echo "None entered"; ?></td>
-  	</tr>
-  	<?php  if (($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) { ?>
-  	<tr>
+    </thead>
+    <tbody>
+    <?php echo $judge_info;	?>
+    </tbody>
+    </table>
+    </td>
+</tr>
+<?php } // end if ($judge_available_not_assigned) ?>
+
+<?php 
+$table_assign = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat']);
+if ((!$judge_available_not_assigned) && (!empty($table_assign))) {
+?>
+<tr>
+	<td class="dataLabel">Location<?php if ($totalRows_judging > 1) echo "(s)"; ?>:</td>
+	<td>
+	
+	<script type="text/javascript" language="javascript">
+		 $(document).ready(function() {
+			$('#sortable_assignments').dataTable( {
+				"bPaginate" : false,
+				"sDom": 'rt',
+				"bStateSave" : false,
+				"bLengthChange" : false,
+				"aaSorting": [[0,'asc']],
+				"aoColumns": [
+					null,
+					null,
+					null
+					]
+				} );
+			} );
+	</script> 
+	<table id="sortable_assignments" class="dataTable" style="width:50%;float:left;">
+	<thead>
+	<tr>
+		<th class="dataHeading bdr1B" width="35%">Location</th>
+		<th class="dataHeading bdr1B" width="35%">Date/Time</th>
+		<th class="dataHeading bdr1B">Table</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php echo $table_assign; ?>
+	</tbody>
+	</table>
+	</td>
+</tr>
+<?php } // end ((!$judge_available_not_assigned) && (!empty($table_assign))) ?>
+
+<tr>
+    <td class="dataLabel">Available to Steward?</td>
+    <td class="data"><?php if ((!empty($_SESSION['brewerSteward'])) && ($action != "print")) echo yes_no($_SESSION['brewerSteward'],$base_url); elseif ((!empty($_SESSION['brewerSteward'])) && ($action == "print")) echo yes_no($_SESSION['brewerSteward'],$base_url,3); else echo "None entered";  ?></td>
+</tr>
+<tr>
+<?php if ($steward_available_not_assigned) { ?>
     	<td class="dataLabel">Stewarding Availability:</td>
     	<td>
     	<script type="text/javascript" language="javascript">
@@ -289,7 +379,7 @@ echo $user_edit_links;
 					"sDom": 'rt',
 					"bStateSave" : false,
 					"bLengthChange" : false,
-					"aaSorting": [[2,'asc']],
+					"aaSorting": [[1,'asc']],
 					"aoColumns": [
 						null,
 						null,
@@ -301,40 +391,17 @@ echo $user_edit_links;
         <table id="sortable_steward" class="dataTable"  style="width:50%;float:left;">
         <thead>
         <tr>
-        	<th class="dataHeading bdr1B" width="10%">Yes/No</th>
-            <th class="dataHeading bdr1B" width="35%">Location</th>
+        	<th class="dataHeading bdr1B" width="15%">Yes/No</th>
+            <th class="dataHeading bdr1B" width="40%">Location</th>
             <th class="dataHeading bdr1B">Date/Time</th>
         </tr>
         </thead>
         <tbody>
-		<?php 
-		$a = explode(",",$_SESSION['brewerStewardLocation']);
-		arsort($a);
-		foreach ($a as $value) {
-			if ($value != "0-0") {
-				$b = substr($value, 2);
-				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
-				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				echo "<tr>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-				echo substr($value, 0, 1);
-				echo "</td>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-				echo $row_judging_loc3['judgingLocName'];
-				echo "</td>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else echo "<td class='dataList'>";
-				echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
-				echo "</td>\n";
-				echo "</tr>";
-				}
-			else echo "";
-			}
-		?>
+		<?php echo $steward_info; ?>
         </tbody>
     	</table>
     	</td>
   	</tr>
-  	<?php } ?>
-  	<?php } ?>
+<?php } // end if ($steward_available_not_assigned) ?>
+
 </table>

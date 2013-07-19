@@ -4,12 +4,25 @@
  * Description: This module houses the functionality for new users to set
  *              up their account. 
  * 
+ 
+  <img id="captcha" src="<?php echo $base_url; ?>captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
+	<p>
+    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
+	<param name="movie" value="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
+	</object>
+    &nbsp;Play audio
+    </p>
+	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
+    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
+
+ 
  */
  
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
+require_once(INCLUDES.'recaptchalib.inc.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 ?>
@@ -123,7 +136,7 @@ if ($section != "admin") { if ($_COOKIE['prefsUseMods'] == "Y") include(INCLUDES
 <?php
 if ((($registration_open < 2) || ($judge_window_open < 2)) && ($section != "admin") && (!open_limit($totalRows_entry_count,$_COOKIE['prefsEntryLimit'],$registration_open))) { 
 ?>
-<p>Entry into our competition is conducted completely online.
+<p>Entry into this competition is conducted completely online.
 	<ul>
 		<?php if (!NHC) { ?>
         <li>If you have already registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in here</a>. </li>
@@ -383,17 +396,7 @@ if ($section != "admin") {
 ?>
 <tr>
 	<td class="dataLabel">CAPTCHA:</td>
-    <td class="data">
-    <img id="captcha" src="<?php echo $base_url; ?>captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
-	<p>
-    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
-	<param name="movie" value="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
-	</object>
-    &nbsp;Play audio
-    </p>
-	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
-    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
-    </td>
+    <td class="data"><?php echo recaptcha_get_html($publickey); ?></td>
     <td class="data"><span class="required">Required</span></td>
     <td class="data">&nbsp;</td>
 </tr>

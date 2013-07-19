@@ -70,31 +70,31 @@ $row_name = mysql_fetch_assoc($name);
 	  $brewerAHA = $_SESSION['brewerAHA'];
 
 // Second, rename current tables and recreate new ones.
-$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
-
-
 // For hosted accounts, limit the table creation to the users, brewer, brewing, judging_tables, judging_assignments, judging_scores, judging_scores_bos, and style_types tables
-//$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
+if (HOSTED) $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
+else $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
 
 foreach ($tables_array as $table) { 
-	$rename_table = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
-	$result = mysql_query($rename_table, $brewing) or die(mysql_error());
+	$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
-	$create_table = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
-	$result = mysql_query($create_table, $brewing) or die(mysql_error());
+	$updateSQL = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 }
 
-$insert_style_types = "
+$insertSQL = "
 INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
 	(1, 'Beer', 'bcoe', 'Y', 1),
 	(2, 'Cider', 'bcoe', 'Y', 3),
 	(3, 'Mead', 'bcoe', 'Y', 3)
 ";
-
-$result = mysql_query($insert_style_types, $brewing) or die(mysql_error());
+mysql_real_escape_string($insertSQL);
+$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
 // Insert current user's info into new "users" and "brewer" table
-$insert_users = "INSERT INTO $users_db_table (
+$insertSQL = "INSERT INTO $users_db_table (
 	id, 
 	user_name, 
 	password, 
@@ -112,10 +112,11 @@ VALUES
 	'$userQuestion', 
 	'$userQuestionAnswer', 
 	NOW());";
-// echo "<p>".$insert_users."</p>";
-$result = mysql_query($insert_users, $brewing) or die(mysql_error());
+// echo "<p>".$insertSQL."</p>";
+mysql_real_escape_string($insertSQL);
+$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
-$insert_brewer = "
+$insertSQL = "
 INSERT INTO $brewer_db_table (
 	id,
 	uid,
@@ -178,13 +179,15 @@ VALUES (
 	NULL,
 	NULL
 );";
-// echo "<p>".$insert_brewer."</p>";
-$result = mysql_query($insert_brewer, $brewing) or die(mysql_error());
+// echo "<p>".$insertSQL."</p>";
+mysql_real_escape_string($insertSQL);
+$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
 // Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-$insert_archive = sprintf("INSERT INTO $archive_db_table (id, archiveSuffix) VALUES (%s, %s);", "''", "'".$suffix."'");
-// echo "<p>".$insert_archive."</p>";
-$result = mysql_query($insert_archive, $brewing) or die(mysql_error());
+$insertSQL = sprintf("INSERT INTO $archive_db_table (id, archiveSuffix) VALUES (%s, %s);", "''", "'".$suffix."'");
+// echo "<p>".$insertSQL."</p>";
+mysql_real_escape_string($insertSQL);
+$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 
 // Last, log the user in and redirect 
 session_destroy();
