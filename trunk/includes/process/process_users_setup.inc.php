@@ -17,9 +17,10 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 					   );
 	
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
-	$insertGoTo = "../setup.php?section=step2&go=".$username;
+	$insertGoTo = $base_url."setup.php?section=step2&go=".$username;
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
   	header(sprintf("Location: %s", stripslashes($insertGoTo)));	
@@ -27,6 +28,13 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	session_start();
 	$_SESSION['loginUsername'] = $username;
 }
-else header("Location: ../setup.php?section=step1&msg=1");
+else {
+	$GoTo = $base_url."setup.php?section=step1&msg=1";
+	$pattern = array('\'', '"');
+  	$GoTo = str_replace($pattern, "", $GoTo); 
+	header(sprintf("Location: %s", stripslashes($GoTo)));	
+}
+
+
 
 ?>

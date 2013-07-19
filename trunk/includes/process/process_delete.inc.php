@@ -17,6 +17,7 @@ if ($go == "special_best") {
 		foreach ($z as $aid) {
 		$deleteAssign = sprintf("DELETE FROM $special_best_data_db_table WHERE id='%s'", $aid);
 		//echo $deleteAssign."<br>";
+		mysql_real_escape_string($deleteAssign);
 		$Result = mysql_query($deleteAssign, $brewing) or die(mysql_error());
 		}
 	}
@@ -65,6 +66,7 @@ if ($go == "judging") {
 				$h = rtrim(implode("",$g),",");
 				$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation='".$h."' WHERE id='".$row_loc['id']."'; ";
 				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($updateSQL);
 				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 				
 				//echo $updateSQL."<br>";
@@ -87,15 +89,18 @@ if ($go == "participants") {
 		
 		$deleteUser = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $row_delete_brewer['id']);
 		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($deleteUser);
 		$Result = mysql_query($deleteUser, $brewing) or die(mysql_error());
 		
 		$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $row_delete_brewer['id']);
 		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($deleteBrewer);
 		$Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
 		
 		if (NHC) {
 			$deleteNHCEntrant = sprintf("DELETE FROM nhcentrant WHERE uid='%s' AND regionPrefix='%s'", $row_delete_brewer['id'],$prefix);
 			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($deleteNHCEntrant);
 			$Result = mysql_query($deleteNHCEntrant, $brewing) or die(mysql_error());
 		}
 		
@@ -110,11 +115,13 @@ if ($go == "participants") {
 			foreach ($a as $id) { 
 			$deleteEntries = sprintf("DELETE FROM $brewing_db_table WHERE id='%s'", $id);
 			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($deleteEntries);
 			$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
 			}
 	} else {
 		$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE id='%s'", $id);
 		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($deleteBrewer);
 		$Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
 	}
 } // end if ($go == "participants")
@@ -126,6 +133,7 @@ if ($go == "entries") {
 	$row_delete_entry = mysql_fetch_assoc($delete_entry);
 	
 	$deleteScore = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $row_delete_entry['id']);
+	mysql_real_escape_string($deleteScore);
 	$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 } // end if ($go == "entries") 
 	
@@ -142,6 +150,7 @@ if ($go == "judging_tables") {
 	
 		foreach ($z as $aid) {
 		$deleteAssign = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $aid);
+		mysql_real_escape_string($deleteAssign);
 		$Result = mysql_query($deleteAssign, $brewing) or die(mysql_error());
 		}
 	
@@ -153,6 +162,7 @@ if ($go == "judging_tables") {
 		
 		foreach ($a as $sid) {
 			$deleteScore = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $sid);
+			mysql_real_escape_string($deleteScore);
 			$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 			}
 	}
@@ -166,6 +176,7 @@ if ($go == "judging_tables") {
 		
 		foreach ($b as $fid) {
 			$deleteFlight = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $fid);
+			mysql_real_escape_string($deleteFlight);
 			$Result = mysql_query($deleteFlight, $brewing) or die(mysql_error());
 			}
 		if ($c != "") {
@@ -176,6 +187,7 @@ if ($go == "judging_tables") {
 			$row_delete_bos = mysql_fetch_assoc($delete_bos);
 			if ($eid == $row_delete_bos['eid']) {
 				$deleteBOS = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
+				mysql_real_escape_string($deleteScore);
 				$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 				}
 			  }
@@ -184,37 +196,48 @@ if ($go == "judging_tables") {
   } // end if ($go == "judging_tables") 
   
   $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-  $Result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
+  mysql_real_escape_string($deleteSQL);
+  $result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
   
 if ($dbTable == "archive") { 
   $dropTable = "DROP TABLE users_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE brewing_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE brewer_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE sponsors_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE judging_assignments_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE judging_flights_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE judging_scores_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE judging_scores_bos_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE judging_tables_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   $dropTable = "DROP TABLE style_types_$filter";
+  mysql_real_escape_string($dropTable);
   $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
   
   header(sprintf("Location: %s", $deleteGoTo));

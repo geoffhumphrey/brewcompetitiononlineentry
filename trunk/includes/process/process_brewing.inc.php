@@ -83,86 +83,96 @@ if ($row_limits['prefsUserEntryLimit'] != "") {
 
 }
 
+if (($action == "add") || ($action == "edit")) {
+	$brewName = strtr($_POST['brewName'],$html_remove);
+	$brewName = strtr($brewName,$html_string);
+	$brewInfo = $_POST['brewInfo'];
+	$brewInfo = strtr($_POST['brewInfo'],$html_remove);
+	
+	if (check_carb_sweetness($_POST['brewStyle'])) { 
+		$brewMead1 = $_POST['brewMead1']; 
+		$brewMead2 = $_POST['brewMead2']; 
+		$brewMead3 = $_POST['brewMead3']; 
+	} 
+	
+	else { 
+		$brewMead1 = "";
+		$brewMead2 = "";
+		$brewMead3 = ""; 
+	} 
 
-if (check_special_ingredients($_POST['brewStyle'])) $brewInfo = strip_newline($_POST['brewInfo']);
-else $brewInfo = "";
-
-if (check_carb_sweetness($_POST['brewStyle'])) { $brewMead1 = $_POST['brewMead1']; $brewMead2 = $_POST['brewMead2']; $brewMead3 = $_POST['brewMead3']; } 
-
-else { $brewMead1 = ""; $brewMead2 = ""; $brewMead3 = ""; } 
-
-$brewExtract = "";
-$brewExtractWeight = "";
-$brewExtractUse = "";
-for($i=1; $i<=5; $i++) {
-	$brewExtract .= "brewExtract".$i.",";
-	$brewExtractWeight .= "brewExtract".$i."Weight,";
-	$brewExtractUse .= "brewExtract".$i."Use,";
+	$brewExtract = "";
+	$brewExtractWeight = "";
+	$brewExtractUse = "";
+	for($i=1; $i<=5; $i++) {
+		$brewExtract .= "brewExtract".$i.",";
+		$brewExtractWeight .= "brewExtract".$i."Weight,";
+		$brewExtractUse .= "brewExtract".$i."Use,";
+		}
+	$brewExtract = rtrim($brewExtract,",");
+	$brewExtractWeight = rtrim($brewExtractWeight,",");
+	$brewExtractUse = rtrim($brewExtractUse,",");	
+	
+	$brewGrain = "";
+	$brewGrainWeight = "";
+	$brewGrainUse = "";	
+	for($i=1; $i<=20; $i++) {
+		$brewGrain .= "brewGrain".$i.",";
+		$brewGrainWeight .= "brewGrain".$i."Weight,";
+		$brewGrainUse .= "brewGrain".$i."Use,";
 	}
-$brewExtract = rtrim($brewExtract,",");
-$brewExtractWeight = rtrim($brewExtractWeight,",");
-$brewExtractUse = rtrim($brewExtractUse,",");	
-
-$brewGrain = "";
-$brewGrainWeight = "";
-$brewGrainUse = "";	
-for($i=1; $i<=20; $i++) {
-	$brewGrain .= "brewGrain".$i.",";
-	$brewGrainWeight .= "brewGrain".$i."Weight,";
-	$brewGrainUse .= "brewGrain".$i."Use,";
+	$brewGrain = rtrim($brewGrain,",");
+	$brewGrainWeight = rtrim($brewGrainWeight,",");
+	$brewGrainUse = rtrim($brewGrainUse,",");	
+	
+	$brewAddition = "";
+	$brewAdditionAmt = "";
+	$brewAdditionUse = "";	
+	for($i=1; $i<=20; $i++) {
+		$brewAddition .= "brewAddition".$i.",";
+		$brewAdditionAmt .= "brewAddition".$i."Amt,";
+		$brewAdditionUse .= "brewAddition".$i."Use,";
+	}
+	$brewAddition = rtrim($brewAddition,",");
+	$brewAdditionAmt = rtrim($brewAdditionAmt,",");
+	$brewAdditionUse = rtrim($brewAdditionUse,",");	
+	
+	$brewHops = "";
+	$brewHopsWeight = "";
+	$brewHopsUse = "";	
+	$brewHopsIBU = "";
+	$brewHopsTime = "";
+	$brewHopsType = "";
+	$brewHopsForm = "";
+	for($i=1; $i<=20; $i++) {
+		$brewHops .= "brewHops".$i.",";
+		$brewHopsWeight .= "brewHops".$i."Weight,";
+		$brewHopsUse .= "brewHops".$i."Use,";
+		$brewHopsIBU .= "brewHops".$i."IBU,";
+		$brewHopsTime .= "brewHops".$i."Time,";
+		$brewHopsType .= "brewHops".$i."Type,";
+		$brewHopsForm .= "brewHops".$i."Form,";
+	}
+	$brewHops = rtrim($brewHops,",");
+	$brewHopsWeight = rtrim($brewHopsWeight,",");
+	$brewHopsUse = rtrim($brewHopsUse,",");	
+	$brewHopsIBU = rtrim($brewHopsIBU,",");
+	$brewHopsTime = rtrim($brewHopsTime,",");
+	$brewHopsType = rtrim($brewHopsType,",");
+	$brewHopsForm = rtrim($brewHopsForm,",");
+	
+	$brewMashStepName = "";
+	$brewMashStepTemp = "";
+	$brewMashStepTime = "";
+	for($i=1; $i<=10; $i++) {
+		$brewMashStepName .= "brewMashStep".$i."Name,";
+		$brewMashStepTemp .= "brewMashStep".$i."Temp,";
+		$brewMashStepTime .= "brewMashStep".$i."Time,";
+	}
+	$brewMashStepName = rtrim($brewMashStepName,",");
+	$brewMashStepTemp = rtrim($brewMashStepTemp,",");
+	$brewMashStepTime = rtrim($brewMashStepTime,",");
 }
-$brewGrain = rtrim($brewGrain,",");
-$brewGrainWeight = rtrim($brewGrainWeight,",");
-$brewGrainUse = rtrim($brewGrainUse,",");	
-
-$brewAddition = "";
-$brewAdditionAmt = "";
-$brewAdditionUse = "";	
-for($i=1; $i<=20; $i++) {
-	$brewAddition .= "brewAddition".$i.",";
-	$brewAdditionAmt .= "brewAddition".$i."Amt,";
-	$brewAdditionUse .= "brewAddition".$i."Use,";
-}
-$brewAddition = rtrim($brewAddition,",");
-$brewAdditionAmt = rtrim($brewAdditionAmt,",");
-$brewAdditionUse = rtrim($brewAdditionUse,",");	
-
-$brewHops = "";
-$brewHopsWeight = "";
-$brewHopsUse = "";	
-$brewHopsIBU = "";
-$brewHopsTime = "";
-$brewHopsType = "";
-$brewHopsForm = "";
-for($i=1; $i<=20; $i++) {
-	$brewHops .= "brewHops".$i.",";
-	$brewHopsWeight .= "brewHops".$i."Weight,";
-	$brewHopsUse .= "brewHops".$i."Use,";
-	$brewHopsIBU .= "brewHops".$i."IBU,";
-	$brewHopsTime .= "brewHops".$i."Time,";
-	$brewHopsType .= "brewHops".$i."Type,";
-	$brewHopsForm .= "brewHops".$i."Form,";
-}
-$brewHops = rtrim($brewHops,",");
-$brewHopsWeight = rtrim($brewHopsWeight,",");
-$brewHopsUse = rtrim($brewHopsUse,",");	
-$brewHopsIBU = rtrim($brewHopsIBU,",");
-$brewHopsTime = rtrim($brewHopsTime,",");
-$brewHopsType = rtrim($brewHopsType,",");
-$brewHopsForm = rtrim($brewHopsForm,",");
-
-$brewMashStepName = "";
-$brewMashStepTemp = "";
-$brewMashStepTime = "";
-for($i=1; $i<=10; $i++) {
-	$brewMashStepName .= "brewMashStep".$i."Name,";
-	$brewMashStepTemp .= "brewMashStep".$i."Temp,";
-	$brewMashStepTime .= "brewMashStep".$i."Time,";
-}
-$brewMashStepName = rtrim($brewMashStepName,",");
-$brewMashStepTemp = rtrim($brewMashStepTemp,",");
-$brewMashStepTime = rtrim($brewMashStepTime,",");
-
 
 if ($action == "add") {
 	
@@ -201,11 +211,24 @@ if ($action == "add") {
 	
 	$insertSQL = "
 		INSERT INTO $brewing_db_table ($brewExtract,
-		$brewExtractWeight,$brewExtractUse,
-		$brewGrain,$brewGrainWeight,$brewGrainUse,
-		$brewAddition,$brewAdditionAmt,$brewAdditionUse,
-		$brewHops,$brewHopsWeight,$brewHopsUse,$brewHopsIBU,$brewHopsTime,$brewHopsType,$brewHopsForm,
-		$brewMashStepName,$brewMashStepTemp,$brewMashStepTime,
+		$brewExtractWeight,
+		$brewExtractUse,
+		$brewGrain,
+		$brewGrainWeight,
+		$brewGrainUse,
+		$brewAddition,
+		$brewAdditionAmt,
+		$brewAdditionUse,
+		$brewHops,
+		$brewHopsWeight,
+		$brewHopsUse,
+		$brewHopsIBU,
+		$brewHopsTime,
+		$brewHopsType,
+		$brewHopsForm,
+		$brewMashStepName,
+		$brewMashStepTemp,
+		$brewMashStepTime,
 		brewName,
 		brewStyle,
 		brewCategory, 
@@ -284,14 +307,14 @@ if ($action == "add") {
 		for($i=1; $i<=10; $i++) { $insertSQL .= GetSQLValueString($_POST['brewMashStep'.$i.'Name'],"text").","; }
 		for($i=1; $i<=10; $i++) { $insertSQL .= GetSQLValueString($_POST['brewMashStep'.$i.'Temp'],"text").","; }
 		for($i=1; $i<=10; $i++) { $insertSQL .= GetSQLValueString($_POST['brewMashStep'.$i.'Time'],"text").","; }
-		
-		$insertSQL .= GetSQLValueString(capitalize($_POST['brewName']),"text").", ";
+			
+		$insertSQL .= GetSQLValueString(capitalize($brewName),"text").", ";
 		$insertSQL .= GetSQLValueString($row_style_name['brewStyle'],"text").", ";
 		$insertSQL .= GetSQLValueString($styleTrim,"text").", "; 
 		$insertSQL .= GetSQLValueString($styleFix,"text").", "; 
 		$insertSQL .= GetSQLValueString($style[1],"text").", ";
 		
-		$insertSQL .= GetSQLValueString($_POST['brewBottleDate'],"text").", "; 
+		$insertSQL .= GetSQLValueString($_POST['brewBottleDate'],"text").", ";  
 		$insertSQL .= GetSQLValueString($_POST['brewDate'],"text").", "; 
 		$insertSQL .= GetSQLValueString($_POST['brewYield'],"text").", "; 
 		$insertSQL .= GetSQLValueString($brewInfo,"text").", "; 
@@ -341,8 +364,9 @@ if ($action == "add") {
 
 		$insertSQL .= ")";
 	
+	mysql_real_escape_string($insertSQL);
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	//if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
 	//elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."index.php?section=list&msg=1";
@@ -365,7 +389,8 @@ if ($action == "add") {
 		if ($_POST['brewInfo'] == "") {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -387,7 +412,8 @@ if ($action == "add") {
 		if ($_POST['brewMead3'] == "") {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -406,7 +432,8 @@ if ($action == "add") {
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -426,7 +453,8 @@ if ($action == "add") {
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -507,7 +535,7 @@ if ($action == "edit") {
 		for($i=1; $i<=10; $i++) { $insertSQL .= "brewMashStep".$i."Temp=".GetSQLValueString($_POST['brewMashStep'.$i.'Temp'],"text").","; }
 		for($i=1; $i<=10; $i++) { $insertSQL .= "brewMashStep".$i."Time=".GetSQLValueString($_POST['brewMashStep'.$i.'Time'],"text").","; }
 		
-		$insertSQL .= "brewName=".GetSQLValueString(capitalize($_POST['brewName']),"scrubbed").", ";
+		$insertSQL .= "brewName=".GetSQLValueString(capitalize($brewName),"text").", ";
 		$insertSQL .= "brewStyle=".GetSQLValueString($row_style_name['brewStyle'],"text").", ";
 		$insertSQL .= "brewCategory=".GetSQLValueString($styleTrim,"text").", "; 
 		$insertSQL .= "brewCategorySort=".GetSQLValueString($styleFix,"text").", ";  
@@ -570,8 +598,9 @@ if ($action == "edit") {
 
 		$insertSQL .= " WHERE id ='".$id."'";
 	
+	mysql_real_escape_string($insertSQL);
 	mysql_select_db($database, $brewing);
-	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	//echo $insertSQL."<br>";
 	
@@ -595,7 +624,8 @@ if ($action == "edit") {
 			$judging_number = generate_judging_num($styleTrim);
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingNumber='%s' WHERE id=%s", $judging_number, GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 	}
 	*/
@@ -605,8 +635,10 @@ if ($action == "edit") {
 		  
 		if ($_POST['brewInfo'] == "") {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
+			mysql_real_escape_string($updateSQL);
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -628,7 +660,8 @@ if ($action == "edit") {
 		if ($_POST['brewMead3'] == "") {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			//echo $updateSQL."<br>";
 		}
 		
@@ -648,7 +681,8 @@ if ($action == "edit") {
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -669,7 +703,8 @@ if ($action == "edit") {
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		if ($section == "admin") {
@@ -722,7 +757,8 @@ if ($action == "update") {
 		brewBoxNum='".$_POST["brewBoxNum".$id]."'
 		WHERE id='".$id."'";
 		mysql_select_db($database, $brewing);
-		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		//echo $updateSQL."<br>";
 	}
 	} 

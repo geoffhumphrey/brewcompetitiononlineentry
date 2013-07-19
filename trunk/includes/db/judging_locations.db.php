@@ -1,4 +1,5 @@
 <?php
+
 $query_judging = "SELECT * FROM $judging_locations_db_table";
 if (($go == "styles") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
 elseif (($go == "judging") && ($action == "update") && ($bid != "default")) $query_judging .= " WHERE id='$bid'";
@@ -33,4 +34,5 @@ if (($row_brewer['brewerJudgeAssignedLocation'] == "") && ($row_brewer['brewerSt
 $judging4 = mysql_query($query_judging4, $brewing) or die(mysql_error());
 $row_judging4 = mysql_fetch_assoc($judging4);
 $totalRows_judging4 = mysql_num_rows($judging4);
+
 ?>

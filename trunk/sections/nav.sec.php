@@ -38,11 +38,11 @@ if (strstr($section,"step")) { ?>
 <?php if (($registration_open > "0") && (isset($_SESSION['loginUsername'])))  { ?> 
 <div id="myInfoMenu" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">Info and List of Entries</a>
-    <a class="menuItem" href="<?php echo $base_url; ?>index.php?<?php if ($_SESSION['brewerID'] != "") echo "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit Your Info</a>
+    <a class="menuItem" href="<?php echo $base_url; ?>index.php?<?php if ($_SESSION['brewerID'] != "") echo "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID']; else echo "action=add&amp;section=brewer&amp;go=judge"; ?>">Edit My Info</a>
     <?php if (!NHC) { ?>
-    <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=username&amp;id=<?php echo $_SESSION['user_id']; ?>">Change Your Email Address</a>
+    <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=username&amp;id=<?php echo $_SESSION['user_id']; ?>">Change My Email Address</a>
 	<?php } ?>
-    <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=password&amp;id=<?php echo $_SESSION['user_id']; ?>">Change Your Password</a>
+    <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=password&amp;id=<?php echo $_SESSION['user_id']; ?>">Change My Password</a>
     <?php if (((NHC) && ($prefix != "final_")) && ($remaining_entries > 0) && ($_SESSION['userLevel'] == 2) && (!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open))) { ?>
     <a class="menuItem"  href="<?php echo build_public_url("brew","default","add",$sef,$base_url); ?>">Add An Entry</a>
     <?php } ?>

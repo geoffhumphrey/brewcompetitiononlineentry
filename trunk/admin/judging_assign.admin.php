@@ -423,7 +423,7 @@ If no judges are listed below, no judge indicated that they are available for th
                     <tr>
                         <td width="15%" nowrap="nowrap"><?php echo ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0'])); ?></td>
                         <td class="data" width="10%"><?php if ($row_assignments['assignment'] == "S") echo "Steward"; else echo "Judge"; ?></td>
-                        <td class="data"><?php echo $judge_info['3']; ?></td>
+                        <td class="data"><?php echo str_replace(",",", ",$judge_info['3']); ?></td>
                     </tr>
                     <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
                 </tbody>
@@ -461,13 +461,20 @@ $query_judge_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLi
 $judge_info = mysql_query($query_judge_info, $brewing) or die(mysql_error());
 $row_judge_info = mysql_fetch_assoc($judge_info);
 
+$bjcp_rank = explode(",",$row_judge_info['brewerJudgeRank']);
+$display_rank = bjcp_rank($bjcp_rank[0],1);
+if ($row_judge_info['brewerJudgeMead'] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>"; 
+if (!empty($bjcp_rank[1])) {
+	$display_rank .= "<em>".designations($row_judge_info['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+}
+
 if ($filter == "stewards") $locations = explode(",",$row_judge_info['brewerStewardLocation']); else $locations = explode(",",$row_judge_info['brewerJudgeLocation']);
 if (in_array($table_location,$locations)) {
 ?>
 	<tr> 
     	<td nowrap="nowrap"><?php echo $row_judge_info['brewerLastName'].", ".$row_judge_info['brewerFirstName']; //echo " - ".$row_brewer['id']; ?></td>
         <?php if ($filter == "judges") { ?>
-        <td nowrap="nowrap"><?php echo bjcp_rank($row_judge_info['brewerJudgeRank'],1); if ($row_judge_info['brewerJudgeMead'] == "Y") echo "<br /><em>Certified Mead Judge</em>"; ?></td>
+        <td nowrap="nowrap"><?php echo $display_rank; ?></td>
         <td nowrap="nowrap"><?php if (($row_judge_info['brewerJudgeID'] != "") && ($row_judge_info['brewerJudgeID'] != "0")) echo strtoupper($row_judge_info['brewerJudgeID']); else echo "N/A"; ?></td>
         <?php } ?>
 		<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  

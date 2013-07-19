@@ -431,17 +431,24 @@ if (($go == "participants") && ($action == "judging_labels") && ($id != "default
 	//echo $query_brewer;
 	$filename .= $row_brewer['brewerFirstName']."_".$row_brewer['brewerLastName']."_Judge_Scoresheet_Labels.pdf";
 	
-	$rank = bjcp_rank($row_brewer['brewerJudgeRank'],2);
+	//$rank = str_replace(",",", ",$row_brewer['brewerJudgeRank']);
+	$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+	$rank = bjcp_rank($bjcp_rank[0],2);
+	if (!empty($bjcp_rank[1])) $rank2 = $bjcp_rank[1].", ".$bjcp_rank[2];
+	
+	
 	$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 	//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
 	if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
 	else $judge_id = "";
 	for($i=0; $i<30; $i++) {
 		
-		$text = sprintf("\n%s\n%s %s\n%s",
+		$text = sprintf("\n%s\n%s %s\n%s\n%s",
 		ucfirst(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucfirst(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
+		
 		$rank,
 		strtoupper($judge_id),
+		$rank2,
 		strtolower($row_brewer['brewerEmail'])
 		);
 		

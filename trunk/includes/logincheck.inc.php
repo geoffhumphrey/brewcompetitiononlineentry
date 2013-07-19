@@ -33,6 +33,9 @@ function sterilize ($sterilize=NULL)
 $loginUsername = sterilize($_POST['loginUsername']);
 $loginPassword = sterilize($_POST['loginPassword']);
 
+mysql_real_escape_string($loginUsername);
+mysql_real_escape_string($loginPassword);
+
 mysql_select_db($database, $brewing);
 $password = md5($loginPassword);
 $query_login = "SELECT * FROM $users_db_table WHERE user_name = '$loginUsername' AND password = '$password'";

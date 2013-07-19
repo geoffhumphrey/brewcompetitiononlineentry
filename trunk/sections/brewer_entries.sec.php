@@ -7,8 +7,6 @@
  * 
  */
 
-
-
 // Show Scores?
 if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
 
@@ -58,7 +56,7 @@ if (($row_limits['prefsUserEntryLimit'] != "") && ($registration_open <= 1)) {
 		else $remaining_message .= " entries "; 
 		$remaining_message .= "per participant in this competition.";
 	}
-	if (((!empty($row_limits['prefsUserEntryLimit'])) && ($totalRows_log < $row_limits['prefsUserEntryLimit'])) || (empty($row_limits['prefsUserEntryLimit']))) {
+	else {
 		$remaining_message .= "<strong>";
 		$remaining_message .= "You have reached the limit of ".readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")";
 		if ($row_limits['prefsUserEntryLimit'] > 1) $remaining_message .= "entry ";
@@ -297,18 +295,16 @@ do {
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png'  border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
 	else { 
-		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/tick.png' border='0' alt='Confirmed Entry!' title='Confirmed entry.'></span>"; else $entry_output .= "Y";
+		if ($action != "print") $entry_output .= yes_no($row_log['brewConfirmed'],$base_url);
+		else $entry_output .= "Yes";
 	} 
+	
 	$entry_output .= "</td>";
 	
 	
 	$entry_output .= "<td class='dataList'>";
-	if ($row_log['brewPaid'] == "1")  { 
-		if ($action != "print") $entry_output .= "<img src='".$base_url."images/tick.png'>"; else $entry_output .= "Y"; 
-		} 
-	else { 
-		if ($action != "print") $entry_output .= "<img src='".$base_url."images/cross.png'>"; else $entry_output .= "N"; 
-		}
+	if ($action != "print") $entry_output .= yes_no($row_log['brewPaid'],$base_url);
+	else  $entry_output .= yes_no($row_log['brewPaid'],$base_url,3);
 	$entry_output .= "</td>";
 	
 	
@@ -331,8 +327,8 @@ do {
 		
 		$entry_output .= "<td class='dataList'>";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
-			if ($action != "print") $entry_output .= "<img src='".$base_url."images/tick.png'>"; 
-			else $entry_output .= "Y"; 
+			if ($action != "print") $entry_output .= "<img src='".$base_url."images/tick.png'>Yes"; 
+			else $entry_output .= "Yes"; 
 			}
 		else $entry_output .= "&nbsp;";
 		$entry_output .= "</td>";

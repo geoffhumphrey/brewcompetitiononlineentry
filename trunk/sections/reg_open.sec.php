@@ -11,7 +11,7 @@ include(DB.'judging_locations.db.php'); ?>
 <h2>Registration</h2>
 	<p>Registration open: <?php echo $reg_open; ?>.</p>
     <p>Registration close: <?php echo $reg_closed ?>. Please note: registered users will <em>not</em> be able to add, view, edit or delete entries after this date/time.</p>
-    <!--
+
 	<?php if (!isset($_SESSION['loginUsername'])) { ?>
 
     <p>If you have already registered, please <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or  steward.</p>
@@ -19,13 +19,13 @@ include(DB.'judging_locations.db.php'); ?>
 <h2>Judging and Stewarding</h2>
 <?php if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) { ?>
 	<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">please register</a>.</p>
-	<p>If you <em>have</em> registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> and then choose <em>Edit Your Info</em> to indicate that you are willing to judge or  steward.</p>
+	<p>If you <em>have</em> registered, <a href="<?php echo build_public_url("login","default","default",$sef,$base_url); ?>">log in</a> and then choose <em>Edit My Info</em> to indicate that you are willing to judge or  steward.</p>
 <?php } elseif (($registration_open == "1") && (isset($_SESSION['loginUsername']))) { ?>
 	<p>Since you have already registered, you can <a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
     <p>If you are willing to judge or steward, please return to register on or after <?php echo $judge_open; ?>.</p>
 <?php } ?>
--->
+
 <h2>Entries</h2>
 <p>Entries will be accepted between <?php echo $entry_open; ?> and <?php echo $entry_closed; ?>. All entries must be received by our shipping location <?php if ($totalRows_dropoff > 0) echo "or at a drop-off location"; ?> by <?php echo $entry_closed; ?> and will not be accepted after this date/time. For details, see the <a href="<?php echo build_public_url("entry","default","default",$sef,$base_url); ?>">Entry Information</a> page.</p> 
 <?php if ($row_limits['prefsEntryLimit'] != "") { ?>

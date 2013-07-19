@@ -8,7 +8,11 @@ else $logout_location = $base_url."index.php?section=login&action=logout&msg=3";
 session_start();
 $requested_logout = true;
 if ($requested_logout) {
-session_restart();
+	session_unset();
+	session_destroy();
+	session_write_close();
+	setcookie(session_name(),'',0,'/');
+	session_regenerate_id(true);
 }
 
 // Now the session_id will be different every browser refresh

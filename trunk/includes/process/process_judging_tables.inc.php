@@ -23,7 +23,8 @@ if ($action == "add") {
 	//echo $insertSQL;
 
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	$query_table = "SELECT id,tableLocation FROM $judging_tables_db_table ORDER BY id DESC LIMIT 1";
 	$table = mysql_query($query_table, $brewing) or die(mysql_error());
@@ -63,7 +64,8 @@ if ($action == "add") {
 						   GetSQLValueString($row_entries['id'], "text"));
 			//echo $updateSQL."<br>";
 			mysql_select_db($database, $brewing);
-			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		
 		// if not, add a new record to the judging_flights table
@@ -82,7 +84,8 @@ if ($action == "add") {
 
 			//echo $insertSQL."<br>";
 			mysql_select_db($database, $brewing);
-  			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($insertSQL);
+  			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 			}
 		} while ($row_entries = mysql_fetch_assoc($entries));
 	}
@@ -111,7 +114,8 @@ if ($action == "edit") {
 
 	//echo $updateSQL."<br>";
   	mysql_select_db($database, $brewing);
- 	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+ 	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
   
   	// Check to see if flights have been designated already
   	$query_flight_count = sprintf("SELECT id,flightEntryID FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
@@ -229,7 +233,8 @@ if ($action == "edit") {
                        GetSQLValueString($id, "text"));
 				//echo $updateSQL.";<br>";
   				mysql_select_db($database, $brewing);
-  				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+				mysql_real_escape_string($updateSQL);
+  				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 			}
 			
 			// If table style is assigned to another table, reassign the entry to that table
@@ -245,7 +250,8 @@ if ($action == "edit") {
                        GetSQLValueString($id, "text"));
 				//echo $updateSQL."<br>";
   				mysql_select_db($database, $brewing);
-  				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+				mysql_real_escape_string($updateSQL);
+  				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 			}
 		}
 	} //end if (($row_flight_count['count'] > 0) && ($table_styles != ""))
@@ -299,7 +305,8 @@ if ($action == "edit") {
 						   GetSQLValueString($id, "text"));
 					//echo $updateSQL."<br>";
 					mysql_select_db($database, $brewing);
-					$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
+					mysql_real_escape_string($updateSQL);
+					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	 
 				}
 				//echo "</p>";
 			} while ($row_table_styles = mysql_fetch_assoc($table_styles));
@@ -314,9 +321,10 @@ if ($action == "edit") {
 	if (($totalRows_flight_count > 0) && ($table_styles == "")) {
 		do { $a[] = $row_flight_count['id']; } while ($row_flight_count = mysql_fetch_assoc($flight_count));
 		foreach ($a as $id) {
-			$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $id);
+			$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $id);
   			mysql_select_db($database, $brewing);
-  			$Result = mysql_query($delete, $brewing) or die(mysql_error());
+			mysql_real_escape_string($deleteSQL);
+  			$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
 			}
 	} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
 	$pattern = array('\'', '"');

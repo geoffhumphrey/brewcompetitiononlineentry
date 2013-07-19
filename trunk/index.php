@@ -53,9 +53,6 @@ if (TESTING) {
 				'closeSpeed'        : 'normal',
 				'type'				: 'iframe',
 				'helpers' 			: {	title : { type : 'inside' } },
-				<?php if ($modal_window == "false") { ?>
-				'afterClose': 		function() { parent.location.reload(true); }
-				<?php } ?>
 			});
 
 		});
@@ -85,6 +82,11 @@ var _gaq = _gaq || [];
   })();
 </script>
 -->
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'white'
+ };
+</script>
 </head>
 <body>
 <a name="top"></a>

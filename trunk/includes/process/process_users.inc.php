@@ -41,7 +41,8 @@ if ($totalRows_userCheck > 0) {
 					   "NOW( )"					   
 					   );
   	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	if ($section != "admin") {
 
@@ -113,6 +114,7 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 						   GetSQLValueString($_POST['user_name'], "text"));
 						   
 	 	mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
 	  	$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	  	$pattern = array('\'', '"');
   		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
@@ -129,15 +131,15 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 		$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s WHERE id=%s", 
 						   GetSQLValueString($_POST['user_name'], "text"),
 						   GetSQLValueString($id, "text")); 
-		
-		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		//echo $updateSQL."<br>";
 		
-		$update2SQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
+		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
 						   GetSQLValueString($_POST['user_name'], "text"),
 						   GetSQLValueString($id, "text")); 
-		
-		$Result2 = mysql_query($update2SQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		//echo $update2SQL."<br>";
 		
 		if ($filter == "admin") {
@@ -203,7 +205,8 @@ if ($go == "password") {
                        GetSQLValueString($passwordNew, "text"),
                        GetSQLValueString($id, "text")); 
 		mysql_select_db($database, $brewing);
-		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		header(sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4"));
   	}
  }

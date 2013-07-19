@@ -6,10 +6,25 @@
  * 
  */
 
-//Error reporting
+/*
 
+reCaptcha Global Key for BCOE&M
+
+Public Key: 	6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7
+Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd 
+
+
+*/
+
+
+//Error reporting
 //error_reporting(0);	// comment out to debug
 error_reporting(E_ALL); // uncomment to debug 
+
+
+
+// reCAPTCHA Public Key
+$publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
 
 // Define Base URL
 if (NHC) $base_url = "";

@@ -19,7 +19,8 @@ if ($action == "add") {
 
 		//echo $insertSQL."<br>";
 		mysql_select_db($database, $brewing);
-  		$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($insertSQL);
+  		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
 	$pattern = array('\'', '"');
   	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -43,7 +44,8 @@ if ($action == "edit") {
 
 			//echo $updateSQL."<br>";
 			mysql_select_db($database, $brewing);
-  			$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($updateSQL);
+  			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		}
 		if ($id > "999999"){
 			$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
@@ -58,7 +60,8 @@ if ($action == "edit") {
 
 			//echo $insertSQL."<br>";
 			mysql_select_db($database, $brewing);
-  			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			mysql_real_escape_string($insertSQL);
+  			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
   	}
 	$pattern = array('\'', '"');
@@ -98,7 +101,8 @@ if ($action == "assign") {
 			GetSQLValueString($row_flights['id'], "int")
 			);
 		mysql_select_db($database, $brewing);
-  		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysql_real_escape_string($updateSQL);
+  		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		//echo $updateSQL.";<br>";
 		} while ($row_flights = mysql_fetch_assoc($flights));
 		}

@@ -221,7 +221,7 @@ if ($totalRows_brewer > 0) { ?>
     </table>
     </div>
 </div>
-<?php } ?>
+<?php } if ($tb != "view") { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -232,4 +232,5 @@ html.push('');
 </script>
 </body>
 </html>
-<?php } else echo "<p>Not available.</p>"; ?>
+<?php }
+} else echo "<p>Not available.</p>"; ?>

@@ -26,6 +26,7 @@ if ($action == "update") {
 				GetSQLValueString($_POST['assignLocation'.$random], "text"));
 			//echo $insertSQL.";<br>";
 			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($insertSQL);
   			$Result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 			}
 		}
@@ -43,6 +44,7 @@ if ($action == "update") {
 				);		   
   			//echo $updateSQL.";<br>";
 			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($updateSQL);
   			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			}
 		
@@ -57,6 +59,7 @@ if ($action == "update") {
 				$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_flights['id']);
  				//echo $deleteSQL.";<br>"; 
 				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($deleteSQL);
  				$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
 				}	
 			}
@@ -83,6 +86,7 @@ if ($action == "update") {
 				GetSQLValueString($_POST['assignLocation'.$random], "text"));
 				//echo $insertSQL.";<br>";
 				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($insertSQL);
   				$Result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 				}
 			}
@@ -100,6 +104,7 @@ if ($action == "update") {
 				);		   
   			//echo $updateSQL.";<br>";
 			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($updateSQL);
   			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			}
 		
@@ -115,6 +120,7 @@ if ($action == "update") {
 				$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $_POST['unassign'.$random]);
  				//echo $deleteSQL.";<br>"; 
 				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($deleteSQL);
  				$Result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
 			//	}	
 			}

@@ -27,7 +27,8 @@ if ($action == "add") {
 
 	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 		}
 	}
 	$pattern = array('\'', '"');
@@ -59,7 +60,8 @@ if ($action == "edit") {
 
 	//echo $updateSQL."<br>";
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	mysql_real_escape_string($updateSQL);
+  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	}
 	if ((($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) && ($_POST['scorePrevious'.$score_id] == "N")) {
 	$insertSQL = sprintf("INSERT INTO $judging_scores_db_table (
@@ -82,12 +84,14 @@ if ($action == "edit") {
 
 	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
-  	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
+	mysql_real_escape_string($insertSQL);
+  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
 		}
 	
 	if ((($_POST['scoreEntry'.$score_id] == "") && ($_POST['scorePlace'.$score_id] == "")) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 		$deleteScore = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $score_id);
-		$Result1 = mysql_query($deleteScore, $brewing) or die(mysql_error());
+		mysql_real_escape_string($deleteScore);
+		$result1 = mysql_query($deleteScore, $brewing) or die(mysql_error());
 	}
 	
 	}

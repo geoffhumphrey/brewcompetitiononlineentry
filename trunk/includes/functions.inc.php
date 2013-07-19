@@ -8,13 +8,28 @@
 
 include (INCLUDES.'date_time.inc.php');
 
+function in_string($haystack,$needle) {
+	if (strpos($haystack,$needle) !== false) return TRUE;
+}
+
+function designations($judge_array,$display) {
+				
+	$return = "";
+	$rank1 = explode(",",$judge_array);
+	foreach ($rank1 as $rank2) {
+		 if ($rank2 != $display) $return .= "<br />".$rank2."";
+		 else $return .= "";
+	}
+	return $return;	
+}
+
 function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 
 	$return = "";
 	$return .= "<span class='icon'>";
 
 	if ($icon == "bin_closed") {
-		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable."&amp;action=".$action."','id',".$id.",'".$alt_title.".');\" title=\"".$alt_title."\">";
+		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable."&amp;action=".$action."','id',".$id.",'".$alt_title."');\" title=\"".$alt_title."\">";
 	}
 
 	else {
@@ -989,7 +1004,7 @@ function total_paid_received($go,$id) {
 	return $row['count'];
 }
 
-function style_convert($number,$type) {
+function style_convert($number,$type,$base_url="") {
 	require(CONFIG.'config.php');
 	$styles_db_table = $prefix."styles";
 	
@@ -1102,10 +1117,11 @@ function style_convert($number,$type) {
 	    mysql_select_db($database, $brewing);
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
-			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='$value'"; 
+			$query_style = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE id='$value'"; 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
-			$style_convert[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
+			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php#".$trimmed.$row_style['brewStyleNum']."' title='View ".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
 		}
 		break;
 		
@@ -2350,13 +2366,13 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format) {
 		do {
 			$location = explode("^",get_table_info(1,"location",$row_table_assignments['assignTable'],"default","default"));
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
-			$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
+			//$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
 			$output .= "\t\t<tr>\n";
 			$output .= "\t\t\t<td class='dataLeft'>".$location[2]."</td>\n";
 			$output .= "\t\t\t<td class='data'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
 			$output .= "\t\t\t<td class='data'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
 			$output .= "\t\t</tr>\n";
-			$output .= "\t</table>\n";
+			//$output .= "\t</table>\n";
 			
 		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
 	}
