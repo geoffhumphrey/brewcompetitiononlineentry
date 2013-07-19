@@ -18,6 +18,7 @@ do {
 						 "0",
 						 $row_admin_users['id']);
 	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
 	$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	
 }  
@@ -27,7 +28,8 @@ $output .=  "<li>Updates to user's table completed.</li>";
 
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.0","2013-08-01","1");
 mysql_select_db($database, $brewing);
-$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+mysql_real_escape_string($updateSQL);
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 
 $output .= "<li>Updates to system table completed.</li>";
 
