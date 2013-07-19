@@ -84,7 +84,7 @@ $totalRows_themes = mysql_num_rows($themes);
       Yes&nbsp;&nbsp;
   <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>
       No</td>
-    <td class="data">Generally, the default is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs.</td>
+    <td class="data">Generally, the default is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs. * to </td>
     </tr>
   <tr>
     <td class="dataLabel">Use Custom Modules:</td>
