@@ -15,6 +15,45 @@ if (TESTING) {
 	$starttime = $mtime; 
 }
 
+$closed_msg = "";
+$registration_open_msg = "";
+$judge_reg_open_msg = "";
+$judge_willing_msg = "";
+$registration_closed_msg = "";
+
+if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
+
+$remaining_entries = 0;
+if (($registration_open == 1) && ($entry_window_open == 1)) {
+	if (!empty($row_limits['prefsUserEntryLimit'])) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+	//elseif (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $remaining_entries = 0;
+	else $remaining_entries = 1;
+}
+
+if (($registration_open == "1") && (!$ua)) {
+	if ($comp_entry_limit) {
+		
+		if ($section != "admin") { 
+			$closed_msg .= "<div class='closed'>The limit of ".readable_number($row_limits['prefsEntryLimit'])." (".$row_limits['prefsEntryLimit'].") entries has been reached. No further entries will be accepted."; 
+			if (!isset($_SESSION['loginUsername'])) $closed_msg .= " However, judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>."; 
+			$closed_msg .="</div>"; 
+		}
+	}
+}
+
+if (($registration_open == "0") && ($ua != "unsupported") && ($section != "admin")) {
+	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>Entry registration will open ".$reg_open.".</div>";
+	if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) $judge_reg_open_msg .= "<div class='info'>Judge/steward registration will open ".$judge_open.".</div>";
+    if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.</div>"; 
+}
+
+if (($registration_open == "2") && (!$ua)) {
+	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { 
+    	$registration_closed_msg .= "<div class='closed'>Entry registration closed ".$reg_closed.".</div>";
+		if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $registration_closed_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.</div>";
+	}
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -53,6 +92,9 @@ if (TESTING) {
 				'closeSpeed'        : 'normal',
 				'type'				: 'iframe',
 				'helpers' 			: {	title : { type : 'inside' } },
+				<?php if ($modal_window == "false") { ?>
+				'afterClose': 		function() { parent.location.reload(true); }
+				<?php } ?>
 			});
 
 		});
@@ -82,11 +124,6 @@ var _gaq = _gaq || [];
   })();
 </script>
 -->
-<script type="text/javascript">
- var RecaptchaOptions = {
-    theme : 'white'
- };
-</script>
 </head>
 <body>
 <a name="top"></a>
@@ -106,6 +143,11 @@ var _gaq = _gaq || [];
   echo "Prefs: ".$query_prefs."<br>";
   echo "Comp Info: ".$row_contest_info."<br>";
   echo "Tables: ".$query_tables."<br>";
+  
+  echo $entry_window_open."<br>";
+  echo $registration_open."<br>";
+  echo judging_date_return()."<br>";
+  echo $remaining_entries;
   */
   
   if ($section != "admin") { ?>
@@ -113,14 +155,15 @@ var _gaq = _gaq || [];
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   	</div>
   <?php  } 
- // Check if registration open date has passed
+    
+  echo $closed_msg;
+  echo $registration_open_msg;
+  echo $judge_reg_open_msg;
+  echo $judge_willing_msg;
+  echo $registration_closed_msg;
+  
+// Check if registration open date has passed
   if (($registration_open == "0") && ($ua != "unsupported")) { 
-  	if ($section != "admin") {
-  	?>
-    <?php if (!isset($_SESSION['loginUsername'])) { ?><div class="closed">Entry registration will open <?php echo $reg_open; ?>.</div><?php } ?>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) { ?><div class="info">Judge/steward registration will open <?php echo $judge_open; ?>.</div><?php } ?>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?> 
-	<?php }
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
@@ -151,10 +194,7 @@ var _gaq = _gaq || [];
   
   // Check if registration close date has passed. If so, display "registration end" message.
   if (($registration_open == "2") && (!$ua)) {
-	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { ?>
-    <div class="closed">Entry registration closed <?php echo $reg_closed; ?>.</div>
-    <?php if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) { ?><div class="info">If you are willing to be a judge or steward, please <a href="<?php echo build_public_url("register","judge","default",$sef,$base_url); ?>">register here</a>.</div><?php } ?>
-	<?php }  
+	  
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
@@ -188,13 +228,7 @@ var _gaq = _gaq || [];
   
   // If registration is currently open
   if (($registration_open == "1") && (!$ua)) {
-  	//if ((NHC) && ($section == "default")) echo "<div class='error'>".$totalRows_entry_count." of ".$row_limits['prefsEntryLimit']." entries have been logged for this region.</div>";
-  	if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) { 
-		if ($section != "admin") { 
-			echo "<div class='closed'>The limit of ".readable_number($row_limits['prefsEntryLimit'])." (".$row_limits['prefsEntryLimit'].") entries has been reached. No further entries will be accepted."; if (!isset($_SESSION['loginUsername'])) echo " However, judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>."; echo "</div>"; 
-		}
-	}
-	if ($section == "register") 	include (SECTIONS.'register.sec.php');
+  	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
@@ -224,12 +258,13 @@ var _gaq = _gaq || [];
   }
   
   if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
+  <div class="error">Please register or log in to access this area.</div>
   <?php if ($section == "admin") { ?>
   <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   </div>
   <?php } ?>
-  <div class="error">Please register or log in to access this area.</div>
+ 
   <?php } ?>
   	</div>
 </div>

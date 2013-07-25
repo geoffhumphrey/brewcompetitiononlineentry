@@ -4,6 +4,10 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ 
+
 if ($action == "update") {
 foreach($_POST['id'] as $id)	{ 
 
@@ -188,4 +192,6 @@ if ($action == "edit") {
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	
 }
+
+} else echo "<p>Not available.</p>";
 ?>

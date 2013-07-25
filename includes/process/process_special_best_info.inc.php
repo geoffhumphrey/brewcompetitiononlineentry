@@ -4,6 +4,10 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "special_best_info" table
  */
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ 
+
 
 
 if ($action == "add") {
@@ -39,6 +43,8 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));					   
 }
+
+} else echo "<p>Not available.</p>";
 
 
 ?>

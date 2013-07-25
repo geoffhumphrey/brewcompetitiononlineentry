@@ -89,7 +89,4 @@ $log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error(
 $row_log_confirmed = mysql_fetch_assoc($log_confirmed);
 $totalRows_log_confirmed = mysql_num_rows($log_confirmed);
 
-if (!empty($row_limits['prefsUserEntryLimit'])) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
-else $remaining_entries = 1;
-
 ?>

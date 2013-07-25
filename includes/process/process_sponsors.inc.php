@@ -3,6 +3,12 @@
  * Module:      process_styles_edit.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table
  */
+
+
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ 
+
 $sponsorURL = check_http($_POST['sponsorURL']);
 $sponsor_name = capitalize($_POST['sponsorName']);
 
@@ -41,5 +47,7 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));			   
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

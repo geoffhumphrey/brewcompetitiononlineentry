@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_scores" table
  */
 
-if ($action == "add") {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($action == "add") {
 	foreach($_POST['score_id'] as $score_id)	{
 	if (($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) {
 	$insertSQL = sprintf("INSERT INTO $judging_scores_db_table (
@@ -100,5 +102,7 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

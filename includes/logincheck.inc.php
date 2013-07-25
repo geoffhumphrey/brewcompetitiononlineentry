@@ -53,12 +53,14 @@ session_regenerate_id(true);
 		$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",$loginUsername, $row_login['id']);
 		
 		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
 		//echo $updateSQL."<br>";
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
 		// Convert email address in the user's accociate record in the "brewer" table
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail='%s' WHERE uid='%s'",$loginUsername, $row_login['id']);
 		//echo $updateSQL."<br>";
+		mysql_real_escape_string($updateSQL);
 		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
   		$_SESSION['loginUsername'] = $loginUsername;

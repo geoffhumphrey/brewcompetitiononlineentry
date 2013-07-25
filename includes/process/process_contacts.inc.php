@@ -4,6 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
 
+if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
+
+
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $contacts_db_table (
 	contactFirstName, 
@@ -109,5 +112,7 @@ if ($action == "email") {
 		header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1"));
 	}
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

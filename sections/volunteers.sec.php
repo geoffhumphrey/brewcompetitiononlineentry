@@ -27,7 +27,7 @@ if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 <?php } elseif (($judge_window_open > 0) && (isset($_SESSION['loginUsername']))) { ?>
 	<p>Since you have already registered, you can <a href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">check your info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>
 <?php } else { ?>
-    <p>If you are willing to judge or steward, please return to register on or after <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?>.</p>
+    <p>If you are willing to judge or steward, please return to register on or after <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?>.</p>
 <?php } ?>
 
 <?php if ($_SESSION['contestVolunteers'] != "") { ?>

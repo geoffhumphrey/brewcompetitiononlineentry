@@ -4,7 +4,10 @@
  * Description: This module does all the heavy lifting for adding information to the 
  *              "preferences" table.
  */
-if ($_POST['prefsUSCLEx'] != "") $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
+
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($_POST['prefsUSCLEx'] != "") $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 else  $prefsUSCLEx = "";
 
 if ($action == "add") {
@@ -244,4 +247,6 @@ if ($action == "edit") {
   		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
+
+} else echo "<p>Not available.</p>";
 ?>

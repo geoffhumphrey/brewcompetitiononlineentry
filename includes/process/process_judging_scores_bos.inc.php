@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_scores_bos" table
  */
 
-if ($action == "enter") {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($action == "enter") {
 	foreach($_POST['score_id'] as $score_id)	{
 	if ($_POST['scorePrevious'.$score_id] == "Y") {
 	$updateSQL = sprintf("UPDATE $judging_scores_bos_db_table SET
@@ -53,4 +55,6 @@ if ($action == "enter") {
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
 
+
+} else echo "<p>Not available.</p>";
 ?>

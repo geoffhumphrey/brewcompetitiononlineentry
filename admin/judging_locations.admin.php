@@ -144,7 +144,7 @@ if (($section == "admin") && (($action == "update") || ($action == "assign"))) {
 	$primary_page_info .= "</p>";
 }
     
-
+if ($section != "step5") {
 // Build Go To Nav
 	$goto_nav .= "<div class='adminSubNavContainer'>";
 	  // Back to Dashboard
@@ -167,7 +167,7 @@ if (($section == "admin") && (($action == "update") || ($action == "assign"))) {
 	
 	$goto_nav .= "</div>";
 
-if (($section == "admin") && (($section != "step3") && ($filter == "default"))) {
+if (($section == "admin") && (($section != "step5") && ($filter == "default"))) {
 	if ($action != "add") {
 		$goto_nav .= "<div class='adminSubNavContainer'>";
 		$goto_nav .= "<span class='adminSubNav'>";
@@ -175,6 +175,7 @@ if (($section == "admin") && (($section != "step3") && ($filter == "default"))) 
 		$goto_nav .= "</span>";
 		$goto_nav .= "</div>";
 	}
+}
 }
 
 // Build Secondary Nav
@@ -555,7 +556,7 @@ $(function() {
   	</tr>
 </table>
 <?php if (!empty($form_submit_button)) echo $form_submit_button; ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($base_url.$_SERVER['SCRIPT_FILENAME']."?".$_SERVER['QUERY_STRING'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=judging"; ?>">
 </form>
 <?php } ?>
 

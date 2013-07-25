@@ -25,6 +25,10 @@ include(DB.'brewer.db.php');
 require_once(INCLUDES.'recaptchalib.inc.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
+
+
+$info_msg = "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
+$nhc_info_msg = "<div class='closed'>Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>";
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/username_check.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
@@ -131,6 +135,8 @@ httpxml.send(null);
 <?php 
 if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
 if ($section != "admin") { if ($_COOKIE['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); }
+if (($section != "admin") && ($action != "print")) echo $info_msg;
+if (NHC) echo $nhc_info_msg;
 ?>
 <h2>Register <?php if ($section == "admin") { if ($go == "judge") echo " a Judge/Steward</h2>"; else echo " a Participant"; } ?></h2>
 <?php
@@ -170,14 +176,7 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && ($section != "admi
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
-
-if ($section != "admin") { 
-?>
-<div class="info">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>
-
-<?php if (NHC) echo "<div class=\"closed\">Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>"; ?>
-
-<?php } ?> 
+?> 
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>

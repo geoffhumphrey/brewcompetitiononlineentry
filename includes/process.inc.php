@@ -30,6 +30,8 @@ if ($section != "setup")  {
 	
 }
 
+if (isset($_SESSION['prefs'.$prefix_session])) { 
+
 require(INCLUDES.'scrubber.inc.php');
 
 function check_http($input) {
@@ -465,4 +467,6 @@ if ($action == "generate_judging_numbers") {
 	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
 	header(sprintf("Location: %s", $updateGoTo));		
 }
+
+} else echo "<p>Not available.</p>";
 ?>

@@ -23,25 +23,49 @@ function designations($judge_array,$display) {
 	return $return;	
 }
 
-function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
+function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$link_text="default") {
 
 	$return = "";
 	$return .= "<span class='icon'>";
+	
+	if (($method == 1) || ($method == 2)) {
+		$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;"; 
+	}
 
 	if ($icon == "bin_closed") {
 		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable."&amp;action=".$action."','id',".$id.",'".$alt_title."');\" title=\"".$alt_title."\">";
 	}
 
 	else {
-		$return .= "<a href='".$base_url."index.php?section=".$section;
-		if ($go != "default") $return .= "&amp;go=".$go;
-		if ($action != "default") $return .= "&amp;action=".$action;
-		if ($filter != "default") $return .= "&amp;filter=".$filter;
-		if ($id != "default") $return .= "&amp;id=".$id;
-		$return .= "' title='".$alt_title."'>";	
+		
+		if ($method == 2) { // print form link
+			$return .= "<a id='modal_window_link' href='".$base_url."output/entry.php?";
+			$return .= "id=".$id;
+			$return .= "&amp;bid=".$section;
+			$return .= "' title='".$alt_title."'>";	
+		} 
+		
+		else {
+			$return .= "<a href='".$base_url."index.php?section=".$section;
+			if ($go != "default") $return .= "&amp;go=".$go;
+			if ($action != "default") $return .= "&amp;action=".$action;
+			if ($filter != "default") $return .= "&amp;filter=".$filter;
+			if ($id != "default") $return .= "&amp;id=".$id;
+			$return .= "' title='".$alt_title."'>";	
+		}
 	}
-	$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'></a>";
-	$return .= "</span>";
+	
+	if (($method == 1) || ($method == 2)) {
+		$return .= $link_text;
+		$return .= "</a>";
+		$return .= "</span>";
+	}
+	
+	else {
+		$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>"; 
+		$return .= "</a>";
+		$return .= "</span>";
+	}
 
 	return $return;
 }

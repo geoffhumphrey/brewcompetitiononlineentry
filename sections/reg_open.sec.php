@@ -32,7 +32,7 @@ include(DB.'judging_locations.db.php'); ?>
 <p>There is a limit of <?php echo readable_number($row_limits['prefsEntryLimit'])." (".$row_limits['prefsEntryLimit'].")"; ?> entries for this competition.</p>
 <?php } ?>
 
-<?php if ($registration_open == "1") { ?>
+<?php if ($entry_window_open == 1) { ?>
 	<h2>Enter Your Brews</h2>
 	<p>To enter your brews,  <?php if (!isset($_SESSION['loginUsername'])) { ?>please proceed through the <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registration process</a><?php } else { ?>use the <a href="<?php echo build_public_url("brew","entry","add",$sef,$base_url); ?>">add an entry form</a><?php } ?>.</p>
 <?php } ?>

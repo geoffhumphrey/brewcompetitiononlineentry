@@ -9,13 +9,14 @@ include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
 include(INCLUDES.'scrubber.inc.php');
 include(INCLUDES.'constants.inc.php');
+include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
 function pay_to_print($prefs_pay,$entry_paid) { 
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
 	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
 	elseif ($prefs_pay == "N") return TRUE;
 }
-$entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
-include_once(CLASSES.'tiny_but_strong/tbs_class_php5.php');
+$entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
+
 mysql_select_db($database, $brewing);
 $query_contest_info = "SELECT * FROM $contest_info_db_table WHERE id=1";
 $row_contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
@@ -50,8 +51,7 @@ $row_prefs = mysql_fetch_assoc($prefs);
 */
 
 // Check access restrictions
-if ($brewer_info['brewerEmail'] != $_SESSION['loginUsername'] &&
-      $row_logged_in_user['userLevel'] > 1) { 
+if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
   	echo "<html><head><title>Error</title></head><body>";
   	echo "<p>You do not have sufficient access priveliges to view this page.</p>";
   	echo "</body>";

@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "mods" table
  */
 
-if (($_POST['mod_extend_function_admin'] == "") && ($_POST['mod_extend_function'] == 9)) $mod_extend_function_admin = "default"; 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if (($_POST['mod_extend_function_admin'] == "") && ($_POST['mod_extend_function'] == 9)) $mod_extend_function_admin = "default"; 
 else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 
 if ($action == "update") {
@@ -90,6 +92,8 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));					   
 }
+
+} else echo "<p>Not available.</p>";
 
 
 ?>

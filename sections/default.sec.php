@@ -65,7 +65,7 @@ else
 if (($registration_open == "2") || (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open))) include('reg_closed.sec.php');
 else include('reg_open.sec.php');
 // echo "Today: ".strtotime("now")."<br>"; 
-// echo "Deadline: ".strtotime($_SESSION['contestRegistrationDeadline'])."<br>";
+// echo "Deadline: ".strtotime($row_contest_dates['contestRegistrationDeadline'])."<br>";
 // end registration end check
 }
 
