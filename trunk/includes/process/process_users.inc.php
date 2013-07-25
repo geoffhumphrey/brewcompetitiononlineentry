@@ -129,14 +129,14 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 	  else  {  
 		mysql_select_db($database, $brewing);
 		$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s WHERE id=%s", 
-						   GetSQLValueString($_POST['user_name'], "text"),
+						   GetSQLValueString(strtolower($_POST['user_name']), "text"),
 						   GetSQLValueString($id, "text")); 
 		mysql_real_escape_string($updateSQL);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
-						   GetSQLValueString($_POST['user_name'], "text"),
+						   GetSQLValueString(strtolower($_POST['user_name']), "text"),
 						   GetSQLValueString($id, "text")); 
 		mysql_real_escape_string($updateSQL);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -154,13 +154,13 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 		$row_login = mysql_fetch_assoc($login);
 		$totalRows_login = mysql_num_rows($login);
 		//echo $query_login;
-		session_destroy;
 		session_start();
 			// Authenticate the user
 			if ($totalRows_login == 1) {
 				// Register the loginUsername
-				$_SESSION['loginUsername'] = $username;
-	
+				$_SESSION['loginUsername'] = strtolower($_POST['user_name']);
+				$_SESSION['user_info'.$prefix_session] = "";
+				//$_SESSION['session_set_'.$prefix_session] = "";
 				// If the username/password combo is OK, relocate to the "protected" content index page
 				header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
 				exit;
@@ -168,7 +168,6 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 			else {
 				// If the username/password combo is incorrect or not found, relocate to the login error page
 				header(sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2"));
-				session_destroy();
 				exit;
 			}
 		

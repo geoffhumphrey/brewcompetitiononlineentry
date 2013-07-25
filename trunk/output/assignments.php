@@ -87,10 +87,12 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 	$judge_info = explode("^",brewer_info($row_assignments['bid']));
 	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
+	
+	$judge_ranks = str_replace(",",", ",$judge_info['3']);
 	?>
     <tr>
     	<td class="bdr1B_gray"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); ?></td>
-        <td class="data bdr1B_gray"><?php echo $judge_info['3']; ?></td>
+        <td class="data bdr1B_gray"><?php echo $judge_ranks; ?></td>
         <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>

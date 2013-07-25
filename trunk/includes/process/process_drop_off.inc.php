@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
 
-$dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ $dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
 $dropLocationName = strtr($_POST['dropLocationName'],$html_string);
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $drop_off_db_table (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
@@ -41,5 +43,7 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

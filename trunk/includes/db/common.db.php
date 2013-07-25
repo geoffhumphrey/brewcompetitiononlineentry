@@ -77,14 +77,6 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	$_SESSION['contestAwardsLocName'] = $row_contest_info['contestAwardsLocName'];
 	$_SESSION['contestAwardsLocTime'] = $row_contest_info['contestAwardsLocTime'];
 	
-	// Comp Dates
-	$_SESSION['contestRegistrationOpen'] = $row_contest_info['contestRegistrationOpen'];
-	$_SESSION['contestRegistrationDeadline'] = $row_contest_info['contestRegistrationDeadline'];
-	$_SESSION['contestJudgeOpen'] = $row_contest_info['contestJudgeOpen'];
-	$_SESSION['contestJudgeDeadline'] = $row_contest_info['contestJudgeDeadline'];
-	$_SESSION['contestEntryOpen'] = $row_contest_info['contestEntryOpen'];
-	$_SESSION['contestEntryDeadline'] = $row_contest_info['contestEntryDeadline'];
-	
 	// Entry Fees
 	$_SESSION['contestEntryFee'] = $row_contest_info['contestEntryFee'];
 	$_SESSION['contestEntryFee2'] = $row_contest_info['contestEntryFee2'];
@@ -238,10 +230,14 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 
 session_write_close();
 
-// Some limits may need to be changed by admin and propagated instantly to all users
+// Some limits and dates may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecialCharLimit,prefsUserSubCatLimit,prefsUSCLEx,prefsUSCLExLimit FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysql_query($query_limits, $brewing) or die(mysql_error());
-$row_limits = mysql_fetch_assoc($limits);	
+$row_limits = mysql_fetch_assoc($limits);
+
+$query_contest_dates = sprintf("SELECT contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline FROM %s WHERE id=1", $prefix."contest_info");
+$contest_dates = mysql_query($query_contest_dates, $brewing) or die(mysql_error());
+$row_contest_dates = mysql_fetch_assoc($contest_dates);
 
 ?>

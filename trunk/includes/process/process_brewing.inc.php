@@ -3,7 +3,9 @@
  * Module:      process_brewing.inc.php
  * Description: This module does all the heavy lifting for adding entries to the DB
  */
-session_start(); 
+
+
+if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
 
 function check_special_ingredients($style) {
 	
@@ -768,4 +770,6 @@ if ($action == "update") {
   	$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 	header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
 } // end if ($action == "update")
+
+} else echo "<p>Not available.</p>";
 ?>

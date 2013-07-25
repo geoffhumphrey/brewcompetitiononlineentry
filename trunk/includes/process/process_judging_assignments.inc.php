@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_assignments" table
  */
 
-if ($action == "update") {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($action == "update") {
 	if ($_SESSION['jPrefsQueued'] == "N") {
 	foreach ($_POST['random'] as $random) {
 		// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
@@ -128,4 +130,6 @@ if ($action == "update") {
  }  // end if ($_SESSION['jPrefsQueued'] == "Y")
 header(sprintf("Location: %s", $base_url."index.php?section=admin&go=judging_tables&msg=2"));
 }
+
+} else echo "<p>Not available.</p>";
 ?>

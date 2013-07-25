@@ -4,6 +4,10 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "style_types" table
  */
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ 
+
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $style_types_db_table (
 	styleTypeName, 
@@ -48,4 +52,4 @@ if ($action == "edit") {
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 }
 
-?>
+} else echo "<p>Not available.</p>";?>

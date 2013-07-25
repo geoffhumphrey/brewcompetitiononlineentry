@@ -1,5 +1,5 @@
 <?php 
-$query_username = sprintf("SELECT user_name FROM %s WHERE id='%s'",$users_db_table,$row_brewer['uid']);
+$query_username = sprintf("SELECT * FROM %s WHERE id='%s'",$users_db_table,$row_brewer['uid']);
 $username = mysql_query($query_username, $brewing) or die(mysql_error());
 $row_username = mysql_fetch_assoc($username);
 
@@ -22,9 +22,9 @@ $row_username = mysql_fetch_assoc($username);
   <td class="dataHeading">User Level:</td>
   <td class="data">
   <select name="userLevel">
-  <option value="2" <?php if ($row_user_level['userLevel'] == "2") echo "SELECTED"; ?>>Participant</option>
-  <option value="1" <?php if ($row_user_level['userLevel'] == "1") echo "SELECTED"; ?>>Admin</option>
-  <option value="0" <?php if ($row_user_level['userLevel'] == "0") echo "SELECTED"; ?>>Top-Level Admin</option>
+  <option value="2" <?php if ($row_username['userLevel'] == "2") echo "SELECTED"; ?>>Participant</option>
+  <option value="1" <?php if ($row_username['userLevel'] == "1") echo "SELECTED"; ?>>Admin</option>
+  <option value="0" <?php if ($row_username['userLevel'] == "0") echo "SELECTED"; ?>>Top-Level Admin</option>
   </select>  
   </td>
 </table>

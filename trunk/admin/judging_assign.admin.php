@@ -402,6 +402,7 @@ If no judges are listed below, no judge indicated that they are available for th
             </table>
         </td>
         <td>
+        <?php if ($totalRows_assignments > 0) { ?>
         	<table class="dataTable bdr1">
             <tr>
             	<th class="dataHeading bdr1B">Judges/Stewards Assigned to this Table</th>
@@ -432,6 +433,7 @@ If no judges are listed below, no judge indicated that they are available for th
             </tr>
             </table>
         </td>
+        <?php } ?>
     </tr>
 </table>
 

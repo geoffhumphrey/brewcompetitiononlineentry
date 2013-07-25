@@ -19,7 +19,7 @@ if (strstr($section,"step")) { ?>
   <?php if (($registration_open == 1) && (!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION['loginUsername'])) { ?><li><?php if ($section != "register") { ?><a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php } ?>
-  <?php if (($registration_open > "0") && (isset($_SESSION['loginUsername'])))  { ?>
+  <?php if (($registration_open > 0) && (isset($_SESSION['loginUsername'])))  { ?>
   		<?php if (NHC) { ?>
   			<?php if (($_SESSION['contestEntryFee'] > 0) && ($totalRows_log > 0)) { ?><li><?php if ($section != "pay") { ?><a href="<?php echo build_public_url("pay","default","default",$sef,$base_url); ?>">Pay My Fees</a><?php } else { ?>Pay My Fees<?php } ?></li><?php } ?>
   		<?php } else { ?> 
@@ -43,11 +43,12 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=username&amp;id=<?php echo $_SESSION['user_id']; ?>">Change My Email Address</a>
 	<?php } ?>
     <a class="menuItem"  href="<?php echo $base_url; ?>index.php?section=user&amp;action=password&amp;id=<?php echo $_SESSION['user_id']; ?>">Change My Password</a>
-    <?php if (((NHC) && ($prefix != "final_")) && ($remaining_entries > 0) && ($_SESSION['userLevel'] == 2) && (!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open))) { ?>
+    <?php if (((NHC) && ($prefix != "final_")) && ($remaining_entries > 0) && ($_SESSION['userLevel'] == 2) && (!$comp_entry_limit)) { ?>
     <a class="menuItem"  href="<?php echo build_public_url("brew","default","add",$sef,$base_url); ?>">Add An Entry</a>
-    <?php } ?>
+    
     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?>
     <a class="menuItem" href="<?php echo build_public_url("beerxml","default","default",$sef,$base_url); ?>">Import Entries Using BeerXML</a>
+    <?php } ?>
     <?php } ?>
 </div>
 <?php } ?>

@@ -12,6 +12,7 @@ function authenticateUser($connection, strtolower($username), $password) {
   	// Formulate the SQL find the user
   	$password = md5($password);
   	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";
+	mysql_real_escape_string($query);
   	$result = mysql_query($query, $connection);
 
 /*

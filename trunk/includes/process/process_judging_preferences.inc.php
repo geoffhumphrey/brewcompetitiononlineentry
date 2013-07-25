@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging preferences" table
  */
 
-if ($action == "add") {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($action == "add") {
 		
 }
 
@@ -76,6 +78,8 @@ WHERE id=%s",
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}
 }
+
+} else echo "<p>Not available.</p>";
 
 
 ?>

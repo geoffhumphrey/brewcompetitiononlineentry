@@ -5,6 +5,8 @@
  *              "contest_info" table.
  */
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
+
 $contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']." ".$_POST['contestRegistrationOpenTime']);
 $contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']." ".$_POST['contestRegistrationDeadlineTime']);
 $contestEntryOpen = strtotime($_POST['contestEntryOpen']." ".$_POST['contestEntryOpenTime']);
@@ -231,4 +233,6 @@ if ($action == "edit") {
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 
 }
+
+} else echo "<p>Not available.</p>";
 ?>

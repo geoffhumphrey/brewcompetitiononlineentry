@@ -5,7 +5,9 @@
  *              Adds/moves/deletes corresponding entries to the judging_flights table
  */
 
-if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
 
 if ($action == "add") {	
 
@@ -331,5 +333,7 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

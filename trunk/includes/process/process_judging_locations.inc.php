@@ -3,8 +3,10 @@
  * Module:      process_judging_location.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
-$judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ $judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
 
 if ($action == "add") {
 	$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",
@@ -41,5 +43,7 @@ if ($action == "edit") {
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
   	header(sprintf("Location: %s", stripslashes($updateGoTo)));
 }
+
+} else echo "<p>Not available.</p>";
 
 ?>

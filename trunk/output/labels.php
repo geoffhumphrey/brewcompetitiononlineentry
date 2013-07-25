@@ -201,7 +201,7 @@ if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "defa
 				$pdf->Add_Label($text);
 			}
 			
-			if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $_SESSION['contestRegistrationDeadline'])) {
+			if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 				$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);				
 				$pdf->Add_Label($text);
 			}
@@ -241,7 +241,7 @@ if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "defaul
 				$pdf->Add_Label($text);
 			}
 			
-			if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $_SESSION['contestRegistrationDeadline'])) {
+			if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 				$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);				
 				$pdf->Add_Label($text);
 			}
@@ -422,7 +422,7 @@ if (($go == "participants") && ($action == "judging_nametags")) {
 if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
 	$pdf = new PDF_Label('5160'); 
 	$pdf->AddPage();
-	$pdf->SetFont('Arial','',9);
+	$pdf->SetFont('Arial','',8);
 	
 	$query_brewer = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeID,brewerEmail,brewerJudgeRank,uid FROM $brewer_db_table WHERE id = %s",$id);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
@@ -434,16 +434,18 @@ if (($go == "participants") && ($action == "judging_labels") && ($id != "default
 	//$rank = str_replace(",",", ",$row_brewer['brewerJudgeRank']);
 	$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 	$rank = bjcp_rank($bjcp_rank[0],2);
-	if (!empty($bjcp_rank[1])) $rank2 = $bjcp_rank[1].", ".$bjcp_rank[2];
+	if (!empty($bjcp_rank[1])) $rank2 = ", ".$bjcp_rank[1];
+	if (!empty($bjcp_rank[2])) $rank2 .= ", ".$bjcp_rank[2];
+	$rank2 = truncate($rank2,50);
 	
 	
 	$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 	//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
-	if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
+	if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
 	else $judge_id = "";
 	for($i=0; $i<30; $i++) {
 		
-		$text = sprintf("\n%s\n%s %s\n%s\n%s",
+		$text = sprintf("\n%s\n%s %s%s\n%s",
 		ucfirst(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucfirst(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
 		
 		$rank,

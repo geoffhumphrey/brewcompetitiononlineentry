@@ -4,7 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
 
-if ($action == "add") {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+ if ($action == "add") {
 	foreach($_POST['id'] as $id)	{
 		$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
 		$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
@@ -109,5 +111,8 @@ if ($action == "assign") {
  	}
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-  	header(sprintf("Location: %s", stripslashes($updateGoTo)));}
-?>
+  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
+}
+
+
+} else echo "<p>Not available.</p>";?>

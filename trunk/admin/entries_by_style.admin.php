@@ -67,7 +67,8 @@ if (array_sum($style_beer_count_logged) > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>";
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='10%' nowrap='nowrap'>Beer</td>";
-	$html_count .= "<td>".(array_sum($style_beer_count)+array_sum($style_beer_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_beer_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_beer_count))."</td>";
 	$html_count .= "</tr>";
 }
 
@@ -75,7 +76,8 @@ if (array_sum($style_mead_count_logged) > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='10%' nowrap='nowrap'>Mead</td>";
-	$html_count .= "<td>".(array_sum($style_mead_count)+array_sum($style_mead_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_mead_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_mead_count))."</td>";
 	$html_count .= "</tr>";
 }
 
@@ -84,7 +86,8 @@ if (array_sum($style_cider_count_logged) > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
 	else $html_count .= "<tr>";
 	$html_count .= "<td>Cider</td>";
-	$html_count .= "<td>".(array_sum($style_cider_count) + array_sum($style_cider_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_cider_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_cider_count))."</td>";
 	$html_count .= "</tr>";
 }
 
@@ -112,6 +115,7 @@ if ($total_style_count > 0) { ?>
 			"aoColumns": [
 				null,
 				null,
+				null
 				]
 		} );
 	} );
@@ -120,7 +124,8 @@ if ($total_style_count > 0) { ?>
 <thead>
 	<tr>
 		<th class="bdr1B" width="20%" nowrap="nowrap">Style Type</th>
-		<th class="bdr1B">Count</th>
+		<th class="bdr1B" width="15%"># Logged</th>
+		<th class="bdr1B"># Paid &amp; Received</th>
 	</tr>
 </thead>
 <tbody>

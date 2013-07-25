@@ -17,7 +17,7 @@ if (NHC) {
 		return $output;
 	}
 	
-	$registration_open = open_or_closed(strtotime("now"),$_SESSION['contestRegistrationOpen'],$_SESSION['contestRegistrationDeadline']);
+	$registration_open = open_or_closed(strtotime("now"),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
 	
 	
 	if ($registration_open == 1) {
