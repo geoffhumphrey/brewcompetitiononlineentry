@@ -6,8 +6,6 @@
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
- 
-
 if ($action == "update") {
 foreach($_POST['id'] as $id)	{ 
 

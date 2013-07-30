@@ -64,8 +64,10 @@ function mod_info($info,$method) {
 </div>
 <?php if ($action == "default") { ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
-    <p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are templates for reports (both on-screen and printed) and simple HTML files. These are located in the &ldquo;Mods&rdquo; sub-folder. A complete guide to adding and using custom modules is provided in the BCOE&amp;M help site.</p>
-    <p>Below is a list of the custom modules added to the database. For the program to use any custom module, its information MUST be added into the database and the file uploaded to the &ldquo;Mods&rdquo; sub-folder.<em> <strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
+    <p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. <!-- Provided in the program package are templates for reports (both on-screen and printed) and simple HTML. These are located in the &ldquo;Mods&rdquo; sub-folder. --> Guidelines to adding and using custom modules are provided in the BCOE&amp;M help site.</p>
+  <p>All files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to &quot;include&quot; files with other exensions).</p>
+  <p>Below is a list of the custom modules added to the database. For the program to use any custom module, its information MUST be added into the database and the file uploaded to the &ldquo;Mods&rdquo; sub-folder.</p>
+  <p><em><strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
 	<?php if ($totalRows_mods > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {

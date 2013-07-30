@@ -43,9 +43,9 @@ if ($entry_count > 0) {
 <tr>
 	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
 	<th class="dataList bdr1B" width="25%">Brewer(s)</th>
-	<th class="dataList bdr1B">Entry Name</th>
+	<th class="dataList bdr1B" width="25%">Entry Name</th>
 	<th class="dataList bdr1B" width="25%">Style</th>
-	<th class="dataList bdr1B" width="25%">Club</th>
+	<th class="dataList bdr1B" width="24%">Club</th>
 	<?php if ($filter == "scores") { ?>
 	<th width="1%" class="dataHeading bdr1B">Score</th>
 	<?php } ?>

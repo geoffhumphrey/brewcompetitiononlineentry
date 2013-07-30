@@ -6,7 +6,7 @@
  * 
  */
 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 $bid = $_SESSION['user_id'];
 
 if ($msg == "10") {
@@ -151,5 +151,4 @@ else $payment_amount = number_format($total_to_pay, 2);
 <?php } ?>
 <?php } 
 }
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

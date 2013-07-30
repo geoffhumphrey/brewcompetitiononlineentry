@@ -116,7 +116,7 @@ else {
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
-		if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+		
 		
 		if (($action != "print") && ($msg != "default")) echo $msg_output;
 		if (!empty($message)) echo "<div class='error'>".$message."</div>";
@@ -150,5 +150,4 @@ else {
     <p>PHP version 5.x or higher is required &mdash; this server is running PHP version <?php echo $php_version; ?>.</p>
 
 <?php } // end else 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 } // end else  ?>

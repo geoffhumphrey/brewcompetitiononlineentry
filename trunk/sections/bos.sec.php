@@ -88,7 +88,7 @@ if ($action == "print") {
   
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
-echo "<h2>Other Overall Winners</h2>";
+echo "<h2>Overall Winners</h2>";
 do { 
 $query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$row_sbi['id']);
 $sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
@@ -128,10 +128,10 @@ $random = random_generator(6,2);
     	<?php if ($row_sbi['sbi_display_places'] == "1") { ?>
         <th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
         <?php } ?>
-        <th class="dataList bdr1B" width="20%">Brewer(s)</th>
-        <th class="dataList bdr1B" width="20%">Entry Name</th>
-        <th class="dataList bdr1B" width="20%">Style</th>
-        <th class="dataList bdr1B">Club</th>
+        <th class="dataList bdr1B" width="25%">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%">Entry Name</th>
+        <th class="dataList bdr1B" width="25%">Style</th>
+        <th class="dataList bdr1B" width="24%">Club</th>
     </tr>
 </thead>
 <tbody>

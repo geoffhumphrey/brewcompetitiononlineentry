@@ -29,7 +29,7 @@ $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 if (($action != "print") && ($msg != "default")) echo $msg_output;
 
 // Add the top of the page MODS scripts
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 
 // Add the help link for the page
 if ($action != "print") echo "<p><span class=\"icon\"><img src=\"".$base_url."images/help.png\"  /></span><a id=\"modal_window_link\" href=\"http://help.brewcompetition.com/files/my_info.html\" title=\"BCOE&amp;M Help: My Info and Entries\">My Info and Entries Help</a></p>";
@@ -38,8 +38,6 @@ if ($action != "print") echo "<p><span class=\"icon\"><img src=\"".$base_url."im
 include (SECTIONS.'brewer_info.sec.php');
 
 // Call the brewer's entry information
-include (SECTIONS.'brewer_entries.sec.php'); 
-
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); 
+include (SECTIONS.'brewer_entries.sec.php');  
 
 ?>

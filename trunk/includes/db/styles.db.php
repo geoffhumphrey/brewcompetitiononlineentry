@@ -7,6 +7,7 @@ elseif ((($section == "judge") && ($go == "judge")) || ($action == "add") || ($a
 elseif (($section == "beerxml") && ($msg != "default")) $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleOwn='bcoe'";
 else $query_styles .= "";
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+$row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
 
 $query_styles2 = "SELECT * FROM $styles_db_table";

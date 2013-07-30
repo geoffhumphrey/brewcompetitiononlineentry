@@ -16,12 +16,9 @@ Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd
 
 */
 
-
 //Error reporting
 //error_reporting(0);	// comment out to debug
 error_reporting(E_ALL); // uncomment to debug 
-
-
 
 // reCAPTCHA Public Key
 $publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
@@ -65,6 +62,9 @@ if (!$setup_success) {
 	header ($setup_relocate);
 	exit;
 }
+
+//echo $setup_success;
+//exit;
 
 // If all setup or update has taken place, run normally
 if ($setup_success) {

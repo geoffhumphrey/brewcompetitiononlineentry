@@ -2372,7 +2372,7 @@ function table_exists($table_name) {
 }
 
 
-function table_assignments($uid,$method,$time_zone,$date_format,$time_format) {
+function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2=0) {
 	
 	// Gather and output the judging or stewarding assignments for a user
 	
@@ -2392,9 +2392,17 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format) {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			//$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
 			$output .= "\t\t<tr>\n";
-			$output .= "\t\t\t<td class='dataLeft'>".$location[2]."</td>\n";
-			$output .= "\t\t\t<td class='data'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-			$output .= "\t\t\t<td class='data'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
+			if ($method2 == 0) {
+				$output .= "\t\t\t<td class='dataList'>".$location[2]."</td>\n";
+				$output .= "\t\t\t<td class='dataList'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+				$output .= "\t\t\t<td class='dataList'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
+			}
+			else {
+				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
+				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+				$output .= "\t\t\t<td class='dataList bdr1B'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";	
+				
+			}
 			$output .= "\t\t</tr>\n";
 			//$output .= "\t</table>\n";
 			
