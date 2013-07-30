@@ -7,6 +7,7 @@
 
 require('paths.php');
 require(CONFIG.'bootstrap.php');
+include(DB.'mods.db.php');
 
 if (TESTING) {
 	$mtime = microtime(); 
@@ -155,7 +156,7 @@ var _gaq = _gaq || [];
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
   	</div>
   <?php  } 
-    
+  if (($_SESSION['prefsUseMods'] == "Y") && ($section != "admin")) include(INCLUDES.'mods_top.inc.php'); // for display consistency
   echo $closed_msg;
   echo $registration_open_msg;
   echo $judge_reg_open_msg;
@@ -164,6 +165,7 @@ var _gaq = _gaq || [];
   
 // Check if registration open date has passed
   if (($registration_open == "0") && ($ua != "unsupported")) { 
+  	
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
@@ -193,8 +195,7 @@ var _gaq = _gaq || [];
   }
   
   // Check if registration close date has passed. If so, display "registration end" message.
-  if (($registration_open == "2") && (!$ua)) {
-	  
+  if (($registration_open == "2") && (!$ua)) { 
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
 	if ($section == "login")		include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
@@ -256,15 +257,16 @@ var _gaq = _gaq || [];
   	echo "<div class='error'>Unsupported browser.</div><p>Your version of Internet Explorer, as detected by our scripting, is not supported by "; if (NHC) 	echo "the NHC online registration system."; else echo "BCOE&amp;M.</p>"; echo "<p>Please <a href='http://windows.microsoft.com/en-US/internet-explorer/download-ie'>download and install the latest version</a> for your operating system. Alternatively, you can use the latest version of another browser (<a href='http://www.google.com/chrome'>Chrome</a>, <a href='http://www.mozilla.org/en-US/firefox/new/'>Firefox</a>, <a href='http://www.apple.com/safari/'>Safari</a>, etc.).</p>"; 
   	echo "<p>The information provided by your browser and used by our script is: ".$_SERVER['HTTP_USER_AGENT']."</p>";
   }
-  
-  if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
-  <div class="error">Please register or log in to access this area.</div>
-  <?php if ($section == "admin") { ?>
-  <div id="header">	
-	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-  </div>
-  <?php } ?>
  
+ 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
+  
+  	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
+  	<div class="error">Please register or log in to access this area.</div>
+	  <?php if ($section == "admin") { ?>
+      <div id="header">	
+        <div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
+      </div>
+      <?php } ?>
   <?php } ?>
   	</div>
 </div>

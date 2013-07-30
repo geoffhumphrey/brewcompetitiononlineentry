@@ -153,11 +153,13 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	
 	if (NHC) {
 	
-		if (($prefix != "final_") && ($show_scores)) { 
-			$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s' AND a.scoreEntry >=25", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
+		if ($show_scores) { 
+			$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
+			if ($prefix != "final_") $query_package_count .= " AND a.scoreEntry >=25";
 			$package_count = mysql_query($query_package_count, $brewing) or die(mysql_error());
 			$row_package_count = mysql_fetch_assoc($package_count);
 			$totalRows_package_count = mysql_num_rows($package_count);
+			//echo $totalRows_package_count;
 			
 			$query_admin_adv = sprintf("SELECT COUNT(*) AS 'count' FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewWinner='6'", $_SESSION['user_id']);
 			$admin_adv = mysql_query($query_admin_adv, $brewing) or die(mysql_error());
@@ -165,7 +167,8 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 			
 			if ($totalRows_package_count > 0) {
 				do { 
-				if (($row_package_count['scorePlace'] != "") && ($row_package_count['scorePlace'] <= 3) && ($row_package_count['scoreEntry'] >= 30)) $count_winner[] = 1;
+				if (($prefix != "final_") && ($row_package_count['scorePlace'] != "") && ($row_package_count['scorePlace'] <= 3) && ($row_package_count['scoreEntry'] >= 30)) $count_winner[] = 1;
+				elseif (($prefix == "final_") &&($row_package_count['scorePlace'] != "") && ($row_package_count['scorePlace'] <= 3)) $count_winner[] = 1;
 				else $count_winner[] = 0;
 				} while ($row_package_count = mysql_fetch_assoc($package_count));
 				$winner_count = array_sum($count_winner);
@@ -192,22 +195,37 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 		$nhc_message_1 .= "</span>";
 		$nhc_message_1 .= "</div>";
 		
-		$nhc_message_2 .= "<div class='closed'>";
-		$nhc_message_2 .= "Your NHC Post-Competition Package is now available - it includes a letter from the American Homebrewers Association";
-		if ($certificate) { 
-			$nhc_message_2 .= " and the gold, silver, and/or bronze certificates your"; 
-			if ($totalRows_count_winner == 1) $nhc_message_2 .= " entry "; 
-			else $nhc_message_2 .= " entries ";
-			$nhc_message_2 .= "earned";
+		if ($prefix != "final_") {
+			$nhc_message_2 .= "<div class='closed'>";
+			$nhc_message_2 .= "Your NHC Post-Competition Package is now available - it includes a letter from the American Homebrewers Association";
+			if ($certificate) { 
+				$nhc_message_2 .= " and the gold, silver, and/or bronze certificates your"; 
+				if ($totalRows_count_winner == 1) $nhc_message_2 .= " entry "; 
+				else $nhc_message_2 .= " entries ";
+				$nhc_message_2 .= "earned";
+			}
+			$nhc_message_2 .= ". ";
+			$nhc_message_2 .= "Download the <a href='".$base_url."mods/nhc_package.php?view=";
+			if ($winner) $nhc_message_2 .= "winner";  
+			else $nhc_message_2 .= "non-winner"; 
+			if ($admin_advance) $nhc_message_2 .= "&amp;filter=admin_adv"; 
+			else $nhc_message_2 .= "&amp;filter=default&amp;id=".$_SESSION['user_id']."'>letter</a> (PDF)";
+			if ($certificate) $nhc_message_2 .= " and your <a href='".$base_url."mods/nhc_package_certificates.php?id=".$_SESSION['user_id']."'>certificates</a> (PDF).";
+			$nhc_message_2 .= "</div>";
 		}
-		$nhc_message_2 .= ". ";
-		$nhc_message_2 .= "Download the <a href='".$base_url."mods/nhc_package.php?view=";
-		if ($winner) $nhc_message_2 .= "winner";  
-		else $nhc_message_2 .= "non-winner"; 
-		if ($admin_advance) $nhc_message_2 .= "&amp;filter=admin_adv"; 
-		else $nhc_message_2 .= "&amp;filter=default&amp;id=".$_SESSION['user_id']."'>letter</a> (PDF)";
-		if ($certificate) $nhc_message_2 .= " and your <a href='".$base_url."mods/nhc_package_certificates.php?id=".$_SESSION['user_id']."'>certificates</a> (PDF).";
-		$nhc_message_2 .= "</div>";
+		
+		if ($prefix == "final_") {
+			$nhc_message_2 .= "<div class='closed'>";
+			$nhc_message_2 .= "Your NHC Post-Final Round Competition Letter is now available. ";
+			$nhc_message_2 .= "Download the <a href='".$base_url."mods/nhc_package.php?view=";
+			if ($winner) $nhc_message_2 .= "winner";  
+			else $nhc_message_2 .= "non-winner"; 
+			$nhc_message_2 .= "&amp;filter=default&amp;id=".$_SESSION['user_id']."'>letter</a> (PDF) from the American Homebrewers Association.";
+			if ($winner) $nhc_message_2 .= "<br>Your customized NHC Final Round Press Release is now available that details your medal wins. Download your <a href='".$base_url."mods/nhc_press_release.php?view=winner&amp;id=".$_SESSION['user_id']."'>press release package</a> (PDF).";
+			//$nhc_message_2 .= "Download the <a href='".$base_url."mods/nhc_press_release.php?view=winner&amp;id=".$_SESSION['user_id'].">press release package</a> (PDF).";
+			$nhc_message_2 .= "</div>";
+		}
+		
 	
 	} // end if (NHC)
 
@@ -252,7 +270,7 @@ if (($action != "print") && ($entry_window_open > 0)) {
 	
 	if (NHC) { 
 		if (($entry_window_open > 0) && ($prefix != "final_")) echo $nhc_message_1;
-		if (($prefix != "final_") && ($show_scores)) echo $nhc_message_2;
+		if ($show_scores) echo $nhc_message_2;
 	} // end if (NHC)
 
 } // end if ($action != "print") 
@@ -276,16 +294,19 @@ do {
 	else $entry_tr_style = "";
 	
 	$entry_output .= "<tr".$entry_tr_style.">";
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	if ((NHC) && ($prefix == "final_")) $entry_output .= sprintf("%06s",$row_log['id']); else $entry_output .= sprintf("%04s",$row_log['id']);
 	$entry_output .= "</td>";
 	
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	$entry_output .= $row_log['brewName']; 
 	if ($row_log['brewCoBrewer'] != "") $entry_output .= "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>";
 	$entry_output .= "</td>";
 	
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	if ($row_style['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; 
 	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<span class='required'>Style NOT entered</span>";
 	else $entry_output .= "<span class='required'>Style entered NOT accepted.</span>";
@@ -293,7 +314,8 @@ do {
 	
 	
 	
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	if ($row_log['brewConfirmed'] == "0") { 
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png' border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
@@ -308,13 +330,15 @@ do {
 	$entry_output .= "</td>";
 	
 	
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	if ($action != "print") $entry_output .= yes_no($row_log['brewPaid'],$base_url);
 	else  $entry_output .= yes_no($row_log['brewPaid'],$base_url,3);
 	$entry_output .= "</td>";
 	
 	
-	$entry_output .= "<td class='dataList'>";
+	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 	if ($row_log['brewUpdated'] != "") $entry_output .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
 	$entry_output .= "</td>";
 	
@@ -327,19 +351,22 @@ do {
 		$winner_place = preg_replace("/[^0-9\s.-:]/", "", $medal_winner);
  		$score = score_check($row_log['id'],$judging_scores_db_table);
 	
-		$entry_output .= "<td class='dataList'>";
+		if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 		$entry_output .= $score;
 		$entry_output .= "</td>";
 		
-		$entry_output .= "<td class='dataList'>";
+		if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
-			if ($action != "print") $entry_output .= "<img src='".$base_url."images/tick.png'>Yes"; 
+			if ($action != "print") $entry_output .= "<img src='".$base_url."images/tick.png'> Yes"; 
 			else $entry_output .= "Yes"; 
 			}
 		else $entry_output .= "&nbsp;";
 		$entry_output .= "</td>";
 		
-		$entry_output .= "<td class='dataList'>";
+		if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
+	else $entry_output .= "<td class='dataList'>";
 		$entry_output .= $medal_winner;
 		if ((NHC) && ($prefix != "final_")) $enter_output .= $admin_adv;
 		$entry_output .= "</td>";

@@ -6,7 +6,7 @@
  * 
  */
  
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 if (($action == "default") || ($action == "login") || ($action == "logout")) {  
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 	if (!isset($_SESSION['loginUsername'])) { 
@@ -82,7 +82,6 @@ if ($go == "verify") {
 	</form>
 	<?php }
 	}
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 }
 
 ?>

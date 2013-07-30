@@ -209,7 +209,6 @@ $query_with_entries = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FR
 $with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
 $row_with_entries = mysql_fetch_assoc($with_entries);
 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($section == "admin") && ($go == "default")) { 
 $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 function total_discount() { 
@@ -241,21 +240,20 @@ function total_discount() {
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php 
+
 /*
 echo "Tables: ".$query_tables."<br>";
 echo "Tables Edit: ".$query_tables_edit."<br>";
 echo "Style Type: ".$query_style_type."<br>";
 echo "Total tables: ".$totalRows_tables;
 */
-
+if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter);
-
-?>
-<?php if (($section == "admin") && ($go == "default")) { ?>
+if (($section == "admin") && ($go == "default")) { ?>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 
 <table>
@@ -1049,8 +1047,6 @@ if ($_SESSION['userLevel'] == "0") {
 	if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php');
 	if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
 }
-
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

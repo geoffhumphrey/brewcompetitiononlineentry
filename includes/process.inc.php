@@ -237,7 +237,7 @@ if (NHC) {
 else {
 	$insertGoTo = "";
 	$updateGoTo = "";
-	$massUpdateGoTo = "../";
+	$massUpdateGoTo = "";
 }
 
 if (strpos($_POST['relocate'],"?") === false) {

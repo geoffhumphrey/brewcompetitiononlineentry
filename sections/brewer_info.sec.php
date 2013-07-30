@@ -118,7 +118,7 @@ $judge_info = "";
 			$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 			$judge_info .= "<tr>\n";
 			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-			$judge_info .= yes_no(substr($value, 0, 1),$base_url);
+			if ($action == "print") $judge_info .= yes_no(substr($value, 0, 1),$base_url,3); else $judge_info .= yes_no(substr($value, 0, 1),$base_url);
 			$judge_info .= "</td>\n";
 			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
 			$judge_info .= $row_judging_loc3['judgingLocName'];
@@ -144,13 +144,13 @@ $steward_info = "";
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
 				$steward_info .= "<tr>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-				$steward_info .= yes_no(substr($value, 0, 1),$base_url);
+				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				if ($action == "print") $steward_info .= yes_no(substr($value, 0, 1),$base_url,3); else $steward_info .= yes_no(substr($value, 0, 1),$base_url);
 				$steward_info .= "</td>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
 				$steward_info .= $row_judging_loc3['judgingLocName'];
 				$steward_info .= "</td>\n";
-				if ($action == "print") echo "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
 				$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 				$steward_info .= "</tr>";
 				}
@@ -325,7 +325,8 @@ if (!empty($bjcp_rank[1])) {
 <?php } // end if ($judge_available_not_assigned) ?>
 
 <?php 
-$table_assign = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat']);
+if ($action == "print") $table_assign = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+else $table_assign = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 if ((!$judge_available_not_assigned) && (!empty($table_assign))) {
 ?>
 <tr>

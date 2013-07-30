@@ -6,10 +6,7 @@
  */
 
 if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
-
-
-
-			  
+ 
 	require(DB.'common.db.php');
 	require(DB.'brewer.db.php');
 	require(DB.'judging_locations.db.php');
@@ -186,7 +183,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 					$row_staff_org = mysql_fetch_assoc($staff_org);
 					$totalRows_staff_org = mysql_num_rows($staff_org);
 					
-					if ($totalRows_staff_org > 0) $updateSQL4 = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", $_POST['Organizer']);
+					if ($totalRows_staff_org > 0) $updateSQL4 = sprintf("UPDATE %s SET staff_organizer='1', staff_staff='0', staff_judge='0', staff_judge_bos='0' WHERE uid='%s'", $prefix."staff", $_POST['Organizer']);
 					else $updateSQL4 = sprintf("INSERT INTO %s (uid,staff_organizer) VALUES (%s,1)",$prefix."staff",$_POST['Organizer']);
 					mysql_real_escape_string($updateSQL4);
 					$result4 = mysql_query($updateSQL4, $brewing) or die(mysql_error());

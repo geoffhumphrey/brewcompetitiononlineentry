@@ -32,7 +32,7 @@ if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_S
 $info_msg = "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
 
 if ($go != "admin") echo $info_msg;
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php'); 
+ 
 ?>
 <?php if ($section == "step2") { ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
@@ -246,5 +246,4 @@ $row_clubs = mysql_fetch_assoc($clubs);
 </form>
 <?php }
 else echo "<div class=\"error\">You can only edit your own profile.</div>";
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>

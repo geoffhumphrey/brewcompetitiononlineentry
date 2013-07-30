@@ -16,9 +16,7 @@ if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$
 <?php } ?>
 <?php if ($action != "print") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="<?php echo $base_url; ?>output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print Volunteer Info">Print This Page</a></p>
-<?php } 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
-?>
+<?php } ?>
 
 <h2>Judging and Stewarding</h2>
 <?php if (($judge_window_open > 0) && (!isset($_SESSION['loginUsername']))) { ?>
@@ -33,8 +31,4 @@ if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 <?php if ($_SESSION['contestVolunteers'] != "") { ?>
 <h2>Other Volunteer Info</h2>
 <?php echo $_SESSION['contestVolunteers']; ?>
-<?php } 
-
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
-
-?>
+<?php } ?>

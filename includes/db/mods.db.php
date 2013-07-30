@@ -30,6 +30,8 @@ if ($go != "mods") {
 	do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysql_fetch_assoc($mods));
 }
 
+//print_r($mods_display);
+
 function mod_display($id,$section,$go,$user_level,$page_location) {
 	
 	require(CONFIG.'config.php');	

@@ -231,9 +231,12 @@ if ($action != "print") {
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
 		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign Judges</a>";
  		$secondary_nav .= "</span>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign BOS Judges</a>";
+		$secondary_nav .= "</span>";
     	$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
-		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign Judges</a>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign Stewards</a>";
  		$secondary_nav .= "</span>";
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";

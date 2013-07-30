@@ -7,7 +7,7 @@
  */
 
 include(DB.'sponsors.db.php');
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 
 if ($action != "print") { ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
@@ -44,4 +44,4 @@ if ($action != "print") { ?>
 	}
 	?>
 </table>
-<?php if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php'); ?>
+

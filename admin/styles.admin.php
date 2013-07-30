@@ -23,7 +23,7 @@ include(DB.'styles.db.php');
     </span>
 <?php } ?>
 </div>
-<?php if ($filter == "default") { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
+<?php if (($filter == "default") && ($action == "default")) { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
 <?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
 <script language="javascript" type="text/javascript">
 //Custom JavaScript Functions by Shawn Olson
@@ -120,7 +120,7 @@ function checkUncheckAll(theElement) {
 <table>
 <tr>
     <td class="dataLabel" >Style Name:</td>
-    <td class="data"><input type="text" name="brewStyle" tooltipText="<?php echo $toolTip_name; ?>" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" size="40">&nbsp;<span class="required">Required</span></td>
+    <td class="data"><input type="text" name="brewStyle" tooltipText="<?php echo $toolTip_name; ?>" value="<?php echo $row_styles['brewStyle']; ?>" size="40">&nbsp;<span class="required">Required</span></td>
 </tr>
 <tr>
     <td class="dataLabel" >Style Type:</td>

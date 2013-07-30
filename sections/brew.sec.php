@@ -363,7 +363,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 
 if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 if (($action == "add") || (($action == "edit") && (($_SESSION['user_id'] == $row_log['brewBrewerID']) || ($_SESSION['userLevel'] <= 1)))) {
 	if ($filter == "default") { ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/add_edit_entries.html" title="BCOE&amp;M Help: Add/Edit an Entry">Add/Edit an Entry Help</a></p>
@@ -897,7 +897,6 @@ if (NHC) { ?>
 </form>
 <?php } 
 else echo "<div class=\"error\">The requested entry was not entered under the currently logged in user's credentials.</div>";
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
 ?>
 </div>
 </div>

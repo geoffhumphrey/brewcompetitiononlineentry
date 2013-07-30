@@ -6,7 +6,7 @@
  * 
  */
 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
+
 if ((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) {
 if ($action == "username") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/username_check.js" ></script>
@@ -160,6 +160,4 @@ if ($action == "password") {
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } else echo "<div class=\"error\">You can only edit your own user name and password.</div>"; 
-if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
-?>
+<?php } else echo "<div class=\"error\">You can only edit your own user name and password.</div>"; ?>

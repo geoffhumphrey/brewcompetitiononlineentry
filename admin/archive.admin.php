@@ -9,6 +9,14 @@ function get_archive_count($table) {
 	return $row_archive_count['count'];
 }
 
+$table_header1 = "Users";
+$table_header2 = "Participants";
+$table_header3 = "Entries";
+$table_header4 = "Tables";
+$table_header5 = "Scores";
+$table_header6 = "BOS";
+$table_header7 = "Actions";
+
 ?>
 <h2>Archived Competition Data</h2>
 <div class="adminSubNavContainer">
@@ -26,13 +34,13 @@ function get_archive_count($table) {
 <h3>Archives</h3>
 <table class="dataTable" id="sortable">
 <thead>
-    <th width="10%" class="dataHeading bdr1B">Users</th>
-    <th width="10%" class="dataHeading bdr1B">Participants</th>
-    <th width="10%" class="dataHeading bdr1B">Entries</th>
-    <th width="10%" class="dataHeading bdr1B">Tables</th>
-    <th width="10%" class="dataHeading bdr1B">Scores</th>
-    <th width="10%" class="dataHeading bdr1B">BOS</th>
-    <th class="dataHeading bdr1B">Actions</th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header1; ?></th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header2; ?></th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header3; ?></th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header4; ?></th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header5; ?></th>
+    <th width="10%" class="dataHeading bdr1B"><?php echo $table_header6; ?></th>
+    <th class="dataHeading bdr1B"><?php echo $table_header7; ?></th>
 </thead>
 <tbody>
   <?php do { ?>

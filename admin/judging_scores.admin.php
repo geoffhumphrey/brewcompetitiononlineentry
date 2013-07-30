@@ -270,7 +270,7 @@ $(document).ready(function() {
 	} while ($row_entries = mysql_fetch_assoc($entries));
 	mysql_free_result($styles);
 	mysql_free_result($entries);
-	} // end foreach ?>
+	} // end foreach ?> 
 </tbody>
 </table>
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>"></p>

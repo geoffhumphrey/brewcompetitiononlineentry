@@ -2,6 +2,8 @@
 require('../paths.php');
 require(CONFIG.'bootstrap_output.php');
 
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
+
 $imageSrc = $base_url."images/";
 
 $fileCornfirm = "default";
@@ -263,3 +265,4 @@ function do_upload($upload_dir, $upload_url) {
 </div>
 </body>
 </html>
+<?php } else echo "Not available."; ?>
