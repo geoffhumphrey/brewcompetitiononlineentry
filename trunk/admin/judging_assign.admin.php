@@ -15,7 +15,7 @@ $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 $row_flights = mysql_fetch_assoc($flights);
 $total_flights = $row_flights['flightNumber'];
 
-$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='$id'", $filter);
+$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='%s'", $row_tables_edit['id']);
 $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 $row_assignments = mysql_fetch_assoc($assignments);
 $totalRows_assignments = mysql_num_rows($assignments);
@@ -211,7 +211,7 @@ if ($queued == "Y") { // For queued judging only
 if ($queued == "N") { // Non-queued judging
 	// Build the flights DropDown
 	$r .= '<select name="assignFlight'.$random.'" '.$disabled.'>';
-	$r .= '<option value="0" />Do Not Assign to This Round</option>';
+	$r .= '<option value="0" />Do Not Assign</option>';
 		for($f=1; $f<$total_flights+1; $f++) {
 			if (flight_round($tid,$f,$round)) { 
 				if (already_assigned($bid,$tid,$f,$round)) { $output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"'; } else { $output = 'Assign'; $selected = ''; $style=''; }
@@ -243,7 +243,7 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 		$entry_conflict = entry_conflict($bid,$table_styles);
 		$at_table = at_table($bid,$tid,$flight,$round);
 		//if (strpos($at_table,$tid) !== false) $already = TRUE;
-		if ($unavailable) $r = '<div class="orange judge-alert">Already Assigned to This Round as a Judge or Steward</div>';
+		if ($unavailable) $r = '<div class="orange judge-alert">Already Assigned to This Round</div>';
 		//if ($already) $r = '<div class="purple judge-alert">Already Assigned to this Table</div>';
 		if ($entry_conflict) $r = '<div class="blue judge-alert">Disabled - Participant has an Entry at this Table</div>';
 		if ((!$unavailable) && (!$entry_conflict)) $r = like_dislike($likes,$dislikes,$table_styles);
@@ -260,7 +260,7 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
         	<span class="icon"><img src="<?php echo $base_url; ?>images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view" title="View Assignments by Table">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon data"><img src="<?php echo $base_url; ?>images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>" title="View Assignments for this Table">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
+        	<span class="icon data"><img src="<?php echo $base_url; ?>images/monitor.png"  /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $row_tables_edit['id']; ?>" title="View Assignments for this Table">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
 <div class="info">Make sure you have <a href="<?php echo $base_url; ?>index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($_SESSION['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
@@ -282,7 +282,7 @@ If no judges are listed below, no judge indicated that they are available for th
   </td>
 </tr>
 </table>
-<h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$id,$dbTable,"default"); echo " (".$entry_count." entries)"; ?></h3>
+<h3>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Table #<?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?></h3>
 <table class="dataTableCompact">
 	<tr>
     	<td class="dataLabel">Location:</td>
@@ -357,17 +357,21 @@ If no judges are listed below, no judge indicated that they are available for th
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[1,'asc'],[0,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				null,
 				null,
 				null
+				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+				null,
+				null
+				<?php } ?>
 				]
 			} );
 		} );
 	</script>
-<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $id; ?>">
+<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
 <table class="dataTable">
     <tr>
         <td width="45%">
@@ -415,6 +419,10 @@ If no judges are listed below, no judge indicated that they are available for th
                         <td class="dataHeading bdr1B">Name</td>
                         <td class="dataHeading bdr1B">Assignment</td>
                         <td class="dataHeading bdr1B">Rank</td>
+                        <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+                        <td class="dataHeading bdr1B">Flight</td>
+                        <td class="dataHeading bdr1B">Round</td>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -422,9 +430,13 @@ If no judges are listed below, no judge indicated that they are available for th
 					$judge_info = explode("^",brewer_info($row_assignments['bid']));
 					?>
                     <tr>
-                        <td width="15%" nowrap="nowrap"><?php echo ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0'])); ?></td>
+                        <td width="25%" nowrap="nowrap"><?php echo ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0'])); ?></td>
                         <td class="data" width="10%"><?php if ($row_assignments['assignment'] == "S") echo "Steward"; else echo "Judge"; ?></td>
                         <td class="data"><?php echo str_replace(",",", ",$judge_info['3']); ?></td>
+                        <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+                        <td class="data" width="15%"><?php echo "Flight ".$row_assignments['assignFlight']; ?></td>
+                        <td class="data" width="15%"><?php echo "Round ".$row_assignments['assignRound']; ?></td>
+                        <?php } ?>
                     </tr>
                     <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
                 </tbody>
@@ -485,10 +497,10 @@ if (in_array($table_location,$locations)) {
         <td class="data">
         <?php 
 		
-		if (at_table($row_brewer['uid'],$id)) echo '<div class="purple judge-alert">Already Assigned to this Table</div>'; 
-		else echo judge_alert($i,$row_brewer['uid'],$id,$location,$row_judge_info['brewerJudgeLikes'],$row_judge_info['brewerJudgeDislikes'],$row_tables_edit['tableStyles'],$id);
+		if (at_table($row_brewer['uid'],$row_tables_edit['id'])) echo '<div class="purple judge-alert">Already Assigned to this Table</div>'; 
+		else echo judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$row_judge_info['brewerJudgeLikes'],$row_judge_info['brewerJudgeDislikes'],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
 		?>
-        <?php echo assign_to_table($id,$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
+        <?php echo assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued); ?> 
         </td>
 		<?php }
 		} // end for loop ?>
@@ -499,7 +511,7 @@ if (in_array($table_location,$locations)) {
 </tbody>
 </table>
 <p><input type="submit" class="button" name="Submit" value="Assign to Table #<?php echo $row_tables_edit['tableNumber']; ?>" /></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); if ($msg != "default") echo "&id=".$id; ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$row_tables_edit['id']); if ($msg != "default") echo "&id=".$row_tables_edit['id']; ?>">
 </form>
 <?php
 //mysql_free_result($styles);

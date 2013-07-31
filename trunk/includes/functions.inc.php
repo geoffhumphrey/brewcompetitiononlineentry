@@ -2494,11 +2494,14 @@ function judge_steward_availability($input,$method) {
 				$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $b);
 				$location = mysql_query($query_location, $brewing) or die(mysql_error());
 				$row_location = mysql_fetch_assoc($location);
-				$return .= $row_location['judgingLocName']." ";
-				//$return .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-				if ($method == "1") $return .= "<br>";
-				elseif ($method == "2") $return .= " | ";
-				else $return .= " ";
+				if (!empty($row_location['judgingLocName'])) {
+					$return .= $row_location['judgingLocName']." ";
+					//$return .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+					if ($method == "1") $return .= "<br>";
+					elseif ($method == "2") $return .= " | ";
+					else $return .= " ";
+					}
+					else $return .= "";
 				}
 			}
 		}

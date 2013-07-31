@@ -1,5 +1,5 @@
 <?php 
-include(DB.'judging_locations.db.php'); 
+//include(DB.'judging_locations.db.php'); 
 include(DB.'styles.db.php');
 //include(DB.'brewer.db.php');
 
@@ -150,7 +150,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 			$row_flights_2 = mysql_fetch_assoc($flights_2);
 			$totalRows_flights_2 = $row_flights_2['count'];
 			?>
-    		<a class="menuItem" href="<?php echo $base_url; if (!NHC) echo "/"; ?>index.php?section=admin&amp;go=judging_flights&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
+    		<a class="menuItem" href="<?php echo $base_url; if (!NHC) echo "/"; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php if ($totalRows_flights_2 > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a>
     		<?php mysql_free_result($flights_2); 
 			} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
     	</div>
@@ -161,7 +161,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 
 <tr>
 	<td><strong>Step 4: </strong><?php echo "Assign ".$assign_to." to Rounds"; ?></td>
-    <td class="data"><span class="icon"><img src="<?php echo $base_url; if (!NHC) echo "/"; ?>images/application_form_add.png" alt="<?php echo "Assign ".$assign_to." to Rounds"; ?>" /></span><a href="<?php echo $base_url; if (!NHC) echo "/"; ?>index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;&filter=rounds"><?php echo "Assign ".$assign_to." to Rounds"; ?></a></td>
+    <td class="data"><span class="icon"><img src="<?php echo $base_url; if (!NHC) echo "/"; ?>images/application_form_add.png" alt="<?php echo "Assign ".$assign_to." to Rounds"; ?>" /></span><a href="<?php echo $base_url; if (!NHC) echo "/"; ?>index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds"><?php echo "Assign ".$assign_to." to Rounds"; ?></a></td>
     <td class="data">&nbsp;</td>
 </tr>
 
@@ -251,7 +251,8 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
                     <?php } ?>
                 </ul>
             </td>
-            <?php if (((NHC) && ($prefix == "_final")) || (!NHC)) { ?>
+            <?php if (((NHC) && ($prefix == "_final")) || (!NHC) && ($totalRows_style_type > 0)) {
+				?>
             <td>A Best of Show round is enabled for the following <a href="<?php echo $base_url; if (!NHC) echo "/"; ?>index.php?section=admin&amp;go=style_types">Style Types</a>:<br />
                 <ul>
                     <?php do { ?>
@@ -496,7 +497,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 			} );
 		} );
 	</script>
-<form method="post" action="<?php echo $base_url; if (!NHC) echo "/"; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go."&amp;id=".$id; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="<?php echo $base_url; if (!NHC) echo "/"; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go."&amp;id=".$row_tables_edit['id']; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <p><input type="submit" class="button" value="Update Table"></p>
 <table>
   <tbody>
@@ -555,7 +556,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
         	<?php do { ?>
             <?php if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default") > 0) { ?>
             <tr>
-            	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
+            	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
                 <td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
                 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?></td>
                 <td class="data"><?php echo $row_styles['brewStyle'].get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>
@@ -578,24 +579,33 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 
 <?php if (($action == "default") && ($filter == "orphans")) { ?>
 <h3>Style Categories with Entries Not Assigned to Tables</h3>
-<?php if  ($totalRows_tables > 0) {
-	do { 
-		if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default")) { 
-			$a[] = 0;
-			if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
-				$a[] = $row_styles['id'];
- 				echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default")." entries)</li></ul>";  
-			}
-	 	} 
-	} while ($row_styles = mysql_fetch_assoc($styles));
-	$b = array_sum($a);
-	if ($b == 0) echo "<p>All style categories with entries have been assigned to tables.</p>";
-	else { echo "<p>No tables have been defined."; if ($dbTable == "judging_tables") echo "<a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a></p>"; } }
+<?php 
+	if ($totalRows_tables > 0) {
+		
+		do { 
+			if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default")) { 
+				$a[] = 0;
+				if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
+					$a[] = $row_styles['id'];
+					echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default")." entries)</li></ul>";  
+				}
+			} 
+		} while ($row_styles = mysql_fetch_assoc($styles));
+		$b = array_sum($a);
+		if ($b == 0) echo "<p>All style categories with entries have been assigned to tables.</p>";
+	
+	} // end if ($totalRows_tables > 0)
+	
+	else {
+		echo "<p>No tables have been defined.";
+		if ($go == "judging_tables") echo " <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a></p>";
+	} // end else
+	
 }// end if (($action == "default") && ($filter == "orphans"))
 ?>
 
 
-<?php if (($action == "assign") && ($filter == "default") && ($id == "default")) { ?>
+<?php if (($action == "assign") && ($filter == "default")) { ?>
 <h3>Assign Judges/Stewards to Tables</h3>
 <table>
  <tr>

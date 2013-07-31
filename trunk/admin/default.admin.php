@@ -423,8 +423,8 @@ if ($go == "default") { ?>
 		</div>
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/note.png"  /></span>Entry and Data Gathering</h4>
 		<div class="toggle_container">
+        	<p class="admin_default_header">Manage/View</p>
         	<?php if ($_SESSION['userLevel'] == "0") { ?>
-			<p class="admin_default_header">Manage/View</p>
 			<ul class="admin_default">
 			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Style Types</a></li>
                 <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>
@@ -970,8 +970,9 @@ if ($go == "default") { ?>
 			</ul>
             <?php if (!NHC) { ?>
   			<p class="admin_default_header">Tab Delimited Files</li>
-<p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
-			<ul class="admin_default">
+			<p>For importing into the Homebrew Competition Coordination Program (HCCP), available for download <a href="http://www.folsoms.net/hccp/" target="_blank">here</a>. <?php if ($totalRows_judging1 > 1) { ?>The tab delimited file for <em>each location</em> should be imported into HCCP as it's own database. Refer to the <a href="http://www.folsoms.net/hccp/hccp.pdf" target="_blank">HCCP documentation</a> for import instructions.<?php } ?></p> 
+			<p><em>*Please note: this function is deprecated and will be removed in a subsequent release.</em></p>
+            <ul class="admin_default">
 				<li><a href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=tab&amp;action=hccp">All Participants</a></li>
 				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid&amp;action=hccp">Paid & Received Entries</a></li>
 				<li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;action=hccp">All Entries</a></li>

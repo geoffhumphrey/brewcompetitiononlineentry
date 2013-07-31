@@ -61,10 +61,10 @@ if (strstr($section,"step")) { ?>
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Custom');"><span class="menuItemText">Custom Modules</span><span class="menuItemArrow">&#9654;</span></a>
 <?php } ?>
-<?php } ?>
+
 <!-- Defining Preferences Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Prefs');"><span class="menuItemText">Defining Preferences</span><span class="menuItemArrow">&#9654;</span></a>
-
+<?php } ?>
 <!-- Preparing Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Preparing');"><span class="menuItemText">Preparing</span><span class="menuItemArrow">&#9654;</span></a>	
 
@@ -146,9 +146,7 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenuCat_Printing" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Printing_Before');"><span class="menuItemText">Before Judging</span><span class="menuItemArrow">&#9654;</span></a>
-	<?php if ($row_scores['count'] > 0) { ?>
     <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Printing_During');"><span class="menuItemText">During Judging</span><span class="menuItemArrow">&#9654;</span></a>
-	<?php } ?>
     <a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Printing_After');"><span class="menuItemText">After Judging</span><span class="menuItemArrow">&#9654;</span></a>
 </div>
 
@@ -350,12 +348,11 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels">Judge Scoresheet Labels (All)</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/labels.php?section=admin&amp;go=participants&amp;action=judging_nametags">Judge, Steward and Staff Name Tags (All)</a>
 </div>
-<?php if ($row_scores['count'] > 0) { ?>
 <?php if (((NHC) && ($prefix == "_final")) || (!NHC)) { ?>
 <div id="adminMenu_Printing_During" class="menu">
 	<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos">All BOS Pullsheets</a>
+    <a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Mats">BOS Cup Mats</a>
 </div>
-<?php } ?>
 <?php } ?>
 <div id="adminMenu_Printing_After" class="menu">
 	<?php if ($totalRows_tables > 0) { 
