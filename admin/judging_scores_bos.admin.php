@@ -1,7 +1,6 @@
 <h2>
 <?php if ($action == "enter") echo "Enter/Edit BOS Places - ".$row_style_type['styleTypeName']; else echo "Best of Show (BOS) Entries and Places"; 
 if ($dbTable != "default") echo ": ".get_suffix($dbTable); 
-do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 ?>
 </h2>
 <div class="adminSubNavContainer">
@@ -25,7 +24,7 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
 		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Back to BOS Entries and Places List</a>
     </span>
 	<?php } ?>
-    <?php if ($action == "default") { ?>
+    <?php if (($action == "default") && ($totalRows_style_type > 0)) { ?>
     <span class="adminSubNav">
     <span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
 		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_2');">Enter/Edit...</a></div>
@@ -57,7 +56,9 @@ do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_asso
     	<span class="icon"><img src="<?php echo $base_url; ?>images/page_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a>
     </span>
 </div>
-<?php } if ($action == "default") { 
+<?php } 
+if (($action == "default") && ($totalRows_style_type > 0)) {
+do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 sort($a);
 foreach ($a as $type) {
 	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
@@ -181,7 +182,9 @@ $totalRows_tables = mysql_num_rows($tables_1);
 ?>
 <?php } ?>
 
-<?php } // end if ($action == "default") ?>
+<?php } // end if ($action == "default")
+else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."index.php?section=admin&amp;go=style_types' title='Enable Best of Show for one or more style types'>has been enabled</a> for any style type.</p>";
+?>
 
 <?php if ($action == "enter") { ?>
 <?php if ($totalRows_enter_bos > 0) { ?>

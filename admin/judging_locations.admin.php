@@ -62,7 +62,7 @@ $form_submit_button = "";
 $output_no_records = "";
 
 // Make DB Connections
-if ($section != "step5") include(DB.'judging_locations.db.php');
+//if ($section != "step5") include(DB.'judging_locations.db.php');
 
 if (($action == "default") && ($section != "step5")) {
 	
@@ -388,7 +388,8 @@ if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default")
 					$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $b);
 					$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 					$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-					if (substr($value, 0, 1) == "Y") $output .= $row_judging_loc3['judgingLocName']."<br>";
+					if ((substr($value, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName']))) $output .= $row_judging_loc3['judgingLocName']."<br>";
+					else $output .= "";
 					}
 				}
 			}
@@ -449,7 +450,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 	if ($section == "step5") $action = "add"; else $action = $action;
 	if ($go == "default") $go = "setup"; else $go = $go;
-	$form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$id,$judging_locations_db_table,TRUE);
+	$form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
 	$form_submit_button .= "<input type='submit' class='button' value='";
 	if ($action == "edit") $form_submit_button .= "Update"; 
 	else $form_submit_button .= "Submit";

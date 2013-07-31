@@ -47,7 +47,8 @@ $output_datatables_bPaginate = "true";
 $output_datatables_sPaginationType = "full_numbers";
 $output_datatables_bLengthChange = "true";
 $output_datatables_iDisplayLength = round($_SESSION['prefsRecordPaging']);
-$output_datatables_sDom = "irftip";
+if ($action == "print") $output_datatables_sDom = "it";
+else $output_datatables_sDom = "irftip";
 $output_datatables_bStateSave = "false";
 $output_datatables_bProcessing = "false";
 

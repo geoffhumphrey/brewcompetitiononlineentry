@@ -8,9 +8,11 @@ if (table_exists($style_types_db_table)) {
 		if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 		if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 		if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
-		if (($go == "judging_tables") && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
+		if ((($go == "judging_tables") || ($go == "judging_scores_bos")) && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
 		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 		$row_style_type = mysql_fetch_assoc($style_type);
+		$totalRows_style_type = mysql_num_rows($style_type); 
+		//echo $totalRows_style_type;
 	}
 }
 

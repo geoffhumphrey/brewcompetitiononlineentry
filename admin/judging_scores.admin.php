@@ -56,7 +56,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-<?php if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
+<?php 
+if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
 </div>
 <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>

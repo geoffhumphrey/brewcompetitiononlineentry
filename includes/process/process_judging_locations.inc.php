@@ -38,6 +38,7 @@ if ($action == "edit") {
 	mysql_select_db($database, $brewing);
 	mysql_real_escape_string($updateSQL);
 	//echo $judgingDate; echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
+	//echo $updateSQL;
   	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	$pattern = array('\'', '"');
   	$updateGoTo = str_replace($pattern, "", $updateGoTo); 

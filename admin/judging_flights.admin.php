@@ -23,7 +23,7 @@ else echo "Define/Edit Flights"; ?></h2>
     <?php } ?>
 </div>
 <?php 
-if (($id =="default") && ($filter == "default")) { 
+if ($filter == "default") { 
 if ($totalRows_tables > 0) {
 ?>
 <form>
@@ -40,7 +40,7 @@ if ($totalRows_tables > 0) {
 			$row_flights = mysql_fetch_assoc($flights);
 			$totalRows_flights = mysql_num_rows($flights);
 			?>
-          	<option value="index.php?section=admin&amp;go=judging_flights&amp;&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
+          	<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php if ($totalRows_flights > 0) echo "edit&amp;id=".$row_tables_edit['id']; else echo "add&amp;id=".$row_tables_edit['id']; ?>"><?php echo "Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
           	<?php mysql_free_result($flights);
 			} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
         </select>
@@ -51,7 +51,7 @@ if ($totalRows_tables > 0) {
 </form>
 <?php } else echo "<p>No tables have been defined. Tables <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>must be defined</a> before flights can be assigned to them.</p>";
 } 
-if ($id !="default") { 
+if (($filter != "default") && ($filter != "rounds"))  { 
 // get variables
 $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 $flight_count = ceil($entry_count/$_SESSION['jPrefsFlightEntries']);
@@ -115,7 +115,8 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 // document.getElementById('summary').innerHTML = butSummary;
 }
 </script>
-<?php echo "<p><span class='dataLabel'>Table Location:</span>".table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</p>"; ?>
+<?php 
+echo "<p><span class='dataLabel'>Table Location:</span>".table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>, this table can be divided into <?php echo readable_number($flight_count); ?> flights. For each entry below, designate the flight in which it will be judged.</p>
 <form name="flights" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <table class="dataTable" id="flightCount" onclick="updateButCount(event);">
@@ -190,7 +191,8 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 </table>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } // end if ($id !="default") ?>
+<?php } // end if ($filter !="default") 
+?>
 
 <?php 
 if (($action == "assign") && ($filter == "rounds")) { 
@@ -254,7 +256,6 @@ if (($action == "assign") && ($filter == "rounds")) {
 		<?php } ?>
 		</select>
         </span>
-        <span class="data">(<?php echo get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"); ?> entries)</span>
         </p>
 		<?php }
 	} else echo "<p>No flights have been defined.</p>";
