@@ -30,7 +30,7 @@ if ($section != "setup")  {
 	
 }
 
-if (isset($_SESSION['prefs'.$prefix_session])) { 
+if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) { 
 
 require(INCLUDES.'scrubber.inc.php');
 
@@ -468,5 +468,5 @@ if ($action == "generate_judging_numbers") {
 	header(sprintf("Location: %s", $updateGoTo));		
 }
 
-} else echo "<p>Not available.</p>";
+} else echo "<p>Not available, SON.</p>";
 ?>

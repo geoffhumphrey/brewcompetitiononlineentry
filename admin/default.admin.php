@@ -167,6 +167,9 @@ function admin_help($go,$header_output,$action,$filter) {
 		case "archive": $page = "archiving";
 		break;
 		
+		case "mods": $page = "mods";
+		break;
+		
 		default: $page = "introduction";
 		break;
 	}

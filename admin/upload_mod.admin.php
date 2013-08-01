@@ -2,8 +2,6 @@
 require('../paths.php');
 require(CONFIG.'bootstrap_output.php');
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
-
 $imageSrc = $base_url."images/";
 
 $fileCornfirm = "default";
@@ -26,7 +24,7 @@ $url_this =  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 $upload_dir = (MODS);
 $upload_url = $url_dir."/mods/";
 
-$message ="";
+$message = "";
 
 // Create Upload Directory
  if (!is_dir($upload_dir)) {
@@ -50,6 +48,12 @@ if ($_REQUEST['del'] && $DELETABLE)  {
   }
 }
 else if ($_FILES['userfile']) {
+	// Uncomment if you want a log file.
+  	//$resource = fopen("log.txt","a");
+  	//fwrite($resource,date("Ymd h:i:s")."UPLOAD - $_SERVER[REMOTE_ADDR]"
+            //.$_FILES['userfile']['name']." "
+            //.$_FILES['userfile']['type']."\n");
+ 	// fclose($resource);
 
   	$file_type = $_FILES['userfile']['type']; 
   	$file_name = $_FILES['userfile']['name'];
@@ -57,24 +61,25 @@ else if ($_FILES['userfile']) {
 
   //File Size Check
   if ($_FILES['userfile']['size'] > $MAX_SIZE) 
-    $message = "The file size is over 2MB.  Please adjust the size and try again.";
+    $message .= "The file size is over 2MB.  Please adjust the size and try again.";
   //File Type/Extension Check
   else if (!in_array($file_type, $FILE_MIMES) && !in_array($file_ext, $FILE_EXTS))
-    $message = "Sorry, that file type is not allowed to be uploaded.  Only .php files are able to be uploaded to the Mods directoy.";
+    $message .= "Sorry, that file type is not allowed to be uploaded.  Only  files with a .php extension able to be uploaded to the directoy.";
   else
-    $message = do_upload($upload_dir, $upload_url);
+    $message .= do_upload($upload_dir, $upload_url);
   
-  print "<script>window.location.href='?action=upload&message=$message'</script>";
+  print "<script>window.location.href='?action=upload&msg=$message'</script>";
 }
 else if (!$_FILES['userfile']);
 else 
-	$message = "Invalid file specified.";
+	$message .= "Invalid file specified.";
 
 // List Files in the directory
 $handle=opendir($upload_dir);
 $filelist = "";
 while ($file = readdir($handle)) {
    if(!is_dir($file) && !is_link($file)) {
+	   $filelist .= "<tr>\n";
 		$filelist .= "<td width=\"25%\" nowrap class=\"data-left\">".$file."</td>\n";
       	$filelist .= "<td width=\"25%\" nowrap class=\"data\">".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 	    if ($_SESSION['userLevel'] <= "1") $filelist .= "<td class=\"data\"><a href =\"?action=upload&amp;section=confirm&fileConfirm=".$file."\"><img src=\"".$imageSrc."bin_closed.png\" border=\"0\"></a></td>\n";
@@ -93,15 +98,15 @@ function do_upload($upload_dir, $upload_url) {
 
 // File Name Check
   if ($file_name == "") { 
-  	$message = "Invalid file name specified";
+  	$message .= "Invalid file name specified";
   	return $message;
   }
 
   $result  =  move_uploaded_file($temp_name, $file_path);
   if (!chmod($file_path,0777))
-   	$message = "Change permission to 777 failed.";
+   	$message .= "Change permission to 777 failed.";
   else
-    $message = ($result)?"The label image $file_name was uploaded successfully." : "An error has occurred, please try again.";
+    $message .= ($result)?"The PHP file $file_name was uploaded successfully." : "An error has occurred, please try again.";
   return $message;
 }
 ?>
@@ -199,9 +204,9 @@ function do_upload($upload_dir, $upload_url) {
 <div id="container">
 <div id="content">
 	<div id="content-inner">
-    <?php if ($message != "") { ?><p class="error"><?=$_REQUEST[message]?></p><?php } ?>
+    <?php if ($msg != "default") echo "<div class='error'>".$msg."</div>"; ?>
 	<h2>Upload Custom Module Files</h2>
-    <?php if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) { ?>
+    <?php if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { ?>
 	<?php if ($section == "default") { ?>
 	<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
 	<table class="dataTable">
@@ -222,9 +227,7 @@ function do_upload($upload_dir, $upload_url) {
         </tr>
     </thead>
     <tbody>
-        <tr>
-        	<?php echo $filelist; ?>
-        </tr>
+    <?php echo $filelist; ?>
     </tbody>
 	</table>
 	<?php } 
@@ -244,9 +247,7 @@ function do_upload($upload_dir, $upload_url) {
   	</tr>
 	</table>
 	<?php } ?>
-	<?php if ($section == "delete") { 
-		unlink($upload_dir.$fileConfirm); 
-	?>
+	<?php if ($section == "delete") { unlink($upload_dir.$fileConfirm); ?>
 	<h2>Delete File</h2>
 	<table>
 	<tr>
@@ -255,10 +256,9 @@ function do_upload($upload_dir, $upload_url) {
 	</td>
 	</table>
 	<?php } ?>
-    <?php } else echo "<div class='error'>Only Admin users can upload images.</div>"; ?>
+    <?php } else echo "<div class='error'>Only Top-Level Admin users can upload files.</div>"; ?>
 	</div>
 </div>
 </div>
 </body>
 </html>
-<?php } else echo "Not available."; ?>

@@ -365,7 +365,7 @@ switch($section) {
 }
 
 if ($msg == "14") $output = "Judging Numbers have been regenerated using the method you specified.";
-if ($msg == "16") $output = "Your installation has been set up successfully! Log in to access the Administration Dashboard.";
+if ($msg == "16") { $output = "Your installation has been set up successfully!"; $output_extend = "<div class='error'> FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE. Otherwise, your installation and server are vulerable to security breaches.</div><div class='closed'>Log in now to access the Admin Dashboard.</div>"; }
 if ($msg == "17") $output = "Your installation has been updated successfully!";
 $msg_output = "<div class='error'>".$output."</div>".$output_extend;
 ?>
