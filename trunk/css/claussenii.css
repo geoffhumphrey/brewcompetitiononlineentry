@@ -335,6 +335,7 @@ textarea {
 	color: #D9E0D2;
 	border-bottom: 1px solid #1A2A00;
 	padding: .65em;
+	box-shadow: 0 6px 6px -4px #000;
 }
 
 

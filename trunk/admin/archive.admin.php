@@ -3,7 +3,7 @@
 function get_archive_count($table) {
 	include(CONFIG.'config.php'); 	
 	mysql_select_db($database, $brewing);
-	$query_archive_count = "SELECT COUNT(*) as 'count' FROM $table";
+	$query_archive_count = "SELECT COUNT(*) as 'count' FROM `$table`";
 	$archive_count = mysql_query($query_archive_count, $brewing) or die(mysql_error());
 	$row_archive_count = mysql_fetch_assoc($archive_count);
 	return $row_archive_count['count'];
@@ -26,7 +26,9 @@ $table_header7 = "Actions";
 </div>
 <p>To archive the current user, participant, entry, table, scoring, and result data, please provide a name of the archive. For example, if your competition is held yearly, you could use the year.</p>
 <form action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s data?\nThis CANNOT be undone.');">
-<p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"></p>
+<p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"> 
+* alpha numeric characters only - all others will be omitted.
+</p>
 <p><input name="submit" type="submit" class="button" value="Archive Now"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>

@@ -35,12 +35,13 @@ if ($action == "add") {
 				mod_description, 
 				mod_permission, 
 				mod_rank, 
-				mod_display_rank
+				mod_display_rank,
+				mod_enable
 				) 
 				VALUES 
 				(
 				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s
+				%s, %s, %s, %s, %s
 				)",
 				GetSQLValueString(strtr($_POST['mod_name'],$html_string), "text"),
 				GetSQLValueString($_POST['mod_type'], "int"),
@@ -50,7 +51,8 @@ if ($action == "add") {
 				GetSQLValueString(strip_newline($_POST['mod_description']), "text"),
 				GetSQLValueString($_POST['mod_permission'], "int"),
 				GetSQLValueString($_POST['mod_rank'], "int"),
-				GetSQLValueString($_POST['mod_display_rank'], "int")
+				GetSQLValueString($_POST['mod_display_rank'], "int"),
+				GetSQLValueString($_POST['mod_enable'], "int")
 				);
 
 	mysql_select_db($database, $brewing);
@@ -72,7 +74,8 @@ if ($action == "edit") {
 			mod_description=%s, 
 			mod_permission=%s, 
 			mod_rank=%s, 
-			mod_display_rank=%s
+			mod_display_rank=%s,
+			mod_enable=%s
 			WHERE id=%s",
 			GetSQLValueString(strtr($_POST['mod_name'],$html_string), "text"),
 			GetSQLValueString($_POST['mod_type'], "int"),
@@ -83,6 +86,7 @@ if ($action == "edit") {
 			GetSQLValueString($_POST['mod_permission'], "int"),
 			GetSQLValueString($_POST['mod_rank'], "int"),
 			GetSQLValueString($_POST['mod_display_rank'], "int"),
+			GetSQLValueString($_POST['mod_enable'], "int"),
 			GetSQLValueString($id, "int"));
 
 	mysql_select_db($database, $brewing);

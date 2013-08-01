@@ -183,5 +183,4 @@ elseif (($section == "list") || ($section == "judge") || ($section == "steward")
 
 //else $query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
 
-
 ?>

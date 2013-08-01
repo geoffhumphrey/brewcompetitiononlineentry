@@ -50,12 +50,6 @@ if ($_REQUEST['del'] && $DELETABLE)  {
   }
 }
 else if ($_FILES['userfile']) {
-	// Uncomment if you want a log file.
-  	//$resource = fopen("log.txt","a");
-  	//fwrite($resource,date("Ymd h:i:s")."UPLOAD - $_SERVER[REMOTE_ADDR]"
-            //.$_FILES['userfile']['name']." "
-            //.$_FILES['userfile']['type']."\n");
- 	// fclose($resource);
 
   	$file_type = $_FILES['userfile']['type']; 
   	$file_name = $_FILES['userfile']['name'];
@@ -250,7 +244,9 @@ function do_upload($upload_dir, $upload_url) {
   	</tr>
 	</table>
 	<?php } ?>
-	<?php if ($section == "delete") { unlink($upload_dir.$fileConfirm); ?>
+	<?php if ($section == "delete") { 
+		unlink($upload_dir.$fileConfirm); 
+	?>
 	<h2>Delete File</h2>
 	<table>
 	<tr>

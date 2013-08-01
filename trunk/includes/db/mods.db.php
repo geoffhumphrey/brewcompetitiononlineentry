@@ -37,7 +37,7 @@ function mod_display($id,$section,$go,$user_level,$page_location) {
 	require(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);
 	
-	$query_mod_display = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."mods",$id);
+	$query_mod_display = sprintf("SELECT * FROM %s WHERE mod_enable='1' AND id='%s'",$prefix."mods",$id);
 	$mod_display = mysql_query($query_mod_display, $brewing) or die(mysql_error());
 	$row_mod_display = mysql_fetch_assoc($mod_display);
 	
@@ -47,7 +47,7 @@ function mod_display($id,$section,$go,$user_level,$page_location) {
 		case "default": 	$display_section = 1; break;
 		case "rules": 		$display_section = 2; break;
 		case "volunteers": 	$display_section = 3; break;
-		case "sponsors": 	$display_section = 4; break;
+		case "sponsors": 	$display_section = 4; break;	
 		case "contact": 	$display_section = 5; break;
 		case "register": 	$display_section = 6; break;
 		case "pay": 		$display_section = 7; break;
