@@ -14,7 +14,7 @@ if (TESTING) {
 		$mtime = $mtime[1] + $mtime[0]; 
 		$endtime = $mtime; 
 		$totaltime = ($endtime - $starttime); 
-		$footer .= "&nbsp;This page was created in ".number_format($totaltime, 2)." seconds."; 
+		$footer .= "&nbsp;This page was created in ".number_format($totaltime, 3)." seconds."; 
 	}
 
 echo $footer;

@@ -101,7 +101,7 @@ if (!empty($_SESSION['brewerPhone2'])) {
 if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; else $club = "None entered";
 $discount = "Yes (".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry)";
 if (!empty($_SESSION['brewerAHA'])) {
-	if ($_SESSION['brewerAHA'] < "999999994") $aha_number = $_SESSION['brewerAHA']; 
+	if ($_SESSION['brewerAHA'] < "999999994") $aha_number = sprintf("%09s",$_SESSION['brewerAHA']); 
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number = "Pending"; 
 } else $aha_number = "None entered";
 
@@ -220,6 +220,10 @@ echo $_SESSION['brewerSteward']."<br>";
     <td class="data"><?php echo $phone; ?></td>
 </tr>
 <tr>
+    <td class="dataLabel">AHA Number:</td>
+    <td class="data"><?php echo $aha_number; ?>&nbsp;&nbsp;<em>*An <a href="http://www.homebrewersassociation.org/" target="_blank">American Homebrewers Association</a> (AHA) membership is required if one of your entries is selected for a <a href="http://www.homebrewersassociation.org/pages/competitions/great-american-beer-festival-pro-am" target="_blank">Great American Beer Festival Pro-Am</a>.</em></td>
+</tr>
+<tr>
   <td class="dataLabel">Drop Off Location:</td>
   <td class="data"><?php echo dropoff_location($_SESSION['brewerDropOff']); ?></td>
 </tr>
@@ -259,7 +263,7 @@ if (!empty($bjcp_rank[1])) {
 ?>
 <tr>
     <td class="dataLabel">BJCP Judge ID:</td>
-    <td class="data"><?php  if ($_SESSION['brewerJudgeID'] != "0") echo $_SESSION['brewerJudgeID']; else echo "N/A"; ?></td>
+    <td class="data"><?php  if ($_SESSION['brewerJudgeID'] > "0") echo $_SESSION['brewerJudgeID']; else echo "N/A"; ?></td>
 </tr>
 <tr>
     <td class="dataLabel">Beer Judge Ranks and Designations:</td>

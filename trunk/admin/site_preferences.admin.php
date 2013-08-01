@@ -84,7 +84,7 @@ $totalRows_themes = mysql_num_rows($themes);
       Yes&nbsp;&nbsp;
   <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>
       No</td>
-    <td class="data">Generally, the default is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs. * to </td>
+    <td class="data">Generally, "Yes" is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs. <br /><em>*If you enable this and receive 404 errors, <?php if ($section == "step3") echo "AFTER SETUP HAS BEEN COMPLETED, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and "turn off" this feature.</em></td>
     </tr>
   <tr>
     <td class="dataLabel">Use Custom Modules:</td>
@@ -119,7 +119,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <td nowrap="nowrap" class="data">
     <select name="prefsSpecialCharLimit" />
     <?php for ($i=25; $i <= 255; $i+=5) { ?>
-    	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    	<option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "50")) echo "SELECTED"; elseif ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
     </select>
     </td>

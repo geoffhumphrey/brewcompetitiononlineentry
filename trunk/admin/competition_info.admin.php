@@ -113,7 +113,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
     <td class="dataLabel">Time: </td>
     <td class="data"><input id="contestEntryOpenTime" name="contestEntryOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
-    <td class="data"><span class="required">Required</span> <em>The date/time drop-off and mail-in locations will begin receiving entries.</em></td>
+    <td class="data"><span class="required">Required</span> <em>The date/time that entrants will be able to add entries to the system. Also the date that drop-off and mail-in locations will begin receiving entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Window Close Date:</td>
@@ -122,7 +122,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestEntryDeadlineTime" name="contestEntryDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
-    <td class="data"><span class="required">Required</span> <em>The final date/time drop-off and mail-in locations will receive entries.</em></td>
+    <td class="data"><span class="required">Required</span> <em>The final date/time  entrants will be able to add entries to the system. Also the date that drop-off and mail-in locations will stop receiving entries.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Open Date:</td>
@@ -131,7 +131,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
     <td class="dataLabel"> Time:</td>
     <td class="data"><input id="contestRegistrationOpenTime" name="contestRegistrationOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
-    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open registrations.</em></td>
+    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open registrations. Make this date <strong>prior</strong> to the entry window date for pre-registration purposes.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">General Registration Close Date:</td>
@@ -149,7 +149,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestJudgeOpenTime" name="contestJudgeOpenTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
-    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open judge/steward registrations.</em></td>
+    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically open judge/steward registrations. This date can be prior to both the entry window open and registration  open dates.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Judge/Steward Registration Close Date:</td>
@@ -158,7 +158,7 @@ $totalRows_contest_info = mysql_num_rows($contest_info);
     <td class="dataLabel">Time:</td>
     <td class="data"><input id="contestJudgeDeadlineTime" name="contestJudgeDeadlineTime" type="text" class="submit" size="10" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" /></td>
-    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close judge/steward registrations.</em></td>
+    <td class="data"><span class="required">Required </span><em>The date/time the system will automatically close judge/steward registrations. This date can be after to both the entry window close and registration  close dates.</em></td>
   </tr>
 </table>
 <h3>Rules</h3>
