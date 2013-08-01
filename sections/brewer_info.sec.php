@@ -116,17 +116,20 @@ $judge_info = "";
 			$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
 			$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 			$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-			$judge_info .= "<tr>\n";
-			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-			if ($action == "print") $judge_info .= yes_no(substr($value, 0, 1),$base_url,3); else $judge_info .= yes_no(substr($value, 0, 1),$base_url);
-			$judge_info .= "</td>\n";
-			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-			$judge_info .= $row_judging_loc3['judgingLocName'];
-			$judge_info .= "</td>\n";
-			if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-			$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
-			$judge_info .= "</td>\n";
-			$judge_info .= "</tr>";
+			$totalRows_judging_loc3 = mysql_num_rows($judging_loc3);
+				if ($totalRows_judging_loc3 > 0) {
+					$judge_info .= "<tr>\n";
+					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+					if ($action == "print") $judge_info .= yes_no(substr($value, 0, 1),$base_url,3); else $judge_info .= yes_no(substr($value, 0, 1),$base_url);
+					$judge_info .= "</td>\n";
+					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+					$judge_info .= $row_judging_loc3['judgingLocName'];
+					$judge_info .= "</td>\n";
+					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+					$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+					$judge_info .= "</td>\n";
+					$judge_info .= "</tr>";
+				}
 			}
 		else $judge_info .= "";
 	}
@@ -143,16 +146,19 @@ $steward_info = "";
 				$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $b);
 				$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
 				$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-				$steward_info .= "<tr>\n";
-				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-				if ($action == "print") $steward_info .= yes_no(substr($value, 0, 1),$base_url,3); else $steward_info .= yes_no(substr($value, 0, 1),$base_url);
-				$steward_info .= "</td>\n";
-				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-				$steward_info .= $row_judging_loc3['judgingLocName'];
-				$steward_info .= "</td>\n";
-				if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-				$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
-				$steward_info .= "</tr>";
+				$totalRows_judging_loc3 = mysql_num_rows($judging_loc3);
+					if ($totalRows_judging_loc3 > 0) {
+						$steward_info .= "<tr>\n";
+						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+						if ($action == "print") $steward_info .= yes_no(substr($value, 0, 1),$base_url,3); else $steward_info .= yes_no(substr($value, 0, 1),$base_url);
+						$steward_info .= "</td>\n";
+						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+						$steward_info .= $row_judging_loc3['judgingLocName'];
+						$steward_info .= "</td>\n";
+						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+						$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_loc3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+						$steward_info .= "</tr>";
+					}
 				}
 			else $steward_info .= "";
 			}

@@ -308,6 +308,7 @@ textarea {
 	font-weight: bold;
 	color: #1C242C;
 	background-color:#394a59;
+	box-shadow: 0 6px 6px -4px #000;
 
 }
 

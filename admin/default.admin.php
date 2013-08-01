@@ -8,8 +8,8 @@ include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
-include(DB.'entries.db.php'); 
-include(DB.'brewer.db.php');
+//include(DB.'entries.db.php'); 
+//include(DB.'brewer.db.php');
 include(DB.'contacts.db.php');
 
 // Check if judging flights are up-to-date

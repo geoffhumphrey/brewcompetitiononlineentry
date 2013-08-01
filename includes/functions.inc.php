@@ -2460,9 +2460,14 @@ function readable_judging_number($style,$number) {
 		return $number;
 	}
 	
-	else {
+	if (strlen($number) == 5) {
 		$judging_number = str_osplit($number, 2);
-		return $judging_number[0]."-".$judging_number[1];
+		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
+	}
+	
+	if (strlen($number) == 4) {
+		$judging_number = str_osplit($number, 1);
+		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
 	}
 }
 

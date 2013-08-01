@@ -220,7 +220,6 @@ if (($action == "add") || ($action == "edit")) { ?>
     <td class="dataLabel">Rank:</td>
     <td class="data">
     <select name="mod_rank" id="mod_rank">
-    	<option value="0" <?php if (($action == "edit") && ($row_mods['mod_rank'] == "0")) echo " SELECTED"; ?>>N/A</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_rank'] == "1")) echo " SELECTED"; ?>>1</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_rank'] == "2")) echo " SELECTED"; ?>>2</option>
         <option value="3" <?php if (($action == "edit") && ($row_mods['mod_rank'] == "3")) echo " SELECTED"; ?>>3</option>
@@ -253,8 +252,13 @@ if (($action == "add") || ($action == "edit")) { ?>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Core Content</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Core Content</option>
     </select>
-    </td>
+    </td> 
     <td class="data">If informational, where will the module's contents be displayed?</td>
+  </tr>
+  <tr>
+    <td class="dataLabel">Enable?</td>
+    <td class="data"><input type="radio" name="mod_enable" value="1" id="mod_enable_0"  <?php if ($row_mods['mod_enable'] == 1) echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="mod_enable" value="0" id="mod_enable_1" <?php if ($row_mods['mod_enable'] == 0) echo "CHECKED"; ?>/> No</td>
+    <td class="data">&nbsp;</td>
   </tr>
 </table>
 <p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Module"></p>

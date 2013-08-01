@@ -12,10 +12,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
 		flightTable, 
 		flightNumber, 
-		flightEntryID
+		flightEntryID,
+		flightRound
   		) VALUES (%s, %s, %s)",
                        GetSQLValueString($_POST['flightTable'], "text"),
 					   GetSQLValueString($flight_number, "text"),
+					   GetSQLValueString("1", "text"),
 					   GetSQLValueString($id, "text")
 					   );
 

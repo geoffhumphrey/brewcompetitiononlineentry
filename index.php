@@ -273,17 +273,7 @@ var _gaq = _gaq || [];
 </div>
 <a name="bottom"></a>
 <div id="footer">
-	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?>
-     <?php if (TESTING) {
-		$mtime = microtime(); 
-		$mtime = explode(" ",$mtime); 
-		$mtime = $mtime[1] + $mtime[0]; 
-		$endtime = $mtime; 
-		$totaltime = ($endtime - $starttime); 
-		echo "<br>This page was created in ".number_format($totaltime, 4)." seconds."; 
-	}
-	?>
-    </div>
+	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?></div>
 </div>
 </body>
 </html>

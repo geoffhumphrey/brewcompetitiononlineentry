@@ -72,11 +72,13 @@ else {
 	$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 	$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 	}
-
-//echo $query_log."<br>";
-//echo $query_log_paid."<br>";
-//echo $query_confirmed."<br>";
-
+/*
+echo $query_log."<br>";
+echo $query_log_paid."<br>";
+echo $query_confirmed."<br>";
+echo $brewing_db_table."<br>";
+echo $dbTable."<br>";
+*/
 $log = mysql_query($query_log, $brewing) or die(mysql_error());
 $row_log = mysql_fetch_assoc($log);
 $totalRows_log = mysql_num_rows($log); 
