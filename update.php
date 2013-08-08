@@ -6,7 +6,7 @@ require(INCLUDES.'authentication_nav.inc.php');  session_start();
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 //require(DB.'common.db.php');
-require(INCLUDES.'headers.inc.php');
+//require(INCLUDES.'headers.inc.php');
 $current_version = "1.3.0.0";
 $section = "update";
 
@@ -18,7 +18,7 @@ $query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
 
-
+date_default_timezone_set('America/Denver');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,23 +90,32 @@ if (file_exists($filename)) {
 	<?php 
 	if (check_setup($prefix."preferences",$database)) {
 		
-		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+		if (isset($_SESSION['loginUsername'])) {
+			
+			$query_user_level = sprintf("SELECT userLevel FROM %s WHERE user_name='%s'",$users_db_table,$_SESSION['loginUsername']);
+			$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
+			$row_user_level = mysql_fetch_assoc($user_level);
+			$totalRows_user_level = mysql_num_rows($user_level);
+			
+		}
+		
+		if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] <= 1)) {
 			
 			if ($current_version != $version) {
 				
 				if ($action == "default") { ?>
+                <div class="error">You should <u>BACK UP</u> your MySQL Database before performing this upgrade.</div>
 				<h2>This script will update your BCOE&amp;M database from its current version, <?php echo $version; ?>, to the latest version, <?php echo $current_version; ?>.</h2>
-				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.</p>
-				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png" /></span><a href="update.php?action=update">Begin The Update Script</a></p>		
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/exclamation.png" /></span>Before running this script, make sure that you have uploaded the necessary version <?php echo $current_version; ?> files to your installation's root folder on your webserver.			</p>
+				<p><span class="icon"><img src="<?php echo $base_url; ?>/images/cog.png" /></span><a href="update.php?action=update" onclick="return confirm('Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.');">Begin The Update Script</a></p>		
 				<?php }
 			
 				if ($action == "update") {
-				
+				$output = "";
 					// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
 						if ($version < "113") {
-							echo "
-							<div class='error'>Your installed version is incompatible with this update script.</div>
+							$output .= "<div class='error'>Your installed version is incompatible with this update script.</div>
 							<p>Please update your database and files manually through version 1.1.2 to utilize the update feature.</p>
 							";
 						}
@@ -169,7 +178,7 @@ if (file_exists($filename)) {
 					session_regenerate_id(true);
 						
 					echo "<div class='error'>Update to ".$current_version." Complete!</div>";
-					echo $output;
+					
 					
 					// -----------------------------------------------------------
 					//  Finish and Clean Up
@@ -181,6 +190,9 @@ if (file_exists($filename)) {
 					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Judging Preferences.</li>";
 					echo "<li>Your competition's specific information by going to: Admin &gt; Preparing &gt; Edit &gt; Competition Info.</li>";
 					echo "</ul>";
+					
+					echo "<div class='info'>Updates Performed Are Detailed Below</div>";
+					echo $output;
 					
 					}
 				

@@ -13,7 +13,8 @@
 
 session_start(); 
 require('../paths.php');
-require(CONFIG.'bootstrap_output.php');
+require(CONFIG.'bootstrap.php');
+require(INCLUDES.'scrubber.inc.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
@@ -434,18 +435,20 @@ $html .= '<br><strong>Total Flights</strong>: '.total_flights().' (includes Best
 	$html .= '</tr>';
 	do { $st[] = $row_staff['uid']; } while ($row_staff = mysql_fetch_assoc($staff));
 	foreach (array_unique($st) as $uid) { 
-		$staff_info = explode("^",brewer_info($uid));
-		$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
-		$html .= '<tr>';
-    	$html .= '<td width="300">'.$staff_name.'</td>';
-        $html .= '<td width="150">';
-			if (validate_bjcp_id($staff_info['4'])) $html .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
-		$html .= '</td>';
-		$html .= '<td width="150">';
-		if (array_sum($st_running_total) <= $staff_points_total) $html .= $staff_points;
-		else $html .= "N/A: Limit of available points reached.";
-		$html .= '</td>';
-    	$html .= '</tr>';
+		if (array_sum($st_running_total) < $staff_points_total) {
+			$staff_info = explode("^",brewer_info($uid));
+			$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
+			$html .= '<tr>';
+			$html .= '<td width="300">'.$staff_name.'</td>';
+			$html .= '<td width="150">';
+				if (validate_bjcp_id($staff_info['4'])) $html .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
+			$html .= '</td>';
+			$html .= '<td width="150">';
+			if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $html .= $staff_points;
+			else $html .= $organ_points;
+			$html .= '</td>';
+			$html .= '</tr>';
+		}
     	}  
     $html .= '</table>';
 	}
@@ -642,7 +645,8 @@ if ($view == "xml") {
 					$output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
 					$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
 					$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-					$output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+					if ($staff_points < $organ_points) $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+					else $output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
 					$output .= "\t\t</JudgeData>\n";
 				}
 			}
@@ -769,21 +773,24 @@ if ($view == "default") { // printing from browser
 		do { $st[] = $row_staff['uid']; } while ($row_staff = mysql_fetch_assoc($staff));
 		$st_running_total[] = "";
 		foreach (array_unique($st) as $uid) { 
-			$staff_info = explode("^",brewer_info($uid));
-			$st_running_total[] = $staff_points;
-			$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 		
-			$output_staff .= "<tr>";
-			$output_staff .= "<td class='bdr1B_gray'>".$staff_name."</td>";
-			$output_staff .= "<td class='data bdr1B_gray'>";
-			if (validate_bjcp_id($staff_info['4'])) $output_staff .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+			if (array_sum($st_running_total) < $staff_points_total) {
+				$staff_info = explode("^",brewer_info($uid));
+				$st_running_total[] = $staff_points;
+				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 			
-			$output_staff .= "</td>";
-			$output_staff .= "<td class='data bdr1B_gray'>";
-			if (array_sum($st_running_total) <= $staff_points_total) $output_staff .= $staff_points;
-			else $output_staff .= "N/A: Limit of available points reached."; 
-			$output_staff .= "</td>";
-			$output_staff .= "</tr>";
+				$output_staff .= "<tr>";
+				$output_staff .= "<td class='bdr1B_gray'>".$staff_name."</td>";
+				$output_staff .= "<td class='data bdr1B_gray'>";
+				if (validate_bjcp_id($staff_info['4'])) $output_staff .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+				
+				$output_staff .= "</td>";
+				$output_staff .= "<td class='data bdr1B_gray'>";
+				if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $output_staff .= $staff_points;
+				else $output_staff .= $organ_points;
+				$output_staff .= "</td>";
+				$output_staff .= "</tr>";
+			}
 		}
 	} // end if ($totalRows_staff > 0)
 

@@ -123,12 +123,6 @@ Set the base URL of your installation. In most cases the default will be OK.
 
 */
 
-$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
-
-//Global definitions
-define('MAINT',FALSE); 		// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
-define('HOSTED',FALSE); 	// Top-level constant for use in a hosted enviroment and shared db tables.
-define('NHC',FALSE); 		// Top-level constant for specialized NHC functionality. Set to FALSE for production.
-define('TESTING',FALSE); 	// Top-level constant for testing functionality. Set to FALSE for production.
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/"; 
 
 ?>

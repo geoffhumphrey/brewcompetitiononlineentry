@@ -255,192 +255,195 @@ if ($filter == "bos") {
 
 
 // Judging Locations & Dates List
-if (($totalRows_judging_locs > 0) && ($action == "default") && ($section != "step5")) {
-	$output_datatables_aaSorting = "[1,'asc']";
-	$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
-	$output_datatables_head .= "<tr>";
-	$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Name</th>";
-	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Date</th>";
-	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Start Time</th>";
-	$output_datatables_head .= "<th width='30%' class='dataHeading bdr1B'>Address</th>";
-	$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'># of Rounds</th>";
-	$output_datatables_head .= "<th class='dataHeading bdr1B'>Actions</th>";
-	$output_datatables_head .= "</tr>";
-	$output_datatables_head .= "";
-	
-	do {
+if ($section != "step5") {
+	if (($totalRows_judging_locs > 0) && ($action == "default")) {
+		$output_datatables_aaSorting = "[1,'asc']";
+		$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
+		$output_datatables_head .= "<tr>";
+		$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Name</th>";
+		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Date</th>";
+		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Start Time</th>";
+		$output_datatables_head .= "<th width='30%' class='dataHeading bdr1B'>Address</th>";
+		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'># of Rounds</th>";
+		$output_datatables_head .= "<th class='dataHeading bdr1B'>Actions</th>";
+		$output_datatables_head .= "</tr>";
+		$output_datatables_head .= "";
 		
-		$output_datatables_edit_link = build_action_link("pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
+		do {
+			
+			$output_datatables_edit_link = build_action_link("pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
+			
+			$output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
+			
+			$output_datatables_actions = $output_datatables_edit_link.$output_datatables_delete_link;
+			
+			$output_datatables_body .= "<tr>";
+			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocName']."</td>";
+			$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
+			$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
+			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocation']."</td>";
+			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingRounds']."</td>";
+			$output_datatables_body .= "<td class='dataList' nowrap='nowrap'>".$output_datatables_actions."</td>";
+			$output_datatables_body .= "</tr>";
+			
+		} while($row_judging_locs = mysql_fetch_assoc($judging_locs));
 		
-		$output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
-		
-		$output_datatables_actions = $output_datatables_edit_link.$output_datatables_delete_link;
-		
-		$output_datatables_body .= "<tr>";
-		$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocName']."</td>";
-		$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
-		$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
-		$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocation']."</td>";
-		$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingRounds']."</td>";
-		$output_datatables_body .= "<td class='dataList' nowrap='nowrap'>".$output_datatables_actions."</td>";
-		$output_datatables_body .= "</tr>";
-		
-	} while($row_judging_locs = mysql_fetch_assoc($judging_locs));
-	
-} // end if (($totalRows_judging_locs > 0) && ($action == "default") && ($section != "step5"))
+	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
+} // end if ($section != "step5")
 
-if (($totalRows_brewer == 0) && ($filter != "default")) { 
-	if ($action == "update") $output_no_records .= "<p>No $filter have been assigned.</p>"; 
-	else $output_no_records .= "<p>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</p>";
+if ($section != "step5") {
+	if (($totalRows_brewer == 0) && ($filter != "default")) { 
+		if ($action == "update") $output_no_records .= "<p>No $filter have been assigned.</p>"; 
+		else $output_no_records .= "<p>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</p>";
+	}
 }
-
 
 
 // *****************************************************************************
 // ---------------------- List Judging Locations ---------------------------
 // *****************************************************************************
-
-if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign"))) { 
-
-	$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
+if ($section != "step5") {
+	if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign"))) { 
 	
-	// Needed to place the organizer designation dropdown after <form> element
-	if ($filter == "staff") {
-		$form_submit_url .= "<p><strong>Designate the Competition Organizer:</strong><span class='data'>";
-		$form_submit_url .= "<select name='Organizer'>";
-		$form_submit_url .= "<option value=''>Choose Below:</option>";
-		do {
-			$form_submit_url .= "<option value='".$row_brewers['uid']."'";
-			if (($row_brewers['uid'] == $row_organizer['uid'])) $form_submit_url .= " SELECTED";
-			$form_submit_url .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
-		} while ($row_brewers = mysql_fetch_assoc($brewers));
-		$form_submit_url .= "</select></span></p>";
-	}
-	$form_submit_button .= "<p><input type='submit' class='button' name='Submit' value='";
-	if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-	elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
-	else $form_submit_button .= "Submit";
-	$form_submit_button .= "' />";
-	$form_submit_button .= "&nbsp;";
-	$form_submit_button .= "<span class='required'>Click";
-	if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-	elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
-	else $form_submit_button .= "Submit";
-	$form_submit_button .= " <em>before</em> paging through records.</span></p>";
-
-	if ($filter == "judges") 		$output_datatables_aaSorting = "[4,'desc']";
-	elseif ($filter == "bos") 		$output_datatables_aaSorting = "[5,'desc']";
-	else 							$output_datatables_aaSorting = "[1,'asc']";
-	
-	if ($filter == "judges") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null, null";
-	elseif ($filter == "stewards") 	$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null";
-	elseif ($filter == "staff")		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null";
-	elseif ($filter == "bos") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null";
-	
-	
-	$output_datatables_head .= "<tr>";
-	$output_datatables_head .= "<th width='1%' class='dataHeading bdr1B'><input type='checkbox' onclick='toggleChecked(this.checked)' title='Check/Uncheck All'></th>";
-	$output_datatables_head .= "<th width='20%' class='dataHeading bdr1B'>Name</th>";
-	$output_datatables_head .= "<th class='dataHeading bdr1B'>Assigned As</th>";
-	if ($filter == "bos") $output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Placing Entries</th>";
-	if (($filter == "judges") || ($filter == "bos")) {
-		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>ID</th>";
-		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Rank</th>";
-	}
-	if (($filter == "judges") || ($filter == "stewards")) {
-		$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Location Preferences</th>";
-		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
-	}
-	$output_datatables_head .= "</tr>";
-	
-	do {
+		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
 		
-		$brewer_assignment = brewer_assignment($row_brewer['uid'],"1");
-		$assignment_checked = str_replace(", ",",",$brewer_assignment);
-		$assignment_checked = explode(",",$assignment_checked);
-		if ((!empty($assignment_checked)) && ($filter == "judges") && (in_array("Judge",$assignment_checked))) $checked = "CHECKED";
-		elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (in_array("Steward",$assignment_checked))) $checked = "CHECKED";
-		elseif ((!empty($assignment_checked)) && ($filter == "staff") && (in_array("Staff",$assignment_checked))) $checked = "CHECKED";
-		elseif ((!empty($assignment_checked)) && ($filter == "bos") && (in_array("BOS Judge",$assignment_checked))) $checked = "CHECKED";
-		else $checked = "";	
-		if ($filter == "bos") { 
-		$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
-			if (!empty($bos_judge_eligible)) {
-				$places_earned = explode("|",$bos_judge_eligible);
-				$judge_places = "";
-				foreach ($places_earned as $places) {
-					$places_earned = explode("-",$places);
-					$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
-				}
-				$judge_places = rtrim($judge_places,", ");
-			}
+		// Needed to place the organizer designation dropdown after <form> element
+		if ($filter == "staff") {
+			$form_submit_url .= "<p><strong>Designate the Competition Organizer:</strong><span class='data'>";
+			$form_submit_url .= "<select name='Organizer'>";
+			$form_submit_url .= "<option value=''>Choose Below:</option>";
+			do {
+				$form_submit_url .= "<option value='".$row_brewers['uid']."'";
+				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_submit_url .= " SELECTED";
+				$form_submit_url .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+			} while ($row_brewers = mysql_fetch_assoc($brewers));
+			$form_submit_url .= "</select></span></p>";
 		}
+		$form_submit_button .= "<p><input type='submit' class='button' name='Submit' value='";
+		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
+		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
+		else $form_submit_button .= "Submit";
+		$form_submit_button .= "' />";
+		$form_submit_button .= "&nbsp;";
+		$form_submit_button .= "<span class='required'>Click";
+		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
+		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
+		else $form_submit_button .= "Submit";
+		$form_submit_button .= " <em>before</em> paging through records.</span></p>";
+	
+		if ($filter == "judges") 		$output_datatables_aaSorting = "[4,'desc']";
+		elseif ($filter == "bos") 		$output_datatables_aaSorting = "[5,'desc']";
+		else 							$output_datatables_aaSorting = "[1,'asc']";
 		
-		if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
-		if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
-		$a = explode(",",$exploder);
-		$output = "";
-		if ($exploder != "") { 
-			sort($a);
-			foreach ($a as $value) {
-				if ($value != "") {
-					$b = substr($value, 2);
-					$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $b);
-					$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-					$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-					if ((substr($value, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName']))) $output .= $row_judging_loc3['judgingLocName']."<br>";
-					else $output .= "";
+		if ($filter == "judges") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null, null";
+		elseif ($filter == "stewards") 	$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null";
+		elseif ($filter == "staff")		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null";
+		elseif ($filter == "bos") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null";
+		
+		
+		$output_datatables_head .= "<tr>";
+		$output_datatables_head .= "<th width='1%' class='dataHeading bdr1B'><input type='checkbox' onclick='toggleChecked(this.checked)' title='Check/Uncheck All'></th>";
+		$output_datatables_head .= "<th width='20%' class='dataHeading bdr1B'>Name</th>";
+		$output_datatables_head .= "<th class='dataHeading bdr1B'>Assigned As</th>";
+		if ($filter == "bos") $output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Placing Entries</th>";
+		if (($filter == "judges") || ($filter == "bos")) {
+			$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>ID</th>";
+			$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Rank</th>";
+		}
+		if (($filter == "judges") || ($filter == "stewards")) {
+			$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Location Preferences</th>";
+			$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
+		}
+		$output_datatables_head .= "</tr>";
+		
+		do {
+			
+			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1");
+			$assignment_checked = str_replace(", ",",",$brewer_assignment);
+			$assignment_checked = explode(",",$assignment_checked);
+			if ((!empty($assignment_checked)) && ($filter == "judges") && (in_array("Judge",$assignment_checked))) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (in_array("Steward",$assignment_checked))) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "staff") && (in_array("Staff",$assignment_checked))) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (in_array("BOS Judge",$assignment_checked))) $checked = "CHECKED";
+			else $checked = "";	
+			if ($filter == "bos") { 
+			$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
+				if (!empty($bos_judge_eligible)) {
+					$places_earned = explode("|",$bos_judge_eligible);
+					$judge_places = "";
+					foreach ($places_earned as $places) {
+						$places_earned = explode("-",$places);
+						$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
+					}
+					$judge_places = rtrim($judge_places,", ");
+				}
+			}
+			
+			if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+			if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
+			$a = explode(",",$exploder);
+			$output = "";
+			if ($exploder != "") { 
+				sort($a);
+				foreach ($a as $value) {
+					if ($value != "") {
+						$b = substr($value, 2);
+						$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $b);
+						$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
+						$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
+						if ((substr($value, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName']))) $output .= $row_judging_loc3['judgingLocName']."<br>";
+						else $output .= "";
+						}
 					}
 				}
-			}
-		$output = rtrim($output,"<br>");
-		if (empty($output)) $output_location = "<span class='icon'><img src='".$base_url."images/exclamation.png'></span>None specified.";
-		else $output_location = $output;
-		
-		$output_datatables_body .= "<tr>";
-		$output_datatables_body .= "<td class='dataList'>";
-		$output_datatables_body .= "<input type='hidden' name='uid[]' value='".$row_brewer['uid']."' />";
-		$output_datatables_body .= "<input name='".$staff_row_field.$row_brewer['uid']."' type='checkbox' class='checkbox' value='1' ".$checked; 
-		if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
-		if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
-		if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
-		$output_datatables_body .= " />";
-		$output_datatables_body .= "</td>";
-		$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
-		$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
-		
-		if ($filter == "bos") {
-			$output_datatables_body .= "<td class='dataList'>";
-			if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places; 
-			else $output_datatables_body .= "&nbsp;";
-			$output_datatables_body .= "</td>";
-		}
-		
-		if (($filter == "judges") || ($filter == "bos")) {
+			$output = rtrim($output,"<br>");
+			if (empty($output)) $output_location = "<span class='icon'><img src='".$base_url."images/exclamation.png'></span>None specified.";
+			else $output_location = $output;
 			
-			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
-			$display_rank = bjcp_rank($bjcp_rank[0],1);
-		
-			$output_datatables_body .= "<td class='dataList'>".strtoupper($row_brewer['brewerJudgeID'])."</td>";
-			$output_datatables_body .= "<td class='dataList'>".$display_rank;
-			if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
-			if (!empty($bjcp_rank[1])) {
-				$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+			$output_datatables_body .= "<tr>";
+			$output_datatables_body .= "<td class='dataList'>";
+			$output_datatables_body .= "<input type='hidden' name='uid[]' value='".$row_brewer['uid']."' />";
+			$output_datatables_body .= "<input name='".$staff_row_field.$row_brewer['uid']."' type='checkbox' class='checkbox' value='1' ".$checked; 
+			if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
+			if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
+			if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
+			$output_datatables_body .= " />";
+			$output_datatables_body .= "</td>";
+			$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
+			$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
+			
+			if ($filter == "bos") {
+				$output_datatables_body .= "<td class='dataList'>";
+				if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places; 
+				else $output_datatables_body .= "&nbsp;";
+				$output_datatables_body .= "</td>";
 			}
-			$output_datatables_body .= "</td>";		
-		}
-		
-		if (($filter == "judges") || ($filter == "stewards")) { 			
-			$output_datatables_body .= "<td class='dataList'>".$output_location."</td>";
-			$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
-		}
-		
-		$output_datatables_body .= "</tr>";
-		
-	} while ($row_brewer = mysql_fetch_assoc($brewer));
-
-} // end if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")))
-
+			
+			if (($filter == "judges") || ($filter == "bos")) {
+				
+				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+				$display_rank = bjcp_rank($bjcp_rank[0],1);
+			
+				$output_datatables_body .= "<td class='dataList'>".strtoupper($row_brewer['brewerJudgeID'])."</td>";
+				$output_datatables_body .= "<td class='dataList'>".$display_rank;
+				if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+				if (!empty($bjcp_rank[1])) {
+					$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+				}
+				$output_datatables_body .= "</td>";		
+			}
+			
+			if (($filter == "judges") || ($filter == "stewards")) { 			
+				$output_datatables_body .= "<td class='dataList'>".$output_location."</td>";
+				$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
+			}
+			
+			$output_datatables_body .= "</tr>";
+			
+		} while ($row_brewer = mysql_fetch_assoc($brewer));
+	
+	} // end if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")))
+}
 // *****************************************************************************
 // ---------------------- Add/Edit Judging Locations ---------------------------
 // *****************************************************************************
@@ -450,7 +453,8 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 	if ($section == "step5") $action = "add"; else $action = $action;
 	if ($go == "default") $go = "setup"; else $go = $go;
-	$form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
+	if ($section == "step5") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,"1",$judging_locations_db_table,TRUE);
+	else $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
 	$form_submit_button .= "<input type='submit' class='button' value='";
 	if ($action == "edit") $form_submit_button .= "Update"; 
 	else $form_submit_button .= "Submit";
@@ -471,7 +475,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 // Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
 echo $subtitle;
 echo $primary_page_info;
-echo $goto_nav;
+if ($section != "step5") echo $goto_nav;
 echo $secondary_nav;
 echo $secondary_page_info;
 

@@ -2,14 +2,7 @@
 
 session_start(); 
 require('../paths.php'); 
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-require(DB.'admin_common.db.php');
-require(INCLUDES.'version.inc.php');
-require(INCLUDES.'headers.inc.php');
-require(INCLUDES.'constants.inc.php');
+require(CONFIG.'bootstrap.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>

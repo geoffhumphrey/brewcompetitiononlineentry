@@ -1,6 +1,6 @@
 <?php 
 
-$output .= "<h2>Performing Updates for Version 1.1.4...</h2>";
+$output .= "<h2>Version 1.1.4...</h2>";
 
 $output .= "<ul>";
 

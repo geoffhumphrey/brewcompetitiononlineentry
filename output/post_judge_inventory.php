@@ -6,14 +6,7 @@
  */
 
 require('../paths.php');
-//error_reporting(E_ALL ^ E_NOTICE); // comment out after debugging
-error_reporting(0); // uncomment when live
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'authentication_nav.inc.php'); session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
-require(INCLUDES.'constants.inc.php'); // if used, must also use functions.inc.php
-require(DB.'common.db.php');
+require(CONFIG.'bootstrap.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>

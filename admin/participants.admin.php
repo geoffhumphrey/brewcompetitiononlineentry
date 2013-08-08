@@ -133,7 +133,7 @@ if ($action != "print") {
 	$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin'>Back to Admin Dashboard</a>";
 	$goto_nav .= "</span>";
 	
-	
+		
 	if ($filter != "default") {
 		$goto_nav .= "<span class='adminSubNav'>";
 		$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=participants'>Back to Participants</a>";
@@ -160,7 +160,7 @@ if ($action != "print") {
 	} // end if ($dbTable != "default")
 	
 	$goto_nav .= "</div>";
-	
+
 	if ($dbTable == "default") {
 		
 		$secondary_nav .= "<div class='adminSubNavContainer'>";
@@ -411,7 +411,7 @@ do {
 	$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
 	
 	if ($filter != "default") { 
-		if ($filter == "judges") {\
+		if ($filter == "judges") {
 			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 			$display_rank = bjcp_rank($bjcp_rank[0],1);
 			
@@ -454,8 +454,7 @@ do {
 
 	
 	$output_datatables_body .= "</tr>";
-
-
+	
 } while ($row_brewer = mysql_fetch_assoc($brewer));
 
 // ----------------------------------------- Presentation ------------------------------------------

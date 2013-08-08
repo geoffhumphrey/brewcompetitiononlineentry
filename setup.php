@@ -1,10 +1,11 @@
 <?php
 require('paths.php');
-require(INCLUDES.'url_variables.inc.php');
+//require(INCLUDES.'url_variables.inc.php');
 $current_version = "1.3.0.0"; 
 require(INCLUDES.'functions.inc.php'); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
+date_default_timezone_set('America/Denver');
 
 // Check to see if initial setup has taken place 
 
@@ -62,8 +63,6 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/smoothscroll.js" ></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/tinymce.init.js"></script>
-<?php include(INCLUDES.'form_check.inc.php'); ?>
-
 <body>
 <div id="container">
 <div id="navigation">
@@ -76,9 +75,11 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 		</div>
 <?php 
 if ($setup_free_access == TRUE) {
+	
 	if ($section != "step0") require(DB.'common.db.php');
 	require(INCLUDES.'version.inc.php');
 	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
+	include(INCLUDES.'form_check.inc.php');
 	if (table_exists($prefix."system")) {
 		mysql_select_db($database, $brewing);
 		$query_system = sprintf("SELECT setup FROM %s", $prefix."system");

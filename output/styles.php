@@ -1,12 +1,7 @@
 <?php 
 session_start(); 
 require('../paths.php'); 
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-require(INCLUDES.'version.inc.php');
-require(INCLUDES.'constants.inc.php');
+require(CONFIG.'bootstrap.php');
 if (NHC) $base_url = "../";
 $query_styles = "SELECT * FROM $styles_db_table";
 if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";

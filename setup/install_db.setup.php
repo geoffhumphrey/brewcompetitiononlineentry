@@ -1571,22 +1571,6 @@ if ($setup_free_access == TRUE) {
 	<div style='padding: 20px; margin: 30px 0 0 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; -webkit-border-radius: 3px;
 	-moz-border-radius: 3px; border-radius: 3px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='".$base_url."setup.php?section=step1'>Continue</a></div>";
 	}
-	
-	if (HOSTED) {
-		// For hosted accounts on brewcompetition.com and brewcomp.com
-		$updateSQL = "INSERT INTO `$brewer_db_table` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
-		(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-		"; 
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		
-		// For hosted accounts on brewcompetition.com or brewcomp.com 
-		$sql = "INSERT INTO `$users_db_table` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES (1, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '0', 'What was your high school mascot?', 'spartan', NOW( ));";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
-	}
 
 }
 ?>
