@@ -26,7 +26,7 @@ if ($row_system['setup'] == 1) header ('Location: index.php');
 <link href="<?php echo $base_url; ?>/css/html_elements.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $base_url; ?>/css/default.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $base_url; ?>/css/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>/js_includes/jquery.ui.widget.min.js"></script>

@@ -12,6 +12,8 @@ Beginning with the 1.3.0 release, an effort was begun to separate the programmin
 layer from the presentation layer for all scripts with this header.
 
 All Public pages have certain variables in common that build the page:
+
+	$warningX = any warnings
   
 	$primary_page_info = any information related to the page
 	
@@ -19,6 +21,7 @@ All Public pages have certain variables in common that build the page:
 	$header2_X = an <h3> subheader on the page
 	
 	$page_infoX = the bulk of the information on the page.
+	$help_page_link = link to the appropriate page on help.brewcompetition.com
 	$print_page_link = the "Print This Page" link
 	$competition_logo = display of the competition's logo
 	
@@ -29,6 +32,7 @@ All Public pages have certain variables in common that build the page:
 	$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
 	
 Declare all variables empty at the top of the script. Add on later...
+	$warning1 = "";
 	$primary_page_info = "";
 	$header1_1 = "";
 	$page_info1 = "";
@@ -174,7 +178,7 @@ $page_info6 .= "<ul>";
 if ($_SESSION['prefsCash'] == "Y") $page_info6 .= "<li>Cash</li>";
 if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>Check, made out to <em>%s</em></li>",$_SESSION['prefsCheckPayee']);
 if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= "<li>PayPal</li>";
-if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
+//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
 $page_info6 .= "</ul>";
 
 // Judging Dates
@@ -317,7 +321,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) && ((judging_date_return() > 0) || (NHC))) echo $competition_logo;
 if ($action != "print") echo $print_page_link;
 
-echo $anchor_links;
+if ($action != "print") echo $anchor_links; 
 echo $header1_1;
 echo $page_info1;
 echo $header1_2;
