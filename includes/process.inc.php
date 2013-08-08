@@ -420,7 +420,7 @@ if ($action == "check_discount") {
 	$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
 	$row_contest_info = mysql_fetch_assoc($contest_info);
 					
-	if ($_POST['brewerDiscount'] == $_SESSION['contestEntryFeePassword']) {
+	if ($_POST['brewerDiscount'] == $row_contest_info['contestEntryFeePassword']) {
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
 					   GetSQLValueString("Y", "text"),
                        GetSQLValueString($id, "text"));	

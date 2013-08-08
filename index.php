@@ -65,7 +65,7 @@ if (($registration_open == "2") && (!$ua)) {
 <link href="<?php echo $base_url; ?>css/<?php echo $_SESSION['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery-ui-1.8.18.custom.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.core.min.js"></script>

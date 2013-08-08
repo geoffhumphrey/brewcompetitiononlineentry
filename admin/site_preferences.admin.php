@@ -261,8 +261,8 @@ $totalRows_themes = mysql_num_rows($themes);
       <option value="-4.000" <?php if ($_SESSION['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
       <option value="-4.001" <?php if ($_SESSION['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay</option>
       <option value="-3.500" <?php if ($_SESSION['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
-      <option value="-3.000" <?php if ($_SESSION['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Brazil, Buenos Aires, Georgetown, Greenland</option>
-      <option value="-3.001" <?php if ($_SESSION['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (No Daylight Savings)</option>
+      <option value="-3.000" <?php if ($_SESSION['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
+      <option value="-3.001" <?php if ($_SESSION['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia)</option>
       <option value="-2.000" <?php if ($_SESSION['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
       <option value="-1.000" <?php if ($_SESSION['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
       <option value="0.000" <?php if ($_SESSION['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
