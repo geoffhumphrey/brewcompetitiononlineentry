@@ -2,7 +2,7 @@
 
 session_start(); 
 require('../paths.php'); 
-require(CONFIG.'bootstrap_output.php');
+require(CONFIG.'bootstrap.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel']<= 1)) {
 if (NHC) $base_url = "../";

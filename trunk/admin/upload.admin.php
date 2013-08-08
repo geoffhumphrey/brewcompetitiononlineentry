@@ -1,6 +1,6 @@
 <?php 
 require('../paths.php');
-require(CONFIG.'bootstrap_output.php');
+require(CONFIG.'bootstrap.php');
 
 
 $imageSrc = $base_url."images/";

@@ -2,12 +2,8 @@
 
 session_start(); 
 require('../paths.php'); 
-require(INCLUDES.'url_variables.inc.php'); 
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-require(INCLUDES.'functions.inc.php');
+require(CONFIG.'bootstrap.php');
 require(INCLUDES.'scrubber.inc.php');
-require(INCLUDES.'constants.inc.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 $type = "entries";

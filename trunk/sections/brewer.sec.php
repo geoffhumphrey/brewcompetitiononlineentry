@@ -46,7 +46,7 @@ if ($go != "admin") echo $info_msg;
 $query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
 $countries = mysql_query($query_countries, $brewing) or die(mysql_error());
 $row_countries = mysql_fetch_assoc($countries);
-if ($row_brewer['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
 <p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
@@ -156,7 +156,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
   <td class="dataLabel">AHA Member Number:</td>
   
   <td class="data">
-  <?php if ($row_brewer['brewerAHA'] >= "999999994") { // For use with NHC ?>
+  <?php if (($section != "step2") && ($row_brewer['brewerAHA'] >= "999999994")) { // For use with NHC ?>
   Pending<input type="hidden" name="brewerAHA" value="<?php echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
   <?php } else { ?>
   <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />

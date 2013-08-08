@@ -2,11 +2,8 @@
 
 session_start();
 require('../paths.php'); 
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-require(INCLUDES.'version.inc.php');
+require(CONFIG.'bootstrap.php');
+require(INCLUDES.'scrubber.inc.php');
 include(DB.'dropoff.db.php');
 include(DB.'sponsors.db.php');
 include(DB.'contacts.db.php');

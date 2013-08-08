@@ -52,6 +52,4 @@ else $output_datatables_sDom = "irftip";
 $output_datatables_bStateSave = "false";
 $output_datatables_bProcessing = "false";
 
-
-
 ?>

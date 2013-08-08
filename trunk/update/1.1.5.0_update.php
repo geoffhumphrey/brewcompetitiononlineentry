@@ -1,6 +1,6 @@
 <?php 
 
-$output .= "<h2>Performing Updates for Version 1.1.5...</h2>";
+$output .= "<h2>Version 1.1.5...</h2>";
 $output .= "<ul>";
 $updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;"; 
 mysql_select_db($database, $brewing);

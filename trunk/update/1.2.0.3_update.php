@@ -1,6 +1,6 @@
 <?php 
 
-$output .= "<h2>Performing Updates for Version 1.2.0.1, 1.2.0.2, and 1.2.0.3...</h2>";
+$output .= "<h2>Version 1.2.0.1, 1.2.0.2, and 1.2.0.3...</h2>";
 $output .= "<ul>";
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD  `brewJudgingNumber` VARCHAR( 10 ) NULL;"; 
 mysql_select_db($database, $brewing);

@@ -1,14 +1,8 @@
 <?php 
 session_start(); 
 require('../paths.php');
-require(INCLUDES.'functions.inc.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(DB.'common.db.php');
-include(INCLUDES.'version.inc.php');
-include(INCLUDES.'headers.inc.php');
+require(CONFIG.'bootstrap.php');
 include(INCLUDES.'scrubber.inc.php');
-include(INCLUDES.'constants.inc.php');
 include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
 function pay_to_print($prefs_pay,$entry_paid) { 
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
@@ -151,7 +145,6 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
 	
 	// Using code from http://www.barcodephp.com
-	//$barcode_link = "http://example.barcodephp.com/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 }
 //if (($_SESSION['prefsEntryForm'] != "N") || ($go == "recipe")) { 

@@ -1,7 +1,7 @@
 <?php 
 
 
-$output .= "<h2>Performing Updates for Version 1.2.0.0...</h2>";
+$output .= "<h2>Version 1.2.0.0...</h2>";
 $output .= "<ul>";
 $updateSQL = "RENAME TABLE `".$prefix."judging` TO `".$prefix."judging_locations`;"; 
 mysql_select_db($database, $brewing);

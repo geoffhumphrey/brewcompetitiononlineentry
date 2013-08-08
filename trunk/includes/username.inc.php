@@ -6,7 +6,7 @@ if(isSet($_POST['user_name'])) {
 	include(INCLUDES.'url_variables.inc.php');
 	include(INCLUDES.'db_tables.inc.php');
 	include(INCLUDES.'functions.inc.php');
-	include(INCLUDES.'constants.inc.php');
+	//if ($section != "step1") include(INCLUDES.'constants.inc.php');
 	mysql_select_db($database, $brewing);
 	
 	

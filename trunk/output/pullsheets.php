@@ -1,7 +1,8 @@
 <?php 
 session_start(); 
 require('../paths.php'); 
-require(CONFIG.'bootstrap_output.php');
+require(CONFIG.'bootstrap.php');
+require(DB.'admin_common.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 function check_flight_round($flight_round,$round) {
@@ -20,7 +21,8 @@ function check_flight_round($flight_round,$round) {
 
 $query_tables = "SELECT * FROM $judging_tables_db_table";
 if ($go == "judging_locations") $query_tables .= sprintf(" WHERE tableLocation = '%s'", $location);
-$query_table .= " ORDER BY tableNumber";
+if ($id != "default") $query_tables .= sprintf(" WHERE id='%s'",$id);
+else $query_tables .= " ORDER BY tableNumber";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables); 
@@ -190,21 +192,21 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 
 if ((($go == "judging_tables") || ($go == "judging_locations")) &&  ($id != "default")) { 
 	
-$flights = number_of_flights($row_tables_edit['id']);
+$flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
 <div id="content">
 	<div id="content-inner">
     <div id="header">	
 		<div id="header-inner">
-        	<h1><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></h1>
-            <?php if ($row_tables_edit['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_tables_edit['tableLocation']);
+        	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+            <?php if ($row_tables['tableLocation'] != "") { 
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_tables['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
+            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
+            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
             <p>** Please Note:</p>
             <ul>
@@ -217,7 +219,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	for($i=1; $i<$flights+1; $i++) { 
 	$random = random_generator(5,1);
 	?>
-    <h3><?php echo "Table ".$row_tables_edit['tableNumber'].", Flight ".$i; ?></h3>
+    <h3><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i; ?></h3>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -253,7 +255,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     </thead>
     <tbody>
     <?php 
-	$a = explode(",", $row_tables_edit['tableStyles']); 
+	$a = explode(",", $row_tables['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
 		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
@@ -405,19 +407,19 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 } while ($row_tables = mysql_fetch_assoc($tables)); 
 if (($round != "default") && (array_sum($round_count) == 0)) echo "<h2>No tables have been assigned to this round at this location</h2>";
 if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "default")) { 
-$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
+$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
 <div id="content">
 	<div id="content-inner">
     <div id="header">	
 		<div id="header-inner">
-        	<h1>Table <?php echo $row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></h1>
-            <?php if ($row_tables_edit['tableLocation'] != "") { 
-			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_tables_edit['tableLocation']);
+        	<h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+            <?php if ($row_tables['tableLocation'] != "") { 
+			$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_tables['tableLocation']);
 			$location = mysql_query($query_location, $brewing) or die(mysql_error());
 			$row_location = mysql_fetch_assoc($location);
 			?>
-            <h2><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
+            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". $entry_count; ?></p>
             <?php } ?>
         </div>
@@ -425,7 +427,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     <?php if ($entry_count > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable<?php echo $row_tables_edit['id']; ?>').dataTable( {
+		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -443,7 +445,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 			} );
 		} );
 	</script>
-    <table class="dataTable" id="sortable<?php echo $row_tables_edit['id']; ?>">
+    <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="1%">Pull Order</th>
@@ -456,7 +458,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
     </thead>
     <tbody>
     <?php 
-	$a = explode(",", $row_tables_edit['tableStyles']); 
+	$a = explode(",", $row_tables['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
 		$query_styles = sprintf("SELECT brewStyle FROM $styles_db_table WHERE id='%s'", $value);
