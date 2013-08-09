@@ -348,6 +348,7 @@ $totalRows_themes = mysql_num_rows($themes);
     <option value="&#8356;" <?php if ($_SESSION['prefsCurrency'] == "&#8356;") echo "SELECTED"; ?>>&#8356; - Lira</option>
     <option value="R" <?php if ($_SESSION['prefsCurrency'] == "&yen;") echo "SELECTED"; ?>>R - Rand</option>
     <option value="&#8360;" <?php if ($_SESSION['prefsCurrency'] == "&#8360;") echo "SELECTED"; ?>>&#8360; - Rupee</option>
+    <option value="R$ " <?php if ($_SESSION['prefsCurrency'] == "R$ ") echo "SELECTED"; ?>>R$ - Real</option>
     </select>    </td>
     <td class="data">&nbsp;</td>
     <tr>
