@@ -6,9 +6,14 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'functions.inc.php'); 
 require(DB.'common.db.php');
+
+require(CLASSES.'phpass/PasswordHash.php');
+$hasher = new PasswordHash(8, false);
+
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 mysql_select_db($database, $brewing);
+
 
 if (($action == "email") && ($id != "default")) {
 	
@@ -84,7 +89,8 @@ $em = $row->username;// email is stored to a variable
 $key = random_generator(10,1);
 
 $password = md5($key);
-$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $password, $row_forgot['id']);
+$hash = $hasher->HashPassword($password);
+$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
 					   
   mysql_select_db($database, $brewing);
   $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());

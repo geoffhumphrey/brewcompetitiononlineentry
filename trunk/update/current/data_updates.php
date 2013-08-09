@@ -4,25 +4,48 @@
 // Data Updates
 // -----------------------------------------------------------
 
-// Update all current admins to Uber Admins
+// Updating and increasing password security by implementing phppass
+// http://www.openwall.com/phpass/
+// http://www.openwall.com/articles/PHP-Users-Passwords
 
-$query_admin_users = "SELECT * FROM $users_db_table WHERE userLevel='1'";
+require(CLASSES.'phpass/PasswordHash.php');
+$hasher = new PasswordHash(8, false);
+
+$query_admin_users = "SELECT * FROM $users_db_table";
 $admin_users = mysql_query($query_admin_users, $brewing) or die(mysql_error());
 $row_admin_users = mysql_fetch_assoc($admin_users);
 $totalRows_admin_users = mysql_num_rows($admin_users);
 
 if ($totalRows_admin_users > 0) {
 	do { 
+	
+		// Update all current passwords to be much more secure
+		// This involves taking the existing string that already has been hashed by md5 and hashing it with phpass
+		// Theres no way to "decode" a string that has been hashed by md5, so we'll "hash a hash" here 
 		
-		$updateSQL = sprintf("UPDATE $users_db_table SET 
-							 userLevel='%s'
-							 WHERE id='%s';", 
-							 "0",
-							 $row_admin_users['id']);
+		// Get password from DB
+		$password = $row_admin_users['password'];
+		
+		// Create hash with phpass
+		$hash = $hasher->HashPassword($password);
+		
+		$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s';", $hash, $row_admin_users['id']);
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($updateSQL);
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
-		//echo $updateSQL."<br>";
+		
+		// Update all current admins to Uber Admins
+		if ($row_admin_users['userLevel'] == 1) {
+			$updateSQL = sprintf("UPDATE $users_db_table SET 
+								 userLevel='%s'
+								 WHERE id='%s';", 
+								 "0",
+								 $row_admin_users['id']);
+			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($updateSQL);
+			$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+			//echo $updateSQL."<br>";
+		}
 	}  
 	while ($row_admin_users = mysql_fetch_assoc($admin_users));
 	
