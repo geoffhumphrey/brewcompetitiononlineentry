@@ -26,16 +26,20 @@ $row_userCheck = mysql_fetch_assoc($userCheck);
 $totalRows_userCheck = mysql_num_rows($userCheck);
 
 if ($totalRows_userCheck > 0) {
-  if ($section == "admin") $msg = "10"; else $msg = "2";
-  header(sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg));
-  }
-  else 
-  {
-  $password = md5($_POST['password']);
-  $insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
+
+  	if ($section == "admin") $msg = "10"; else $msg = "2";
+  	header(sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg));
+}
+
+else  {
+	require(CLASSES.'phpass/PasswordHash.php');
+	$hasher = new PasswordHash(8, false);
+	$password = md5($_POST['password']);
+	$hash = $hasher->HashPassword($password);
+	$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
-                       GetSQLValueString($password, "text"),
+                       GetSQLValueString($hash, "text"),
 					   GetSQLValueString($_POST['userQuestion'], "text"),
 					   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
 					   "NOW( )"					   
@@ -189,19 +193,28 @@ $totalRows_userCheck = mysql_num_rows($userCheck);
 if ($go == "password") {
 
 	// Check if old password is correct; if not redirect
-	$passwordOld = md5($_POST['passwordOld']);
-	$passwordNew = md5($_POST['password']);
+	require(CLASSES.'phpass/PasswordHash.php');
+	$hasher = new PasswordHash(8, false);
+	
+	$password_old = md5($_POST['passwordOld']);
+	$password_new = md5($_POST['password']);
+	
+	
+	
+	
 	mysql_select_db($database, $brewing);
-	$query_userPass = "SELECT password FROM $users_db_table WHERE id = '$id'";
+	$query_userPass = sprintf("SELECT password FROM $users_db_table WHERE id = '%s'",$id);
 	$userPass = mysql_query($query_userPass, $brewing) or die(mysql_error());
 	$row_userPass = mysql_fetch_assoc($userPass);
-	$totalRows_userPass = mysql_num_rows($userPass);
-
-	if ($passwordOld != $row_userPass['password']) header(sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id));
 	
-	if ($passwordOld == $row_userPass['password'])  {  
+	$check = $hasher->CheckPassword($password_old, $row_userPass['password']);
+	$hash_new = $hasher->HashPassword($password_new);
+
+	if (!$check) header(sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id));
+	
+	if ($check)  {  
   		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
-                       GetSQLValueString($passwordNew, "text"),
+                       GetSQLValueString($hash_new, "text"),
                        GetSQLValueString($id, "text")); 
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($updateSQL);

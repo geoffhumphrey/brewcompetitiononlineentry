@@ -4,10 +4,35 @@
  * Description: This module houses and calls the upload mechanism for parsing Beer XML files
  *              and inserting the data into the brewing database table.
  * 
+ 
+echo $php_version;
+echo $registration_open."<br>";
+echo $entry_window_open."<br>";
+echo $remaining_entries."<br>";
+echo $_SESSION['userLevel'];
+
+$php_version = "4.0.1";
  */
  
- 
-//$php_version = "4.0.1";
+
+
+function check_exension($file_ext) {
+	switch($file_ext) {
+		case "xml": return TRUE;
+		break;
+	
+		case "":  	
+		case NULL: 
+		return FALSE;
+		break;
+		
+		default: return FALSE;
+		break;
+	}
+	
+}
+
+
 // Disaable entry add/edit if registration closed and entry window closed
 if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
 	echo "<div class='error'>Importing Entries Not Available</div>";
@@ -16,27 +41,28 @@ if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLe
 }
 
 // Open but entry limit reached
-// Only allow editing
+// No importing
 elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit)) {
 	echo "<div class='error'>Importing Entries Not Available</div>";
 	echo "<p>The competition entry limit has been reached.</p>";
 }
 
 // Open but personal entry limit reached
-// Only allow editing
+// No importing
 elseif (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($remaining_entries == 0)) {
 	echo "<div class='error'>Adding Entries Not Available</div>";
 	echo "<p>Your personal entry limit has been reached.</p>";
 }
 
 // Registration open, but entry window not
+// No importing
 elseif (($registration_open == 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
 	echo "<div class='error'>Importing Entries Not Available</div>";
 	echo "<p>You will be able to add or import entries on or after $entry_open.</p>";
 }
 
 // Special for NHC
-// Close adding or editing during the entry window as well
+// No importing
 elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($prefix != "final_")) {
 	echo "<div class='error'>Importing Entries Not Available</div>";
 	echo "<p>NHC registration has closed.</p>";
@@ -51,24 +77,7 @@ elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($
 
 else {
 
-	if ($php_version >= "5") {
-		
-		function check_exension($file_ext) {
-
-			switch($file_ext) {
-				case "xml": return TRUE;
-				break;
-			
-				case "":  // Handle file extension for files ending in '.'
-				case NULL: 
-				return FALSE;  // Handle no file extension
-				break;
-				
-				default: return FALSE;
-				break;
-			}
-			
-		}
+	if ($php_version >= 5) {
 		
 		$message = "";
 		$return = "";
@@ -116,15 +125,11 @@ else {
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
-		
-		
 		if (($action != "print") && ($msg != "default")) echo $msg_output;
 		if (!empty($message)) echo "<div class='error'>".$message."</div>";
 		if (entries_unconfirmed($_SESSION['user_id']) > 0) { 
 			echo "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
 		} 
-		
-	
 ?>
 
     <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/beerxml_import.html" title="BCOE&amp;M Help: Beer XML Import">BeerXML Import Help</a></p>
@@ -145,9 +150,8 @@ else {
     <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>" />
     </form>
 	<?php } // end if ($php_version >= "5") 
-	else { ?>
-    <div class="error">Your server's version of PHP does not support the BeerXML import feature.</div>
-    <p>PHP version 5.x or higher is required &mdash; this server is running PHP version <?php echo $php_version; ?>.</p>
+	
+	else echo "<div class='error'>Your server's version of PHP does not support the BeerXML import feature.</div>
+    <p>PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version.".</p>";
 
-<?php } // end else 
 } // end else  ?>

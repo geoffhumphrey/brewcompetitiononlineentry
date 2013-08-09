@@ -25,8 +25,8 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 </table>
 <p><input type="submit" class="button" value="Login"></p>
 </form>
-<?php if (($section != "update") && ($registration_open < "2")) {
-if ($msg != "default") { ?><p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p><?php } ?>
+<?php if ($section != "update") {
+if (($msg != "default") && ($registration_open < "2")) { ?><p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png" alt="Exclamation" /></span><span class="data">Have you <a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">registered your account</a> yet?</span></p><?php } ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"   alt="Exclamation" /></span><span class="data">Did you forget your password? If so, <a href="<?php echo build_public_url("login","password","forgot",$sef,$base_url); ?>">click here to reset it</a>.</span></p>
 <?php }
 } 

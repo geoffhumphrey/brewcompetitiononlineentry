@@ -19,7 +19,6 @@ if (NHC) {
 	
 	$registration_open = open_or_closed(strtotime("now"),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
 	
-	
 	if ($registration_open == 1) {
 		$email = $_POST['user_name'];
 	
@@ -170,10 +169,13 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	else  {
 	// Add the user's creds to the "users" table
 		$password = md5($_POST['password']);
+		require(CLASSES.'phpass/PasswordHash.php');
+		$hasher = new PasswordHash(8, false);
+		$hash = $hasher->HashPassword($password);
 		$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
-                       GetSQLValueString($password, "text"),
+                       GetSQLValueString($hash, "text"),
 					   GetSQLValueString($_POST['userQuestion'], "text"),
 					   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
 					   "NOW( )"					   
