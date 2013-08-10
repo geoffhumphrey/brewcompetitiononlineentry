@@ -6,6 +6,8 @@
  */
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+	
+include(INCLUDES.'process/process_judging_flight_check.inc.php');
 
  if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
 

@@ -31,7 +31,7 @@ date_default_timezone_set('America/Denver');
 <body>
 <div id="container">
 <div id="navigation">
-	<div id="navigation-inner"><?php echo sessionAuthenticateNav(); ?></div>
+	<div id="navigation-inner"><?php //echo sessionAuthenticateNav(); ?></div>
 </div>
 <div id="content">
  	 <div id="content-inner">

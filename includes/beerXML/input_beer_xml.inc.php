@@ -1,30 +1,15 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: 
-
- $counter["misc"] = 0;
-        foreach($recipe->miscs->miscs as $misc){
-            $counter["misc"]++;
-            if($counter["misc"] <= 4){
-                $vf["brewMisc" . $counter["misc"] . "Name"] = strtr($misc->name, $html_string);
-                $vf["brewMisc" . $counter["misc"] . "Type"] = $misc->type;  // BeerXML differntiates between liquid and volume - BB 2.2 does not - item for future release
-                $vf["brewMisc" . $counter["misc"] . "Use"] = $misc->useFor;
-                $vf["brewMisc" . $counter["misc"] . "Time"] = round($misc->time, 0);
-                $vf["brewMisc" . $counter["misc"] . "Amount"] = number_format(round($misc->amount, 2),2);  // Beer XML standard is kg or liters - will need to address in subsequent release
-            }
-        }
-
-
-*/
+/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 
 //{{{ License
 // +------------------------------------------------------------------------+
 // | Input Beer XML - takes recipe objects from BeerXMLParser               |
 // |                  and inserts recipes into database                     |
 // | 							                                            |
-// | NOTES - Augmented by Geoff Humphrey for use in BrewBlogger	2.3         |
-// |         <brewmeister@brewblogger.net>                                  |
-// |       - Added conversion variables based upon BB preferences           |
+// | NOTES - Augmented by Geoff Humphrey for use in BCOE&M                  |
+// |         <prost@brewcompetition.com>                                    |
+// |       - Added conversion variables based upon preferences              |
 // |       - Beer XML standards are in Metric for weight/volume, C for temp |
 // +------------------------------------------------------------------------+
 // | This program is free software; you can redistribute it and/or          |
@@ -44,9 +29,6 @@
 // +------------------------------------------------------------------------+
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
-
-
-
 //}}}
 
 function generate_judging_num($style_cat_num) {
@@ -64,12 +46,59 @@ function generate_judging_num($style_cat_num) {
 	return $return;
 }
 
-
+function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$user_name) {
+	/*
+	$style = Style category and subcategory number
+	$pref_num = Subcategory limit number from preferences
+	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
+	$pref_exception_sub_array = Array of EXCEPTED subcategories
+	*/
+	
+	$style_break = explode("-",$style);
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
+	
+	//$style_trimmed = ltrim($style_break[0],"0");
+	
+	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
+	else $style_num = $style_break[0];
+	
+	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_num,$style_break[1]); 
+	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	
+	// Check if the user has a entry in the system in the subcategory
+	
+	$query_check_user = sprintf("SELECT id FROM %s WHERE user_name='%s'", $prefix."users",$user_name);
+	$check_user = mysql_query($query_check_user, $brewing) or die(mysql_error());
+	$row_check_user = mysql_fetch_assoc($check_user);
+	
+	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing",$row_check_user['id'],$style_num,$style_break[1]);
+	$check = mysql_query($query_check, $brewing) or die(mysql_error());
+	$row_check = mysql_fetch_assoc($check);
+	
+	if ($row_check['count'] >= $pref_num) $return = TRUE;
+	else $return = FALSE;
+	
+	
+	// Check for exceptions
+	if (($return) && (!empty($pref_exception_sub_array))) {
+		if (in_array($row_style['id'],$pref_exception_sub_array)) {
+			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
+			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $return = TRUE;
+			else $return = FALSE;
+		}
+	}
+	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
+	return $return;
+	
+}
 
 include ('parse_beer_xml.inc.php');
 //{{{ InputBeerXML
-
-
 class InputBeerXML {
     public $recipes; 
     public $insertedRecipes;
@@ -134,10 +163,35 @@ class InputBeerXML {
         $counter = array();
 		$vf["brewBrewerFirstName"] = $_POST["brewBrewerFirstName"];
 		$vf["brewBrewerLastName"] = $_POST["brewBrewerLastName"];
-        $vf["brewStyle"] = strtr($recipe->style->name, $html_string);
-		$vf["brewCategory"] = ltrim($recipe->style->categoryNumber, "0");
-		$vf["brewCategorySort"] = $recipe->style->categoryNumber;
-		$vf["brewSubCategory"] = $recipe->style->styleLetter;
+
+		$query_limits = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+		$limits = mysql_query($query_limits, $brewing) or die(mysql_error());
+		$row_limits = mysql_fetch_assoc($limits);
+		
+		$style_value = ltrim($recipe->style->categoryNumber, "0")."-".$recipe->style->styleLetter;
+		if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
+		else $user_subcat_limit = $row_limits['prefsUserSubCatLimit'];
+			
+		if (empty($row_limits['prefsUSCLExLimit'])) $user_subcat_limit_exception = "99999";
+		else $user_subcat_limit_exception = $row_limits['prefsUSCLExLimit'];
+			
+		// Determine if the subcategory limit has been reached
+		$subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['loginUsername']);
+		
+		if (!$subcat_limit) {
+			$vf["brewStyle"] = strtr($recipe->style->name, $html_string);	
+			$vf["brewCategory"] = ltrim($recipe->style->categoryNumber, "0");
+			$vf["brewCategorySort"] = $recipe->style->categoryNumber;
+			$vf["brewSubCategory"] = $recipe->style->styleLetter;
+		}
+		
+		else {
+			$vf["brewStyle"] = "";	
+			$vf["brewCategory"] = "";
+			$vf["brewCategorySort"] = "";
+			$vf["brewSubCategory"] = "";
+		}
+		
         //$vf["brewSource"] = $recipe->brewer;
         //$vf["brewYield"] = $this->convertUnit($recipe->batchSize, "volume");
         //$vf["brewNotes"] = strtr($recipe->notes, $html_string);
@@ -192,9 +246,19 @@ class InputBeerXML {
                     break;
             }
         }
-
-       
-
+		/*
+        $counter["misc"] = 0;
+        foreach($recipe->miscs->miscs as $misc){
+            $counter["misc"]++;
+            if($counter["misc"] <= 4){
+                $vf["brewMisc" . $counter["misc"] . "Name"] = strtr($misc->name, $html_string);
+                $vf["brewMisc" . $counter["misc"] . "Type"] = $misc->type;  // BeerXML differntiates between liquid and volume - BB 2.2 does not - item for future release
+                $vf["brewMisc" . $counter["misc"] . "Use"] = $misc->useFor;
+                $vf["brewMisc" . $counter["misc"] . "Time"] = round($misc->time, 0);
+                $vf["brewMisc" . $counter["misc"] . "Amount"] = number_format(round($misc->amount, 2),2);  // Beer XML standard is kg or liters - will need to address in subsequent release
+            }
+        }
+		*/
 
         $counter["hops"] = 0;
         foreach($recipe->hops->hops as $hop){
@@ -233,7 +297,8 @@ class InputBeerXML {
 		
 		$vf["brewBrewerID"] = $_POST["brewBrewerID"];
 		$vf["brewConfirmed"] = "0";
-		$vf["brewJudgingNumber"] = generate_judging_num($vf["brewCategory"]);
+		if (!empty($vf["brewStyle"])) $vf["brewJudgingNumber"] = generate_judging_num($vf["brewCategory"]);
+		else $vf["brewJudgingNumber"] = "";
 		
         foreach($vf as $field=>$value){
             $fields .= ", " . $field;
@@ -253,4 +318,9 @@ class InputBeerXML {
     //}}}
   }
 
+//}}}
+//}}}
+//}}}
+//}}}
 ?>
+
