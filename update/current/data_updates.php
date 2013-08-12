@@ -35,7 +35,7 @@ if ($totalRows_admin_users > 0) {
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		
 		// Update all current admins to Uber Admins
-		if ($row_admin_users['userLevel'] == 1) {
+		if ((!NHC) && ($row_admin_users['userLevel'] == 1)) {
 			$updateSQL = sprintf("UPDATE $users_db_table SET 
 								 userLevel='%s'
 								 WHERE id='%s';", 
@@ -62,8 +62,6 @@ if (!NHC) {
 	$staff_assign = mysql_query($query_staff_assign, $brewing) or die(mysql_error());
 	$row_staff_assign = mysql_fetch_assoc($staff_assign);
 	$totalRows_staff_assign = mysql_num_rows($staff_assign);
-	
-	
 	
 	if ($totalRows_staff_assign > 0) {
 		
@@ -177,9 +175,9 @@ if (!NHC) {
 	
 	$output .= "<li>Updates to archive table completed.</li>";
 
-}
+} // end if (!NHC)
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s';",$prefix."system","1.3.0.0","2013-08-01","1");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s';",$prefix."system","1.3.0.0","2013-08-15","1");
 mysql_select_db($database, $brewing);
 mysql_real_escape_string($updateSQL);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 

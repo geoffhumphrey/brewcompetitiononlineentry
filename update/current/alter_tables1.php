@@ -70,7 +70,8 @@ mysql_real_escape_string($updateSQL);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 //echo $updateSQL."<br>"; 
 
-$updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'";
+if (NHC) $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='Y', prefsHideRecipe='Y', prefsUseMods='Y', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'";
+else $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'"; 
 mysql_select_db($database, $brewing);
 mysql_real_escape_string($updateSQL);
 $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
