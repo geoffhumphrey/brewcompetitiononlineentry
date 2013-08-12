@@ -26,10 +26,10 @@ define('MODS',ROOT.'mods'.DIRECTORY_SEPARATOR);
 require(CONFIG.'config.php');
 
 //Global definitions
-define('MAINT',FALSE); 		// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
-define('HOSTED',FALSE); 	// Top-level constant for use in a hosted enviroment and shared db tables.
-define('NHC',FALSE); 		// Top-level constant for specialized NHC functionality. Set to FALSE for production.
-define('TESTING',FALSE); 	// Top-level constant for testing functionality. Set to FALSE for production.
+define('MAINT', FALSE); 	// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
+define('HOSTED', FALSE); 	// Top-level constant for use in a hosted enviroment and shared db tables.
+define('NHC', FALSE); 		// Top-level constant for specialized NHC functionality. Set to FALSE for production.
+define('TESTING', FALSE); 	// Top-level constant for testing functionality. Set to FALSE for production.
 
 
 ?>

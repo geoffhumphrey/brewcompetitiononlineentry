@@ -106,6 +106,9 @@ $page_info14 = "";
 $header1_15 = "";
 $page_info15 = "";
 
+$header1_16 = "";
+$page_info16 = "";
+
 // Build Anchor Links
 $anchor_links = "";
 if ($contact_count > 0) {
@@ -171,6 +174,37 @@ if ($row_limits['prefsEntryLimit'] != "") {
 	$page_info5 .= sprintf("<p>There is a limit of %s (%s) entries for this competition.</p>",readable_number($row_limits['prefsEntryLimit']),$row_limits['prefsEntryLimit']);
 }
 
+if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit']))) {
+	$header1_16 .= "<h2>Per Entrant Limits</h2>";
+	
+	if (!empty($row_limits['prefsUserEntryLimit'])) {
+		if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>Each entrant is limited to %s entry for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
+		else $page_info16 .= sprintf("<p>Each entrant is limited to %s entries for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
+	}
+	
+	if (!empty($row_limits['prefsUserSubCatLimit'])) { 
+		$page_info16 .= "<p>";
+		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("Each entrant is limited to %s entry per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		else $page_info16 .= sprintf("Each entrant is limited to %s entries per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= " (exceptions are detailed below)";
+		$page_info16 .= ".";
+		$page_info16 .= "</p>";
+
+	}
+	
+	if (!empty($row_limits['prefsUSCLExLimit'])) { 
+	$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
+	if (count($excepted_styles) == 1) $sub = "sub-category"; else $sub = "sub-categories";
+		if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>Each entrant is limited to %s for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
+		else $page_info16 .= sprintf("<p>Each entrant is limited to %s entries for for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
+		$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+
+	}
+	
+}
+
+
+
 // Payment
 $header1_6 .= "<a name='payment'></a><h2>Payment</h2>";
 $page_info6 .= "<p>After registering and inputting entries, all participants must pay their entry fee(s).</p>";
@@ -182,8 +216,8 @@ if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= "<li>PayPal</li>";
 $page_info6 .= "</ul>";
 
 // Judging Dates
-if ($totalRows_judging == 1) $header1_7 .= "<a name='judging'></a><h2>Judging Date</h2>";
-else $header1_7 .= "<a name='judging'></a><h2>Judging Dates</h2>";
+if ($totalRows_judging > 1) $header1_7 .= "<a name='judging'></a><h2>Judging Locations and Dates</h2>";
+else $header1_7 .= "<a name='judging'></a><h2>Judging Location and Dates</h2>";
 
 	if ($totalRows_judging == 0) $page_info7 .= "<p>The competition judging date is yet to be determined. Please check back later.";
 	else {
@@ -193,7 +227,7 @@ else $header1_7 .= "<a name='judging'></a><h2>Judging Dates</h2>";
 			if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br />".$row_judging['judgingLocation'];
 			if (($row_judging['judgingLocation'] != "") && ($action != "print"))  {
 				$page_info7 .= "&nbsp;<span class='icon'><a id='modal_window_link' href='".$base_url."output/maps.php?section=map&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."' title='Map to ".$row_judging['judgingLocName']."'><img src='".$base_url."images/map.png'  border='0' alt='Map ".$row_judging['judgingLocName']."' title='Map ".$row_judging['judgingLocName']."' /></a></span>";
-				$page_info7 .= "<span class='icon'><a href='".$base_url."output/maps.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."' target='_blank' title='Map to ".$row_judging['judgingLocName']."'><img src='".$base_url."images/car.png'  border='0' alt='Map ".$row_judging['judgingLocName']."' title='Map ".$row_judging['judgingLocName']."' /></a></span>";
+				$page_info7 .= "<span class='icon'><a href='".$base_url."output/maps.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."' target='_blank' title='Map to ".$row_judging['judgingLocName']."'><img src='".$base_url."images/car.png'  border='0' alt='Map ".$row_judging['judgingLocName']."' title='Driving Directions to ".$row_judging['judgingLocName']."' /></a></span>";
 			}
 			if ($row_judging['judgingDate'] != "") $page_info7 .= "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."<br />";
 			$page_info7 .= "</p>";
@@ -270,7 +304,7 @@ if ($totalRows_dropoff > 0) {
 		$page_info11 .= $row_dropoff['dropLocation'];
 		if ($action != "print") {
 			$page_info11 .= "&nbsp;<span class='icon'><a id='modal_window_link' href='".$base_url."output/maps.php?section=map&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."' title='Map to ".$row_dropoff['dropLocationName']."'><img src='".$base_url."images/map.png'  border='0' alt='Map ".$row_dropoff['dropLocationName']."' title='Map ".$row_dropoff['dropLocationName']."' /></a></span>";
-			$page_info11 .= "<span class='icon'><a href='".$base_url."output/maps.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."' target='_blank' title='Map to ".$row_dropoff['dropLocationName']."'><img src='".$base_url."images/car.png'  border='0' alt='Map ".$row_dropoff['dropLocationName']."' title='Map ".$row_dropoff['dropLocationName']."' /></a></span>";
+			$page_info11 .= "<span class='icon'><a href='".$base_url."output/maps.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."' target='_blank' title='Map to ".$row_dropoff['dropLocationName']."'><img src='".$base_url."images/car.png'  border='0' alt='Map ".$row_dropoff['dropLocationName']."' title='Driving Directions to ".$row_dropoff['dropLocationName']."' /></a></span>";
 		}
 		$page_info11 .= "<br />";
 		$page_info11 .= $row_dropoff['dropLocationPhone'];
@@ -336,6 +370,9 @@ echo $page_info4;
 echo $header1_5;
 echo $page_info5;
 
+echo $header1_16;
+echo $page_info16;
+
 echo $header1_6;
 echo $page_info6;
 
@@ -366,5 +403,5 @@ echo $page_info14;
 echo $header1_15;
 echo $page_info15;
 
-?>
 
+?>

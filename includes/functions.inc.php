@@ -1167,6 +1167,23 @@ function style_convert($number,$type,$base_url="") {
 		}
 		$style_convert = rtrim(implode(", ",$style_convert1),", ");
 		break;
+		
+		case "7":
+		$a = explode(",",$number);
+		require(CONFIG.'config.php');
+	    mysql_select_db($database, $brewing);
+		$style_convert = "";
+		$style_convert .= "<ul>";
+		foreach ($a as $value) {
+			$styles_db_table = $prefix."styles";
+			$query_style = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE id='$value'"; 
+			$style = mysql_query($query_style, $brewing) or die(mysql_error());
+			$row_style = mysql_fetch_assoc($style);
+			$style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</li>";
+		}
+		$style_convert .= "</ul>";
+		
+		break;
 	}
 	return $style_convert;
 }
