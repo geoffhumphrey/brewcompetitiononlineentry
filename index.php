@@ -151,8 +151,6 @@ var _gaq = _gaq || [];
   echo $remaining_entries;
   */
   
-  echo $_SERVER['SERVER_NAME'];
-  
   if ($section != "admin") { ?>
 	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
