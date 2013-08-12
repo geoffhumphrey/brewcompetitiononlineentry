@@ -78,19 +78,22 @@ $totalRows_themes = mysql_num_rows($themes);
     </td>
   	<td class="data">&nbsp;</td>
   </tr>
+  <?php if (!HOSTED) { ?>
   <tr>
     <td class="dataLabel">Use Search Engine Friendly URLs:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />
-      Yes&nbsp;&nbsp;
-  <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>
-      No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />Yes&nbsp;&nbsp;<input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No</td>
     <td class="data">Generally, "Yes" is good for most installations. However, if your installation is experiencing multiple &quot;Page Not Found&quot; errors (404), switch the following to &quot;No&quot; to turn off Search Engine Friendly (SEF) URLs. <br /><em>*If you enable this and receive 404 errors, <?php if ($section == "step3") echo "AFTER SETUP HAS BEEN COMPLETED, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and "turn off" this feature.</em></td>
     </tr>
+ 
   <tr>
     <td class="dataLabel">Use Custom Modules:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
   	<td class="data"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</td>
   </tr>
+  <?php } else { ?>
+  <input type="hidden" name="prefsSEF" value="Y" />
+  <input type="hidden" name="prefsUseMods" value="N" />
+  <?php } ?>
 </table>
 <h3>Entries</h3>
 <table>

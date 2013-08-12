@@ -45,23 +45,27 @@ WHERE id=%s",
   		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
 		if (HOSTED) {
-		// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
-		$to_email = "prost@brewcompetition.com";
-		$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
-		$message = "<html>" . "\r\n";
-		$message .= "<body>
-					<p>BCOEM Setup Completed for http://".$_SERVER['SERVER_NAME']."</p>
-					<p>Be sure to change setup_free_access to FALSE</p>
-					</body>" . "\r\n";
-		$message .= "</html>";
-		
-		$headers  = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
-		$headers .= "To: BCOEM Admin <prost@brewcompetition.com>, " . "\r\n";
-		$headers .= "From: BCOEM Server <noreply@brewcompetition.com>" . "\r\n";
-		
-		
-		mail($to_email, $subject, $message, $headers);
+			
+			if (strpos($_SERVER['SERVER_NAME'],"brewcomp.com") !== false) $server = "brewcomp.com";
+			elseif (strpos($_SERVER['SERVER_NAME'],"brewcompetition.com") !== false) $server = "brewcompetition.com";
+			else $server = "brewcompetition.com";
+			
+			// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
+			$to_email = "prost@brewcompetition.com";
+			$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
+			$message = "<html>" . "\r\n";
+			$message .= "<body>
+						<p>BCOEM Setup Completed for http://".$_SERVER['SERVER_NAME']."</p>
+						<p>Be sure to change setup_free_access to FALSE</p>
+						</body>" . "\r\n";
+			$message .= "</html>";
+			
+			$headers  = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+			$headers .= "To: BCOEM Admin <prost@brewcompetition.com>, " . "\r\n";
+			$headers .= "From: BCOEM Server <noreply@".$server.">" . "\r\n";
+			
+			mail($to_email, $subject, $message, $headers);
 		}
 		
 		session_unset();

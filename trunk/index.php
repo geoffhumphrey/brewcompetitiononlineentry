@@ -43,7 +43,7 @@ if (($registration_open == "1") && (!$ua)) {
 }
 
 if (($registration_open == "0") && ($ua != "unsupported") && ($section != "admin")) {
-	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>Entry registration will open ".$reg_open.".</div>";
+	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>General registration will open ".$reg_open.".</div>";
 	if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) $judge_reg_open_msg .= "<div class='info'>Judge/steward registration will open ".$judge_open.".</div>";
     if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.</div>"; 
 }
@@ -150,6 +150,8 @@ var _gaq = _gaq || [];
   echo judging_date_return()."<br>";
   echo $remaining_entries;
   */
+  
+  echo $_SERVER['SERVER_NAME'];
   
   if ($section != "admin") { ?>
 	<div id="header">	

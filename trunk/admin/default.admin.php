@@ -351,7 +351,7 @@ if ($go == "default") { ?>
 				<li><a href="http://help.brewcompetition.com" title="Help" target="_blank">All Help Topics</a></li>
     		</ul>
         </div>
-        <?php if (($_SESSION['prefsUseMods'] == "Y") && ($_SESSION['userLevel'] == "0")) { ?>
+        <?php if (($_SESSION['prefsUseMods'] == "Y") && ($_SESSION['userLevel'] == "0") && (!HOSTED)) { ?>
         <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/brick.png"  /></span>Custom Modules</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
