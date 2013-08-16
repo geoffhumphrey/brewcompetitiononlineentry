@@ -136,7 +136,7 @@ if (($total_to_pay > 0) && ($view == "default")) {
 		$page_info2 .= "<p><span class='required'> Your check carbon or cashed check is your entry receipt.</span></p>";
 	}
 
-	if (($_SESSION['prefsPaypal'] == "Y") || ($_SESSION['prefsGoogle'] == "Y"))  { 
+	if ($_SESSION['prefsPaypal'] == "Y")  { 
 		switch ($_SESSION['prefsCurrency']) {
 			case "&pound;": $currency_code = "GBP";
 			break;

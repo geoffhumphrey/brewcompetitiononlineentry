@@ -131,7 +131,7 @@ function build_public_url($section="default",$go="default",$action="default",$se
 }
 /*
 function build_admin_url ($section="default",$go="default",$action="default",$id="default",$filter="default",$view="default",$sef="true",$base_url) {
-	if ($sef = "true") {
+	if ($sef == "true") {
 		$url = $base_url."";
 		if ($section != "default") $url .= $section."/";
 		if ($go != "default") $url .= $go."/";

@@ -442,7 +442,16 @@ $row_brewer = mysql_fetch_assoc($brewer);
    <td class="data">
    <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
    <input type="hidden" name="brewStyle" id="type" value="<?php echo $view; ?>"><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; ?>
-   <?php } elseif (((NHC) && ($prefix == "final_") && ($_SESSION['userLevel'] < 2) && (($action == "add") || ($action == "edit"))) || ((NHC) && ($prefix != "final_")) || (!NHC)) { ?>
+   <?php 
+   } elseif (((NHC) && ($prefix == "final_") && ($_SESSION['userLevel'] < 2) && (($action == "add") || ($action == "edit"))) || ((NHC) && ($prefix != "final_")) || (!NHC)) { 
+		
+		if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
+		else $user_subcat_limit = $row_limits['prefsUserSubCatLimit'];
+			
+		if (empty($row_limits['prefsUSCLExLimit'])) $user_subcat_limit_exception = "99999";
+		else $user_subcat_limit_exception = $row_limits['prefsUSCLExLimit'];
+		
+   ?>
 	<select name="brewStyle" id="type">
 	 	<?php
 		do {
@@ -450,11 +459,6 @@ $row_brewer = mysql_fetch_assoc($brewer);
 			
 			// Option value variable
 			$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-			if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
-			else $user_subcat_limit = $row_limits['prefsUserSubCatLimit'];
-			
-			if (empty($row_limits['prefsUSCLExLimit'])) $user_subcat_limit_exception = "99999";
-			else $user_subcat_limit_exception = $row_limits['prefsUSCLExLimit'];
 			
 			// Determine if the subcategory limit has been reached for various conditions
 			if ($_SESSION['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
@@ -473,7 +477,7 @@ $row_brewer = mysql_fetch_assoc($brewer);
 			// Build selection variable
 			$selection = ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 			if ($selected_disabled == "DISABLED") $selection .= " [disabled - subcategory entry limit reached]";
-		if (!empty($row_styles['brewStyleGroup'])) {?>
+		if (!empty($row_styles['brewStyleGroup'])) { ?>
 		<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
    		<?php }
 		} while ($row_styles = mysql_fetch_assoc($styles)); ?>
@@ -517,7 +521,7 @@ $row_brewer = mysql_fetch_assoc($brewer);
   </td>
 </tr>
 <tr>
-   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>"></td>
+   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60"></td>
 </tr>
 <tr>
    <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
