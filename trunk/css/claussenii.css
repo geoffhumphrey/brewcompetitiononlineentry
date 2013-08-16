@@ -1,32 +1,21 @@
 @charset "utf-8";
 
 /* CSS Document 
-
 *        Document Name: claussenii.css
-
 *        Description:   A custom theme that expands upon default.css
-
 *		 Color scheme:  #1A2A00 (dark green)
-
                         #3A6907 (medium green)
-						#BFCAB2 (light green)
+					#BFCAB2 (light green)
 						#D9E0D2 (ultra-light green)
 
 */
 
-
 @import url("html_elements.css");
-
 @import url("common.css");
-
 @import url("messages.css");
-
 @import url("menus.css");
-
 @import url("sorting.css");
-
 @import url(https://fonts.googleapis.com/css?family=Cabin|Droid+Serif:700);
-
 
 /* --------------------- html_elements.css Overrides -------------------- */
 
@@ -34,19 +23,12 @@
 /* **************************************************************
 
    Customize below the various default elements in  
-
    html_lements.css. 
-
    
-
    Use the file for reference, however, it is suggested that you 
-
    NOT edit the file itself!
-
    **************************************************************
-
 */
-
 
 html, body {
 	background-color: #eeeeee;
@@ -249,19 +231,13 @@ textarea {
 
 
 /* **************************************************************
-
    Customize below the various default elements in common.css. 
-
-   
-
+ 
    Use the file for reference, however, it is suggested that you 
-
    NOT edit the file itself!
-
    **************************************************************
 
 */
-
 
 /* ------------------------------- Content ------------------------------- */
 
@@ -745,9 +721,7 @@ textarea {
 /* **************************************************************
 
    Customize below the various default elements in messages.css - 
-
    Use the file for reference, however, it is suggested that you 
-
    NOT edit the file itself!
 
    **************************************************************
@@ -806,18 +780,14 @@ textarea {
 
 
 #menu_container .trigger a:link,
-
 #menu_container .trigger a:hover, 
-
 #menu_container .trigger a:active, 
-
 #menu_container .trigger a:focus {
 	background-color: $fff;
 }
 
 
 #menu_container .trigger.open a:link, 
-
 #menu_container .trigger.open a:visited {
 	background-color: #fff;
 }
@@ -832,13 +802,9 @@ textarea {
 /* **************************************************************
 
    Copy and paste the elements you wish to override from 
-
    the sorting.css file below. 
-
    
-
    Use the file for reference, however, it is suggested that you 
-
    NOT edit the file itself!
 
    **************************************************************

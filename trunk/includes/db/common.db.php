@@ -111,8 +111,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
 	$_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
 	$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
-	$_SESSION['prefsGoogle'] = $row_prefs['prefsGoogle'];
-	$_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
+	//$_SESSION['prefsGoogle'] = $row_prefs['prefsGoogle'];
+	// $_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
 	$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
 	$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
 	$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
