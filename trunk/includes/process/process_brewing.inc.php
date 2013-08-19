@@ -212,6 +212,7 @@ if ($action == "add") {
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
 	
+	
 	// Mark as paid if free entry fee
 	if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1"; else $brewPaid = "0";
 	
@@ -416,6 +417,7 @@ if ($action == "add") {
 	mysql_real_escape_string($insertSQL);
 	mysql_select_db($database, $brewing);
 	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+
 	
 	//if (($style[0] > 28) && ($_POST['brewInfo'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
 	//elseif (($style[0] > 28) && ($_POST['brewInfo'] != "")) $insertGoTo = $base_url."index.php?section=list&msg=1";
@@ -436,7 +438,7 @@ if ($action == "add") {
 	if (check_special_ingredients($styleBreak)) {
 		  
 		if ($_POST['brewInfo'] == "") {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "text"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -459,7 +461,7 @@ if ($action == "add") {
 	if (check_mead_strength($style[0])) {
 		
 		if ($_POST['brewMead3'] == "") {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "text"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -479,7 +481,7 @@ if ($action == "add") {
 	if (check_carb_sweetness($style[0])) {
 		 
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "text"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -500,7 +502,7 @@ if ($action == "add") {
 	if ((check_carb_sweetness($style[0])) && (check_mead_strength($style[0]))) {
 		 
 		if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id='%s'", GetSQLValueString($id, "text"));
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
