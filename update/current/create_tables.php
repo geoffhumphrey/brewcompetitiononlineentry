@@ -6,7 +6,7 @@ if (!NHC) {
 	//   Table to house information about staff.
 	// -----------------------------------------------------------
 		
-		$updateSQLa = "CREATE TABLE IF NOT EXISTS `$staff_db_table` (
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `$staff_db_table` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
 		  `staff_judge` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
@@ -17,8 +17,8 @@ if (!NHC) {
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM;";
 		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQLa);
-		$resulta = mysql_query($updateSQLa, $brewing) or die(mysql_error()); 
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		//echo $updateSQL."<br>";
 		$output .= "<li>Staff table created.</li>";
 	
@@ -29,7 +29,7 @@ if (!NHC) {
 	
 	
 	
-		$updateSQLb = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
+		$updateSQL = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
 			  `mod_type` tinyint(2) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
@@ -44,7 +44,7 @@ if (!NHC) {
 			  PRIMARY KEY (`id`)
 			) ENGINE=MyISAM;";
 		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQLb);
+		mysql_real_escape_string($updateSQL);
 		$result = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		//echo $updateSQL."<br>";
 	
