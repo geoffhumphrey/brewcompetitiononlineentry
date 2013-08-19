@@ -62,7 +62,7 @@ $page_info8 = "";
 
 $header1_2 .= "<h2>Registration</h2>"; 
 $page_info2 .= sprintf("<p>Registration open: %s.</p>",$reg_open);
-$page_info2 .= sprintf("<p>Registration close: %s.</p>",$reg_open);
+$page_info2 .= sprintf("<p>Registration close: %s.</p>",$reg_closed);
 if (!isset($_SESSION['loginUsername'])) $page_info2 .= " <p>If you have already registered, please <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or steward.</p>";
 
 $header1_3 .= "<h2>Judging and Stewarding</h2>"; 
