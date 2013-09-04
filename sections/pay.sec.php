@@ -213,6 +213,7 @@ if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFe
 	$page_info7 .= "<input name='brewerDiscount' type='text' class='submit' size='20'>";
 	$page_info7 .= "</p>";
 	$page_info7 .= sprintf("<p><input type='submit' class='button' value='%s'></p>","Submit Code");
+	$page_info7 .= "</form>";
 }
 
 if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= "<span class='icon'><img src='".$base_url."images/thumb_up.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your fees have been paid. Thank you!</p>";

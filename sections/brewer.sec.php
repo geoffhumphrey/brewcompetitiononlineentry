@@ -203,7 +203,7 @@ $row_clubs = mysql_fetch_assoc($clubs);
 </tr>
 <?php if ($totalRows_judging > 1) { ?>
 <tr>
-<td class="dataLabel">Judging<br />Location Availablity:</td>
+<td class="dataLabel">Judging<br />Location Availability:</td>
 <td class="data" colspan="3">
 <?php do { ?>
 	<table class="dataTableCompact">

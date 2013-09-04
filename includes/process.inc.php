@@ -14,6 +14,8 @@ require(INCLUDES.'url_variables.inc.php');
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
+date_default_timezone_set("America/Denver");
+
 if ($section != "setup")  { 
 	require(DB.'common.db.php');
 	require(INCLUDES.'date_time.inc.php');
@@ -416,11 +418,13 @@ if ($action == "purge") {
 if ($action == "check_discount") {
 	
 	mysql_select_db($database, $brewing);
-	$query_contest_info = "SELECT contestEntryFeePassword FROM $contest_info_db_table WHERE id=1";
-	$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-	$row_contest_info = mysql_fetch_assoc($contest_info);
-					
-	if ($_POST['brewerDiscount'] == $row_contest_info['contestEntryFeePassword']) {
+	$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
+	$contest_info1 = mysql_query($query_contest_info1, $brewing) or die(mysql_error());
+	$row_contest_info1 = mysql_fetch_assoc($contest_info1);
+	
+	//echo $_POST['brewerDiscount']."<br>".$row_contest_info1['contestEntryFeePassword']."<br>";
+	
+	if ($_POST['brewerDiscount'] == $row_contest_info1['contestEntryFeePassword']) {
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
 					   GetSQLValueString("Y", "text"),
                        GetSQLValueString($id, "text"));	

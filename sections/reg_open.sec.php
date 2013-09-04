@@ -68,7 +68,7 @@ if (!isset($_SESSION['loginUsername'])) $page_info2 .= " <p>If you have already 
 $header1_3 .= "<h2>Judging and Stewarding</h2>"; 
 
 if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) { 
-	$page_info3 .= "<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='".build_public_url("register","judge","default",$sef,$base_url).".'>please register</a>.</p>";
+	$page_info3 .= "<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>please register</a>.</p>";
 	$page_info3 .= "<p>If you <em>have</em> registered, <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> and then choose <em>Edit My Info</em> to indicate that you are willing to judge or  steward.</p>";
 }
 
@@ -132,7 +132,7 @@ if ($entry_window_open == 1) {
 }
 
 if ($totalRows_judging > 1) $header1_7 .= "<h2>Judging Locations and Dates</h2>";
-$header1_7 .= "<h2>Judging Location and Date</h2>";
+else $header1_7 .= "<h2>Judging Location and Date</h2>";
 if ($totalRows_judging == 0) $page_info7 .= "<p>The competition judging date is yet to be determined. Please check back later.</p>";
 else {
 	do {

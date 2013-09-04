@@ -429,7 +429,7 @@ if ($go == "default") { ?>
 	</tr>
 	<?php if ($totalRows_judging > 1) { ?>
     <tr rel="judge_no">
-    <td class="dataLabel">Judging<br />Location Availablity:</td>
+    <td class="dataLabel">Judging<br />Location Availability:</td>
     <td class="data" colspan="3">
     <?php do { ?>
         <table class="dataTableCompact">
