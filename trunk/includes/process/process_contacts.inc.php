@@ -4,54 +4,6 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
 
-if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
-
-
-if ($action == "add") {
-	$insertSQL = sprintf("INSERT INTO $contacts_db_table (
-	contactFirstName, 
-	contactLastName, 
-	contactPosition, 
-	contactEmail
-	) 
-	VALUES 
-	(%s, %s, %s, %s)",
-                       GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
-                       GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
-                       GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-					   GetSQLValueString(strtolower($_POST['contactEmail']), "text"));
-	//echo $insertSQL;				   
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($insertSQL);
-  	$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-	$pattern = array('\'', '"');
-  	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
-  	header(sprintf("Location: %s", stripslashes($insertGoTo)));
-	
-}
-
-if ($action == "edit") {
-	$updateSQL = sprintf("UPDATE $contacts_db_table SET 
-	contactFirstName=%s, 
-	contactLastName=%s, 
-	contactPosition=%s, 
-	contactEmail=%s
-	WHERE id=%s",
-                       GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
-                       GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
-                       GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-					   GetSQLValueString(strtolower($_POST['contactEmail']), "text"),
-					   GetSQLValueString($id, "int"));
-					   
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-  	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  	$pattern = array('\'', '"');
-  	$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-  	header(sprintf("Location: %s", stripslashes($updateGoTo)));
-	
-}
-
 if ($action == "email") { 
 
 // CAPCHA check
@@ -113,6 +65,56 @@ if ($action == "email") {
 	}
 }
 
+elseif ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
+
+	
+	if ($action == "add") {
+		$insertSQL = sprintf("INSERT INTO $contacts_db_table (
+		contactFirstName, 
+		contactLastName, 
+		contactPosition, 
+		contactEmail
+		) 
+		VALUES 
+		(%s, %s, %s, %s)",
+						   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
+						   GetSQLValueString(strtolower($_POST['contactEmail']), "text"));
+		//echo $insertSQL;				   
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($insertSQL);
+		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		$pattern = array('\'', '"');
+		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		
+	}
+	
+	if ($action == "edit") {
+		$updateSQL = sprintf("UPDATE $contacts_db_table SET 
+		contactFirstName=%s, 
+		contactLastName=%s, 
+		contactPosition=%s, 
+		contactEmail=%s
+		WHERE id=%s",
+						   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
+						   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
+						   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
+						   GetSQLValueString(strtolower($_POST['contactEmail']), "text"),
+						   GetSQLValueString($id, "int"));
+						   
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$pattern = array('\'', '"');
+		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		
+	}
+
 } else echo "<p>Not available.</p>";
+
+
 
 ?>
