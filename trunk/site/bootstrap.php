@@ -87,21 +87,21 @@ if ($setup_success) {
 
 
 function version_check($version) {
-	// Current version is 1.3.0.0, change version in system table if not
-	// There are NO database structure or data updates for version 1.2.1.3
+	// Current version is 1.3.0.1, change version in system table if not
+	// There are NO database structure or data updates for version 1.3.0.1
 	// USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.3.0.0") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.0","2013-08-31","1");
+	if ($version != "1.3.0.1") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.1","2013-09-04","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
-/*	
+	
 version_check($version);
-*/
+
 
 // Global Includes and DB Calls
 require(INCLUDES.'functions.inc.php');
