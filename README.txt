@@ -5,7 +5,7 @@
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston, Bruce Buerger, Oskar Stephens **
 ** and Luis Balbinot                                                **
-** Release 1.3.0.1 September, 2013                                  **
+** Release 1.3.0.2 September, 2013                                  **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
