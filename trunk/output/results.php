@@ -3,6 +3,12 @@
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
+require(DB.'winners.db.php');
+
+$query_prefs = sprintf("SELECT prefsWinnerMethod FROM %s WHERE id=1", $prefix."preferences");
+$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+$row_prefs = mysql_fetch_assoc($prefs);
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>
@@ -16,7 +22,7 @@ if (NHC) $base_url = "../";
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 </head>
 <body>
-<div id="content">
+<div id="content" style="background-color: inherit;">
 	<div id="content-inner">
     <div id="header">	
 		<div id="header-inner">
@@ -24,8 +30,8 @@ if (NHC) $base_url = "../";
         </div>
 	</div>
 <?php if (($go == "judging_scores") && ($action == "print"))  {
-	if ($_SESSION['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php'); 
-	elseif ($_SESSION['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php'); 
+	if ($row_prefs['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php'); 
+	elseif ($row_prefs['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php'); 
 	else include (SECTIONS.'winners.sec.php');
 } 
 if (($go == "judging_scores_bos") && ($action == "print")) include (SECTIONS.'bos.sec.php'); 

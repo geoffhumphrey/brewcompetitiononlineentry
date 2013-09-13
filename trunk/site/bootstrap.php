@@ -59,7 +59,7 @@ if (NHC) {
 	
 	//echo $row_version['version'];
 	
-	if ($row_version['version'] != "1.3.0.0") { 
+	if ($row_version['version'] != "1.3.0.2") { 
 		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."update.php";
 	}
@@ -87,14 +87,14 @@ if ($setup_success) {
 
 
 function version_check($version) {
-	// Current version is 1.3.0.1, change version in system table if not
-	// There are NO database structure or data updates for version 1.3.0.1
+	// Current version is 1.3.0.2, change version in system table if not
+	// There are NO database structure or data updates for version 1.3.0.2
 	// USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 	// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 	require(CONFIG.'config.php');
 	
-	if ($version != "1.3.0.1") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.1","2013-09-04","1");
+	if ($version != "1.3.0.2") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.2","2013-09-13","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}

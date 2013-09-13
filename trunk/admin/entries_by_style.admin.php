@@ -1,9 +1,11 @@
-<?php include(DB.'styles.db.php'); 
+<?php 
+include(DB.'styles.db.php'); 
 do { $total_cat[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
-$total_cat = count(array_unique($total_cat));
-for($cat=1; $cat<=$total_cat; $cat++)  { 
-if ($cat <= 9) $cat_convert = "0".$cat; else $cat_convert = $cat;
-$cat_name = style_convert($cat_convert,1);
+$total_cat = array_unique($total_cat);
+foreach ($total_cat as $cat) { 
+	
+	$cat_convert = $cat;
+	$cat_name = style_convert($cat_convert,1);
 
 	// Perform query in appropriate db table rows
 	$query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$cat_convert);

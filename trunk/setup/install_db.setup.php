@@ -48,7 +48,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Archive</strong> table installed successfully.</li>";
@@ -98,7 +98,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		
@@ -477,7 +477,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Entries</strong> table installed successfully.</li>";
@@ -501,7 +501,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Contacts</strong> table installed successfully.</li>";
@@ -556,7 +556,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Competition Info</strong> table installed successfully.</li>";
@@ -577,7 +577,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		
 		$sql = "
 		INSERT INTO `$countries_db_table` (`id`, `name`) VALUES
@@ -829,7 +829,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		$output .= "<li><strong>Countries</strong> table installed successfully.</li>";
 		
 		// ------------------- 
@@ -851,7 +851,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Drop Off Locations</strong> table installed successfully.</li>";
@@ -876,7 +876,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		//echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Assignments</strong> table installed successfully.</li>";
@@ -899,7 +899,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Flights</strong> table installed successfully.</li>";
@@ -923,7 +923,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Locations</strong> table installed successfully.</li>";
@@ -946,7 +946,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		
 		$sql = "
 		INSERT INTO `$judging_preferences_db_table` (`id`, `jPrefsQueued`, `jPrefsFlightEntries`, `jPrefsMaxBOS`, `jPrefsRounds`) VALUES (1, 'N', 12, 7, 3);
@@ -955,7 +955,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Preferences</strong> table installed successfully.</li>";
@@ -982,7 +982,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Scores</strong> table installed successfully.</li>";
@@ -1007,7 +1007,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Scores BOS</strong> table installed successfully.</li>";
@@ -1033,7 +1033,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Judging Tables</strong> table installed successfully.</li>";
@@ -1059,7 +1059,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		
 		// ------------------- 
 		// Preferences Table (v1.3.0.0 done)
@@ -1118,7 +1118,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Preferences</strong> table installed successfully.</li>";
@@ -1142,7 +1142,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Special Best Data</strong> table installed successfully.</li>";
@@ -1166,7 +1166,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Special Best Info</strong> table installed successfully.</li>";
@@ -1190,7 +1190,7 @@ if ($setup_free_access == TRUE) {
 		
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Sponsors</strong> table installed successfully.</li>";
@@ -1214,7 +1214,7 @@ if ($setup_free_access == TRUE) {
 		
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Staff</strong> table installed successfully.</li>";
@@ -1251,7 +1251,7 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		$output .= "<li><strong>Styles</strong> table installed successfully.</li>";
 		
 		$sql = "
@@ -1358,94 +1358,94 @@ if ($setup_free_access == TRUE) {
 		
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		 
 		 // Designate all BJCP styles that require special ingredients
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 21;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 59;";
 		mysql_select_db($database, $brewing);
 		
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 65;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 74;";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 75;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 76;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 78;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 79;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 80;";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 86;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 87;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 89;";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 94;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 95;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 96;";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 97;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 98;";
 		mysql_select_db($database, $brewing); 
 		mysql_real_escape_string($sql);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		$result = mysql_query($updateSQL, $brewing);
 		
 		$output .= "<li><strong>Styles</strong> data installed successfully.</li>";
 		
@@ -1465,7 +1465,7 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		$output .= "<li><strong>Style Types</strong> table installed successfully.</li>";
 		
 		$sql = "
@@ -1476,7 +1476,7 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Style Types</strong> data installed successfully.</li>";
@@ -1498,13 +1498,13 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		$output .= "<li><strong>System</strong> table installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.3.0.0', '2012-08-01', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.3.0.2', '2012-09-06', NOW( ),'0');";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>System</strong> data installed successfully.</li>";	
@@ -1525,7 +1525,7 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		$output .= "<li><strong>Themes</strong> table installed successfully.</li>";
 		
 		$sql = "
@@ -1536,7 +1536,7 @@ if ($setup_free_access == TRUE) {
 		";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li><strong>Themes</strong> data installed successfully.</li>";	
@@ -1561,7 +1561,7 @@ if ($setup_free_access == TRUE) {
 		
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing) or die(mysql_error());
+		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
 		if (HOSTED) {
@@ -1574,13 +1574,13 @@ if ($setup_free_access == TRUE) {
 			(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$prefix."brewer");
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($sql);
-			$result = mysql_query($sql, $brewing) or die(mysql_error());
+			$result = mysql_query($sql, $brewing);
 			
 			// For hosted accounts on brewcompetition.com or brewcomp.com 
 			$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`,`userQuestionAnswer`,`userCreated`) VALUES (1, 'geoff@zkdigital.com', '%s', '0', 'What was your high school mascot?', 'spartan', NOW( ));",$prefix."users",$hash);
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($sql);
-			$result = mysql_query($sql, $brewing) or die(mysql_error());
+			$result = mysql_query($sql, $brewing);
 		}
 		
 		

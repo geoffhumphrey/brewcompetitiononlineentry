@@ -7,7 +7,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 //require(DB.'common.db.php');
 //require(INCLUDES.'headers.inc.php');
-$current_version = "1.3.0.0";
+$current_version = "1.3.0.2";
 $section = "update";
 
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");

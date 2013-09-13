@@ -452,7 +452,7 @@ $html .= '<br><strong>Total Flights</strong>: '.total_flights().' (includes Best
     	}  
     $html .= '</table>';
 	}
-	
+	$html = iconv('UTF-8', 'windows-1252', $html);	
 	$pdf->WriteHTML($html);
 	$pdf->Output($filename,'D');
 }

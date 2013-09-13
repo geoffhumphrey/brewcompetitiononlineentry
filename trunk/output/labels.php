@@ -59,7 +59,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
 			);
-			
+			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 			
 		} while ($row_log = mysql_fetch_assoc($log));
@@ -121,6 +121,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					if ($row_log['brewMead3'] != "") $text .= sprintf(" / %s",$row_log['brewMead3']); 
 					
 				}
+				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 			}
 			
@@ -160,7 +161,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
 			$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
 			);
-			
+			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 			
 		} while ($row_log = mysql_fetch_assoc($log));
@@ -194,11 +195,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);																						  
 				if (($entry_no != "") && ($filter == "default")) {
 					$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
 				
 				if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
-					$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);				
+					$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);	
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
 				
@@ -239,6 +242,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 					$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);				
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
 				
@@ -271,6 +275,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		do {
 			for($i=0; $i<$sort; $i++) {
 				$text = sprintf("\n%s",$row_log['brewCategorySort'].$row_log['brewSubCategory']);
+				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 			}
 		} while ($row_log = mysql_fetch_assoc($log));
@@ -305,6 +310,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
 				);
 				
+				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 			}
 		} while ($row_log = mysql_fetch_assoc($log));
@@ -368,6 +374,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					if ($row_log['brewMead3'] != "") $text .= sprintf(" / %s",$row_log['brewMead3']); 
 					
 				}
+				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 			}
 			
@@ -407,6 +414,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$brewerAssignment
 			);
 			
+			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 		} while ($row_brewer = mysql_fetch_assoc($brewer));
 		
@@ -448,6 +456,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			strtolower($row_brewer['brewerEmail'])
 			);
 			
+			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 		}
 	} while ($row_brewer = mysql_fetch_assoc($brewer));
@@ -500,6 +509,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$row_brewer['brewerZip'],
 					$brewer_country
 					);
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 					}
 				}
@@ -513,6 +523,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$row_brewer['brewerZip'],
 					$brewer_country
 					);
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
 		} while ($row_brewer = mysql_fetch_assoc($brewer));
@@ -550,6 +561,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove), 
 				strtr($row_entries['brewName'],$html_remove)." - ".$row_entries['brewStyle']
 				);
+				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 			}
 			
@@ -589,6 +601,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
 						strtr($row_scores['brewName'],$html_remove)
 						);
+						$text = iconv('UTF-8', 'windows-1252', $text);
 						$pdf->Add_Label($text);
 					} while ($row_scores = mysql_fetch_assoc($scores)); 
 				}
@@ -628,6 +641,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
 						strtr($row_scores['brewName'],$html_remove)
 						);
+						$text = iconv('UTF-8', 'windows-1252', $text);
 						$pdf->Add_Label($text);
 					} while ($row_scores = mysql_fetch_assoc($scores)); 
 				}
@@ -654,6 +668,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove), 
 					strtr($row_entries['brewName'],$html_remove)
 					);
+					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 					
 				} while ($row_scores = mysql_fetch_assoc($scores));
@@ -708,7 +723,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$rank2,
 			strtolower($row_brewer['brewerEmail'])
 			);
-			
+			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 		}
 		

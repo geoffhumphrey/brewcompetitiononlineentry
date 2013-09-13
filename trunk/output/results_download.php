@@ -3,9 +3,12 @@
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
+require(DB.'winners.db.php');
 require(INCLUDES.'scrubber.inc.php');
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+$query_prefs = sprintf("SELECT prefsWinnerMethod FROM %s WHERE id=1", $prefix."preferences");
+$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+$row_prefs = mysql_fetch_assoc($prefs);
 
 if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');
@@ -54,7 +57,7 @@ if ($totalRows_bos > 0) {
 	$html .= '<br><br><strong>'.$row_style_type['styleTypeName'].'</strong><br>';
 	$html .= '<table border="1">';
 	$html .= '<tr>';
-	$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Place</strong></td>';
+	$html .= '<td width="35"  align="center" bgcolor="#cccccc" nowrap="nowrap"><strong>Place</strong></td>';
 	$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
 	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Entry Name</strong></td>';
 	$html .= '<td width="200" align="center" bgcolor="#cccccc"><strong>Style</strong></td>';
@@ -127,7 +130,10 @@ if ($totalRows_bos > 0) {
 		
 	} while ($row_sbi = mysql_fetch_assoc($sbi));	
   }
- 	if ($view == "pdf") { $pdf->WriteHTML($html); }
+ 	if ($view == "pdf") { 
+	$html = iconv('UTF-8', 'windows-1252', $html);	
+	$pdf->WriteHTML($html); 
+	}
 	//echo $html;
 } // end if ($go == "judging_scores_bos")
 
@@ -142,7 +148,7 @@ $filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
 $html = '';
 if ($view == "html") $html .= '<h1>Results - '.$_SESSION['contestName'].'</h1>';
 
-	if ($_SESSION['prefsWinnerMethod'] == "1") {
+	if ($row_prefs['prefsWinnerMethod'] == 1) {
 		
 		$query_styles = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup ASC";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -195,9 +201,9 @@ if ($view == "html") $html .= '<h1>Results - '.$_SESSION['contestName'].'</h1>';
 			$html .= '</table>';
 			} 
 		} 
-	} // end if ($_SESSION['prefsWinnerMethod'] == "1") 
+	} // end if ($row_prefs['prefsWinnerMethod'] == "1") 
 	
-	elseif ($_SESSION['prefsWinnerMethod'] == "2") {
+	if ($row_prefs['prefsWinnerMethod'] == 2) {
 		
 		$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -255,7 +261,7 @@ if ($view == "html") $html .= '<h1>Results - '.$_SESSION['contestName'].'</h1>';
 		
 	}
 
-	else {
+	if ($row_prefs['prefsWinnerMethod'] == 0) {
 		do { 
 			$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 			if ($entry_count > 0) { 
@@ -298,7 +304,10 @@ if ($view == "html") $html .= '<h1>Results - '.$_SESSION['contestName'].'</h1>';
 		} while ($row_tables = mysql_fetch_assoc($tables));
 	} // end 
 
-if ($view == "pdf") { $pdf->WriteHTML($html); }	
+if ($view == "pdf") { 
+$html = iconv('UTF-8', 'windows-1252', $html);				
+$pdf->WriteHTML($html); 
+}	
 } // end if ($go == "judging_scores")
 
 
@@ -318,7 +327,4 @@ if ($view == "html") {
 	exit();
 	}
 
-}
-
-else echo "<p>Not available.</p>";
 ?>

@@ -469,7 +469,7 @@ if ($go == "default") { ?>
 	});
 </script>
 <input type="hidden" name="userLevel" value="2" />
-<!-- <input type="hidden" name="relocate" value="<?php //echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>"> -->
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
