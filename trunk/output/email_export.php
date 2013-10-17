@@ -2,7 +2,7 @@
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
-require(INCLUDES.'scrubber.inc.php');
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if ($bid != "") {
 $query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
@@ -41,8 +41,8 @@ if (($filter == "staff") && ($section == "admin")) $query_sql = "SELECT a.brewer
 
 //if ($filter == "avail_judges") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table ORDER BY brewerLastName ASC";
 //if ($filter == "avail_stewards") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table ORDER BY brewerLastName ASC";
-if ($filter == "avail_judges")   $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
-elseif ($filter == "avail_stewards") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table WHERE brewerSteward='Y' ORDER BY brewerLastName ASC";
+if ($filter == "avail_judges")   $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes bju FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+elseif ($filter == "avail_stewards") $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM $brewer_db_table WHERE brewerSteward='Y' ORDER BY brewerLastName ASC";
 else $query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM $brewer_db_table ORDER BY brewerLastName ASC";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);

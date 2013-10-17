@@ -65,7 +65,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 <table class="dataTable">
 <?php if ($entries_unconfirmed > 0) { ?>
 <tr>
-   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are <span style='background-color: #ff9; border: 1px solid #F90; padding: 2px 3px 2px 3px;'>highlighted below</span> and are not included in fee calculations.
+   <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are <span style='background-color: #ff9; border: 1px solid #F90; padding: 2px 3px 2px 3px;'>highlighted</span> and are not included in fee calculations.
    </td>
 </tr>
 <tr>

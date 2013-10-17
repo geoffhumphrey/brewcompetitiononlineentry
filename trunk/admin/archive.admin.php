@@ -1,14 +1,5 @@
 <?php require(DB.'archive.db.php'); 
 
-function get_archive_count($table) {
-	include(CONFIG.'config.php'); 	
-	mysql_select_db($database, $brewing);
-	$query_archive_count = "SELECT COUNT(*) as 'count' FROM `$table`";
-	$archive_count = mysql_query($query_archive_count, $brewing) or die(mysql_error());
-	$row_archive_count = mysql_fetch_assoc($archive_count);
-	return $row_archive_count['count'];
-}
-
 $table_header1 = "Users";
 $table_header2 = "Participants";
 $table_header3 = "Entries";
@@ -46,7 +37,7 @@ $table_header7 = "Actions";
 </thead>
 <tbody>
   <?php do { ?>
-  <tr <?php echo " style=\"background-color:$color\"";?>>
+  <tr>
     <td nowrap="nowrap"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png"  border="0"></span><?php echo $row_archive['archiveSuffix']; ?></td>
     <td class="data" nowrap="nowrap">
     <?php 
@@ -96,7 +87,6 @@ $table_header7 = "Actions";
 	?>
     <td class="dataList"><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete','id',<?php echo $row_archive['id']; ?>,'Are you sure you want to delete the archive called <?php echo $row_archive['archiveSuffix']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?" title="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?"></a></span></td>
   </tr>
-  <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
   <?php } while ($row_archive = mysql_fetch_assoc($archive)); ?>
 </tbody>
 </table>

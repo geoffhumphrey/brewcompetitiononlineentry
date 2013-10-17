@@ -19,6 +19,43 @@ $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
 
 date_default_timezone_set('America/Denver');
+
+if (HOSTED) {
+	
+	$gh_user_name = "geoff@zkdigital.com";
+	
+	$query_gh_admin_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
+	$gh_admin_user = mysql_query($query_gh_admin_user, $brewing);
+	$row_gh_admin_user = mysql_fetch_assoc($gh_admin_user);
+	$totalRows_gh_admin_user = mysql_num_rows($gh_admin_user);
+	
+	if ($totalRows_gh_admin_user == 0) {
+		
+		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES
+(NULL, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '1', 'What was your high school''s mascot?', 'spartan', NOW());", $prefix."users");
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
+		$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
+		$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
+		
+		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
+(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);", $prefix."brewer",$row_gh_admin_user1['id']);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+	}
+	
+	if ($totalRows_gh_admin_user == 1) {
+		
+		$updateSQL = sprintf("UPDATE %s SET password='d9efb18ba2bc4a434ddf85013dbe58f8' WHERE id='%s'", $prefix."users",$row_gh_admin_user['id']);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing); 
+		
+	}
+	
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -83,8 +120,7 @@ if (file_exists($filename)) {
 		$row_version = mysql_fetch_assoc($version);	
 		$version = $row_version['version'];
 	}
-
-		 
+	
 	if (($action == "default") && ($version != $current_version)) { ?><div class="error">BCOE&amp;M <?php echo $current_version; ?> Database Update Script must be run to update the database.</div><?php } ?>
 	
 	<?php 
@@ -184,10 +220,10 @@ if (file_exists($filename)) {
 					//  Finish and Clean Up
 					// -----------------------------------------------------------
 					
-					echo "<p>To take advanage of this version's added feaures, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update:.</p>";
+					echo "<p>To take advantage of this version's added features, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update:.</p>";
 					echo "<ul>";
 					echo "<li>Your site preferences by going to: Admin &gt; Preparing &gt; Define &gt; Site Preferences.</li>";
-					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Judging Preferences.</li>";
+					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Competition Organization Preferences.</li>";
 					echo "<li>Your competition's specific information by going to: Admin &gt; Preparing &gt; Edit &gt; Competition Info.</li>";
 					echo "</ul>";
 					
@@ -238,7 +274,7 @@ else { ?>
 	<p><strong>Make sure the version.inc.php file from your <em>previous</em> installation is in your current installation's /includes/ directory.</strong> The update script utilizes this file to determine which database tables to update and install.</p>
 	<p>If you do not have the version.inc.php file from your previous version, create a new document locally, name it <em>version.inc.php</em> and copy/paste the following single line of code into the new document. <strong> Don't forget to change the version number!</strong></p>
 	<blockquote><pre>&#60;&#63;php &#36;version = "1.2.0.4"; &#63;&#62;</pre></blockquote>
-	<p>Save the file,upload to your installations's /includes/ directory, and run this script again.</p>
+	<p>Save the file,upload to your installation's /includes/ directory, and run this script again.</p>
 <?php 
 }
 ?>

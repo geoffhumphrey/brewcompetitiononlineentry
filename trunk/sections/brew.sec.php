@@ -96,6 +96,17 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
 	return $return;
 }
+
+if ($totalRows_styles2 > 0) {
+
+	do { 
+		$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
+		$special_required[] = $style_special."-".$row_styles2['brewStyleNum']; 
+	}  while ($row_styles2 = mysql_fetch_assoc($styles2));
+
+// print_r ($special_required);
+
+}
 	
 function highlight_required($msg,$method) {
 	
@@ -121,6 +132,23 @@ function highlight_required($msg,$method) {
 	}
 	
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
+	
+		include(CONFIG.'config.php');
+		$query_check = sprintf("SELECT * FROM %s WHERE brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'", $prefix."styles");
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+		$totalRows_check = mysql_num_rows($check);
+	
+		if ($totalRows_check > 0) {
+			do { 
+				$style_special = ltrim($row_check['brewStyleGroup'],"0");
+				$special_required[] = $style_special."-".$row_check['brewStyleNum']; 
+			}  while ($row_check = mysql_fetch_assoc($check));
+			
+			$trimmed = ltrim($msg,"1-");
+			if (in_array($trimmed,$special_required)) return TRUE;
+		}
+	
 		switch($msg) {
 			case "1-6-D":		
 			case "1-16-E":
@@ -202,16 +230,7 @@ $special_mead = array("24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","2
 $special_cider = array("27-B","27-C","27-E","28-A","28-B","28-C","28-D");
 $all_execptions = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A","27-A","27-D","24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C","27-B","27-C","27-E","28-A","28-B","28-C","28-D");
 
-if ($totalRows_styles2 > 0) {
-
-	do { 
-		$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
-		$special_required[] = $style_special."-".$row_styles2['brewStyleNum']; 
-	}  while ($row_styles2 = mysql_fetch_assoc($styles2));
-
-//print_r ($special_required);
-
-}
+if (($action == "edit") && ($msg != "default")) $view = ltrim($msg,"1-"); else $view = $view;
 
 ?>
 <script type="text/javascript">//<![CDATA[
@@ -247,8 +266,8 @@ $(document).ready(function() {
 	<?php } ?>
 	<?php if (($action == "edit") && (in_array($view,$special_required))) { ?>
 		$("#special").show("slow");
-		$("#mead-cider").show("slow");
-		$("#mead").show("slow");
+		$("#mead-cider").hide();
+		$("#mead").hide();
 	<?php } ?>
 	<?php if (($action == "edit") && ($msg != "")) { ?>	
 		<?php if (highlight_required($msg,0)) { ?>
@@ -453,6 +472,7 @@ $row_brewer = mysql_fetch_assoc($brewer);
 		
    ?>
 	<select name="brewStyle" id="type">
+    
 	 	<?php
 		do {
 			// Build style drop-down

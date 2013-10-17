@@ -294,7 +294,7 @@ if ($section != "step5") {
 if ($section != "step5") {
 	if (($totalRows_brewer == 0) && ($filter != "default")) { 
 		if ($action == "update") $output_no_records .= "<p>No $filter have been assigned.</p>"; 
-		else $output_no_records .= "<p>No participants have indicated that they would like to be a ".rtrim($filter, "s").".</p>";
+		else $output_no_records .= "<p>No participants are eligible.</p>";
 	}
 }
 

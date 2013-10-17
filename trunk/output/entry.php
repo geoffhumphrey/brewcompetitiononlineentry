@@ -2,7 +2,7 @@
 session_start(); 
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
-include(INCLUDES.'scrubber.inc.php');
+
 include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
 function pay_to_print($prefs_pay,$entry_paid) { 
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
@@ -62,8 +62,7 @@ else $brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
 $style_entry = $brewing_info['brewCategory']."-".$brewing_info['brewSubCategory'];
-$special_ingredients_required = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A","24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C","27-B","27-C","27-E","28-A","28-B","28-C","28-D");
-if (in_array($style_entry,$special_ingredients_required)) $brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove); else $brewing_info['brewInfo'] = "";
+$brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove); 
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewer_info['brewerLastName'] = strtr($brewer_info['brewerLastName'],$html_remove);
 $brewer_info['brewerAddress'] = strtr($brewer_info['brewerAddress'],$html_remove);
@@ -127,10 +126,11 @@ if ($brewing_info['brewCategory'] < 29) {
  	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
 }
 else
-  $brewing_info['styleName'] = $_SESSION['contestName']." Style: ".$brewing_info['brewStyle']; 
-// Some metric/US conversions
-$brewing_info['brewSize']['us']=$brewing_info['brewYield'];
-$brewing_info['brewSize']['metric']=round($brewing_info['brewYield']*3.78541,2);
+  	$brewing_info['styleName'] = $brewing_info['brewStyle']; 
+	// Some metric/US conversions
+	$brewing_info['brewSize']['us']=$brewing_info['brewYield'];
+	$brewing_info['brewSize']['metric']=round($brewing_info['brewYield']*3.78541,2);
+	$brewing_info['styleCat'] = "";
 if ($_SESSION['prefsEntryForm'] == "N") { 
 	
 	if (strstr($prefix,"region")) {  // Only for NHC - comment out in general release

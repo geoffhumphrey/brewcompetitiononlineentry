@@ -5,8 +5,9 @@
  * 
  */
  
-$footer = "";
-if (NHC) $footer .= "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> - NHC Edition*  &copy;".date('Y');
+$footer = "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ";
+if (NHC) $footer .= "&ndash; NHC Edition &copy;2009-".date('Y');
+elseif (HOSTED) $footer .= $version." &ndash; Hosted Edition &copy;2009-".date('Y')." by <a href='http://www.zkdigital.com' target='_blank'>zkdigital.com</a>.";
 else $footer .= "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ".$version." &copy;2009-".date('Y')." by <a href='http://www.zkdigital.com' target='_blank'>zkdigital.com</a>.";
 if (TESTING) {
 		$mtime = microtime(); 
@@ -14,7 +15,7 @@ if (TESTING) {
 		$mtime = $mtime[1] + $mtime[0]; 
 		$endtime = $mtime; 
 		$totaltime = ($endtime - $starttime); 
-		$footer .= "&nbsp;This page was created in ".number_format($totaltime, 3)." seconds."; 
+		$footer .= "&nbsp;Page created in ".number_format($totaltime, 3)." seconds."; 
 	}
 
 echo $footer;

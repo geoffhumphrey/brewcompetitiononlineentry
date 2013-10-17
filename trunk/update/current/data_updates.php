@@ -17,6 +17,7 @@ $row_admin_users = mysql_fetch_assoc($admin_users);
 $totalRows_admin_users = mysql_num_rows($admin_users);
 
 if ($totalRows_admin_users > 0) {
+	
 	do { 
 	
 		// Update all current passwords to be much more secure
@@ -46,7 +47,9 @@ if ($totalRows_admin_users > 0) {
 			$result = mysql_query($updateSQL, $brewing); 
 			//echo $updateSQL."<br>";
 		}
-	}  
+	} 
+	
+	
 	while ($row_admin_users = mysql_fetch_assoc($admin_users));
 	
 	$output .=  "<li>Updates to user's table completed.</li>";

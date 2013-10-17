@@ -109,6 +109,7 @@ require(INCLUDES.'authentication_nav.inc.php');  session_start();
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(DB.'common.db.php');
+require(INCLUDES.'scrubber.inc.php');
 
 
 // If session variables have changed, regenerate the session

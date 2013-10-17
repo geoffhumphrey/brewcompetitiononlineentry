@@ -171,7 +171,7 @@ if ($action != "purge") {
 	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 	{
 	  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
-	  require ('scrubber.inc.php');
+	  require (INCLUDES.'scrubber.inc.php');
 	  switch ($theType) {
 	  
 		case "text":
