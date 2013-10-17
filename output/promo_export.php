@@ -3,7 +3,6 @@
 session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
-require(INCLUDES.'scrubber.inc.php');
 include(DB.'dropoff.db.php');
 include(DB.'sponsors.db.php');
 include(DB.'contacts.db.php');

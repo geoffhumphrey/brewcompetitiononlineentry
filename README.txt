@@ -79,17 +79,15 @@ Changes in This Version
 
 **********************************************************************
 
-This is a bugfix release. Addresses Google Code Issue 285, Issue 286, 
-Issue 288, Issue 289, Issue 290, and Issue 291.
+This is a bugfix release. Addresses Google Code Issue 295 and Issue 298
+as well as other minor unreported issues.
 
 For those experiencing any issues related to initial browser-based 
-setup of BCOE&M, the bcoem_baseline_1.3.0.X.sql document was added to 
+setup of BCOE&M, the bcoem_baseline_1.3.0.X.sql document is available in 
 the package. It contains the necessary database structure and dummy 
 data for a new installation that can be installed manually via 
 phpMyAdmin or shell access. Be sure to follow the directions in the
 document *before* use, especially those relating to security.
-
-http://help.brewcompetition.com/files/whatsnew.html
 
 **********************************************************************
 

@@ -2645,4 +2645,13 @@ function check_judging_flights() {
 	if (($row_check_received['count'] > 0) && ($row_check_flights['count'] > 0) && ($row_check_tables['count'] > 0) && ($row_check_received['count'] != $row_check_flights['count'])) return FALSE; 
 
 }
+
+function get_archive_count($table) {
+	include(CONFIG.'config.php'); 	
+	mysql_select_db($database, $brewing);
+	$query_archive_count = "SELECT COUNT(*) as 'count' FROM `$table`";
+	$archive_count = mysql_query($query_archive_count, $brewing) or die(mysql_error());
+	$row_archive_count = mysql_fetch_assoc($archive_count);
+	return $row_archive_count['count'];
+}
 ?>

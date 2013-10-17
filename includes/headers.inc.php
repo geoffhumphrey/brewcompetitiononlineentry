@@ -166,7 +166,7 @@ switch($section) {
 			case "2": $output = "Info edited successfully.<br />"; break;
 			case "3": $output = "There was an error. Please try again.<br />"; break;
 			case "4": $output = "This competition utilizes custom entry categories. All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries will be deleted from the system after 24 hours.<br />"; break;
-			default: $output = "Your entry has not yet been confirmed. Please review the information as listed and correct any errors. "; break;
+			default: $output = "This entry has not yet been confirmed. Please review the information as listed and correct any errors. "; break;
 		}
 	if (strstr($msg,"1-")) $output .= "Unconfirmed entries will be deleted from the system after 24 hours.";
 	break;

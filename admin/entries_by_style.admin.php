@@ -1,8 +1,9 @@
 <?php 
-include(DB.'styles.db.php'); 
+include(DB.'styles.db.php');
 do { $total_cat[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 $total_cat = array_unique($total_cat);
-foreach ($total_cat as $cat) { 
+//print_r($total_cat);
+foreach ($total_cat as $cat) {
 	
 	$cat_convert = $cat;
 	$cat_name = style_convert($cat_convert,1);
@@ -15,7 +16,7 @@ foreach ($total_cat as $cat) {
 	$query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s'",$prefix."brewing",$cat_convert);
 	$style_count_logged = mysql_query($query_style_count_logged, $brewing) or die(mysql_error());
 	$row_style_count_logged = mysql_fetch_assoc($style_count_logged);
-	
+
 	$style_beer_count[] = 0;
 	$style_mead_count[] = 0;
 	$style_cider_count[] = 0;
@@ -23,6 +24,8 @@ foreach ($total_cat as $cat) {
 	$style_beer_count_logged[] = 0;
 	$style_mead_count_logged[] = 0;
 	$style_cider_count_logged[] = 0;
+	
+	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
 	
 	if ($cat <= 23) { 
 		$style_type = "Beer"; 
@@ -49,26 +52,52 @@ foreach ($total_cat as $cat) {
 		
 		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 		
+		if ($style_type == "Beer") {
+			$style_beer_count[] .= $row_style_count['count']; 
+			$style_beer_count_logged[] .= $row_style_count_logged['count'];  
+		}
+		
+		elseif ($style_type == "Mead") {
+			$style_mead_count[] .= $row_style_count['count']; 
+			$style_mead_count_logged[] .= $row_style_count_logged['count']; 
+		}
+		
+		elseif ($style_type == "Cider") {
+			$style_cider_count[] .= $row_style_count['count'];
+			$style_cider_count_logged[] .= $row_style_count_logged['count']; 
+		}
+		
+		else {
+			$style_other_count[] .= $row_style_count['count'];
+			$style_other_count_logged[] .= $row_style_count_logged['count']; 
+		}
+		
+		
+		//$style_type_array[] = $style_type;
+		
 	}
 	
 	if (!empty($cat_name)) { 
 	
 		if ($action == "print") $html .= "<tr class='bdr1B_gray'>"; 
 		else $html .= "<tr>";
-		$html .= "<td nowrap='nowrap'>".$cat_convert." - ".$cat_name."</td>";
+		$html .= "<td nowrap='nowrap' width='25%'>".$cat_convert." - ".$cat_name."</td>";
 		$html .= "<td nowrap='nowrap'>".$row_style_count_logged['count']."</td>";
 		$html .= "<td nowrap='nowrap'>".$row_style_count['count']."</td>";
 		$html .= "<td class='data'>".$style_type."</td>";
 		$html .= "</tr>";
+	
 	}
 	
 } 
+
+//print_r($style_type_array);
 
 $html_count = "";
 if (array_sum($style_beer_count_logged) > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>";
 	else $html_count .= "<tr>";
-	$html_count .= "<td width='10%' nowrap='nowrap'>Beer</td>";
+	$html_count .= "<td width='25%' nowrap='nowrap'>Beer</td>";
 	$html_count .= "<td>".(array_sum($style_beer_count_logged))."</td>";
 	$html_count .= "<td>".(array_sum($style_beer_count))."</td>";
 	$html_count .= "</tr>";
@@ -77,7 +106,7 @@ if (array_sum($style_beer_count_logged) > 0) {
 if (array_sum($style_mead_count_logged) > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
 	else $html_count .= "<tr>";
-	$html_count .= "<td width='10%' nowrap='nowrap'>Mead</td>";
+	$html_count .= "<td width='25%' nowrap='nowrap'>Mead</td>";
 	$html_count .= "<td>".(array_sum($style_mead_count_logged))."</td>";
 	$html_count .= "<td>".(array_sum($style_mead_count))."</td>";
 	$html_count .= "</tr>";
@@ -87,14 +116,36 @@ if (array_sum($style_cider_count_logged) > 0) {
 	
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
 	else $html_count .= "<tr>";
-	$html_count .= "<td>Cider</td>";
+	$html_count .= "<td width='25%'>Cider</td>";
 	$html_count .= "<td>".(array_sum($style_cider_count_logged))."</td>";
 	$html_count .= "<td>".(array_sum($style_cider_count))."</td>";
 	$html_count .= "</tr>";
 }
 
-$total_style_count = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_cider_count) + array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged));
+if ((array_sum($style_other_count) > 0) || (array_sum($style_other_count_logged) > 0)) {
+		
+	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
+	else $html_count .= "<tr>";
+	$html_count .= "<td width='25%'>Other</td>";
+	$html_count .= "<td>".(array_sum($style_other_count_logged))."</td>";
+	$html_count .= "<td>".(array_sum($style_other_count))."</td>";
+	$html_count .= "</tr>";		
+}
 
+$total_style_count = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_cider_count) + array_sum($style_othr_count));
+$total_style_count_logged = (array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
+$total_style_count_all = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_othr_count) + array_sum($style_cider_count) + array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
+
+if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
+	$html .= "<tfoot>";
+	$html .= "<tr class='bdr1T'>"; 
+	$html .= "<td nowrap='nowrap'><strong>Totals</strong></td>";
+	$html .= "<td nowrap='nowrap'>".$total_style_count_logged."</td>";
+	$html .= "<td nowrap='nowrap'>".$total_style_count."</td>";
+	$html .= "<td class='data'>&nbsp;</td>";
+	$html .= "</tr>";
+	$html .= "</tfoot>";
+}
 ?>
 <h2>Entry Counts by Style</h2>
 <?php if ($action != "print") { ?>

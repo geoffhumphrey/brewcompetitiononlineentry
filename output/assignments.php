@@ -2,7 +2,7 @@
 
 session_start(); 
 require('../paths.php'); 
-require(CONFIG.'bootstrap.php');
+require(CONFIG.'bootstrap.php'); 
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel']<= 1)) {
 if (NHC) $base_url = "../";
@@ -66,7 +66,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 		<div id="header-inner">
         	<h1><?php if ($filter == "S") echo "Steward "; else echo "Judge "; ?>Assignments <?php if ($view == "name") echo "By Last Name"; elseif ($view == "table") echo "By Table"; elseif ($view == "location") echo "By Location"; else echo ""; ?></h1>
         </div>
-    </div>
+    </div> 
     <?php if ($totalRows_assignments > 0) { ?>
     <table class="dataTable" id="sortable">
     <thead>

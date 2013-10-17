@@ -376,8 +376,8 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenu_Exporting_Email" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php">All Participants</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Available Judges</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Available Stewards</a>
+	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=avail_judges&amp;action=email">All Available Judges</a>
+	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=avail_stewards&amp;action=email">All Available Stewards</a>
     <a class="menuItem"  href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Assigned Judges</a>
 	<a class="menuItem"  href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Assigned Stewards</a>
     <a class="menuItem"  href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>

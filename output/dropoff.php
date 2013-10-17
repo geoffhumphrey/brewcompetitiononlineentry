@@ -1,13 +1,14 @@
 <?php 
 /**
- * Module:      report_tempate.php 
- * Description: Template for custom reports.
+ * Module:      dropoff.php 
+ * Description: Outputs report of entries by dropoff location.
  * 
  */
 
 // ---- REQUIRED Includes if using default CSS s footer and constants ----
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
+require(DB.'dropoff.db.php');
 if (NHC) $base_url = "../";
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
@@ -85,7 +86,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$row_dropoffs = mysql_fetch_assoc($dropoffs);
 		$totalRows_dropoffs = mysql_num_rows($dropoffs);
 		
-		//echo $query_dropoffs."<br>";
+		echo $query_dropoffs."<br>";
 
 		if ($totalRows_dropoffs > 0) {
 			unset($location_count);

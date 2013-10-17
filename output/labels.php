@@ -4,7 +4,6 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
-include(INCLUDES.'scrubber.inc.php');
 
 if (isset($_SESSION['loginUsername'])) {
 

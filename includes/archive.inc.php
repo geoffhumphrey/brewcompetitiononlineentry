@@ -21,8 +21,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	if (NHC) $base_url = "../";
 	else $base_url = $base_url;
 	
-	
-	
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
 	mysql_select_db($database, $brewing);
@@ -192,6 +190,33 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	mysql_real_escape_string($insertSQL);
 	$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
+	
+	// If hosted, insert GH as admin user
+	if (HOSTED) {
+		
+		$gh_user_name = "geoff@zkdigital.com";
+		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
+		
+		require(CLASSES.'phpass/PasswordHash.php');
+		$hasher = new PasswordHash(8, false);
+		$hash = $hasher->HashPassword($gh_password);
+		
+		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES
+(NULL, 'geoff@zkdigital.com', '%s', '0', 'What was your high school''s mascot?', 'spartan', NOW());", $users_db_table,$hash);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$users_db_table,$gh_user_name);
+		$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
+		$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
+		
+		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
+(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id']);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+	}
+	
 	// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 	$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
 	//echo "<p>".$insertSQL."</p>";
@@ -199,7 +224,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
 	// Last, log the user in and redirect 
-	mysql_select_db($database, $brewing);
 	$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
 	$login = mysql_query($query_login, $brewing) or die(mysql_error());
 	$row_login = mysql_fetch_assoc($login);

@@ -325,7 +325,7 @@ $output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Assigned A
 if ($filter != "default") { 
 	if ($filter == "judges") {
 		$output_datatables_head .= "<th width='8%' class='dataHeading bdr1B'>ID</th>";
-		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Rnak</th>";
+		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Rank</th>";
 	}
 	
 	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
