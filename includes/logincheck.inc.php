@@ -1,11 +1,9 @@
 <?php
 
 require('../paths.php');
-//require(CONFIG.'bootstrap.php');
-require(INCLUDES.'url_variables.inc.php');
+require(CONFIG.'bootstrap.php');
+require(INCLUDES.'url_variables.inc.php'); 
 require(INCLUDES.'db_tables.inc.php');
-
-mysql_select_db($database, $brewing);
 
 // Clean the data collected in the <form>
 function sterilize ($sterilize=NULL) {
@@ -21,6 +19,7 @@ function sterilize ($sterilize=NULL) {
 	return $sterilize;
 }
 
+mysql_select_db($database, $brewing);
 $loginUsername = sterilize($_POST['loginUsername']);
 $password = sterilize($_POST['loginPassword']);
 
@@ -80,7 +79,7 @@ else {
 	
 	// Check that the password is correct, returns a boolean
 	$check = $hasher->CheckPassword($password, $stored_hash);
-	
+	//echo $query_login."<br>";
 }
 
 
@@ -92,16 +91,17 @@ if ($check) {
 
 	// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
 	$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",$loginUsername, $row_login['id']);
-
 	mysql_real_escape_string($updateSQL);
-	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
 	// Convert email address in the user's accociate record in the "brewer" table
 	$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail='%s' WHERE uid='%s'",$loginUsername, $row_login['id']);
 	mysql_real_escape_string($updateSQL);
-	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 	
 	$_SESSION['loginUsername'] = $loginUsername;
+	
+	//echo $loginUsername;
 
 	if (($section != "update") && ($row_login['userLevel'] == "2")) header(sprintf("Location: %s", $base_url."index.php?section=list"));
 	elseif (($section != "update") && ($row_login['userLevel'] <= "1")) header(sprintf("Location: %s", $base_url."index.php?section=admin"));

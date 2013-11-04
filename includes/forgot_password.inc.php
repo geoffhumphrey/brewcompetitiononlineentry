@@ -4,7 +4,7 @@ include('../paths.php');
 require(CONFIG.'config.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
-require(INCLUDES.'functions.inc.php'); 
+require(LIB.'common.lib.php'); 
 require(DB.'common.db.php');
 
 require(CLASSES.'phpass/PasswordHash.php');

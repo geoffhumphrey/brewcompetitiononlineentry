@@ -92,10 +92,7 @@ if (($registration_open == "2") && (!$ua)) {
 				'openSpeed'         : 'normal',
 				'closeSpeed'        : 'normal',
 				'type'				: 'iframe',
-				'helpers' 			: {	title : { type : 'inside' } },
-				<?php if ($modal_window == "false") { ?>
-				'afterClose': 		function() { parent.location.reload(true); }
-				<?php } ?>
+				'helpers' 			: {	title : { type : 'inside' } }
 			});
 
 		});
@@ -110,7 +107,8 @@ if ($section == "admin") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce.init.js"></script>
 <?php } 
-if (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) include(INCLUDES.'form_check.inc.php'); 
+if (($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) 
+include(INCLUDES.'form_check.inc.php'); 
 ?>
 <!--
 <script type="text/javascript">

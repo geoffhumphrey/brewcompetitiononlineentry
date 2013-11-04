@@ -42,6 +42,10 @@ Declare all variables empty at the top of the script. Add on later...
 include(DB.'dropoff.db.php');
 include(DB.'sponsors.db.php');
 
+$query_check = "SELECT judgingDate FROM $judging_locations_db_table ORDER BY judgingDate DESC LIMIT 1";
+$check = mysql_query($query_check, $brewing) or die(mysql_error());
+$row_check = mysql_fetch_assoc($check);
+
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 
 $print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
@@ -58,7 +62,7 @@ $primary_page_info = "";
 $primary_page_info .= sprintf("<p>Thank you for your interest in the %s organized by ",$_SESSION['contestName']);
 if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
 else $primary_page_info .= $_SESSION['contestHost'];
-if ($_SESSION['contestHostLocation'] != "") $primary_page_info .= sprintf(", ",$_SESSION['contestHostLocation']);
+if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", ",$_SESSION['contestHostLocation']);
 $primary_page_info .= sprintf(".  Be sure to read the <a href='%s'>competition rules</a>.</p>",build_public_url("rules","default","default",$sef,$base_url));
 
 if ((judging_date_return() == 0) && ($registration_open == "2")) {
@@ -183,8 +187,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 	if ($totalRows_judging == 0) echo $message2;
 } 
 
-echo $primary_page_info;
-echo $totalRowsSponsors;
+//echo $primary_page_info;
+//echo $totalRowsSponsors;
 
 if ((judging_date_return() == 0) && ($registration_open == "2")) { 
 	
@@ -204,9 +208,6 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 		}
 		
 		else {
-			$query_check = "SELECT judgingDate FROM $judging_locations_db_table ORDER BY judgingDate DESC LIMIT 1";
-			$check = mysql_query($query_check, $brewing) or die(mysql_error());
-			$row_check = mysql_fetch_assoc($check);
 			echo $page_info;
 		}
 	} 

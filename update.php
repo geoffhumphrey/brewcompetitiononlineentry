@@ -1,13 +1,13 @@
 <?php 
 require('paths.php');
 mysql_select_db($database, $brewing);
-//require(INCLUDES.'functions.inc.php');
+//require(LIB.'common.lib.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
 //require(DB.'common.db.php');
 //require(INCLUDES.'headers.inc.php');
-$current_version = "1.3.0.2";
+$current_version = "1.3.0.3";
 $section = "update";
 
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");

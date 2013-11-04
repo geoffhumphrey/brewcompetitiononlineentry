@@ -37,8 +37,9 @@ $entry_fee_message = "";
 $nhc_message_1 = "";
 $nhc_message_2 = "";
 $add_entry_link = "";
-$beer_xml_link .= "";
+$beer_xml_link = "";
 $print_list_link = "";
+$pay_fees_message = "";
 
 if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	$entry_message .= "<div class='adminSubNavContainer'>";

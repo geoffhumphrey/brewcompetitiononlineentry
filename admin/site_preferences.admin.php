@@ -1,17 +1,5 @@
 <?php 
-mysql_select_db($database, $brewing);
-
 include (DB.'styles.db.php');
-
-$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
-$totalRows_prefs = mysql_num_rows($prefs);
-
-$query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
-$themes = mysql_query($query_themes, $brewing) or die(mysql_error());
-$row_themes = mysql_fetch_assoc($themes);
-$totalRows_themes = mysql_num_rows($themes);
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
 <form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">

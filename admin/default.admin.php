@@ -4,241 +4,22 @@
  * Description: This module houses links to all administration functions.
  *
  */
+include(LIB.'admin.lib.php');
 include(DB.'admin_common.db.php');
 include(DB.'judging_locations.db.php'); 
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
-//include(DB.'entries.db.php'); 
-//include(DB.'brewer.db.php');
 include(DB.'contacts.db.php');
 
-// Check if judging flights are up-to-date
-if (!check_judging_flights()) { 
-$location = $base_url."includes/process.inc.php?action=update_judging_flights&go=admin_dashboard";
-header(sprintf("Location: %s", $location)); 
-}
-
-function participant_choose($brewer_db_table) {
-	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	
-	$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
-	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
-	$row_brewers = mysql_fetch_assoc($brewers);
-	
-	$output = "";
-	$output .= "<select name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\">";
-	$output .= "<option value=\"\">Choose Below:</option>";
-	do { 
-		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
-	} while ($row_brewers = mysql_fetch_assoc($brewers)); 
-	$output .= "</select>";
-	
-	return $output;
-}
-
-
-function admin_help($go,$header_output,$action,$filter) {
-	include (CONFIG.'config.php');
-	switch($go) {
-		case "preferences": $page = "site_prefs";
-		break;
-		
-		case "judging_preferences": $page = "comp_org_prefs";
-		break;
-		
-		case "style_types": $page = "style_types";
-		break;
-		
-		case "styles": 
-			switch ($action) {
-			
-			case "add":
-			case "edit": $page = "custom_style";
-			break;
-			
-			default: $page = "accepted_style";
-			break;
-			}
-		break;
-		
-		case "special_best": 
-		case "special_best_data": $page = "custom_winner";
-		break;
-		
-		case "judging":
-		
-			switch($filter) {
-				case "judges": 
-				case "stewards":
-				case "staff":
-				$page = "assigning";
-				break;
-				
-				default: $page = "judging_locations";
-				break;
-				
-				
-			}
-		
-		
-		break;
-		
-		case "contacts": $page = "comp_contacts";
-		break;
-		
-		case "dropoff": $page = "drop_off";
-		break;
-		
-		case "sponsors": $page = "sponsors";
-		break;
-		
-		case "contest_info": $page = "competition_info";
-		break;
-		
-		case "entrant":
-		case "judge": $page = "participants";
-		break;
-		
-		case "participants": 
-			switch ($filter) {
-				case "judges": 
-				case "assignJudges": $page = "judges";
-				break;
-				
-				case "stewards":
-				case "assignStewards": $page = "stewards";
-				break;
-				
-				default: $page = "participants";
-				break;
-			}
-		
-		break;
-		
-		
-		case "entries": $page = "entries";
-		break;
-		
-		case "assign": $page = "assigning";
-		break;
-		
-		case "judging_tables": 
-			switch ($action) {
-				case "assign": $page = "assigning";
-				break; 
-				
-				default: $page = "tables";
-				break;
-			}
-		
-		break;
-		
-		case "judging_flights": 
-			switch ($action) {
-				
-				case "rounds": $page = "rounds";
-				break;
-				
-				case "default": $page = "flights";
-				break;
-				
-			}
-			
-			switch ($filter) {
-				case "rounds": $page = "rounds";
-				break;
-				
-				case "default": $page = "flights";
-				break;
-			}
-		
-		break;
-		
-		case "judging_scores": $page = "scores";
-		break;
-		
-		case "judging_scores_bos": $page = "best_of_show";
-		break;
-		
-		case "special_best_data": $page = "introduction";
-		break;
-		
-		case "archive": $page = "archiving";
-		break;
-		
-		case "mods": $page = "mods";
-		break;
-		
-		default: $page = "introduction";
-		break;
-	}
-	
-	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
-	return $return;	
-}
-
-function custom_modules($type,$method) {
-	require(CONFIG.'config.php');
-	
-	if ($type == "reports") { $type = 1; $modal = "id='modal_window_link'"; }
-	if ($type == "exports") { $type = 2; $modal = ""; }
-	
-	if ($method == 1) {
-		
-		$query_custom_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE mod_type='%s'", $prefix."mods", $type);
-		$custom_number = mysql_query($query_custom_number, $brewing) or die(mysql_error());
-		$row_custom_number = mysql_fetch_assoc($custom_number);
-		
-		if ($row_custom_number['count'] > 0) return TRUE;	
-	}
-	
-	if ($method == 2) {
-		
-		$query_custom_mod = sprintf("SELECT * FROM %s WHERE mod_type='%s' ORDER BY mod_name ASC", $prefix."mods", $type);
-		$custom_mod = mysql_query($query_custom_mod, $brewing) or die(mysql_error());
-		$row_custom_mod = mysql_fetch_assoc($custom_mod);
-		$output = "";
-		do {
-			$output .= "<li><a ".$modal." href='".$base_url."mods/".$row_custom_mod['mod_filename']."'>".$row_custom_mod['mod_name']."</a></li>";
-			//$output = $query_custom_mod;
-		} while ($row_custom_mod = mysql_fetch_assoc($custom_mod));
-		
-		return $output;
-	}
-}
-
-$query_with_entries = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FROM %s",$prefix."brewing");
-$with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
-$row_with_entries = mysql_fetch_assoc($with_entries);
-
 if (($section == "admin") && ($go == "default")) { 
-$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
-function total_discount() { 
-	require(CONFIG.'config.php');
-	
-	$query_discount = sprintf("SELECT uid FROM %s WHERE brewerDiscount='Y'", $prefix."brewer");
-	$discount = mysql_query($query_discount, $brewing) or die(mysql_error());
-	$row_discount = mysql_fetch_assoc($discount);
-	$totalRows_discount = mysql_num_rows($discount);
-	
-	do { $a[] = $row_discount['uid']; } while ($row_discount = mysql_fetch_assoc($discount));
-	
-	foreach ($a as $brewer_id) {
-	
-		$query_discount_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerId='%s'", $prefix."brewing", $brewer_id);
-		$discount_number = mysql_query($query_discount_number, $brewing) or die(mysql_error());
-		$row_discount_number = mysql_fetch_assoc($discount_number);
-		$b[] = $row_discount_number['count']; 
-		
-	}
-	
-	$return = $totalRows_discount."^".array_sum($b);
-	return $return;
+	$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 }
 
+if ($check_judging_flights) {
+	include(PROCESS.'process_judging_flight_check.inc.php'); 
 }
 
+include(INCLUDES.'form_check.inc.php'); 
 ?>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
@@ -296,7 +77,7 @@ if (($section == "admin") && ($go == "default")) { ?>
         <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>:</td>
         <td class="data"><?php echo get_participant_count('steward'); ?></td>
 	</tr>
-    <?php if (($_SESSION['contestEntryFeePassword'] != "") && ($_SESSION['contestEntryFeePasswordNum'] != "")) { ?>
+    <?php if ((!empty($_SESSION['contestEntryFeePassword'])) && (!empty($_SESSION['contestEntryFeePasswordNum']))) { ?>
     <tr>
         <td class="dataLabel">Participants Who Redeemed Discount:</td>
         <td class="data"><?php $a = explode("^",total_discount()); echo $a[0]; ?></td>
@@ -677,21 +458,6 @@ if ($go == "default") { ?>
                     <?php } ?>
                 </select> label(s) per entry
              	</li>
-                <!--
-                <li>Category: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">
-                	<option value=""></option>
-                    <?php 
-					/*
-					$query_style_count = sprintf("SELECT brewStyleGroup FROM %s ORDER BY brewStyleGroup DESC LIMIT 1", $prefix."styles");
-					$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
-					$row_style_count = mysql_fetch_assoc($style_count);
-
-					for($i=1; $i<=$row_style_count['brewStyleGroup']; $i++) { 
-					*/ ?>
-                    <option value="output/labels.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=default&amp;view=<?php //echo $i; ?>"><?php // echo $i; ?></option>
-                    <?php // } ?>
-                </select></li>
-                -->
             </ul>
             <ul class="admin_default">
              	<li><a href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank">OnlineLabels.com 0.75 Inch Labels</a>, All Categories: <select name="round_judging" id="round_judging" onchange="jumpMenu('self',this,0)">

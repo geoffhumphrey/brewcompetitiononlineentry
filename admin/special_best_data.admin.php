@@ -6,19 +6,7 @@
  */
  
 //if (($action == "add") || ($action == "edit")) $query_sbd = "SELECT * FROM $special_best_data_db_table WHERE id='$id'";
-$query_sbi = "SELECT * FROM $special_best_info_db_table";
-if (($action == "add") || ($action == "edit")) $query_sbi .= " WHERE id='$id'"; 
-$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
-$row_sbi = mysql_fetch_assoc($sbi);
-$totalRows_sbi = mysql_num_rows($sbi);
 
-$query_sbd = "";
-if ($action == "add") $query_sbd .= "SELECT * FROM $special_best_data_db_table WHERE id='$id'";
-elseif ($action == "edit") $query_sbd .= "SELECT * FROM $special_best_data_db_table WHERE sid='$id' ORDER BY sbd_place ASC";
-else $query_sbd .= "SELECT * FROM $special_best_data_db_table ORDER BY sid,sbd_place ASC";
-$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-$row_sbd = mysql_fetch_assoc($sbd);
-$totalRows_sbd = mysql_num_rows($sbd);
 
 ?> 
 <h2><?php if ($action == "add") echo "Add Entries to Custom Winning Category: ".$row_sbi['sbi_name']; elseif ($action == "edit") echo "Edit Entries in Custom Winning Category: ".$row_sbi['sbi_name']; else echo "Custom Winning Category Entries"; ?></h2>
@@ -79,14 +67,11 @@ $totalRows_sbd = mysql_num_rows($sbd);
     <?php do { 
 	$info = explode("^", entry_info($row_sbd['eid']));
 	$brewer_info = explode("^", brewer_info($row_sbd['bid']));
+	$special_best_info = explode("^",special_best_info($row_sbd['sid']));
 	
-	$query_sbi = sprintf("SELECT * FROM $special_best_info_db_table WHERE id='%s'",$row_sbd['sid']); 
-	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
-	$row_sbi = mysql_fetch_assoc($sbi);
-	$totalRows_sbi = mysql_num_rows($sbi);
 	?>
      <tr>
-      <td width="15%" class="dataList"><?php echo $row_sbi['sbi_name']; ?></td>
+      <td width="15%" class="dataList"><?php echo $special_best_info[1]; ?></td>
       <td width="1%" class="dataList"><?php echo $row_sbd['sbd_place']; ?></td>
       <td width="1%" class="dataList"><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
       <td width="1%" class="dataList"><?php echo readable_judging_number($info[1],$info[6]); ?></td>
@@ -97,7 +82,6 @@ $totalRows_sbd = mysql_num_rows($sbd);
       </td>
      </tr>
     <?php
-	mysql_free_result($sbi);
 	} while($row_sbd = mysql_fetch_assoc($sbd));  ?>
      </tbody>
     </table>

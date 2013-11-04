@@ -8,11 +8,7 @@
 </div>
 <?php } ?>
 <p><input name="submit" type="submit" class="button" value="Update Competition Info"></p>
-<?php if ($section == "step4") { 
-$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid='1'";
-$name = mysql_query($query_name, $brewing) or die(mysql_error());
-$row_name = mysql_fetch_assoc($name);
-?>
+<?php if ($section == "step4") { ?>
 <h3>Contact</h3>
 <table>
   <tr>
@@ -38,20 +34,12 @@ $row_name = mysql_fetch_assoc($name);
 <?php } ?>
 <?php if (($section != "step4") && (get_contact_count() == 0)) { ?>
 <div class="error">Contact information for your competition has not been set up yet. Would you like to <a href="<?php echo $base_url; ?>index.php?section=admin&go=contacts">add a contact</a>?</div>
-<?php } 
-
-$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
-$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-$row_contest_info = mysql_fetch_assoc($contest_info);
-$totalRows_contest_info = mysql_num_rows($contest_info); 
-
-?>
-
+<?php } ?>
 <h3>General</h3>
 <table>
   <tr>
     <td class="dataLabel">Competition Name:</td>
-    <td class="data"><input name="contestName" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestName']; ?>"></td>
+    <td class="data"><input name="contestName" type="text" class="submit" size="50" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestName']; ?>"></td>
     <td class="data"><span class="required">Required</span></td>
   </tr>
   <tr>

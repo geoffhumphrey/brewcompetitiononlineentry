@@ -1345,7 +1345,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '1.3.0.2', '2012-09-13', '2013-09-13 11:59:59', 1);
+(1, '1.3.0.3', '2012-10-25', '2013-09-13 11:59:59', 1);
 
 -- --------------------------------------------------------
 

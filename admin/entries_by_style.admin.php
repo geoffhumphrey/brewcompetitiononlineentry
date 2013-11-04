@@ -3,20 +3,17 @@ include(DB.'styles.db.php');
 do { $total_cat[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 $total_cat = array_unique($total_cat);
 //print_r($total_cat);
+$html = "";
+$style_other_count[] = 0;
+$style_other_count_logged[] = 0;
 foreach ($total_cat as $cat) {
 	
 	$cat_convert = $cat;
 	$cat_name = style_convert($cat_convert,1);
 
 	// Perform query in appropriate db table rows
-	$query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$cat_convert);
-	$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
-	$row_style_count = mysql_fetch_assoc($style_count);
+	include(DB.'entry_count_by_style.db.php');
 	
-	$query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s'",$prefix."brewing",$cat_convert);
-	$style_count_logged = mysql_query($query_style_count_logged, $brewing) or die(mysql_error());
-	$row_style_count_logged = mysql_fetch_assoc($style_count_logged);
-
 	$style_beer_count[] = 0;
 	$style_mead_count[] = 0;
 	$style_cider_count[] = 0;
@@ -43,9 +40,6 @@ foreach ($total_cat as $cat) {
 		$style_cider_count_logged[] .= $row_style_count_logged['count']; 
 		}
 	if ($cat > 28) {
-		$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$prefix."styles",$cat_convert);
-		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-		$row_style_type = mysql_fetch_assoc($style_type);
 		
 		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
 		if ($row_style_type['brewStyleType'] > 3)  $source = "custom"; 
@@ -132,9 +126,9 @@ if ((array_sum($style_other_count) > 0) || (array_sum($style_other_count_logged)
 	$html_count .= "</tr>";		
 }
 
-$total_style_count = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_cider_count) + array_sum($style_othr_count));
+$total_style_count = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_cider_count) + array_sum($style_other_count));
 $total_style_count_logged = (array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
-$total_style_count_all = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_othr_count) + array_sum($style_cider_count) + array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
+$total_style_count_all = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_other_count) + array_sum($style_cider_count) + array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
 
 if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 	$html .= "<tfoot>";

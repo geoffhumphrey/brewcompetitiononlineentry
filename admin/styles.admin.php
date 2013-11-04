@@ -76,12 +76,6 @@ function checkUncheckAll(theElement) {
  </thead>
  <tbody>
  <?php do { 
-    	if (($section != "step7") && ($totalRows_judging > 1) && (($filter == "default") && ($bid == "default"))) { 
- 		$query_judging2 = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'", $row_styles['brewStyleJudgingLoc']);
-		$judging2 = mysql_query($query_judging2, $brewing) or die(mysql_error());
-		$row_judging2 = mysql_fetch_assoc($judging2);
-		$totalRows_judging2 = mysql_num_rows($judging2);
-		}
 	if ($row_styles['id'] != "") {
 	?>
  <tr>

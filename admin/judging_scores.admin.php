@@ -35,14 +35,13 @@ $totalRows_entry_count = total_paid_received($go,"default");
 		<span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit scores" title="Enter/Edit scores" /></span>
     		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_tables');">Enter/Edit Scores for...</a></div>
     		<div id="scoresMenu_tables" class="menu" onmouseover="menuMouseover(event)">
-    			<?php do { 
-				$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables_edit_2['id']);
-				$scores_1 = mysql_query($query_scores_1, $brewing) or die(mysql_error());
-				$row_scores_1 = mysql_fetch_assoc($scores_1);
-				$totalRows_scores_1 = $row_scores_1['count'];
+    			<?php 
+				
+				do { 
+					$table_count_total = table_count_total($row_tables_edit_2['id']);
 				?>
-   				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($totalRows_scores_1  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
-   			 	<?php mysql_free_result($scores_1); } while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
+   				<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table #".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a>
+   			 	<?php  } while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
     		</div>
   	</span>
     <?php } // end if ($totalRows_tables > 0) 
@@ -119,41 +118,44 @@ if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?>
     </tr>
 </thead>
 <tbody>
-	<?php do {
-	$query_entries_1 = sprintf("SELECT id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
-	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
-	$row_entries_1 = mysql_fetch_assoc($entries_1);
-	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
+	<?php 
+	do {
 	
-	$query_styles_1 = sprintf("SELECT brewStyle FROM $styles_db_table WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
-	$styles_1 = mysql_query($query_styles_1, $brewing) or die(mysql_error());
-	$row_styles_1 = mysql_fetch_assoc($styles_1);
+	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable']); 
+	$table_score_data = explode("^",$table_score_data);
 	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
-	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
-	$row_tables_1 = mysql_fetch_assoc($tables_1);
-	$totalRows_tables = mysql_num_rows($tables_1);
-		//if ($row_tables_1['id'] != "") { // if table is erased.
+	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]); 
+	else $entry_number = sprintf("%04s",$table_score_data[0]);
+	
+	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = $table_score_data[6]; 
+	else $judging_number = readable_judging_number($table_score_data[2],$table_score_data[6]);
+	
+	if ($row_scores['scorePlace'] == "5") $score_place = "HM"; 
+	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Avance"; 
+	elseif ($row_scores['scorePlace'] == "") $score_place = "<span style='display:none'>N/A</span>"; 
+	else $score_place =  $row_scores['scorePlace'];
+	
+	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<img src='".$base_url."images/tick.png' /></span>";
+	else $mini_bos = "&nbsp;";
+	
+	
 	?>
 	<tr>
-    	<td><?php if ((NHC) && ($prefix == "final_")) echo sprintf("%06s",$row_entries_1['id']); else echo sprintf("%04s",$row_entries_1['id']); ?></td>
-        <td class="data"><?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries_1['brewJudgingNumber']; else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']);  ?></td>
-        <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
-        <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_styles_1['brewStyle']; ?></td>
-        <?php if ($dbTable != "default") { 
-			$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE id='%s'", $row_entries_1['brewBrewerID']);
-			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-			$row_brewer = mysql_fetch_assoc($brewer);
-		?>
-        <td class="data"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
-        <td class="data"><?php echo $row_entries_1['brewName'] ?></td>
+    	<td><?php echo $entry_number; ?></td>
+        <td class="data"><?php echo $judging_number;  ?></td>
+        <td class="data"><?php echo $table_score_data[11]; ?></td>
+        <td class="data"><?php echo $table_score_data[10]; ?></td>
+        <td class="data"><?php echo $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; ?></td>
+        
+        <?php if ($dbTable != "default") { ?>
+        <td class="data"><?php echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
+        <td class="data"><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
-        <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; elseif ($row_scores['scorePlace'] == "6") echo "Admin Avance"; elseif ($row_scores['scorePlace'] == "") echo "<span style='display:none'>N/A</span>"; else echo $row_scores['scorePlace']; ?></td>  
-        <td class="data"><?php if ($row_scores['scoreMiniBOS'] == "1") echo "<img src='".$base_url."images/tick.png' /></span>"; ?></td>
+        <td class="data"><?php echo $score_place; ?></td>  
+        <td class="data"><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
+        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $table_score_data[10]; ?> scores" title="Edit the <?php echo $table_score_data[10]; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $table_score_data[10]; ?>" title="Print the scores for <?php echo $table_score_data[10]; ?>"></a></span>
         </td>
         <?php } ?>
     </tr>
@@ -214,63 +216,80 @@ $(document).ready(function() {
     </tr>
 </thead>
 <tbody>
-	<?php 
+	<?php
+	
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	//echo $row_tables_edit['tableStyles'];
 	
 	foreach (array_unique($a) as $value) {
 		
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM $styles_db_table WHERE id='%s'", $value);
-		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-		$row_styles = mysql_fetch_assoc($styles);
+		$score_style_data = score_style_data($value);
+		$score_style_data = explode("^",$score_style_data);
 		
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-		$row_entries = mysql_fetch_assoc($entries);
-		$totalRows_entries = mysql_num_rows($entries);
+		include(DB.'judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		
 		do {
-		if ($totalRows_entries > 0) {
-			if ($action == "edit") {
-				$query_scores = sprintf("SELECT * FROM $judging_scores_db_table WHERE eid='%s'", $row_entries['id']);
-				$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-				$row_scores = mysql_fetch_assoc($scores);
+
+			if ($totalRows_entries > 0) {
+				
+				if ($action == "edit") {
+					$score_entry_data = score_entry_data($row_entries['id']);
+					$score_entry_data = explode("^",$score_entry_data);
 				}
+				
+				if (($action == "edit") && (!empty($score_entry_data[0]))) $score_id = $score_entry_data[0]; 
+				else $score_id = $row_entries['id'];
+				
+				if (!empty($score_entry_data[3])) $score_previous = "Y"; 
+				else $score_previous = "N";
+				
+				if (($action == "edit") && (!empty($score_entry_data[1]))) $eid = $score_entry_data[1]; 
+				else $eid = $row_entries['id'];
+				
+				// $bid is the brewBrewerID/uid
+				if (($action == "edit") && (!empty($score_entry_data[2]))) $eid = $score_entry_data[2]; 
+				else $bid = $row_entries['brewBrewerID'];
+				
+				if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$row_entries['id']);
+				else $entry_number = sprintf("%04s",$row_entries['id']);
+				
+				if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = $row_entries['brewJudgingNumber']; 
+				else $judging_number = readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);
+				
+				$style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
+			
 	?>
 	<tr>
-		<?php if (($action == "edit") && ($row_scores['id'] != "")) $score_id = $row_scores['id']; else $score_id = $row_entries['id']; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
         <?php if ($action == "edit") { ?>
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if ($row_scores['id'] != "") echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php echo $score_previous; ?>" />
     	<?php } ?>
-        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['eid'] != "")) echo $row_scores['eid']; else echo $row_entries['id']; ?>" />
-        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
+        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $eid; ?>" />
+        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bid; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
-        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
-        <td><?php if ((NHC) && ($prefix == "final_")) echo sprintf("%06s",$row_entries['id']); else echo sprintf("%04s",$row_entries['id']); ?></td>
-        <td class="data"><?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber']; else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
-        <td class="data"><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($row_scores['scoreMiniBOS'] == "1")) echo "CHECKED"; ?> /></td>
+        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($score_style_data[3],"1","bcoe"); ?>" />
+        <td><?php echo $entry_number; ?></td>
+        <td class="data"><?php echo $judging_number; ?></td>
+        <td class="data"><?php echo $style_display; ?></td>
+        <td class="data"><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($score_entry_data[5] == "1")) echo "CHECKED"; ?> /></td>
         
-    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
+    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" /></td>
         <td>
         <select class="fDrop" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
-          <option value="1" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "1")) echo "selected"; ?>>1st</option>
-          <option value="2" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "2")) echo "selected"; ?>>2nd</option>
-          <option value="3" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "3")) echo "selected"; ?>>3rd</option>
+          <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
+          <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
+          <option value="3" <?php if (($action == "edit") && ($score_entry_data[4] == "3")) echo "SELECTED"; ?>>3rd</option>
           <?php if (!NHC) { ?>
-          <option value="4" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "4")) echo "selected"; ?>>4th</option>
-          <option value="5" <?php if (($action == "edit") && ($row_scores['scorePlace'] == "5")) echo "selected"; ?>>Hon. Men.</option>
+          <option value="4" <?php if (($action == "edit") && ($score_entry_data[4] == "4")) echo "SELECTED"; ?>>4th</option>
+          <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
           <?php } ?>
         </select>
         </td>
 	</tr>
     <?php }
-	} while ($row_entries = mysql_fetch_assoc($entries));
-	mysql_free_result($styles);
-	mysql_free_result($entries);
+		} while ($row_entries = mysql_fetch_assoc($entries));
 	} // end foreach ?> 
 </tbody>
 </table>

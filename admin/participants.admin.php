@@ -49,6 +49,8 @@ All Admin pages have certain variables in common that build the page:
 
  * ---------------- END Rebuild Info --------------------- */
 
+include(DB.'participants.db.php');
+
 // Set Vars
 $subtitle = "";
 $primary_page_info = "";
@@ -68,34 +70,6 @@ $form_submit_url = "";
 $form_submit_button = "";
 $output_no_records = "";
 $output_add_edit = FALSE;
-
-$query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewer");
-$result_participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
-$row_participant_count = mysql_fetch_assoc($result_participant_count);
-
-function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
-	require(CONFIG.'config.php');
-	if ($dbTable != "default") $dbTable = $dbTable; else $dbTable = $prefix."users";
-	
-	$result1 = mysql_query(sprintf("SHOW COLUMNS FROM %s LIKE 'userCreated'",$dbTable));
-	$exists = (mysql_num_rows($result1))?TRUE:FALSE;
-	
-	if ($exists) {
-	
-		$query_user = sprintf("SELECT userCreated FROM %s WHERE id = '%s'",$dbTable,$uid);
-		$user = mysql_query($query_user, $brewing) or die(mysql_error());
-		$row_user = mysql_fetch_assoc($user);
-		$totalRows_user = mysql_num_rows($user);
-		
-		if (($totalRows_user == 1) && ($row_user['userCreated'] != "")) {
-			$result = getTimeZoneDateTime($timezone, strtotime($row_user['userCreated']), $date_format,  $time_format, "short", "date-time-no-gmt");
-		}
-		
-		else $result = "&nbsp;";
-	}
-	else $result = "&nbsp;";
-	return $result;
-}
 
 if ($action != "print") { 
 	if (($dbTable == "default") && ($row_participant_count['count'] > $_SESSION['prefsRecordLimit']))	{ 
@@ -260,7 +234,7 @@ if ($action != "print") {
 // *****************************************************************************
 
 $output_datatables_aaSorting = "";
-$output_datatables_aaColumns = "";
+$output_datatables_aoColumns = "";
 
 if ($action == "print") {
 	
@@ -349,9 +323,8 @@ do {
 	$output_datatables_view_link = "";
 	$output_datatables_actions = "";
 	
-	$query_user1 = sprintf("SELECT id,userLevel FROM $users_db_table WHERE id = '%s'", $row_brewer['uid']);
-	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
-	$row_user1 = mysql_fetch_assoc($user1);
+	$user_info = user_info($row_brewer['uid']);
+	$user_info = explode("^",$user_info);
 	
 	if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
 	if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
@@ -438,7 +411,7 @@ do {
 		$output_datatables_edit_link = build_action_link("pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"Edit the user record for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
 		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['id'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.");
 		else $output_datatables_delete_link = "<span class='icon'><img src='".$base_url."images/bin_closed_fade.png' title='You cannot delete yourself!'></span>";
-		if ($row_user1['userLevel'] <= "1") $change_icon = "lock_open"; else $change_icon = "lock_edit";
+		if ($user_info[1] <= "1") $change_icon = "lock_open"; else $change_icon = "lock_edit";
 		$output_datatables_other_link = build_action_link($change_icon,$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s User Level");
 		$output_datatables_view_link = "";
 		if (strpos($brewer_assignment,'Judge') !== false)  {

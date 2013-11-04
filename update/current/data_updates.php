@@ -180,7 +180,7 @@ if (!NHC) {
 
 } // end if (!NHC)
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s';",$prefix."system","1.3.0.2","2013-09-13","1");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s';",$prefix."system","1.3.0.3","2013-10-25","1");
 mysql_select_db($database, $brewing);
 mysql_real_escape_string($updateSQL);
 $result = mysql_query($updateSQL, $brewing); 

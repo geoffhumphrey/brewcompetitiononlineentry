@@ -18,8 +18,10 @@
                 <td>Other Designations*</td>
             </tr>
             	<td nowrap="nowrap">
-                <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
-                <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice")) echo "CHECKED"; else echo "CHECKED" ?>>Novice<br />
+                <?php 
+				$judge_array = explode(",",$row_brewer['brewerJudgeRank']); 
+				?>
+                <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice",$judge_array)) echo "CHECKED"; else echo "CHECKED" ?>>Novice<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>Rank Pending<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Apprentice" <?php if (($action == "edit") && in_array("Apprentice",$judge_array)) echo "CHECKED"; ?>>Apprentice<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>>Provisional<br />

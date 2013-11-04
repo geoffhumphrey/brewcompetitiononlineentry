@@ -2,10 +2,10 @@
 if(isSet($_POST['user_name'])) {
 	$user_name = strtolower($_POST['user_name']);
 	include('../paths.php');
-	include(CONFIG.'config.php'); 
+	include(CONFIG.'config.php');  
 	include(INCLUDES.'url_variables.inc.php');
 	include(INCLUDES.'db_tables.inc.php');
-	include(INCLUDES.'functions.inc.php');
+	include(LIB.'common.lib.php');
 	//if ($section != "step1") include(INCLUDES.'constants.inc.php');
 	mysql_select_db($database, $brewing);
 	

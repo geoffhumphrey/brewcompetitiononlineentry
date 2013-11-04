@@ -1,9 +1,4 @@
-<?php 
-$query_username = sprintf("SELECT * FROM %s WHERE id='%s'",$users_db_table,$row_brewer['uid']);
-$username = mysql_query($query_username, $brewing) or die(mysql_error());
-$row_username = mysql_fetch_assoc($username);
-
-?>
+<?php include(DB.'make_admin.db.php'); ?>
 
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users top-level admin and admin access with caution.</div>

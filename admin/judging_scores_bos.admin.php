@@ -60,30 +60,22 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable);
 if (($action == "default") && ($totalRows_style_type > 0)) {
 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 sort($a);
+
 foreach ($a as $type) {
-	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
-	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-	$row_style_type = mysql_fetch_assoc($style_type);
+	$style_type_info = style_type_info($type);
+	$style_type_info = explode("^",$style_type_info);
+	
+if ($style_type_info[0] == "Y") { 
 
-if ($row_style_type['styleTypeBOS'] == "Y") { 
-
-	$query_bos = "SELECT * FROM $judging_scores_db_table";
-	if ($row_style_type['styleTypeBOSMethod'] == "1") $query_bos .= " WHERE scoreType='$type' AND scorePlace='1'";
-	if ($row_style_type['styleTypeBOSMethod'] == "2") $query_bos .= " WHERE scoreType='$type' AND (scorePlace='1' OR scorePlace='2')";
-	if ($row_style_type['styleTypeBOSMethod'] == "3") $query_bos .= " WHERE (scoreType='$type' AND scorePlace='1') OR (scoreType='$type' AND scorePlace='2') OR (scoreType='$type' AND scorePlace='3')";
-	$query_bos .= " ORDER BY scoreTable ASC";
-
-	$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
-	$row_bos = mysql_fetch_assoc($bos);
-	$totalRows_bos = mysql_num_rows($bos);
+include(DB.'judging_scores_bos.db.php');
 
 ?>
-<a name="<?php echo $type; ?>"></a><h3>BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></h3>
+<a name="<?php echo $type; ?>"></a><h3>BOS Entries and Places - <?php echo $style_type_info[2]; ?></h3>
 <?php if ($totalRows_bos > 0) { ?>
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
 <span class="adminSubNav">
-<span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit BOS Entries and Places" title="Enter/Edit BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Entries and Places - <?php echo $row_style_type['styleTypeName']; ?></a></span>
+<span class="icon"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter/Edit BOS Entries and Places" title="Enter/Edit BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $type; ?>">Enter/Edit BOS Entries and Places - <?php echo $style_type_info[2]; ?></a></span>
 </span> 
 </div>
 <?php } ?>
@@ -134,45 +126,32 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 </thead>
 <tbody>
 	<?php do {
-	$query_entries_1 = sprintf("SELECT brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
-	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
-	$row_entries_1 = mysql_fetch_assoc($entries_1);
-	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
-	
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM $judging_tables_db_table WHERE id='%s'", $row_bos['scoreTable']);
-	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
-	$row_tables_1 = mysql_fetch_assoc($tables_1);
-$totalRows_tables = mysql_num_rows($tables_1);
-	
-	$query_bos_place_1 = sprintf("SELECT scorePlace,scoreEntry FROM $judging_scores_bos_db_table WHERE eid='%s'", $row_bos['eid']);
-	$bos_place_1 = mysql_query($query_bos_place_1, $brewing) or die(mysql_error());
-	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);
+		
+	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable']);
+	$bos_entry_info = explode("^",$bos_entry_info);
+	$style = $bos_entry_info[1].$bos_entry_info[3];
 	
 	?>
 	<tr>
     	<td><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
-        <td class="data"><?php echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); ?></td>
-        <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
-        <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_entries_1['brewStyle']; ?></td>
+        <td class="data"><?php echo readable_judging_number($bos_entry_info[0],$bos_entry_info[6]); ?></td>
+        <td class="data"><?php echo $bos_entry_info[9] ?></td>
+        <td class="data"><?php echo $bos_entry_info[8]; ?></td>
+        <td class="data"><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
         <?php if ($dbTable == "default") { ?>
         <td class="data"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="data"><?php echo $row_bos['scorePlace']; ?></td>
         <?php } ?>
         <?php if ($dbTable != "default") { ?>
-        <td class="data"><?php echo $row_entries_1['brewBrewerLastName'].", ".$row_entries_1['brewBrewerFirstName']; ?></td>
-        <td class="data"><?php echo $row_entries_1['brewName'] ?></td>
+        <td class="data"><?php echo $bos_entry_info[5].", ".$bos_entry_info[4]; ?></td>
+        <td class="data"><?php echo $bos_entry_info[12]; ?></td>
         
         <?php } ?>
-        <td class="data"><?php echo $row_bos_place_1['scoreEntry']; ?></td>
-        <td class="data"><?php echo $row_bos_place_1['scorePlace']; ?></td>
+        <td class="data"><?php echo $bos_entry_info[11]; ?></td>
+        <td class="data"><?php echo $bos_entry_info[10] ?></td>
     </tr>
     <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
 	mysql_free_result($bos);
-	mysql_free_result($style_type);
-	mysql_free_result($tables_1);
-	mysql_free_result($bos_place_1);
-	mysql_free_result($entries_1);
 	?>
 </tbody>
 </table>
@@ -182,11 +161,15 @@ $totalRows_tables = mysql_num_rows($tables_1);
 ?>
 <?php } ?>
 
-<?php } // end if ($action == "default")
-else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."index.php?section=admin&amp;go=style_types' title='Enable Best of Show for one or more style types'>has been enabled</a> for any style type.</p>";
+<?php 
+//else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."index.php?section=admin&amp;go=style_types' title='Enable Best of Show for one or more style types'>has been enabled</a> for any style type.</p>";
+} // end if ($action == "default")
 ?>
 
-<?php if ($action == "enter") { ?>
+<?php if ($action == "enter") { 
+include(DB.'judging_scores_bos.db.php');
+
+?>
 <?php if ($totalRows_enter_bos > 0) { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
 <script type="text/javascript" language="javascript">
@@ -220,41 +203,37 @@ else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."i
 </thead>
 <tbody>
 	<?php 
-	do {	
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_enter_bos['eid']);
-		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-		$row_entries = mysql_fetch_assoc($entries);
-		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+	do {
 		
-		$query_scores = sprintf("SELECT * FROM $judging_scores_bos_db_table WHERE eid='%s'", $row_enter_bos['eid']);
-		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-		$row_scores = mysql_fetch_assoc($scores);
+		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default");
+		$bos_entry_info = explode("^",$bos_entry_info);
+		$style = $bos_entry_info[1].$bos_entry_info[3];
+		
 	?>
 	<tr>
-		<?php $score_id = $row_entries['id']; ?>
+		<?php $score_id = $bos_entry_info[13]; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if ($row_scores['id'] != "") echo "Y"; else echo "N"; ?>" />
-        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $row_entries['id']; ?>" />
-        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $row_entries['uid']; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[14])) echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[7]; ?>" />
+        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
-        <?php if ($row_scores['id'] != "") { ?>
-        <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $row_scores['id']; ?>" />
+        <?php if (!empty($bos_entry_info[14])) { ?>
+        <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
         <?php } ?>
         <td><?php echo sprintf("%04s",$row_enter_bos['eid']);  ?></td>
-        <td class="data"><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
-    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $row_scores['scoreEntry']; ?>" /></td>
+        <td class="data"><?php echo readable_judging_number($bos_entry_info[2],$bos_entry_info[6]); ?></td>
+        <td class="data"><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
+    	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $bos_entry_info[11]; ?>" /></td>
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
-          <option value="<?php echo $i; ?>" <?php if ($row_scores['scorePlace'] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
+          <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
           <?php } ?>
         </select>
         </td>
 	</tr>
     <?php 
-	mysql_free_result($entries);
 	} while ($row_enter_bos = mysql_fetch_assoc($enter_bos)); 
 	?>	
 </tbody>

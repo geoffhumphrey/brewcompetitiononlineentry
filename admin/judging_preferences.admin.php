@@ -7,11 +7,7 @@
 		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a>
 	</span>
 </div>
-<?php } 
-$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
-$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
-$row_judging_prefs = mysql_fetch_assoc($judging_prefs);	
-?>
+<?php } ?>
 <table>
   <tr>
     <td class="dataLabel">Use Queued Judging:</td>

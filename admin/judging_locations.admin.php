@@ -48,6 +48,7 @@ All Admin pages have certain variables in common that build the page:
 
 */
 
+include(DB.'judging_locations.db.php');
 
 // Set Vars
 $output_datatables_head = "";
@@ -60,28 +61,7 @@ $secondary_page_info = "";
 $form_submit_url = "";
 $form_submit_button = "";
 $output_no_records = "";
-
-// Make DB Connections
-//if ($section != "step5") include(DB.'judging_locations.db.php');
-
-if (($action == "default") && ($section != "step5")) {
-	
-	// Get Judging Locations Info
-	$query_judging_locs = "SELECT * FROM $judging_locations_db_table ORDER by judgingDate ASC";
-	$judging_locs = mysql_query($query_judging_locs, $brewing) or die(mysql_error());
-	$row_judging_locs = mysql_fetch_assoc($judging_locs);
-	$totalRows_judging_locs = mysql_num_rows($judging_locs);
-}
-
-if ($filter == "staff") {
-	$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
-	$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
-	$row_organizer = mysql_fetch_assoc($organizer);
-	
-	$query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
-	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
-	$row_brewers = mysql_fetch_assoc($brewers);
-}
+$goto_nav = "";
 
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";
@@ -93,31 +73,6 @@ if ($filter == "judges") 	$filter_readable .= "Judges";
 if ($filter == "stewards") 	$filter_readable .= "Stewards";
 if ($filter == "staff") 	$filter_readable .= "Staff"; 
 if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
-
-// Define Custom Functions
-function bos_judge_eligible($uid) {
-	include(CONFIG.'config.php');
-	$query_eligible = sprintf("SELECT a.scorePlace,scoreTable FROM %s a, %s b WHERE a.scorePlace IS NOT NULL AND a.eid = b.id AND b.brewBrewerID = %s ORDER BY scoreTable ASC", $prefix."judging_scores", $prefix."brewing", $uid);
-	$eligible = mysql_query($query_eligible, $brewing) or die(mysql_error());
-	$row_eligible = mysql_fetch_assoc($eligible);
-	$totalRows_eligible = mysql_num_rows($eligible);
-	
-	$return = "";
-	unset($first_places);
-	unset($second_places);
-	unset($third_places);
-	
-	if ($totalRows_eligible > 0) {
-		do {
-			$places[] = $row_eligible['scorePlace']."-".$row_eligible['scoreTable'];
-		} while ($row_eligible = mysql_fetch_assoc($eligible));
-	$places = implode("|",$places);
-	$return .= $places;
-	}
-	
-	return $return;
-}
-
 
 // *****************************************************************************
 // ---------------------- Top of Page Vars -------------------------------------
@@ -291,19 +246,12 @@ if ($section != "step5") {
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
 } // end if ($section != "step5")
 
-if ($section != "step5") {
-	if (($totalRows_brewer == 0) && ($filter != "default")) { 
-		if ($action == "update") $output_no_records .= "<p>No $filter have been assigned.</p>"; 
-		else $output_no_records .= "<p>No participants are eligible.</p>";
-	}
-}
-
 
 // *****************************************************************************
 // ---------------------- List Judging Locations ---------------------------
 // *****************************************************************************
 if ($section != "step5") {
-	if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign"))) { 
+	if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) { 
 	
 		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
 		
@@ -378,25 +326,22 @@ if ($section != "step5") {
 					$judge_places = rtrim($judge_places,", ");
 				}
 			}
-			
-			if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
-			if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
-			$a = explode(",",$exploder);
-			$output = "";
-			if ($exploder != "") { 
-				sort($a);
-				foreach ($a as $value) {
-					if ($value != "") {
-						$b = substr($value, 2);
-						$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM $judging_locations_db_table WHERE id='%s'", $b);
-						$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-						$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-						if ((substr($value, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName']))) $output .= $row_judging_loc3['judgingLocName']."<br>";
-						else $output .= "";
+			if (($filter == "judges") || ($filter == "stewards")) {
+				if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+				if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
+				$a = explode(",",$exploder);
+				$output = "";
+				if ($exploder != "") { 
+					sort($a);
+					foreach ($a as $value) {
+						if ($value != "") {
+							$b = substr($value, 2);
+							$output .= judging_location_avail($b,$value);
+							}
 						}
 					}
-				}
-			$output = rtrim($output,"<br>");
+				$output = rtrim($output,"<br>");
+			}
 			if (empty($output)) $output_location = "<span class='icon'><img src='".$base_url."images/exclamation.png'></span>None specified.";
 			else $output_location = $output;
 			
