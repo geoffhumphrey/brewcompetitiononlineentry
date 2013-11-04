@@ -5,16 +5,7 @@
  *              (e.g., for a Pro-Am, Best Entry Name, Stewards Choice, etc.)
  */
 
-$query_sbi = "SELECT * FROM $special_best_info_db_table";
-$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
-$row_sbi = mysql_fetch_assoc($sbi);
-$totalRows_sbi = mysql_num_rows($sbi);
-
-$query_sbd = "SELECT COUNT(*) as 'count' FROM $special_best_data_db_table";
-$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-$row_sbd = mysql_fetch_assoc($sbd);
-
- ?>
+?>
 <h2><?php if ($action == "add") echo "Add a Custom Winning Category"; elseif ($action == "edit") echo "Edit a Custom Winning Category"; else echo "Custom Winning Categories"; ?></h2>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
@@ -22,7 +13,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
     	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
         <?php } else { ?>
         <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a></span>
-   		<?php } if ($row_sbd['count'] > 0) { ?>
+   		<?php } if ($totalRows_sbd > 0) { ?>
         <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/award_star_gold_2.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">View Custom Winning Category Entires</a></span>
         <?php } ?>
     </span>
@@ -64,9 +55,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
      </thead>
      <tbody>
      <?php do { 
-		$query_sbd = sprintf("SELECT COUNT(*) as 'count' FROM $special_best_data_db_table WHERE sid='%s'",$row_sbi['id']);
-		$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-		$row_sbd = mysql_fetch_assoc($sbd);
+		$sbd_count = sbd_count($row_sbi['id']);
 	 ?>
      <tr>
       <td width="20%" class="dataList"><?php echo $row_sbi['sbi_name']; ?></td>
@@ -76,7 +65,7 @@ $row_sbd = mysql_fetch_assoc($sbd);
       <td width="25%" class="dataList"><?php echo $row_sbi['sbi_rank']; ?></td>
       <td class="dataList" nowrap="nowrap">
       <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
-      <?php if ($row_sbd['count'] > 0) { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
+      <?php if ($sbd_count > 0) { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
       </td>
      </tr>
     <?php } while($row_sbi = mysql_fetch_assoc($sbi)) ?>

@@ -113,7 +113,7 @@ $inserted = "default";
 if (isset($_GET['inserted'])) {
   $inserted = (get_magic_quotes_gpc()) ? $_GET['inserted'] : addslashes($_GET['inserted']);
 } 
-// -----------------
+// ----------------- 
 
 
 ?>

@@ -138,8 +138,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 				null,
 				null,
 				null,
-
-			{ "asSorting": [  ] },
+				null,
 				{ "asSorting": [  ] }<?php if ($dbTable == "default") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
@@ -154,7 +153,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
-			"bStateSave": true
+			"bStateSave": false,
 			"bLengthChange" : false,
 			
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>
@@ -203,26 +202,11 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
  <tbody>
  <?php 
  
- 	do {
-	{  
-	mysql_select_db($database, $brewing);
-	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
-	/*
-	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
-	$style = mysql_query($query_style, $brewing) or die(mysql_error());
-	$row_style = mysql_fetch_assoc($style);
-	*/
-	$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid='%s'",$row_log['brewBrewerID']);
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_array($brewer);
-
-	$query_styles_num = "SELECT DISTINCT brewStyleGroup FROM $styles_db_table ORDER BY brewStyleGroup ASC";
-	$styles_num = mysql_query($query_styles_num, $brewing) or die(mysql_error());
-	$row_styles_num = mysql_fetch_assoc($styles_num);
-	$totalRows_styles_num = mysql_num_rows($styles_num);
+ 	do {  
 	
+	$brewer_info = brewer_info($row_log['brewBrewerID']);
+	$brewer_info = explode("^",$brewer_info);
 	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
-	
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 	
 	?>
@@ -241,11 +225,11 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   </td>
   <td class="dataList "><?php echo $row_log['brewName']; ?></td>
   <td class="dataList "><?php if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if (!empty($row_log['brewCategorySort'])) echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; else echo "<span class='required'>Style NOT specified!</span>"; if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td class="dataList "><?php if (($row_brewer['brewerFirstName'] != "") && ($row_brewer['brewerLastName'] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?></td>
-  <td class="dataList "><?php echo $row_brewer['brewerClubs']; ?></td>
+  <td class="dataList "><?php if (($brewer_info[0] != "") && ($brewer_info[1] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only <?php echo $brewer_info[0]." ".$brewer_info[1]."&rsquo;s"; ?> entries"><?php } echo  $brewer_info[1].", ".$brewer_info[0]; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?></td>
+  <td class="dataList "><?php echo $brewer_info[8] ; ?></td>
   <td class="dataList "><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
-  <td nowrap="nowrap" class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='".$base_url."images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
-  <td class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewReceived'] == "1") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "1") echo "X"; } ?></td>
+  <td nowrap="nowrap" class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php echo "<span style='visibility:hidden'>".$row_log['brewPaid']."</span>"; if ($brewer_info[9] == "Y") echo "&nbsp;<span class='icon'><img src='".$base_url."images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
+  <td class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewReceived'] == "1") echo "checked"; else ""; ?> /><?php  echo "<span style='visibility:hidden'>".$row_log['brewReceived']."</span>"; } else { if ($row_log['brewReceived'] == "1") echo "X"; } ?></td>
   <td class="dataList "><?php if ($action != "print") { ?><input id="brewBoxNum" name="brewBoxNum<?php echo $row_log['id']; ?>" type="text" size="5" maxlength="10" value="<?php echo $row_log['brewBoxNum']; ?>" /><?php } else { echo $row_log['brewBoxNum']; }?></td>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <td class="dataList" nowrap="nowrap">
@@ -254,7 +238,7 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   </td>
   <?php } ?>
   </tr>
-  <?php } } while($row_log = mysql_fetch_assoc($log)) ?>
+  <?php } while($row_log = mysql_fetch_assoc($log)) ?>
 </tbody>
 </table>
 
@@ -262,7 +246,6 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
 	if (($dbTable == "default") && ($totalRows_entry_count >= $_SESSION['prefsRecordLimit']))	{
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_entry_count;
 	else $total_paginate = $totalRows_log;
-	paginate($_SESSION['prefsRecordPaging'], $pg, $total_paginate);
 	}
 ?>
 <?php if ($dbTable == "default") { ?>
@@ -271,4 +254,4 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
 </form>
 
 <?php } 
-} else echo "<p class=\"error\">There are no entires.</p>"; ?>
+} else echo "<p>There are no entires.</p>"; ?>

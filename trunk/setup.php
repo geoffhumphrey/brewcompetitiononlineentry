@@ -1,13 +1,13 @@
 <?php
 require('paths.php');
 //require(INCLUDES.'url_variables.inc.php');
-$current_version = "1.3.0.2"; 
-require(INCLUDES.'functions.inc.php'); 
+$current_version = "1.3.0.3"; 
+require(LIB.'common.lib.php'); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 date_default_timezone_set('America/Denver');
 
-// Check to see if initial setup has taken place 
+// Check to see if initial setup has taken place
 
 if (table_exists($prefix."system")) {
 mysql_select_db($database, $brewing);

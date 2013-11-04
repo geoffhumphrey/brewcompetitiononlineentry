@@ -1,7 +1,7 @@
 <?php
 require('paths.php');
 require(DB.'common.db.php');
-require(INCLUDES.'functions.inc.php');
+require(LIB.'common.lib.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 

@@ -1,6 +1,7 @@
 <?php
 // Determine if current or archive
 //include(INCLUDES.'db_tables.inc.php');
+
 if (table_exists($style_types_db_table)) {
 	
 	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging")) {
@@ -17,7 +18,7 @@ if (table_exists($style_types_db_table)) {
 }
 
 if (table_exists($judging_tables_db_table)) {
-	if (($go == "default") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights")) {
+	if (($go == "default") || ($go == "participants") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights")) {
 		
 		$query_tables = "SELECT * FROM $judging_tables_db_table";
 		if (($go == "judging_scores") || ($go == "judging_tables")) $query_tables .= " ORDER BY tableNumber ASC";
@@ -46,36 +47,48 @@ if ($go == "judging_scores") {
 	$totalRows_scores = mysql_num_rows($scores);
 }
 
-if ($go == "judging_scores_bos") {
-	if ($action == "default") { 
-		$query_style_types = "SELECT * FROM $style_types_db_table";
-		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
-		$row_style_types = mysql_fetch_assoc($style_types);
+if (($go == "judging_scores_bos") || ($go == "judging_tables")) {
 	
+	$query_style_types = "SELECT * FROM $style_types_db_table";
+	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+	$row_style_types = mysql_fetch_assoc($style_types);
+	
+	if ($action == "default") {
+		
 		$query_style_types_2 = "SELECT * FROM $style_types_db_table";
 		$style_types_2 = mysql_query($query_style_types_2, $brewing) or die(mysql_error());
 		$row_style_types_2 = mysql_fetch_assoc($style_types_2);
+		
 		} // end if ($action == "default);
 	
-	if ($action != "default") {
-		$query_style_types = "SELECT * FROM $style_types_db_table";
-		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
-		$row_style_types = mysql_fetch_assoc($style_types);
-		
-		$query_enter_bos = "SELECT * FROM $judging_scores_db_table";
-		if ($row_style_type['styleTypeBOSMethod'] == "1") $query_enter_bos .= " WHERE scoreType='$filter' AND scorePlace='1'";
-		if ($row_style_type['styleTypeBOSMethod'] == "2") $query_enter_bos .= " WHERE scoreType='$filter' AND (scorePlace='1' OR scorePlace='2')";
-		if ($row_style_type['styleTypeBOSMethod'] == "3") $query_enter_bos .= " WHERE (scoreType='$filter' AND scorePlace='1') OR (scoreType='$filter' AND scorePlace='2') OR (scoreType='$filter' AND scorePlace='3')";
-		//if ($_SESSION['jPrefsBOSMethodBeer'] == "4") $query_enter_bos .= " WHERE scoreType='B' AND scorePlace='1'";
-		$query_enter_bos .= " ORDER BY scoreTable ASC";
-		$enter_bos = mysql_query($query_enter_bos, $brewing) or die(mysql_error());
-		$row_enter_bos = mysql_fetch_assoc($enter_bos);
-		$totalRows_enter_bos = mysql_num_rows($enter_bos);
-		//echo $query_enter_bos;
-		}
   	}
 	
 $total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
 $total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
 $total_fees_unpaid = ($total_fees - $total_fees_paid);
+
+if ($go == "default") {
+	$query_with_entries = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FROM %s",$prefix."brewing");
+	$with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
+	$row_with_entries = mysql_fetch_assoc($with_entries);
+}
+
+if (($go == "special_best_data") || ($go == "special_best")) {
+	
+	$query_sbi = "SELECT * FROM $special_best_info_db_table";
+	if (($action == "add") || ($action == "edit")) $query_sbi .= " WHERE id='$id'"; 
+	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
+	$row_sbi = mysql_fetch_assoc($sbi);
+	$totalRows_sbi = mysql_num_rows($sbi);
+	
+	if ($action == "add") $query_sbd = "SELECT * FROM $special_best_data_db_table WHERE id='$id'";
+	elseif ($action == "edit") $query_sbd = "SELECT * FROM $special_best_data_db_table WHERE sid='$id' ORDER BY sbd_place ASC";
+	else $query_sbd = "SELECT * FROM $special_best_data_db_table ORDER BY sid,sbd_place ASC";
+	$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
+	$row_sbd = mysql_fetch_assoc($sbd);
+	$totalRows_sbd = mysql_num_rows($sbd);
+}
+
+
+
 ?>

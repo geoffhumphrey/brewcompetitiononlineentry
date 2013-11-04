@@ -46,6 +46,7 @@ function generate_judging_num($style_cat_num) {
 	return $return;
 }
 
+
 function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$user_name) {
 	/*
 	$style = Style category and subcategory number

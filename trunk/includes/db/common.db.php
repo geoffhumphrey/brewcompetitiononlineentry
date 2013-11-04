@@ -9,7 +9,9 @@ $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
 if ($prefix != "") $prefix_session = md5(rtrim($prefix,"_"));
 else $prefix_session = md5("BCOEM12345");
+
 /*
+---- DEPRECATED for now ----
 // Go about setting a unique name for the session. Using the competition name since it's unique to every competition.
 $query_session_name = sprintf("SELECT contestName FROM %s WHERE id=1", $prefix."contest_info");
 $session_name = mysql_query($query_session_name, $brewing) or die(mysql_error());
@@ -71,6 +73,7 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	$_SESSION['contestHostWebsite'] = $row_contest_info['contestHostWebsite'];
 	$_SESSION['contestShippingName'] = $row_contest_info['contestShippingName'];
 	$_SESSION['contestShippingAddress'] = $row_contest_info['contestShippingAddress'];
+	$_SESSION['contestHostLocation'] = $row_contest_info['contestHostLocation'];
 	
 	// Awards Information
 	$_SESSION['contestAwardsLocation'] = $row_contest_info['contestAwardsLocation'];
@@ -239,5 +242,39 @@ $row_limits = mysql_fetch_assoc($limits);
 $query_contest_dates = sprintf("SELECT contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline FROM %s WHERE id=1", $prefix."contest_info");
 $contest_dates = mysql_query($query_contest_dates, $brewing) or die(mysql_error());
 $row_contest_dates = mysql_fetch_assoc($contest_dates);
+
+// Only used for initial setup of installation
+if ($section == "step4") {
+	$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid='1'";
+	$name = mysql_query($query_name, $brewing) or die(mysql_error());
+	$row_name = mysql_fetch_assoc($name);
+}
+
+// Do not rely on session data to populate Competition Info for editing in Admin or in Setup
+if (($section == "admin") && ($go == "contest_info")) {
+	$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
+	$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+	$row_contest_info = mysql_fetch_assoc($contest_info);
+}
+
+// Do not rely on session data to populate Site Preferences for editing in Admin or in Setup
+if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
+	$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
+	$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+	$row_prefs = mysql_fetch_assoc($prefs);
+	$totalRows_prefs = mysql_num_rows($prefs);
+	
+	$query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
+	$themes = mysql_query($query_themes, $brewing) or die(mysql_error());
+	$row_themes = mysql_fetch_assoc($themes);
+	$totalRows_themes = mysql_num_rows($themes);
+}
+
+// Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup
+if ((($section == "admin") && ($go == "judging_preferences")) || ($go == "step8")) {
+	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+	$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
+	$row_judging_prefs = mysql_fetch_assoc($judging_prefs);	
+}
 
 ?>

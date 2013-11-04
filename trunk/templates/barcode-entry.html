@@ -140,7 +140,6 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
         <td colspan="2">For Mead</td>
         </tr>
       <tr>
-      
         <td width="2%">
            <img src="../images/check.jpg" border="0">
            [onshow_still;block=td;when [var.brewing_info.sparkling]='Still']
@@ -170,22 +169,20 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
            [onshow_hydromel;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Hydromel (light mead)</td>
-
       </tr>
       <tr>
         <td width="2%">
            <img src="../images/check.jpg" border="0">
-           [onshow_petillant;block=td;when [var.brewing_info.sparkling]='Petillant']
+           [onshow_petillant;block=td;when [var.brewing_info.sparkling]='petillant']
         </td>
         <td width="2%">
            <img src="../images/box.jpg" border="0">
            [onshow_petillant;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Petillant</td>
-
         <td width="2%">
            <img src="../images/check.jpg" border="0">
-           [onshow_ssweet;block=td;when [var.brewing_info.sweetness]='semiSweet']
+           [onshow_ssweet;block=td;when [var.brewing_info.sweetness]='Semi-Sweet']
         </td>
         <td width="2%">
            <img src="../images/box.jpg" border="0">
@@ -202,13 +199,11 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
            [onshow_stdmead;block=td;default]
         </td>
         <td nowrap="nowrap">Standard Mead</td>
-        
       </tr>
-      
       <tr>
          <td width="2%">
            <img src="../images/check.jpg" border="0">
-           [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='Sparkling']
+           [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='yes']
         </td>
         <td width="2%">
            <img src="../images/box.jpg" border="0">
@@ -235,7 +230,6 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
            [onshow_sack;block=td;default]
         </td>
         <td nowrap="nowrap">Sack (strong mead)</td>
-        
       </tr>
     </table>
     </td>

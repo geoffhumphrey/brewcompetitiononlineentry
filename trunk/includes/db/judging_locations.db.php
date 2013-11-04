@@ -26,12 +26,34 @@ if ((($section == "brewer") && ($action == "edit")) || ($section == "admin") || 
 $judging3 = mysql_query($query_judging3, $brewing) or die(mysql_error());
 $row_judging3 = mysql_fetch_assoc($judging3);
 $totalRows_judging3 = mysql_num_rows($judging3);
-
+/*
 $query_judging4 = "SELECT * FROM $judging_locations_db_table";
 if (($row_brewer['brewerJudgeAssignedLocation'] != "") && ($row_brewer['brewerStewardAssignedLocation'] == "")) $query_judging4 .= sprintf(" WHERE id='%s'", $row_brewer['brewerJudgeAssignedLocation']);
 if (($row_brewer['brewerJudgeAssignedLocation'] == "") && ($row_brewer['brewerStewardAssignedLocation'] != "")) $query_judging4 .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardAssignedLocation']);
 $judging4 = mysql_query($query_judging4, $brewing) or die(mysql_error());
 $row_judging4 = mysql_fetch_assoc($judging4);
 $totalRows_judging4 = mysql_num_rows($judging4);
+*/
+// Make DB Connections
+//if ($section != "step5") include(DB.'judging_locations.db.php');
+
+if ((($action == "default") || ($action == "assign")) && ($section != "step5")) {
+	
+	// Get Judging Locations Info
+	$query_judging_locs = "SELECT * FROM $judging_locations_db_table ORDER by judgingDate ASC";
+	$judging_locs = mysql_query($query_judging_locs, $brewing) or die(mysql_error());
+	$row_judging_locs = mysql_fetch_assoc($judging_locs);
+	$totalRows_judging_locs = mysql_num_rows($judging_locs);
+}
+
+if ($filter == "staff") {
+	$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+	$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
+	$row_organizer = mysql_fetch_assoc($organizer);
+	
+	$query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
+	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
+	$row_brewers = mysql_fetch_assoc($brewers);
+}
 
 ?>

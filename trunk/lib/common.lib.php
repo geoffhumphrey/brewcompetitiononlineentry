@@ -1,12 +1,12 @@
 <?php
 /**
- * Module:      functions.inc.php
+ * Module:      common.inc.php
  * Description: This module houses all site-wide function definitions. If a function
  *              or variable is called from multiple modules, it is housed here.
  *
  */
 
-include (INCLUDES.'date_time.inc.php');
+include (INCLUDES.'date_time.inc.php'); 
 
 function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
@@ -153,11 +153,6 @@ function build_admin_url ($section="default",$go="default",$action="default",$id
 }
 */
 
-$pg = "default";
-if (isset($_GET['pg'])) {
-  $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
-}
-
 function display_array_content($arrayname,$method) {
  	$a = "";
  	while(list($key, $value) = each($arrayname)) {
@@ -232,7 +227,7 @@ function purge_entries($type, $interval) {
 		
 		do { 
 				if ($row_check['brewInfo'] == "") {
-					$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
+					$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
 					mysql_select_db($database, $brewing);
 					$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
 				}
@@ -313,10 +308,6 @@ function check_judging_numbers() {
 	$row_check = mysql_fetch_assoc($check);
 	if ($row_check['count'] == 0) return true; else return false;
 }
-
-$color = "#eeeeee";
-$color1 = "#e0e0e0";
-$color2 = "#eeeeee";
 
 
 // ---------------------------- Temperature, Weight, and Volume Conversion ----------------------------------
@@ -407,9 +398,8 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 
 # Pagination
-
+/*
 function paginate($display, $pg, $total) {
-  /* make sure pagination doesn't interfere with other query string variables */
   if(isset($_SERVER['QUERY_STRING']) && trim(
     $_SERVER['QUERY_STRING']) != '') {
     	if(stristr($_SERVER['QUERY_STRING'], 'pg='))
@@ -421,16 +411,13 @@ function paginate($display, $pg, $total) {
 	else
     $query_str = '?pg=';
     
-  /* find out how many pages we have */
   $pages = ($total <= $display) ? 1 : ceil($total / $display);
-    
-  /* create the links */
+
   $first = '<span id="sortable_first" class="first paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.'1">First</a></span>';
   $prev =  '<span id="sortable_previous" class="previous paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.($pg - 1).'">Previous</a></span>';
   $next =  '<span id="sortable_next" class="next paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.($pg + 1).'">Next</a></span>';
   $last =  '<span id="sortable_last" class="last paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.$pages.'">Last</a></span>';
    
-  /* display opening navigation */
   echo '<div id="sortable_paginate" class="dataTables_paginate paging_full_numbers">';
   echo ($pg > 1) ? "$first$prev" : '<span id="sortable_first" class="first paginate_button">First</span><span id="sortable_previous" class="previous paginate_button">Previous</span>';
   
@@ -444,12 +431,11 @@ function paginate($display, $pg, $total) {
   for($i=$begin; $i<=$end; $i++)
     echo ($i == $pg) ? ' <span class="paginate_active">'.$i.'</span> ' : '<span class="paginate_button"><a href="'.
       $_SERVER['PHP_SELF'].$query_str.$i.'">'.$i.'</a></span>';
-    
-  /* display ending navigation */
-  echo ($pg < $pages) ? "$next$last" : '<span id="sortable_next" class="next paginate_button">Next</span><span id="sortable_last" class="last paginate_button">Last</span>';
+      echo ($pg < $pages) ? "$next$last" : '<span id="sortable_next" class="next paginate_button">Next</span><span id="sortable_last" class="last paginate_button">Last</span>';
   echo '</div>';
 }
-	
+*/
+
 function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
 	require(CONFIG.'config.php');
 	
@@ -939,7 +925,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	} // end if (($bid == "default") && ($filter != "default"))
 	// ----------------------------------------------------------------------	
 }
-
+/*
 function unpaid_fees($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap, $secret, $secret_num) {
 	switch($discount) {
 		case "N": 
@@ -995,6 +981,7 @@ function discount_display($total_not_paid, $discount_amt, $entry_fee, $entry_fee
 		}
 	return $array;
 } // end funtion
+*/
 
 function total_not_paid_brewer($bid) { 
 	require(CONFIG.'config.php');
@@ -1414,29 +1401,6 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	}
 }
 
-
-function table_count_total($input) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $input);
-	$scores_1 = mysql_query($query_scores_1, $brewing) or die(mysql_error());
-	$row_scores_1 = mysql_fetch_assoc($scores_1);
-	return $row_scores_1['count'];
-}
-
-
-
-function bos_place($eid) { 
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_bos_place = sprintf("SELECT scorePlace,scoreEntry FROM %s WHERE eid='$eid'", $prefix."judging_scores_bos");
-	$bos_place = mysql_query($query_bos_place, $brewing) or die(mysql_error());
-	$row_bos_place = mysql_fetch_assoc($bos_place);
-	$value = $row_bos_place['scorePlace']."-".$row_bos_place['scoreEntry'];
-	return $value;
-}
-
 function style_type($type,$method,$source) { 
 	if ($method == "1") { 
 		switch($type) { 
@@ -1517,113 +1481,7 @@ function check_bos_loc($id) {
 	return $bos_loc;
 }
 */
-function bos_method($value) {
-	switch($value) {
-		case "1": $bos_method = "1st place only";
-		break;
-		case "2": $bos_method = "1st and 2nd places only";
-		break;
-		case "3": $bos_method = "1st, 2nd, and 3rd places";
-		break;
-		case "4": $bos_method = "Defined by Admin";
-		break;
-	}
-	return $bos_method;
-}
 
-function text_number($n) {
-    # Array holding the teen numbers. If the last 2 numbers of $n are in this array, then we'll add 'th' to the end of $n
-    $teen_array = array(11, 12, 13, 14, 15, 16, 17, 18, 19);
-   
-    # Array holding all the single digit numbers. If the last number of $n, or if $n itself, is a key in this array, then we'll add that key's value to the end of $n
-    $single_array = array(1 => 'st', 2 => 'nd', 3 => 'rd', 4 => 'th', 5 => 'th', 6 => 'th', 7 => 'th', 8 => 'th', 9 => 'th', 0 => 'th');
-   
-    # Store the last 2 digits of $n in order to check if it's a teen number.
-    $if_teen = substr($n, -2, 2);
-   
-    # Store the last digit of $n in order to check if it's a teen number. If $n is a single digit, $single will simply equal $n.
-    $single = substr($n, -1, 1);
-   
-    # If $if_teen is in array $teen_array, store $n with 'th' concantenated onto the end of it into $new_n
-    if (in_array($if_teen, $teen_array)) {
-        $new_n = $n . 'th';
-    	}
-    # $n is not a teen, so concant the appropriate value of it's $single_array key onto the end of $n and save it into $new_n
-    elseif ($single_array[$single])  {
-        $new_n = $n . $single_array[$single];   
-    	}
-		
-    # Return new
-    return $new_n;
-}
-
-
-function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	if ($method == "thickbox") {  $class = 'class="menuItem" id="modal_window_link"'; }
-	
-	if ($method == "none") { $class = 'class="menuItem"'; }
-	
-	$random = random_generator(7,2);
-	
-	$query_tables = sprintf("SELECT * FROM %s ORDER BY tableNumber ASC", $prefix."judging_tables");
-	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-	$row_tables = mysql_fetch_assoc($tables);
-	$totalRows_tables = mysql_num_rows($tables);
-	
-	$table_choose = '<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, \'menu_categories'.$random.'\');">For Table #...</a></div>';
-	$table_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
-	
-	do {
-		$table_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a>';
-	} while ($row_tables = mysql_fetch_assoc($tables));
-	
-	$table_choose .= '</div>';
-	return $table_choose;
-	
-}
-
-
-function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
-	
-	if ($method == "none") { $suffix = '';  $class = 'class="menuItem"'; }
-	
-	$random = random_generator(7,2);
-	
-	$style_choose = '<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, \'menu_categories'.$random.'\');">Select Below...</a></div>';
-	$style_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
-	for($i=1; $i<29; $i++) { 
-		if ($i <= 9) $num = "0".$i; else $num = $i;
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategory='%s'", $prefix."brewing", $i);
-		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-		$row = mysql_fetch_array($result);
-		//if ($num == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
-	}
-	
-	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
-	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-	$row_styles = mysql_fetch_assoc($styles);
-	$totalRows_styles = mysql_num_rows($styles);
-	
-	do {  
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $row_styles['brewStyleGroup']);
-		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-		$row = mysql_fetch_array($result);
-		//if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].$suffix.'" title="Print '.$row_styles['brewStyle'].'">'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</a>'; } 
-	} while ($row_styles = mysql_fetch_assoc($styles));
-	
-	
-	$style_choose .= '</div>';
-	return $style_choose;   			
-}
 
 function table_location($table_id,$date_format,$time_zone,$time_format,$method) { 
 	require(CONFIG.'config.php');
@@ -1651,23 +1509,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 	}
 	
 	return $table_location;
-}
-
-function flight_count($table_id,$method) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $table_id);
-	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
-	$row_flights = mysql_fetch_assoc($flights);
-	
-	switch($method) {
-		case "1": if ($row_flights['count'] > 0) return true; else return false;
-		break;
-		
-		case "2": return $row_flights['count'];
-		break;
-	}
-}
+} 
 
 function score_count($table_id,$method) {
 	require(CONFIG.'config.php');
@@ -1684,35 +1526,6 @@ function score_count($table_id,$method) {
 		break;
 	}
 	
-}
-
-
-	
-function orphan_styles() { 
-	require(CONFIG.'config.php');
-	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
-	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-	$row_styles = mysql_fetch_assoc($styles);
-	$totalRows_styles = mysql_num_rows($styles);
-	
-	$query_style_types = sprintf("SELECT id FROM %s WHERE styleTypeOwn = 'custom'", $prefix."style_types");
-	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
-	$row_style_types = mysql_fetch_assoc($style_types);
-	$totalRows_style_types = mysql_num_rows($style_types);
-	
-	do { $a[] = style_type($row_style_types['id'], "2", "bcoe"); } while ($row_style_types = mysql_fetch_assoc($style_types));
-
-	$return = "";
-	if ($totalRows_styles > 0) {
-		do {
-			if (!in_array($row_styles['brewStyleType'], $a)) { 
-				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='".$base_url."images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
-			}
-		} while ($row_styles = mysql_fetch_assoc($styles));
-	}
-	if ($return == "") $return .= "<p>All custom styles have a valid style type associated with them.</p>";
-	return $return;
-
 }
 
 function bjcp_rank($rank,$method) {
@@ -1774,7 +1587,6 @@ function bjcp_rank($rank,$method) {
 	return $return;
 }
 
-
 function srm_color($srm,$method) {
 	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
 	
@@ -1826,10 +1638,19 @@ function get_contact_count() {
 function brewer_info($uid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['uid']."^".$row_brewer_info['brewerClubs'];
+	$r = $row_brewer_info['brewerFirstName']."^".
+	$row_brewer_info['brewerLastName']."^".
+	$row_brewer_info['brewerPhone1']."^".
+	$row_brewer_info['brewerJudgeRank']."^".
+	$row_brewer_info['brewerJudgeID']."^".
+	$row_brewer_info['brewerJudgeBOS']."^".
+	$row_brewer_info['brewerEmail']."^".
+	$row_brewer_info['uid']."^".
+	$row_brewer_info['brewerClubs']."^".
+	$row_brewer_info['brewerDiscount'];
 	return $r;
 }
 
@@ -1926,79 +1747,9 @@ function entry_info($id) {
 }
 
 function get_suffix($dbTable) {
-	/*
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_suffix = sprintf("SELECT archiveSuffix FROM %s WHERE id='%s'", $prefix."archive");
-	$suffix = mysql_query($suffix, $brewing) or die(mysql_error());
-	$row_suffix = mysql_fetch_assoc($suffix);
-	do { $a[] = $row_suffix['archiveSuffix']; } while ($row_suffix = mysql_fetch_assoc($suffix));
-	*/
-	
 	$suffix = strrchr($dbTable,"_");
 	$suffix = ltrim($suffix, "_");
-	/*
-	
-	if (strstr($dbTable,"judging_tables")) $suffix = ltrim($dbTable,"judging_tables");
-	if (strstr($dbTable,"judging_flights")) $suffix = ltrim($dbTable,"judging_flights");
-	if (strstr($dbTable,"judging_scores")) $suffix = ltrim($dbTable,"judging_scores");
-	if (strstr($dbTable,"judging_scores_bos")) $suffix = ltrim($dbTable,"judging_scores_bos");
-	if (strstr($dbTable,"brewing"))  $suffix = ltrim($dbTable,"brewing");
-	if (strstr($dbTable,"brewer"))  $suffix = ltrim($dbTable,"brewer");
-	if (strstr($dbTable,"style_types"))  $suffix = ltrim($dbTable,"style_types");
-	if (strstr($dbTable,"special_best_data"))  $suffix = ltrim($dbTable,"special_best_data");
-	if (strstr($dbTable,"special_best_info"))  $suffix = ltrim($dbTable,"special_best_info");
-	*/
 	return $suffix;
-}
-
-function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
-	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-	$row_tables = mysql_fetch_assoc($tables);
-	$totalRows_tables = mysql_num_rows($tables); 
-	//echo $query_tables;
-	
-	if ($totalRows_tables > 0) {
-	$r = "<select name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	$r .= "<option>Choose Below:</option>";
-		do { 
-		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
-		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-		$row_scores = mysql_fetch_assoc($scores);
-		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-        	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>"; 
-		} while ($row_tables = mysql_fetch_assoc($tables));
-     $r .= "</select>";
-	} 
-	 else $r = "No tables have been defined.";
-	 return $r;
-}
-
-function score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table) {
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_sbi = "SELECT id,sbi_name FROM $special_best_info_db_table ORDER BY sbi_name ASC";
-	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
-	$row_sbi = mysql_fetch_assoc($sbi);
-	$totalRows_sbi = mysql_num_rows($sbi); 
-	//echo $query_tables;
-	if ($totalRows_sbi > 0) {
-	$r = "<select name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	$r .= "<option>Choose Below:</option>";
-		do { 
-		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $special_best_data_db_table WHERE sid='%s'", $row_sbi['id']);
-		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-		$row_scores = mysql_fetch_assoc($scores);
-		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-        	$r .= "<option value=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</option>";
-		} while ($row_sbi = mysql_fetch_assoc($sbi));
-     $r .= "</select>";
-	} 
-	else $r = "No custom winning categories have been defined.";
-	 return $r;
 }
 
 function score_check($id,$judging_scores_db_table) {
@@ -2384,6 +2135,8 @@ function readable_number($a){
 
 function winner_method($type,$output_type) {
 	
+	$output = "";
+	
 	if ($output_type == 1) {
 		switch ($type) {
 			case 0: $output = "By Table";
@@ -2692,217 +2445,4 @@ function number_pad($number,$n) {
 	return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
 }
 
-function participant_choose($brewer_db_table) {
-	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	
-	$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
-	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
-	$row_brewers = mysql_fetch_assoc($brewers);
-	
-	$output = "";
-	$output .= "<select name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\">";
-	$output .= "<option value=\"\">Choose Below:</option>";
-	do { 
-		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
-	} while ($row_brewers = mysql_fetch_assoc($brewers)); 
-	$output .= "</select>";
-	
-	return $output;
-}
-
-
-function admin_help($go,$header_output,$action,$filter) {
-	include (CONFIG.'config.php');
-	switch($go) {
-		case "preferences": $page = "site_prefs";
-		break;
-		
-		case "judging_preferences": $page = "comp_org_prefs";
-		break;
-		
-		case "style_types": $page = "style_types";
-		break;
-		
-		case "styles": 
-			switch ($action) {
-			
-			case "add":
-			case "edit": $page = "custom_style";
-			break;
-			
-			default: $page = "accepted_style";
-			break;
-			}
-		break;
-		
-		case "special_best": 
-		case "special_best_data": $page = "custom_winner";
-		break;
-		
-		case "judging":
-		
-			switch($filter) {
-				case "judges": 
-				case "stewards":
-				case "staff":
-				$page = "assigning";
-				break;
-				
-				default: $page = "judging_locations";
-				break;
-				
-				
-			}
-		
-		
-		break;
-		
-		case "contacts": $page = "comp_contacts";
-		break;
-		
-		case "dropoff": $page = "drop_off";
-		break;
-		
-		case "sponsors": $page = "sponsors";
-		break;
-		
-		case "contest_info": $page = "competition_info";
-		break;
-		
-		case "entrant":
-		case "judge": $page = "participants";
-		break;
-		
-		case "participants": 
-			switch ($filter) {
-				case "judges": 
-				case "assignJudges": $page = "judges";
-				break;
-				
-				case "stewards":
-				case "assignStewards": $page = "stewards";
-				break;
-				
-				default: $page = "participants";
-				break;
-			}
-		
-		break;
-		
-		
-		case "entries": $page = "entries";
-		break;
-		
-		case "assign": $page = "assigning";
-		break;
-		
-		case "judging_tables": 
-			switch ($action) {
-				case "assign": $page = "assigning";
-				break; 
-				
-				default: $page = "tables";
-				break;
-			}
-		
-		break;
-		
-		case "judging_flights": 
-			switch ($action) {
-				
-				case "rounds": $page = "rounds";
-				break;
-				
-				case "default": $page = "flights";
-				break;
-				
-			}
-			
-			switch ($filter) {
-				case "rounds": $page = "rounds";
-				break;
-				
-				case "default": $page = "flights";
-				break;
-			}
-		
-		break;
-		
-		case "judging_scores": $page = "scores";
-		break;
-		
-		case "judging_scores_bos": $page = "best_of_show";
-		break;
-		
-		case "special_best_data": $page = "introduction";
-		break;
-		
-		case "archive": $page = "archiving";
-		break;
-		
-		case "mods": $page = "mods";
-		break;
-		
-		default: $page = "introduction";
-		break;
-	}
-	
-	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
-	return $return;	
-}
-
-function custom_modules($type,$method) {
-	require(CONFIG.'config.php');
-	
-	if ($type == "reports") { $type = 1; $modal = "id='modal_window_link'"; }
-	if ($type == "exports") { $type = 2; $modal = ""; }
-	
-	if ($method == 1) {
-		
-		$query_custom_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE mod_type='%s'", $prefix."mods", $type);
-		$custom_number = mysql_query($query_custom_number, $brewing) or die(mysql_error());
-		$row_custom_number = mysql_fetch_assoc($custom_number);
-		
-		if ($row_custom_number['count'] > 0) return TRUE;	
-	}
-	
-	if ($method == 2) {
-		
-		$query_custom_mod = sprintf("SELECT * FROM %s WHERE mod_type='%s' ORDER BY mod_name ASC", $prefix."mods", $type);
-		$custom_mod = mysql_query($query_custom_mod, $brewing) or die(mysql_error());
-		$row_custom_mod = mysql_fetch_assoc($custom_mod);
-		$output = "";
-		do {
-			$output .= "<li><a ".$modal." href='".$base_url."mods/".$row_custom_mod['mod_filename']."'>".$row_custom_mod['mod_name']."</a></li>";
-			//$output = $query_custom_mod;
-		} while ($row_custom_mod = mysql_fetch_assoc($custom_mod));
-		
-		return $output;
-	}
-}
-
-function total_discount() {
-	require(CONFIG.'config.php');
-	
-	$query_discount = sprintf("SELECT uid FROM %s WHERE brewerDiscount='Y'", $prefix."brewer");
-	$discount = mysql_query($query_discount, $brewing) or die(mysql_error());
-	$row_discount = mysql_fetch_assoc($discount);
-	$totalRows_discount = mysql_num_rows($discount);
-	
-	do { $a[] = $row_discount['uid']; } while ($row_discount = mysql_fetch_assoc($discount));
-	
-	foreach ($a as $brewer_id) {
-	
-		$query_discount_number = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerId='%s'", $prefix."brewing", $brewer_id);
-		$discount_number = mysql_query($query_discount_number, $brewing) or die(mysql_error());
-		$row_discount_number = mysql_fetch_assoc($discount_number);
-		$b[] = $row_discount_number['count']; 
-		
-	}
-	
-	$return = $totalRows_discount."^".array_sum($b);
-	return $return;
-}
-
-?>
+?> 

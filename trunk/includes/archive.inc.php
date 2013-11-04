@@ -15,7 +15,7 @@ session_start();
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
 											  
 	require(INCLUDES.'scrubber.inc.php');
-	require(INCLUDES.'functions.inc.php');
+	require(LIB.'common.lib.php');
 	$dbTable = "default";
 	require(INCLUDES.'db_tables.inc.php');
 	if (NHC) $base_url = "../";
