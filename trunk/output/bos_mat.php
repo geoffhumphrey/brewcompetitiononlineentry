@@ -13,41 +13,8 @@ if (NHC) $base_url = "../";
 $special_beer = array("6D","16E","17F","20A","21A","21B","22B","22C","23A");
 $special_mead = array("24A","24B","24C","25A","25B","25C","26A","26B","26C");
 $special_cider = array("27B","27C","27E","28A","28B","28C","28D");
-/*
-$section = "brew";
-require(DB.'styles.db.php');
 
-// Custom styles where special ingredients are required
-if ($totalRows_styles2 > 0) {
-	do { 
-		$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
-		$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
-	}  while ($row_styles2 = mysql_fetch_assoc($styles2));
-}
-*/
-
-// Beer Styles
-$query_scores = sprintf("SELECT a.scorePlace, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND scorePlace='1' AND brewCategory <=23", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
-$query_scores .= " ORDER BY b.brewCategorySort ASC";
-$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-$row_scores = mysql_fetch_assoc($scores);
-$totalRows_scores = mysql_num_rows($scores);
-
-// Mead Styles
-$query_scores_mead = sprintf("SELECT a.scorePlace, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3 FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND scorePlace='1' AND (brewCategory = 24 OR brewCategory = 25 OR brewCategory = 26)", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
-$query_scores_mead .= " ORDER BY b.brewCategorySort ASC";
-$scores_mead = mysql_query($query_scores_mead, $brewing) or die(mysql_error());
-$row_scores_mead = mysql_fetch_assoc($scores_mead);
-$totalRows_scores_mead = mysql_num_rows($scores_mead);
-
-
-// Cider Styles
-
-$query_scores_cider = sprintf("SELECT a.scorePlace, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3 FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND scorePlace='1' AND (brewCategory = 27 OR brewCategory = 28)", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
-$query_scores_cider .= " ORDER BY b.brewCategorySort ASC";
-$scores_cider = mysql_query($query_scores_cider, $brewing) or die(mysql_error());
-$row_scores_cider = mysql_fetch_assoc($scores_cider);
-$totalRows_scores_cider = mysql_num_rows($scores_cider);
+include(DB.'output_bos_mat.db.php');
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -2,7 +2,7 @@
 $queued = $_SESSION['jPrefsQueued'];
 $location = $row_tables_edit['tableLocation'];
 
-include(DB.'judging_assign.db.php');
+include(DB.'admin_judging_assign.db.php');
 
 ?>
 <div class="adminSubNavContainer">
@@ -227,7 +227,7 @@ $table_location = "Y-".$row_tables_edit['tableLocation'];
 
 $judge_info = judge_info($row_brewer['uid']);
 $judge_info = explode("^",$judge_info);
-
+/*
 $r = 
 $row_brewer_info['brewerFirstName']."^".
 $row_brewer_info['brewerLastName']."^".
@@ -238,7 +238,7 @@ $row_brewer_info['brewerJudgeRank']."^".
 $row_brewer_info['brewerJudgeID']."^".
 $row_brewer_info['brewerStewardLocation']."^".
 $row_brewer_info['brewerJudgeLocation'];
-
+*/
 $bjcp_rank = explode(",",$judge_info[5]);
 $display_rank = bjcp_rank($bjcp_rank[0],1);
 if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>"; 

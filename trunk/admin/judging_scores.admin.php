@@ -226,7 +226,7 @@ $(document).ready(function() {
 		$score_style_data = score_style_data($value);
 		$score_style_data = explode("^",$score_style_data);
 		
-		include(DB.'judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops
+		include(DB.'admin_judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		
 		do {

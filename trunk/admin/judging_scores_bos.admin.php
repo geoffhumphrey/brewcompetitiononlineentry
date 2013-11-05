@@ -67,7 +67,7 @@ foreach ($a as $type) {
 	
 if ($style_type_info[0] == "Y") { 
 
-include(DB.'judging_scores_bos.db.php');
+include(DB.'admin_judging_scores_bos.db.php');
 
 ?>
 <a name="<?php echo $type; ?>"></a><h3>BOS Entries and Places - <?php echo $style_type_info[2]; ?></h3>
@@ -167,7 +167,7 @@ include(DB.'judging_scores_bos.db.php');
 ?>
 
 <?php if ($action == "enter") { 
-include(DB.'judging_scores_bos.db.php');
+include(DB.'admin_judging_scores_bos.db.php');
 
 ?>
 <?php if ($totalRows_enter_bos > 0) { ?>
