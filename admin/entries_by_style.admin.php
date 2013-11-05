@@ -12,7 +12,7 @@ foreach ($total_cat as $cat) {
 	$cat_name = style_convert($cat_convert,1);
 
 	// Perform query in appropriate db table rows
-	include(DB.'entry_count_by_style.db.php');
+	include(DB.'admin_entry_count_by_style.db.php');
 	
 	$style_beer_count[] = 0;
 	$style_mead_count[] = 0;

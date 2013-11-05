@@ -1,6 +1,4 @@
 <?php 
-
-session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php'); 
 
@@ -8,12 +6,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel']<= 1)) {
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
-$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignment='%s'", $filter);
-if ($id != "default") $query_assignments .= " AND assignTable='$id'";
-$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-$row_assignments = mysql_fetch_assoc($assignments);
-$totalRows_assignments = mysql_num_rows($assignments);
-
+include(DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0); 
 
 ?>
@@ -87,7 +80,6 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 	$judge_info = explode("^",brewer_info($row_assignments['bid']));
 	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
-	
 	$judge_ranks = str_replace(",",", ",$judge_info['3']);
 	?>
     <tr>
@@ -109,14 +101,6 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 </div>
 <?php } // end if ($view != "sign-in") 
 else { 
-$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid";
-if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
-else $query_brewer .= " AND b.staff_judge='1'"; 
-$query_brewer .= " ORDER BY a.brewerLastName ASC";
-$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-$row_brewer = mysql_fetch_assoc($brewer);
-$totalRows_brewer = mysql_num_rows($brewer);
-
 if ($totalRows_brewer > 0) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

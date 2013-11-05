@@ -161,7 +161,7 @@ echo "<p><span class='dataLabel'>Table Location:</span>".table_location($row_tab
 		
 		$style_name = style_convert($value,"8");
 		
-		include(DB.'judging_flights.db.php');
+		include(DB.'admin_judging_flights.db.php');
 		
 		do {
 			
@@ -219,7 +219,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 		
 		foreach (array_unique($a) as $flight_table) {
 			
-			include(DB.'judging_flights.db.php');
+			include(DB.'admin_judging_flights.db.php');
 			
 ?>
 	<h3 style="margin-top: 3em;">Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; if (($totalRows_flights > 0) && ($_SESSION['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $flight_table; ?>"><img src="<?php echo $base_url; ?>images/application_form_edit.png" alt="Edit the <?php echo $row_tables['tableName']; ?> Flights" title="Edit the <?php echo $row_tables['tableName']; ?> Flights"/></a></span><?php }  if (($totalRows_flights == 0) && ($_SESSION['jPrefsQueued'] == "N")) { ?>&nbsp;&nbsp;<span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;action=add&amp;id=<?php echo $flight_table; ?>" alt="Define Flights for <?php echo $row_tables['tableName']; ?>" title="Define Flights for <?php echo $row_tables['tableName']; ?>"><img src="<?php echo $base_url; ?>images/application_form_add.png"></a></span><?php } ?></h3>

@@ -169,8 +169,9 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 
 // Define variables
 $unassign = unassign($bid,$location,$round,$tid);
-$unavailable = unavailable($bid,$table_location,$round,$tid);
+$unavailable = unavailable($bid,$location,$round,$tid);
 $random = random_generator(8,2);
+$r = "";
 if (entry_conflict($bid,$table_styles)) $disabled = 'disabled'; else $disabled = '';
 if ($filter == "stewards") $role = 'S'; else $role = 'J';
 
@@ -237,7 +238,7 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 	if (table_round($tid,$round)) {
 		$unavailable = unavailable($bid,$location,$round,$tid);
 		$entry_conflict = entry_conflict($bid,$table_styles);
-		$at_table = at_table($bid,$tid,$flight,$round);
+		$at_table = at_table($bid,$tid);
 		//if (strpos($at_table,$tid) !== false) $already = TRUE;
 		if ($unavailable) $r = '<div class="orange judge-alert">Already Assigned to This Round</div>';
 		//if ($already) $r = '<div class="purple judge-alert">Already Assigned to this Table</div>';

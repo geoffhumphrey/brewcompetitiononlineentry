@@ -142,7 +142,7 @@ $random = random_generator(6,2);
 	?>
 	<tr>
         <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],0); ?></td><?php } ?>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['0']." ".$brewer_info['1']; if ($row_entries['brewCoBrewer'] != "") echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
+        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['0']." ".$brewer_info['1']; if (!empty($entry_info['4'])) echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $entry_info['0']; ?></td>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$entry_info['3']; ?></td>
         <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['8']; ?></td>    

@@ -1,6 +1,6 @@
 <?php 
 include(DB.'styles.db.php'); 
-include(DB.'judging_tables.db.php');
+include(DB.'admin_judging_tables.db.php');
 ?>
 <h2><?php 
 if ($action == "edit") echo "Edit Table"; 

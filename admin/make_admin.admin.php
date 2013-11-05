@@ -1,4 +1,4 @@
-<?php include(DB.'make_admin.db.php'); ?>
+<?php include(DB.'admin_make_admin.db.php'); ?>
 
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
 <div class="error">Grant users top-level admin and admin access with caution.</div>
