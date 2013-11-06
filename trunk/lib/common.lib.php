@@ -6,7 +6,29 @@
  *
  */
 
-include (INCLUDES.'date_time.inc.php'); 
+include (INCLUDES.'date_time.inc.php');
+
+// ------------------ VERSION CHECK ------------------  
+// Current version is 1.3.0.3, change version in system table if not
+// There are NO database structure or data updates for version 1.3.0.3
+// USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
+// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
+
+include(INCLUDES.'version.inc.php');
+function version_check($version) {
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	if ($version != "1.3.0.3") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.3","2013-10-25","1");
+		mysql_select_db($database, $brewing);
+		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+	}
+}
+	
+version_check($version);
+
+// ---------------------------------------------------  
 
 function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
@@ -1638,19 +1660,25 @@ function get_contact_count() {
 function brewer_info($uid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount,brewerAddress,brewerCity,brewerState,brewerZip,brewerCountry FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".
-	$row_brewer_info['brewerLastName']."^".
-	$row_brewer_info['brewerPhone1']."^".
-	$row_brewer_info['brewerJudgeRank']."^".
-	$row_brewer_info['brewerJudgeID']."^".
-	$row_brewer_info['brewerJudgeBOS']."^".
-	$row_brewer_info['brewerEmail']."^".
-	$row_brewer_info['uid']."^".
-	$row_brewer_info['brewerClubs']."^".
-	$row_brewer_info['brewerDiscount'];
+	$r = 
+	$row_brewer_info['brewerFirstName']."^". 		// 0
+	$row_brewer_info['brewerLastName']."^". 		// 1
+	$row_brewer_info['brewerPhone1']."^". 			// 2
+	$row_brewer_info['brewerJudgeRank']."^".		// 3
+	$row_brewer_info['brewerJudgeID']."^".			// 4
+	$row_brewer_info['brewerJudgeBOS']."^".			// 5
+	$row_brewer_info['brewerEmail']."^".			// 6
+	$row_brewer_info['uid']."^".					// 7
+	$row_brewer_info['brewerClubs']."^".			// 8
+	$row_brewer_info['brewerDiscount']."^".			// 9
+	$row_brewer_info['brewerAddress']."^".			// 10
+	$row_brewer_info['brewerCity']."^".				// 11
+	$row_brewer_info['brewerState']."^".			// 12
+	$row_brewer_info['brewerZip'];					// 13
+	$row_brewer_info['brewerCountry'];				// 14
 	return $r;
 }
 

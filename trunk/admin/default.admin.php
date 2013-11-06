@@ -565,8 +565,8 @@ if ($go == "default") { ?>
 			<p class="admin_default_header">Before Judging</p>
             <ul class="admin_default">
 				<li>Print Drop Off Location Reports:</li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php"  title="Print Total Entries by Location">Entry Totals by Location</a></li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php?section=check"  title="Print Entries By Drop-Off Location">Entries By Drop-Off Location</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php"  title="Print Total Entries by Location">Entry Totals by Drop-Off Location</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/dropoff.php?section=check"  title="Print Entries By Drop-Off Location">List of Entries By Drop-Off Location</a></li>
             </ul>
 			<?php if ($totalRows_tables > 0) { ?>
             <?php if (!NHC) { ?>

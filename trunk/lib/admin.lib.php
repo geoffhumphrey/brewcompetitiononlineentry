@@ -809,6 +809,7 @@ function sbd_count($id) {
 	$row_sbd = mysql_fetch_assoc($sbd);	
 	return $row_sbd['count'];
 }
+
 function special_best_info($sid) {
 	include(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);

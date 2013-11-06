@@ -2,47 +2,12 @@
 session_start(); 
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
-
+require(LIB.'output.lib.php');
 include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
-function pay_to_print($prefs_pay,$entry_paid) { 
-	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
-	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
-	elseif ($prefs_pay == "N") return TRUE;
-}
+include(DB.'output_entry.db.php');
+
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
-
-mysql_select_db($database, $brewing);
-$query_contest_info = "SELECT * FROM $contest_info_db_table WHERE id=1";
-$row_contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-$contest_info = mysql_fetch_assoc($row_contest_info);
-
 if ((NHC) && ($prefix == "final_")) $contest_name = date('Y')." NHC Final Round"; else $contest_name = $contest_info['contestName'];
-
-$query_brewing = sprintf("SELECT * FROM $brewing_db_table WHERE id = '%s'", $id);
-$log = mysql_query($query_brewing, $brewing) or die(mysql_error());
-$brewing_info = mysql_fetch_assoc($log);
-
-$query_brewer_user = sprintf("SELECT * FROM $users_db_table WHERE id = '%s'", $bid);
-$user = mysql_query($query_brewer_user, $brewing) or die(mysql_error());
-$row_brewer_user_info = mysql_fetch_assoc($user);
-
-$query_brewer_organizer = "SELECT a.brewerFirstName,a.brewerLastName FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND staff_organizer='1'";
-$brewer_organizer = mysql_query($query_brewer_organizer, $brewing) or die(mysql_error());
-$row_brewer_organizer = mysql_fetch_assoc($brewer_organizer); 
-
-$query_logged_in = sprintf("SELECT * FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
-$logged_in_user = mysql_query($query_logged_in, $brewing) or die(mysql_error());
-$row_logged_in_user = mysql_fetch_assoc($logged_in_user);
-
-$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $bid);
-$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-$brewer_info = mysql_fetch_assoc($brewer);
-
-/*
-$query_prefs = "SELECT * FROM $preferences_db_table WHERE id=1";
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
-*/
 
 // Check access restrictions
 if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
@@ -57,6 +22,7 @@ if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && (
   	echo "</body>";
   	exit();
 }
+
 if ($prefix == "final_") $brewing_info['id'] = sprintf("%06s",$brewing_info['id']);
 else $brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
@@ -71,6 +37,7 @@ $brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);
 $brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
 $brewer_info['brewerEmail'] = strtr($brewer_info['brewerEmail'],$html_remove);
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
+
 // Get some values that are easier to work with in the templates
 $brewing_info['carbonation'] = 'unknown';
 if ($brewing_info['brewCarbonationMethod'] == "Y") {
@@ -79,6 +46,7 @@ if ($brewing_info['brewCarbonationMethod'] == "Y") {
 if ($brewing_info['brewCarbonationMethod'] == "N") {
   $brewing_info['carbonation'] = 'bottleConditioned';
 }
+
 // Various mead and cider info
 switch ($brewing_info['brewMead1']) {
   case "Still":
@@ -93,6 +61,7 @@ switch ($brewing_info['brewMead1']) {
   default:
     $brewing_info['sparkling'] = '';
 }
+
 switch ($brewing_info['brewMead2']) {
   case "Dry":
     $brewing_info['sweetness'] = 'Dry';
@@ -106,6 +75,7 @@ switch ($brewing_info['brewMead2']) {
   default:
     $brewing_info['sweetness'] = '';
 }
+
 switch ($brewing_info['brewMead3']) {
   case "Hydromel":
     $brewing_info['meadType']='Hydromel';
@@ -120,11 +90,13 @@ switch ($brewing_info['brewMead3']) {
     $brewing_info['meadType']='';
     break;
 }
+
 // Style name
 if ($brewing_info['brewCategory'] < 29) { 
   	$brewing_info['styleName'] = $brewing_info['brewStyle'];
  	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
 }
+
 else
   	$brewing_info['styleName'] = $brewing_info['brewStyle']; 
 	// Some metric/US conversions
@@ -147,6 +119,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Using code from http://www.barcodephp.com
 	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 }
+
 //if (($_SESSION['prefsEntryForm'] != "N") || ($go == "recipe")) { 
 	// Convert fermentation temperature
 	$brewPrimaryTemp=$brewing_info['brewPrimaryTemp'];
