@@ -23,15 +23,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	else $loc = "";
 	$date = date("m-d-Y");
 	
-	function  parseCSVComments($comments) {
-	  $comments = str_replace('"', '""', $comments); // First off escape all " and make them ""
-	  if(eregi(",", $comments) or eregi("\n", $comments)) { // Check if I have any commas or new lines
-		return '"'.$comments.'"'; // If I have new lines or commas escape them
-	  } else {
-		return $comments; // If no new lines or commas just return the value
-	  }
-	}
-	
 	mysql_select_db($database, $brewing);
 	if     ($section == "loc") 
 	$query_sql = "
