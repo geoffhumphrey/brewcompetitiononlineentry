@@ -183,4 +183,70 @@ function user_entry_count() {
 	
 }
 
+// --------------------------------------------------------
+// The following applies to /output/participant_summary.php
+// --------------------------------------------------------
+
+
+
+// --------------------------------------------------------
+// The following applies to /output/pullsheets.php
+// --------------------------------------------------------
+
+function number_of_flights($table_id) { 
+    require(CONFIG.'config.php');
+    mysql_select_db($database, $brewing);
+	
+	$query_flights = sprintf("SELECT flightNumber FROM %s WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $prefix."judging_flights", $table_id);
+    $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+    $row_flights = mysql_fetch_assoc($flights);
+	
+	$r = $row_flights['flightNumber'];
+	return $r;	
+}
+
+function check_flight_number($entry_id,$flight) {
+	require(CONFIG.'config.php');
+    mysql_select_db($database, $brewing);
+	
+	$query_flights = sprintf("SELECT flightNumber,flightRound FROM %s WHERE flightEntryID='%s'", $prefix."judging_flights", $entry_id);
+    $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+    $row_flights = mysql_fetch_assoc($flights);
+	
+	if ($row_flights['flightNumber'] == $flight) $r = $row_flights['flightRound'];
+	else $r = "";
+	return $r;
+	
+}
+
+function check_flight_round($flight_round,$round) {
+
+	if ($round == "default") {
+		if ($flight_round != "") return TRUE;
+		else return FALSE;
+	}
+	
+	if ($round != "default") {
+		if (($flight_round != "") && ($flight_round == $round)) return TRUE;
+		else return FALSE;
+	}
+		
+}
+
+function style_type_info($id) {
+	require(CONFIG.'config.php');
+    mysql_select_db($database, $brewing);
+	
+	$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."style_types",$id);
+	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+	$row_style_type = mysql_fetch_assoc($style_type);
+	
+	$return = 
+	$row_style_type['styleTypeBOS']."^".  // 0
+	$row_style_type['styleTypeBOSMethod']."^".  // 1
+	$row_style_type['styleTypeName'];  // 2
+	
+	return $return;
+}
+
 ?>

@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for any DB updates; new entries,
  *              new users, organization, etc.
  */
- 
+ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 

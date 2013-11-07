@@ -171,26 +171,4 @@ if ($setup_success) {
 		}
 	}
 } // end if ($setup_success);
-
-
-
-/*
-
-// May not be needed - must check
-if (empty($_SESSION['prefs'])) { 
-	if (NHC) $location = "index.php";
-	else $location = $base_url;
-	header(sprintf("Location: %s",$location));
-}
-
-if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_session]))) { 
-
-	if (($_SESSION['userLevel'] <= 1) && ($section == "list") && ($msg == "2")) $location = "index.php?section=list";
-	elseif (($_SESSION['userLevel'] <= 1) && ($msg == "default")) $location = "index.php?section=admin";
-	else $location = build_public_url("list","default","default",$sef,$base_url);
-	
-	header(sprintf("Location: %s",$location));
-}
-*/
-
 ?>

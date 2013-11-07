@@ -1,27 +1,14 @@
 <?php 
 session_start(); 
-
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-	
-$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
-$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-$row_brewer = mysql_fetch_assoc($brewer);
-$totalRows_brewer = mysql_num_rows($brewer);
 
+$section = "participant_summary";
+include(DB.'brewer.db.php');
 
-$query_organizer = "SELECT a.uid,a.brewerLastName,a.brewerFirstName,b.uid FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND b.staff_organizer=1";
-$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
-$row_organizer = mysql_fetch_assoc($organizer);
-$totalRows_organizer = mysql_num_rows($organizer);
-
-//ini_set('display_errors', '0');
 $total_entries_judged = get_entry_count('received');
-//$total_judges = "";
-//$total_participants = get_participant_count();
-//error_reporting(E_ALL);
 if (NHC) $base_url = "../";
 ?>
 
@@ -36,13 +23,8 @@ if (NHC) $base_url = "../";
 </head>
 <body>
 <div id="content">
-<?php do { 
-// Check for Entries
-$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID='%s' AND brewReceived='1' AND brewPaid='1'", $row_brewer['uid']);
-$log = mysql_query($query_log, $brewing) or die(mysql_error());
-$row_log = mysql_fetch_assoc($log);
-$totalRows_log = mysql_num_rows($log);
-
+<?php do {
+include(DB.'output_participant_summary.db.php');
 if ($totalRows_log > 0) { ?>
 	<div id="content-inner">
 	<div id="header">	

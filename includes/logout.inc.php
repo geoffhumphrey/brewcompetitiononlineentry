@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require('../paths.php');
 require(LIB.'common.lib.php');
 
@@ -16,7 +17,7 @@ if ($requested_logout) {
 }
 
 // Now the session_id will be different every browser refresh
-print(session_id());
+// print(session_id());
 function session_restart() {
 	if (session_name()=='') {
 		// Session not started yet
@@ -31,7 +32,7 @@ function session_restart() {
 		session_regenerate_id(true);
 	}
 }
-header("Location: $logout_location");
+header (sprintf("Location: %s"),$$logout_location);
 
 ?>
 

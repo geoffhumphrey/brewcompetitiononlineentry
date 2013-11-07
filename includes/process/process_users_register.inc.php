@@ -80,16 +80,16 @@ if (NHC) {
 	}
 	
 	// ...and proceed normally with registration at the Region level.
-}
-
-// CAPCHA check
-if ($filter != "admin") {
-require_once(INCLUDES.'recaptchalib.inc.php');
-$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
-$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-}
-
-if (($filter != "admin") && (!$resp->is_valid)) {
+	}
+	
+	// CAPCHA check
+	if ($filter != "admin") {
+	require_once(INCLUDES.'recaptchalib.inc.php');
+	$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
+	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+	}
+	
+	if (($filter != "admin") && (!$resp->is_valid)) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
@@ -110,9 +110,9 @@ if (($filter != "admin") && (!$resp->is_valid)) {
 	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
 	$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 	header(sprintf("Location: %s", $location));
-}
-
-elseif ($_POST['user_name'] != $_POST['user_name2']) {
+	}
+	
+	elseif ($_POST['user_name'] != $_POST['user_name2']) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
@@ -134,7 +134,8 @@ elseif ($_POST['user_name'] != $_POST['user_name2']) {
 	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=16";
 	else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
 	header(sprintf("Location: %s", $location));
-}
+
+} // end if NHC
 
 else {
 

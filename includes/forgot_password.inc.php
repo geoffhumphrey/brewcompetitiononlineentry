@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include('../paths.php');
 // Based upon a script from www.plus2net.com 
 require(CONFIG.'config.php');

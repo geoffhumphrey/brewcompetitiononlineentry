@@ -1,10 +1,4 @@
 <?php
-
-/*
-$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-if (preg_match('/MSIE/i', $user_agent)) $user_agent = "IE"; else $user_agent = "non-IE";
-*/
-
 function open_or_closed($now,$date1,$date2) {
 		// First date has not passed yet
 		if ($now < $date1) $output = "0";

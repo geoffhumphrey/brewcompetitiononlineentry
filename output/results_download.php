@@ -4,10 +4,7 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(DB.'winners.db.php');
-
-$query_prefs = sprintf("SELECT prefsWinnerMethod FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
+require(DB.'output_results.php');
 
 if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');

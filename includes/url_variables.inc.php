@@ -1,5 +1,4 @@
 <?php
-
 $id = "default";
 if (isset($_GET['id'])) {
   $id = (get_magic_quotes_gpc()) ? $_GET['id'] : addslashes($_GET['id']);
@@ -114,6 +113,4 @@ if (isset($_GET['inserted'])) {
   $inserted = (get_magic_quotes_gpc()) ? $_GET['inserted'] : addslashes($_GET['inserted']);
 } 
 // ----------------- 
-
-
 ?>

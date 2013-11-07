@@ -1,14 +1,12 @@
 <?php
-
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
+mysql_select_db($database, $brewing);
+include(DB.'output_labels.db.php');
 
 if (isset($_SESSION['loginUsername'])) {
-	
-	include(DB.'output_labels.db.php');
-
 	// Special ingredients required
 	$special_ingredients = array("6D","16E","17F","20A","21A","21B","22B","22C","23A","25C","26A","26B","26C","27E","28B","28C","28D");
 	
@@ -45,6 +43,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 			} while ($row_log = mysql_fetch_assoc($log));
 		
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}
 		
@@ -103,6 +102,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 			} while ($row_log = mysql_fetch_assoc($log));
 			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}
 		
@@ -132,8 +132,12 @@ if (isset($_SESSION['loginUsername'])) {
 				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 				
+				//echo $text;
+				
 			} while ($row_log = mysql_fetch_assoc($log));
-		
+
+			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -170,6 +174,7 @@ if (isset($_SESSION['loginUsername'])) {
 				}
 			} while ($row_log = mysql_fetch_assoc($log));
 			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -205,6 +210,7 @@ if (isset($_SESSION['loginUsername'])) {
 				}
 			} while ($row_log = mysql_fetch_assoc($log));
 			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -230,6 +236,7 @@ if (isset($_SESSION['loginUsername'])) {
 			} while ($row_log = mysql_fetch_assoc($log));
 			
 			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -258,6 +265,7 @@ if (isset($_SESSION['loginUsername'])) {
 				}
 			} while ($row_log = mysql_fetch_assoc($log));
 		
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -318,6 +326,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 			} while ($row_log = mysql_fetch_assoc($log));
 			//$pdf->Output();
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -349,6 +358,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$pdf->Add_Label($text);
 			} while ($row_brewer = mysql_fetch_assoc($brewer));
 			
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}
 	
@@ -446,6 +456,7 @@ if (isset($_SESSION['loginUsername'])) {
 					
 			} while ($row_brewer = mysql_fetch_assoc($brewer));
 			
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 			
 		}
@@ -459,6 +470,7 @@ if (isset($_SESSION['loginUsername'])) {
 			
 			include(DB.'output_labels_awards.db.php');
 				
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}
 		
