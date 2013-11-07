@@ -48,11 +48,7 @@ include(DB.'dropoff.db.php');
 include(DB.'contacts.db.php');
 include(DB.'judging_locations.db.php');
 include(DB.'styles.db.php');
-
-// Get competition information for display on the page.
-$query_contest_info = sprintf("SELECT contestBottles,contestBOSAward,contestAwards,contestCircuit FROM %s WHERE id=1", $prefix."contest_info");
-$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-$row_contest_info = mysql_fetch_assoc($contest_info);
+include(DB.'entry_info.db.php');
 
 $print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
 $competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";

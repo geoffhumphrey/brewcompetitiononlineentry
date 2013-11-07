@@ -1188,7 +1188,8 @@ function style_convert($number,$type,$base_url="") {
 			$query_style = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE id='$value'"; 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
-			$style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</li>";
+			if ($row_style['brewStyleGroup'] > 28) $style_convert .= "<li>Custom Style: ".$row_style['brewStyle']."</li>";
+			else $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</li>";
 		}
 		$style_convert .= "</ul>";
 		
@@ -1270,7 +1271,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			//echo "<p>".print_r($b)."</p>";
 			//echo "<p>-".$value."-</p>";
 			if (in_array($value,$b)) { 
-				echo "Yes. The style ID is $value.<br>";
+				//echo "Yes. The style ID is $value.<br>";
 				//$query_styles1 = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
 				//$styles1 = mysql_query($query_styles1, $brewing) or die(mysql_error());
 				//$row_styles1 = mysql_fetch_assoc($styles1);
@@ -2468,9 +2469,31 @@ function get_archive_count($table) {
 	return $row_archive_count['count'];
 }
 
-
 function number_pad($number,$n) {
 	return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
 }
 
-?> 
+	
+function open_or_closed($now,$date1,$date2) {
+		// First date has not passed yet
+		if ($now < $date1) $output = "0";
+		
+		// First date has passed, but second has not
+		elseif (($now >= $date1) && ($now <= $date2)) $output = "1";
+		
+		// Both dates have passed
+		else $output = "2";
+		
+		return $output;
+}
+
+function open_limit($total_entries,$limit,$registration_open) {
+	// Check to see if the limit of entries has been reached
+	if ($limit != "") {
+		if (($total_entries >= $limit) && ($registration_open == "1")) return TRUE;
+		else return FALSE;
+	}
+	else return FALSE;
+}
+
+?>

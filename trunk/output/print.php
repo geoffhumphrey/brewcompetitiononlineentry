@@ -53,6 +53,8 @@ require(CONFIG.'bootstrap.php');
 <div id="footer">
 	<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>.</div>
 </div>
+</body>
+</html>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -61,5 +63,3 @@ function selfPrint(){
 setTimeout('selfPrint()',2000);
 html.push(''); 
 </script> 
-</body>
-</html>

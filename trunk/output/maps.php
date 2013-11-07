@@ -1,5 +1,5 @@
 <?php 
-
+ob_start();
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 $address = rtrim($id,"&amp;KeepThis=true");

@@ -1,10 +1,10 @@
 <?php 
-
 /**
  * Module:      archive.inc.php
  * Description: This module takes the current database tables and renames them 
  *              for archiving purposes so that data is still available.
  */
+ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 require('../paths.php');

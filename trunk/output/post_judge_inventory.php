@@ -7,6 +7,7 @@
 
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
+include(DB.'output_post_judge_inventory.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>
@@ -45,17 +46,6 @@ if (NHC) $base_url = "../";
 </script>
 </head>
 <body>
-<!-- Automatically print upon load...
-<body>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',2000);
-html.push(''); 
-</script>
--->
 <div id="content">
 	<div id="content-inner">
     <div id="header">	
@@ -77,12 +67,7 @@ html.push('');
         </tr>
     </thead>
     <tbody>
-    <?php
-	$query_post_inventory = sprintf("SELECT b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, a.scoreEntry FROM %s a, %s b WHERE a.scorePLACE IS NULL AND a.eid = b.id ORDER BY b.brewCategory,b.brewSubCategory,a.scoreEntry ASC",$prefix."judging_scores",$prefix."brewing");
-	$post_inventory = mysql_query($query_post_inventory, $brewing) or die(mysql_error());
-	$row_post_inventory = mysql_fetch_assoc($post_inventory);
-	$totalRows_post_inventory = mysql_num_rows($post_inventory);
-	do { ?>
+    <?php do { ?>
     	<tr>
         	<td class="data bdr1B_gray"><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
             <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_post_inventory['id']); ?></td> 
@@ -104,4 +89,12 @@ html.push('');
 </div>
 </body>
 </html>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+html.push(''); 
+</script> 
 <?php } else echo "<p>Not available.</p>"; ?>

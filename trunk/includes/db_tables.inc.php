@@ -6,7 +6,6 @@
  */
 
 // echo get_suffix($dbTable);
-
 if ($dbTable == "default") { 
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer";

@@ -1,14 +1,9 @@
 <?php 
-
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(DB.'winners.db.php');
-
-$query_prefs = sprintf("SELECT prefsWinnerMethod FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
-
+require(DB.'output_results.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>
@@ -29,7 +24,8 @@ if (NHC) $base_url = "../";
 			<h1><?php echo $_SESSION['contestName']." Results"; ?></h1>
         </div>
 	</div>
-<?php if (($go == "judging_scores") && ($action == "print"))  {
+<?php 
+	if (($go == "judging_scores") && ($action == "print"))  {
 	if ($row_prefs['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php'); 
 	elseif ($row_prefs['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php'); 
 	else include (SECTIONS.'winners.sec.php');
@@ -38,6 +34,8 @@ if (($go == "judging_scores_bos") && ($action == "print")) include (SECTIONS.'bo
 ?>
 </div>
 </div>
+</body>
+</html>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -46,8 +44,6 @@ function selfPrint(){
 setTimeout('selfPrint()',2000);
 html.push('');
 </script> 
-</body>
-</html>
 <?php } 
 else echo "<p>Not available.</p>";
 ?>
