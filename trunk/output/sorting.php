@@ -1,17 +1,12 @@
 <?php 
-
-session_start(); 
-
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
-$query_style = "SELECT brewStyleGroup FROM $styles_db_table WHERE brewStyleActive='Y'";
-if ($filter !="default") $query_style .= " AND brewStyleGroup='$filter'";
-$style = mysql_query($query_style, $brewing) or die(mysql_error());
-$row_style = mysql_fetch_assoc($style);
+$section = "sorting";
+include(DB.'styles.db.php');
 
-do { $s[] = $row_style['brewStyleGroup']; } while ($row_style = mysql_fetch_assoc($style));
+do { $s[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 sort($s);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,11 +21,9 @@ sort($s);
 <body>
 <div id="content">
 	<div id="content-inner">
-<?php foreach (array_unique($s) as $style) { 
-$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid,brewReceived FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
-$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-$row_entries = mysql_fetch_assoc($entries);
-$totalRows_entries = mysql_num_rows($entries);
+<?php 
+foreach (array_unique($s) as $style) { 
+include(DB.'output_sorting.db.php');
 if ($totalRows_entries > 0) {
 ?>
     <div id="header">	

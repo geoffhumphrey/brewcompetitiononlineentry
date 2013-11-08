@@ -672,15 +672,15 @@ border-left: 1px solid #cccccc;
 }
 
 .table_card h1 {
-	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
-	font-size: 8em;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 11em;
 	margin: 0;
 	padding: 0;
 	text-align: center;
 }
 
 .table_card h2 {
-	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-style: italic;
 	font-size: 3em;
 	margin: 0;
@@ -689,7 +689,7 @@ border-left: 1px solid #cccccc;
 }
 
 .table_card h3 {
-	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 2em;
 	margin: 0;
 	padding: 0;
@@ -697,7 +697,7 @@ border-left: 1px solid #cccccc;
 }
 
 .table_card h4 {
-	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.5em;
 	margin: 0;
 	padding: 1em 0;
@@ -706,7 +706,7 @@ border-left: 1px solid #cccccc;
 
 .table_card .dataTable {
 	width: 100%;
-	font-family: Tahoma, Geneva, Arial, Verdana, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.3em;
 	margin: 1em 0;
 	border-collapse: collapse;

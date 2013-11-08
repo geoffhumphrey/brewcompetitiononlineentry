@@ -94,7 +94,7 @@ if (!$setup_success) {
 
 // If all setup or update has taken place, run normally
 if ($setup_success) {
-
+	
 	// Global Library, Includes and DB Calls
 	require(LIB.'common.lib.php');
 	require(INCLUDES.'authentication_nav.inc.php'); 
@@ -170,5 +170,6 @@ if ($setup_success) {
 			}
 		}
 	}
+	
 } // end if ($setup_success);
 ?>

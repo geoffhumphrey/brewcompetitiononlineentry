@@ -1,27 +1,4 @@
 <?php
-function open_or_closed($now,$date1,$date2) {
-		// First date has not passed yet
-		if ($now < $date1) $output = "0";
-		
-		// First date has passed, but second has not
-		elseif (($now >= $date1) && ($now <= $date2)) $output = "1";
-		
-		// Both dates have passed
-		else $output = "2";
-		
-		return $output;
-}
- 
-
-function open_limit($total_entries,$limit,$registration_open) {
-	// Check to see if the limit of entries has been reached
-	if ($limit != "") {
-		if (($total_entries >= $limit) && ($registration_open == "1")) return TRUE;
-		else return FALSE;
-	}
-	else return FALSE;
-}
-
 $registration_open = open_or_closed(strtotime("now"),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
 $entry_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestEntryOpen'],$row_contest_dates['contestEntryDeadline']);
 $judge_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestJudgeOpen'],$row_contest_dates['contestJudgeDeadline']);
@@ -49,5 +26,4 @@ $output_datatables_bProcessing = "false";
 $color = "#eeeeee";
 $color1 = "#e0e0e0";
 $color2 = "#eeeeee";
-
 ?>
