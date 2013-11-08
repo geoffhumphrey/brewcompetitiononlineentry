@@ -4,7 +4,7 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(DB.'winners.db.php');
-require(DB.'output_results.php');
+require(DB.'output_results.db.php');
 
 if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');
@@ -37,15 +37,8 @@ $html == '';
 if ($view == "html") $html .= '<h1>BOS - '.$_SESSION['contestName'].'</h1>';
 sort($a);
 foreach (array_unique($a) as $type) {
-	$query_style_type = "SELECT * FROM $style_types_db_table WHERE id='$type'";
-	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-	$row_style_type = mysql_fetch_assoc($style_type);
-
-	if ($row_style_type['styleTypeBOS'] == "Y") { 
-	$query_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID AND scoreType='%s' ORDER BY a.scorePlace", $prefix."judging_scores_bos", $prefix."brewing", $prefix."brewer", $type);
-	$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
-	$row_bos = mysql_fetch_assoc($bos);
-	$totalRows_bos = mysql_num_rows($bos);
+	
+	include(DB.'output_results_download_bos.db.php');
 	
 	//echo $query_bos;
 	
@@ -85,10 +78,8 @@ if ($totalRows_bos > 0) {
   if ($totalRows_sbi > 0) {	
   
   	do {
-		$query_sbd = sprintf("SELECT * FROM $special_best_data_db_table WHERE sid='%s' ORDER BY sbd_place ASC",$row_sbi['id']);
-		$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-		$row_sbd = mysql_fetch_assoc($sbd);
-		$totalRows_sbd = mysql_num_rows($sbd);
+		
+		include(DB.'output_results_download_sbd.db.php');
 		
 			$html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
 			$html .= '<br>'.strtr($row_sbi['sbi_description'],$html_remove).'<br>';
@@ -129,7 +120,6 @@ if ($totalRows_bos > 0) {
  	if ($view == "pdf") { 
 	$html = iconv('UTF-8', 'windows-1252', $html);	
 	$pdf->WriteHTML($html); 
-	}
 	//echo $html;
 } // end if ($go == "judging_scores_bos")
 

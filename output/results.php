@@ -3,7 +3,7 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(DB.'winners.db.php');
-require(DB.'output_results.php');
+require(DB.'output_results.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
 ?>

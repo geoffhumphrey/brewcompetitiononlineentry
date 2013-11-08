@@ -24,11 +24,12 @@ else {
 	}
 	
 	if (table_exists($judging_tables_db_table)) {
-		if (($go == "default") || ($go == "participants") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights")) {
+		if (($go == "default") || ($go == "participants") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights") || ($go == "judging_tables") || ($go == "judging_locations")) {
 			
 			$query_tables = "SELECT * FROM $judging_tables_db_table";
-			if (($go == "judging_scores") || ($go == "judging_tables")) $query_tables .= " ORDER BY tableNumber ASC";
-			//if ($id != "default") $query_tables .= " WHERE id='$id'";
+			if (($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
+			if (($section = "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
+			
 			$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 			$row_tables = mysql_fetch_assoc($tables);
 			$totalRows_tables = mysql_num_rows($tables); 
@@ -94,6 +95,6 @@ else {
 		$row_sbd = mysql_fetch_assoc($sbd);
 		$totalRows_sbd = mysql_num_rows($sbd);
 	}
-
+	
 }
 ?>

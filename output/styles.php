@@ -3,16 +3,8 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 if (NHC) $base_url = "../";
-$query_styles = "SELECT * FROM $styles_db_table";
-if ($filter == "default") $query_styles .= " WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
-else $query_styles .= " WHERE brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
-$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-$row_styles = mysql_fetch_assoc($styles);
-$totalRows_styles = mysql_num_rows($styles);
-
-$query_styles_count = "SELECT brewStyleGroup FROM $styles_db_table ORDER BY brewStyleGroup DESC LIMIT 1";
-$styles_count = mysql_query($query_styles_count, $brewing) or die(mysql_error());
-$row_styles_count = mysql_fetch_assoc($styles_count);
+$section = "output_styles";
+include(DB.'styles.db.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -184,9 +184,217 @@ function user_entry_count() {
 }
 
 // --------------------------------------------------------
-// The following applies to /output/participant_summary.php
+// The following applies to /output/staff_points.php
 // --------------------------------------------------------
 
+function round_down_to_hundred($number) {
+    if (strlen($number)<3) { $number = $number;	} 
+	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
+    return $number;
+}
+
+function total_days() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_sessions = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
+	$sessions = mysql_query($query_sessions, $brewing) or die(mysql_error());
+	$row_sessions = mysql_fetch_assoc($sessions);
+	
+	do {
+		$a[] = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_sessions['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-no-gmt");
+	} while ($row_sessions = mysql_fetch_assoc($sessions));
+	
+	$output = array_unique($a);	
+	$output = count($output);
+	return $output;
+	
+}
+
+function total_sessions() {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_sessions = sprintf("SELECT judgingRounds FROM %s", $prefix."judging_locations");
+	$sessions = mysql_query($query_sessions, $brewing) or die(mysql_error());
+	$row_sessions = mysql_fetch_assoc($sessions);
+	
+	do {
+		$a[] = $row_sessions['judgingRounds'];	
+	} while ($row_sessions = mysql_fetch_assoc($sessions));
+	
+	$output = array_sum($a);
+	return $output;
+	
+}
+
+function total_flights () {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);	
+	$query_tables = sprintf("SELECT id FROM %s", $prefix."judging_tables");
+	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
+	$row_tables = mysql_fetch_assoc($tables);
+	
+	do {
+	$a[] = $row_tables['id'];	
+	} while ($row_tables = mysql_fetch_assoc($tables));
+	
+	foreach ($a as $table_id) {
+		$query_table_flights = sprintf("SELECT flightNumber FROM %s WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $prefix."judging_flights", $table_id);
+		$table_flights = mysql_query($query_table_flights, $brewing) or die(mysql_error());
+		$row_table_flights = mysql_fetch_assoc($table_flights);
+		$b[] = $row_table_flights['flightNumber'];
+	}
+	
+	$query_style_types = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE styleTypeBOS='Y'",$prefix."style_types");
+	$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+	$row_style_types = mysql_fetch_assoc($style_types);
+	$b[] = $row_style_types['count'];
+	$output = array_sum($b);
+	return $output;
+	
+}
+
+function validate_bjcp_id($input) {
+	$length = strlen($input); 
+	if ($length != 5) return FALSE;
+	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
+	else return TRUE;
+}
+
+// Get possible organizer points
+
+function total_points($total_entries,$method) {
+	switch ($method) {
+		case "Organizer":
+			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 2;
+			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2.5;
+			elseif (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
+			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 3.5;
+			elseif (($total_entries >= 200) && ($total_entries <= 299)) $points = 4;
+			elseif (($total_entries >= 300) && ($total_entries <= 399)) $points = 4.5;
+			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 5;
+			elseif ($total_entries >= 500) $points = 6;
+			else $points = 0;
+		break;
+		
+		case "Staff":
+			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 1;
+			if (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
+			if (($total_entries >= 100) && ($total_entries <= 149)) $points = 3;
+			if (($total_entries >= 150) && ($total_entries <= 199)) $points = 4;
+			if (($total_entries >= 200) && ($total_entries <= 299)) $points = 5;
+			if (($total_entries >= 300) && ($total_entries <= 399)) $points = 6;
+			if (($total_entries >= 400) && ($total_entries <= 499)) $points = 7;
+			if (($total_entries >= 500) && ($total_entries <= 599)) $points = 8;
+			if ($total_entries > 599) {
+				$total = round_down_to_hundred($total_entries)/100;
+				//$points = $total;
+				if ($total >= 2) {
+					for($i=1; $i<$total+1; $i++) {
+						$points = $i+3;
+					}
+				}
+			}
+		break;
+		
+		case "Judge":
+			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 1.5;
+			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2;
+			elseif (($total_entries >= 100) && ($total_entries <= 149)) $points = 2.5;
+			elseif (($total_entries >= 150) && ($total_entries <= 199)) $points = 3;
+			elseif (($total_entries >= 200) && ($total_entries <= 299)) $points = 3.5;
+			elseif (($total_entries >= 300) && ($total_entries <= 399)) $points = 4;
+			elseif (($total_entries >= 400) && ($total_entries <= 499)) $points = 4.5;
+			elseif ($total_entries >= 500) $points = 5.5;
+			else $points = 0;
+		break;
+	}
+	return number_format($points,1);
+}
+
+// calculate a Judge's points
+function judge_points($uid,$bos) { 
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	require(INCLUDES.'db_tables.inc.php');
+	require(DB.'judging_locations.db.php');
+	
+	// *minimum* of 1.0 points per competition	
+	// *maximum* of 1.5 points per day
+	
+	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
+	foreach (array_unique($a) as $location) {
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
+		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+		$row_assignments = mysql_fetch_assoc($assignments);
+		if ($row_assignments['count'] > 1) $b[] = 1.0; 
+		else $b[] = $row_assignments['count'];
+	}
+	
+	$points = array_sum($b);
+		
+	$days = number_format(total_days(),1);
+	
+	// Cannot exceed more than 1.5 points per day
+	if ($points > $days) $points = $days; else $points = $points;
+	
+	/* 
+	// Assuming there is only one BOS in the competition. This may not be the case.
+	// NEED TO RECONFIGURE THE BOS PANEL DESIGNATION TO INCLUDE BEER, MEAD, CIDER, COMMERCIAL BOS PANELS 
+	if (($bos == "Y") && ($points > .5)) $points = $points + 0.5; 
+	if (($bos == "Y") && ($points <= .5)) $points = 1.0; 
+	else $points = $points;
+	*/
+	
+	return number_format($points,1);
+	
+}
+	
+// calculate a Steward's points
+function steward_points($uid) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	require(INCLUDES.'db_tables.inc.php');
+	require(DB.'judging_locations.db.php');
+	
+	// *minimum* of 0.5 points per day	
+	// *maximum* of 1.0 points per competition
+	// Participants may not earn both Judge and Steward points in a single competition.
+	// A program participant may earn both Steward and Staff points.
+	
+	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
+	foreach (array_unique($a) as $location) {
+		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $prefix."judging_assignments", $uid, $location);
+		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+		$row_assignments = mysql_fetch_assoc($assignments);
+		if ($row_assignments['count'] > 1) $b[] = 0.5; 
+		else $b[] = $row_assignments['count'] * 0.5;
+	}
+	
+	$points = array_sum($b);
+	
+	$days = number_format(total_days(),1);
+	
+	// Cannot exceed more than 0.5 points per day
+	if ($points > $days) $points = $days; else $points = $points;
+	
+	// Cannot exceed more than 1.0 points per competition
+	if ($points >= 1.0) $points = 1.0; else $points = $points;
+	return number_format($points,1);
+}
+
+function bos_points($uid) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	require(INCLUDES.'db_tables.inc.php');
+	$query_bos_judges = sprintf("SELECT staff_judge_bos FROM %s WHERE uid='%s'",$prefix."staff",$uid);
+	$bos_judges = mysql_query($query_bos_judges, $brewing) or die(mysql_error());
+	$row_bos_judges = mysql_fetch_assoc($bos_judges);
+	
+	if ($row_bos_judges['staff_judge_bos'] == 1) return TRUE;
+	else return FALSE;
+}
 
 
 // --------------------------------------------------------

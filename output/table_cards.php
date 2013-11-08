@@ -4,17 +4,8 @@ require('../paths.php');
 require(CONFIG.'bootstrap.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if (NHC) $base_url = "../";
-if ($go == "judging_tables") {
-   $query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber";       
-}
-
-if ($go == "judging_locations") {
-   $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);       
-}
-
-$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
-$row_tables = mysql_fetch_assoc($tables);
-$totalRows_tables = mysql_num_rows($tables);
+$section = "table_cards";
+include(DB.'admin_common.db.php');
 //echo $query_tables."<br>";
 ?>
 
@@ -43,12 +34,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 <?php if ($id == "default") { ?>
 
     <?php do { 
-                $query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='%s'",$row_tables['id']);
-                if ($round2 != "default") $query_assignments .= sprintf(" AND assignRound='%s'", $round2);                        
-                $query_assignments .= " ORDER BY assignRound,assignFlight ASC";
-                $assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-                $row_assignments = mysql_fetch_assoc($assignments);
-                $totalRows_assignments = mysql_num_rows($assignments);
+          include(DB.'output_table_cards.db.php');
         ?>
 <div class="table_card">
     <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
@@ -80,7 +66,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
         
         <?php do { 
                         $judge_info = explode("^",brewer_info($row_assignments['bid'])); 
-                        if ($row_assignments['assignment'] == "S") $assignment = "&ndash; Steward"; else $assignment = "&ndash; Judge";
+                        if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
                 ?>
@@ -103,19 +89,10 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
     </table>
 </div>
 <div style="page-break-after:always;"></div>
-<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
-
-
-<?php } 
-if ($id != "default")
-{ ?>
-<?php 
-$query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE assignTable='%s'",$id);
-if ($round2 != "default") $query_assignments .= sprintf(" AND assignRound='%s'", $round2);
-$query_assignments .= " ORDER BY assignRound,assignFlight ASC";
-$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
-$row_assignments = mysql_fetch_assoc($assignments);
-$totalRows_assignments = mysql_num_rows($assignments);
+<?php } while ($row_tables = mysql_fetch_assoc($tables)); 
+} 
+if ($id != "default") { 
+	include(DB.'output_table_cards.db.php');
 ?>
 <div class="table_card">
     <h1>Table <?php echo $row_tables_edit['tableNumber']; ?></h1>
@@ -147,7 +124,7 @@ $totalRows_assignments = mysql_num_rows($assignments);
         
         <?php do { 
                         $judge_info = explode("^",brewer_info($row_assignments['bid'])); 
-                        if ($row_assignments['assignment'] == "S") $assignment = "&ndash; Steward"; else $assignment = "&ndash; Judge";
+                        if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
                 ?>
