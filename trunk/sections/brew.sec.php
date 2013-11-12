@@ -50,52 +50,6 @@ elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($
 }
 
 else {
-	
-function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
-	/*
-	$style = Style category and subcategory number
-	$pref_num = Subcategory limit number from preferences
-	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
-	$pref_exception_sub_array = Array of EXCEPTED subcategories
-	*/
-	
-	$style_break = explode("-",$style);
-	
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
-	
-	//$style_trimmed = ltrim($style_break[0],"0");
-	
-	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
-	else $style_num = $style_break[0];
-	
-	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_num,$style_break[1]); 
-	$style = mysql_query($query_style, $brewing) or die(mysql_error());
-	$row_style = mysql_fetch_assoc($style);
-	
-	// Check if the user has a entry in the system in the subcategory
-	
-	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_num,$style_break[1]);
-	$check = mysql_query($query_check, $brewing) or die(mysql_error());
-	$row_check = mysql_fetch_assoc($check);
-	
-	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
-	else $return = "";
-	
-	
-	// Check for exceptions
-	if (($return == "DISABLED") && (!empty($pref_exception_sub_array))) {
-		if (in_array($row_style['id'],$pref_exception_sub_array)) {
-			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
-			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $return = "DISABLED";
-			else $return = "";
-		}
-	}
-	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
-	return $return;
-}
 
 if ($totalRows_styles2 > 0) {
 
@@ -106,95 +60,6 @@ if ($totalRows_styles2 > 0) {
 
 // print_r ($special_required);
 
-}
-	
-function highlight_required($msg,$method) {
-	
-	if ($method == "0") { // special ingredients OPTIONAL mead/cider
-		switch($msg) {
-			case "1-24-A":
-			case "1-24-B":
-			case "1-24-C":
-			case "1-25-A":
-			case "1-25-B":
-			case "1-26-B":
-			case "1-26-C":
-			case "1-27-B":
-			case "1-27-C":
-			case "1-28-C":
-			return TRUE;
-			break;
-			
-			default: 
-			return FALSE;
-			break;
-		}
-	}
-	
-	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
-	
-		include(CONFIG.'config.php');
-		$query_check = sprintf("SELECT * FROM %s WHERE brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'", $prefix."styles");
-		$check = mysql_query($query_check, $brewing) or die(mysql_error());
-		$row_check = mysql_fetch_assoc($check);
-		$totalRows_check = mysql_num_rows($check);
-	
-		if ($totalRows_check > 0) {
-			do { 
-				$style_special = ltrim($row_check['brewStyleGroup'],"0");
-				$special_required[] = $style_special."-".$row_check['brewStyleNum']; 
-			}  while ($row_check = mysql_fetch_assoc($check));
-			
-			$trimmed = ltrim($msg,"1-");
-			if (in_array($trimmed,$special_required)) return TRUE;
-		}
-	
-		switch($msg) {
-			case "1-6-D":		
-			case "1-16-E":
-			case "1-17-F":
-			case "1-20-A":
-			case "1-21-A":
-			case "1-21-B":
-			case "1-22-B":
-			case "1-22-C":
-			case "1-23-A":
-			case "1-25-C":
-			case "1-26-A":
-			case "1-26-C":
-			case "1-27-E":
-			case "1-28-A":
-			case "1-28-B":
-			case "1-28-C":
-			case "1-28-D":
-			case "4":
-			return TRUE;
-			break;
-			
-			default: 
-			return FALSE;
-			break;
-		}
-	}
-
-	if ($method == "2") { // mead and cider carb/sweetness
-		if (strstr($msg,"1-24")) return TRUE;
-		elseif (strstr($msg,"1-25")) return TRUE;
-		elseif (strstr($msg,"1-26")) return TRUE;
-		elseif (strstr($msg,"1-27")) return TRUE;
-		elseif (strstr($msg,"1-28")) return TRUE;
-		else return FALSE;
-	}
-	
-	if ($method == "3") { // mead strength
-		if (strstr($msg,"1-24")) return TRUE;
-		elseif (strstr($msg,"1-25")) return TRUE;
-		elseif (strstr($msg,"1-26")) return TRUE;
-		else return FALSE;
-	}
-	
-	
-	
 }
 
 if ($_SESSION['prefsHideRecipe'] == "N") { ?>
@@ -423,16 +288,15 @@ else $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/add.png"
 <?php
 if (($filter == "admin") || ($filter == "default")) $brewer_id = $_SESSION['user_id']; else $brewer_id = $filter; 
 
-$query_brewer = sprintf("SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE uid='%s'",$brewer_id);
-$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-$row_brewer = mysql_fetch_assoc($brewer);
+$brewer_info = brewer_info($brewer_id);
+$brewer_info = explode("^",$brewer_info);
 
 ?>
 <tr>
    <td class="dataLabel">Brewer:</td>
    <td class="data">
-   <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?>
-   <input type="hidden" name="brewBrewerID" value="<?php echo $row_brewer['uid']; ?>">
+   <?php echo $brewer_info[0]." ".$brewer_info[1]; ?>
+   <input type="hidden" name="brewBrewerID" value="<?php echo $brewer_info[7]; ?>">
    </td>
    <td class="data">&nbsp;</td>
 </tr>
@@ -523,7 +387,6 @@ $row_brewer = mysql_fetch_assoc($brewer);
 <?php } else { ?>
 <tr>
    <td class="dataLeft">
-   
    	<p>
     <span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, and 28B-D.</em></span><br />
    	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;). 	  </p>
@@ -537,7 +400,6 @@ $row_brewer = mysql_fetch_assoc($brewer);
     	        </ul>
 	    </li>
     </ul>
-   
   </td>
 </tr>
 <tr>

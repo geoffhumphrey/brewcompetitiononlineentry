@@ -44,23 +44,9 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 $bid = $_SESSION['user_id'];
-
-if ($msg == "10") {
-	// If redirected from PayPal, update the brewer table to mark entries as paid
-	$a = explode('-', $view);
-	foreach (array_unique($a) as $value) {
-		$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
-		//echo $updateSQL;
-		mysql_select_db($database, $brewing);
-		$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	}
-}
-
 include (DB.'entries.db.php');
 
-$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
-$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-$row_contest_info = mysql_fetch_assoc($contest_info); 
+$currency_code = currency_info($_SESSION['prefsCurrency'],1);
 
 $total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
 $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
@@ -92,14 +78,14 @@ $page_info7 = "";
 
 // Build top of page info: total entry fees, list of unpaid entries, etc.
 $primary_page_info .= "<p>";
-$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Fees are %s per entry.",$_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryFee'],2));
-if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
-if ($_SESSION['contestEntryCap'] != "") $primary_page_info .= sprintf(" %s for unlimited entries. ",$_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryCap'], 2));
+$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Fees are %s per entry.",$currency_code[0].number_format($_SESSION['contestEntryFee'],2));
+if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$currency_code[0].number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
+if ($_SESSION['contestEntryCap'] != "") $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_code[0].number_format($_SESSION['contestEntryCap'], 2));
 $primary_page_info .= "</p>";
 if ($row_brewer['brewerDiscount'] == "Y") {
-	$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images//star.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your fees have been discounted to %s per entry.</p>",$_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryFeePasswordNum'], 2));
+	$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images//star.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your fees have been discounted to %s per entry.</p>",$currency_code[0].number_format($_SESSION['contestEntryFeePasswordNum'], 2));
 }
-$primary_page_info .= sprintf("<p><span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your total entry fees are %s You need to pay %s.</p>",$_SESSION['prefsCurrency'].number_format($total_entry_fees,2),$_SESSION['prefsCurrency'].number_format($total_to_pay,2));
+$primary_page_info .= sprintf("<p><span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your total entry fees are %s You need to pay %s.</p>",$currency_code[0].number_format($total_entry_fees,2),$currency_code[0].number_format($total_to_pay,2));
 $primary_page_info .= "<p>";
 $primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>You currently have %s <strong>unpaid</strong> ",readable_number($total_not_paid));
 if ($total_not_paid == "1") $primary_page_info .= "entry:"; else $primary_page_info .= "entries:";
@@ -137,16 +123,7 @@ if (($total_to_pay > 0) && ($view == "default")) {
 	}
 
 	if ($_SESSION['prefsPaypal'] == "Y")  { 
-		switch ($_SESSION['prefsCurrency']) {
-			case "&pound;": $currency_code = "GBP";
-			break;
-			case "&euro;": $currency_code = "EUR";
-			break;
-			case "&yen;": $currency_code = "JPY";
-			break;
-			default: $currency_code = "USD";
-		}
-		
+				
 		if ($_SESSION['prefsTransFee'] == "Y") $payment_amount = $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
 		else $payment_amount = number_format($total_to_pay, 2);
 		$fee = number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
@@ -155,36 +132,34 @@ if (($total_to_pay > 0) && ($view == "default")) {
 		$header1_3 .= "<h2>Pay Online</h2>";
 		$page_info3 .= "<p><span class='required'> Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</span></p>";
 	
-		
-		if ($_SESSION['prefsPaypal'] == "Y") {
-			// PayPal
-			$header2_4 .= "<h3>PayPal</h3>";
-			$page_info4 .= "<p>Click the &quot;Pay Now&quot; button below to pay online using PayPal.";
-			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$_SESSION['prefsCurrency'].$fee);
-			$page_info4 .= "<div class='error'>To make sure your PayPal payment is marked &quot;paid&quot; on <em>this site</em>, please click the &quot;Return to...&quot; link on PayPal's confirmation screen after you have sent your payment.</div>";
-			$page_info4 .= "<form name='PayPal' action='https://www.paypal.com/cgi-bin/webscr' method='post'>";
-			$page_info4 .= "<input type='hidden' name='cmd' value='_xclick'>";
-			$page_info4 .= sprintf("<input type='hidden' name='business' value='%s'>",$_SESSION['prefsPaypalAccount']);
-			$page_info4 .= sprintf("<input type='hidden' name='item_name' value='%s, %s - %s Payment'>",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
-			$page_info4 .= sprintf("<input type='hidden' name='amount' value='%s'>",$payment_amount);
-			$page_info4 .= sprintf("<input type='hidden' name='currency_code' value='%s'>",$currency_code);
-			$page_info4 .= "<input type='hidden' name='button_subtype' value='services'>";
-			$page_info4 .= "<input type='hidden' name='no_note' value='0'>";
-			$page_info4 .= "<input type='hidden' name='cn' value='Add special instructions'>";
-			$page_info4 .= "<input type='hidden' name='no_shipping' value='1'>";
-			$page_info4 .= "<input type='hidden' name='rm' value='1'>";
-			$page_info4 .= sprintf("<input type='hidden' name='return' value='%s'>",rtrim($return, '-'));
-			$page_info4 .= sprintf("<input type='hidden' name='cancel_return' value='$s'>",$base_url."index.php?section=pay&msg=11");
-			$page_info4 .= "<input type='hidden' name='bn' value='PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted'>";
-			$page_info4 .= "<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif' border='0' name='submit' class='paypal' alt='Pay your competition entry fees with PayPal' title='Pay your compeition entry fees with PayPal'>";
-			$page_info4 .= "</form>";
-		}
+		// PayPal
+		$header2_4 .= "<h3>PayPal</h3>";
+		$page_info4 .= "<p>Click the &quot;Pay Now&quot; button below to pay online using PayPal.";
+		if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_code[0].$fee);
+		$page_info4 .= "<div class='error'>To make sure your PayPal payment is marked &quot;paid&quot; on <em>this site</em>, please click the &quot;Return to...&quot; link on PayPal's confirmation screen after you have sent your payment.</div>";
+		$page_info4 .= "<form name='PayPal' action='https://www.paypal.com/cgi-bin/webscr' method='post'>";
+		$page_info4 .= "<input type='hidden' name='cmd' value='_xclick'>";
+		$page_info4 .= sprintf("<input type='hidden' name='business' value='%s'>",$_SESSION['prefsPaypalAccount']);
+		$page_info4 .= sprintf("<input type='hidden' name='item_name' value='%s, %s - %s Payment'>",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
+		$page_info4 .= sprintf("<input type='hidden' name='amount' value='%s'>",$payment_amount);
+		$page_info4 .= sprintf("<input type='hidden' name='currency_code' value='%s'>",$currency_code[1]);
+		$page_info4 .= "<input type='hidden' name='button_subtype' value='services'>";
+		$page_info4 .= "<input type='hidden' name='no_note' value='0'>";
+		$page_info4 .= "<input type='hidden' name='cn' value='Add special instructions'>";
+		$page_info4 .= "<input type='hidden' name='no_shipping' value='1'>";
+		$page_info4 .= "<input type='hidden' name='rm' value='1'>";
+		$page_info4 .= sprintf("<input type='hidden' name='return' value='%s'>",rtrim($return, '-'));
+		$page_info4 .= sprintf("<input type='hidden' name='cancel_return' value='$s'>",$base_url."index.php?section=pay&msg=11");
+		$page_info4 .= "<input type='hidden' name='bn' value='PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted'>";
+		$page_info4 .= "<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif' border='0' name='submit' class='paypal' alt='Pay your competition entry fees with PayPal' title='Pay your compeition entry fees with PayPal'>";
+		$page_info4 .= "</form>";
+
 		/*
 		if ($_SESSION['prefsGoogle'] == "Y") {
 			// Google Wallet
 			$header2_5 .= "<h2>Google Wallet</h2>";
 			$page_info5 .= "<p>Click the &quot;Buy Now&quot; button below to pay online using Google Wallet.";
-			if ($_SESSION['prefsTransFee'] == "Y") $page_info5 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$_SESSION['prefsCurrency'].$fee);
+			if ($_SESSION['prefsTransFee'] == "Y") $page_info5 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_code[0].$fee);
 			$page_info5 .= "<div class='error'>To make sure your Google Wallet payment is marked &quot;paid&quot; on <em>this site</em>, please click the &quot;Return to...&quot; link on Google Wallet's confirmation screen after you have sent your payment.</div>";
 			$page_info5 .= sprintf("<form action='https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/%s' id='BB_BuyButtonForm' method='post' name='BB_BuyButtonForm' target='_top'>",$_SESSION['prefsGoogleAccount']);
 			$page_info5 .= sprintf("<input name='item_name_1' type='hidden' value='%s, %s - %s Payment'>",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);

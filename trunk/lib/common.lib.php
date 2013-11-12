@@ -419,6 +419,266 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 
+function currency_info($input,$method) {
+	
+	if ($method == 1) {
+		
+		switch ($input) {
+			case "&pound;": $currency_code = $input."^GBP";
+			break;
+			case "&euro;": $currency_code = $input."^EUR";
+			break;
+			case "&yen;": $currency_code = $input."^JPY";
+			break;
+			case "C$": $currency_code = "$^CAD";
+			break;
+			case "kr": $currency_code = $input."^DKK";
+			break;
+			case "&#8356;": $currency_code = $input."^TRY";
+			break;
+			case "R$": $currency_code = "R$^BRL";
+			break;
+			case "A$": $currency_code = "$^AUD";
+			break;
+			case "N$": $currency_code = "$^NZD";
+			break;
+			case "H$": $currency_code = "$^HKD";
+			break;
+			case "S$": $currency_code = "$^SGD";
+			break;
+			case "skr": $currency_code = "kr^SEK";
+			break;
+			case "z&#322;": $currency_code = $input."^PLN";
+			break;
+			case "nkr": $currency_code = "kr^NOK";
+			break;
+			case "Ft": $currency_code = $input."^HUF";
+			break;
+			case "K&#269;": $currency_code = $input."^CZK";
+			break;
+			case "&#8362;": $currency_code = $input."^ILS";
+			break;
+			case "M$": $currency_code = "$^MXM";
+			break;
+			case "RM": $currency_code = $input."^MYR";
+			break;
+			case "T$": $currency_code = "$^TWD";
+			break;
+			case "&#3647;": $currency_code = $input."^THB";
+			break;
+			case "&#8378;": $currency_code = $input."^TRY";
+			break;
+			case "p.": $currency_code = $input."^RUB";
+			break;
+			default: $currency_code = $input."^USD";
+		
+		}
+	
+	}
+	
+	if ($method == 2) {
+		
+	$currency_code = array(	   
+			"R$^Brazilian Real^BRL",
+			"&pound;^British Pound^GBP",
+			"K&#269;^Czech Koruna^CZK",
+			"&euro;^Euro^EUR",
+			"kr^Danish Krone^DKK",
+			"A$^Dollar - Australian^AUD",
+			"C$^Dollar - Canadian^CAD",
+			"H$^Dollar -Hong Kong^HKD",
+			"N$^Dollar - New Zealand^NZD",
+			"S$^Dollar- Singapore^SGD",
+			"$^Dollar - U.S.^USD",
+			"Ft^Hungarian Forint^HUF",
+			"&#8362;^Israeli New Shekel^ILS",
+			"&yen;^Japanese Yen^JPY",
+			"RM^Malaysian Ringgit^MYR",
+			"M$^Mexican Peso^MXM",
+			"nkr^Norwegian Krone^NOK",
+			"&#8369;^Philippine Peso^PHP",
+			"z&#322;^Polish Zloty^PLN",
+			"p.^Russian Ruble^RUB",
+			"skr^Swedish Krona^SEK",
+			"&8355;Swiss Franc^CHF",
+			"T$^Taiwan Dollar (New)^TWD",
+			"&#3647;^Thai Baht^THB",
+			"&#8378;^Turkish Lira^TRY"
+		);	
+		
+	}
+	
+	return $currency_code;
+	
+	/* 
+	
+	PAYPAL accepted currencies:
+	
+	Canadian Dollar CAD
+	Euro EUR
+	British Pound GBP
+	U.S. Dollar USD
+	Japanese Yen JPY
+	Australian Dollar AUD
+	New Zealand Dollar NZD
+	Swiss Franc CHF
+	Hong Kong Dollar HKD
+	Singapore Dollar SGD
+	Swedish Krona SEK
+	Danish Krone DKK
+	Polish Zloty PLN
+	Norwegian Krone NOK
+	Hungarian Forint HUF
+	Czech Koruna CZK
+	Israeli New Shekel ILS
+	Mexican Peso MXM
+	Brazilian Real BRL
+	Malaysian Ringgit MYR
+	Philippine Peso PHP
+	New Taiwan Dollar TWD
+	Thai Baht THB
+	Turkish Lira TRY
+	Russian Ruble RUB
+	
+	World Currency Codes:
+	
+	Albania, Leke (ALL)
+	America-USA, Dollars (USD)
+	Afghanistan, Afghanis (AFN)
+	Argentina, Pesos (ARS)
+	Aruba, Guilders/Florins (AWG)
+	Australia, Dollars (AUD)
+	Azerbaijan, New Manats (AZN)
+	Bahamas, Dollars (BSD)
+	Barbados, Dollars (BBD)
+	Belarus, Rubles (BYR)
+	Belgium, Euro (EUR)
+	Belize, Dollars (BZD)
+	Bermuda, Dollars (BMD)
+	Bolivia, Bolivianos (BOB)
+	Bosnia and Herzegovina, Convertible Marka (BAM)
+	Botswana, Pulas (BWP)
+	Bulgaria, Leva (BGN)
+	Brazil, Reais (BRL)
+	Britain (UK), Pounds (GBP)
+	Brunei Darussalam, Dollars (BND)
+	Cambodia, Riels (KHR)
+	Canada, Dollars (CAD)
+	Cayman Islands, Dollars (KYD)
+	Chile, Pesos (CLP)
+	China, Yuan Renminbi (CNY)
+	Colombia, Pesos (COP)
+	Costa Rica, Colón (CRC)
+	Croatia, Kuna (HRK)
+	Cuba, Pesos (CUP)
+	Cyprus, Euro (EUR)
+	Czech Republic, Koruny (CZK)
+	Denmark, Kroner (DKK)
+	Dominican Republic, Pesos (DOP)
+	East Caribbean, Dollars (XCD)
+	Egypt, Pounds (EGP)
+	El Salvador, Colones (SVC)
+	England (United Kingdom), Pounds (GBP)
+	Estonia, Krooni (EEK)
+	Euro (EUR)
+	Falkland Islands, Pounds (FKP)
+	Fiji, Dollars (FJD)
+	France, Euro (EUR)
+	Ghana, Cedis (GHC)
+	Gibraltar, Pounds (GIP)
+	Greece, Euro (EUR)
+	Guatemala, Quetzales (GTQ)
+	Guernsey, Pounds (GGP)
+	Guyana, Dollars (GYD)
+	Holland (Netherlands), Euro (EUR)
+	Honduras, Lempiras (HNL)
+	Hong Kong, Dollars (HKD)
+	Hungary, Forint (HUF)
+	Iceland, Kronur (ISK)
+	India, Rupees (INR)
+	Indonesia, Rupiahs (IDR)
+	Iran, Rials (IRR)
+	Ireland, Euro (EUR)
+	Isle of Man, Pounds (IMP)
+	Israel, New Shekels (ILS)
+	Italy, Euro (EUR)
+	Jamaica, Dollars (JMD)
+	Japan, Yen (JPY)
+	Jersey, Pounds (JEP)
+	Kazakhstan, Tenge (KZT)
+	Korea (North), Won (KPW)
+	Korea (South), Won (KRW)
+	Kyrgyzstan, Soms (KGS)
+	Laos, Kips (LAK)
+	Latvia, Lati (LVL)
+	Lebanon, Pounds (LBP)
+	Liberia, Dollars (LRD)
+	Liechtenstein, Switzerland Francs (CHF)
+	Lithuania, Litai (LTL)
+	Luxembourg, Euro (EUR)
+	Macedonia, Denars (MKD)
+	Malaysia, Ringgits (MYR)
+	Malta, Euro (EUR)
+	Mauritius, Rupees (MUR)
+	Mexico, Pesos (MXM)
+	Mongolia, Tugriks (MNT)
+	Mozambique, Meticais (MZN)
+	Namibia, Dollars (NAD)
+	Nepal, Rupees (NPR)
+	Netherlands Antilles, Guilders /Florins (ANG)
+	Netherlands, Euro (EUR)
+	New Zealand, Dollars (NZD)
+	Nicaragua, Cordobas (NIO)
+	Nigeria, Nairas (NGN)
+	North Korea, Won (KPW)
+	Norway, Krone (NOK)
+	Oman, Rials (OMR)
+	Pakistan, Rupees (PKR)
+	Panama, Balboa (PAB)
+	Paraguay, Guarani (PYG)
+	Peru, Nuevos Soles (PEN)
+	Philippines, Pesos (PHP)
+	Poland, Zlotych (PLN)
+	Qatar, Rials (QAR)
+	Romania, New Lei (RON)
+	Russia, Rubles (RUB)
+	Saint Helena, Pounds (SHP)
+	Saudi Arabia, Riyals (SAR)
+	Serbia, Dinars (RSD)
+	Seychelles, Rupees (SCR)
+	Singapore, Dollars (SGD)
+	Slovenia, Euro (EUR)
+	Solomon Islands, Dollars (SBD)
+	Somalia, Shillings (SOS)
+	South Africa, Rand (ZAR)
+	South Korea, Won (KRW)
+	Spain, Euro (EUR)
+	Sri Lanka, Rupees (LKR)
+	Sweden, Kronor (SEK)
+	Switzerland, Francs (CHF)
+	Suriname, Dollars (SRD)
+	Syria, Pounds (SYP)
+	Taiwan, New Dollars (TWD)
+	Thailand, Baht (THB)
+	Trinidad and Tobago, Dollars (TTD)
+	Turkey, Lira (TRY)
+	Turkey, Liras (TRL)
+	Tuvalu, Dollars (TVD)
+	Ukraine, Hryvnia (UAH)
+	United Kingdom, Pounds (GBP)
+	United States of America, Dollars (USD)
+	Uruguay, Pesos (UYU)
+	Uzbekistan, Sums (UZS)
+	Vatican City, Euro (EUR)
+	Venezuela, Bolivares Fuertes (VEF)
+	Vietnam, Dong (VND)
+	Yemen, Rials (YER)
+	Zimbabwe, Zimbabwe Dollars (ZWD)
+	
+	*/
+	
+}
+
 # Pagination
 /*
 function paginate($display, $pg, $total) {
@@ -1248,7 +1508,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	}
 	
 	if ($method == "location") { // used in output/assignments.php and output/pullsheets.php
-		$query_judging_location = sprintf("SELECT * FROM $judging_locations_db_table WHERE id='%s'", $input);
+		$query_judging_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $input);
 		$judging_location = mysql_query($query_judging_location, $brewing) or die(mysql_error());
 		$row_judging_location = mysql_fetch_assoc($judging_location);
 		
@@ -2212,15 +2472,15 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	
 	$output = "";
 	
-	$query_table_assignments = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
+	$query_table_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysql_query($query_table_assignments, $brewing) or die(mysql_error());
 	$row_table_assignments = mysql_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysql_num_rows($table_assignments);
 	
 	if ($totalRows_table_assignments > 0) {
 		do {
-			$location = explode("^",get_table_info(1,"location",$row_table_assignments['assignTable'],"default","default"));
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
+			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 			//$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
 			$output .= "\t\t<tr>\n";
 			if ($method2 == 0) {
@@ -2494,6 +2754,155 @@ function open_limit($total_entries,$limit,$registration_open) {
 		else return FALSE;
 	}
 	else return FALSE;
+}
+
+function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
+	/*
+	$style = Style category and subcategory number
+	$pref_num = Subcategory limit number from preferences
+	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
+	$pref_exception_sub_array = Array of EXCEPTED subcategories
+	*/
+	
+	$style_break = explode("-",$style);
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
+	
+	//$style_trimmed = ltrim($style_break[0],"0");
+	
+	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
+	else $style_num = $style_break[0];
+	
+	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_num,$style_break[1]); 
+	$style = mysql_query($query_style, $brewing) or die(mysql_error());
+	$row_style = mysql_fetch_assoc($style);
+	
+	// Check if the user has a entry in the system in the subcategory
+	
+	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing",$uid,$style_num,$style_break[1]);
+	$check = mysql_query($query_check, $brewing) or die(mysql_error());
+	$row_check = mysql_fetch_assoc($check);
+	
+	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
+	else $return = "";
+	
+	
+	// Check for exceptions
+	if (($return == "DISABLED") && (!empty($pref_exception_sub_array))) {
+		if (in_array($row_style['id'],$pref_exception_sub_array)) {
+			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
+			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $return = "DISABLED";
+			else $return = "";
+		}
+	}
+	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
+	return $return;
+}
+
+function highlight_required($msg,$method) {
+	
+	if ($method == "0") { // special ingredients OPTIONAL mead/cider
+		switch($msg) {
+			case "1-24-A":
+			case "1-24-B":
+			case "1-24-C":
+			case "1-25-A":
+			case "1-25-B":
+			case "1-26-B":
+			case "1-26-C":
+			case "1-27-B":
+			case "1-27-C":
+			case "1-28-C":
+			return TRUE;
+			break;
+			
+			default: 
+			return FALSE;
+			break;
+		}
+	}
+	
+	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
+	
+		include(CONFIG.'config.php');
+		$query_check = sprintf("SELECT * FROM %s WHERE brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'", $prefix."styles");
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+		$totalRows_check = mysql_num_rows($check);
+	
+		if ($totalRows_check > 0) {
+			do { 
+				$style_special = ltrim($row_check['brewStyleGroup'],"0");
+				$special_required[] = $style_special."-".$row_check['brewStyleNum']; 
+			}  while ($row_check = mysql_fetch_assoc($check));
+			
+			$trimmed = ltrim($msg,"1-");
+			if (in_array($trimmed,$special_required)) return TRUE;
+		}
+	
+		switch($msg) {
+			case "1-6-D":		
+			case "1-16-E":
+			case "1-17-F":
+			case "1-20-A":
+			case "1-21-A":
+			case "1-21-B":
+			case "1-22-B":
+			case "1-22-C":
+			case "1-23-A":
+			case "1-25-C":
+			case "1-26-A":
+			case "1-26-C":
+			case "1-27-E":
+			case "1-28-A":
+			case "1-28-B":
+			case "1-28-C":
+			case "1-28-D":
+			case "4":
+			return TRUE;
+			break;
+			
+			default: 
+			return FALSE;
+			break;
+		}
+	}
+
+	if ($method == "2") { // mead and cider carb/sweetness
+		if (strstr($msg,"1-24")) return TRUE;
+		elseif (strstr($msg,"1-25")) return TRUE;
+		elseif (strstr($msg,"1-26")) return TRUE;
+		elseif (strstr($msg,"1-27")) return TRUE;
+		elseif (strstr($msg,"1-28")) return TRUE;
+		else return FALSE;
+	}
+	
+	if ($method == "3") { // mead strength
+		if (strstr($msg,"1-24")) return TRUE;
+		elseif (strstr($msg,"1-25")) return TRUE;
+		elseif (strstr($msg,"1-26")) return TRUE;
+		else return FALSE;
+	}
+	
+}
+
+function user_check($user_name) {
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_userCheck = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$user_name);
+	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
+	$row_userCheck = mysql_fetch_assoc($userCheck);
+	$totalRows_userCheck = mysql_num_rows($userCheck);
+	//$return = $query_userCheck;
+	$return = $totalRows_userCheck."^".$row_userCheck['userQuestion']."^".$row_userCheck['id'];
+	
+	return $return;
+	
 }
 
 ?>

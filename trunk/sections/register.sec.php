@@ -166,9 +166,6 @@ if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 
 if ($go != "default") {
-	$query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
-	$countries = mysql_query($query_countries, $brewing) or die(mysql_error());
-	$row_countries = mysql_fetch_assoc($countries);
 	
 	do { 
 		$country_select .= "<option value='".$row_countries['name']."' ";
@@ -189,14 +186,6 @@ if ($go != "default") {
    		} while ($row_dropoff = mysql_fetch_assoc($dropoff));
 	} 
 }
-
-if (NHC) {
-	// Custom code for AHA - possiblity of inclusion in a future version
-	$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";
-	$clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
-	$row_clubs = mysql_fetch_assoc($clubs);	
-}
-
 $warning1 = "";
 $warning2 = "";
 $primary_page_info = "";

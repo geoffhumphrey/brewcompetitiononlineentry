@@ -331,18 +331,21 @@ include (DB.'styles.db.php');
 <table>
   	<td class="dataLabel">Currency:</td>
     <td class="data">
-    <select name="prefsCurrency">
-    <option value="$"  <?php if ($_SESSION['prefsCurrency'] == "$") echo "SELECTED"; ?>>$ - Dollar</option>
-    <option value="&amp;pound;" <?php if ($_SESSION['prefsCurrency'] == "&pound;") echo "SELECTED"; ?>>&pound; - Pound Sterling</option>
-    <option value="&amp;euro;" <?php if ($_SESSION['prefsCurrency'] == "&euro;") echo "SELECTED"; ?>>&euro; - Euro</option>
-    <option value="&amp;yen;" <?php if ($_SESSION['prefsCurrency'] == "&yen;") echo "SELECTED"; ?>>&yen; - Yen</option>
-    <option value="&#8355;" <?php if ($_SESSION['prefsCurrency'] == "&#8355;") echo "SELECTED"; ?>>&#8355; - Franc</option>
-    <option value="kr" <?php if ($_SESSION['prefsCurrency'] == "kr") echo "SELECTED"; ?>>kr - Krone</option>
-    <option value="&#8356;" <?php if ($_SESSION['prefsCurrency'] == "&#8356;") echo "SELECTED"; ?>>&#8356; - Lira</option>
-    <option value="R" <?php if ($_SESSION['prefsCurrency'] == "&yen;") echo "SELECTED"; ?>>R - Rand</option>
-    <option value="&#8360;" <?php if ($_SESSION['prefsCurrency'] == "&#8360;") echo "SELECTED"; ?>>&#8360; - Rupee</option>
-    <option value="R$ " <?php if ($_SESSION['prefsCurrency'] == "R$ ") echo "SELECTED"; ?>>R$ - Real</option>
-    </select>    </td>
+        <select name="prefsCurrency">
+            <option value="U$" <?php if ($_SESSION['prefsCurrency'] == "$") echo "SELECTED"; ?>>$ - U.S. Dollar</option>
+            <option value="A$" <?php if ($_SESSION['prefsCurrency'] == "A$") echo "SELECTED"; ?>>A$ - Australian Dollar</option>
+            <option value="C$" <?php if ($_SESSION['prefsCurrency'] == "A$") echo "SELECTED"; ?>>C$ - Canadian Dollar</option>
+            <option value="&amp;pound;" <?php if ($_SESSION['prefsCurrency'] == "&pound;") echo "SELECTED"; ?>>&pound; - Pound Sterling</option>
+            <option value="&amp;euro;" <?php if ($_SESSION['prefsCurrency'] == "&euro;") echo "SELECTED"; ?>>&euro; - Euro</option>
+            <option value="&amp;yen;" <?php if ($_SESSION['prefsCurrency'] == "&yen;") echo "SELECTED"; ?>>&yen; - Japanese Yen</option>
+            <option value="C&amp;yen;" <?php if ($_SESSION['prefsCurrency'] == "C&yen;") echo "SELECTED"; ?>>&yen; - Chinese Yuan</option>
+            <option value="kr" <?php if ($_SESSION['prefsCurrency'] == "kr") echo "SELECTED"; ?>>kr - Danish Krone</option>
+            <option value="&#8356;" <?php if ($_SESSION['prefsCurrency'] == "&#8356;") echo "SELECTED"; ?>>&#8356; - Turkish Lira</option>
+            <option value="R" <?php if ($_SESSION['prefsCurrency'] == "R") echo "SELECTED"; ?>>R - South African Rand</option>
+            <option value="&#8360;" <?php if ($_SESSION['prefsCurrency'] == "&#8360;") echo "SELECTED"; ?>>&#8360; - Indian Rupee</option>
+            <option value="R$ " <?php if ($_SESSION['prefsCurrency'] == "R$ ") echo "SELECTED"; ?>>R$ - Brazillian Real</option>
+        </select>
+    </td>
     <td class="data">&nbsp;</td>
     <tr>
     <td class="dataLabel">Pay for Entries to Print Paperwork:</td>

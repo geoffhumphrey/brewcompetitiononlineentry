@@ -5,7 +5,16 @@ else $totalRows_entry_count = total_paid_received($go,"default");
 if (NHC) {
 	// Place NHC SQL calls below
 	
+	$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
+	if ($prefix != "final_") $query_package_count .= " AND a.scoreEntry >=25";
+	$package_count = mysql_query($query_package_count, $brewing) or die(mysql_error());
+	$row_package_count = mysql_fetch_assoc($package_count);
+	$totalRows_package_count = mysql_num_rows($package_count);
+	//echo $totalRows_package_count;
 	
+	$query_admin_adv = sprintf("SELECT COUNT(*) AS 'count' FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewWinner='6'", $_SESSION['user_id']);
+	$admin_adv = mysql_query($query_admin_adv, $brewing) or die(mysql_error());
+	$row_admin_adv = mysql_fetch_assoc($admin_adv);
 }
 // end if (NHC)
 
@@ -18,6 +27,20 @@ else {
 		}
 			
 	elseif ($section == "pay") { 
+	
+		if ($msg == "10") {
+			// If redirected from PayPal, update the brewer table to mark entries as paid
+			$a = explode('-', $view);
+			foreach (array_unique($a) as $value) {
+				$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
+				//echo $updateSQL;
+				mysql_select_db($database, $brewing);
+				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			}
+		}
+
+	
+	
 		$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewConfirmed='1' ORDER BY id ASC",  $_SESSION['user_id']); 
 		$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'"; 
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
@@ -100,6 +123,14 @@ else {
 	$log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error());
 	$row_log_confirmed = mysql_fetch_assoc($log_confirmed);
 	$totalRows_log_confirmed = mysql_num_rows($log_confirmed);
+	
+	if ($section == "pay") {
+	
+		$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
+		$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+		$row_contest_info = mysql_fetch_assoc($contest_info); 
+		
+	}
 
 }
 ?>

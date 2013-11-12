@@ -73,7 +73,7 @@ do {
 	$page_info1 .= "<img src='"; 
 	if (($row_sponsors['sponsorImage'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) $page_info1 .= $base_url."user_images/".$row_sponsors['sponsorImage']; 
 	else $page_info1 .= $base_url."images/no_image.png";
-	$page_info1 .= sprintf("' width='%s' border='0' alt='".$row_sponsors['sponsorName']."Logo' title='".$row_sponsors['sponsorName']."Logo' />",$_SESSION['prefsSponsorLogoSize']);
+	$page_info1 .= sprintf("' width='%s' border='0' alt='".$row_sponsors['sponsorName']." Logo' title='".$row_sponsors['sponsorName']." Logo' />",$_SESSION['prefsSponsorLogoSize']);
 	$page_info1 .= "</p>";
 	if ($row_sponsors['sponsorText'] != "") $page_info1 .= "<p>".$row_sponsors['sponsorText']."</p>";
 	$page_info1 .= "</td>";

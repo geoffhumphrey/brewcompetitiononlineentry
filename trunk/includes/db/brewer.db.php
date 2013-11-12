@@ -8,6 +8,17 @@ $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix
 $result_participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 $row_participant_count = mysql_fetch_assoc($result_participant_count);
 
+$query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
+$countries = mysql_query($query_countries, $brewing) or die(mysql_error());
+$row_countries = mysql_fetch_assoc($countries);
+ 
+if (NHC) {
+	// Custom code for AHA - possiblity of inclusion in a future version
+	$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";
+	$clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
+	$row_clubs = mysql_fetch_assoc($clubs);
+}
+
 // Editing a single participant query
 if (($section == "brewer") && ($action == "edit") && ($id == "default")) {
 	$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'",  $_SESSION['user_id']);
@@ -182,5 +193,20 @@ elseif (($section == "list") || ($section == "judge") || ($section == "steward")
 	}
 
 //else $query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
+
+if ($section != "step2") {
+	mysql_select_db($database, $brewing);
+	$query_brewerID = sprintf("SELECT * FROM $brewer_db_table WHERE id = '%s'", $id); 
+	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
+	$row_brewerID = mysql_fetch_assoc($brewerID);
+	$totalRows_brewerID = mysql_num_rows($brewerID);
+} 
+if ($section == "step2")  {
+	mysql_select_db($database, $brewing);
+	$query_brewerID = sprintf("SELECT * FROM $users_db_table WHERE user_name = '%s'", $go); 
+	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
+	$row_brewerID = mysql_fetch_assoc($brewerID);
+	$totalRows_brewerID = mysql_num_rows($brewerID);
+}
 
 ?>

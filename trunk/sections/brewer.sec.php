@@ -7,30 +7,14 @@
  */
 mysql_select_db($database, $brewing);
 if ($section != "step2") {
-include(DB.'judging_locations.db.php');
-include(DB.'stewarding.db.php'); 
-include(DB.'styles.db.php');
+	include(DB.'judging_locations.db.php');
+	include(DB.'stewarding.db.php'); 
+	include(DB.'styles.db.php');
 }
 include(DB.'brewer.db.php');
-if ($section != "step2") {
-	mysql_select_db($database, $brewing);
-	$query_brewerID = sprintf("SELECT * FROM $brewer_db_table WHERE id = '%s'", $id); 
-	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
-	$row_brewerID = mysql_fetch_assoc($brewerID);
-	$totalRows_brewerID = mysql_num_rows($brewerID);
-} 
-if ($section == "step2")  {
-	mysql_select_db($database, $brewing);
-	$query_brewerID = sprintf("SELECT * FROM $users_db_table WHERE user_name = '%s'", $go); 
-	$brewerID = mysql_query($query_brewerID, $brewing) or die(mysql_error());
-	$row_brewerID = mysql_fetch_assoc($brewerID);
-	$totalRows_brewerID = mysql_num_rows($brewerID);
-}
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { 
-
 $info_msg = "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
-
 if ($go != "admin") echo $info_msg;
  
 ?>
@@ -43,9 +27,6 @@ if ($go != "admin") echo $info_msg;
 <?php } else { ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "brewer") echo "list"; else echo "admin"; echo "&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $brewer_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php } 
-$query_countries = "SELECT * FROM $countries_db_table ORDER BY id ASC";
-$countries = mysql_query($query_countries, $brewing) or die(mysql_error());
-$row_countries = mysql_fetch_assoc($countries);
 if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
 ?>
 <p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
@@ -60,7 +41,7 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
 </tr>
 <tr>
       <td class="dataLabel">Last Name:</td>
-      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32" maxlength="20"  <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly style='color:#666; background-color: #eee; border: 1px solid #666;'"; ?></td>
+      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32" maxlength="20"  <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly"; ?></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
     </tr>
 <tr>
@@ -126,14 +107,7 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
   </td>
   <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
   </tr>
-<?php if (NHC) { 
-
-// Custom code for AHA - possiblity of inclusion in a future version
-$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";
-$clubs = mysql_query($query_clubs, $brewing) or die(mysql_error());
-$row_clubs = mysql_fetch_assoc($clubs);
-
-?>
+<?php if (NHC) { ?>
 <tr>
       <td class="dataLabel">Club Name:</td>
       <td class="data" colspan="3">

@@ -155,16 +155,6 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	if (NHC) {
 	
 		if ($show_scores) { 
-			$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
-			if ($prefix != "final_") $query_package_count .= " AND a.scoreEntry >=25";
-			$package_count = mysql_query($query_package_count, $brewing) or die(mysql_error());
-			$row_package_count = mysql_fetch_assoc($package_count);
-			$totalRows_package_count = mysql_num_rows($package_count);
-			//echo $totalRows_package_count;
-			
-			$query_admin_adv = sprintf("SELECT COUNT(*) AS 'count' FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewWinner='6'", $_SESSION['user_id']);
-			$admin_adv = mysql_query($query_admin_adv, $brewing) or die(mysql_error());
-			$row_admin_adv = mysql_fetch_assoc($admin_adv);
 			
 			if ($totalRows_package_count > 0) {
 				do { 
@@ -281,12 +271,16 @@ $entry_output = "";
 
 do {
 	
-	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
-	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
+	
+	include(DB.'styles.db.php');
+	
+	/*
+	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log['brewCategorySort'], $row_log['brewSubCategory']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	$totalRows_style = mysql_num_rows($style);
+	*/
 	
 	// Build Entry Table Body
 	
@@ -308,7 +302,7 @@ do {
 	
 	if ($action == "print") $entry_output .= "<td class='dataList bdr1B'>";
 	else $entry_output .= "<td class='dataList'>";
-	if ($row_style['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_style['brewStyle']; 
+	if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
 	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<span class='required'>Style NOT entered</span>";
 	else $entry_output .= "<span class='required'>Style entered NOT accepted.</span>";
 	$entry_output .= "</td>";
