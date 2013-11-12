@@ -32,7 +32,6 @@ function session_restart() {
 		session_regenerate_id(true);
 	}
 }
-header (sprintf("Location: %s"),$$logout_location);
 
+header(sprintf("Location: %s",$logout_location));
 ?>
-

@@ -42,10 +42,6 @@ Declare all variables empty at the top of the script. Add on later...
 include(DB.'dropoff.db.php');
 include(DB.'sponsors.db.php');
 
-$query_check = "SELECT judgingDate FROM $judging_locations_db_table ORDER BY judgingDate DESC LIMIT 1";
-$check = mysql_query($query_check, $brewing) or die(mysql_error());
-$row_check = mysql_fetch_assoc($check);
-
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 
 $print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";

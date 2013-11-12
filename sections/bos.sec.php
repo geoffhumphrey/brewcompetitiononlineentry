@@ -6,41 +6,23 @@
  * 
  */
 require(DB.'winners.db.php');
-?> 
 
-<?php 
 	// Display BOS winners for each applicable style type
 	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 	sort($a);
 	foreach ($a as $type) {
-		$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."style_types", $type);
-		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-		$row_style_type = mysql_fetch_assoc($style_type);
-		
-		if ($row_style_type['styleTypeBOS'] == "Y") { 
-			$query_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID AND scoreType='%s' ORDER BY a.scorePlace", $prefix."judging_scores_bos", $prefix."brewing", $prefix."brewer", $type);
-			$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
-			//echo $query_bos;
-			$row_bos = mysql_fetch_assoc($bos);
-			$totalRows_bos = mysql_num_rows($bos);
+	
+		include(DB.'output_results_download_bos.db.php');
 			
 			if ($totalRows_bos > 0) { 
 			
 			$random = random_generator(6,2);
 			
-if ($action == "print") { 
+	if ($action == "print") echo '<div id="header"><div id="header-inner">'; 
 	?>
-	<div id="header">	
-		<div id="header-inner">
-    	<?php } ?>        
-		<h3>BOS - <?php echo $row_style_type['styleTypeName']; ?></h3>
-        <?php 
-		if ($action == "print") { 
-		?>
-        </div>
-	</div>
-    	<?php } ?>
-<script type="text/javascript" language="javascript">
+	<h3>Best of Show &ndash; <?php echo $row_style_type['styleTypeName']; ?></h3>
+    <?php if ($action == "print") echo "</div></div>";	?>
+	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
 			"bPaginate" : false,
@@ -81,25 +63,20 @@ if ($action == "print") {
     <?php } while ($row_bos = mysql_fetch_assoc($bos)); ?>
 </tbody>
 </table>
-<?php 	} 
-	else echo "<h3>BOS - ".$row_style_type['styleTypeName']."</h3><p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
-    } 
-  }
+<?php 	
+	} 
+}
   
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
-echo "<h2>Overall Winners</h2>";
 do { 
-$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$row_sbi['id']);
-$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-$row_sbd = mysql_fetch_assoc($sbd);
-$totalRows_sbd = mysql_num_rows($sbd);
 
+include(DB.'output_results_download_sbd.db.php');
 
 if ($totalRows_sbd > 0) {
 $random = random_generator(6,2);		
 ?>        
-<h3><?php echo $row_sbi['sbi_name']; ?></h3>
+<h3>Best of Show &ndash; <?php echo $row_sbi['sbi_name']; ?></h3>
 <?php if ($row_sbi['sbi_description'] != "") echo "<p>".$row_sbi['sbi_description']."</p>"; ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

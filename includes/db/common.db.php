@@ -260,6 +260,31 @@ else {
 		$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
 		$row_judging_prefs = mysql_fetch_assoc($judging_prefs);	
 	}
+	
+	
+	if ($section == "default") {
+			
+		$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1",$prefix."judging_locations");
+		$check = mysql_query($query_check, $brewing) or die(mysql_error());
+		$row_check = mysql_fetch_assoc($check);
+
+	}
+
+	if ($section == "rules") {
+		
+		$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
+		$contest_rules = mysql_query($query_contest_rules, $brewing) or die(mysql_error());
+		$row_contest_rules = mysql_fetch_assoc($contest_rules);	
+			
+	}
+	
+	if ($section == "volunteers") {
+	
+		$query_contest_info = sprintf("SELECT contestVolunteers FROM %s WHERE id=1", $prefix."contest_info");
+		$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
+		$row_contest_info = mysql_fetch_assoc($contest_info);
+	
+	}
 
 } // end else
 

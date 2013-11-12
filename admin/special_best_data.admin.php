@@ -78,7 +78,7 @@
       <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
       <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
+      <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
       </td>
      </tr>
     <?php
@@ -117,7 +117,7 @@ if (($action == "add") || ($action == "edit")) { ?>
   <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
   <tr>
-    <td class="dataLabel"><?php echo $row_sbi['sbi_name']; ?> Winning Entry Judging Number:</td>
+    <td class="dataLabel">Winning Entry <em>Judging</em> Number:</td>
     <td class="data"><input name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php echo readable_judging_number($info[1],$info[6]); ?>"></td>
     <td class="dataLabel">Place:</td>
     <td class="data"><input name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" size="5" value="<?php echo $row_sbd['sbd_place']; ?>"></td>
@@ -137,7 +137,7 @@ if (($action == "add") || ($action == "edit")) { ?>
     <input type="hidden" name="entry_exists<?php echo $random; ?>" value="N" />
     <input type="hidden" name="sid<?php echo $random; ?>" value="<?php echo $id; ?>">
   <tr>
-    <td class="dataLabel"><?php echo $row_sbi['sbi_name']; ?> Winning Entry Judging Number:</td>
+    <td class="dataLabel">Winning Entry <em>Judging</em> Number:</td>
     <td class="data"><input name="sbd_judging_no<?php echo $random; ?>" type="text" size="10" maxlength="255" value=""></td>
     <td class="dataLabel">Place:</td>
     <td class="data"><input name="sbd_place<?php echo $random; ?>" type="text" size="5" value=""></td>
@@ -147,8 +147,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	?>
   <?php } ?>
 </table>
-
-<p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries in <?php echo $row_sbi['sbi_name'];?>"></p>
+<p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries in this Custom Winning Category"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } ?>

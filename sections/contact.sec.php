@@ -62,10 +62,6 @@ if ($_SESSION['prefsContact'] == "N") {
 
 if ($_SESSION['prefsContact'] == "Y") {
 	
-	$query_contacts = sprintf("SELECT * FROM %s ORDER BY contactLastName ASC",$prefix."contacts");
-	$contacts = mysql_query($query_contacts, $brewing) or die(mysql_error());
-	$row_contacts = mysql_fetch_assoc($contacts);
-	
 	$option = "";
 		
 	do { 

@@ -5,7 +5,7 @@ require('../paths.php');
 require(CONFIG.'bootstrap.php');
 require(DB.'winners.db.php');
 require(DB.'output_results.db.php');
-
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 if ($view == "pdf") {
 	require(CLASSES.'fpdf/html_table.php');
 	$pdf=new PDF();
@@ -312,5 +312,5 @@ if ($view == "html") {
 	echo $header.$html.$footer;
 	exit();
 	}
-
+} else echo "<p>Not available.</p>";
 ?>

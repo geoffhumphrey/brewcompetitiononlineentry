@@ -49,16 +49,14 @@ if ($action == "forgot") {
 </form>
 <?php  }
 if ($go == "verify") {
-	if ($msg == "default") $username = $_POST['loginUsername'];
-	mysql_select_db($database, $brewing);
-	$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
-	$row_userCheck = mysql_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysql_num_rows($userCheck);
+	
+	$username = $_POST['loginUsername'];
+	$user_check = user_check($username);
+	$user_check = explode("^",$user_check);
 	
 	if (($action != "print") && ($msg != "default")) echo $msg_output;
 	
-	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
+	if (($user_check[0] == 0) && ($msg == "default")) { 
 		echo "<div class=\"error\">There is no email address in the system that matches the one you entered.</div><p><a href='".build_public_url("login","password","forgot",$sef,$base_url)."'>Try again?</a>";
 		} 
 	else { ?>
@@ -66,7 +64,7 @@ if ($go == "verify") {
 	<table class="dataTable">
 	<tr>
     	<td class="dataLabel" width="5%">ID Verification Question:</td>
-        <td class="data"><?php echo $row_userCheck['userQuestion']; ?></td>
+        <td class="data"><?php echo $user_check[1]; ?></td>
     </tr>
     <tr>
     	<td class="dataLabel">Answer:</td>
@@ -78,7 +76,7 @@ if ($go == "verify") {
   	</tr>
 	</table>
 	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
-    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $row_userCheck['id']; ?>">Get it via email</a>.</p><?php } ?>
+    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>">Get it via email</a>.</p><?php } ?>
 	</form>
 	<?php }
 	}
