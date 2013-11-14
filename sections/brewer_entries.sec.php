@@ -275,13 +275,6 @@ do {
 	
 	include(DB.'styles.db.php');
 	
-	/*
-	$query_style = sprintf("SELECT * FROM $styles_db_table WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log['brewCategorySort'], $row_log['brewSubCategory']);
-	$style = mysql_query($query_style, $brewing) or die(mysql_error());
-	$row_style = mysql_fetch_assoc($style);
-	$totalRows_style = mysql_num_rows($style);
-	*/
-	
 	// Build Entry Table Body
 	
 	if (($row_log['brewConfirmed'] == 0) && ($action != "print")) $entry_tr_style = " style='background-color: #ff9; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 

@@ -47,6 +47,7 @@ $bid = $_SESSION['user_id'];
 include (DB.'entries.db.php');
 
 $currency_code = currency_info($_SESSION['prefsCurrency'],1);
+$currency_code = explode("^",$currency_code);
 
 $total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
 $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
@@ -85,25 +86,30 @@ $primary_page_info .= "</p>";
 if ($row_brewer['brewerDiscount'] == "Y") {
 	$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images//star.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your fees have been discounted to %s per entry.</p>",$currency_code[0].number_format($_SESSION['contestEntryFeePasswordNum'], 2));
 }
-$primary_page_info .= sprintf("<p><span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your total entry fees are %s You need to pay %s.</p>",$currency_code[0].number_format($total_entry_fees,2),$currency_code[0].number_format($total_to_pay,2));
-$primary_page_info .= "<p>";
-$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>You currently have %s <strong>unpaid</strong> ",readable_number($total_not_paid));
-if ($total_not_paid == "1") $primary_page_info .= "entry:"; else $primary_page_info .= "entries:";
-$primary_page_info .= "</p>";
+$primary_page_info .= sprintf("<p><span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>Your total entry fees are %s. You need to pay %s.</p>",$currency_code[0].number_format($total_entry_fees,2),$currency_code[0].number_format($total_to_pay,2));
+
+if ($total_not_paid == 0) $primary_page_info .= sprintf("<p><span class='icon'><img src='".$base_url."images/thumb_up.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>%s</p>","Your fees have been paid. Thank you!");
+
+
+else {
+	$primary_page_info .= "<p>";
+	$primary_page_info .= sprintf("<span class='icon'><img src='".$base_url."images/money.png'  border='0' alt='Entry Fees' title='Entry Fees'></span>You currently have %s <strong>unpaid</strong> ",readable_number($total_not_paid));
+	if ($total_not_paid == "1") $primary_page_info .= "entry:"; else $primary_page_info .= "entries:";
+	$primary_page_info .= "</p>";
+	$primary_page_info .= "<ul>";
+		do { 
+			if ($row_log['brewPaid'] != "1") {
+				$entry_no = sprintf("%04s",$row_log['id']);
+				$primary_page_info .= sprintf("<li>Entry #%s: %s (Category %s)</li>",$entry_no,$row_log['brewName'],$row_log['brewCategory'].$row_log['brewSubCategory']);
+				$entries .= sprintf("%04s",$row_log['id']).", ";
+				$return .= $row_log['id']."-";
+			}
+		} while ($row_log = mysql_fetch_assoc($log)); 
+	$primary_page_info .= "</ul>";
+}
 
 $return = $base_url."index.php?section=pay&msg=10&view=";
 $entries = "";
-
-$primary_page_info .= "<ul>";
-	do { 
-		if ($row_log['brewPaid'] != "1") {
-			$entry_no = sprintf("%04s",$row_log['id']);
-			$primary_page_info .= sprintf("<li>Entry #%s: %s (Category %s)</li>",$entry_no,$row_log['brewName'],$row_log['brewCategory'].$row_log['brewSubCategory']);
-			$entries .= sprintf("%04s",$row_log['id']).", ";
-			$return .= $row_log['id']."-";
-	  	}
-	} while ($row_log = mysql_fetch_assoc($log)); 
-$primary_page_info .= "</ul>";
 
 if (($total_to_pay > 0) && ($view == "default")) {
 	

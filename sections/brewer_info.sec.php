@@ -8,45 +8,6 @@
 
 include (DB.'judging_locations.db.php');
 
-function judging_location_info($id) {
-
-	include(CONFIG.'config.php');
-	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM $judging_locations_db_table WHERE id='%s'", $id);
-	$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
-	$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
-	$totalRows_judging_loc3 = mysql_num_rows($judging_loc3);
-			
-	$return = 
-	$totalRows_judging_loc3."^". // 0
-	$row_judging_loc3['judgingLocName']."^". // 1
-	$row_judging_loc3['judgingDate']."^". // 2
-	$row_judging_loc3['judgingLocation']."^". // 3
-	$row_judging_loc3['judgingTime']; // 4
-	
-	return $return;
-	
-}
-
-// Functions unique to this script
-function yes_no($input,$base_url,$method=0) {
-	if ($method != 3) {
-		if (($input == "Y") || ($input == 1)) { 
-			$output = "<span class='icon'><img src='".$base_url."images/tick.png' alt='Yes' title='Yes'></span>";
-			if ($method == 0) $output .= "Yes";
-		}
-		else {
-			$output = "<span class='icon'><img src='".$base_url."images/cross.png' alt='No' title='No'></span>";
-			if ($method == 0) $output .= "No";
-		}
-	}
-	if ($method == 3) {
-		if (($input == "Y") || ($input == 1)) $output = "Yes";
-		else $output = "No";
-		
-	}
-	return $output;
-}
-
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
 $brewer_assignment = brewer_assignment($_SESSION['user_id'],"1");

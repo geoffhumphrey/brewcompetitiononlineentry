@@ -459,7 +459,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `brewBrewerLastName` varchar(255) DEFAULT NULL,
   `brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
   `brewWinner` char(1) DEFAULT NULL,
-  `brewWinnerCat` varchar(3) DEFAULT NULL,
+  `brewWinnerCat` varchar(5) DEFAULT NULL,
   `brewWinnerSubCat` varchar(3) DEFAULT NULL,
   `brewWinnerPlace` varchar(3) DEFAULT NULL,
   `brewBOSRound` char(1) DEFAULT NULL,

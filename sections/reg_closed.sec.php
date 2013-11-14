@@ -10,7 +10,11 @@ include(DB.'judging_locations.db.php');
 include(DB.'entries.db.php');
 ?>
 <h2>Thanks and Good Luck To All Who Entered the <?php echo $_SESSION['contestName']; ?>!</h2>
+<?php if (NHC) { ?>
 <p>There are <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
+<?php } else { ?>
+<p>There are <strong><?php echo get_entry_count("default"); ?></strong> logged entries and <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
+<?php } ?>
 <h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
 <?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { ?>
 			<?php do { ?>

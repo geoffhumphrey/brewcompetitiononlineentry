@@ -97,7 +97,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 <?php if ($action == "add") { for ($i=1; $i <= $row_sbi['sbi_places']; $i++) { ?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
   <tr>
-    <td class="dataLabel"><?php echo $row_sbi['sbi_name']; ?> Winning Entry <?php echo $i; ?> Judging Number:</td>
+    <td class="dataLabel">Winning Entry <?php echo $i; ?>'s Judging Number:</td>
     <td class="data"><input name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value=""></td>
     <td class="dataLabel">Place:</td>
     <td class="data">

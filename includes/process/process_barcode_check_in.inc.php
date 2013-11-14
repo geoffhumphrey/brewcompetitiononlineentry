@@ -22,7 +22,7 @@ else {
 			$jnum = mysql_query($query_jnum, $brewing) or die(mysql_error());
 			$row_jnum = mysql_fetch_assoc($jnum);
 			
-			$query_enum = sprintf("SELECT brewJudgingNumber FROM %s WHERE id='%s'",$prefix."brewing",$_POST['eid'.$id]);
+			$query_enum = sprintf("SELECT brewJudgingNumber,brewPaid FROM %s WHERE id='%s'",$prefix."brewing",$_POST['eid'.$id]);
 			$enum = mysql_query($query_enum, $brewing) or die(mysql_error());
 			$row_enum = mysql_fetch_assoc($enum);
 			
@@ -49,7 +49,7 @@ else {
 					$entries_updated[] = number_pad($_POST['eid'.$id],4);
 				}
 				
-				if ($_POST['brewPaid'.$id] == 1) $brewPaid = 1; else $brewPaid = 0;
+				if ($_POST['brewPaid'.$id] == 1) $brewPaid = 1; else $brewPaid = $row_enum['brewPaid'];
 				
 				$updateSQL = sprintf("UPDATE %s SET brewReceived='1', brewJudgingNumber='%s', brewBoxNum='%s', brewPaid='%s' WHERE id='%s';",$brewing_db_table,$judging_number, $_POST['box'.$id],$brewPaid,$eid);
 				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());

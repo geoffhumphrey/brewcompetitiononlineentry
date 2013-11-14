@@ -208,6 +208,8 @@ if ($totalRows_brewer > 0) { ?>
     </div>
 </div>
 <?php } if ($tb != "view") { ?>
+</body>
+</html>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -216,7 +218,5 @@ function selfPrint(){
 setTimeout('selfPrint()',2000);
 html.push('');
 </script>
-</body>
-</html>
 <?php }
 } else echo "<p>Not available.</p>"; ?>

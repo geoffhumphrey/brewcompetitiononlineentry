@@ -173,7 +173,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
       <tr>
         <td width="2%">
            <img src="../images/check.jpg" border="0">
-           [onshow_petillant;block=td;when [var.brewing_info.sparkling]='petillant']
+           [onshow_petillant;block=td;when [var.brewing_info.sparkling]='Petillant']
         </td>
         <td width="2%">
            <img src="../images/box.jpg" border="0">
@@ -203,7 +203,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
       <tr>
          <td width="2%">
            <img src="../images/check.jpg" border="0">
-           [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='yes']
+           [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='Sparkling']
         </td>
         <td width="2%">
            <img src="../images/box.jpg" border="0">
@@ -348,7 +348,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 
           <td width="5%">
              <img src="../images/check.jpg" border="0">
-             [onshow_fcarb;block=td;when [var.brewing_info.carbonation]='forced']
+             [onshow_fcarb;block=td;when [var.brewing_info.sparkling]='forced']
           </td>
           <td width="5%">
              <img src="../images/box.jpg" border="0">
@@ -360,7 +360,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
           
           <td width="5%">
              <img src="../images/check.jpg" border="0">
-             [onshow_carb;block=td;when [var.brewing_info.carbonation]='bottleConditioned']
+             [onshow_carb;block=td;when [var.brewing_info.sparkling]='bottleConditioned']
           </td>
           <td width="5%">
              <img src="../images/box.jpg" border="0">
@@ -718,10 +718,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
         <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
-        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
-      </tr>
-      <tr>
         <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
       </tr>
@@ -770,15 +766,12 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div></td>
       </tr>
-    </table></td>
+    </table>
+    </td>
     <td align="center">
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap">Competition:</td>
-        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
@@ -837,10 +830,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
         <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
-        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
-      </tr>
-      <tr>
         <td nowrap="nowrap">Entry #</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
       </tr>
@@ -896,10 +885,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap">Competition:</td>
-        <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
@@ -966,6 +951,7 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
   </tr>
 </table>
 </div> <!-- end non-print header -->
+</div>
 <div>
 [onshow;block=div;when [var.action]=='print']
 <script type="text/javascript">
@@ -977,8 +963,5 @@ setTimeout('selfPrint()',2000);
 html.push('');
 </script>
 </div>
-</div> <!-- end container div -->
-
 </body>
-
 </html>

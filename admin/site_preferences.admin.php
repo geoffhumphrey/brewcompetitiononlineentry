@@ -87,14 +87,6 @@ include (DB.'styles.db.php');
 </table>
 <h3>Entries</h3>
 <table>
-  <!-- Deprecated 
-  <tr>
-    <td class="dataLabel">Require Special Ingredients<br />
-      for Custom Styles:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsDisplaySpecial" value="Y" id="prefsDisplaySpecial_0"  <?php //if ($_SESSION['prefsDisplaySpecial'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsDisplaySpecial" value="N" id="prefsDisplaySpecial_1" <?php //if ($_SESSION['prefsDisplaySpecial'] == "N") echo "CHECKED"; ?>/> No</td>
-    <td class="data">Indicate whether you would like to require entrants to specify special ingredients or a classic style for all of your competition's custom styles.</td>
-  </tr>
-  -->
   <tr>
     <td class="dataLabel">Printed Entry Form to Use:</td>
     <td nowrap="nowrap" class="data">
@@ -200,13 +192,6 @@ include (DB.'styles.db.php');
 </table>
 <h3>Performance</h3>
 <table>
-<!--
-  <tr>
-  	<td class="dataLabel">DataTables Record Threshold:</td>
-    <td nowrap="nowrap" class="data"><input name="prefsRecordLimit" type="text" value="<?php //if ($section == "step3") echo "1000"; else echo $_SESSION['prefsRecordLimit']; ?>" size="5" maxlength="11" /></td>
-    <td class="data">The threshold of records for the application to utilize <a href="http://www.datatables.net/" target="_blank">DataTables</a> for paging and sorting,  a Javascript-enabled function that does not require page refreshes to sort or page through <em>all </em>records - the higher the threshold, the greater the possibility for performance issues because <em>all</em> records are loaded at once.  Generally, the default value will work for most installations.</td>
-  </tr>
--->
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
     <td nowrap="nowrap" class="data">
@@ -332,21 +317,24 @@ include (DB.'styles.db.php');
   	<td class="dataLabel">Currency:</td>
     <td class="data">
         <select name="prefsCurrency">
-            <option value="U$" <?php if ($_SESSION['prefsCurrency'] == "$") echo "SELECTED"; ?>>$ - U.S. Dollar</option>
-            <option value="A$" <?php if ($_SESSION['prefsCurrency'] == "A$") echo "SELECTED"; ?>>A$ - Australian Dollar</option>
-            <option value="C$" <?php if ($_SESSION['prefsCurrency'] == "A$") echo "SELECTED"; ?>>C$ - Canadian Dollar</option>
-            <option value="&amp;pound;" <?php if ($_SESSION['prefsCurrency'] == "&pound;") echo "SELECTED"; ?>>&pound; - Pound Sterling</option>
-            <option value="&amp;euro;" <?php if ($_SESSION['prefsCurrency'] == "&euro;") echo "SELECTED"; ?>>&euro; - Euro</option>
-            <option value="&amp;yen;" <?php if ($_SESSION['prefsCurrency'] == "&yen;") echo "SELECTED"; ?>>&yen; - Japanese Yen</option>
-            <option value="C&amp;yen;" <?php if ($_SESSION['prefsCurrency'] == "C&yen;") echo "SELECTED"; ?>>&yen; - Chinese Yuan</option>
-            <option value="kr" <?php if ($_SESSION['prefsCurrency'] == "kr") echo "SELECTED"; ?>>kr - Danish Krone</option>
-            <option value="&#8356;" <?php if ($_SESSION['prefsCurrency'] == "&#8356;") echo "SELECTED"; ?>>&#8356; - Turkish Lira</option>
-            <option value="R" <?php if ($_SESSION['prefsCurrency'] == "R") echo "SELECTED"; ?>>R - South African Rand</option>
-            <option value="&#8360;" <?php if ($_SESSION['prefsCurrency'] == "&#8360;") echo "SELECTED"; ?>>&#8360; - Indian Rupee</option>
-            <option value="R$ " <?php if ($_SESSION['prefsCurrency'] == "R$ ") echo "SELECTED"; ?>>R$ - Brazillian Real</option>
+        <?php 
+		
+		$currency = currency_info($_SESSION['prefsCurrency'],2);
+		$currency_dropdown = "";
+		
+		foreach($currency as $curr) {
+			$curr = explode("^",$curr);
+			$currency_dropdown .= '<option value="'.$curr[0].'"';
+			if ($_SESSION['prefsCurrency'] == $curr[0]) $currency_dropdown .= ' SELECTED';
+			$currency_dropdown .= '>';
+			$currency_dropdown .= $curr[1]."</option>";
+		}
+		
+		echo $currency_dropdown;
+		?>
         </select>
     </td>
-    <td class="data">&nbsp;</td>
+    <td class="data">Please note. The currencies available in the drop-down <em><strong>above</strong> the dashed line</em> are those that are currently accepted by PayPal.</td>
     <tr>
     <td class="dataLabel">Pay for Entries to Print Paperwork:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($_SESSION['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>

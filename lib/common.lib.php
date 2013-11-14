@@ -434,8 +434,7 @@ function currency_info($input,$method) {
 			break;
 			case "kr": $currency_code = $input."^DKK";
 			break;
-			case "&#8356;": $currency_code = $input."^TRY";
-			break;
+			
 			case "R$": $currency_code = "R$^BRL";
 			break;
 			case "A$": $currency_code = "$^AUD";
@@ -448,15 +447,15 @@ function currency_info($input,$method) {
 			break;
 			case "skr": $currency_code = "kr^SEK";
 			break;
-			case "z&#322;": $currency_code = $input."^PLN";
+			case "pol": $currency_code = "z&#322;^PLN";
 			break;
 			case "nkr": $currency_code = "kr^NOK";
 			break;
 			case "Ft": $currency_code = $input."^HUF";
 			break;
-			case "K&#269;": $currency_code = $input."^CZK";
+			case "czkoruna": $currency_code = "K&#269;^CZK";
 			break;
-			case "&#8362;": $currency_code = $input."^ILS";
+			case "shekel": $currency_code = "&#8362;^ILS";
 			break;
 			case "M$": $currency_code = "$^MXM";
 			break;
@@ -464,9 +463,9 @@ function currency_info($input,$method) {
 			break;
 			case "T$": $currency_code = "$^TWD";
 			break;
-			case "&#3647;": $currency_code = $input."^THB";
+			case "baht": $currency_code = "&#3647;^THB";
 			break;
-			case "&#8378;": $currency_code = $input."^TRY";
+			case "tlira": $currency_code = $input."&#8378;^TRY";
 			break;
 			case "p.": $currency_code = $input."^RUB";
 			break;
@@ -479,31 +478,34 @@ function currency_info($input,$method) {
 	if ($method == 2) {
 		
 	$currency_code = array(	   
-			"R$^Brazilian Real^BRL",
-			"&pound;^British Pound^GBP",
-			"K&#269;^Czech Koruna^CZK",
-			"&euro;^Euro^EUR",
-			"kr^Danish Krone^DKK",
-			"A$^Dollar - Australian^AUD",
-			"C$^Dollar - Canadian^CAD",
-			"H$^Dollar -Hong Kong^HKD",
-			"N$^Dollar - New Zealand^NZD",
-			"S$^Dollar- Singapore^SGD",
-			"$^Dollar - U.S.^USD",
-			"Ft^Hungarian Forint^HUF",
-			"&#8362;^Israeli New Shekel^ILS",
-			"&yen;^Japanese Yen^JPY",
-			"RM^Malaysian Ringgit^MYR",
-			"M$^Mexican Peso^MXM",
-			"nkr^Norwegian Krone^NOK",
-			"&#8369;^Philippine Peso^PHP",
-			"z&#322;^Polish Zloty^PLN",
-			"p.^Russian Ruble^RUB",
-			"skr^Swedish Krona^SEK",
-			"&8355;Swiss Franc^CHF",
-			"T$^Taiwan Dollar (New)^TWD",
-			"&#3647;^Thai Baht^THB",
-			"&#8378;^Turkish Lira^TRY"
+			"R$^R$ Brazilian Real^BRL",
+			"&pound;^&pound; British Pound^GBP",
+			"czkoruna^K&#269; Czech Koruna^CZK",
+			"&euro;^&euro; Euro^EUR",
+			"A$^$ Dollar - Australian^AUD",
+			"C$^$ Dollar - Canadian^CAD",
+			"H$^$ Dollar - Hong Kong^HKD",
+			"N$^$ Dollar - New Zealand^NZD",
+			"S$^$ Dollar - Singapore^SGD",
+			"T$^$ Dollar - Taiwan (New)^TWD",
+			"$^$ Dollar - U.S.^USD",
+			"Ft^Ft Hungarian Forint^HUF",
+			"shekel^&#8362; Israeli New Shekel^ILS",
+			"&yen;^&yen; Japanese Yen^JPY",
+			"nkr^kr Krone - Norwegian^NOK",
+			"kr^kr Krone - Danish^DKK",
+			"RM^RM Malaysian Ringgit^MYR",
+			"M$^$ Mexican Peso^MXM",
+			"phpeso^&#8369; Philippine Peso^PHP",
+			"pol^z&#322; Polish Zloty^PLN",
+			"p.^p. Russian Ruble^RUB",
+			"skr^kr Swedish Krona^SEK",
+			"sfranc^&#8355; Swiss Franc^CHF",
+			"baht^&#3647; Thai Baht^THB",
+			"tlira^&#8378; Turkish Lira^TRY",
+			" ^---------------------^-----------",
+			"R^R South African Rand^ZAR",
+			"rupee^&#8360; Rupee^INR"
 		);	
 		
 	}
@@ -2827,7 +2829,8 @@ function highlight_required($msg,$method) {
 	
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
 	
-		include(CONFIG.'config.php');
+		require(CONFIG.'config.php');
+		mysql_select_db($database, $brewing);
 		$query_check = sprintf("SELECT * FROM %s WHERE brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'", $prefix."styles");
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
@@ -2904,5 +2907,90 @@ function user_check($user_name) {
 	return $return;
 	
 }
+
+function judging_location_info($id) {
+
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $id);
+	$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
+	$row_judging_loc3 = mysql_fetch_assoc($judging_loc3);
+	$totalRows_judging_loc3 = mysql_num_rows($judging_loc3);
+			
+	$return = 
+	$totalRows_judging_loc3."^". // 0
+	$row_judging_loc3['judgingLocName']."^". // 1
+	$row_judging_loc3['judgingDate']."^". // 2
+	$row_judging_loc3['judgingLocation']."^". // 3
+	$row_judging_loc3['judgingTime']; // 4
+	
+	return $return;
+	
+}
+
+// Functions unique to this script
+function yes_no($input,$base_url,$method=0) {
+	if ($method != 3) {
+		if (($input == "Y") || ($input == 1)) { 
+			$output = "<span class='icon'><img src='".$base_url."images/tick.png' alt='Yes' title='Yes'></span>";
+			if ($method == 0) $output .= "Yes";
+		}
+		else {
+			$output = "<span class='icon'><img src='".$base_url."images/cross.png' alt='No' title='No'></span>";
+			if ($method == 0) $output .= "No";
+		}
+	}
+	if ($method == 3) {
+		if (($input == "Y") || ($input == 1)) $output = "Yes";
+		else $output = "No";
+		
+	}
+	return $output;
+}
+
+function styles_active($method) {
+	
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	
+	if ($method == 0) { // Active Styles
+		
+		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles");
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		$totalRows_styles = mysql_num_rows($styles);
+		do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
+		
+		return $a;
+	}
+	
+	
+	if ($method == 1) { // Style Types
+	
+		$query_style_types_active = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE styleTypeBOS='Y'", $prefix."style_types");
+		$style_types_active = mysql_query($query_style_types_active, $brewing) or die(mysql_error());
+		$row_style_types_active = mysql_fetch_assoc($style_types_active);
+		
+		return $row_style_types_active['count'];
+	
+	}
+	
+	if ($method == 2) {
+		
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles");
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		$totalRows_styles = mysql_num_rows($styles);
+		do { $a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle']; } while ($row_styles = mysql_fetch_assoc($styles));
+		
+		return $a;
+	
+	}
+	
+	
+}
+
 
 ?>

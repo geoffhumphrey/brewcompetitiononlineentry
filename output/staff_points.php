@@ -689,7 +689,9 @@ if ($view == "default") { // printing from browser
     </table>
     <?php }	?>
 	</div>
-</div>	
+</div>
+</body>
+</html>	
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -698,8 +700,6 @@ function selfPrint(){
 setTimeout('selfPrint()',2000);
 html.push(''); 
 </script>
-</body>
-</html>	
 <?php } // end if ($view == "print") 
 }
 else echo "<p>Not available.</p>";

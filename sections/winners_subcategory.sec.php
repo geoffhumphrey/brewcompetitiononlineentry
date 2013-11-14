@@ -6,24 +6,14 @@
  * 
  */
  
-$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
-$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-$row_styles = mysql_fetch_assoc($styles);
-$totalRows_styles = mysql_num_rows($styles);
-do { $a[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle']; } while ($row_styles = mysql_fetch_assoc($styles));
+$a = styles_active(2);
 
 foreach (array_unique($a) as $style) {
-	$style = explode("-",$style);
-	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style[0], $style[1]);
-	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-	$row_entry_count = mysql_fetch_assoc($entry_count);
 	
-	$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
-	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
-	$row_score_count = mysql_fetch_assoc($score_count);
+	$style = explode("^",$style);
 	
-	//echo $row_score_count['count'];
-	//echo $query_score_count;
+	include(DB.'winners_subcategory.db.php');
+	
 	// Display all winners 
 	if ($row_entry_count['count'] > 0) {
 		if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
@@ -66,13 +56,8 @@ foreach (array_unique($a) as $style) {
 </thead>
 <tbody>
 <?php 
-	$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
-	if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL"; 
-	$query_scores .= " ORDER BY a.scorePlace";
-	//echo $query_scores;
-	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-	$row_scores = mysql_fetch_assoc($scores);
-	$totalRows_scores = mysql_num_rows($scores);
+
+	include(DB.'scores.db.php');
 			
 	do { 
 	$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];

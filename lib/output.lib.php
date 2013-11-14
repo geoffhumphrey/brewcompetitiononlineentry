@@ -457,4 +457,20 @@ function style_type_info($id) {
 	return $return;
 }
 
+function results_count($style) {
+	require(CONFIG.'config.php');
+    mysql_select_db($database, $brewing);
+	
+	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $prefix."brewing",  $style);
+	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row_entry_count = mysql_fetch_assoc($entry_count);
+	
+	$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $style);
+	$score_count = mysql_query($query_score_count, $brewing) or die(mysql_error());
+	$row_score_count = mysql_fetch_assoc($score_count);
+	
+	return $row_entry_count['count']."^".$row_score_count['count'];
+	
+}
+
 ?>
