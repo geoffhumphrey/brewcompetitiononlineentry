@@ -122,10 +122,24 @@ switch($section) {
 	case "contact":
 	$header_output = "Contact";
 	if ($msg == "1") {
-	mysql_select_db($database, $brewing);
-	$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
-	$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-	$row_contact = mysql_fetch_assoc($contact);
+	
+	if (NHC) {
+	// Place NHC SQL calls below
+	
+	
+	}
+	// end if (NHC)
+	
+	else {
+	
+		mysql_select_db($database, $brewing);
+		$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
+		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+		$row_contact = mysql_fetch_assoc($contact);
+		
+	}
+	
+	
 	$output = "Your message has been sent to ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".";
 	}
 	elseif ($msg == "2") $output = "The characters you entered in the CAPTCHA section below were not correct. Please try again.";

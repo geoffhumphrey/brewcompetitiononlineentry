@@ -52,53 +52,67 @@ mysql_real_escape_string($loginUsername);
 mysql_real_escape_string($password);
 $password = md5($password);
 
-// ---------------------------------------------------------------
-// ONLY for 1.3.0.0 release
-// DELETE for future releases
-// Has to do with the hashing of passwords introduced in 1.3.0.0
-// ---------------------------------------------------------------
 
-if ($section == "update") {
+if (NHC) {
+	// Place NHC SQL calls below
 	
-	$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s' AND password = '%s'",$prefix."users",$loginUsername,$password);
-	$login = mysql_query($query_login, $brewing) or die(mysql_error());
-	$row_login = mysql_fetch_assoc($login);
-	$totalRows_login = mysql_num_rows($login);
-	
-	$loginUsername = strtolower($loginUsername);
-	
-	if ($totalRows_login == 1) $check = 1;
-	else $check = 0;
-	
-	//echo $query_login."<br>";
 	
 }
+// end if (NHC)
 
-// ---------------------------------------------------------------
+else {
 
-if ($section != "update") {
+	// ---------------------------------------------------------------
+	// ONLY for 1.3.0.0 release
+	// DELETE for future releases
+	// Has to do with the hashing of passwords introduced in 1.3.0.0
+	// ---------------------------------------------------------------
 	
-	$loginUsername = strtolower($loginUsername);	
-	$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
-	$login = mysql_query($query_login, $brewing) or die(mysql_error());
-	$row_login = mysql_fetch_assoc($login);
-	$totalRows_login = mysql_num_rows($login);
-	
-	$stored_hash = $row_login['password'];
-	
-	$check = 0;
-	
-	if ($totalRows_login > 0) {
-		$check = $hasher->CheckPassword($password, $stored_hash);
+	if ($section == "update") {
+		
+		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s' AND password = '%s'",$prefix."users",$loginUsername,$password);
+		$login = mysql_query($query_login, $brewing) or die(mysql_error());
+		$row_login = mysql_fetch_assoc($login);
+		$totalRows_login = mysql_num_rows($login);
+		
+		$loginUsername = strtolower($loginUsername);
+		
+		if ($totalRows_login == 1) $check = 1;
+		else $check = 0;
+		
+		//echo $query_login."<br>";
+		
 	}
 	
-	/*
-	echo $query_login."<br>";
-	echo $password."<br>";
-	echo $check."<br>";
-	*/
+	// ---------------------------------------------------------------
 	
-} // end if ($section != "update")
+	if ($section != "update") {
+		
+		$loginUsername = strtolower($loginUsername);	
+		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
+		$login = mysql_query($query_login, $brewing) or die(mysql_error());
+		$row_login = mysql_fetch_assoc($login);
+		$totalRows_login = mysql_num_rows($login);
+		
+		$stored_hash = $row_login['password'];
+		
+		$check = 0;
+		
+		if ($totalRows_login > 0) {
+			$check = $hasher->CheckPassword($password, $stored_hash);
+		}
+		
+		/*
+		echo $query_login."<br>";
+		echo $password."<br>";
+		echo $check."<br>";
+		*/
+		
+	} // end if ($section != "update")
+
+} // end else NHC
+
+
 
 // If the username/password combo is valid, register a session, register a session cookie
 // perform certain tasks and redirect
@@ -107,16 +121,27 @@ if ($check == 1) {
 	// Start the session and regenerate the session ID
 	session_start();
 	session_regenerate_id(true); 
-
-	// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
-	$updateSQL = sprintf("UPDATE %s SET user_name='%s' WHERE id='%s'",$prefix."users",$loginUsername, $row_login['id']);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-
-	// Convert email address in the user's accociate record in the "brewer" table
-	$updateSQL = sprintf("UPDATE %s SET brewerEmail='%s' WHERE uid='%s'",$prefix."brewer",$loginUsername, $row_login['id']);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	if (NHC) {
+	// Place NHC SQL calls below
+	
+	
+	}
+	// end if (NHC)
+	
+	else {
+	
+		// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
+		$updateSQL = sprintf("UPDATE %s SET user_name='%s' WHERE id='%s'",$prefix."users",$loginUsername, $row_login['id']);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+		// Convert email address in the user's accociate record in the "brewer" table
+		$updateSQL = sprintf("UPDATE %s SET brewerEmail='%s' WHERE uid='%s'",$prefix."brewer",$loginUsername, $row_login['id']);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	} // end else NHC
 	
 	// Regiseter the session variable
 	$_SESSION['loginUsername'] = $loginUsername;

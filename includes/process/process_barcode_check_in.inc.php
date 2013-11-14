@@ -57,8 +57,8 @@ else {
 			}
 		}
 	}
+	
 	$entry_list .= display_array_content($entries_updated,2);
-
 }
 
 ?>

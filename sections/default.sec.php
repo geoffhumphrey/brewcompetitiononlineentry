@@ -71,17 +71,11 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 	if ($style_types_active > 0) {
 		$header1_1 .= "<h2>Best of Show Winners";
 		if ($section == "past_winners") $header1_1 .= ": ".$trimmed; 
-		if (($row_bos_scores['count'] > 0) && ($section == "default") && ($action != "print")) { 
-			$header1_1 .= "<span class='icon'>&nbsp;<a href='".$base_url."output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf'><img src='".$base_url."images/page_white_acrobat.png' border='0' title='Download a PDF of the Best of Show Winner List'/></a></span><span class='icon'><a href='".$base_url."output/results_download.php?section=admin&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html'><img src='".$base_url."images/html.png' border='0' title='Download the Best of Show Winner List in HTML format'/></a></span>"; 
-			} 
 		$header1_1 .= "</h2>";
 	}
 	
 	$header1_2 .= "<h2>Winning Entries";
 	if ($section == "past_winners") $header1_2 .= ": ".$trimmed;
-	if (($row_scores['count'] > 0) && ($section == "default") && ($action != "print")) { 
-		$header1_2 .= "<span class='icon'>&nbsp;<a href='".$base_url."output/results_download.php?section=admin&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf'><img src='".$base_url."images/page_white_acrobat.png' border='0' title='Download a PDF of the Best of Show Winner List'/></a></span><span class='icon'><a href='".$base_url."output/results_download.php?section=admin&amp;go=judging_scores&amp;action=download&amp;filter=default&amp;view=html'><img src='".$base_url."images/html.png' border='0' title='Download the Best of Show Winner List in HTML format'/></a></span>"; 
-		}
 	$header1_2 .= "</h2>";
 
 	$page_info .= sprintf("<h2>Winning Entries</h2><p>Winners will be posted on or after %s.</p>",getTimeZoneDateTime($_SESSION['prefsTimeZone'], ($row_check['judgingDate']+$delay), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));

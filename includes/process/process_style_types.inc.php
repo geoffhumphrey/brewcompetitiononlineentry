@@ -11,7 +11,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 		
 	}
-	// end if (NHC)
 	
 	else {
 

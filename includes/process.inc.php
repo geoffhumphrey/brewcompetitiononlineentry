@@ -268,34 +268,45 @@ if ($action == "purge") {
 	header(sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&purge=true"));
 }
 
-if ($action == "check_discount") {
+if (NHC) {
+	// Place NHC SQL calls below
+	if ($action == "check_discount") {
 	
-	mysql_select_db($database, $brewing);
-	$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
-	$contest_info1 = mysql_query($query_contest_info1, $brewing) or die(mysql_error());
-	$row_contest_info1 = mysql_fetch_assoc($contest_info1);
-	
-	//echo $_POST['brewerDiscount']."<br>".$row_contest_info1['contestEntryFeePassword']."<br>";
-	
-	if ($_POST['brewerDiscount'] == $row_contest_info1['contestEntryFeePassword']) {
-		$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
-					   GetSQLValueString("Y", "text"),
-                       GetSQLValueString($id, "text"));	
+		mysql_select_db($database, $brewing);
+		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
+		$contest_info1 = mysql_query($query_contest_info1, $brewing) or die(mysql_error());
+		$row_contest_info1 = mysql_fetch_assoc($contest_info1);
 		
-		//echo $updateSQL;
-  		mysql_select_db($database, $brewing);
-  		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  		header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
+		//echo $_POST['brewerDiscount']."<br>".$row_contest_info1['contestEntryFeePassword']."<br>";
+		
+		if ($_POST['brewerDiscount'] == $row_contest_info1['contestEntryFeePassword']) {
+			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
+						   GetSQLValueString("Y", "text"),
+						   GetSQLValueString($id, "text"));	
+			
+			//echo $updateSQL;
+			mysql_select_db($database, $brewing);
+			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
+		}
+		else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
 	}
-	else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
+	
+	
+	if ($action == "generate_judging_numbers") {
+		if ($filter == "default") generate_judging_numbers($brewing_db_table);	
+		if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
+		else $updateGoTo = $base_url."index.php?section=admin&msg=14";
+		header(sprintf("Location: %s", $updateGoTo));		
+	}
+	
 }
+// end if (NHC)
 
+else {
 
-if ($action == "generate_judging_numbers") {
-	if ($filter == "default") generate_judging_numbers($brewing_db_table);	
-	if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
-	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
-	header(sprintf("Location: %s", $updateGoTo));		
+	
+
 }
 
 } else echo "<p>Not available, SON.</p>";
