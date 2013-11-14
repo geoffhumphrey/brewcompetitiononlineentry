@@ -88,6 +88,8 @@ if ($totalRows_log > 0) { ?>
     <?php } // END entries section ?>
     <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
 </div>
+</body>
+</html>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
@@ -96,8 +98,6 @@ function selfPrint(){
 setTimeout('selfPrint()',2000);
 html.push(''); 
 </script> 
-</body>
-</html>
 <?php }
 else echo "<p>Not available.</p>";
 ?>

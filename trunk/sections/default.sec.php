@@ -66,12 +66,9 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 	include ('judge_closed.sec.php'); 
 	include (DB.'winners.db.php');
 	
-	$query_style_types_active = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE styleTypeBOS='Y'", $prefix."style_types");
-	$style_types_active = mysql_query($query_style_types_active, $brewing) or die(mysql_error());
-	$row_style_types_active = mysql_fetch_assoc($style_types_active);
+	$style_types_active = styles_active(1);
 	
-	
-	if ($row_style_types_active['count'] > 0) {
+	if ($style_types_active > 0) {
 		$header1_1 .= "<h2>Best of Show Winners";
 		if ($section == "past_winners") $header1_1 .= ": ".$trimmed; 
 		if (($row_bos_scores['count'] > 0) && ($section == "default") && ($action != "print")) { 

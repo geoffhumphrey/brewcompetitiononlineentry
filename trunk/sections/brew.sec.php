@@ -282,6 +282,7 @@ else $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/add.png"
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>">
 <?php } ?> 
+<input type="hidden" name="brewJudgingNumber" value="<?php echo $row_log['brewJudgingNumber']; ?>">
 <h2>Required Information</h2>
 <p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" <?php if (($action == "add") && ($remaining_entries == 0) && ($_SESSION['user_level'] == 2)) echo "DISABLED"; ?> /></p>
 <table>

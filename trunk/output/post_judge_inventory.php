@@ -34,7 +34,7 @@ if (NHC) $base_url = "../";
 			"bLengthChange" : false,
 			"aaSorting": [[3,'asc']],
 			"aoColumns": [
-				<?php if ($section == "score") { ?>null,<?php } ?>
+				<?php if ($section == "scores") { ?>null,<?php } ?>
 				null,
 				null,
 				null,
@@ -49,7 +49,7 @@ if (NHC) $base_url = "../";
 <div id="content">
 	<div id="content-inner">
     <div id="header">	
-		<div id="header-inner"><h1><?php echo $_SESSION['contestName']; ?> Post Judging Entry Inventory</h1></div>
+		<div id="header-inner"><h1><?php echo $_SESSION['contestName']; ?> Post-Judging Entry Inventory</h1></div>
 	</div><!-- end header -->
     <!-- BEGIN content -->
     <!-- DataTables Table Format -->
@@ -59,9 +59,9 @@ if (NHC) $base_url = "../";
         	<th class="bdr1B" width="5%" nowrap="nowrap">Entry #</th>
             <th class="bdr1B" width="5%" nowrap="nowrap">Judging #</th>
             <th class="bdr1B">Entry Name</th>
-            <th class="bdr1B">Category</th>
+            <th class="bdr1B" width="25%">Category</th>
             <th class="bdr1B" width="40%">Special Ingredients / Classic Style</th>
-            <?php if ($section == "score") { ?> 
+            <?php if ($section == "scores") { ?> 
             <th class="bdr1B" width="5%" nowrap="nowrap">Score</th>
             <?php } ?>
         </tr>
@@ -69,12 +69,12 @@ if (NHC) $base_url = "../";
     <tbody>
     <?php do { ?>
     	<tr>
-        	<td class="data bdr1B_gray"><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
-            <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_post_inventory['id']); ?></td> 
+        	<td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_post_inventory['id']); ?></td> 
+            <td class="data bdr1B_gray"><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
             <td class="data bdr1B_gray"><?php echo $row_post_inventory['brewName']; ?></td> 
             <td class="data bdr1B_gray"><?php echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?></td>
             <td class="data bdr1B_gray"><?php echo $row_post_inventory['brewInfo']; ?></td> 
-            <?php if ($section == "score") { ?> 
+            <?php if ($section == "scores") { ?> 
             <td class="data bdr1B_gray"><?php echo $row_post_inventory['scoreEntry']; ?></td>
             <?php } ?>
         </tr>

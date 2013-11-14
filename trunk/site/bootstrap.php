@@ -31,66 +31,7 @@ $php_version = phpversion();
 $nhc_landing_url = "https://www.brewingcompetition.com";
 
 // Pre-flight Checks
-function check_setup($tablename, $database) {
-	
-	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	
-	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-
-    if ($row_log['count'] == 0) return FALSE;
-	else return TRUE;
-
-}
-
-$setup_success = TRUE;
-
-// The following line will need to change with future conversions
-if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) { 
-
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
-	
-}
-	
-if (NHC) {
-
-	mysql_select_db($database, $brewing);
-	$query_version = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
-	$version = mysql_query($query_version, $brewing) or die(mysql_error());
-	$row_version = mysql_fetch_assoc($version);
-	
-	//echo $row_version['version'];
-	
-	if ($row_version['version'] != "1.3.0.3") { 
-		$setup_success = FALSE;
-		$setup_relocate = "Location: ".$base_url."update.php";
-	}
-	
-}
-
-if ((!NHC) && (!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
-	
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."update.php";
-	
-}
-	
-elseif (MAINT) { 
-
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."maintenance.php";
-	
-}
-
-if (!$setup_success) {
-	
-	header ($setup_relocate);
-	exit;
-	
-}
+require(LIB.'preflight.lib.php');
 
 // If all setup or update has taken place, run normally
 if ($setup_success) {
@@ -147,10 +88,16 @@ if ($setup_success) {
 	}
 	
 	if (NHC) {
+		
+		/*
+		
+		// ---------------------------------------------------------
+		// BELOW WILL BE MOST LIKELY BE DEPRECATED FOR NHC 2014 ON
+		// ---------------------------------------------------------
+		
 		if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) {
 			// compare region prefix to the actual region that the user is registered to
 			// if they do not match, destroy the session - saves confusion and cheating
-			
 			if ($_SESSION['userLevel'] == 2) {
 			$query_check_region = sprintf("SELECT email,regionPrefix FROM nhcentrant WHERE email='%s'", $_SESSION['loginUsername']);
 			$check_region = mysql_query($query_check_region, $brewing) or die(mysql_error());
@@ -159,17 +106,27 @@ if ($setup_success) {
 			if (($row_check_region['regionPrefix'] != $prefix) && ($_SESSION['loginUsername'] != "geoff@zkdigital.com") && ($_SESSION['loginUsername'] != "janis@brewersassociation.org")) session_destroy();
 			}			
 		}
+		
+		// ---------------------------------------------------------
+		// END DEPRECATED CODE
+		// ---------------------------------------------------------
+		
+		*/
+		
 		// ONLY for NHC application
 		// Check to see if SSL is in place and redirect to non SSL instance if not on pay screens
 		if ($section != "pay") {
+			
 			$https = ((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off')) ? true : false;
 			if ($https)  {
 				$location = "http://www.brewingcompetition.com".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 				header("Location: $location");
 				exit;
 			}
+			
 		}
-	}
+		
+	} // end if (NHC)
 	
 } // end if ($setup_success);
 ?>

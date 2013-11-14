@@ -41,10 +41,10 @@ $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer[
 // Get some values that are easier to work with in the templates
 $brewing_info['carbonation'] = 'unknown';
 if ($brewing_info['brewCarbonationMethod'] == "Y") {
-  $brewing_info['carbonation'] = 'forced';
+  $brewing_info['sparkling'] = 'forced';
 }
 if ($brewing_info['brewCarbonationMethod'] == "N") {
-  $brewing_info['carbonation'] = 'bottleConditioned';
+  $brewing_info['sparkling'] = 'bottleConditioned';
 }
 
 // Various mead and cider info
@@ -285,28 +285,19 @@ $TBS = new clsTinyButStrong;
 
 if ($go == "default") {
 	if ($_SESSION['prefsEntryForm'] == "B") { 
-	$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
+		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 	}
 	if ($_SESSION['prefsEntryForm'] == "M") { 
-	$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
+		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
 	}
 	if ($_SESSION['prefsEntryForm'] == "U") { 
-	$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
+		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
 	}
 	if ($_SESSION['prefsEntryForm'] == "N") { 
-	/*
-	$query_drop_off = "SELECT * FROM $drop_off_db_table";
-	$drop_off = mysql_query($query_drop_off, $brewing) or die(mysql_error());
-	$row_drop_off = mysql_fetch_assoc($drop_off);
-	$drop_off['drop_off_location'] = array();
-	do {
-		$drop_off['drop_off_location'] = $row_drop_off['dropLocationName'].$row_drop_off['dropLocation'].$row_drop_off['dropLocationNotes'];	
-	} while ($row_drop_off = mysql_fetch_assoc($drop_off));
-	*/
-	if ((NHC) && ($prefix == "final_")) $TBS->LoadTemplate(TEMPLATES.'nhc-entry-final-round.html');
-	elseif (NHC) $TBS->LoadTemplate(TEMPLATES.'nhc-entry.html');
-	else $TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
-	$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
+		if ((NHC) && ($prefix == "final_")) $TBS->LoadTemplate(TEMPLATES.'nhc-entry-final-round.html');
+		elseif (NHC) $TBS->LoadTemplate(TEMPLATES.'nhc-entry.html');
+		else $TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
+		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 }
 

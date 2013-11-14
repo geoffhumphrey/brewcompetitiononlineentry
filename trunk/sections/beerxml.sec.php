@@ -120,11 +120,6 @@ else {
 		}
 		elseif (!$_FILES['userfile']) $message .= "Please choose your BeerXML file to upload.";
 		else $message .= "Invalid file specified.";
-		/*
-		$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewBrewerID='%s'", $prefix."brewing",$_SESSION['user_id']);
-		$check = mysql_query($query_check, $brewing) or die(mysql_error());
-		$row_check = mysql_fetch_assoc($check);
-		*/
 		if (($action != "print") && ($msg != "default")) echo $msg_output;
 		if (!empty($message)) echo "<div class='error'>".$message."</div>";
 		if (entries_unconfirmed($_SESSION['user_id']) > 0) { 

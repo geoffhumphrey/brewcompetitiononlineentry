@@ -10,12 +10,11 @@ date_default_timezone_set('America/Denver');
 // Check to see if initial setup has taken place
 
 if (table_exists($prefix."system")) {
-mysql_select_db($database, $brewing);
-$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
-$system = mysql_query($query_system, $brewing) or die(mysql_error());
-$row_system = mysql_fetch_assoc($system);
-
-if ($row_system['setup'] == 1) header ('Location: index.php');
+	mysql_select_db($database, $brewing);
+	$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
+	$system = mysql_query($query_system, $brewing) or die(mysql_error());
+	$row_system = mysql_fetch_assoc($system);
+	if ($row_system['setup'] == 1) header (sprintf("Location: %s",$base_url."index.php"));
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -81,6 +80,7 @@ if ($setup_free_access == TRUE) {
 	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
 	include(INCLUDES.'form_check.inc.php');
 	if (table_exists($prefix."system")) {
+		
 		mysql_select_db($database, $brewing);
 		$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
 		$system = mysql_query($query_system, $brewing) or die(mysql_error());

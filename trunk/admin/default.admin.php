@@ -36,7 +36,12 @@ if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter);
-if (($section == "admin") && ($go == "default")) { ?>
+if ($_SESSION['userLevel'] <= "1") {
+			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error' style='margin-top: 15px;'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
+			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
+			if (($totalRows_contact == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No competition contacts have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=contacts\">Add a competition contact</a>?</div>";
+			
+if ($go == "default") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 
@@ -89,12 +94,6 @@ if (($section == "admin") && ($go == "default")) { ?>
     <?php } ?>
 </table>
 </div>
-<?php } if ($_SESSION['userLevel'] <= "1") {
-			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error' style='margin-top: 15px;'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
-			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
-			if (($totalRows_contact == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No competition contacts have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=contacts\">Add a competition contact</a>?</div>";
-			
-if ($go == "default") { ?>
 <div id="menu_container">
 <div id="outer">
 <p>Click the headings below to expand and collapse each category.</p>
@@ -710,6 +709,12 @@ if ($go == "default") { ?>
             <ul class="admin_default">
 				<li>Participant Summaries:</li>
 				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/participant_summary.php" title="Print Participant Summaries (Each on a Separate Piece of 8 1/2 X 11 Paper)">Print</a> (All Participants with Entries)</li>
+			</ul>
+            
+            <ul class="admin_default">
+				<li>Post-Judging Inventory:</li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/post_judge_inventory.php?section=scores" title="Post-Judging Inventory">Print</a> (with Scores)</li>
+				<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/post_judge_inventory.php" title="Post-Judging Inventory">Print</a> (without Scores)</li>
 			</ul>
             
             <?php if (custom_modules("reports",1)) { ?>
