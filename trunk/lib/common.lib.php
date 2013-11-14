@@ -6,7 +6,7 @@
  *
  */
 
-include (INCLUDES.'date_time.inc.php');
+include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
 // Current version is 1.3.0.3, change version in system table if not

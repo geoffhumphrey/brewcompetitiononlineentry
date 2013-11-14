@@ -127,8 +127,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 	return $return;
 }
 
-function greaterDate($start_date,$end_date)
-{
+function greaterDate($start_date,$end_date) {
   $start = strtotime($start_date);
   $end = strtotime($end_date);
   if ($start > $end)

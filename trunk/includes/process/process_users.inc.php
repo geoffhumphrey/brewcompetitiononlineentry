@@ -20,7 +20,6 @@ if (NHC) {
 		
 		
 }
-// end if (NHC)
 
 else {
 

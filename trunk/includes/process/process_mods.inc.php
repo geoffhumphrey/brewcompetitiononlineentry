@@ -14,7 +14,6 @@ else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 		
 		
 	}
-	// end if (NHC)
 	
 	else {
 

@@ -6,7 +6,6 @@
 
 if ($action == "email") { 
 
-// CAPCHA check
 	require_once(INCLUDES.'recaptchalib.inc.php');
 	$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
 	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
@@ -22,15 +21,28 @@ if ($action == "email") {
 		setcookie("message", $_POST['message'], 0, "/");
 		header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
 		
-	}
-
+	} // end if (!$resp->is_valid)
+	
 	else {
-
-		mysql_select_db($database, $brewing);
-		$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
-		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-		$row_contact = mysql_fetch_assoc($contact);
-		//echo $query_contact;
+		
+		
+		if (NHC) {
+	// Place NHC SQL calls below
+	
+	
+		}
+		
+		
+		else {
+		
+			mysql_select_db($database, $brewing);
+			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
+			$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
+			$row_contact = mysql_fetch_assoc($contact);
+			//echo $query_contact;
+		
+		} // end if (NHC)
+		
 		
 		// Gather the variables from the form
 		$to_email = $row_contact['contactEmail'];
@@ -62,8 +74,10 @@ if ($action == "email") {
 		
 		mail($to_email, $subject, $message, $headers);
 		header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1"));
-	}
-}
+		
+	} // end else if (!$resp->is_valid)
+
+} // end if ($action == "email")
 
 elseif ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	
@@ -123,8 +137,9 @@ elseif ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) 
 	
 	} // end else NHC
 
-} else echo "<p>Not available.</p>";
+} 
 
+else echo "<p>Not available.</p>";
 
 
 ?>

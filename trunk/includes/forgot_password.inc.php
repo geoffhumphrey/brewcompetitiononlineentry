@@ -18,18 +18,33 @@ mysql_select_db($database, $brewing);
 
 if (($action == "email") && ($id != "default")) {
 	
-	$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
-	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-	$row_forgot = mysql_fetch_assoc($forgot);
-	$totalRows_forgot = mysql_num_rows($forgot);
 	
-	$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_assoc($brewer);
-	$totalRows_brewer = mysql_num_rows($brewer);
-
-	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
-	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
+	
+	if (NHC) {
+	// Place NHC SQL calls below
+	
+	
+	}
+	// end if (NHC)
+	
+	else {
+	
+		$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
+		$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+		$row_forgot = mysql_fetch_assoc($forgot);
+		$totalRows_forgot = mysql_num_rows($forgot);
+		
+		$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
+		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+		$row_brewer = mysql_fetch_assoc($brewer);
+		$totalRows_brewer = mysql_num_rows($brewer);
+	
+		$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
+		$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
+	
+	}
+	
+	
 	
 	$to_recipient = $first_name." ".$last_name;
 	$to_email = $row_forgot['user_name'];
@@ -68,10 +83,23 @@ if (($action == "email") && ($id != "default")) {
 else {
 $username = $_POST['loginUsername'];
 
-$query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-$row_forgot = mysql_fetch_assoc($forgot);
-$totalRows_forgot = mysql_num_rows($forgot);
+	if (NHC) {
+		// Place NHC SQL calls below
+		
+		
+	}
+	// end if (NHC)
+	
+	else {
+	
+		$query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
+		$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+		$row_forgot = mysql_fetch_assoc($forgot);
+		$totalRows_forgot = mysql_num_rows($forgot);
+	
+	}
+
+
 
 if ($totalRows_forgot == 0) { header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); }
 if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { //if answer is correct
@@ -91,16 +119,29 @@ $key = random_generator(10,1);
 
 $password = md5($key);
 $hash = $hasher->HashPassword($password);
-$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
-					   
-  mysql_select_db($database, $brewing);
-  $Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-  
-  $updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
-  header(sprintf("Location: %s", $updateGoTo)); 
+	
+	if (NHC) {
+	// Place NHC SQL calls below
+	
+	
+	}
+	// end if (NHC)
+	
+	else {
+	
+		mysql_select_db($database, $brewing);
+		$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
+		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	
+	}
+	
+  	$updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
+  	header(sprintf("Location: %s", $updateGoTo)); 
 
 } else {
-header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
+	
+	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
+	
 }
 
 /*

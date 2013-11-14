@@ -183,4 +183,59 @@ function generate_judging_numbers($brewing_db_table) {
 	} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 }
 
+
+function check_special_ingredients($style) {
+	
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+		
+	$style = explode("-",$style);
+
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $style[0], $style[1]);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
+	else return FALSE;
+}
+	  
+function check_carb_sweetness($style) {
+	
+	$style = str_replace("-","",$_POST['brewStyle']);
+	$style = preg_replace('/[^0-9,]|,[0-9]*$/','',$style);
+	
+	switch($style) {
+		case "24":
+		case "25":
+		case "26":
+		case "27":
+		case "28":
+		return TRUE;
+		break;
+		
+		default:
+		return FALSE;
+		break;
+	}
+}
+	
+	
+function check_mead_strength($style) {
+	
+	$style = str_replace("-","",$_POST['brewStyle']);
+	$style = preg_replace('/[^0-9,]|,[0-9]*$/','',$style); 
+	
+	switch($style) {
+		case "24":
+		case "25":
+		case "26":
+		return TRUE;
+		break;
+		
+		default:
+		return FALSE;
+		break;
+	}
+}	
+
  ?>
