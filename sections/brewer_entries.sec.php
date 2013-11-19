@@ -108,9 +108,9 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	$entry_fee_message .= "You currently have ".readable_number($total_not_paid)." <strong>unpaid</strong>";
 	if ($total_not_paid == "1") $entry_fee_message .= " entry. "; 
 	else $entry_fee_message .= " entries. ";
-	$entry_fee_message .= "Your total entry fees are ".$_SESSION['prefsCurrency'].$total_entry_fees; 
+	$entry_fee_message .= "Your total entry fees are ".$currency_symbol.$total_entry_fees; 
 	if ((NHC) && ($_SESSION['brewerDiscount'] != "Y")) $entry_fee_message .= " (as a non-AHA member)"; 
-	$entry_fee_message .= ". You need to pay ".$_SESSION['prefsCurrency'].$total_to_pay.".";
+	$entry_fee_message .= ". You need to pay ".$currency_symbol.$total_to_pay.".";
 	$entry_fee_message .= "</span>";
 	
 	// Build Discount Fee Message
@@ -118,7 +118,7 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	$discount_fee_message .= "<span class='icon'><img src='".$base_url."images/star.png' border='0' alt='Discount!' title='Discount!' /></span>";
 	if (NHC) $discount_fee_message .= "As an AHA member, your entry fees are "; 
 	else $discount_fee_message .= "Your fees have been discounted to "; 
-	$discount_fee_message .= $_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry.";
+	$discount_fee_message .= $currency_symbol.$_SESSION['contestEntryFeePasswordNum']." per entry.";
 	$discount_fee_message .= "</span>";
 	
 	// Build Pay Fees Message/Link

@@ -100,7 +100,7 @@ else {
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewBrewerID='$bid' AND brewConfirmed='1'";
 		}
 	else { 
-		if (isset($_SESSION['loginUsername'])) $query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $_SESSION['user_id']);
+		if ((isset($_SESSION['loginUsername'])) && ($section != "admin")) $query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory, brewName $dir", $_SESSION['user_id']);
 		else $query_log = "SELECT * FROM $brewing_db_table";
 		$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";

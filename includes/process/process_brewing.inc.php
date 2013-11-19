@@ -727,7 +727,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				mysql_real_escape_string($updateSQL);
 				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 				//echo $updateSQL."<br>";
-			}
+				}
 			} 
 			//echo $massUpdateGoTo;
 			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
@@ -735,6 +735,48 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 			header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
 			} // end if ($action == "update")
+			
+			if ($action == "paid") {
+				
+				$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1'";
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($updateSQL);
+				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=20";
+				$pattern = array('\'', '"');
+				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+				header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+				
+			}
+			
+			if ($action == "received") {
+				
+				$updateSQL = "UPDATE $brewing_db_table SET brewReceived='1'";
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($updateSQL);
+				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=21";
+				$pattern = array('\'', '"');
+				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+				header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+				
+			}
+			
+			if ($action == "confirmed") {
+				
+				$updateSQL = "UPDATE $brewing_db_table SET brewConfirmed='1'";
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($updateSQL);
+				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=22";
+				$pattern = array('\'', '"');
+				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+				header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+				
+			}
 
 	} // end else NHC
 	

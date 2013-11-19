@@ -10,8 +10,10 @@ include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'dropoff.db.php'); 
 include(DB.'contacts.db.php');
+include(INCLUDES.'form_check.inc.php'); 
 
-if (($section == "admin") && ($go == "default")) { 
+if ($go == "default") {
+	$totalRows_entry_count = total_paid_received("default","default");
 	$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 }
 
@@ -19,8 +21,14 @@ if ($check_judging_flights) {
 	include(PROCESS.'process_judging_flight_check.inc.php'); 
 }
 
-include(INCLUDES.'form_check.inc.php'); 
 ?>
+<script type="text/javascript" language="javascript">
+function toggleChecked(status) {
+	$(".checkbox").each( function() {
+		$(this).attr("checked",status);
+	})
+}
+</script>
 <div id="header">	
 	<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
 </div>
@@ -54,7 +62,7 @@ if ($go == "default") { ?>
         <td class="data"><?php echo $totalRows_log_confirmed."/".$entries_unconfirmed; ?></td>
         <?php if (!NHC) { ?>
 		<td class="dataLabel">Total Fees:</td>
-        <td class="data"><?php echo $_SESSION['prefsCurrency'].$total_fees; ?></td>
+        <td class="data"><?php echo $currency_symbol.$total_fees; ?></td>
         <?php } else { ?>
         <td class="dataLabel">&nbsp;</td>
         <td class="data">&nbsp;</td>
@@ -67,7 +75,7 @@ if ($go == "default") { ?>
       <td class="data"><?php echo $row_with_entries['count']; ?></td>
       <?php if (!NHC) { ?>
 		<td class="dataLabel">Total Paid Fees:</td>
-        <td class="data"><?php echo $_SESSION['prefsCurrency'].$total_fees_paid; ?></td>
+        <td class="data"><?php echo $currency_symbol.$total_fees_paid; ?></td>
         <?php } else { ?>
         <td class="dataLabel">&nbsp;</td>
         <td class="data">&nbsp;</td>
@@ -89,7 +97,7 @@ if ($go == "default") { ?>
         <td class="dataLabel">Total Discounted Entries:</td>
         <td class="data"><?php echo $a[1]; ?></td>
         <td class="dataLabel">Total Fees at Discount:</td>
-        <td class="data"><?php echo $_SESSION['prefsCurrency'].($a[1] * $_SESSION['contestEntryFeePasswordNum']); ?></td>
+        <td class="data"><?php echo $currency_symbol.($a[1] * $_SESSION['contestEntryFeePasswordNum']); ?></td>
     </tr>
     <?php } ?>
 </table>

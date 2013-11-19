@@ -14,25 +14,7 @@ echo $_SESSION['userLevel'];
 $php_version = "4.0.1";
  */
  
-
-
-function check_exension($file_ext) {
-	switch($file_ext) {
-		case "xml": return TRUE;
-		break;
-	
-		case "":  	
-		case NULL: 
-		return FALSE;
-		break;
-		
-		default: return FALSE;
-		break;
-	}
-	
-}
-
-
+ 
 // Disaable entry add/edit if registration closed and entry window closed
 if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
 	echo "<div class='error'>Importing Entries Not Available</div>";
@@ -116,9 +98,9 @@ else {
 				
 				$_SESSION['recipes'] = $recipes;
 			}
-			print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=1</script>";
+			print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=1'</script>";
 		}
-		elseif (!$_FILES['userfile']) $message .= "Please choose your BeerXML file to upload.";
+		elseif (!$_FILES['userfile']) $message .= "";
 		else $message .= "Invalid file specified.";
 		if (($action != "print") && ($msg != "default")) echo $msg_output;
 		if (!empty($message)) echo "<div class='error'>".$message."</div>";

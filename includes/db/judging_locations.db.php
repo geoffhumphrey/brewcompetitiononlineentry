@@ -51,7 +51,7 @@ else {
 	
 	if ($filter == "staff") {
 		
-		$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+		$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$prefix."staff");
 		$organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 		$row_organizer = mysql_fetch_assoc($organizer);
 		
