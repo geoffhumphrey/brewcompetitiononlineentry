@@ -64,7 +64,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	$output .= "<h2>Competition Rules</h2>\n";
 	$output .= $_SESSION['contestRules']."\n";
 	$output .= "<h3>Entry Fee</h3>\n";
-	$output .= "<p>".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFee']." per entry."; if ($_SESSION['contestEntryFeeDiscount'] == "Y") $output .= $_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryFee2'], 2)." per entry after ".$_SESSION['contestEntryFeeDiscountNum']." entries. "; if ($_SESSION['contestEntryCap'] != "") $output .= $_SESSION['prefsCurrency'].number_format($_SESSION['contestEntryCap'], 2)." for unlimited entries."; 
+	$output .= "<p>".$currency_symbol.$_SESSION['contestEntryFee']." per entry."; if ($_SESSION['contestEntryFeeDiscount'] == "Y") $output .= $currency_symbol.number_format($_SESSION['contestEntryFee2'], 2)." per entry after ".$_SESSION['contestEntryFeeDiscountNum']." entries. "; if ($_SESSION['contestEntryCap'] != "") $output .= $currency_symbol.number_format($_SESSION['contestEntryCap'], 2)." for unlimited entries."; 
 	$output .= "</p>\n";
 	$output .= "<h3>Payment</h3>\n";
 	$output .= "<p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>\n";

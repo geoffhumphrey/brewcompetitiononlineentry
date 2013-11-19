@@ -268,6 +268,13 @@ if ($action == "purge") {
 	header(sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&purge=true"));
 }
 
+if ($action == "generate_judging_numbers") {
+	generate_judging_numbers($prefix."brewing");	
+	if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
+	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
+	header(sprintf("Location: %s", $updateGoTo));		
+}
+
 if (NHC) {
 	// Place NHC SQL calls below
 	if ($action == "check_discount") {
@@ -290,14 +297,6 @@ if (NHC) {
 			header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
 		}
 		else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
-	}
-	
-	
-	if ($action == "generate_judging_numbers") {
-		if ($filter == "default") generate_judging_numbers($brewing_db_table);	
-		if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
-		else $updateGoTo = $base_url."index.php?section=admin&msg=14";
-		header(sprintf("Location: %s", $updateGoTo));		
 	}
 	
 }

@@ -158,10 +158,10 @@ $page_info3 .= sprintf("<p>Entries will be accepted at our shipping and drop-off
 
 // Entry Fees
 $header1_4 .= "<a name='entry'></a><h2>Entry Fees</h2>";
-$page_info4 .= sprintf("<p>%s%s per entry. ",$_SESSION['prefsCurrency'],number_format($_SESSION['contestEntryFee'],2));
-if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s per entry after the %s entry. ",$_SESSION['prefsCurrency'],number_format($_SESSION['contestEntryFee2'],2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']));
-if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s for unlimited entries. ",$_SESSION['prefsCurrency'],number_format($_SESSION['contestEntryCap'],2));
-if (NHC) $page_info4 .= sprintf("%s%s for AHA members.",$_SESSION['prefsCurrency'],number_format($_SESSION['contestEntryFeePasswordNum'],2));
+$page_info4 .= sprintf("<p>%s%s (%s) per entry. ",$currency_symbol,number_format($_SESSION['contestEntryFee'],2),$currency_code);
+if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s per entry after the %s entry. ",$currency_symbol,number_format($_SESSION['contestEntryFee2'],2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']));
+if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s for unlimited entries. ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2));
+if (NHC) $page_info4 .= sprintf("%s%s for AHA members.",$currency_symbol,number_format($_SESSION['contestEntryFeePasswordNum'],2));
 $page_info4 .= "</p>";
 
 // Entry Limit

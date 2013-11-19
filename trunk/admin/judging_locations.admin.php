@@ -425,15 +425,6 @@ echo $secondary_nav;
 echo $secondary_page_info;
 
 // Display HTML/JS elements and compiled PHP elements
-?>
-<script type="text/javascript" language="javascript">
-function toggleChecked(status) {
-	$(".checkbox").each( function() {
-		$(this).attr("checked",status);
-	})
-}
-</script>
-<?php 
 if (!empty($output_no_records)) echo $output_no_records; 
 if (!empty($output_datatables_body)) { 
 	if (!empty($form_submit_url)) echo $form_submit_url.$form_submit_button; 

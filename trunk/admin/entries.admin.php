@@ -50,13 +50,16 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
   <?php } ?>
   <?php } ?>
 </div>
+
 <?php if ($dbTable == "default") { ?>
-<!--
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav">
-    <span class="icon"><img src="<?php //echo $base_url; ?>/images/tick.png"  /></span>Mark Entries as Paid/Received for Category: <?php //echo style_choose($section,$go,$action,$filter,$view,"index.php","none"); ?></span>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>">Mark All Entries as Paid</a></span>
+    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>">Mark All Entries as Received</a></span>
+    <span class="adminSubNav">...then uncheck those that aren't paid and/or received.</span>
 </div>
--->
+<div class="adminSubNavContainer">
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>">Confirm All Unconfirmed Entries</a></span>
+</div>
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 
@@ -81,18 +84,18 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 <?php if ($view == "default") { ?>
 <tr>
   <td class="dataHeading">Total Confirmed Entry Fees <?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
-  <td class="data"><?php echo $_SESSION['prefsCurrency'].$total_fees; ?></td>
+  <td class="data"><?php echo $currency_symbol.$total_fees; ?></td>
 </tr>
 <tr>
   <td class="dataHeading">Paid &amp; Unpaid Confirmed Entries<?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php 
   if (($filter == "default") && ($bid == "default")) { 
-  	if ($totalRows_log_paid > 0) echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a> (".$_SESSION['prefsCurrency'].$total_fees_paid.")";
- 	else echo $totalRows_log_paid." paid (".$_SESSION['prefsCurrency'].$total_fees_paid.")";
-	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo ", <a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid</a> (".$_SESSION['prefsCurrency'].$total_fees_unpaid.")"; 
-	else echo "<br>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$_SESSION['prefsCurrency'].$total_fees_unpaid.")";
+  	if ($totalRows_log_paid > 0) echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a> (".$currency_symbol.$total_fees_paid.")";
+ 	else echo $totalRows_log_paid." paid (".$currency_symbol.$total_fees_paid.")";
+	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo ", <a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid</a> (".$currency_symbol.$total_fees_unpaid.")"; 
+	else echo "<br>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
 	}
-  else echo $totalRows_log_paid." paid (".$_SESSION['prefsCurrency'].$total_fees_paid."), ".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$_SESSION['prefsCurrency'].$total_fees_unpaid.")";
+  else echo $totalRows_log_paid." paid (".$currency_symbol.$total_fees_paid."), ".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
   ?></td>
 </tr>
 <?php } ?>
@@ -220,7 +223,7 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   </td>
   <td class="dataList ">
   <?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) { ?>
-  <?php if ($action != "print") { echo "<span style='display:none;'>".$row_log['brewJudgingNumber']."</span>"; ?><input id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo $row_log['brewJudgingNumber']; ?>" title="<?php if (strlen($row_log['brewJudgingNumber']) < 6) { echo "This Judging Number was automatically assigned by the system to this entry."; if ($_SESSION['prefsEntryForm'] == "N") echo " You can override it when scanning in barcodes or by entering it here and clicking &ldquo;Update Entries.&rdquo;"; } ?>" /><?php } else echo $row_log['brewJudgingNumber']; ?>
+  <?php if ($action != "print") { echo "<span style='display:none;'>".$row_log['brewJudgingNumber']."</span>"; ?><input id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo sprintf("%06s",$row_log['brewJudgingNumber']); ?>" title="<?php if ((strlen($row_log['brewJudgingNumber']) < 6) && ($row_log['brewReceived'] != 1)) { echo "This Judging Number was automatically assigned by the system to this entry. "; if ($_SESSION['prefsEntryForm'] == "N") echo "You can override this Judging Number when scanning in barcodes or by entering it here and clicking &ldquo;Update Entries.&rdquo;"; } ?>" /><?php } else echo $row_log['brewJudgingNumber']; ?>
   <?php } else echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);  ?>
   </td>
   <td class="dataList "><?php echo $row_log['brewName']; ?></td>

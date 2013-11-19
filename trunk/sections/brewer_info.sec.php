@@ -79,7 +79,7 @@ if (!empty($_SESSION['brewerPhone2'])) {
 	else $phone .= "<br>".$_SESSION['brewerPhone2']." (2)";
 }
 if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; else $club = "None entered";
-$discount = "Yes (".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry)";
+$discount = "Yes (".$currency_symbol.$_SESSION['contestEntryFeePasswordNum']." per entry)";
 if (!empty($_SESSION['brewerAHA'])) {
 	if ($_SESSION['brewerAHA'] < "999999994") $aha_number = sprintf("%09s",$_SESSION['brewerAHA']); 
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number = "Pending"; 

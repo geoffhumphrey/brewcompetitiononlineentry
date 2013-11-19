@@ -25,8 +25,7 @@ function version_check($version) {
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
-	
-version_check($version);
+if (strpos($section, 'step') === FALSE) version_check($version);
 
 // ---------------------------------------------------  
 
@@ -424,6 +423,66 @@ function currency_info($input,$method) {
 	if ($method == 1) {
 		
 		switch ($input) {
+			
+			
+			case "R$": $currency_code = "R$^BRL";
+			break;
+			case "pound": $currency_code = "&pound;^GBP";
+			break;
+			case "czkoruna": $currency_code = "K&#269;^CZK";
+			break;
+			case "euro": $currency_code = "&euro;^EUR";
+			break;
+			case "A$": $currency_code = "$^AUD";
+			break;
+			case "C$": $currency_code = "$^CAD";
+			break;
+			case "H$": $currency_code = "$^HKD";
+			break;
+			case "N$": $currency_code = "$^NZD";
+			break;
+			case "S$": $currency_code = "$^SGD";
+			break;
+			case "T$": $currency_code = "$^TWD";
+			break;
+			case "$": $currency_code = "$^USD";
+			break;
+			case "Ft": $currency_code = "Ft^HUF";
+			break;
+			case "shekel": $currency_code = "&#8362;^ILS";
+			break;
+			case "yen": $currency_code = "&yen;^JPY";
+			break;
+			case "nkr": $currency_code = "kr^NOK";
+			break;
+			case "kr": $currency_code = "kr^DKK";
+			break;
+			case "RM": $currency_code = "RM^MYR";
+			break;
+			case "M$": $currency_code = "$^MXM";
+			break;
+			case "phpeso": $currency_code = "&#8369;^PHP";
+			break;
+			case "pol": $currency_code = "z&#322;^PLN";
+			break;
+			case "p.": $currency_code = "p.^RUB";
+			break;
+			case "skr": $currency_code = "kr^SEK";
+			break;
+			case "sfranc": $currency_code = "&#8355;^CHF";
+			break;
+			case "baht": $currency_code = "&#3647;^THB";
+			break;
+			case "tlira": $currency_code = "&#8356;^TRY";
+			break;
+			case "R": $currency_code = "R^ZAR";
+			break;
+			case "rupee": $currency_code = "&#8360;^INR";
+			break;
+			
+			
+			/*
+			
 			case "&pound;": $currency_code = $input."^GBP";
 			break;
 			case "&euro;": $currency_code = $input."^EUR";
@@ -434,7 +493,6 @@ function currency_info($input,$method) {
 			break;
 			case "kr": $currency_code = $input."^DKK";
 			break;
-			
 			case "R$": $currency_code = "R$^BRL";
 			break;
 			case "A$": $currency_code = "$^AUD";
@@ -465,11 +523,15 @@ function currency_info($input,$method) {
 			break;
 			case "baht": $currency_code = "&#3647;^THB";
 			break;
-			case "tlira": $currency_code = $input."&#8378;^TRY";
+			case "tlira": $currency_code = "&#8356;^TRY";
 			break;
 			case "p.": $currency_code = $input."^RUB";
 			break;
+			case "phpeso": $currency_code = "&#8369;^PHP";
+			break;
 			default: $currency_code = $input."^USD";
+			*/
+			
 		
 		}
 	
@@ -479,9 +541,9 @@ function currency_info($input,$method) {
 		
 	$currency_code = array(	   
 			"R$^R$ Brazilian Real^BRL",
-			"&pound;^&pound; British Pound^GBP",
+			"pound^&pound; British Pound^GBP",
 			"czkoruna^K&#269; Czech Koruna^CZK",
-			"&euro;^&euro; Euro^EUR",
+			"euro^&euro; Euro^EUR",
 			"A$^$ Dollar - Australian^AUD",
 			"C$^$ Dollar - Canadian^CAD",
 			"H$^$ Dollar - Hong Kong^HKD",
@@ -491,7 +553,7 @@ function currency_info($input,$method) {
 			"$^$ Dollar - U.S.^USD",
 			"Ft^Ft Hungarian Forint^HUF",
 			"shekel^&#8362; Israeli New Shekel^ILS",
-			"&yen;^&yen; Japanese Yen^JPY",
+			"yen^&yen; Japanese Yen^JPY",
 			"nkr^kr Krone - Norwegian^NOK",
 			"kr^kr Krone - Danish^DKK",
 			"RM^RM Malaysian Ringgit^MYR",
@@ -502,7 +564,7 @@ function currency_info($input,$method) {
 			"skr^kr Swedish Krona^SEK",
 			"sfranc^&#8355; Swiss Franc^CHF",
 			"baht^&#3647; Thai Baht^THB",
-			"tlira^&#8378; Turkish Lira^TRY",
+			"tlira^&#8356; Turkish Lira^TRY",
 			" ^---------------------^-----------",
 			"R^R South African Rand^ZAR",
 			"rupee^&#8360; Rupee^INR"
@@ -2989,6 +3051,23 @@ function styles_active($method) {
 	
 	}
 	
+	
+}
+
+
+function check_exension($file_ext) {
+	switch($file_ext) {
+		case "xml": return TRUE;
+		break;
+	
+		case "":  	
+		case NULL: 
+		return FALSE;
+		break;
+		
+		default: return FALSE;
+		break;
+	}
 	
 }
 

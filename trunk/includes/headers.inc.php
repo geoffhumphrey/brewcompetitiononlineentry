@@ -376,6 +376,9 @@ switch($section) {
 	elseif ($msg == "15") $output = "One or more pieces of required data are missing - outlined in red below. Please check your data and enter again.";
 	elseif ($msg == "18") $output = "The email addresses you entered do not match. Please check and try again.";
 	elseif ($msg == "19") $output = "The AHA number you entered is already in the system. Please check the number and try again.";
+	elseif ($msg == "20") $output = "All entries have been marked as paid.";
+	elseif ($msg == "21") $output = "All entries have been marked as received.";
+	elseif ($msg == "22") $output = "All unconfirmed entries are now marked as confirmed.";
 	else $output = "";
 	break;
 }

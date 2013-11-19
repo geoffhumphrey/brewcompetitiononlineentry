@@ -147,7 +147,6 @@ function purge_entries($type, $interval) {
 function generate_judging_numbers($brewing_db_table) {
 	
 	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
 	
 	/*
 	$query_judging_numbers = "SELECT id FROM $brewing_db_table ORDER BY id ASC";

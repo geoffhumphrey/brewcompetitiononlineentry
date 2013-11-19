@@ -12,6 +12,10 @@ $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dat
 $judge_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); ;
 $judge_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-time");
 
+$currency = explode("^",currency_info($_SESSION['prefsCurrency'],1));
+$currency_symbol = $currency[0];
+$currency_code = $currency[1];
+
 // DataTables Default Values
 
 $output_datatables_bPaginate = "true";

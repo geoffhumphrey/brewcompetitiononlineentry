@@ -56,16 +56,10 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 						
 						
 						// Check to see if the participant is assigned to be a judge or steward in the judging_assignments table
-						$query_brewer = sprintf("SELECT id FROM $brewer_db_table WHERE uid='%s'",$uid);
-						$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-						$row_brewer = mysql_fetch_assoc($brewer);
-						//echo $query_brewer."<br>";
-						
-						$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='J'",$row_brewer['id']);
+						$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='J'",$uid);
 						$assign = mysql_query($query_assign, $brewing) or die(mysql_error());
 						$row_assign = mysql_fetch_assoc($assign);
 						$totalRows_assign = mysql_num_rows($assign);
-						//echo $query_assign."<br>";
 						
 						// If so, delete all instances
 						if ($totalRows_assign > 0) {
@@ -102,11 +96,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 						//echo $updateSQL2."<br>";
 						
 						// Check to see if the participant is assigned to be a steward in the judging_assignments table
-						$query_brewer = sprintf("SELECT id FROM $brewer_db_table WHERE uid='%s'",$uid);
-						$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-						$row_brewer = mysql_fetch_assoc($brewer);
-						
-						$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='S'",$row_brewer['id']);
+						$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='S'",$uid);
 						$assign = mysql_query($query_assign, $brewing) or die(mysql_error());
 						$row_assign = mysql_fetch_assoc($assign);
 						$totalRows_assign = mysql_num_rows($assign);
@@ -158,9 +148,9 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 					if ($_POST['staff_judge_bos'.$uid] == "") {
 						if ($row_staff['count'] == 0) $updateSQL2 == "";
 						else { 
-						$updateSQL2 = sprintf("UPDATE %s SET staff_judge_bos=0 WHERE uid=%s",$prefix."staff",$uid);
-						mysql_real_escape_string($updateSQL2);
-						$result1 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
+							$updateSQL2 = sprintf("UPDATE %s SET staff_judge_bos=0 WHERE uid=%s",$prefix."staff",$uid);
+							mysql_real_escape_string($updateSQL2);
+							$result1 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 						}
 						//echo $updateSQL."<br>";
 					}

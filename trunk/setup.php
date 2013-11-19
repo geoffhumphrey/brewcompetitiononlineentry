@@ -2,8 +2,8 @@
 require('paths.php');
 //require(INCLUDES.'url_variables.inc.php');
 $current_version = "1.3.0.3"; 
-require(LIB.'common.lib.php'); 
 require(INCLUDES.'url_variables.inc.php');
+require(LIB.'common.lib.php');
 require(INCLUDES.'db_tables.inc.php');
 date_default_timezone_set('America/Denver');
 
@@ -16,6 +16,7 @@ if (table_exists($prefix."system")) {
 	$row_system = mysql_fetch_assoc($system);
 	if ($row_system['setup'] == 1) header (sprintf("Location: %s",$base_url."index.php"));
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

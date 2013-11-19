@@ -31,74 +31,22 @@
 // +------------------------------------------------------------------------+
 //}}}
 
+
 function generate_judging_num($style_cat_num) {
 	// Generate the Judging Number each entry 
-	require('paths.php');
 	require(CONFIG.'config.php');
-	//require('../includes/url_variables.inc.php');
 	mysql_select_db($database, $brewing);
 	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
 	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
 	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
 	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
-	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $return = $style_cat_num."001";
-	else $return = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return $return;
+	
+	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
+	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
+	return sprintf("%05s",$output) ;
 }
 
-
-function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$user_name) {
-	/*
-	$style = Style category and subcategory number
-	$pref_num = Subcategory limit number from preferences
-	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
-	$pref_exception_sub_array = Array of EXCEPTED subcategories
-	*/
-	
-	$style_break = explode("-",$style);
-	
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	
-	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
-	
-	//$style_trimmed = ltrim($style_break[0],"0");
-	
-	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
-	else $style_num = $style_break[0];
-	
-	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_num,$style_break[1]); 
-	$style = mysql_query($query_style, $brewing) or die(mysql_error());
-	$row_style = mysql_fetch_assoc($style);
-	
-	// Check if the user has a entry in the system in the subcategory
-	
-	$query_check_user = sprintf("SELECT id FROM %s WHERE user_name='%s'", $prefix."users",$user_name);
-	$check_user = mysql_query($query_check_user, $brewing) or die(mysql_error());
-	$row_check_user = mysql_fetch_assoc($check_user);
-	
-	$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing",$row_check_user['id'],$style_num,$style_break[1]);
-	$check = mysql_query($query_check, $brewing) or die(mysql_error());
-	$row_check = mysql_fetch_assoc($check);
-	
-	if ($row_check['count'] >= $pref_num) $return = TRUE;
-	else $return = FALSE;
-	
-	
-	// Check for exceptions
-	if (($return) && (!empty($pref_exception_sub_array))) {
-		if (in_array($row_style['id'],$pref_exception_sub_array)) {
-			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
-			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $return = TRUE;
-			else $return = FALSE;
-		}
-	}
-	//$return = $return." ".$pref_num." ".$pref_exception_sub_num." ".$pref_exception_sub_array." ".$uid;
-	return $return;
-	
-}
-
-include ('parse_beer_xml.inc.php');
+include (INCLUDES.'beerXML/parse_beer_xml.inc.php');
 //{{{ InputBeerXML
 class InputBeerXML {
     public $recipes; 
@@ -153,7 +101,7 @@ class InputBeerXML {
     function insertRecipe($recipe){  // inserts into `recipes` DB table
 	include(CONFIG.'config.php');
 	include (INCLUDES.'scrubber.inc.php');
-	include (INCLUDES.'url_variables.inc.php');
+	//include (INCLUDES.'url_variables.inc.php');
         $brewing = $connection;
         $sqlQuery = "INSERT INTO ".$prefix."brewing";
         $fields = "(brewName";

@@ -136,7 +136,7 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
   <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
   <?php } ?>
   </td>
-  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$_SESSION['prefsCurrency'].$_SESSION['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
+  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$currency_symbol.$_SESSION['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
 </tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
 <tr>

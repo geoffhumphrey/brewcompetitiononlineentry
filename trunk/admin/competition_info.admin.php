@@ -202,13 +202,13 @@
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Entry Fee:</td>
-    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFee" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee']; ?>"></td>
-    <td class="data style1"> <span class="required">Required </span>Fee for a single entry <?php if ($section != "step4") echo "(".$_SESSION['prefsCurrency'].")"; ?> - please enter a zero (0) for a free entry fee.</td>
+    <td class="data"><?php echo $currency_symbol; ?> <input name="contestEntryFee" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee']; ?>"></td>
+    <td class="data style1"> <span class="required">Required </span>Fee for a single entry <?php if ($section != "step4") echo "(".$currency_symbol.")"; ?> - please enter a zero (0) for a free entry fee.</td>
   </tr>
   <tr>
     <td class="dataLabel">Entry Fee Cap:</td>
-    <td class="data"><?php echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryCap" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryCap']; ?>"></td>
-    <td class="data"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php if ($section != "step4") echo $_SESSION['prefsCurrency']; ?>X for the first X number of entries, <?php if ($section != "step4") echo $_SESSION['prefsCurrency']; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
+    <td class="data"><?php echo $currency_symbol; ?> <input name="contestEntryCap" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryCap']; ?>"></td>
+    <td class="data"><em>Useful for competitions with "unlimited" entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). Enter the maximum amount for each entrant. Leave blank if no cap.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Discount Multiple Entries:</td>
@@ -226,7 +226,7 @@
   </tr>
   <tr>
     <td class="dataLabel">Discounted Entry Fee:</td>
-    <td class="data"><?php if ($section != "step4") echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee2']; ?>"></td>
+    <td class="data"><?php if ($section != "step4") echo $currency_symbol; ?> <input name="contestEntryFee2" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee2']; ?>"></td>
     <td class="data"><em>Fee for a single, </em>discounted<em> entry.</em></td>
   </tr>
    <tr>
@@ -236,8 +236,8 @@
   </tr>
   <tr>
     <td class="dataLabel">Member Discount Fee:</td>
-    <td class="data"><?php if ($section != "step4") echo $_SESSION['prefsCurrency']; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
-    <td class="data"><em>Fee for a single, </em>discounted<em> member entry <?php if ($section != "step4") echo "(".$_SESSION['prefsCurrency'].")"; ?>. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</em></td>
+    <td class="data"><?php if ($section != "step4") echo $currency_symbol; ?> <input name="contestEntryFeePasswordNum" type="text" class="submit" size="5" maxlength="10" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeePasswordNum']; ?>"></td>
+    <td class="data"><em>Fee for a single, </em>discounted<em> member entry <?php if ($section != "step4") echo "(".$currency_symbol.")"; ?>. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</em></td>
   </tr>
 </table>
 <table class="dataTable">
