@@ -18,7 +18,7 @@ date_default_timezone_set("America/Denver");
 
 if ($section != "setup")  { 
 	require(DB.'common.db.php');
-	require(INCLUDES.'date_time.inc.php');
+	require(LIB.'date_time.lib.php');
 	
 	// Set timezone globals for the site
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
@@ -64,7 +64,7 @@ $users_db_table = $prefix."users";
 
 if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
 	require(DB.'common.db.php');
-	require(INCLUDES.'date_time.inc.php');
+	require(LIB.'date_time.lib.php');
 	
 	// Set timezone globals for the site
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
