@@ -134,7 +134,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 	?>
 	<tr>
     	<td><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
-        <td class="data"><?php echo readable_judging_number($bos_entry_info[0],$bos_entry_info[6]); ?></td>
+        <td class="data"><?php echo readable_judging_number($bos_entry_info[1],$bos_entry_info[6]); ?></td>
         <td class="data"><?php echo $bos_entry_info[9] ?></td>
         <td class="data"><?php echo $bos_entry_info[8]; ?></td>
         <td class="data"><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
@@ -207,20 +207,22 @@ include(DB.'admin_judging_scores_bos.db.php');
 		
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default");
 		$bos_entry_info = explode("^",$bos_entry_info);
+		//print_r($bos_entry_info);
+		//echo "<br>";
 		$style = $bos_entry_info[1].$bos_entry_info[3];
 		
 	?>
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[14])) echo "Y"; else echo "N"; ?>" />
-        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[7]; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[10])) echo "Y"; elseif (!empty($bos_entry_info[11])) echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $score_id; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
         <?php if (!empty($bos_entry_info[14])) { ?>
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
         <?php } ?>
-        <td><?php echo sprintf("%04s",$row_enter_bos['eid']);  ?></td>
+        <td><?php echo sprintf("%04s",$row_enter_bos['eid']); ?></td>
         <td class="data"><?php echo readable_judging_number($bos_entry_info[2],$bos_entry_info[6]); ?></td>
         <td class="data"><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $bos_entry_info[11]; ?>" /></td>

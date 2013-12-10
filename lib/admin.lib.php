@@ -61,22 +61,22 @@ function bos_entry_info($eid,$table_id) {
 	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);	
 	
 	$return = 
-	$row_entries_1['brewStyle']."^".
-	$row_entries_1['brewCategorySort']."^".
-	$row_entries_1['brewCategory']."^".
-	$row_entries_1['brewSubCategory']."^".
-	$row_entries_1['brewBrewerFirstName']."^".
-	$row_entries_1['brewBrewerLastName']."^".
-	$row_entries_1['brewJudgingNumber']."^".
-	$row_tables_1['id']."^".
-	$row_tables_1['tableName']."^".
-	$row_tables_1['tableNumber']."^".
-	$row_bos_place_1['scorePlace']."^".
-	$row_bos_place_1['scoreEntry']."^".
-	$row_entries_1['brewName']."^".
-	$row_entries_1['id']."^".
-	$row_bos_place_1['id']."^".
-	$row_entries_1['brewBrewerID']
+	$row_entries_1['brewStyle']."^".  // 0
+	$row_entries_1['brewCategorySort']."^".  // 1
+	$row_entries_1['brewCategory']."^".  // 2
+	$row_entries_1['brewSubCategory']."^".  // 3
+	$row_entries_1['brewBrewerFirstName']."^".  // 4
+	$row_entries_1['brewBrewerLastName']."^".  // 5
+	$row_entries_1['brewJudgingNumber']."^".   // 6
+	$row_tables_1['id']."^".  // 7
+	$row_tables_1['tableName']."^".   // 8
+	$row_tables_1['tableNumber']."^".  // 9
+	$row_bos_place_1['scorePlace']."^".  // 10
+	$row_bos_place_1['scoreEntry']."^".  // 11
+	$row_entries_1['brewName']."^".  // 12
+	$row_entries_1['id']."^".   // 13
+	$row_bos_place_1['id']."^".   // 14
+	$row_entries_1['brewBrewerID']  // 15
 	;
 	return $return;
 }

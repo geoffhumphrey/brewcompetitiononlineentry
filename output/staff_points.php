@@ -122,7 +122,7 @@ if ($view == "pdf") {
 				$html .= '<td width="150">';
 					if (validate_bjcp_id($judge_info['4'])) $html .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
 				$html .= '</td>';
-				$html .= '<td width="150">'.$bos_judge_points.'</td>';
+				$html .= '<td width="150">1.0</td>';
 				$html .= '</tr>';
 			}
 		}
@@ -248,7 +248,7 @@ if ($view == "xml") {
 					$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
 					$output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
 					$output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-					$output .= "\t\t\t<JudgePts>".$bos_judge_points."</JudgePts>\n";
+					$output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
 					$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
 					$output .= "\t\t</JudgeData>\n";
 				}
@@ -312,6 +312,7 @@ if ($view == "xml") {
 		// Judges without a properly formatted BJCP IDs in the system
 		foreach (array_unique($j) as $uid) { 
 		$judge_info = explode("^",brewer_info($uid));
+		$judge_points = judge_points($uid,$judge_info['5']);
 		$bos_judge = bos_points($uid);
 		if ($judge_points > 0) {
 			if ($judge_info['5'] == "Y") $assignment = "Judge+BOS";
@@ -339,7 +340,7 @@ if ($view == "xml") {
 					$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
 					$output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
 					$output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-					$output .= "\t\t\t<JudgePts>".$bos_judge_points."</JudgePts>\n";
+					$output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
 					$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
 					$output .= "\t\t</JudgeData>\n";
 				}
@@ -433,29 +434,30 @@ if ($view == "default") { // printing from browser
 			$judge_info = explode("^",brewer_info($uid));
 			$judge_points = judge_points($uid,$judge_info['5']);
 			if ($judge_points > 0) {
-				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
-				$bos_judge = bos_points($uid);
-				
-				$output_judges .= "<tr>";
-				$output_judges .= "<td class='bdr1B_gray'>".$judge_name."</td>";
-				$output_judges .= "<td class='data bdr1B_gray'>";
-				if (validate_bjcp_id($judge_info['4'])) $output_judges .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-				$output_judges .= "</td>";
-				$output_judges .= "<td class='data bdr1B_gray'>";
-				if ($bos_judge) $output_judges .= number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1); 
-				else $output_judges .=  judge_points($uid,$judge_info['5']);
-				$output_judges .= "</td>";
-				$output_judges .= "<td class='bdr1B_gray'>";
-				if ($bos_judge) $output_judges .= "X";
-				else $output_judges .= "&nbsp;";
-				$output_judges .= "</td>";
-				$output_judges .= "</tr>";
+				if (!empty($judge_info['1'])) {
+					$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
+					$bos_judge = bos_points($uid);
+					$output_judges .= "<tr>";
+					$output_judges .= "<td class='bdr1B_gray'>".$judge_name."</td>";
+					$output_judges .= "<td class='data bdr1B_gray'>";
+					if (validate_bjcp_id($judge_info['4'])) $output_judges .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+					$output_judges .= "</td>";
+					$output_judges .= "<td class='data bdr1B_gray'>";
+					if ($bos_judge) $output_judges .= number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1); 
+					else $output_judges .=  judge_points($uid,$judge_info['5']);
+					$output_judges .= "</td>";
+					$output_judges .= "<td class='bdr1B_gray'>";
+					if ($bos_judge) $output_judges .= "X";
+					else $output_judges .= "&nbsp;";
+					$output_judges .= "</td>";
+					$output_judges .= "</tr>";
+				}
 			}
 		}
 		
 		foreach (array_unique($bos_judge_no_assignment) as $uid) { 
 			$judge_info = explode("^",brewer_info($uid));
-			if (!empty($uid)) {
+			if ((!empty($uid)) && (!empty($judge_info['1']))) {
 				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
 				
 				$output_judges .= "<tr>";
@@ -464,7 +466,7 @@ if ($view == "default") { // printing from browser
 				if (validate_bjcp_id($judge_info['4'])) $output_judges .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 				$output_judges .= "</td>";
 				$output_judges .= "<td class='data bdr1B_gray'>";
-				$output_judges .= $bos_judge_points; 
+				$output_judges .= "1.0"; 
 				$output_judges .= "</td>";
 				$output_judges .= "<td class='bdr1B_gray'>";
 				$output_judges .= "X";
@@ -483,15 +485,17 @@ if ($view == "default") { // printing from browser
 			$steward_points = steward_points($uid);
 			if ($steward_points > 0) {
 				$steward_info = explode("^",brewer_info($uid));
-				$steward_name = ucwords(strtolower($steward_info['1'])).", ".ucwords(strtolower($steward_info['0']));
-				$output_stewards .= "<tr>";
-				$output_stewards .= "<td class='bdr1B_gray'>".$steward_name."</td>";
-				$output_stewards .= "<td class='data bdr1B_gray'>";
-				if (validate_bjcp_id($steward_info['4'])) $output_stewards .= strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
-				else $output_staff .= "&nbsp;";
-				$output_stewards .= "</td>";
-				$output_stewards .= "<td class='data bdr1B_gray'>".steward_points($uid)."</td>";
-				$output_stewards .= "</tr>";
+				if (!empty($steward_info['1'])) {
+					$steward_name = ucwords(strtolower($steward_info['1'])).", ".ucwords(strtolower($steward_info['0']));
+					$output_stewards .= "<tr>";
+					$output_stewards .= "<td class='bdr1B_gray'>".$steward_name."</td>";
+					$output_stewards .= "<td class='data bdr1B_gray'>";
+					if (validate_bjcp_id($steward_info['4'])) $output_stewards .= strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
+					else $output_staff .= "&nbsp;";
+					$output_stewards .= "</td>";
+					$output_stewards .= "<td class='data bdr1B_gray'>".steward_points($uid)."</td>";
+					$output_stewards .= "</tr>";
+				}
 			}
 	
 		}
@@ -507,19 +511,22 @@ if ($view == "default") { // printing from browser
 			if (array_sum($st_running_total) < $staff_points_total) {
 				$staff_info = explode("^",brewer_info($uid));
 				$st_running_total[] = $staff_points;
-				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
-			
-				$output_staff .= "<tr>";
-				$output_staff .= "<td class='bdr1B_gray'>".$staff_name."</td>";
-				$output_staff .= "<td class='data bdr1B_gray'>";
-				if (validate_bjcp_id($staff_info['4'])) $output_staff .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
 				
-				$output_staff .= "</td>";
-				$output_staff .= "<td class='data bdr1B_gray'>";
-				if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $output_staff .= $staff_points;
-				else $output_staff .= $organ_points;
-				$output_staff .= "</td>";
-				$output_staff .= "</tr>";
+				if (!empty($staff_info['1'])) {
+					$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
+				
+					$output_staff .= "<tr>";
+					$output_staff .= "<td class='bdr1B_gray'>".$staff_name."</td>";
+					$output_staff .= "<td class='data bdr1B_gray'>";
+					if (validate_bjcp_id($staff_info['4'])) $output_staff .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+					
+					$output_staff .= "</td>";
+					$output_staff .= "<td class='data bdr1B_gray'>";
+					if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $output_staff .= $staff_points;
+					else $output_staff .= $organ_points;
+					$output_staff .= "</td>";
+					$output_staff .= "</tr>";
+				}
 			}
 		}
 	} // end if ($totalRows_staff > 0)

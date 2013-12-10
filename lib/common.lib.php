@@ -1917,6 +1917,7 @@ function bjcp_rank($rank,$method) {
 		switch($rank) {
 			case "None": 
 			case "":
+			case "Novice";
 			case "Experienced":
 			$return = "Experienced Judge";
 			break;
@@ -2610,11 +2611,6 @@ function readable_judging_number($style,$number) {
 	}
 	*/
 	
-	// NHC and Barcode usage
-	if (strlen($number) == 6) {
-		return $number;
-	}
-	
 	if (strlen($number) == 5) {
 		$judging_number = str_osplit($number, 2);
 		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
@@ -2623,6 +2619,10 @@ function readable_judging_number($style,$number) {
 	if (strlen($number) == 4) {
 		$judging_number = str_osplit($number, 1);
 		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
+	}
+	
+	else {
+		return sprintf("%06s",$number);
 	}
 }
 

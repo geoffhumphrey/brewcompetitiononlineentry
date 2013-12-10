@@ -1,9 +1,3 @@
-<?php if ($action != "print") { 
-	if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']) && ($totalRows_scores > $_SESSION['prefsRecordPaging']))	{ 
-			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." entries.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries ($totalRows_entry_count).</div>";
-	}
-}
-?>
 <h2><?php 
 if (($action == "edit") && ($id != "default")) echo "Edit Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
 elseif (($action == "add") && ($id != "default")) echo "Add Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
@@ -59,6 +53,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
 </div>
 <?php } // end if ($dbTable == "default") ?>
+
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -127,8 +122,8 @@ if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?>
 	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]); 
 	else $entry_number = sprintf("%04s",$table_score_data[0]);
 	
-	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = $table_score_data[6]; 
-	else $judging_number = readable_judging_number($table_score_data[2],$table_score_data[6]);
+	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$table_score_data[6]); 
+	else $judging_number = readable_judging_number($table_score_data[1],$table_score_data[6]);
 	
 	if ($row_scores['scorePlace'] == "5") $score_place = "HM"; 
 	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Avance"; 
@@ -164,7 +159,8 @@ if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?>
 	} while ($row_scores = mysql_fetch_assoc($scores)); ?>
 </tbody>
 </table>
-<?php } else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Enter/Edit Scores for...&rdquo; menu above to add scores.</p>"; ?>
+<?php } // end if ($totalRows_scores > 0) 
+else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Enter/Edit Scores for...&rdquo; menu above to add scores.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
 <?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { 
@@ -216,10 +212,8 @@ $(document).ready(function() {
     </tr>
 </thead>
 <tbody>
-	<?php
-	
+<?php
 	$a = explode(",", $row_tables_edit['tableStyles']); 
-	//echo $row_tables_edit['tableStyles'];
 	
 	foreach (array_unique($a) as $value) {
 		
@@ -241,22 +235,23 @@ $(document).ready(function() {
 				if (($action == "edit") && (!empty($score_entry_data[0]))) $score_id = $score_entry_data[0]; 
 				else $score_id = $row_entries['id'];
 				
-				if (!empty($score_entry_data[3])) $score_previous = "Y"; 
+				if (!empty($score_entry_data[3])) $score_previous = "Y";
+				elseif (!empty($score_entry_data[4])) $score_previous = "Y";
 				else $score_previous = "N";
 				
-				if (($action == "edit") && (!empty($score_entry_data[1]))) $eid = $score_entry_data[1]; 
-				else $eid = $row_entries['id'];
+				$eid = $row_entries['id'];
 				
 				// $bid is the brewBrewerID/uid
-				if (($action == "edit") && (!empty($score_entry_data[2]))) $eid = $score_entry_data[2]; 
-				else $bid = $row_entries['brewBrewerID'];
+				$bid = $row_entries['brewBrewerID'];
 				
 				if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$row_entries['id']);
 				else $entry_number = sprintf("%04s",$row_entries['id']);
 				
-				if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = $row_entries['brewJudgingNumber']; 
-				else $judging_number = readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);
+				if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']); 
+				else $judging_number = readable_judging_number($table_score_data[1],$row_entries['brewJudgingNumber']);
 				
+				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
+				 
 				$style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
 			
 	?>
@@ -293,9 +288,10 @@ $(document).ready(function() {
 	} // end foreach ?> 
 </tbody>
 </table>
+
 <p><input type="submit" class="button" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } // end if ($id != "default"); 
-else echo "<p><strong>Add Scores For:</strong> ".score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table)."</p>";
-} ?>
+
+<?php } // end if ($id != "default") ?>
+<?php } // end if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) ?>
