@@ -182,13 +182,13 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 	</script>
 	<?php } 
 if ($_SESSION['prefsEntryForm'] == "N") { ?>
-<p><strong>Please note:</strong> <em>5 digit</em> judging numbers are automatically assigned by the system. When you <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">check-in your entries</a> using a barcode reader/scanner, the 5 digit system-assigned judging number will be over-written by the 6 digit judging number scanned/assigned via that function. Additionally, you may also update judging numbers manually below by entering them in the fields provided and clicking &ldquo;Update Entries.&ldquo;</p>
+<p><strong>Please note:</strong> Judging numbers are automatically assigned by the system. When you <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">check-in your entries</a> using a barcode reader/scanner, the system-assigned judging number will be over-written by the judging number scanned/assigned via that function. Additionally, you may also update judging numbers manually below by entering them in the fields provided and clicking &ldquo;Update Entries.&ldquo;</p>
 <?php } ?>
 <table class="dataTable" id="sortable">
 <thead>
  <tr>
   <th width="7%" class="dataHeading bdr1B">Entry #</th>
-  <th width="7%" class="dataHeading bdr1B" title="<?php echo "5 digit Judging Numbers are automatically assigned by the system to each entry."; if ($_SESSION['prefsEntryForm'] == "N") echo " You can override each judging number when scanning in barcodes or by entering it in the field provided and clicking &ldquo;Update Entries.&ldquo;"; ?>">Judging #</th>
+  <th width="7%" class="dataHeading bdr1B" title="<?php echo "Judging Numbers are automatically assigned by the system to each entry."; if ($_SESSION['prefsEntryForm'] == "N") echo " You can override each judging number when scanning in barcodes or by entering it in the field provided and clicking &ldquo;Update Entries.&ldquo;"; ?>">Judging #</th>
   <th width="15%" class="dataHeading bdr1B">Name</th>
   <th width="15%" class="dataHeading bdr1B">Category</th>
   <th width="15%" class="dataHeading bdr1B">Brewer</th>
@@ -223,7 +223,7 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   </td>
   <td class="dataList ">
   <?php if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) { ?>
-  <?php if ($action != "print") { echo "<span style='display:none;'>".$row_log['brewJudgingNumber']."</span>"; ?><input id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo sprintf("%06s",$row_log['brewJudgingNumber']); ?>" title="<?php if ((strlen($row_log['brewJudgingNumber']) < 6) && ($row_log['brewReceived'] != 1)) { echo "This Judging Number was automatically assigned by the system to this entry. "; if ($_SESSION['prefsEntryForm'] == "N") echo "You can override this Judging Number when scanning in barcodes or by entering it here and clicking &ldquo;Update Entries.&rdquo;"; } ?>" /><?php } else echo $row_log['brewJudgingNumber']; ?>
+  <?php if ($action != "print") { echo "<span style='display:none;'>".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>"; ?><input id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo sprintf("%06s",$row_log['brewJudgingNumber']); ?>" title="<?php if ((strlen($row_log['brewJudgingNumber']) < 6) && ($row_log['brewReceived'] != 1)) { echo "This Judging Number was automatically assigned by the system to this entry. "; if ($_SESSION['prefsEntryForm'] == "N") echo "You can override this Judging Number when scanning in barcodes or by entering it here and clicking &ldquo;Update Entries.&rdquo;"; } ?>" /><?php } else echo $row_log['brewJudgingNumber']; ?>
   <?php } else echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);  ?>
   </td>
   <td class="dataList "><?php echo $row_log['brewName']; ?></td>

@@ -24,6 +24,32 @@ $table_header7 = "Actions";
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php if ($totalRows_archive > 0) { ?>
+
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable').dataTable( {
+			"bPaginate" : true,
+			"sPaginationType" : "full_numbers",
+			"bLengthChange" : false,
+			"iDisplayLength" :  <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+			"sDom": 'ifrtip',
+			"bStateSave" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : true,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				{ "asSorting": [  ] }
+				]
+			} );
+		} );
+	</script>
+
+
 <h3>Archives</h3>
 <table class="dataTable" id="sortable">
 <thead>

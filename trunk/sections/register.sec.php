@@ -103,19 +103,7 @@
  * Module:      register.sec.php 
  * Description: This module houses the functionality for new users to set
  *              up their account. 
- * 
- 
-  <img id="captcha" src="<?php echo $base_url; ?>captcha/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #000000;" />
-	<p>
-    <object type="application/x-shockwave-flash" data="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" width="19" height="19">
-	<param name="movie" value="<?php echo $base_url; ?>captcha/securimage_play.swf?audio_file=<?php echo $base_url; ?>captcha/securimage_play.php&amp;bgColor1=#fff&amp;bgColor2=#fff&amp;iconColor=#000&amp;borderWidth=1&amp;borderColor=#000" />
-	</object>
-    &nbsp;Play audio
-    </p>
-	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
-    <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
-
- 
+ *  
  */
 
 /* ---------------- PUBLIC Pages Rebuild Info ---------------------
@@ -162,6 +150,7 @@ include(DB.'styles.db.php');
 include(DB.'brewer.db.php');
 
 require_once(INCLUDES.'recaptchalib.inc.php');
+
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 
@@ -184,7 +173,23 @@ if ($go != "default") {
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>";
    		} while ($row_dropoff = mysql_fetch_assoc($dropoff));
-	} 
+	}
+	
+	if (NHC-TESTING) {
+		
+		include(DB.'nhc_regions.db.php');
+		
+		do {
+			
+			$region_select .= "<option value='".$row_regions['id']."' ";
+			//if (($action == "edit") && ($row_brewer['regions'] == $row_regions['id'])) $region_select .= "SELECTED";
+			$region_select .= ">";
+			$region_select .= $row_regions['name']."</option>";
+			
+		} while while ($row_regions = mysql_fetch_assoc($regions));
+		
+		
+	}
 }
 $warning1 = "";
 $warning2 = "";
@@ -289,12 +294,46 @@ if ($go == "default") { ?>
         <td class="data">&nbsp;</td>
   	</tr>
 <?php } ?>
+<?php if (NHC-TESTING) { ?>
+	<tr>
+        <td class="dataLabel">Preferred Entry Region:</td>
+        <td class="data">
+  		<select name="region_pref1">
+    		<option value="0">I'm Shipping My Entries</option> 
+  			<option disabled="disabled">-------------</option>
+    		<?php echo $region_select; ?>
+  		</select>
+  		</td>
+  		<td colspan="2" nowrap="nowrap" class="data">Please indicate your <strong>first choice region</strong> where you would like to send your entries.</td>
+    </tr>
+    <tr>
+        <td class="dataLabel">Preferred Entry Region:</td>
+        <td class="data">
+  		<select name="region_pref1">
+    		<option value="0">I'm Shipping My Entries</option> 
+  			<option disabled="disabled">-------------</option>
+    		<?php echo $region_select; ?>
+  		</select>
+  		</td>
+  		<td colspan="2" nowrap="nowrap" class="data">Please indicate your <strong>second choice region</strong> where you would like to send your entries.</td>
+    </tr>
+    <tr>
+        <td class="dataLabel">Preferred Entry Region:</td>
+        <td class="data">
+  		<select name="region_pref1">
+    		<option value="0">I'm Shipping My Entries</option> 
+  			<option disabled="disabled">-------------</option>
+    		<?php echo $region_select; ?>
+  		</select>
+  		</td>
+  		<td colspan="2" nowrap="nowrap" class="data">Please indicate your <strong>third choice region</strong> where you would like to send your entries.</td>
+    </tr>
+<?php } ?>
 	<tr>
       <td class="dataLabel" width="5%">First Name:</td>
       <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($msg > 0) echo $_COOKIE['brewerFirstName']; ?>" size="32" maxlength="20"></td>
       <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />
-      You will be able to identify a co-brewer when adding your entries.</td>
+      <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />You will be able to identify a co-brewer when adding your entries.</td>
 	</tr>
 	<tr>
       <td class="dataLabel">Last Name:</td>
@@ -343,8 +382,8 @@ if ($go == "default") { ?>
   			<option disabled="disabled">-------------</option>
     		<?php echo $dropoff_select; ?>
   		</select>
-  </td>
-  <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
+  		</td>
+  		<td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
     </tr>
     <tr>
       <td class="dataLabel">Phone 1:</td>
@@ -358,7 +397,7 @@ if ($go == "default") { ?>
       <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
       <td class="data">&nbsp;</td>
 	</tr>
-<?php if (NHC) { ?>
+<?php if (NHC-TESTING) { ?>
 	<tr>
       <td class="dataLabel">Club Name:</td>
       <td class="data" colspan="3">

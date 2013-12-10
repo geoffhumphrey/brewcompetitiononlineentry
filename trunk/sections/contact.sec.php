@@ -73,7 +73,7 @@ if ($_SESSION['prefsContact'] == "Y") {
 		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
 
 	
-	} while ($row_contact = mysql_fetch_assoc($contacts)); 
+	} while ($row_contact = mysql_fetch_assoc($contact)); 
    
    	mysql_free_result($contacts);
 

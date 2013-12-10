@@ -105,7 +105,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         <td class="data bdr1B_gray" nowrap>
 		<?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
-		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber'];
+		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
@@ -205,7 +205,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
-		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber'];
+		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
@@ -303,7 +303,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
         <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
-		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber'];
+		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
@@ -385,7 +385,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
         <td class="data bdr1B_gray" nowrap>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
-		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo $row_entries['brewJudgingNumber'];
+		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>

@@ -5,6 +5,7 @@ require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
 mysql_select_db($database, $brewing);
 include(DB.'output_labels.db.php');
+include(LIB.'output.lib.php');
 
 if (isset($_SESSION['loginUsername'])) {
 	// Special ingredients required
@@ -371,7 +372,22 @@ if (isset($_SESSION['loginUsername'])) {
 		$filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Judge_Scoresheet_Labels.pdf";
 		
 		do {
-			$rank = bjcp_rank($row_brewer['brewerJudgeRank'],2);
+			
+			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+
+			/*
+			$bjcp_rank1 = $bjcp_rank[0].",";
+			$other_ranks = str_replace($bjcp_rank1,"",$row_brewer['brewerJudgeRank']);
+			$other_ranks = str_replace(",",", ",$other_ranks);
+			*/
+			
+			$rank = bjcp_rank($bjcp_rank[0],2);
+			//if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
+			
+			if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
+			if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
+		
+			
 			$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 			
 			$first_name = strtr($row_brewer['brewerFirstName'],$html_remove);
@@ -387,7 +403,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$text = sprintf("\n%s %s\n%s %s\n%s",
 				$first_name,
 				$last_name,
-				$rank,
+				truncate($rank,50),
 				strtoupper($judge_id),
 				strtolower($row_brewer['brewerEmail'])
 				);
@@ -498,9 +514,9 @@ if (isset($_SESSION['loginUsername'])) {
 		//$rank = str_replace(",",", ",$row_brewer['brewerJudgeRank']);
 		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 		$rank = bjcp_rank($bjcp_rank[0],2);
-		if (!empty($bjcp_rank[1])) $rank2 = ", ".$bjcp_rank[1];
-		if (!empty($bjcp_rank[2])) $rank2 .= ", ".$bjcp_rank[2];
-		$rank2 = truncate($rank2,50);
+		if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
+		if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
+		//$rank2 = truncate($rank2,50);
 			
 		$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 		//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
@@ -508,12 +524,11 @@ if (isset($_SESSION['loginUsername'])) {
 		else $judge_id = "";
 		for($i=0; $i<30; $i++) {
 			
-			$text = sprintf("\n%s %s\n%s %s%s\n%s",
-			$row_brewer['brewerFirstName'], 
-			$row_brewer['brewerLastName'],
-			$rank,
+			$text = sprintf("\n%s %s\n%s %s\n%s",
+			$first_name, 
+			$last_name,
+			truncate($rank,50),
 			strtoupper($judge_id),
-			$rank2,
 			strtolower($row_brewer['brewerEmail'])
 			);
 			$text = iconv('UTF-8', 'windows-1252', $text);

@@ -230,13 +230,13 @@ else {
 					$entry_no = sprintf("%04s",$row_log['id']);
 					$primary_page_info .= sprintf("<li>Entry #%s: %s (Category %s)</li>",$entry_no,$row_log['brewName'],$row_log['brewCategory'].$row_log['brewSubCategory']);
 					$entries .= sprintf("%04s",$row_log['id']).", ";
-					$return .= $row_log['id']."-";
+					$return_entries .= $row_log['id']."-";
 				}
 			} while ($row_log = mysql_fetch_assoc($log)); 
 		$primary_page_info .= "</ul>";
 	}
 	
-	$return = $base_url."index.php?section=pay&msg=10&view=";
+	$return = $base_url."index.php?section=pay&msg=10&view=".$return_entries;
 	$entries = "";
 	
 	if (($total_to_pay > 0) && ($view == "default")) {
@@ -271,7 +271,7 @@ else {
 			$page_info4 .= "<p>Click the &quot;Pay Now&quot; button below to pay online using PayPal.";
 			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
 			$page_info4 .= "<div class='error'>To make sure your PayPal payment is marked &quot;paid&quot; on <em>this site</em>, please click the &quot;Return to...&quot; link on PayPal's confirmation screen after you have sent your payment.</div>";
-			$page_info4 .= "<form name='PayPal' action='https://www.paypal.com/cgi-bin/webscr' method='post'>";
+			$page_info4 .= "<form name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" onsubmit=\"return confirm('To make sure your PayPal payment is marked PAID on THIS SITE, make sure to click the Return to... link on PayPal\'s confirmation screen AFTER you have sent your payment.');\">";
 			$page_info4 .= "<input type='hidden' name='cmd' value='_xclick'>";
 			$page_info4 .= sprintf("<input type='hidden' name='business' value='%s'>",$_SESSION['prefsPaypalAccount']);
 			$page_info4 .= sprintf("<input type='hidden' name='item_name' value='%s, %s - %s Payment'>",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
@@ -283,7 +283,7 @@ else {
 			$page_info4 .= "<input type='hidden' name='no_shipping' value='1'>";
 			$page_info4 .= "<input type='hidden' name='rm' value='1'>";
 			$page_info4 .= sprintf("<input type='hidden' name='return' value='%s'>",rtrim($return, '-'));
-			$page_info4 .= sprintf("<input type='hidden' name='cancel_return' value='$s'>",$base_url."index.php?section=pay&msg=11");
+			$page_info4 .= sprintf("<input type='hidden' name='cancel_return' value='%s'>",$base_url."index.php?section=pay&msg=11");
 			$page_info4 .= "<input type='hidden' name='bn' value='PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted'>";
 			$page_info4 .= "<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif' border='0' name='submit' class='paypal' alt='Pay your competition entry fees with PayPal' title='Pay your compeition entry fees with PayPal'>";
 			$page_info4 .= "</form>";

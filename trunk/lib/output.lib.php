@@ -108,7 +108,7 @@ function entries_by_dropoff_loc($id) {
 
 // --------------------------------------------------------
 // The following apply to:	/output/email_export.php
-//							/output/eentries_export.php
+//							/output/entries_export.php
 // --------------------------------------------------------
 
 function parseCSVComments($comments) {
@@ -320,32 +320,30 @@ function judge_points($uid,$bos) {
 	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
 	
-	// *minimum* of 1.0 points per competition	
+	// Judges earn 0.5 points per session
+	// *minimum* of 1.0 points per competition
 	// *maximum* of 1.5 points per day
+	
+	$days = number_format(total_days(),1);
+	$sessions = number_format(total_sessions(),1);
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysql_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);
-		if ($row_assignments['count'] > 1) $b[] = 1.0; 
-		else $b[] = $row_assignments['count'];
+		//if ($row_assignments['count'] > 1) $b[] = 1.0;
+		//else $b[] = $row_assignments['count'];
+		$b[] = ($row_assignments['count'] * 0.5);
 	}
 	
 	$points = array_sum($b);
+	$max_comp_points = ($sessions * 0.5);
 		
-	$days = number_format(total_days(),1);
-	
 	// Cannot exceed more than 1.5 points per day
 	if ($points > $days) $points = $days; else $points = $points;
-	
-	/* 
-	// Assuming there is only one BOS in the competition. This may not be the case.
-	// NEED TO RECONFIGURE THE BOS PANEL DESIGNATION TO INCLUDE BEER, MEAD, CIDER, COMMERCIAL BOS PANELS 
-	if (($bos == "Y") && ($points > .5)) $points = $points + 0.5; 
-	if (($bos == "Y") && ($points <= .5)) $points = 1.0; 
-	else $points = $points;
-	*/
+	if ($points > $max_comp_points) $points = $max_comp_points; else $points = $points;
+	if ($points < 1) $points = 1.0; else $points = $points;
 	
 	return number_format($points,1);
 	
