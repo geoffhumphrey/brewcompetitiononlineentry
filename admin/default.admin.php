@@ -663,15 +663,45 @@ if ($go == "default") { ?>
 				<li>Print BOS Pullsheets:
     			<ul>
         			<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos" title="Print All BOS Pullsheets">All</a></li>
-    	  			<?php do { ?>
+                    <?php 
+					/*
+					// Future use for granular BOS mats and pullsheets.
+					
+					function style_types_bos_print($file_name,$section,$go,$view) {
+						
+						require(CONfIG.'config.php');
+						$query_style_types = sprintf("SELECT id FROM %s", $prefix."style_types");
+						$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
+						$row_style_types = mysql_fetch_assoc($style_types);
+						
+						$return = '';
+						
+						do {
+							
+							if ($row_style_type['styleTypeBOS'] == "Y") {
+								
+								$return .= '<li>';
+								$return .= '<a id="modal_window_link" href="'.$base_url.'output/'.$file_name.'?section='.$section.'&amp;go='.$go.'&amp;id='.$row_style_type['id'].'"  title="Print">';
+								$return .= $row_style_type['styleTypeName'];;
+								$return .= '</a>';
+								$return .= '</li>';
+								
+							}
+							
+						} while ($row_style_type = mysql_fetch_assoc($style_type));
+						
+					}
+					
+					*/
+					do { ?>
           			<?php if ($row_style_type['styleTypeBOS'] == "Y") { ?><li><a id="modal_window_link" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li><?php } ?>
-          			<?php } while ($row_style_type = mysql_fetch_assoc($style_type)) ?>
+          			<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
         		</ul>
     			</li>
 			</ul>
             <ul class="admin_default">
 				<li>BOS Cup Mats:</li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Matss">Print</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Mats">Print</a></li>
                 <li><em>For the mats to print properly, set your browser's printing margins to .25 inch and the orientation to landscape.</em></li>
             </ul>
             <?php } ?>

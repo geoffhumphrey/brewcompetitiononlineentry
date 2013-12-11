@@ -54,7 +54,7 @@ else {
 		$totalRows_scores = mysql_num_rows($scores);
 	}
 	
-	if (($go == "judging_scores_bos") || ($go == "judging_tables")) {
+	if (($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "output")) {
 		
 		$query_style_types = "SELECT * FROM $style_types_db_table";
 		$style_types = mysql_query($query_style_types, $brewing) or die(mysql_error());
