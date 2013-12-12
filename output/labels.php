@@ -365,118 +365,116 @@ if (isset($_SESSION['loginUsername'])) {
 	
 	
 		if (($go == "participants") && ($action == "judging_labels") && ($id == "default")) {
-		$pdf = new PDF_Label('5160'); 
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','',9);
-		
-		$filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Judge_Scoresheet_Labels.pdf";
-		
-		do {
-			
-			$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
-
-			/*
-			$bjcp_rank1 = $bjcp_rank[0].",";
-			$other_ranks = str_replace($bjcp_rank1,"",$row_brewer['brewerJudgeRank']);
-			$other_ranks = str_replace(",",", ",$other_ranks);
-			*/
-			
-			$rank = bjcp_rank($bjcp_rank[0],2);
-			//if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
-			
-			if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
-			if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
-		
-			
-			$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
-			
-			$first_name = strtr($row_brewer['brewerFirstName'],$html_remove);
-			$first_name = ucfirst(strtolower($first_name));
-			$last_name = strtr($row_brewer['brewerLastName'],$html_remove);
-			$last_name = ucfirst(strtolower($last_name));
-				
-			//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
-			if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
-			else $judge_id = "";
-			for($i=0; $i<30; $i++) {
-				
-				$text = sprintf("\n%s %s\n%s %s\n%s",
-				$first_name,
-				$last_name,
-				truncate($rank,50),
-				strtoupper($judge_id),
-				strtolower($row_brewer['brewerEmail'])
-				);
-				
-				$text = iconv('UTF-8', 'windows-1252', $text);
-				$pdf->Add_Label($text);
-			}
-		} while ($row_brewer = mysql_fetch_assoc($brewer));
-		
-		$pdf->Output($filename,'D');
-	}
-	
-		if (($go == "participants") && ($action == "address_labels")) {
 			$pdf = new PDF_Label('5160'); 
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','',8);
+			$pdf->SetFont('Arial','',9);
 			
-			if ($filter == "with_entries") { 
-				$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels.pdf";
-				
-				do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysql_fetch_assoc($with_entries));
-				
-			}
-			else $filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Participant_Address_Labels.pdf";	
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Judge_Scoresheet_Labels.pdf";
 			
 			do {
 				
-				if (strlen($row_brewer['brewerState']) <= 3) $brewerState = strtoupper($row_brewer['brewerState']);
-				else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
+				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+	
+				/*
+				$bjcp_rank1 = $bjcp_rank[0].",";
+				$other_ranks = str_replace($bjcp_rank1,"",$row_brewer['brewerJudgeRank']);
+				$other_ranks = str_replace(",",", ",$other_ranks);
+				*/
+				
+				$rank = bjcp_rank($bjcp_rank[0],2);
+				//if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
+				
+				if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
+				if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
 			
-					if ($filter == "with_entries") { 
+				
+				$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
+				
+				$first_name = strtr($row_brewer['brewerFirstName'],$html_remove);
+				$first_name = ucfirst(strtolower($first_name));
+				$last_name = strtr($row_brewer['brewerLastName'],$html_remove);
+				$last_name = ucfirst(strtolower($last_name));
 					
-						if (in_array($row_brewer['uid'],$with_entries_array)) {
-							
-							$user_entry_count = user_entry_count($row_brewer['uid']);
-							
-							if ($user_entry_count == 1) $entry_count ="(". $user_entry_count." Entry)";
-							else $entry_count = "(".$user_entry_count." Entries)";
-							
-							if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
-							$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
-							ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
-							$entry_count,
-							ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-							ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-							$brewerState,
-							$row_brewer['brewerZip'],
-							$brewer_country
-							);
-						}
-					}
-					else {
-						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
-						$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-						ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
-						ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-						ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-						$brewerState,
-						$row_brewer['brewerZip'],
-						$brewer_country
-						);
-					}
+				//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
+				if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
+				else $judge_id = "";
+				for($i=0; $i<30; $i++) {
+					
+					$text = sprintf("\n%s %s\n%s %s\n%s",
+					$first_name,
+					$last_name,
+					truncate($rank,50),
+					strtoupper($judge_id),
+					strtolower($row_brewer['brewerEmail'])
+					);
 					
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
-					
+				}
 			} while ($row_brewer = mysql_fetch_assoc($brewer));
 			
-			ob_end_clean();
 			$pdf->Output($filename,'D');
-			
 		}
 		
+		if (($go == "participants") && ($action == "address_labels")) {
+		$pdf = new PDF_Label('5160'); 
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','',8);
+		
+		if ($filter == "with_entries") { 
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels.pdf";
+			
+			do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysql_fetch_assoc($with_entries));
+			
+		}
+		else $filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Participant_Address_Labels.pdf";	
+		
+		do {
+			
+			if (strlen($row_brewer['brewerState']) <= 3) $brewerState = strtoupper($row_brewer['brewerState']);
+			else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
+		
+				if ($filter == "with_entries") { 
+					if (in_array($row_brewer['uid'],$with_entries_array)) { 
+					
+					$user_entry_count = user_entry_count($row_brewer['uid']);
+					
+					if ($user_entry_count == 1) $entry_count ="(". $user_entry_count." Entry)";
+					else $entry_count = "(".$user_entry_count." Entries)";
+					
+					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+					$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
+					ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
+					$entry_count,
+					ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
+					ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
+					$brewerState,
+					$row_brewer['brewerZip'],
+					$brewer_country
+					);
+					$pdf->Add_Label($text);
+					}
+				}
+				else {
+					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+					$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
+					ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
+					ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
+					ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
+					$brewerState,
+					$row_brewer['brewerZip'],
+					$brewer_country
+					);
+					$pdf->Add_Label($text);
+				}
+		} while ($row_brewer = mysql_fetch_assoc($brewer));
+		
+		//$pdf->Output();
+		$pdf->Output($filename,'D');
+	}
+	
+
+	
 		if (($go == "judging_scores") && ($action == "awards")) {
 			$pdf = new PDF_Label('5160'); 
 			$pdf->AddPage();

@@ -97,7 +97,7 @@ if ($go == "participants") {
 		$query_brewer = sprintf("SELECT * FROM %s ORDER BY brewerLastName ASC",$brewer_db_table);
 		
 		if ($filter == "with_entries") { 
-			$query_with_entries = sprintf("SELECT brewBrewerID FROM %s",$brewing_db_table);
+			$query_with_entries = sprintf("SELECT brewBrewerID FROM %s WHERE brewReceived='1'",$brewing_db_table);
 			$with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
 			$row_with_entries = mysql_fetch_assoc($with_entries);
 		}
