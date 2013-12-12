@@ -170,12 +170,12 @@ function truncate($string, $your_desired_width) {
   return implode(array_slice($parts, 0, $last_part));
 }
 
-function user_entry_count() {
+function user_entry_count($uid) {
 	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_with_entries_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$uid);
+	$query_with_entries_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewBrewerID='%s' AND brewReceived='1'",$prefix."brewing",$uid);
 	$with_entries_count = mysql_query($query_with_entries_count, $brewing) or die(mysql_error());
 	$row_with_entries_count = mysql_fetch_assoc($with_entries_count);
 	
