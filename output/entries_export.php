@@ -3,6 +3,7 @@
 session_start(); 
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
+//require(LIB.'common.lib.php');
 require(LIB.'output.lib.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
@@ -89,6 +90,7 @@ do {
 	if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
 		
 		$brewer_info = brewer_info($row_sql['brewBrewerID']);
+		$brewer_info = explode("^",$brewer_info);
 		$a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$entryNo,readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$brewName,$brewInfo);
 	
 	}

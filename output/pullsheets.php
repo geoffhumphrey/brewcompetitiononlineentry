@@ -5,7 +5,7 @@ require(CONFIG.'bootstrap.php');
 require(DB.'admin_common.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 include(LIB.'output.lib.php');
-include(DB.'output_pullsheets.db.php');
+if ($go == "judging_tables") include(DB.'output_pullsheets.db.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -19,9 +19,10 @@ include(DB.'output_pullsheets.db.php');
 </head>
 <?php 
 
-if ($totalRows_tables == 0) { 
+if (($go == "judging_tables") && ($totalRows_tables == 0)) { 
 echo "<body>";
-echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>"; 
+echo "<p>".$query_tables;
+echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h1>"; 
 } 
 else {
 ?>

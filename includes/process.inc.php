@@ -279,6 +279,15 @@ if (NHC) {
 	// Place NHC SQL calls below
 	if ($action == "check_discount") {
 	
+	}
+	
+}
+// end if (NHC)
+
+else {
+
+	if ($action == "check_discount") {
+	
 		mysql_select_db($database, $brewing);
 		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
 		$contest_info1 = mysql_query($query_contest_info1, $brewing) or die(mysql_error());
@@ -296,14 +305,9 @@ if (NHC) {
 			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
 		}
+		
 		else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
 	}
-	
-}
-// end if (NHC)
-
-else {
-
 	
 
 }

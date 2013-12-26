@@ -45,13 +45,13 @@ if (($registration_open == "1") && (!$ua)) {
 if (($registration_open == "0") && ($ua != "unsupported") && ($section != "admin")) {
 	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>General registration will open ".$reg_open.".</div>";
 	if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) $judge_reg_open_msg .= "<div class='info'>Judge/steward registration will open ".$judge_open.".</div>";
-    if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.</div>"; 
+    if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>"; 
 }
 
 if (($registration_open == "2") && (!$ua)) {
 	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { 
     	$registration_closed_msg .= "<div class='closed'>Entry registration closed ".$reg_closed.".</div>";
-		if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $registration_closed_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.</div>";
+		if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $registration_closed_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>";
 	}
 }
 

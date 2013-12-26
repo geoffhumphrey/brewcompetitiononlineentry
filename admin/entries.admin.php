@@ -53,12 +53,12 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
 
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>">Mark All Entries as Paid</a></span>
-    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>">Mark All Entries as Received</a></span>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as paid and is could be a large pain to undo.');">Mark All Entries as Paid</a></span>
+    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as received and is could be a large pain to undo.');">Mark All Entries as Received</a></span>
     <span class="adminSubNav">...then uncheck those that aren't paid and/or received.</span>
 </div>
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>">Confirm All Unconfirmed Entries</a></span>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and is could be a large pain to undo.');">Confirm All Unconfirmed Entries</a></span>
 </div>
 <?php } 
 } ?>
@@ -97,6 +97,10 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 	}
   else echo $totalRows_log_paid." paid (".$currency_symbol.$total_fees_paid."), ".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
   ?></td>
+</tr>
+<tr>
+  <td class="dataHeading">Received Entries Not Paid:</td>
+  <td class="data"><?php echo $total_nopay_received; ?></td>
 </tr>
 <?php } ?>
 </table>
@@ -228,7 +232,7 @@ if ($_SESSION['prefsEntryForm'] == "N") { ?>
   </td>
   <td class="dataList "><?php echo $row_log['brewName']; ?></td>
   <td class="dataList "><?php if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } if (!empty($row_log['brewCategorySort'])) echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; else echo "<span class='required'>Style NOT specified!</span>"; if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td class="dataList "><?php if (($brewer_info[0] != "") && ($brewer_info[1] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only <?php echo $brewer_info[0]." ".$brewer_info[1]."&rsquo;s"; ?> entries"><?php } echo  $brewer_info[1].", ".$brewer_info[0]; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?></td>
+  <td class="dataList "><?php if (($brewer_info[0] != "") && ($brewer_info[1] != "")) { if (($bid == "default") && ($dbTable == "default")) { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only <?php echo $brewer_info[0]." ".$brewer_info[1]."&rsquo;s"; ?> entries"><?php } echo  $brewer_info[1].", ".$brewer_info[0]; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php }  } else echo "&nbsp;"; ?><br /><?php echo "<a href='mailto:".$brewer_info[6]."'>".$brewer_info[6]."</a>"; ?></td>
   <td class="dataList "><?php echo $brewer_info[8] ; ?></td>
   <td class="dataList "><?php if ($row_log['brewUpdated'] != "") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else echo "&nbsp;"; ?></td>
   <td nowrap="nowrap" class="dataList "><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php echo "<span style='visibility:hidden'>".$row_log['brewPaid']."</span>"; if ($brewer_info[9] == "Y") echo "&nbsp;<span class='icon'><img src='".$base_url."images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
