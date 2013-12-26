@@ -4,6 +4,7 @@
  * Description: This module houses the main navigation. 
  * 
  */
+ 
 if (strstr($section,"step")) { ?>
 <div class="setupTitle">Set Up Your Brew Competition Online Entry and Management Site</div>
 <?php } else { ?>
@@ -322,7 +323,6 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Tables</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Scores by Table</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;filter=category">Scores by Category</a>
     <?php if (((NHC) && ($prefix == "_final")) || (!NHC)) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">BOS Entries and Places</a>
     <?php } ?>
@@ -332,7 +332,6 @@ if (strstr($section,"step")) { ?>
 
 <div id="adminMenu_Scoring_Add" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=add">Scores by Table</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=add&amp;filter=category">Scores by Category</a>
 </div>
 
 <div id="adminMenu_Printing_Before" class="menu">
