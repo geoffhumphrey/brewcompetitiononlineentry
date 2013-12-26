@@ -42,7 +42,7 @@ elseif ($section == "pay") {
 }
 
 // Viewing all participants in current comp DB query
-elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) {
+elseif ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default"))  || ($section == "participant_summary")) {
 	$query_brewer = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
 	if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());

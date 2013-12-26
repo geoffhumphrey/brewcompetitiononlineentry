@@ -1,8 +1,8 @@
 <?php
 require('paths.php');
-//require(INCLUDES.'url_variables.inc.php');
-$current_version = "1.3.0.3"; 
 require(INCLUDES.'url_variables.inc.php');
+$current_version = "1.3.0.4"; 
+//require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 require(INCLUDES.'db_tables.inc.php');
 date_default_timezone_set('America/Denver');

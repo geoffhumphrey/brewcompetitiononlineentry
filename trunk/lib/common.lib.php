@@ -9,8 +9,8 @@
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 1.3.0.3, change version in system table if not
-// There are NO database structure or data updates for version 1.3.0.3
+// Current version is 1.3.0.4, change version in system table if not
+// There are NO database structure or data updates for version 1.3.0.4
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
@@ -19,8 +19,8 @@ function version_check($version) {
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	if ($version != "1.3.0.3") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.3","2013-10-25","1");
+	if ($version != "1.3.0.4") {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.0.4","2013-12-26","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
@@ -1356,6 +1356,20 @@ function total_paid_received($go,$id) {
 	//if (($go == "entries") && ($id != "default")) $query_entry_count .= " WHERE brewCategorySort='$id'"; 
 	if ($id == 0)  $query_entry_count .= "";
 	elseif ($id > 0) $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'";
+	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_array($result);
+	return $row['count'];
+}
+
+function total_nopay_received($go,$id) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
+	if ($go == "entries") $query_entry_count .= " WHERE brewPaid='0' AND brewReceived='1' AND brewConfirmed='1'";
+	//if (($go == "entries") && ($id != "default")) $query_entry_count .= " WHERE brewCategorySort='$id'"; 
+	if ($id == 0)  $query_entry_count .= "";
+	elseif ($id > 0) $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='0' AND brewReceived='1' AND brewConfirmed='1'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	return $row['count'];

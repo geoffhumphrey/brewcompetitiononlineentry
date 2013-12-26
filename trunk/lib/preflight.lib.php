@@ -33,7 +33,7 @@ if (NHC) {
 	
 	//echo $row_version['version'];
 	
-	if ($row_version['version'] != "1.3.0.3") { 
+	if ($row_version['version'] != "1.3.0.4") { 
 		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."update.php";
 	}

@@ -601,12 +601,14 @@ if ($go == "default") { ?>
                 <li>
                     <div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'pullsheetsloc_judging');">For Location...</a></div>
                     <div id="pullsheetsloc_judging" class="menu" onmouseover="menuMouseover(event)">
-                     <?php do { for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) { 
-					 $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
-					 
+                     <?php do { 
+					 	for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) { 
+					 		$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
 					 ?>
                     <a id="modal_window_link" class="menuItem" style="font-size: .9em; padding: 1px;" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_locations&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
-                    <?php }} while ($row_judging1 = mysql_fetch_assoc($judging1)); ?>
+                    <?php }
+					} while ($row_judging1 = mysql_fetch_assoc($judging1)); 
+					?>
                     </div>
                 </li>
 			</ul>

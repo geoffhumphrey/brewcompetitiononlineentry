@@ -3,13 +3,14 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 $section = "participant_summary";
 include(DB.'brewer.db.php');
-
 $total_entries_judged = get_entry_count('received');
 if (NHC) $base_url = "../";
+include(LIB.'output.lib.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

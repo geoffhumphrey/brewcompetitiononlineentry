@@ -8,7 +8,15 @@
 </div>
 <?php } ?>
 <p><input name="submit" type="submit" class="button" value="Update Competition Info"></p>
-<?php if ($section == "step4") { ?>
+<?php if ($section == "step4") { 
+$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
+$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
+$row_prefs = mysql_fetch_assoc($prefs);
+
+$currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
+$currency_symbol = $currency[0];
+$currency_code = $currency[1];
+?>
 <h3>Contact</h3>
 <table>
   <tr>

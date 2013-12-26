@@ -390,10 +390,12 @@ $brewer_info = explode("^",$brewer_info);
    <td class="dataLeft">
    	<p>
     <span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, and 28B-D.</em></span><br />
-   	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;). 	  </p>
+   	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;).
+    </p>
    	<ul>
    	  <li><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the Brewer's Specifics field under &ldquo;General&rdquo; area below to add information <strong>NOT essential to judging your entry</strong>."; ?></li>
-    	<li>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
+      <li>Judges <strong>will not know</strong> the name of your entry. If your special ingredient/classic style is part of your entry's name, be sure each is included below.</li>
+      <li>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
     	    <ul>
     	        <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
     	        <li>Mead example: <em>wildflower honey, blueberries</em> or <em>traditional tej with gesho</em>, etc.</li>

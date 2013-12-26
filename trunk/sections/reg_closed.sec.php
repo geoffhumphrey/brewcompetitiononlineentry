@@ -13,7 +13,7 @@ include(DB.'entries.db.php');
 <?php if (NHC) { ?>
 <p>There are <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
 <?php } else { ?>
-<p>There are <strong><?php echo get_entry_count("default"); ?></strong> logged entries and <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
+<p>There are <strong><?php echo get_entry_count('received'); ?></strong> logged and received entries and <strong><?php echo get_participant_count('default'); ?></strong> registered participants, judges, and stewards.</p>
 <?php } ?>
 <h2>Judging Date<?php if ($totalRows_judging > 1) echo "s"; ?></h2>
 <?php if ($totalRows_judging == 0) echo "<p>The competition judging date is yet to be determined. Please check back later."; else { ?>

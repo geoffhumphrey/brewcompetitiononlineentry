@@ -37,9 +37,9 @@ require(LIB.'preflight.lib.php');
 if ($setup_success) {
 	
 	// Global Library, Includes and DB Calls
+	require(INCLUDES.'url_variables.inc.php');
 	require(LIB.'common.lib.php');
 	require(INCLUDES.'authentication_nav.inc.php'); 
-	require(INCLUDES.'url_variables.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'common.db.php');
 	require(DB.'brewer.db.php');
