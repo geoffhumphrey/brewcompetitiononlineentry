@@ -5,7 +5,7 @@
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston, Bruce Buerger, Oskar Stephens **
 ** and Luis Balbinot                                                **
-** Release 1.3.0.2 November, 2013                                   **
+** Release 1.3.0.4 December, 2013                                   **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
@@ -79,12 +79,14 @@ Changes in This Version
 
 **********************************************************************
 
-This is a bugfix release. Addresses Google Code Issue 295 and Issue 298
-as well as other minor unreported issues.
+This is a bugfix release. Addresses Google Code Issue 330, Issue 332, 
+Issue 333, Issue 334, Issue 335, Issue 336, Issue 337, Issue 338, 
+Issue 339, Issue 340, and Issue 342 as well as other minor unreported 
+issues.
 
 For those experiencing any issues related to initial browser-based 
 setup of BCOE&M, the bcoem_baseline_1.3.0.X.sql document is available in 
 the package. It contains the necessary database structure and dummy 
 data for a new installation that can be installed manually via 
 phpMyAdmin or shell access. Be sure to follow the directions in the
-document *before* use, espe
+document *before* use.
