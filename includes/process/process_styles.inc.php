@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 	
 	if (NHC) {
 		// Place NHC SQL calls below
@@ -55,7 +55,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			}
 				 
 		if($result1){ 
-			if ($section == "step7") header("location:../setup.php?section=step8"); 
+			if ($section == "setup") header("location:../setup.php?section=step8"); 
 			else {
 				$pattern = array('\'', '"');
 				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);

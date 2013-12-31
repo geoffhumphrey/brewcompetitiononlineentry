@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding participant information to the 
  *              "brewer" table.
  */
-if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
+if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup")) {
 	
 	if (NHC) {
 	// Place NHC SQL calls below

@@ -113,6 +113,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 
 function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_reqired) {
 	$return = "";
+	if (strpos($section, 'step') !== FALSE) $section = "setup"; else $section = $section;
 	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
 	if ($go != "default") $return .= "&amp;go=".$go;
 	if ($action != "default") $return .= "&amp;action=".$action;

@@ -5,7 +5,7 @@
  *              "contest_info" table.
  */
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup")) { 
 
 	// Constants
 	$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']." ".$_POST['contestRegistrationOpenTime']);

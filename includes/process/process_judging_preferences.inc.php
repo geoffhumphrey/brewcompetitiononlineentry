@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging preferences" table
  */
  
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || ($section == "setup")) {
 	
 	if (NHC) {
 		// Place NHC SQL calls below
@@ -19,7 +19,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			
 		}
 		
-		if (($action == "edit") || ($section == "step8")) {
+		if (($action == "edit") || ($section == "setup")) {
 		
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
@@ -43,7 +43,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($updateSQL);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-		if ($section == "step8") {
+		if ($section == "setup") {
 			// Lock down the config file
 			//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
 			
