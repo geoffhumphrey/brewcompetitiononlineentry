@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 
 	$judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
 
@@ -29,7 +29,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($insertSQL);
 			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			if ($section == "step5") $insertGoTo = "../setup.php?section=step5&msg=9"; else $insertGoTo = $insertGoTo;
+			if ($section == "setup") $insertGoTo = "../setup.php?section=step5&msg=9"; else $insertGoTo = $insertGoTo;
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));				   

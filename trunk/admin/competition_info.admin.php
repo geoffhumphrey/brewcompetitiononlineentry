@@ -1,4 +1,4 @@
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($section != "step4") { ?>
 <h2>Competition Info</h2>
 <div class="adminSubNavContainer">

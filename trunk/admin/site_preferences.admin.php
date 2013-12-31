@@ -2,7 +2,7 @@
 include (DB.'styles.db.php');
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step3") { ?>
 <h2>Site Preferences</h2>
 <div class="adminSubNavContainer">

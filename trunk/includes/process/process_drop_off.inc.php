@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 
 	if (NHC) {
 		// Place NHC SQL calls below
@@ -30,7 +30,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($insertSQL);
 			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			if ($section == "step6") $insertGoTo = "../setup.php?section=$section&msg=11"; else $insertGoTo = $insertGoTo;
+			if ($section == "setup") $insertGoTo = "../setup.php?section=step6&msg=11"; else $insertGoTo = $insertGoTo;
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));			   

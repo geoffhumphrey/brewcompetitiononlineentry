@@ -9,6 +9,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	include(DB.'output_email_export.db.php');
 	
+	echo $query_sql;
+	
 	$separator = ","; 
 	$extension = ".csv";
 	$contest = str_replace(' ', '_', $_SESSION['contestName']);
@@ -38,7 +40,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		else $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$row_sql['brewerJudge'],$judge_avail,$row_sql['brewerSteward'],$steward_avail,judge_entries($row_sql['uid'],0));
 	} while ($row_sql = mysql_fetch_assoc($sql)); 
 	
-	
+	/*
 	header('Content-type: application/x-msdownload');
 	header('Content-Disposition: attachment;filename="'.$filename.'"');
 	header('Pragma: no-cache');
@@ -49,7 +51,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		fputcsv($fp,$fields,$separator);
 	}
 	fclose($fp);
-
+	*/
 }
 
 else echo "<p>Not available.</p>";
