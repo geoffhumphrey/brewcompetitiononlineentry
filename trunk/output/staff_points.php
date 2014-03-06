@@ -19,6 +19,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 include(DB.'judging_locations.db.php');
 include(DB.'styles.db.php');
+include(DB.'admin_common.db.php');
 include(LIB.'output.lib.php');
 
 // Get total amount of paid and received entries
@@ -296,7 +297,7 @@ if ($view == "xml") {
 		$organizer_info = explode("^",brewer_info($uid));
 			if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) { 
 				$output .= "\t\t<JudgeData>\n";
-				$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeName>".$organizer_info['1'].", ".$organizer_info['0']."</JudgeName>\n";
 				$output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
 				$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
 				$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
@@ -388,7 +389,7 @@ if ($view == "xml") {
 		$organizer_info = explode("^",brewer_info($uid));
 			if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (!validate_bjcp_id($organizer_info['4']))) { 
 				$output .= "\t\t<JudgeData>\n";
-				$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+				$output .= "\t\t\t<JudgeName>".$organizer_info['1'].", ".$organizer_info['0']."</JudgeName>\n";
 				$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
 				$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
 				$output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
@@ -396,6 +397,27 @@ if ($view == "xml") {
 			}
 		}
 		$output .= "\t</NonBJCP>\n";
+		
+		// BOS Reporting
+		$output .= "\t<Comments>\n";
+		$output .= "Submitter Email: ".$_SESSION['user_name']."\n";
+		
+		do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+		sort($a);
+		
+		foreach ($a as $type) {
+			
+			include(DB.'output_results_download_bos.db.php');
+			
+			if ($totalRows_bos > 0) {
+				$output .= "BOS Winner: ".."\n";
+				$output .= "BOS Style: ".."\n";
+				$output .= "BOS City: ".."\n";
+				$output .= "BOS State: ".."\n";
+			}
+		}
+		
+		$output .= "\t</Comments>\n";
 		
 		$output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
 		$output .= "</OrgReport>";

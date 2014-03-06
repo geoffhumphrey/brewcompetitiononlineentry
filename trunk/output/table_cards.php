@@ -69,19 +69,20 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
+						$rank = str_replace(",",", ",$judge_info['3']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
+                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']." (".$rank.")"; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
-            <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
-                </tr>
+            	<td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
+            	<td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
+        </tr>
                 <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
     <?php } ?>
     <table class="dataTable">
-    <?php for($i=0; $i<(14-$totalRows_assignments); $i++) { ?>
+    <?php for($i=0; $i<(10-$totalRows_assignments); $i++) { ?>
     <tr>
     	<td class="bdr1B">&nbsp;</td>
     </tr>
@@ -127,13 +128,14 @@ if ($id != "default") {
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
+						$rank = str_replace(",",", ",$judge_info['3']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; ?></td>
+                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']." (".$rank.")"; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
-            <td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            <td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
-                </tr>
+            	<td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
+            	<td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
+        </tr>
                 <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
