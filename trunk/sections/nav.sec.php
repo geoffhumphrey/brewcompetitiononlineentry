@@ -154,11 +154,15 @@ if (strstr($section,"step")) { ?>
 <div id="adminMenuCat_Exporting" class="menu">
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Email');"><span class="menuItemText">Email Addresses (CSV Files)</span><span class="menuItemArrow">&#9654;</span></a>
     <?php if (!NHC) { ?>
+    <!--
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Tab');"><span class="menuItemText">Tab Delimited Files</span><span class="menuItemArrow">&#9654;</span></a>
+    -->
     <?php } ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_CSV');"><span class="menuItemText">CSV Files</span><span class="menuItemArrow">&#9654;</span></a>
     <?php if (!NHC) { ?>
+    <!--
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenu_Exporting_Promo');"><span class="menuItemText">Promo Materials</span><span class="menuItemArrow">&#9654;</span></a>
+    -->
     <?php } ?>
 </div>
 
@@ -392,14 +396,18 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;action=hccp">All Entries</a>
 </div>
 <div id="adminMenu_Exporting_CSV" class="menu">
+<!--
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries (All Data)</a>
+-->
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv">All Entries (Limited Data)</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=csv">All Participants</a>
+    <!-- 
 	<a class="menuItem" href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>
+    -->
 </div>
 <div id="adminMenu_Exporting_Promo" class="menu">
 	<a class="menuItem" href="<?php echo $base_url; ?>output/promo_export.php?section=admin&amp;action=html">HTML</a>
