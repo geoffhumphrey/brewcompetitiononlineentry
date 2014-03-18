@@ -58,10 +58,11 @@ if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 	} 
 }
 
-else {
 
-if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('FirstName','LastName','Category','SubCategory','EntryNumber','BrewName','Info','MeadCiderSweetness','MeadCarb','MeadStrength');
-if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a [] = array('First Name','Last Name','Email','Category','Sub-Category','Entry Number','Judging Number','Entry Name','Info');
+else {
+//first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
+if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Sub Category','Entry Number','Judging Number','Brew Name','Special Ingredients','Sweetness','Carb','Strength');
+if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Sub Category','Entry Number','Judging Number','Brew Name','Special Ingredients','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country');
 if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
 
 do {
@@ -70,7 +71,8 @@ do {
 	$brewName = strtr($row_sql['brewName'],$html_remove);
 	$brewInfo = strtr($row_sql['brewInfo'],$html_remove);
 	$entryNo = sprintf("%04s",$row_sql['id']);
-	
+	$judgingNo = readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']);
+	$brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
 	
 	// Winner Downloads
 	
@@ -89,12 +91,9 @@ do {
 	
 	if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
 		
-		$brewer_info = brewer_info($row_sql['brewBrewerID']);
-		$brewer_info = explode("^",$brewer_info);
-		$a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$entryNo,readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']),$brewName,$brewInfo);
-	
+		
+		$a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$entryNo,$judgingNo,$brewName,$brewInfo,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
 	}
-
 } while ($row_sql = mysql_fetch_assoc($sql));
 
 if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] > 0)) {

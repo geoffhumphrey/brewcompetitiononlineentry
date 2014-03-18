@@ -703,7 +703,8 @@ if ($go == "default") { ?>
 			</ul>
             <ul class="admin_default">
 				<li>BOS Cup Mats:</li>
-                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Mats">Print</a></li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Mats">Print</a> (Using <em>Judging</em> Numbers)</li>
+                <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php?filter=entry" title="Print BOS Cup Mats">Print</a> (Using <em>Entry</em> Numbers)</li>
                 <li><em>For the mats to print properly, set your browser's printing margins to .25 inch and the orientation to landscape.</em></li>
             </ul>
             <?php } ?>

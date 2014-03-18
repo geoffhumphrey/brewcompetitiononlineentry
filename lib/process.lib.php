@@ -111,35 +111,18 @@ function purge_entries($type, $interval) {
 	}
 	
 	if ($type == "special") {
-		$query_check = sprintf("SELECT id,brewInfo FROM %s WHERE (
-					(brewCategorySort = '06' AND brewSubCategory = 'D') OR 
-					(brewCategorySort = '16' AND brewSubCategory = 'E') OR 
-					(brewCategorySort = '17' AND brewSubCategory = 'F') OR 
-					(brewCategorySort = '20' AND brewSubCategory = 'A') OR 
-					(brewCategorySort = '21' AND brewSubCategory = 'A') OR 
-					(brewCategorySort = '21' AND brewSubCategory = 'B') OR 
-					(brewCategorySort = '22' AND brewSubCategory = 'C') OR 
-					(brewCategorySort = '23' AND brewSubCategory = 'A') OR 
-					(brewCategorySort = '25' AND brewSubCategory = 'C') OR 
-					(brewCategorySort = '26' AND brewSubCategory = 'A') OR 
-					(brewCategorySort = '26' AND brewSubCategory = 'C') OR 
-					(brewCategorySort = '27' AND brewSubCategory = 'E') OR 
-					(brewCategorySort = '28' AND brewSubCategory = 'B') OR
-					(brewCategorySort = '28' AND brewSubCategory = 'C') OR 
-					(brewCategorySort = '28' AND brewSubCategory = 'D') OR 
-					brewCategorySort >  '28')", 
-					$prefix."brewing");
+		$query_check = sprintf("SELECT a.id,a.brewInfo,a.brewCategorySort,a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='')", $prefix."brewing",$prefix."styles");
 		if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
 		do { 
-			if ($row_check['brewInfo'] == "") {
-				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
-				mysql_select_db($database, $brewing);
-				$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
-			}
+				
+			$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
+			mysql_select_db($database, $brewing);
+			$result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+			
 		} while ($row_check = mysql_fetch_assoc($check));
 	}
 }
