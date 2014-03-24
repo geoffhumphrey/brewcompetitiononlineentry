@@ -404,7 +404,7 @@ if ($view == "xml") {
 		
 		do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
 		sort($a);
-		
+		/*
 		foreach ($a as $type) {
 			
 			include(DB.'output_results_download_bos.db.php');
@@ -416,7 +416,7 @@ if ($view == "xml") {
 				$output .= "BOS State: ".."\n";
 			}
 		}
-		
+		*/
 		$output .= "\t</Comments>\n";
 		
 		$output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
