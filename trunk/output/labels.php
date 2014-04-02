@@ -413,6 +413,7 @@ if (isset($_SESSION['loginUsername'])) {
 				}
 			} while ($row_brewer = mysql_fetch_assoc($brewer));
 			
+			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}
 		
@@ -470,6 +471,7 @@ if (isset($_SESSION['loginUsername'])) {
 		} while ($row_brewer = mysql_fetch_assoc($brewer));
 		
 		//$pdf->Output();
+		ob_end_clean();
 		$pdf->Output($filename,'D');
 	}
 	
@@ -532,7 +534,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 		}
-		
+		ob_end_clean();
 		$pdf->Output($filename,'D');
 	}
 

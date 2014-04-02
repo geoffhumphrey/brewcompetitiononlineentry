@@ -353,7 +353,12 @@ switch($section) {
 	elseif ($msg == "4") $output = "All received entries have been checked and those not assigned to tables have been assigned."; 
 	elseif ($msg == "5") $output = "Info deleted successfully.";
 	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a different one."; 
-	elseif ($msg == "7") $output = "Archives created successfully. Click the archive name to view.";
+	elseif ($msg == "7") { 
+		if (HOSTED) $output = "All competition data has been cleared. "; 
+		else $output = "Archives created successfully. Click the archive name to view. ";
+		$output .= "Rembember to update your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.";
+	
+	}
 	elseif ($msg == "8") $output = "Archive \"".$filter."\" deleted."; 
 	elseif ($msg == "9") $output = "The records have been updated.";
 	elseif ($msg == "10") $output = "The username you have entered is already in use.";

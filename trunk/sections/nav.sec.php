@@ -86,7 +86,7 @@ if (strstr($section,"step")) { ?>
 
 <!-- Exporting Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Exporting');"><span class="menuItemText">Exporting</span><span class="menuItemArrow">&#9654;</span></a>
-<?php if ($_SESSION['userLevel'] == "0") { ?>	
+<?php if (($_SESSION['userLevel'] == "0") && (!HOSTED)) { ?>	
 <!-- Archiving Menu -->
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Archiving');"><span class="menuItemText">Archiving</span><span class="menuItemArrow">&#9654;</span></a>
 <?php } ?>

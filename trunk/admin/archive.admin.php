@@ -15,6 +15,13 @@ $table_header7 = "Actions";
 		<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><?php if ($action == "default") { ?><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a><?php } else { ?><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Back to Tables List</a><?php } ?>
 	</span>
 </div>
+<?php if (HOSTED) { ?>
+<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of all participant, entry, table, scoring, and judging data, click the link below.</p> 
+<form action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to clear the current competition\'s data?\nThis CANNOT be undone.');">
+<p><input name="submit" type="submit" class="button" value="Clear Competition Data"></p>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+</form>
+<?php } else { ?>
 <p>To archive the current user, participant, entry, table, scoring, and result data, please provide a name of the archive. For example, if your competition is held yearly, you could use the year.</p>
 <form action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s data?\nThis CANNOT be undone.');">
 <p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"> 
@@ -116,4 +123,5 @@ $table_header7 = "Actions";
   <?php } while ($row_archive = mysql_fetch_assoc($archive)); ?>
 </tbody>
 </table>
+<?php } // end else ?>
 <?php } ?>
