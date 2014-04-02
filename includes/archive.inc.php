@@ -93,20 +93,33 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				  $brewerAHA = $row_name['brewerAHA'];
 			
 			// Second, rename current tables and recreate new ones.
-			// For hosted accounts, limit the table creation to the users, brewer, brewing, judging_tables, judging_assignments, judging_scores, judging_scores_bos, and style_types tables
-			if (HOSTED) $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
-			else $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
+			// For hosted accounts, no archiving. ONLY resetting of table data.
+			//if (HOSTED) $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
+			
+			$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
 			
 			foreach ($tables_array as $table) { 
-				$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+				if (HOSTED) {
+					$updateSQL = "TRUNCATE ".$table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				}
 				
-				$updateSQL = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				else {
+					$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+				}
+		
 			}
 			
 			$insertSQL = "
@@ -210,7 +223,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			
 			
 			// If hosted, insert GH as admin user
-			if (HOSTED) {
+			if ((HOSTED) && ($row_user['user_name'] != "geoff@zkdigital.com")) {
 				
 				$gh_user_name = "geoff@zkdigital.com";
 				$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
@@ -235,11 +248,15 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				
 			}
 			
-			// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-			$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
-			//echo "<p>".$insertSQL."</p>";
-			mysql_real_escape_string($insertSQL);
-			$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			else {
+				
+				// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
+				$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
+				//echo "<p>".$insertSQL."</p>";
+				mysql_real_escape_string($insertSQL);
+				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+
+			}
 			
 			// Last, log the user in and redirect 
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
