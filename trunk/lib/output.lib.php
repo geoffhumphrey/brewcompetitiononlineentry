@@ -351,11 +351,13 @@ function judge_points($uid,$bos) {
 	
 // calculate a Steward's points
 function steward_points($uid) {
+	
+	/*
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
-	
+
 	// *minimum* of 0.5 points per day	
 	// *maximum* of 1.0 points per competition
 	// Participants may not earn both Judge and Steward points in a single competition.
@@ -371,11 +373,10 @@ function steward_points($uid) {
 	}
 	
 	$points = array_sum($b);
+	*/
 	
 	$days = number_format(total_days(),1);
-	
-	// Cannot exceed more than 0.5 points per day
-	if ($points > $days) $points = $days; else $points = $points;
+	$points = $days * 0.5;
 	
 	// Cannot exceed more than 1.0 points per competition
 	if ($points >= 1.0) $points = 1.0; else $points = $points;
