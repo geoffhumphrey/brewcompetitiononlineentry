@@ -4,6 +4,9 @@
  * Description: This module does all the heavy lifting for all DB deletes: new entries,
  *              new users, organization, etc.
  */
+ 
+require('../paths.php');
+require(INCLUDES.'url_variables.inc.php');
 
 if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
 
@@ -95,28 +98,31 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			if ($uid != "") {
 				mysql_select_db($database, $brewing);
-				$query_delete_brewer = sprintf("SELECT id FROM $users_db_table WHERE id='%s'", $uid);
+				/*
+				$query_delete_brewer = sprintf("SELECT id FROM $users_db_table WHERE id='%s'", $id);
 				$delete_brewer = mysql_query($query_delete_brewer, $brewing) or die(mysql_error()); 
 				$row_delete_brewer = mysql_fetch_assoc($delete_brewer);
-				
-				$deleteUser = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $row_delete_brewer['id']);
+				*/
+				$deleteUser = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $id);
 				mysql_select_db($database, $brewing);
 				mysql_real_escape_string($deleteUser);
+				//echo $deleteUser."<br>";
 				$Result = mysql_query($deleteUser, $brewing) or die(mysql_error());
 				
-				$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $row_delete_brewer['id']);
+				$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $id);
 				mysql_select_db($database, $brewing);
 				mysql_real_escape_string($deleteBrewer);
+				//echo $deleteBrewer."<br>";
 				$Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
 				
 				if (NHC) {
-					$deleteNHCEntrant = sprintf("DELETE FROM nhcentrant WHERE uid='%s' AND regionPrefix='%s'", $row_delete_brewer['id'],$prefix);
+					$deleteNHCEntrant = sprintf("DELETE FROM nhcentrant WHERE uid='%s' AND regionPrefix='%s'", $id,$prefix);
 					mysql_select_db($database, $brewing);
 					mysql_real_escape_string($deleteNHCEntrant);
 					$Result = mysql_query($deleteNHCEntrant, $brewing) or die(mysql_error());
 				}
 				
-				$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'", $row_delete_brewer['id']);
+				$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'",$id);
 				$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 				$row_entries = mysql_fetch_assoc($entries);
 			  
@@ -124,18 +130,73 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				
 					sort($a);
 					
-					foreach ($a as $id) { 
-					$deleteEntries = sprintf("DELETE FROM $brewing_db_table WHERE id='%s'", $id);
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($deleteEntries);
-					$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+					foreach ($a as $brew_id) { 
+						$deleteEntries = sprintf("DELETE FROM $brewing_db_table WHERE id='%s'", $brew_id);
+						mysql_select_db($database, $brewing);
+						mysql_real_escape_string($deleteEntries);
+						//echo $deleteEntries."<br>";
+						$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+						
+						$deleteScore = sprintf("DELETE FROM $judging_scores_db_table WHERE eid='%s'", $brew_id);
+						mysql_real_escape_string($deleteScore);
+						$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
+						
+						$deleteScoreBOS = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE eid='%s'", $brew_id);
+						mysql_real_escape_string($deleteScoreBOS);
+						$Result = mysql_query($deleteScoreBOS, $brewing) or die(mysql_error());
 					}
+				
+				
+				// Clear any Judging Assignments
+				$query_judge_assign = sprintf("SELECT id from $judging_assignments_db_table WHERE bid='%s'",$id);
+				$judge_assign = mysql_query($query_judge_assign, $brewing) or die(mysql_error());
+				$row_judge_assign = mysql_fetch_assoc($judge_assign);
+			  
+				do { $b[] = $row_judge_assign['id']; } while ($row_judge_assign = mysql_fetch_assoc($judge_assign));
+				
+					sort($b);
+					
+					foreach ($b as $judge_id) { 
+						$deleteEntries = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $judge_id);
+						mysql_select_db($database, $brewing);
+						mysql_real_escape_string($deleteEntries);
+						//echo $deleteEntries."<br>";
+						$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+					}
+				
+				// Clear any Staff Assignments
+				$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
+				//echo $query_staff_assign;
+				$staff_assign = mysql_query($query_staff_assign, $brewing) or die(mysql_error());
+				$row_staff_assign = mysql_fetch_assoc($staff_assign);
+			  
+				do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysql_fetch_assoc($staff_assign));
+				
+					sort($c);
+					
+					foreach ($c as $staff_id) { 
+						$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."staff", $staff_id);
+						mysql_select_db($database, $brewing);
+						mysql_real_escape_string($deleteEntries);
+						//echo $deleteEntries."<br>";
+						$Result = mysql_query($deleteEntries, $brewing) or die(mysql_error()); 
+					}
+					
 			} else {
-				$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE id='%s'", $id);
+				
+				$deleteUser = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $id);
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($deleteUser);
+				//echo $deleteUser."<br>";
+				$Result = mysql_query($deleteUser, $brewing) or die(mysql_error());
+				
+				$deleteBrewer = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $id);
 				mysql_select_db($database, $brewing);
 				mysql_real_escape_string($deleteBrewer);
+				//echo $deleteBrewer."<br>";
 				$Result = mysql_query($deleteBrewer, $brewing) or die(mysql_error());
 			}
+			//exit;
 		} // end if ($go == "participants")
 			
 		if ($go == "entries") {
@@ -200,7 +261,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 					if ($eid == $row_delete_bos['eid']) {
 						$deleteBOS = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
 						mysql_real_escape_string($deleteScore);
-						$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
+					$Result = mysql_query($deleteScore, $brewing) or die(mysql_error());
 						}
 					  }
 					}

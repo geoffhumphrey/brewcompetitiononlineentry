@@ -4,9 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing information in the 
  *              "contest_info" table.
  */
-
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup")) { 
-
 	// Constants
 	$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']." ".$_POST['contestRegistrationOpenTime']);
 	$contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']." ".$_POST['contestRegistrationDeadlineTime']);
@@ -19,7 +17,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 	
 	//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 
 	//echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -28,7 +25,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 	// end if (NHC)
 	
 	else {
-
 		
 	
 	// --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
@@ -246,6 +242,5 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		}
 	
 	} // end else
-
 } else echo "<p>Not available.</p>";
 ?>

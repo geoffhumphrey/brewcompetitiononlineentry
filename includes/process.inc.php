@@ -150,17 +150,20 @@ else {
 	$insertGoTo = "";
 	$updateGoTo = "";
 	$massUpdateGoTo = "";
+	$errorGoTo = "";
 }
 
 if (strpos($_POST['relocate'],"?") === false) {
 	$insertGoTo .= $_POST['relocate']."?msg=1"; 
 	$updateGoTo .= $_POST['relocate']."?msg=2";
+	$errorGoTo .= $_POST['relocate']."?msg=3";
 	$massUpdateGoTo .= $_POST['relocate']."?msg=9";
 }
 
 else { 
 	$insertGoTo .= $_POST['relocate']."&msg=1";
 	$updateGoTo .= $_POST['relocate']."&msg=2";
+	$errorGoTo .= $_POST['relocate']."&msg=3";
 	$massUpdateGoTo .= $_POST['relocate']."&msg=9";
 }
 
@@ -176,117 +179,25 @@ else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 //echo $deleteGoTo;
 //exit;
 //session_start();
-
-// --------------------------- Entries -------------------------------- //
-
-if ($dbTable == $prefix."brewing")				include_once (PROCESS.'process_brewing.inc.php');
-
-// --------------------------- Users ------------------------------- //
-
-if ($dbTable == $prefix."users") 				include_once (PROCESS.'process_users.inc.php');
-
-// --------------------------- Participant or Admin's Info ------------------------------- //
-
-if ($dbTable == $prefix."brewer") 				include_once (PROCESS.'process_brewer.inc.php'); 
-	
-// --------------------------- General Contest Info ------------------------------- // 
-
-if ($dbTable == $prefix."contest_info") 		include_once (PROCESS.'process_comp_info.inc.php');
-
-// --------------------------- Preferences ------------------------------- //
-
-if ($dbTable == $prefix."preferences") 			include_once (PROCESS.'process_prefs.inc.php');
-
-// --------------------------- Sponsors ------------------------------- //
-
-if ($dbTable == $prefix."sponsors") 			include_once (PROCESS.'process_sponsors.inc.php');
-
-// --------------------------- Judging Locations ------------------------------- //
-
-if ($dbTable == $prefix."judging_locations") 	include_once (PROCESS.'process_judging_locations.inc.php');
-
-// --------------------------- Drop-off Locations ------------------------------- //
-
-if ($dbTable == $prefix."drop_off") 			include_once (PROCESS.'process_drop_off.inc.php');
-
-// --------------------------- Styles --------------------------- //
-
-if ($dbTable == $prefix."styles") 				include_once (PROCESS.'process_styles.inc.php');
-
-// --------------------------- If Adding a Contact (Non-setup) --------------------------- //
-
-if ($dbTable == $prefix."contacts")				include_once (PROCESS.'process_contacts.inc.php');
-
-// --------------------------- If Editing Judging Preferences ------------------------------- //
-
-if ($dbTable == $prefix."judging_preferences") 	include_once (PROCESS.'process_judging_preferences.inc.php');
-
-// --------------------------- Tables and Associated Styles ------------------------------- //
-
-if ($dbTable == $prefix."judging_tables")		include_once (PROCESS.'process_judging_tables.inc.php'); 
-
-// --------------------------- Flights ------------------------------- //
-
-if ($dbTable == $prefix."judging_flights") 		include_once (PROCESS.'process_judging_flights.inc.php'); 
-
-// --------------------------- Judging Assignments ------------------------------- //
-
-if ($dbTable == $prefix."judging_assignments") 	include_once (PROCESS.'process_judging_assignments.inc.php');
-
-// --------------------------- Scores ------------------------------- //
-
-if ($dbTable == $prefix."judging_scores") 		include_once (PROCESS.'process_judging_scores.inc.php');
-
-// --------------------------- BOS Scores ------------------------------- //
-
-if ($dbTable == $prefix."judging_scores_bos") 	include_once (PROCESS.'process_judging_scores_bos.inc.php');
-
-// --------------------------- Style Types ------------------------------- //
-
-if ($dbTable == $prefix."style_types") 			include_once (PROCESS.'process_style_types.inc.php');
-
-// --------------------------- Custom Winner Category Info ------------------------------- //
-
-if ($dbTable == $prefix."special_best_info") 	include_once (PROCESS.'process_special_best_info.inc.php');
-
-// --------------------------- Custom Winner Category Entries ------------------------------- //
-
-if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
-
-// --------------------------- Custom Modules ------------------------------- //
-
-if ($dbTable == $prefix."mods") 				include_once (PROCESS.'process_mods.inc.php');
-
 // --------------------------- Various Actions ------------------------------- //
 
 if ($action == "delete")						include_once (PROCESS.'process_delete.inc.php');
-if ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
+elseif ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
 //if ($action == "update_judging_flights")		include_once (PROCESS.'process_judging_flight_check.inc.php'); 
-if ($action == "purge") {
+elseif ($action == "purge") {
 	purge_entries("unconfirmed", 0);
 	purge_entries("special", 0); 
 	header(sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&purge=true"));
 }
 
-if ($action == "generate_judging_numbers") {
+elseif ($action == "generate_judging_numbers") {
 	generate_judging_numbers($prefix."brewing");	
 	if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
 	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
 	header(sprintf("Location: %s", $updateGoTo));		
 }
 
-if (NHC) {
-	// Place NHC SQL calls below
-	if ($action == "check_discount") {
-	
-	}
-	
-}
-// end if (NHC)
-
-else {
-
-	if ($action == "check_discount") {
+elseif ($action == "check_discount") {
 	
 		mysql_select_db($database, $brewing);
 		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
@@ -307,8 +218,89 @@ else {
 		}
 		
 		else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
-	}
+}
+
+else {
+
+	// --------------------------- Entries -------------------------------- //
 	
+	if ($dbTable == $prefix."brewing")				include_once (PROCESS.'process_brewing.inc.php');
+	
+	// --------------------------- Users ------------------------------- //
+	
+	if ($dbTable == $prefix."users") 				include_once (PROCESS.'process_users.inc.php');
+	
+	// --------------------------- Participant or Admin's Info ------------------------------- //
+	
+	if ($dbTable == $prefix."brewer") 				include_once (PROCESS.'process_brewer.inc.php'); 
+		
+	// --------------------------- General Contest Info ------------------------------- // 
+	
+	if ($dbTable == $prefix."contest_info") 		include_once (PROCESS.'process_comp_info.inc.php');
+	
+	// --------------------------- Preferences ------------------------------- //
+	
+	if ($dbTable == $prefix."preferences") 			include_once (PROCESS.'process_prefs.inc.php');
+	
+	// --------------------------- Sponsors ------------------------------- //
+	
+	if ($dbTable == $prefix."sponsors") 			include_once (PROCESS.'process_sponsors.inc.php');
+	
+	// --------------------------- Judging Locations ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_locations") 	include_once (PROCESS.'process_judging_locations.inc.php');
+	
+	// --------------------------- Drop-off Locations ------------------------------- //
+	
+	if ($dbTable == $prefix."drop_off") 			include_once (PROCESS.'process_drop_off.inc.php');
+	
+	// --------------------------- Styles --------------------------- //
+	
+	if ($dbTable == $prefix."styles") 				include_once (PROCESS.'process_styles.inc.php');
+	
+	// --------------------------- If Adding a Contact (Non-setup) --------------------------- //
+	
+	if ($dbTable == $prefix."contacts")				include_once (PROCESS.'process_contacts.inc.php');
+	
+	// --------------------------- If Editing Judging Preferences ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_preferences") 	include_once (PROCESS.'process_judging_preferences.inc.php');
+	
+	// --------------------------- Tables and Associated Styles ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_tables")		include_once (PROCESS.'process_judging_tables.inc.php'); 
+	
+	// --------------------------- Flights ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_flights") 		include_once (PROCESS.'process_judging_flights.inc.php'); 
+	
+	// --------------------------- Judging Assignments ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_assignments") 	include_once (PROCESS.'process_judging_assignments.inc.php');
+	
+	// --------------------------- Scores ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_scores") 		include_once (PROCESS.'process_judging_scores.inc.php');
+	
+	// --------------------------- BOS Scores ------------------------------- //
+	
+	if ($dbTable == $prefix."judging_scores_bos") 	include_once (PROCESS.'process_judging_scores_bos.inc.php');
+	
+	// --------------------------- Style Types ------------------------------- //
+	
+	if ($dbTable == $prefix."style_types") 			include_once (PROCESS.'process_style_types.inc.php');
+	
+	// --------------------------- Custom Winner Category Info ------------------------------- //
+	
+	if ($dbTable == $prefix."special_best_info") 	include_once (PROCESS.'process_special_best_info.inc.php');
+	
+	// --------------------------- Custom Winner Category Entries ------------------------------- //
+	
+	if ($dbTable == $prefix."special_best_data") 	include_once (PROCESS.'process_special_best_data.inc.php');
+	
+	// --------------------------- Custom Modules ------------------------------- //
+	
+	if ($dbTable == $prefix."mods") 				include_once (PROCESS.'process_mods.inc.php');
 
 }
 

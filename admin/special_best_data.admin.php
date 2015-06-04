@@ -74,7 +74,11 @@
       <td width="15%" class="dataList"><?php echo $special_best_info[1]; ?></td>
       <td width="1%" class="dataList"><?php echo $row_sbd['sbd_place']; ?></td>
       <td width="1%" class="dataList"><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
-      <td width="1%" class="dataList"><?php echo sprintf("%06s",$info[6]); ?></td>
+      <td width="1%" class="dataList">
+	  <?php 
+	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
+	  else echo readable_judging_number($info[3],$info[6]); 
+	  ?></td>
       <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
       <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td class="dataList" nowrap="nowrap">
@@ -92,7 +96,7 @@
 	<p>Add Winners for Custom Winning Cateory: ".score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table)."</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>" name="form1">
+<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&id=<?php echo $id; ?>" name="form1">
 <table>
 <?php if ($action == "add") { for ($i=1; $i <= $row_sbi['sbi_places']; $i++) { ?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
@@ -118,7 +122,11 @@ if (($action == "add") || ($action == "edit")) { ?>
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
   <tr>
     <td class="dataLabel">Winning Entry <em>Judging</em> Number:</td>
-    <td class="data"><input name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php echo sprintf("%06s",$info[6]); ?>"></td>
+    <td class="data"><input name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($info[6] > 0) {
+	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
+	  else echo readable_judging_number($info[3],$info[6]); 
+	}
+	  ?>"></td>
     <td class="dataLabel">Place:</td>
     <td class="data"><input name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" size="5" value="<?php echo $row_sbd['sbd_place']; ?>"></td>
     <td class="dataLabel">Entry Name:</td> 

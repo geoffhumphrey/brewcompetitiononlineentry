@@ -25,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Style
 class Style extends Parser{
 	// fields within STYLE tag
@@ -54,7 +52,6 @@ class Style extends Parser{
 	public $profile;
 	public $ingredients;
 	public $examples;
-
     // extensions
     public $displayOGMin;
     public $displayOGMax;
@@ -69,10 +66,8 @@ class Style extends Parser{
     public $colorRange;
     public $abvRange;
 	function startElement($parser,$tagName,$attrs) {
-
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "STYLE":
@@ -82,7 +77,6 @@ class Style extends Parser{
 				break;
 		}
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -197,8 +191,6 @@ class Style extends Parser{
 			}
 		}
 	}
-
 }
 //}}}
-
 ?>

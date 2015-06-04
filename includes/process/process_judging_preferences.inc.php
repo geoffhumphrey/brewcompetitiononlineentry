@@ -14,7 +14,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 	// end if (NHC)
 	
 	else {
-
 		if ($action == "add") {
 			
 		}
@@ -90,10 +89,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
 			}
 		}
-
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
-
-
 ?>

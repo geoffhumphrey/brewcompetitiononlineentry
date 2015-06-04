@@ -5,8 +5,7 @@
  *              user name and password information. 
  * 
  */
-
-
+ 
 if ((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) {
 if ($action == "username") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/username_check.js" ></script>
@@ -14,17 +13,12 @@ if ($action == "username") { ?>
 <script type="text/javascript">
 pic1 = new Image(16, 16); 
 pic1.src = "<?php echo $base_url; ?>images/loader.gif";
-
 $(document).ready(function(){
-
 $("#user_name").change(function() { 
-
 var usr = $("#user_name").val();
-
 if(usr.length >= 6)
 {
 $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/loader.gif" align="absmiddle"><span>Checking availability...');
-
     $.ajax({  
     type: "POST",  
     url: "<?php echo $base_url; ?>includes/username.inc.php",  
@@ -32,7 +26,6 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
     success: function(msg){  
    
    $("#status").ajaxComplete(function(event, request, settings){ 
-
 	if(msg == 'OK')
 	{ 
         $("#user_name").removeClass('object_error'); // if necessary
@@ -47,11 +40,9 @@ $("#status").html('<span class="icon"><img src="<?php echo $base_url; ?>images/l
 	}  
    
    });
-
  } 
    
   }); 
-
 }
 else
 	{
@@ -59,11 +50,8 @@ else
 	$("#user_name").removeClass('object_ok'); // if necessary
 	$("#user_name").addClass("object_error");
 	}
-
 });
-
 });
-
 function AjaxFunction(email)
 {
 	var httpxml;
@@ -97,7 +85,6 @@ function stateck()
 if(httpxml.readyState==4)
 {
 document.getElementById("msg_email").innerHTML=httpxml.responseText;
-
 }
 }
 var url="<?php echo $base_url; ?>includes/email.inc.php";
@@ -107,8 +94,6 @@ httpxml.onreadystatechange=stateck;
 httpxml.open("GET",url,true);
 httpxml.send(null);
 }
-
-
 //-->
 </script>
 <?php } 
@@ -156,7 +141,6 @@ if ($action == "password") {
 <?php } ?>
 </table>
 <p><input type="submit" class="button" value="Update"></p>
-
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>

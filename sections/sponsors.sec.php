@@ -5,14 +5,11 @@
  *              sponsors database table. 
  * 
  */
-
+ 
 /* ---------------- PUBLIC Pages Rebuild Info ---------------------
-
 Beginning with the 1.3.0 release, an effort was begun to separate the programming
 layer from the presentation layer for all scripts with this header.
-
 All Public pages have certain variables in common that build the page:
-
 	$warningX = any warnings
   
 	$primary_page_info = any information related to the page
@@ -40,22 +37,17 @@ Declare all variables empty at the top of the script. Add on later...
 	$page_info2 = "";
 	
 	etc., etc., etc.
-
  * ---------------- END Rebuild Info --------------------- */
-
-
+ 
 include(DB.'sponsors.db.php');
-
 $print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
 $competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
-
 $primary_page_info = "";
 $page_info1 = "";
 		
 $sponsors_endRow = 0;
 if ($action == "print") $sponsors_columns = 3; else $sponsors_columns = 4;  // number of columns
 $sponsors_hloopRow1 = 0; // first row flag
-
 $page_info1 .= "<table>";
 $page_info1 .= "<tr>";
 	
@@ -85,26 +77,19 @@ do {
 	}
 	
 } while ($row_sponsors = mysql_fetch_assoc($sponsors));
-
 if ($sponsors_endRow != 0) {
 	while ($sponsors_endRow < $sponsors_columns) {
 		$page_info1 .= "<td>&nbsp;</td>";
 		$sponsors_endRow++;
 	}
 }
-
 $page_info1 .= "</tr>";
 $page_info1 .= "</table>";
-
-
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
 if (($action != "print") && ($msg != "default")) echo $msg_output;
 if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) && ((judging_date_return() > 0) || (NHC))) echo $competition_logo;
 if ($action != "print") echo $print_page_link;
-
 echo $page_info1;
 ?>
-
-

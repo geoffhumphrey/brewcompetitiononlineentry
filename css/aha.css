@@ -1,0 +1,817 @@
+@charset "utf-8";
+/* CSS Document 
+*        Document Name: aha.css
+*        Description:   A custom theme for the American Homebrewers Association
+*		 Color scheme:  #000000 (black)
+                        #3B2313 (dark brown)
+						#f5af00 (gold)
+						#f4c13e (light gold)
+						#4E7222 (darker green) *nav and footer links
+						#5C8727 (green) *for general links
+						#6E943D (slightly lighter green) *for hover links
+						#f0ecd3 (background)
+						#dbd396 (tan)
+						#b6985a (beige)
+*/
+
+@import url("html_elements.css");
+@import url("common.css");
+@import url("messages.css");
+@import url("menus.css");
+
+/*
+@import url("sorting.css");
+@import url(https://fonts.googleapis.com/css?family=Alfa+Slab+One|Arimo);
+*/
+
+/* --------------------- html_elements.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in  
+   html_lements.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+html, body {
+	background-color: #f0ecd3;
+}
+
+body, caption, input, textarea, select, option, legend, fieldset  {
+	/* font-family: 'Arimo', Tahoma, Geneva, sans-serif; */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0em;
+	word-spacing: 0.009em;
+	line-height: 1.5;
+}
+
+option {
+}
+
+th, td {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+pre, code {
+}
+
+p {
+	margin: 1.25em 0 1.25em 0;
+}
+
+/* Links */
+
+a:link {
+	color: #5C8727;
+}
+
+a:visited {
+	color: #5C8727;
+}
+
+a:hover, a:focus {
+	color: #6E943D;
+	text-decoration:underline;
+}
+
+a:active {
+	color: #6E943D;
+}
+
+/** headings **/
+h1 {
+	/* font-family: 'Alfa Slab One', Georgia, serif; */
+	font-weight:bolder;
+	font-size: 2.6em;
+	color: #3B2313;
+	margin: 1em 0 .8em 0;
+	font-weight: bold;
+}
+
+h2 {
+	/* font-family: 'Alfa Slab One', Georgia, serif; */
+	font-size: 1.8em;
+	color: #3B2313;
+	margin: 1em 0 .8em 0;
+	font-weight: bold;
+}
+
+h3 {
+	/* font-family: 'Alfa Slab One', Georgia, serif; */
+	font-size: 1.6em;
+	color: #3B2313;
+	margin: 1em 0 .8em 0;
+	font-weight: bold;
+}
+
+h4, h5, h6 {
+	/* font-family: 'Alfa Slab One', Georgia, serif; */
+	font-size: 1.4em;
+	margin: 1em 0 .8em 0;
+	font-weight: bold;
+}
+
+h4 a {
+	font-weight:bold;
+}
+
+/** lists **/
+ul, ol {
+}
+
+ul ul, ul ol, ol ol, ol ul {
+}
+
+li {
+}
+
+ul { 
+}
+
+ul ul { 
+}
+
+ul ul ul { 
+}
+
+ul ul ul ul { 
+}
+
+ol { 
+}
+
+ol ol { 
+}
+
+ol ol ol { 
+}
+
+dt  {
+}
+
+dd {
+}
+
+
+/** tables **/
+table {
+}
+
+td {
+	padding: .5em 2em .5em .5em;
+}
+
+th {
+	padding: 1em .5em 1em .5em;
+	text-align: left;
+	background-color: #dbd396;
+	color:  #3B2313;
+}
+
+td table th {
+	background-color: #dbd396;
+	color:  #3B2313;
+}
+
+/** images **/
+img  {
+}
+
+/** horizontal rules **/
+hr  {
+}
+
+/** forms **/
+form {
+}
+
+button, menu, textarea, submit, .submit, select, input {
+	border: 1px solid #b6985a;
+	background-color: #dbd396;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+label {
+	font-size: 1em;
+	display: block;  /* block float the labels to left column, set a width */
+	float: left; 
+	padding: 0; 
+	margin: 5px 0 0; /* set top margin same as form input - textarea etc. elements */
+	text-align: right; 
+}
+
+
+select, optgroup, option  {
+}
+
+textarea {
+}
+
+
+/* --------------------- common.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in common.css. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+
+/* ------------------------------- Content ------------------------------- */
+
+#content {
+}
+
+#content-inner {
+
+}
+
+#content-inner-no-nav {
+	padding: 1em;
+}
+
+#content-inner h2 { 
+}
+
+#content-inner-no-nav h2 {
+	border-bottom: 2px solid #3B2313;
+}
+
+#content-inner .menu {
+	border: none;
+	background-color: #b6985a;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+
+#content-inner .menu a {
+	color: #3B2313;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#content-inner .menu a.menuItem:hover, 
+#content-inner .menu a.menuItemHighlight {
+	background-color: #f4c13e;
+	color: #3B2313;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#container {
+	position: relative;
+	min-height: 95%;
+	background-color: #ffffff;
+}
+
+/* ------------------------------- Nav ------------------------------- */
+
+#navigation { 
+	width: 100%;
+}
+
+#navigation-inner
+{
+	border-bottom: 6px solid #3B2313;
+	padding: 1em;
+	vertical-align:middle;
+	background-image: url(../images/aha/aha_nav_bknd.png);
+	background-repeat: repeat-x;
+	font-weight: bold;
+	color: #3B2313;
+	background-color:#f5af00;
+	font-size: 1.1em;
+}
+
+#navigation-inner a {
+	color: #4E7222;
+	font-weight: normal;
+}
+
+#navigation-inner .menu {
+	/* border: 2px solid #3B2313; */
+	border: none;
+	background-color: #b6985a;
+	font-size: .9em;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #876C3B;
+}
+
+#navigation-inner .menu a {
+	color: #3B2313;
+	font-weight: normal;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#navigation-inner .menu a.menuItem:hover, 
+#navigation-inner .menu a.menuItemHighlight {
+	background-color: #f5af00;
+	color: #3B2313;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#nav {
+	margin: 0;
+	padding: 0;
+}
+
+#nav ul {
+	padding-left: 0;	
+}
+
+#nav li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1em 0 0;
+	margin: 0;
+}
+
+#break {
+	display: inline;
+	vertical-align: middle;
+	float: right;
+	font-weight:normal;
+	font-style: italic;
+	font-size: .8em;
+}
+
+/* ------------------------------- Header ------------------------------- */
+#header {
+	width: auto;
+	height: auto;
+}
+
+#header-inner {
+}
+
+#header-inner h1 {
+	margin-bottom: 0px;
+}
+
+
+/* ------------------------------- Footer ------------------------------- */
+#footer {
+	width: 100%;
+	background-color: #f5af00;
+	border-top: 6px solid #3B2313;
+	background-image: url(../images/aha/aha_nav_bknd.png);
+	color: #3B2313;
+}
+
+#footer-inner {
+	vertical-align: middle;
+	text-align: center;
+	padding: 1em;
+}
+
+#footer-inner a {
+	color: #4E7222;
+}
+
+/* ------------------------------- Data Display ------------------------------- */
+
+.dataTable {
+}
+
+.dataTable th {
+	background-color: #dbd396;
+}
+
+.dataTable td {
+}
+
+.dataTable .odd {
+	background-color: #F2EDCA;
+}
+
+.dataTable .odd .sorting_1 {
+	background-color: #ede6b5;
+}
+
+.dataTable .odd .sorting_2 {
+	background-color: #E8E1A1;
+}
+
+.dataTable .odd .sorting_3 {
+	background-color: #E3DA8C;
+}
+
+.dataTable .even {
+	background-color: #E1D9A8;
+}
+
+.dataTable .even .sorting_1 {
+	background-color: #dbd396;
+}
+
+.dataTable .even .sorting_2 {
+	background-color: #D4CA82;
+}
+
+.dataTable .even .sorting_3 {
+	background-color: #CEC36F;
+}
+
+.dataHeading {
+}
+
+.dataList {
+}
+
+.dataLabel {
+}
+
+.data {
+}
+
+.data-left {
+}
+
+.icon {
+}
+
+.dataTableCompact  { 
+}
+
+.dataTableCompact td { 
+}
+
+.dataTableCompact th {
+	background-color: #b6985a;
+}
+
+/* ------------------------------- Forms ------------------------------- */
+
+.button { 
+	border: 1px solid #3B2313;
+	font-weight: bold;
+} 
+
+.button:hover {
+	border: 1px solid #3B2313;
+	background-color: #f5af00;
+}
+
+.button-no-form { 
+	border: 1px solid #b6985a;
+	background-color: #dbd396;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #3B2313;
+	font-weight: bold;
+	color:#000;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0em;
+	word-spacing: 0.009em;
+	line-height: 1.5;
+} 
+
+.button-no-form a {
+	color:#000;
+}
+
+.button-no-form a:hover {
+	color:#000;
+	text-decoration:none;
+}
+
+.button-no-form:hover {
+	background-color: #f5af00;
+	color:#000;
+}
+
+
+.paypal {
+}
+
+.special-required {
+	border: 2px solid #FF0000; 
+	background-color: #FFFF99;
+	padding: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	min-width: 150px;
+	max-width: 350px;
+	margin-bottom: 10px;
+}
+
+.special-suggested {
+	border: 2px solid #000099;
+	background-color: #B7D9FF;
+	padding: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+/* ------------------------------- Collapse jquery ------------------------------- */
+
+.trigger {
+	color: #3B2313;
+	background-color: none;
+}
+
+.trigger a {
+}
+
+.trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
+	
+}
+
+.trigger .open {
+	background-color: none;	
+}
+
+.toggle_container {
+/* Use the following for accordian */
+/* display: none */
+}
+
+.toggle_container a {
+/* Use the following for accordian */
+/* display: block */
+}
+
+
+/* ------------------------------- Admin ------------------------------- */
+
+.admin {
+}
+
+.admin_default {
+	margin: 0 0 1.5em 0;
+	padding: 0 .5em 0 0;
+}
+
+.admin_default ul {
+	display: inline;
+}
+
+.admin_default li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default li li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 1.5em 0 0;
+	margin: 0;
+}
+
+.admin_default_header {
+	/* font-family: 'Alfa Slab One', Georgia, serif; */
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 1.5em 0 .5em 0;
+	padding: 0 0 .5em 0;
+}
+
+/* -- Admin Menu -- */
+
+.menu {	
+}
+
+/* -- Admin Sub-Navigation -- */
+
+.adminSubNavContainer {
+}
+
+.adminSubNav {
+}
+
+/* ------------------------------- Sponsor Display ------------------------------- */
+
+#sponsor {
+}
+
+#sponsor li {
+}
+
+.looper {
+}
+
+.looper_large {
+}
+
+.looper_large th {
+}
+
+.looper_large .location {
+}
+
+.looper_large .logo {
+}
+
+.looper_large .info {
+}
+
+
+/* ------------------------------- Setup ------------------------------- */
+
+.setupTitle {
+}
+
+/* ------------------------------- Colors ------------------------------- */
+
+.red {
+	background-color:#F00;
+	color: #FFF;
+}
+
+.green {
+	background-color:#090;
+	color: #FFF;
+}
+
+.yellow {
+	background-color:#FC0;
+	color: #FFF;
+}
+
+.orange {
+	background-color:#F60;
+	color: #FFF;
+}
+
+.blue {
+	background-color:#00C;
+	color: #FFF;
+}
+
+/* ------------------------------- Borders ------------------------------- */
+
+.bdr1 {
+	border: 1px solid #3B2313;
+}
+
+.bdr1T {
+	border-top: 1px solid #3B2313;
+}
+
+.bdr1B {
+	border-bottom: 1px solid #3B2313;
+}
+
+.bdr1B_dashed {
+	border-color: #3B2313;
+}
+
+.bdr1T_dashed {
+	border-color: #3B2313;
+}
+
+/* --------------------- messages.css Overrides -------------------- */
+
+/* **************************************************************
+   Customize below the various default elements in messages.css - 
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.info {
+	border-width: 2px;
+}
+
+.closed {
+	border-width: 2px;
+}
+
+.error {
+	background-color: #f4c13e;
+	border-color: #aa0202;
+	color: #aa0202;
+	border-width: 2px;
+}
+
+.required {
+	border-width: 2px;
+}
+
+.judge-alert {
+	border-width: 2px;
+}
+
+.bos {
+	border-width: 2px;
+}
+
+.at-a-glance {
+	border-width: 2px;
+	background-color: #dbd396;
+	border-color: #3B2313;
+}
+
+/* --------------------- menus.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the menus.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.menu {
+margin-top: -3px;	
+}
+
+
+
+/* --------------------- sorting.css Overrides -------------------- */
+
+/* **************************************************************
+   Copy and paste the elements you wish to override from 
+   the sorting.css file below. 
+   
+   Use the file for reference, however, it is suggested that you 
+   NOT edit the file itself!
+   **************************************************************
+*/
+
+.dataTables_filter {
+	padding: 0;
+	margin: 5px 0 5px 0;
+	float: right;
+}
+
+.dataTables_filter label {
+	width: auto;
+}
+
+.dataTables_info {
+	padding: 0;
+	margin: 5px 0 5px 0;	
+}
+
+/*
+.paging_full_numbers {
+	height: 22px;
+	line-height: 22px;
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+	border: 1px solid #3B2313;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 2px 5px;
+	margin: 0 3px;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+.paging_full_numbers span.paginate_button {
+	background-color: #f5af00;
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #f5af00;
+}
+
+.paging_full_numbers span.paginate_active {
+	background-color: #f5af00;
+}
+
+
+.paging_full_numbers .paginate_button {
+	background-color: #f5af00;
+	border: 1px solid #3B2313;
+}
+
+.paging_full_numbers .paginate_button:hover {
+	background-color: #f5af00;
+}
+
+.paging_full_numbers .paginate_active {
+	background-color: #f5af00;
+}
+*/

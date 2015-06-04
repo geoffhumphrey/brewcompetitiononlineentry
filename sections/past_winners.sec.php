@@ -4,7 +4,6 @@
  * Description: This module displays winners from archived database tables. 
  * 
  */
-
 if ($section == "past_winners") {
 if ($action != "print") { 
 ?>

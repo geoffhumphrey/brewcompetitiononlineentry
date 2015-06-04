@@ -25,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Water
 class Water extends Parser{
 	// fields within WATER tag
@@ -42,14 +40,11 @@ class Water extends Parser{
 	public $magnesium;
 	public $ph;
 	public $notes;
-
     //extensions
     public $displayAmount;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "WATER":
@@ -59,7 +54,6 @@ class Water extends Parser{
 				break;
 		}
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -105,15 +99,12 @@ class Water extends Parser{
 			}
 		}
 	}
-
 }
 //}}}
-
 //{{{ Waters
 class Waters extends Parser{
 	//fields within WATERS tag
 	public $waters = array();
-
 	function startElement($parser,$tagName,$attrs) {
 		switch($tagName){
 			case "WATER":
@@ -125,7 +116,6 @@ class Waters extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "WATERS":
@@ -135,12 +125,9 @@ class Waters extends Parser{
 		}
 		$this->tag = $tagName;
 	}
-
 	function nodeData($parser,$data) {
 	
     }
-
 }
 //}}}
-
 ?>

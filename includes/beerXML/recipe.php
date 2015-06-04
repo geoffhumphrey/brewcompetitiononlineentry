@@ -25,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Recipe
 class Recipe extends Parser{
 	// fields within RECIPE tag
@@ -67,7 +65,6 @@ class Recipe extends Parser{
 	public $kegPrimingFactor;
 	public $carbonationTemp;
 	public $date;
-
     // extensions
 	public $estimatedOriginalGravity;
 	public $estimatedFinalGravity;
@@ -88,7 +85,6 @@ class Recipe extends Parser{
     public $displayAgeTemp;
     public $carbonationUsed;
     public $displayCarbTemp;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	switch($tagName){
@@ -136,7 +132,6 @@ class Recipe extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "RECIPE":
@@ -146,7 +141,6 @@ class Recipe extends Parser{
 				break;
 		}
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -303,7 +297,6 @@ class Recipe extends Parser{
 			}
 		}
 	}
-
 }
 //}}}
 ?>

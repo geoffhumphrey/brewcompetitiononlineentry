@@ -60,10 +60,19 @@ $header1_8 = "";
 $page_info8 = "";
 
 
-$header1_2 .= "<h2>Registration</h2>"; 
-$page_info2 .= sprintf("<p>Registration open: %s.</p>",$reg_open);
-$page_info2 .= sprintf("<p>Registration close: %s.</p>",$reg_closed);
-if (!isset($_SESSION['loginUsername'])) $page_info2 .= " <p>If you have already registered, please <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or steward.</p>";
+$header1_2 .= "<h2>Registration Window</h2>";
+$page_info2 .= "<p><strong>Online registration</strong> on this site will take place between the following dates:</p> ";
+$page_info2 .= "<ul>";
+$page_info2 .= sprintf("<li>Open: %s.</li>",$reg_open);
+$page_info2 .= sprintf("<li>Close: %s.</li>",$reg_closed);
+$page_info2 .= "</ul>";
+if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) $page_info2 .= " <p>If you have already registered, please <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or steward.</p>";
+$page_info2 .= "<h2>Entry Window</h2>";
+$page_info2 .= "<p><strong>Entries will be accepted</strong> at our shipping and drop-off locations between the following dates:</p>";
+$page_info2 .= "<ul>";
+$page_info2 .= sprintf("<li>Open: %s.</li>",$entry_open);
+$page_info2 .= sprintf("<li>Close: %s.</li>",$entry_closed);
+$page_info2 .= "</ul>";
 
 $header1_3 .= "<h2>Judging and Stewarding</h2>"; 
 
@@ -80,7 +89,7 @@ else $page_info3 .= sprintf("<p>If you are willing to judge or steward, please r
 
 $header1_4 .= "<h2>Entries</h2>"; 
 $page_info4 .= "<p>";
-$page_info4 .= sprintf("Participants will be able to add their via this website and entries will be accepted at drop-off and shipping locations between %s and %s. ",$entry_open,$entry_closed);
+$page_info4 .= sprintf("Participants will be able to add their entry data via this website and entries will be accepted at drop-off and shipping locations between %s and %s. ",$entry_open,$entry_closed);
 $page_info4 .= "</p>";
 $page_info4 .= "<p>";
 $page_info4 .= "All entries must be received by our shipping location ";

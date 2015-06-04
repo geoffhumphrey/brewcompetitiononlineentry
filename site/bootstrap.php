@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module:      bootstrap.php 
  * Description: This module houses specific global variables and various pre-flight checks.
@@ -48,6 +49,14 @@ if ($setup_success) {
 	require(INCLUDES.'constants.inc.php');
 	require(INCLUDES.'scrubber.inc.php');
 	
+	// Redirect if section not in list
+	
+	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores");
+	if (!in_array($section,$section_array)) { 
+		header(sprintf("Location: %s",$base_url."404.php"));
+		exit;
+		}
+	
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
 	
@@ -58,11 +67,13 @@ if ($setup_success) {
 	// check to see if all judging numbers have been generated. If not, generate
 	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 	
-	// Automatically purge all unconfirmed entries
-	purge_entries("unconfirmed", 1);
-	
-	// Purge entries without defined special ingredients designated to particular styles that require them
-	purge_entries("special", 1);
+	if ($_SESSION['prefsAutoPurge'] == 1) {
+		// Automatically purge all unconfirmed entries
+		purge_entries("unconfirmed", 1);
+		
+		// Purge entries without defined special ingredients designated to particular styles that require them
+		purge_entries("special", 1);
+	}
 	
 	// Check if judging flights are up-to-date
 	if (!check_judging_flights()) $check_judging_flights = TRUE;
@@ -86,6 +97,13 @@ if ($setup_success) {
 		$msie_version = intval($ua_array[$msie_version_key]);
 		if ($msie_version <= 7) $ua = TRUE;
 	}
+	
+	// Check for Firefox (printing issues persist with Firefox)
+	//$ua_fx_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
+	//$fx_key = array_search('Firefox', $ua_fx_array);
+	
+	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE) $fx = TRUE;
+	else $fx = FALSE;
 	
 	if (NHC) {
 		

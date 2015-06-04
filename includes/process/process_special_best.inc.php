@@ -3,9 +3,7 @@
  * Module:      process_special_best_info.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "special_best_info" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -13,7 +11,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	}
 	
 	else {
-
 		if ($action == "add") {
 			$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank) VALUES (%s, %s, %s, %s)",
 							   GetSQLValueString($_POST['sbi_name'], "text"),
@@ -47,7 +44,5 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		}
 	
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
-
 ?>

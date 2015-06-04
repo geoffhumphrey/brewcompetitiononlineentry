@@ -4,7 +4,8 @@
  * Description: This module houses the main navigation. 
  * 
  */
- 
+// Turn off SEF for error pages
+if ($section >= 400) $sef = "false"; else $sef = $sef; 
 if (strstr($section,"step")) { ?>
 <div class="setupTitle">Set Up Your Brew Competition Online Entry and Management Site</div>
 <?php } else { ?>
@@ -91,7 +92,7 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, 'adminMenuCat_Archiving');"><span class="menuItemText">Archiving</span><span class="menuItemArrow">&#9654;</span></a>
 <?php } ?>
 <!-- Bug Reporting -->
-<a class="menuItem" href="http://code.google.com/p/brewcompetitiononlineentry/issues/entry" target="_blank">Report a Bug</a>
+<a class="menuItem" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue at GitHub</a>
 </div>
 
 <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
@@ -383,6 +384,7 @@ if (strstr($section,"step")) { ?>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=avail_stewards&amp;action=email">All Available Stewards</a>
     <a class="menuItem"  href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Assigned Judges</a>
 	<a class="menuItem"  href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Assigned Stewards</a>
+    <a class="menuItem"  href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=staff&amp;action=email">All Staff</a>
     <a class="menuItem"  href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a>

@@ -16,17 +16,25 @@ $table_header7 = "Actions";
 	</span>
 </div>
 <?php if (HOSTED) { ?>
-<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of all participant, entry, table, scoring, and judging data, click the link below.</p> 
+<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of data, use the links below.</p> 
 <form action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to clear the current competition\'s data?\nThis CANNOT be undone.');">
-<p><input name="submit" type="submit" class="button" value="Clear Competition Data"></p>
+<h3>Option 1</h3>
+<p>The following option clears all participant, entry, judging, and scoring data. Provides a clean slate.</p>
+<p><input name="submit" type="submit" class="button" value="Clear All Participant, Entry, Judging, and Scoring Data"></p>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+</form>
+<form action="<?php echo $base_url; ?>includes/archive.inc.php?filter=participant" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to clear the current competition\'s entry and scoring data ONLY?\nThis CANNOT be undone.');">
+<h3>Option 2</h3>
+<p>The following option clears all entry, judging, and scoring data, but retains the participant data. Useful if you want don't want to have participants create new account profiles.</p>
+<p><input name="submit" type="submit" class="button" value="Clear Entry, Judging, and Scoring Data Only"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } else { ?>
-<p>To archive the current user, participant, entry, table, scoring, and result data, please provide a name of the archive. For example, if your competition is held yearly, you could use the year.</p>
 <form action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1"  onsubmit="return confirm('Are you sure you want to archive the current competition\'s data?\nThis CANNOT be undone.');">
-<p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"> 
-* alpha numeric characters only - all others will be omitted.
-</p>
+<p>To archive the current entry, table, scoring, and result data, provide a name of the archive.</p>
+<p><input name="archiveSuffix" type="text" size="15" value="<?php echo date('Y'); ?>"> * alpha numeric characters only - all others will be omitted.</p>
+<p>If you wish to keep the current participant data (useful if you want don't want to have participants create new account profiles), indicate so below.</p>
+<p><input name="keepParticipants" type="checkbox" value="Y" />Keep participant information?</p>
 <p><input name="submit" type="submit" class="button" value="Archive Now"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
@@ -77,8 +85,8 @@ $table_header7 = "Actions";
 	$db = $prefix."brewer_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php } ?>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db;  ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
+    <?php } else echo "Not Archived"; ?>
     </td>
     <td class="data" nowrap="nowrap">
     <?php 
@@ -103,7 +111,7 @@ $table_header7 = "Actions";
 	$db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
     <?php } 
 	}
 	?>
@@ -113,7 +121,7 @@ $table_header7 = "Actions";
 	$db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
     </td>
     <?php } 
 	}

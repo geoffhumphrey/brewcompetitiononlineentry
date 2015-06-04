@@ -25,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Hop
 class Hop extends Parser{
 	// fields within HOP tag
@@ -48,16 +46,13 @@ class Hop extends Parser{
     public $caryophyllene;
     public $cohumulone;
     public $myrcene;
-
     // extensions
     public $displayAmount;
 	public $displayTime;
     public $inventory;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "HOP":
@@ -67,7 +62,6 @@ class Hop extends Parser{
 				break;
 		}
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -139,12 +133,10 @@ class Hop extends Parser{
 	}
 }
 //}}}
-
 //{{{ Hops
 class Hops extends Parser{
 	//fields within HOPS tag
 	public $hops = array();
-
 	function startElement($parser,$tagName,$attrs) {
 		switch($tagName){
 			case "HOP":
@@ -156,7 +148,6 @@ class Hops extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "HOPS":
@@ -166,12 +157,9 @@ class Hops extends Parser{
 		}
 		$this->tag = $tagName;
 	}
-
 	function nodeData($parser,$data) {
 	
     }
-
 }
 //}}}
-
 ?>

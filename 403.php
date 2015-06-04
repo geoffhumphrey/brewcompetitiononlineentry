@@ -1,11 +1,6 @@
 <?php
 require('paths.php');
-require(DB.'common.db.php');
-require(LIB.'common.lib.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
-require(INCLUDES.'constants.inc.php');
+require(CONFIG.'bootstrap.php');
 $section = "403";
 ?>
 <html>
@@ -23,7 +18,7 @@ $section = "403";
 			<div id="header">	
 				<div id="header-inner"><h1>403 Error</h1></div>
             </div>
-			<p>Denied! You do not have permission for this request: <?php echo $_SERVER['REQUEST_URI']; ?>.</p>
+			<div class="error">Denied! You do not have permission for this request.</div>
             <p>Please use the main navigation above to get where you want to go.</p>
             <p>Cheers!<br>The <?php echo $_SESSION['contestName']; ?> Site Server</p>
         </div>

@@ -57,7 +57,7 @@ $competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo
 $header1_1 .= "<h2>Judging and Stewarding</h2>";
 if (($judge_window_open > 0) && (!isset($_SESSION['loginUsername']))) { 
 	$page_info1 .= sprintf("<p>If you <em>have</em> registered, <a href='%s'>log in</a> and then choose <em>Edit My Info</em> to indicate that you are willing to judge or  steward.</p>",build_public_url("login","default","default",$sef,$base_url));
-	$page_info1 .= sprintf("<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href=''>please register</a>.</p>",build_public_url("register","judge","default",$sef,$base_url));
+	$page_info1 .= sprintf("<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='%s'>please register</a>.</p>",build_public_url("register","judge","default",$sef,$base_url));
 }
 
 elseif (($judge_window_open > 0) && (isset($_SESSION['loginUsername']))) {

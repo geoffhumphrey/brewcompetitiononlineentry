@@ -5,16 +5,13 @@
  */
  
 if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
-
 	if (NHC) {
 	// Place NHC SQL calls below
 	
 	
 	}
 	// end if (NHC)
-
 	else {
-
 		include(DB.'common.db.php');
 		mysql_select_db($database, $brewing);
 		
@@ -45,17 +42,10 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$brewInfo = $_POST['brewInfo'];
 			$brewInfo = strtr($_POST['brewInfo'],$html_remove);
 			
-			if (check_carb_sweetness($_POST['brewStyle'])) { 
-				$brewMead1 = $_POST['brewMead1']; 
-				$brewMead2 = $_POST['brewMead2']; 
-				$brewMead3 = $_POST['brewMead3']; 
-			} 
 			
-			else { 
-				$brewMead1 = "";
-				$brewMead2 = "";
-				$brewMead3 = ""; 
-			} 
+			$brewMead1 = $_POST['brewMead1']; 
+			$brewMead2 = $_POST['brewMead2']; 
+			$brewMead3 = $_POST['brewMead3']; 
 		
 		
 			// The following are only enabled when preferences dictate that the recipe fields be shown.
@@ -154,8 +144,11 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			$styleBreak = $_POST['brewStyle'];
 			$style = explode('-', $styleBreak);
+			if (preg_match("/^[[:digit:]]+$/",$style[0])) $styleReturn = sprintf('%02d',$style[0])."-".$style[1];
+			else $styleReturn = $style[0]."-".$style[1];
 			$styleTrim = ltrim($style[0], "0"); 
-			if ($style [0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
+			if (($style [0] < 10) && (preg_match("/^[[:digit:]]+$/",$style [0]))) $styleFix = "0".$style[0];
+			else $styleFix = $style[0];
 			
 			if (NHC) $brewJudgingNumber = "";
 			else $brewJudgingNumber = generate_judging_num($styleTrim);
@@ -384,7 +377,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			}
 			  
 			// Check if entry requires special ingredients or a classic style
-			if (check_special_ingredients($styleBreak)) {
+			if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
 				  
 				if ($_POST['brewInfo'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
@@ -394,12 +387,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewInfo'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=list&msg=2";
 				}
 				  
@@ -407,7 +400,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			 
 			 // Check if mead/cider entry has carbonation and sweetness
 			 
-			if (check_mead_strength($style[0])) {
+			if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 				
 				if ($_POST['brewMead3'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
@@ -417,17 +410,17 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewMead3'] == "") $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=list&msg=2";
 				}
 			}
 			  
-			if (check_carb_sweetness($style[0])) {
+			if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 				 
 				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
@@ -437,18 +430,18 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=list&msg=2";
 				}
 				  
 			 }
 			
-			if ((check_carb_sweetness($style[0])) && (check_mead_strength($style[0]))) {
+			if ((check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) && (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet']))) {
 				 
 				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
@@ -458,12 +451,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $insertGoTo = $base_url."index.php?section=list&msg=2";
 				}
 				  
@@ -485,7 +478,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $name);
 				$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 				$row_brewer = mysql_fetch_assoc($brewer);
-
 				$brewBrewerID = $row_brewer['uid'];
 				$brewBrewerLastName = $row_brewer['brewerLastName'];
 				$brewBrewerFirstName = $row_brewer['brewerFirstName'];
@@ -502,8 +494,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			$styleBreak = $_POST['brewStyle'];
 			$style = explode('-', $styleBreak);
+			if (preg_match("/^[[:digit:]]+$/",$style[0])) $styleReturn = sprintf('%02d',$style[0])."-".$style[1];
+			else $styleReturn = $style[0]."-".$style[1];
 			$styleTrim = ltrim($style[0], "0"); 
-			if ($style[0] < 10) $styleFix = "0".$style[0]; else $styleFix = $style[0];
+			
+			if (($style [0] < 10) && (preg_match("/^[[:digit:]]+$/",$style [0]))) $styleFix = "0".$style[0];
+			else $styleFix = $style[0];
 			
 			// Get style name from broken parts
 			$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
@@ -592,13 +588,13 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			
 			// Build updade url
-			if ((check_special_ingredients($styleBreak)) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+			if ((check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
 			elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			
 			
 			// Check if entry requires special ingredients or a classic style, if so, override the $updateGoTo variable with another and redirect
-			if (check_special_ingredients($styleBreak)) {
+			if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
 				  
 				if ($_POST['brewInfo'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
@@ -609,12 +605,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if ($_POST['brewInfo'] == "") $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $updateGoTo = $base_url."index.php?section=list&msg=2";
 				}
 				  
@@ -622,7 +618,31 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			 
 			 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
 			 
-			 if (check_mead_strength($style[0])) {
+			 
+			  
+			 if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
+				 
+				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
+					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+					mysql_select_db($database, $brewing);
+					mysql_real_escape_string($updateSQL);
+					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				}
+				
+				if ($section == "admin") {
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+				}
+				
+				else {
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+					else $updateGoTo = $base_url."index.php?section=list&msg=2";
+				}
+				  
+			 }
+			 
+			 
+			 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 				
 				if ($_POST['brewMead3'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
@@ -634,38 +654,18 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				
 				if ($section == "admin") {
 					if ($_POST['brewMead3'] != "")$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-					else $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					else $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 				}
 				
 				else {
 					if ($_POST['brewMead3'] != "") $updateGoTo = $base_url."index.php?section=list&msg=2";
-					else $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					else $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 				}
 			}
-			  
-			 if (check_carb_sweetness($style[0])) {
-				 
-				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
-					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-				}
-				
-				if ($section == "admin") {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
-					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-				}
-				
-				else {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
-					else $updateGoTo = $base_url."index.php?section=list&msg=2";
-				}
-				  
-			 }
-			
+			 
+			/*
 			// Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
-			if ((check_carb_sweetness($style[0])) && (check_mead_strength($style[0]))) {
+			if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 				 
 				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
@@ -675,27 +675,54 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				}
 				
 				if ($section == "admin") {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == ""))  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 				}
 				
 				else {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == ""))  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleBreak;
+					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == ""))  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+					else $updateGoTo = $base_url."index.php?section=list&msg=2";
+				}
+				  
+			 }
+			 
+			 
+			 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
+				 
+				if ($_POST['brewMead3'] == "") {
+					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+					mysql_select_db($database, $brewing);
+					mysql_real_escape_string($updateSQL);
+					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				}
+				
+				if ($section == "admin") {
+					if ($_POST['brewMead3'] == "")  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+				}
+				
+				else {
+					if ($_POST['brewMead3'] == "")  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 					else $updateGoTo = $base_url."index.php?section=list&msg=2";
 				}
 				  
 			 }
 			
-			
-			//echo $updateGoTo."<br>";
-			//echo $style[0]."<br>";
-			//if ($_POST['brewMead3'] == "") echo "YES - strength is empty<br>";
-			//if (check_mead_strength($style[0])) echo "YES - check strength<br>";
+			*/
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
-			
+			/*
+			echo $updateGoTo."<br>";
+			echo $style[0]."<br>";
+			echo $styleTrim."<br>";
+			if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES strength<br>"; else echo "No strength<br>";
+			if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES carb/sweetness<br>"; else echo "No carb/sweeness<br>";
+			echo $brewMead1."<br>";
+			echo $brewMead2."<br>";
+			echo $brewMead3."<br>";
+			*/
 			
 		} // end if ($action == "edit")
 		
@@ -777,7 +804,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
 				
 			}
-
 	} // end else NHC
 	
 } else echo "<p>Not available.</p>";

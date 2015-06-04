@@ -99,7 +99,7 @@ else {
 		$_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
 		$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
 		//$_SESSION['prefsGoogle'] = $row_prefs['prefsGoogle'];
-		// $_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
+		//$_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
 		$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
 		$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
 		$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
@@ -127,7 +127,8 @@ else {
 		//$_SESSION['prefsUSCLExLimit'] = $row_prefs['prefsUSCLExLimit'];
 		$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
 		$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
-		
+		$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
+		$_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
 	
 		$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 		$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
@@ -149,7 +150,7 @@ else {
 	}
 	
 	
-	# Set global pagination variables 
+	// Set global pagination variables 
 	$display = $_SESSION['prefsRecordPaging']; 
 	$pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
 	$start = $display * $pg - $display;

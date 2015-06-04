@@ -36,14 +36,16 @@ if (($go == "judging_scores_bos") && ($action == "print")) include (SECTIONS.'bo
 </div>
 </body>
 </html>
+<?php if (!$fx) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
     self.print();
 }
-setTimeout('selfPrint()',2000);
-html.push('');
-</script> 
+setTimeout('selfPrint()',3000);
+html.push(''); 
+</script>
+<?php } ?>
 <?php } 
 else echo "<p>Not available.</p>";
 ?>

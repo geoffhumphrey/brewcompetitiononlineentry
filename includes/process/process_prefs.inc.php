@@ -70,6 +70,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			prefsSEF,
 			prefsSpecialCharLimit,
 			
+			prefsStyleSet,
+			prefsAutoPurge,
+			
 			id
 			
 			) VALUES (
@@ -81,7 +84,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			%s, %s, %s, %s, %s,
 			%s, %s, %s, %s, %s,
 			%s, %s, %s, %s, %s,
-			%s)",
+			%s, %s, %s)",
 								   GetSQLValueString($_POST['prefsTemp'], "text"),
 								   GetSQLValueString($_POST['prefsWeight1'], "text"),
 								   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -129,6 +132,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 								   GetSQLValueString($_POST['prefsUseMods'], "text"),
 								   GetSQLValueString($_POST['prefsSEF'], "text"),
 								   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
+								   GetSQLValueString($_POST['prefsStyleSet'], "text"),
+								   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 								   GetSQLValueString($id, "int"));
 								   
 				//echo $insertSQL;
@@ -197,7 +202,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			prefsHideRecipe=%s,
 			prefsUseMods=%s,
 			prefsSEF=%s,
-			prefsSpecialCharLimit=%s
+			prefsSpecialCharLimit=%s,
+			
+			prefsStyleSet=%s,
+			prefsAutoPurge=%s
 			
 			WHERE id=%s",
 								   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -247,6 +255,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 								   GetSQLValueString($_POST['prefsUseMods'], "text"),
 								   GetSQLValueString($_POST['prefsSEF'], "text"),
 								   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
+								   
+								   GetSQLValueString($_POST['prefsStyleSet'], "text"),
+								   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 								   
 								   GetSQLValueString($id, "int"));
 								   

@@ -9,7 +9,6 @@ chr(35) => "&#35;",
 chr(39) => "&#39;",
 chr(176) => "&#176;"
 );
-
 $html_string = array( 
 chr(34) => "&quot;",  
 chr(37) => "&#37;",
@@ -314,7 +313,6 @@ chr(380) => "&#380;",
 */
 "&#39;" => "&rsquo;",
 "&apos;" => "&rsquo;",
-
 "“" => "&ldquo;",   // left side double smart quote
 "”" => "&rdquo;",  	// right side double smart quote
 "‘" => "&lsquo;",  	// left side single smart quote
@@ -323,7 +321,6 @@ chr(380) => "&#380;",
 "—" => "&mdash;",  	// em dash
 "–" => "&ndash;",  	// en dash
 );
-
 $html_remove = array( 
 "&amp;" => "&",
 "&lt;" => "<", 
@@ -347,7 +344,6 @@ $html_remove = array(
 "—" => "--",  	// em dash
 "–" => "-",  	// en dash
 );
-
 $space_remove = array( 
 "&amp;" => "",
 "&lt;" => "", 
@@ -359,7 +355,6 @@ $space_remove = array(
 " " => "",
 "&nbsp;" => ""
 );
-
 $bjcp_num_replace = array( 
 "(" => "9", 
 ")" => "0", 
@@ -367,5 +362,4 @@ $bjcp_num_replace = array(
 "O" => "0",
 "-" => ""
 );
-
 ?>

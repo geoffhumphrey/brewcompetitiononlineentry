@@ -127,7 +127,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 <tbody>
 	<?php do {
 		
-	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable']);
+	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
 	$bos_entry_info = explode("^",$bos_entry_info);
 	$style = $bos_entry_info[1].$bos_entry_info[3];
 	

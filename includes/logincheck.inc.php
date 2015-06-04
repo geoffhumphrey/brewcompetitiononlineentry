@@ -70,17 +70,28 @@ else {
 	
 	if ($section == "update") {
 		
-		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s' AND password = '%s'",$prefix."users",$loginUsername,$password);
+		$loginUsername = strtolower($loginUsername);
+		
+		$loginUsername = strtolower($loginUsername);	
+		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
 		$login = mysql_query($query_login, $brewing) or die(mysql_error());
 		$row_login = mysql_fetch_assoc($login);
 		$totalRows_login = mysql_num_rows($login);
 		
-		$loginUsername = strtolower($loginUsername);
+		$stored_hash = $row_login['password'];
 		
-		if ($totalRows_login == 1) $check = 1;
+		$check = 0;
+		
+		if ($totalRows_login > 0) {
+			$check = $hasher->CheckPassword($password, $stored_hash);
+			$check = 1;
+		}
+		
 		else $check = 0;
 		
 		//echo $query_login."<br>";
+		//echo $check."<br>";
+		//exit;
 		
 	}
 	

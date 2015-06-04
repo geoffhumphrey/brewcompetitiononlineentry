@@ -12,7 +12,6 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 	
 	}
 	// end if (NHC)
-
 	else {
 	 
 		require(DB.'common.db.php');
@@ -25,6 +24,18 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		unset($_SESSION['user_info'.$prefix_session]);
 		
 		if ($action == "update") {
+			
+			if ($filter == "clear") {
+				
+				$updateSQL1 = sprintf("TRUNCATE %s",$prefix."staff",$uid);
+				mysql_real_escape_string($updateSQL1);
+				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
+				
+				$updateSQL1 = sprintf("TRUNCATE %s",$prefix."judging_assignments",$uid);
+				mysql_real_escape_string($updateSQL1);
+				$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());				
+								
+			}
 		
 			foreach($_POST['uid'] as $uid) {
 			
@@ -200,7 +211,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			}
 			
 			$pattern = array('\'', '"');
-			$massUpdateGoTo = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
+			if ($filter == "clear") $massUpdateGoTo = $base_url."index.php?section=admin&go=participants&msg=9";
+			else $massUpdateGoTo = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
 			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 			//echo $massUpdateGoTo;
 			header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
@@ -488,5 +500,4 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 	} // end else NHC
 	
 } else echo "<p>Not available.</p>";
-
 ?>

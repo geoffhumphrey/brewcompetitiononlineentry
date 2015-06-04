@@ -5,9 +5,8 @@
  *              Displays by style category.
  * 
  */
-
+ 
 $a = styles_active(0);
-
 foreach (array_unique($a) as $style) {
 	
 	include(DB.'winners_category.db.php');

@@ -5,29 +5,29 @@
 <title>[onshow.brewing_info.brewName] Recipe Form</title>
 <style type="text/css">
 <!--
-body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt;  word-spacing: 0.008em; line-height:normal; }
-table					{ border-collapse: collapse; width: 100%; }
-table td				{ padding: 2px; }
-.headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
-.headerTitleSm 			{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
-.bottle, .medium 		{ font-size: 9px; } 
-.small 					{ font-size: 8px; margin: 0; } 
-#printContainer 		{ width: 100%; }
-.bdr1_thick	 			{ border: 5px solid #000000; }
-.bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
-.bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
-.bdr1B 					{ border-bottom: 1px solid #000000; }
-.bdr1L 					{ border-left: 1px solid #000000; }
-.bdr1R 					{ border-right: 1px solid #000000; }
-.bdr1T 					{ border-top: 1px solid #000000; }
-.bdr1R_dashed			{ border-right: 1px dashed #000000; }
-.bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
-.headerItalic 		    { font-size: 8px; font-style: italic; }
-table.small	td			{ padding: 1px 2px 1px 2px; }
-table.bottleLabel		{ border-collapse: collapse; width: 100%; }
-table.bottleLabel-inner	{ margin: 15px; width: 300px; }
-table.bottleLabel-inner	td { padding: 5px; text-align: left; }
-.error 					{ color: #FF0000; font-size: 1.3em; font-weight: bold; margin: 1em 0 1em 0; padding: .5em .5em .5em 2.2em; background-position:.5em; background-image: url(../images/error.png); background-repeat: no-repeat; background-color: #FFFF99; border: 1px solid #FF0000; border-radius: 5px; }
+body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt;  word-spacing: 0.008em; line-height:normal; }
+table						{ border-collapse: collapse; width: 100%; }
+table td					{ padding: 2px; }
+.headerTitle 				{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+.headerTitleSm 				{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
+.bottle, .medium 			{ font-size: 9px; } 
+.small 						{ font-size: 8px; margin: 0; } 
+#printContainer 			{ width: 100%; }
+.bdr1_thick	 				{ border: 5px solid #000000; }
+.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
+.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
+.bdr1B 						{ border-bottom: 1px solid #000000; }
+.bdr1L 						{ border-left: 1px solid #000000; }
+.bdr1R 						{ border-right: 1px solid #000000; }
+.bdr1T 						{ border-top: 1px solid #000000; }
+.bdr1R_dashed				{ border-right: 1px dashed #000000; }
+.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
+.headerItalic 		    	{ font-size: 8px; font-style: italic; }
+table.small	td				{ padding: 1px 2px 1px 2px; }
+table.bottleLabel			{ border-collapse: collapse; width: 100%; }
+table.bottleLabel-inner		{ margin: 15px; width: 300px; }
+table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: top; }
+.error 						{ color: #FF0000; font-size: 1.3em; font-weight: bold; margin: 1em 0 1em 0; padding: .5em .5em .5em 2.2em; background-position:.5em; background-image: url(../images/error.png); background-repeat: no-repeat; background-color: #FFFF99; border: 1px solid #FF0000; border-radius: 5px; }
 -->
 </style>
 </head>
@@ -152,7 +152,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
            [onshow_dry;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Dry</td>
-
         <td width="2%">
            <img src="../images/check.jpg" border="0">
            [onshow_hydromel;block=td;when [var.brewing_info.meadType]='hydromel']
@@ -162,7 +161,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
            [onshow_hydromel;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Hydromel (light mead)</td>
-
       </tr>
       <tr>
         <td width="2%">
@@ -174,7 +172,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
            [onshow_petillant;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Petillant</td>
-
         <td width="2%">
            <img src="../images/check.jpg" border="0">
            [onshow_ssweet;block=td;when [var.brewing_info.sweetness]='Semi-Sweet']
@@ -343,7 +340,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
       <table>
         <tr>
           <td align="left" valign="top"><strong><em>CARBONATION</em></strong></td>
-
           <td width="5%">
              <img src="../images/check.jpg" border="0">
              [onshow_fcarb;block=td;when [var.brewing_info.carbonation]='forced']
@@ -352,7 +348,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
              <img src="../images/box.jpg" border="0">
              [onshow_fcarb;block=td;default]
           </td>
-
           <td>forced CO<sub>2</sub></td>
           
           
@@ -410,7 +405,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
           <td width="5%">&nbsp;</td>
           <td align="center" class="bdr1B">[onshow.brewing_info.brewSecondaryTemp.f]</td>
         </tr>
-
         <tr>
           [onshow_othertemp;block=tr;when [var.brewing_info.brewOther]!='']
           <td align="right">Tertiary</td>
@@ -419,7 +413,6 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
           <td width="5%">&nbsp;</td>
           <td align="center" class="bdr1B">[onshow.brewing_info.brewOtherTemp]</td>
         </tr>
-
         <!-- Currently no lagering info in the software. For future expansion... -->
         <!--
 		<tr>

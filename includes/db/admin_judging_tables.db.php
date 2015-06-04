@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 	
 	if ($action == "add") {
@@ -39,5 +38,4 @@ else {
 	}
 	
 }
-
 ?>

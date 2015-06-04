@@ -5,20 +5,30 @@
  *              information - references the "brewer" database table.
  * 
  */
+ 
 mysql_select_db($database, $brewing);
+
 if ($section != "step2") {
 	include(DB.'judging_locations.db.php');
 	include(DB.'stewarding.db.php'); 
 	include(DB.'styles.db.php');
 }
+
 include(DB.'brewer.db.php');
+
+$table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+$table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+
+if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) $table_assignment = TRUE;
+if ((empty($table_assign_judge)) && (empty($table_assign_steward))) $table_assignment = FALSE;
+
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { 
 $info_msg = "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
 if ($go != "admin") echo $info_msg;
- 
+
+if ($section == "step2") { 
 ?>
-<?php if ($section == "step2") { ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
 <input name="brewerSteward" type="hidden" value="N" />
 <input name="brewerJudge" type="hidden" value="N" />
@@ -139,15 +149,14 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
   <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$currency_symbol.$_SESSION['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
 </tr>
 <?php if (($go != "entrant") && ($section != "step2")) { ?>
+<?php if (!$table_assignment) { ?>
 <tr>
       <td class="dataLabel">Stewarding:</td>
       <td class="data">Are you willing be a steward in this competition?</td>
       <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
       <td class="data">&nbsp;</td>
 </tr>
-
 <?php if ($totalRows_judging > 1) { ?>
-
 <tr>
 <td class="dataLabel">Stewarding<br />Location Availabilty:</td>
 <td colspan="3" class="data">
@@ -164,11 +173,11 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
         </tr>
     </table>
 <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
-
-
 </td>
 </tr>
-<?php } ?>
+<?php } 
+}
+if (!$table_assignment) { ?>
 <tr>
       <td class="dataLabel">Judging:</td>
       <td class="data">Are you willing and qualified to judge in this competition?</td>
@@ -194,10 +203,14 @@ if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) 
 <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
 </td>
 </tr>
-<?php } else { ?>
+<?php 
+	}
+} else { ?>
     <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
     <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-<?php } } ?>
+<?php 	 
+	} 
+} ?>
 <?php if (($go == "judge") || (($go == "admin") && ($action == "add"))) { ?>
 <tr>
 	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>

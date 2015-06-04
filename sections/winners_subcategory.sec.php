@@ -7,7 +7,6 @@
  */
  
 $a = styles_active(2);
-
 foreach (array_unique($a) as $style) {
 	
 	$style = explode("^",$style);
@@ -56,7 +55,6 @@ foreach (array_unique($a) as $style) {
 </thead>
 <tbody>
 <?php 
-
 	include(DB.'scores.db.php');
 			
 	do { 

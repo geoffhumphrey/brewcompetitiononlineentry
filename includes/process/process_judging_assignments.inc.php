@@ -3,7 +3,6 @@
  * Module:      process_judging_assignments.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_assignments" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	if (NHC) {
@@ -14,7 +13,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	// end if (NHC)
 	
 	else {
-
 		if ($action == "update") {
 			if ($_SESSION['jPrefsQueued'] == "N") {
 			foreach ($_POST['random'] as $random) {

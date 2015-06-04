@@ -22,5 +22,4 @@ $row_logged_in_user = mysql_fetch_assoc($logged_in_user);
 $query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $bid);
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $brewer_info = mysql_fetch_assoc($brewer);
-
 ?>

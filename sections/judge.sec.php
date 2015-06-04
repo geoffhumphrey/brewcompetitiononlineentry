@@ -1,12 +1,10 @@
 <?php 
-
 /**
  * Module:      judge.sec.php 
  * Description: This module houses the functionality for users to enter their
  *              judging information. 
  * 
  */
-
 include(DB.'brewer.db.php');
 include(DB.'styles.db.php'); 
 ?>

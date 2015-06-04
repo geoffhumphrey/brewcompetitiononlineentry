@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 		
 	// This query is ONLY used in the judging_scores function when entering scores for a particular table
@@ -13,6 +12,5 @@ else {
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 	$row_entries = mysql_fetch_assoc($entries);
 	$totalRows_entries = mysql_num_rows($entries);
-
 }
 ?>

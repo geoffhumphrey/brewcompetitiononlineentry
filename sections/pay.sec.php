@@ -5,14 +5,11 @@
                 specific payment preferences. 
  * 
  */
-
+ 
 /* ---------------- PUBLIC Pages Rebuild Info ---------------------
-
 Beginning with the 1.3.0 release, an effort was begun to separate the programming
 layer from the presentation layer for all scripts with this header.
-
 All Public pages have certain variables in common that build the page:
-
 	$warningX = any warnings
   
 	$primary_page_info = any information related to the page
@@ -40,7 +37,6 @@ Declare all variables empty at the top of the script. Add on later...
 	$page_info2 = "";
 	
 	etc., etc., etc.
-
  * ---------------- END Rebuild Info --------------------- */
  
 if (NHC) {
@@ -171,7 +167,6 @@ if (NHC) {
 	} // end else if ($totalRows_log_paid >= $row_limits['prefsEntryLimit'])
 	
 } // end if (NHC)
-
 else {
 	
 		$bid = $_SESSION['user_id'];
@@ -364,4 +359,3 @@ else {
 	
 } // end else if (NHC)
 ?>
-

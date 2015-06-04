@@ -31,7 +31,6 @@ table.bottleLabel		{ border-collapse: collapse; width: 700px; }
 table.bottleLabel-inner	{ margin: 15px; width: 325px }
 table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 .error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-image: url(../images/error.png); background-position: center left; background-repeat: no-repeat; }
-
 -->
 </style>
 </head>
@@ -39,13 +38,11 @@ table.bottleLabel-inner	td { padding: 5px; text-align: left; }
 <!--
 This is not intended as a complete example. For some more complex usage, see the BJCP
 form.
-
 More information about Tiny But Strong templating system at
 http://www.tinybutstrong.com/
 -->
 <div id="printContainer">
 <a name="labels_top" id="labelsOtop"></a>
-
 <!-- div for non-print header -->
 <div>
 [onshow;block=div;when [var.action]!='print']
@@ -57,9 +54,7 @@ http://www.tinybutstrong.com/
   </tr>
 </table>
 </div> <!-- end non-print header-->
-
 <h1>Entry Form, [onshow.contest_info.contestName]</h1>
-
 <table border="0">
   <tr>
     <td width="50%">
@@ -95,7 +90,6 @@ http://www.tinybutstrong.com/
 </td>
   </tr>
 </table>
-
 <div>
 <h2>Recipe</h2>
 [onshow;block=div;when [var.totalFermentables]!='0']
@@ -142,13 +136,11 @@ http://www.tinybutstrong.com/
 <div>
 [onshow;block=div;when [var.brewing_info.brewYeast]!='']
 <h3>Yeast</h3>
-
 <p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
 </div>
 <div>
 [onshow;block=div;when [var.brewing_info.brewOG]!='']
 <h3>Processes</h3>
-
 <ul>
   <li>OG: [onshow.brewing_info.brewOG;frm='0.000']</li>
   <li>FG: [onshow.brewing_info.brewFG;frm='0.000']</li>

@@ -53,12 +53,12 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
 
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as paid and is could be a large pain to undo.');">Mark All Entries as Paid</a></span>
-    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as received and is could be a large pain to undo.');">Mark All Entries as Received</a></span>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as paid and could be a large pain to undo.');">Mark All Entries as Paid</a></span>
+    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as received and could be a large pain to undo.');">Mark All Entries as Received</a></span>
     <span class="adminSubNav">...then uncheck those that aren't paid and/or received.</span>
 </div>
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and is could be a large pain to undo.');">Confirm All Unconfirmed Entries</a></span>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a> or <span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span>
 </div>
 <?php } 
 } ?>
@@ -66,14 +66,9 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
 if (($filter == "default") && ($bid == "default") && ($view == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 ?>
 <table class="dataTable">
-<?php if ($entries_unconfirmed > 0) { ?>
+<?php if (($action != "print") && ($entries_unconfirmed > 0)) { ?>
 <tr>
    <td colspan="2"><strong>Unconfirmed entries</strong> or entries in categories requiring special ingredients with none entered are <span style='background-color: #ff9; border: 1px solid #F90; padding: 2px 3px 2px 3px;'>highlighted</span> and are not included in fee calculations.
-   </td>
-</tr>
-<tr>
-   <td colspan="2">
-   <span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge all</a> unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database?
    </td>
 </tr>
 <?php } ?>
@@ -83,7 +78,7 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 </tr>
 <?php if ($view == "default") { ?>
 <tr>
-  <td class="dataHeading">Total Confirmed Entry Fees <?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
+  <td class="dataHeading">Total Entry Fees <?php if ($filter != "default") echo " in this Category"; if ($bid != "default") echo " for this Particpant";?>:</td>
   <td class="data"><?php echo $currency_symbol.$total_fees; ?></td>
 </tr>
 <tr>
@@ -92,8 +87,8 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
   if (($filter == "default") && ($bid == "default")) { 
   	if ($totalRows_log_paid > 0) echo "<a href='index.php?section=".$section."&amp;go=".$go."&amp;view=paid' title='View All Paid Entries'>".$totalRows_log_paid." paid</a> (".$currency_symbol.$total_fees_paid.")";
  	else echo $totalRows_log_paid." paid (".$currency_symbol.$total_fees_paid.")";
-	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo ", <a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid</a> (".$currency_symbol.$total_fees_unpaid.")"; 
-	else echo "<br>".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
+	if (($totalRows_entry_count - $totalRows_log_paid) > 0) echo ", <a href='index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid' title='View All Unpaid Entries'>".($totalRows_entry_count - $totalRows_log_paid)." unpaid</a> (".$currency_symbol.$total_fees_unpaid.")"; 
+	else echo "<br>".($totalRows_entry_count - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
 	}
   else echo $totalRows_log_paid." paid (".$currency_symbol.$total_fees_paid."), ".($totalRows_log_confirmed - $totalRows_log_paid)." unpaid (".$currency_symbol.$total_fees_unpaid.")";
   ?></td>

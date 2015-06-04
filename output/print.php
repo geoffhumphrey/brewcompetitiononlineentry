@@ -20,12 +20,14 @@ require(CONFIG.'bootstrap.php');
 <link href="<?php echo $base_url; ?>css/common.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $base_url; ?>css/messages.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $base_url; ?>css/print.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
 </head>
 <body>
+<div id="printable">
 <div id="content">
 	<div id="content-inner">
+    <!-- <button class="print no-print" style="cursor:pointer; vertical-align:middle;"><?php echo "<img src=\"".$base_url."images/printer.png\">"; ?> Print </button> -->
     <?php if ($section != "admin") { ?>
     <div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
@@ -53,13 +55,26 @@ require(CONFIG.'bootstrap.php');
 <div id="footer">
 	<div id="footer-inner">Printed <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>.</div>
 </div>
-</body>
-</html>
+</div>
+<!--
+<script src="<?php echo $base_url; ?>js_includes/jQuery.print.js"></script> 
+<script type='text/javascript'>
+	$(function() {
+		$("#printable").find('.print').on('click', function() {
+			$.print("#printable");
+		}); 
+	});
+</script>
+-->
+<?php if (!$fx) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
     self.print();
 }
-setTimeout('selfPrint()',2000);
+setTimeout('selfPrint()',3000);
 html.push(''); 
-</script> 
+</script>
+<?php } ?>
+</body>
+</html>

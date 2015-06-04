@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 //{{{ License
 // +------------------------------------------------------------------------+
@@ -26,14 +25,12 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 //{{{ Parser
 abstract class Parser {
 	public $parser;
 	public $tag;
 	public $insideItm;
 	public $inNode;
-
 	function parse($parser,$beerXMLParser){
 		xml_set_object($parser,$this);
 		$this->parser = $beerXMLParser;

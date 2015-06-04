@@ -25,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Misc
 class Misc extends Parser{
 	// fields within MISC tag
@@ -40,16 +38,13 @@ class Misc extends Parser{
     public $use;
 	public $time;
 	public $notes;
-
     // extensions
     public $displayAmount;
     public $inventory;
     public $displayTime;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "MISC":
@@ -59,7 +54,6 @@ class Misc extends Parser{
 				break;
 		}
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -105,15 +99,12 @@ class Misc extends Parser{
 			}
 		}
 	}
-
 }
 //}}}
-
 //{{{ Miscs
 class Miscs extends Parser{
 	//fields within MISCS tag
 	public $miscs = array();
-
 	function startElement($parser,$tagName,$attrs) {
 		switch($tagName){
 			case "MISC":
@@ -125,7 +116,6 @@ class Miscs extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "MISCS":
@@ -135,12 +125,9 @@ class Miscs extends Parser{
 		}
 		$this->tag = $tagName;
 	}
-
 	function nodeData($parser,$data) {
 	
     }
-
 }
 //}}}
-
 ?>

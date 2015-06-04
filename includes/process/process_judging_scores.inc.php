@@ -25,7 +25,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				scorePlace,
 				scoreType,
 				scoreMiniBOS
-				) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+				) VALUES (%s, %s, %s, %s, %s, %s, %s);",
 								   GetSQLValueString($_POST['eid'.$score_id], "text"),
 								   GetSQLValueString($_POST['bid'.$score_id], "text"),
 								   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
@@ -41,6 +41,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 				}
 			}
+			//exit;
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
@@ -57,7 +58,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				scorePlace=%s,
 				scoreType=%s,
 				scoreMiniBOS=%s
-				WHERE id=%s",
+				WHERE id=%s;",
 								   GetSQLValueString($_POST['eid'.$score_id], "text"),
 								   GetSQLValueString($_POST['bid'.$score_id], "text"),
 								   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
@@ -72,6 +73,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				mysql_select_db($database, $brewing);
 				mysql_real_escape_string($updateSQL);
 				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
 			}
 		
 			if ((($_POST['scoreEntry'.$score_id] != "") || ($_POST['scorePlace'.$score_id] != "")) && ($_POST['scorePrevious'.$score_id] == "N")) {
@@ -93,7 +95,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 								   GetSQLValueString($_POST['scoreMiniBOS'.$score_id], "int")
 								   );
 				
-				//echo $insertSQL."<br>";
+				echo $insertSQL."<br>";
 				mysql_select_db($database, $brewing);
 				mysql_real_escape_string($insertSQL);
 				$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());		
@@ -101,12 +103,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			
 			if ((($_POST['scoreEntry'.$score_id] == "") && ($_POST['scorePlace'.$score_id] == "")) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 				$deleteScore = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $score_id);
+				
+				//echo $deleteScore;	
 				mysql_real_escape_string($deleteScore);
 				$result1 = mysql_query($deleteScore, $brewing) or die(mysql_error());
 			}
 		
 		}
-		
+		//exit;
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));

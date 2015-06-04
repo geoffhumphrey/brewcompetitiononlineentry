@@ -1,286 +1,286 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>National Homebrew Competition Entry Form and Bottle Labels</title>
-<style type="text/css">
-<!--
-body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
-h1							{ font-size: 1.8em; }
-h2							{ font-size: 1.5em; }
-table						{ border-collapse: collapse; width: 100%; }
-table td					{ padding: 2px; }
-table th					{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
-.headerTitle 				{ font-size: 2.2em; font-weight: bold; margin: 0; padding: 0; }
-.headerTitleSm 				{ font-size: 1.2em; font-weight: bold; margin: 0; padding: 0 0 8px 0; }
-.bottle, .medium 			{ font-size: .9em; } 
-.small 						{ font-size: .8em; margin: 0; }
-.dataLabel					{ font-weight: bold; white-space: nowrap; width: 1%; }
-#printContainer 			{ width: 100%; }
-.bdr1_thick	 				{ border: 5px solid #000000; }
-.bdr1_thick_dashed			{ border: 2px dashed #ccc; }
-.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
-.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
-.bdr1B 						{ border-bottom: 1px solid #000000; }
-.bdr1L 						{ border-left: 1px solid #000000; }
-.bdr1R 						{ border-right: 1px solid #000000; }
-.bdr1T 						{ border-top: 1px solid #000000; }
-.bdr1R_dashed				{ border-right: 1px dashed #000000; }
-.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
-.headerItalic 		    	{ font-size: .9em; font-style: italic; }
-table.small	td				{ padding: 1px 2px 1px 3px; }
-table.bottleLabel			{ border-collapse: collapse; width: 680px; vertical-align:top; }
-table.shippingLabel			{ border-collapse: collapse; width: 680px; vertical-align:top; height:250px; }
-table.shippingLabel td		{ padding: 10px; }
-table.bottleLabel-inner		{ margin: 5px; width: 320px; padding: 2px; }
-table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
-.box						{ border: 1px solid #bbb; width: 100%; height: 60px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
-	border-radius: 5px;}
-.box1 { border: 1px solid #bbb; width: 100%; height: 60px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
-	border-radius: 5px;}
-.box11 { border: 1px solid #bbb; width: 100%; min-height: 75px; vertical-align: middle; padding: 20px 0; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
-	border-radius: 5px; margin: 0 0 25px 0; }
--->
-</style>
-</head>
-<body>
-<div id="printContainer">
-<h1>[onshow.contest_info.contestName]</h1>
-<h3>Entry instructions and a shipping label are below your entry's bottle labels.</h3>
-<div style="margin-bottom: 30px;"></div>
-<table align="center" class="bottleLabel">
-    <tr>
-        <td align="center" class="bdr1_thick">
-        <table class="bottle bottleLabel-inner">
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Category Number:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Letter:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Name:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
-            </tr>
-            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Special/Classic:</td>
-                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Carbonation:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Sweetness:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Strength:</td>
-                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
-                </tr>
-            </div>
-        </table>
-        </td>
-        <td>&nbsp;</td>
-        <td align="center" class="bdr1_thick">
-        <table class="bottle bottleLabel-inner">
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Category Number:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Letter:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Name:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
-            </tr>
-            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Special/Classic:</td>
-                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Carbonation:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Sweetness:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Strength:</td>
-                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
-                </tr>
-            </div>
-        </table>
-        </td>
-    </tr>
-    <tr>
-    	<td>&nbsp;</td>
-        <td>&nbsp;</td>
-    </tr>
-    <tr>
-        <td align="center" class="bdr1_thick">
-        <table class="bottle bottleLabel-inner">
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
-            </tr>
-            <tr>
-                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Category Number:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Letter:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
-            </tr>
-            <tr>
-                <td valign="top" class="dataLabel">Subcategory Name:</td>
-                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
-            </tr>
-            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Special/Classic:</td>
-                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Carbonation:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Sweetness:</td>
-                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
-                </tr>
-            </div>
-            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
-                <tr>
-                    <td valign="top" class="dataLabel">Strength:</td>
-                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
-                </tr>
-            </div>
-        </table>
-        </td>
-        <td>&nbsp;</td>
-    </tr>
-</table>
-<div style="page-break-after:always;"></div>
-<p align="center"><img src="mods/brewers_association_150.jpg" width="150" height="167" border="0" /></p>
-<h1>Instructions for Entering The Final Round</h1>
-<p><strong>Verify Your Entries and Provide the Recipe</strong></p>
-<p>A condition of your entry into the final round is the recipe for each of your entries. Medal winning recipes may be published in <strong><em>Zymurgy</em></strong> magazine and on American Homebrewers Association websites. Brewers will be given full credit for their recipe.</p>
-<p>All regional winner data has been moved to the NHC Final Round competition site. To verify your entries that have advanced to the NHC Final Round:</p>
-<ul>
-  <li>Go to http://www.brewingcompetition.com/final</li>
-  <li>Log on with the username and password you established at your NHC regional comptetition site </li>
-  <li>From the entries list on the <em>My Info and Entries</em> page, click the "Edit" link for each of your entries  </li>
-  <li>Verify your entry information and add the entry\'s recipe</li>
-</ul>
-<p><strong>How Many Bottles to Send</strong></p>
-<p><em>Three</em>. There will be approximately 33 entries in each category. As a result, judging will be split into two tiers for each category. In the first tier, multiple panels of judges will judge the entries in each category. Two-to-three entries will be advanced by each judge panel to be judged again in the second tier to determine gold, silver, and bronze winners (category Best-of-Show, BOS). One bottle is needed for the first tier, one needed for the second tier, and the third bottle is needed in the event your entry wins a gold medal in the category and advances to the competition BOS round. If you only have two bottles to send, you will not be disqualified, however, your entry will be ineligible to compete in the final BOS judging.</p>
-<p><strong>Registration Bottle Labels</strong></p>
-<p>Print your bottle labels by going to http://www.brewingcompetition.com/final and logging in using the same user name and password you established at your NHC regional competition website. From your <em>My Info and Entries</em> page, click the "View/Print Bottle Labels" link for each of your entries and print the labels. Cut out these labels and <strong>tape one to each of <em>three</em> bottles with clear packaging tape</strong>. Place the label horizontally on the bottle near the top of the barrel (not the neck) of the bottle. Be sure to match the Category Number and Subcategory Letter on the labels to the proper entry. All other identifying marks must be removed. Any writing on the bottle cap must be blacked-out with indelible ink. Your bottles must contain 10-14 ounces in volume and meet the bottle requirements in the <a href="http://www.homebrewersassociation.org/pages/competitions/national-homebrew-competition/competition-information/rules-and-regulations">2013 NHC Rules & Regulations</a>.</p>
-<p><strong>Packing Your Final Round Entries</strong></p>
-<p>Carefully pack your entries in a sturdy box. Line the inside of the box with a plastic trash bag to contain breakage. We recommend using the type of shipping boxes used by beer-of-the-month clubs to reduce packaging waste and bottle breakage. In any case, pack so that the bottles will not bang against each other.</p>
-<p><strong>Where to Send Your Entries</strong></p>
-<p>Do NOT use the U.S. Postal Service to ship your entries; it is illegal to do so.</p>
-<p>Address your shipment to:</p>
- 	<blockquote>
- 	  <p>   Keystone Homebrew Supply<br>   Attn: NHC Final Round<br>   435 Doylestown Rd<br>   Montgomeryville, PA 18936<br>   USA</p>
-  </blockquote>
-<p><strong>Note</strong>: If your shipper requires a phone number, use (215) 855-0100. If you would like confirmation of delivery, get a tracking number from your shipper. We cannot acknowledge receipt of entries. Please do not call Keystone Homebrew Supply; they cannot answer your questions about the competition. You may hand-deliver your entry within the entry deadline; however all entries must be packaged and labeled as they would for shipment.</p>
-<p><strong>When to Ship</strong></p>
-<p>Time your shipment to <strong><em>arrive</em></strong> between June 3rd and June 17th. This timing is very important. Late entries may be disqualified.</p>
-<p><strong>Judging</strong></p>
-<p>Final Round judging will take place Thursday, June 27th during the AHA National Homebrewers Conference at the <strong>Philadelphia Marriott Downtown</strong>, in Philadelphia, PA. Gold-medal winners of each category will compete in Homebrewer of the Year, Meadmaker of the Year, and Cidermaker of the Year judging on Thursday, June 27th.</p>
-<p><strong>Results</strong></p>
-<p>Winners will be announced the evening of June 29th at the Grand Banquet and Awards Ceremony, which will be broadcast live on The Brewing Network (TheBrewingNetwork.com). Final results will also be posted on the American Homebrewers Association website: HomebrewersAssociation.org  after the Awards Ceremony. Results and score sheets will be mailed to all Final Round participants as soon as the organizers are able.</p>
-<p><strong>Photos</strong></p>
-<p>If you are not attending the Awards Ceremony in Philadelphia, please help us give proper recognition to the competition winners in <strong><em>Zymurgy</em></strong> magazine. We are on a tight schedule and will need a picture of you on file in case you win a gold medal in a competition category. Please send, by email or mail, a nice, sharp, flattering picture of yourself to:</p>
-<blockquote>
-  <p>   Allison Seymour, Zymurgy Art Director<br>   C/O NHC 2013<br>   PO Box 1679<br>   Boulder, CO 80306-1679<br>   USA<br>   allison@brewersassociation.org</p>
-</blockquote>
-<p>Photo should be at least 3 inches high, 900 pixels/300dpi - TIF or JPG preferred. Be sure to put your name and <em>NHC 2013</em> on the back of the photo if sending by mail. Photos must be received before July 1. If you want the photo returned, please include a self-addressed, postage-paid envelope.</p>
-<p>If you have any questions about entering the Final Round, contact Janis Gross at 1-888-822-6273 x134, janis@brewersassociation.org.</p>
-<p><strong>Congratulations on brewing an award-winning beer and good luck in the Final Round of the National Homebrew Competition. We hope to see you at the National Homebrewers Conference!</strong></p>
-
-
-
-<div style="page-break-after:always;"></div>
-<h1>Shipping Label</h1>
-<div style="margin-top: 80px;">
-<table align="center" class="shippingLabel bdr1_thick_dashed">
-	<tr>
-    	<td colspan="2">[onshow.brewer_info.brewerFirstName]  [onshow.brewer_info.brewerLastName]<br />
-        [onshow.brewer_info.brewerAddress]<br />
-		[onshow.brewer_info.brewerCity], [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]<br />
-        [onshow.brewer_info.brewerCountry]
-        </td>
-    </tr>
-    <tr>
-   	 <td width="200">&nbsp;</td>
-   	  <td>
-          <h3>Keystone  Homebrew Supply<br />
-            Attn: NHC Final Round<br />
-            435 Doylestown Rd<br />
-            Montgomeryville, PA 18936<br />
-            United States
-        </h3>
-        </td>
-    </tr>
-</table>
-</div>
-</div>
-<script type="text/javascript">
-function selfPrint(){
-    self.focus();
-    self.print();
-}
-setTimeout('selfPrint()',2000);
-html.push('');
-</script>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>National Homebrew Competition Entry Form and Bottle Labels</title>
+<style type="text/css">
+<!--
+body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
+h1							{ font-size: 1.8em; }
+h2							{ font-size: 1.5em; }
+table						{ border-collapse: collapse; width: 100%; }
+table td					{ padding: 2px; }
+table th					{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
+.headerTitle 				{ font-size: 2.2em; font-weight: bold; margin: 0; padding: 0; }
+.headerTitleSm 				{ font-size: 1.2em; font-weight: bold; margin: 0; padding: 0 0 8px 0; }
+.bottle, .medium 			{ font-size: .9em; } 
+.small 						{ font-size: .8em; margin: 0; }
+.dataLabel					{ font-weight: bold; white-space: nowrap; width: 1%; }
+#printContainer 			{ width: 100%; }
+.bdr1_thick	 				{ border: 5px solid #000000; }
+.bdr1_thick_dashed			{ border: 2px dashed #ccc; }
+.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
+.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
+.bdr1B 						{ border-bottom: 1px solid #000000; }
+.bdr1L 						{ border-left: 1px solid #000000; }
+.bdr1R 						{ border-right: 1px solid #000000; }
+.bdr1T 						{ border-top: 1px solid #000000; }
+.bdr1R_dashed				{ border-right: 1px dashed #000000; }
+.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
+.headerItalic 		    	{ font-size: .9em; font-style: italic; }
+table.small	td				{ padding: 1px 2px 1px 3px; }
+table.bottleLabel			{ border-collapse: collapse; width: 680px; vertical-align:top; }
+table.shippingLabel			{ border-collapse: collapse; width: 680px; vertical-align:top; height:250px; }
+table.shippingLabel td		{ padding: 10px; }
+table.bottleLabel-inner		{ margin: 5px; width: 320px; padding: 2px; }
+table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; }
+.box						{ border: 1px solid #bbb; width: 100%; height: 60px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+	border-radius: 5px;}
+.box1 { border: 1px solid #bbb; width: 100%; height: 60px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+	border-radius: 5px;}
+.box11 { border: 1px solid #bbb; width: 100%; min-height: 75px; vertical-align: middle; padding: 20px 0; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+	border-radius: 5px; margin: 0 0 25px 0; }
+-->
+</style>
+</head>
+<body>
+<div id="printContainer">
+<h1>[onshow.contest_info.contestName]</h1>
+<h3>Entry instructions and a shipping label are below your entry's bottle labels.</h3>
+<div style="margin-bottom: 30px;"></div>
+<table align="center" class="bottleLabel">
+    <tr>
+        <td align="center" class="bdr1_thick">
+        <table class="bottle bottleLabel-inner">
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Category Number:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Letter:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Name:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
+            </tr>
+            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Special/Classic:</td>
+                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Carbonation:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Sweetness:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Strength:</td>
+                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
+                </tr>
+            </div>
+        </table>
+        </td>
+        <td>&nbsp;</td>
+        <td align="center" class="bdr1_thick">
+        <table class="bottle bottleLabel-inner">
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Category Number:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Letter:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Name:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
+            </tr>
+            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Special/Classic:</td>
+                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Carbonation:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Sweetness:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Strength:</td>
+                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
+                </tr>
+            </div>
+        </table>
+        </td>
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td align="center" class="bdr1_thick">
+        <table class="bottle bottleLabel-inner">
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm">ATTACH TO BOTTLE WITH<br>CLEAR PACKING TAPE <u>ONLY</u></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="headerTitleSm"><strong>[onshow.contest_name]</strong></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div align="center" class="box11"><img src="[onshow.barcode_link]" /></div></td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Category Number:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Letter:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+            </tr>
+            <tr>
+                <td valign="top" class="dataLabel">Subcategory Name:</td>
+                <td colspan="2" class="bdr1B">[onshow.brewing_info.styleName]</td>
+            </tr>
+            <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Special/Classic:</td>
+                    <td colspan="2" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Carbonation:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sparkling]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.sweetness]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Sweetness:</td>
+                    <td class="bdr1B">[onshow.brewing_info.sweetness]</td>
+                </tr>
+            </div>
+            <div> [onshow;block=div;when [var.brewing_info.meadType]!='']
+                <tr>
+                    <td valign="top" class="dataLabel">Strength:</td>
+                    <td class="bdr1B">[onshow.brewing_info.meadType]</td>
+                </tr>
+            </div>
+        </table>
+        </td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+<div style="page-break-after:always;"></div>
+<p align="center"><img src="mods/brewers_association_150.jpg" width="150" height="167" border="0" /></p>
+<h1>Instructions for Entering The Final Round</h1>
+<p><strong>Verify Your Entries and Provide the Recipe</strong></p>
+<p>A condition of your entry into the final round is the recipe for each of your entries. Medal winning recipes may be published in <strong><em>Zymurgy</em></strong> magazine and on American Homebrewers Association websites. Brewers will be given full credit for their recipe.</p>
+<p>All regional winner data has been moved to the NHC Final Round competition site. To verify your entries that have advanced to the NHC Final Round:</p>
+<ul>
+  <li>Go to http://www.brewingcompetition.com/final</li>
+  <li>Log on with the username and password you established at your NHC regional comptetition site </li>
+  <li>From the entries list on the <em>My Info and Entries</em> page, click the "Edit" link for each of your entries  </li>
+  <li>Verify your entry information and add the entry\'s recipe</li>
+</ul>
+<p><strong>How Many Bottles to Send</strong></p>
+<p><em>Three</em>. There will be approximately 33 entries in each category. As a result, judging will be split into two tiers for each category. In the first tier, multiple panels of judges will judge the entries in each category. Two-to-three entries will be advanced by each judge panel to be judged again in the second tier to determine gold, silver, and bronze winners (category Best-of-Show, BOS). One bottle is needed for the first tier, one needed for the second tier, and the third bottle is needed in the event your entry wins a gold medal in the category and advances to the competition BOS round. If you only have two bottles to send, you will not be disqualified, however, your entry will be ineligible to compete in the final BOS judging.</p>
+<p><strong>Registration Bottle Labels</strong></p>
+<p>Print your bottle labels by going to http://www.brewingcompetition.com/final and logging in using the same user name and password you established at your NHC regional competition website. From your <em>My Info and Entries</em> page, click the "View/Print Bottle Labels" link for each of your entries and print the labels. Cut out these labels and <strong>tape one to each of <em>three</em> bottles with clear packaging tape</strong>. Place the label horizontally on the bottle near the top of the barrel (not the neck) of the bottle. Be sure to match the Category Number and Subcategory Letter on the labels to the proper entry. All other identifying marks must be removed. Any writing on the bottle cap must be blacked-out with indelible ink. Your bottles must contain 10-14 ounces in volume and meet the bottle requirements in the <a href="http://www.homebrewersassociation.org/pages/competitions/national-homebrew-competition/competition-information/rules-and-regulations">2013 NHC Rules & Regulations</a>.</p>
+<p><strong>Packing Your Final Round Entries</strong></p>
+<p>Carefully pack your entries in a sturdy box. Line the inside of the box with a plastic trash bag to contain breakage. We recommend using the type of shipping boxes used by beer-of-the-month clubs to reduce packaging waste and bottle breakage. In any case, pack so that the bottles will not bang against each other.</p>
+<p><strong>Where to Send Your Entries</strong></p>
+<p>Do NOT use the U.S. Postal Service to ship your entries; it is illegal to do so.</p>
+<p>Address your shipment to:</p>
+ 	<blockquote>
+ 	  <p>   Keystone Homebrew Supply<br>   Attn: NHC Final Round<br>   435 Doylestown Rd<br>   Montgomeryville, PA 18936<br>   USA</p>
+  </blockquote>
+<p><strong>Note</strong>: If your shipper requires a phone number, use (215) 855-0100. If you would like confirmation of delivery, get a tracking number from your shipper. We cannot acknowledge receipt of entries. Please do not call Keystone Homebrew Supply; they cannot answer your questions about the competition. You may hand-deliver your entry within the entry deadline; however all entries must be packaged and labeled as they would for shipment.</p>
+<p><strong>When to Ship</strong></p>
+<p>Time your shipment to <strong><em>arrive</em></strong> between June 3rd and June 17th. This timing is very important. Late entries may be disqualified.</p>
+<p><strong>Judging</strong></p>
+<p>Final Round judging will take place Thursday, June 27th during the AHA National Homebrewers Conference at the <strong>Philadelphia Marriott Downtown</strong>, in Philadelphia, PA. Gold-medal winners of each category will compete in Homebrewer of the Year, Meadmaker of the Year, and Cidermaker of the Year judging on Thursday, June 27th.</p>
+<p><strong>Results</strong></p>
+<p>Winners will be announced the evening of June 29th at the Grand Banquet and Awards Ceremony, which will be broadcast live on The Brewing Network (TheBrewingNetwork.com). Final results will also be posted on the American Homebrewers Association website: HomebrewersAssociation.org  after the Awards Ceremony. Results and score sheets will be mailed to all Final Round participants as soon as the organizers are able.</p>
+<p><strong>Photos</strong></p>
+<p>If you are not attending the Awards Ceremony in Philadelphia, please help us give proper recognition to the competition winners in <strong><em>Zymurgy</em></strong> magazine. We are on a tight schedule and will need a picture of you on file in case you win a gold medal in a competition category. Please send, by email or mail, a nice, sharp, flattering picture of yourself to:</p>
+<blockquote>
+  <p>   Allison Seymour, Zymurgy Art Director<br>   C/O NHC 2013<br>   PO Box 1679<br>   Boulder, CO 80306-1679<br>   USA<br>   allison@brewersassociation.org</p>
+</blockquote>
+<p>Photo should be at least 3 inches high, 900 pixels/300dpi - TIF or JPG preferred. Be sure to put your name and <em>NHC 2013</em> on the back of the photo if sending by mail. Photos must be received before July 1. If you want the photo returned, please include a self-addressed, postage-paid envelope.</p>
+<p>If you have any questions about entering the Final Round, contact Janis Gross at 1-888-822-6273 x134, janis@brewersassociation.org.</p>
+<p><strong>Congratulations on brewing an award-winning beer and good luck in the Final Round of the National Homebrew Competition. We hope to see you at the National Homebrewers Conference!</strong></p>
+
+
+
+<div style="page-break-after:always;"></div>
+<h1>Shipping Label</h1>
+<div style="margin-top: 80px;">
+<table align="center" class="shippingLabel bdr1_thick_dashed">
+	<tr>
+    	<td colspan="2">[onshow.brewer_info.brewerFirstName]  [onshow.brewer_info.brewerLastName]<br />
+        [onshow.brewer_info.brewerAddress]<br />
+		[onshow.brewer_info.brewerCity], [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]<br />
+        [onshow.brewer_info.brewerCountry]
+        </td>
+    </tr>
+    <tr>
+   	 <td width="200">&nbsp;</td>
+   	  <td>
+          <h3>Keystone  Homebrew Supply<br />
+            Attn: NHC Final Round<br />
+            435 Doylestown Rd<br />
+            Montgomeryville, PA 18936<br />
+            United States
+        </h3>
+        </td>
+    </tr>
+</table>
+</div>
+</div>
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+html.push('');
+</script>
+</body>
 </html>

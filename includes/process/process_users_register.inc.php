@@ -330,7 +330,15 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		//echo $insertSQL;
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($insertSQL);
-		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());	
+		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		
+		
+		// Stop Gap for random staff assignments
+		
+		$updateSQL1 = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
+		mysql_real_escape_string($updateSQL1);
+		$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
+		
 	
 	if ($filter == "default") {
 	    // Log in the user and redirect

@@ -25,7 +25,6 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 //{{{ includes
 include("style.php");
 include("misc.php");
@@ -36,15 +35,12 @@ include("fermentables.php");
 include("yeast.php");
 include("mash.php");
 include("recipe.php");
-
 //}}}
-
 //{{{ BeerXMLParser
 class BeerXMLParser {
 	public $inNode = false;
    	public $insideitem = false;
 	public $tag = "";
-
 	public $recipes = array();
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
@@ -58,15 +54,11 @@ class BeerXMLParser {
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName){
 	
     }
-
 	function nodeData($parser,$data) {
-
     }
-
 	function BeerXMLParser($filename)
 	{
 		$xml_parser = xml_parser_create();
@@ -88,8 +80,6 @@ class BeerXMLParser {
          fclose($fp);
          return $this->recipes;
 	}
-
 }
 //}}}
-
 ?>

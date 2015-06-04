@@ -65,9 +65,7 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 	}	
 } // end if ($_SESSION['prefsWinnerMethod'] == 1)
 
-
 // BY SUB-CATEGORY
-
 if ($_SESSION['prefsWinnerMethod'] == 2) {
 	
 	$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM $styles_db_table WHERE brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
@@ -109,5 +107,4 @@ if ($_SESSION['prefsWinnerMethod'] == 2) {
 		}
 	}
 } // end if ($_SESSION['prefsWinnerMethod'] == 2)
-
 ?>

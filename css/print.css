@@ -4,15 +4,12 @@
 *        Description:   Styles designed for printing clearly on paper
 *		 
 */
-
 @import url("html_elements.css");
 @import url("common.css");
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
-
 /* --------------------- html_elements.css Overrides -------------------- */
-
 /* **************************************************************
    Customize below the various default elements in  
    html_lements.css. 
@@ -21,9 +18,9 @@
    NOT edit the file itself!
    **************************************************************
 */
-
 html, body {
 	background-color: #fff;
+	margin: 5px 5px 5px 5px;
 }
 
 body, caption, input, textarea, select, option, legend, fieldset  {
@@ -38,15 +35,19 @@ th, td {
 	font-family: inherit;
 }
 
+td {
+	font-size: inherit;
+}
+
 pre, code {
 }
 
 p {
-	margin: 1.25em 0 1.25em 0;
+	margin: 0;
 }
 
-/* Links */
 
+/* Links */
 a:link {
 	color: #000;
 }
@@ -124,7 +125,6 @@ dt  {
 dd {
 }
 
-
 /** tables **/
 table {
 }
@@ -166,9 +166,7 @@ select, optgroup, option  {
 textarea {
 }
 
-
 /* --------------------- common.css Overrides -------------------- */
-
 /* **************************************************************
    Customize below the various default elements in common.css. 
    
@@ -176,15 +174,11 @@ textarea {
    NOT edit the file itself!
    **************************************************************
 */
-
-
 /* ------------------------------- Content ------------------------------- */
-
 #content {
 }
 
 #content-inner {
-
 }
 
 #content-inner-no-nav {
@@ -210,7 +204,6 @@ textarea {
 	background-color: #eee;
 }
 
-
 #content-inner .menu a {
 	color: #aaa;
 }
@@ -228,9 +221,7 @@ textarea {
 }
 
 /* ------------------------------- Nav ------------------------------- */
-
 #navigation { 
-
 }
 
 #navigation-inner {
@@ -296,7 +287,6 @@ textarea {
 	text-decoration: none;
 }
 
-
 #break {
 	display: inline;
 	vertical-align: middle;
@@ -322,7 +312,6 @@ textarea {
 	padding: 0 0 .25em 0;
 	font-weight: bold;
 }
-
 
 /* ------------------------------- Footer ------------------------------- */
 #footer {
@@ -355,7 +344,6 @@ textarea {
 }
 
 /* ------------------------------- Data Display ------------------------------- */
-
 .dataTable {
 	width: 650px;
 }
@@ -396,11 +384,10 @@ textarea {
 }
 
 /* ------------------------------- Forms ------------------------------- */
-
 .button { 
 	font-weight: bold;
-} 
-
+}
+ 
 .button:hover {
 	background-color: #eee;
 }
@@ -409,7 +396,6 @@ textarea {
 }
 
 /* ------------------------------- Collapse jquery ------------------------------- */
-
 .trigger {
 	color: #aaa;
 }
@@ -430,9 +416,7 @@ textarea {
 /* display: block */
 }
 
-
 /* ------------------------------- Admin ------------------------------- */
-
 .admin {
 }
 
@@ -467,12 +451,10 @@ textarea {
 }
 
 /* -- Admin Menu -- */
-
 .menu {	
 }
 
 /* -- Admin Sub-Navigation -- */
-
 .adminSubNavContainer {
 }
 
@@ -480,7 +462,6 @@ textarea {
 }
 
 /* ------------------------------- Sponsor Display ------------------------------- */
-
 #sponsor {
 }
 
@@ -505,14 +486,11 @@ textarea {
 .looper_large .info {
 }
 
-
 /* ------------------------------- Setup ------------------------------- */
-
 .setupTitle {
 }
 
 /* ------------------------------- Colors ------------------------------- */
-
 .red {
 }
 
@@ -529,7 +507,6 @@ textarea {
 }
 
 /* ------------------------------- Borders ------------------------------- */
-
 .bdr1 {
 	border: 1px solid #000;
 }
@@ -557,14 +534,12 @@ border-left: 1px solid #cccccc;
 }
 
 /* --------------------- messages.css Overrides -------------------- */
-
 /* **************************************************************
    Customize below the various default elements in messages.css - 
    Use the file for reference, however, it is suggested that you 
    NOT edit the file itself!
    **************************************************************
 */
-
 .info {
 }
 
@@ -583,9 +558,7 @@ border-left: 1px solid #cccccc;
 .bos {
 }
 
-
 /* --------------------- menus.css Overrides -------------------- */
-
 /* **************************************************************
    Copy and paste the elements you wish to override from 
    the menus.css file below. 
@@ -594,7 +567,6 @@ border-left: 1px solid #cccccc;
    NOT edit the file itself!
    **************************************************************
 */
-
 #menu_container .trigger a:link,
 #menu_container .trigger a:hover, 
 #menu_container .trigger a:active, 
@@ -607,11 +579,7 @@ border-left: 1px solid #cccccc;
 	background-color: #fff;
 }
 
-
-
-
 /* --------------------- sorting.css Overrides -------------------- */
-
 /* **************************************************************
    Copy and paste the elements you wish to override from 
    the sorting.css file below. 
@@ -620,13 +588,11 @@ border-left: 1px solid #cccccc;
    NOT edit the file itself!
    **************************************************************
 */
-
 .paging_full_numbers {
 }
 
 .paging_full_numbers span.paginate_button,
  	.paging_full_numbers span.paginate_active {
-
 }
 
 .paging_full_numbers span.paginate_button {
@@ -635,7 +601,6 @@ border-left: 1px solid #cccccc;
 .paging_full_numbers span.paginate_button:hover {
 	background-color: #eee;
 }
-
 
 .sorting_asc {
 	cursor: pointer;
@@ -661,9 +626,7 @@ border-left: 1px solid #cccccc;
 	cursor: pointer;
 }
 
-
 /* --------------------- Custom/Print Specific Styles -------------------- */
-
 .table_card {
 	width: 600px;
 	margin-left: auto;
@@ -746,3 +709,4 @@ border-left: 1px solid #cccccc;
 	vertical-align: text-top;
 	margin: 0;
 }
+

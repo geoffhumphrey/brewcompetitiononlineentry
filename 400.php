@@ -1,11 +1,6 @@
 <?php
 require('paths.php');
-require(DB.'common.db.php');
-require(LIB.'common.lib.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
-require(INCLUDES.'constants.inc.php');
+require(CONFIG.'bootstrap.php');
 $section = "400";
 ?>
 <html>
@@ -23,7 +18,7 @@ $section = "400";
 			<div id="header">	
 				<div id="header-inner"><h1>400 Error</h1></div>
             </div>
-			<p>Unfortunately, an invalid request has been received.</p>
+			<div class="error">Unfortunately, an invalid request has been received.</div>
 			<p>Please use the main navigation above to get where you want to go.</p>
             <p>Cheers!<br>
           The <?php echo $_SESSION['contestName']; ?> Site Server</p>

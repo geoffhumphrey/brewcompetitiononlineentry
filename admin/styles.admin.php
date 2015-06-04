@@ -1,7 +1,6 @@
 <?php 
 if ($section != "step7") include(DB.'judging_locations.db.php'); 
 include(DB.'styles.db.php'); 
-
 ?>
 <h2><?php if ($action == "add") echo "Add a Custom Style Category"; elseif ($action == "edit") echo "Edit a Custom Style Category" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo "Style Categories Judged at ".$row_judging['judgingLocName']; else echo "Accepted Style Categories"; ?></h2>
 <?php if ($section != "step7") { ?>
@@ -24,7 +23,8 @@ include(DB.'styles.db.php');
 <?php } ?>
 </div>
 <?php if (($filter == "default") && ($action == "default")) { ?><p>Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); } else echo "your competition will accept (any custom styles will be at the <a href='#bottom'>bottom</a> of the list)"; ?>.</p><?php } ?>
-<?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
+<?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { 
+?>
 <script language="javascript" type="text/javascript">
 //Custom JavaScript Functions by Shawn Olson
 //Copyright 2006-2008
@@ -53,13 +53,16 @@ function checkUncheckAll(theElement) {
 				null,
 				null,
 				null,
-				null,
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
 		} );
-	</script>
+</script>  
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step7") echo "setup"; else echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <p><input type="submit" class="button" name="Submit" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Style Categories"; ?>" /></p>
 <table class="dataTable" id="sortable">
@@ -70,6 +73,9 @@ function checkUncheckAll(theElement) {
   <th class="dataHeading bdr1B" title="Category Number and Subcategory Letter">#</th>
   <th class="dataHeading bdr1B">Style Type</th>
   <th class="dataHeading bdr1B" title="Special Ingredients Required for this Style?">Spec. Ing. Req?</th>
+  <th class="dataHeading bdr1B" title="Strength Required for this Style?">Strength Req?</th>
+  <th class="dataHeading bdr1B" title="Carbonation Ingredients Required for this Style?">Carbonation Req?</th>
+  <th class="dataHeading bdr1B" title="Sweetness Ingredients Required for this Style?">Sweetness Req?</th>
   <th class="dataHeading bdr1B">Link</th>
   <th class="dataHeading bdr1B">Actions</th>
  </tr>
@@ -86,14 +92,17 @@ function checkUncheckAll(theElement) {
   <td width="1%" class="dataList"><input name="brewStyleJudgingLoc<?php echo $row_styles['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if ($row_styles['brewStyleJudgingLoc'] == $bid) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td width="15%" class="dataList"><?php echo $row_styles['brewStyle']; ?></td>
-  <td width="10%" class="dataList"><?php if ($row_styles['brewStyleGroup'] > 28) echo "Custom"; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
+  <td width="10%" class="dataList"><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; if (preg_match("/^[[:digit:]]+$/",$style[0])) echo sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
   <td width="10%" class="dataList"><?php if (style_type($row_styles['brewStyleType'],"1","") <= "3") $style_own = "bcoe"; else $style_own = "custom"; echo style_type($row_styles['brewStyleType'],"2",$style_own); ?></td>
   <td width="10%" class="dataList"><?php if ($row_styles['brewStyleReqSpec'] == 1)  { if ($action != "print") echo "<img src='".$base_url."images/tick.png'>"; else echo "Y"; } ?></td>
+  <td width="10%" class="dataList"><?php if ($row_styles['brewStyleStrength'] == 1)  { if ($action != "print") echo "<img src='".$base_url."images/tick.png'>"; else echo "Y"; } ?></td>
+  <td width="10%" class="dataList"><?php if ($row_styles['brewStyleCarb'] == 1)  { if ($action != "print") echo "<img src='".$base_url."images/tick.png'>"; else echo "Y"; } ?></td>
+  <td width="10%" class="dataList"><?php if ($row_styles['brewStyleSweet'] == 1)  { if ($action != "print") echo "<img src='".$base_url."images/tick.png'>"; else echo "Y"; } ?></td>
   <td width="10%" class="dataList"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank"><img src="<?php echo $base_url; ?>images/link.png" border="0" alt="Link to BJCP Style"></a><?php } else echo "&nbsp;"; ?></td>
   
   <td class="dataList">
   <?php if ($row_styles['brewStyleOwn'] != "bcoe") { ?>
-  <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_styles['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_styles['brewStyle']; ?>" title="Edit <?php echo $row_styles['brewStyle']; ?>"></a></span>
+  <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_styles['id']; ?>&amp;view=<?php echo $row_styles['brewStyleType']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_styles['brewStyle']; ?>" title="Edit <?php echo $row_styles['brewStyle']; ?>"></a></span>
   <span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;action=delete','id',<?php echo $row_styles['id']; ?>,'Are you sure you want to delete <?php echo $row_styles['brewStyle']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_style['brewStyle']; ?>" title="Delete <?php echo $row_style['brewStyle']; ?>"></a></span></td>
   <?php } else { ?>
   <span class="icon"><img src="<?php echo $base_url; ?>images/pencil_fade.png"  border="0" /></span>
@@ -109,28 +118,139 @@ function checkUncheckAll(theElement) {
 </form>
 <?php } ?>
 
-<?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" onSubmit="return CheckRequiredFields()">
+<?php if (($action == "add") || ($action == "edit")) {
+$style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
+?>
+
+<script type='text/javascript'>//<![CDATA[ 
+$(document).ready(function(){
+	$("#mead-cider").hide("fast");
+	$("#mead").hide("fast");
+	
+	<?php if (($action == "edit") && ($view == "2")) { ?>
+	
+	$("#mead-cider").show("slow");
+	$("#mead").hide("slow");
+	
+	<?php } ?>
+	
+	<?php if (($action == "edit") && ($view == "3")) { ?>
+	
+	$("#mead-cider").show("slow");
+	$("#mead").show("slow");
+	
+	<?php } ?>
+	
+	$("#brewStyleType").change(function() {
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+		
+        if ( 
+			$("#brewStyleType").val() == "1"){
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+		}
+		
+		else if ( 
+			$("#brewStyleType").val() == "2"){
+			$("#mead").hide("slow");
+			$("#mead-cider").show("slow");
+			
+		}
+		
+		else if ( 
+			$("#brewStyleType").val() == "3"){
+			$("#mead").show("slow");
+			$("#mead-cider").show("slow");
+			
+		}
+		
+		else{
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			
+		}	
+	}
+	);
+});//]]>  
+
+</script>
+<!--
+<script type='text/javascript'>//<![CDATA[ 
+$(document).ready(function(){
+var MeadCider = jQuery('#brewStyleType');
+var select = this.value;
+MeadCider.change(function () {
+	
+	if ($(this).val() == '1') {
+        $('#mead-cider').hide("fast");
+		$("#mead").hide("fast");
+    }
+	
+	else if ($(this).val() == '2') {
+        $('#mead-cider').hide("fast");
+		$("#mead").show("slow");
+    }
+	
+	else if ($(this).val() == '3') {
+        $('#mead-cider').show("show");
+		$("#mead").show("slow");
+    }
+	
+    else {
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			
+		}
+});
+});//]]>  
+
+</script>
+-->
+<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1" onSubmit="return CheckRequiredFields()">
 <table>
 <tr>
     <td class="dataLabel" >Style Name:</td>
-    <td class="data"><input type="text" name="brewStyle" tooltipText="<?php echo $toolTip_name; ?>" value="<?php echo $row_styles['brewStyle']; ?>" size="40">&nbsp;<span class="required">Required</span></td>
+    <td class="data"><input type="text" name="brewStyle" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" size="40">&nbsp;<span class="required">Required</span></td>
 </tr>
 <tr>
     <td class="dataLabel" >Style Type:</td>
     <td class="data" nowrap="nowrap">
-    <select name="brewStyleType" id="brewStyleType" class="text_area">
+    <select name="brewStyleType" class="text_area" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();">
     	<option value=""></option>
         <?php do { ?>
-        <option value="<?php echo $row_style_type['id']; ?>" <?php if ($action == "edit") if (style_type($row_styles['brewStyleType'],"1","bcoe") == $row_style_type['id']) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
+        <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
     	<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
     </select>
     <span class="required">Required</span><span class="data">No types that fit?</span><span class="icon"><img src="<?php echo $base_url; ?>images/page_add.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Custom Style Type</a></span> 
     </td>
 </tr>
 <tr>
-    <td class="dataLabel" >Require Special Ingredients:</td>
-    <td class="data"><input type="radio" name="brewStyleReqSpec" value="1" id="brewStyleReqSpec_0" <?php if ($row_styles['brewStyleReqSpec'] == 1) echo "CHECKED"; ?> />Yes <input type="radio" name="brewStyleReqSpec" value="0" id="brewStyleReqSpec_1" <?php if ($row_styles['brewStyleReqSpec'] == 0) echo "CHECKED"; ?> />No</tr>
+    <td class="dataLabel" style="width: 180px;">Require Special Ingredients:</td>
+    <td class="data"><input type="radio" name="brewStyleReqSpec" value="1" id="brewStyleReqSpec_0" <?php if ($row_styles['brewStyleReqSpec'] == 1) echo "CHECKED"; ?> />Yes <input type="radio" name="brewStyleReqSpec" value="0" id="brewStyleReqSpec_1" <?php if (($action == "add") ||  ($row_styles['brewStyleReqSpec'] == 0)) echo "CHECKED"; ?> />No</td>
+</tr>
+</table>
+<div id="mead-cider">
+<table>
+<tr>
+    <td class="dataLabel" style="width: 180px;">Require Carbonation:</td>
+    <td class="data"><input type="radio" name="brewStyleCarb" value="1" id="brewStyleCarb_0" <?php if ($row_styles['brewStyleCarb'] == 1) echo "CHECKED"; ?> />Yes <input type="radio" name="brewStyleCarb" value="0" id="brewStyleCarb_1" <?php if (($action == "add") || (($action == "edit") && ($row_styles['brewStyleCarb'] == 0))) echo "CHECKED"; ?> />No</td>
+</tr>
+<tr>
+    <td class="dataLabel" style="width: 180px;">Require Sweetness:</td>
+    <td class="data"><input type="radio" name="brewStyleSweet" value="1" id="brewStyleSweet_0" <?php if ($row_styles['brewStyleSweet'] == 1) echo "CHECKED"; ?> />Yes <input type="radio" name="brewStyleSweet" value="0" id="brewStyleSweet_1" <?php if (($action == "add") || (($action == "edit") && ($row_styles['brewStyleSweet'] == 0))) echo "CHECKED"; ?> />No</td>
+</tr>
+</table>
+</div>
+<div id="mead">
+<table>
+<tr>
+    <td class="dataLabel" style="width: 180px;">Require Strength:</td>
+    <td class="data"><input type="radio" name="brewStyleStrength" value="1" id="brewStyleStrength_0" <?php if ($row_styles['brewStyleStrength'] == 1) echo "CHECKED"; ?> />Yes <input type="radio" name="brewStyleStrength" value="0" id="brewStyleStrength_1" <?php if (($action == "add") || (($action == "edit") && ($row_styles['brewStyleStrength'] == 0))) echo "CHECKED"; ?> />No</td>
+</tr>
+</table>
+</div>
+<table>
 <tr>
     <td class="dataLabel" >OG Minimum:</td>
     <td class="data"><input type="text" name="brewStyleOG" value="<?php if ($action == "edit") echo $row_styles['brewStyleOG']; ?>" size="5"></td>

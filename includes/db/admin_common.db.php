@@ -5,9 +5,7 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
-
 	if (table_exists($style_types_db_table)) {
 		
 		if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging")) {

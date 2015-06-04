@@ -3,7 +3,6 @@
  * Module:      process_judging_bos.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_scores_bos" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	if (NHC) {
@@ -14,7 +13,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	
 	else {
-
 		if ($action == "enter") {
 			foreach($_POST['score_id'] as $score_id)	{
 				
@@ -67,8 +65,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
 			
 		} // end if ($action == "enter")
-
 	}  // end else NHC
-
 } else echo "<p>Not available.</p>";
 ?>

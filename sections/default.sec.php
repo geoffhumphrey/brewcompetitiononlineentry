@@ -58,7 +58,7 @@ $primary_page_info = "";
 $primary_page_info .= sprintf("<p>Thank you for your interest in the %s organized by ",$_SESSION['contestName']);
 if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
 else $primary_page_info .= $_SESSION['contestHost'];
-if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", ",$_SESSION['contestHostLocation']);
+if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", %s",$_SESSION['contestHostLocation']);
 $primary_page_info .= sprintf(".  Be sure to read the <a href='%s'>competition rules</a>.</p>",build_public_url("rules","default","default",$sef,$base_url));
 
 if ((judging_date_return() == 0) && ($registration_open == "2")) {
@@ -174,7 +174,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 	if ($totalRows_judging == 0) echo $message2;
 } 
 
-//echo $primary_page_info;
+echo $primary_page_info;
 //echo $totalRowsSponsors;
 
 if ((judging_date_return() == 0) && ($registration_open == "2")) { 

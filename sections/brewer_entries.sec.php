@@ -19,15 +19,17 @@ $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 // Build Warnings
 $warnings = "";
 if (($totalRows_log > 0) && ($action != "print")) {
+	
 	if (entries_unconfirmed($_SESSION['user_id']) > 0) { 
 			$warnings .= "<div class='error'>";
 			$warnings .= "You have unconfirmed entries. For each highlighed entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to review and confirm all your entry data. Unconfirmed entries will be deleted automatically after 24 hours."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}
+		
 	if (entries_no_special($_SESSION['user_id'])) $warnings .= "<div class='error2'>You have entries that require you to define special ingredients. For each highlighted entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
+	
 }
-
 
 // Build Messages and Links
 $entry_message = "";
@@ -227,6 +229,8 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 
 echo "<a name='list'></a><h2>Entries</h2>";
 
+if ($fx) echo  "<div class='error'>There is a known issue with printing from the Firefox browser. To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+
 // Display Warnings and Entry Message
 if (($totalRows_log > 0) && ($action != "print")) {
 	echo $warnings; 
@@ -278,7 +282,7 @@ do {
 	// Build Entry Table Body
 	
 	if (($row_log['brewConfirmed'] == 0) && ($action != "print")) $entry_tr_style = " style='background-color: #ff9; border-top: 1px solid #F90; border-bottom: 1px solid #F90;'"; 
-	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = " style='background-color: #f90; border-top: 1px solid #FF6600; border-bottom: 1px solid #FF6600;'";
+	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = " style='background-color: #f90; border-top: 1px solid #FF6600; border-bottom: 1px solid #FF6600;'";
 	else $entry_tr_style = "";
 	
 	$entry_output .= "<tr".$entry_tr_style.">";
@@ -297,7 +301,8 @@ do {
 	else $entry_output .= "<td class='dataList'>";
 	if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
 	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<span class='required'>Style NOT entered</span>";
-	else $entry_output .= "<span class='required'>Style entered NOT accepted.</span>";
+	else $entry_output .= $entry_style;
+	//$entry_output .= "<span class='required'>Style entered NOT accepted.</span>";
 	$entry_output .= "</td>";
 	
 	
@@ -307,7 +312,7 @@ do {
 	if ($row_log['brewConfirmed'] == "0") { 
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png' border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
-	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "")) { 
+	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) { 
 		if ($action != "print") $entry_output .= "<span class='icon'><img src='".$base_url."images/exclamation.png'  border='0' alt='Unconfirmed entry!' title='Unconfirmed entry! Click Edit to review and confirm the entry data.'></span>"; else $entry_output .= "Y";
 	} 
 	else { 
@@ -365,11 +370,15 @@ do {
 	// Build Actions Links
 	
 	// Edit
+	if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
+	else $brewCategory = $row_log['brewCategory'];
+	
 	$edit_link = "";
 	$edit_link .= "<span class='icon'><img src='".$base_url."images/pencil.png' border='0' alt='Edit ".$row_log['brewName']."' title='Edit ".$row_log['brewName']."'></span>";
 	$edit_link .= "<a href='".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id']; 
-	if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$row_log['brewCategory']."-".$row_log['brewSubCategory']; 
-	else $edit_link .= "&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory'];
+	if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory']; 
+	
+	$edit_link .= "&amp;view=".$brewCategory."-".$row_log['brewSubCategory'];
 	$edit_link .= "' title='Edit ".$row_log['brewName']."'>Edit</a>&nbsp;&nbsp;";
 	
 	// Print Forms
@@ -387,7 +396,9 @@ do {
 	// Print Recipe
 	$print_recipe_link = "<span class='icon'><img src='".$base_url."images/printer.png'  border='0' alt='Print Recipe Form for ".$row_log['brewName']."' title='Print Recipe for ".$row_log['brewName']."'></span><a id='modal_window_link' href='".$base_url."output/entry.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."' title='Print Recipe Form for ".$row_log['brewName']."'>Print Recipe</a>&nbsp;&nbsp;";
 	
-	if (($entry_window_open == 1) && (!$comp_entry_limit)) $delete_link = build_action_link("bin_closed",$base_url,$section,$go,"delete",$filter,$row_log['id'],$brewing_db_table,"Delete ".$row_log['brewName']."? This cannot be undone.",1,"Delete");
+	if ($comp_entry_limit) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
+	
+	if ($entry_window_open == 1) $delete_link = build_action_link("bin_closed",$base_url,$section,$go,"delete",$filter,$row_log['id'],$brewing_db_table,"Delete ".$row_log['brewName']."? This cannot be undone. ".$warning_append,1,"Delete");
 
 	if ((judging_date_return() > 0) && ($action != "print")) {
 		

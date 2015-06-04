@@ -1,4 +1,3 @@
-
 	<tr>
       <td width="10%" class="dataLabel">BJCP Judge ID:</td>
       <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
@@ -53,6 +52,7 @@
       	</ul>
         </td>
     </tr>
+    <?php if (!$table_assignment) { ?>
 	<tr>
       <td width="10%" class="dataLabel">Preferred:</td>
       <td class="data" colspan="3">
@@ -117,3 +117,4 @@
         </table>
       </td>
 	</tr>
+    <?php } ?>

@@ -66,8 +66,14 @@ switch ($brewing_info['brewMead2']) {
   case "Dry":
     $brewing_info['sweetness'] = 'Dry';
     break;
-  case "Semi-Sweet":
-    $brewing_info['sweetness'] = 'Semi-sweet';
+  case "Medium Dry":
+    $brewing_info['sweetness'] = 'Medium Dry';
+    break;
+  case "Medium":
+    $brewing_info['sweetness'] = 'Medium';
+    break;
+  case "Medium Sweet":
+    $brewing_info['sweetness'] = 'Medium Sweet';
     break;
   case "Sweet":
     $brewing_info['sweetness'] = 'Sweet';
@@ -282,6 +288,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	}
 // } // end if ($_SESSION['prefsEntryForm'] != "N")
 $TBS = new clsTinyButStrong;
+//$TBS->SetOption('noerr',TRUE);
 
 if ($go == "default") {
 	if ($_SESSION['prefsEntryForm'] == "B") { 
@@ -312,5 +319,6 @@ if ($go == "recipe") {
 	$TBS->MergeBlock('hops',$brewing_info['hops']);
 	$TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
 //}
+$TBS->NoErr;
 $TBS->Show();
 ?>

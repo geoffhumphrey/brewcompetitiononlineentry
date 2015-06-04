@@ -6,13 +6,27 @@ require(CLASSES.'fpdf/pdf_label.php');
 mysql_select_db($database, $brewing);
 include(DB.'output_labels.db.php');
 include(LIB.'output.lib.php');
+include(DB.'styles.db.php');
 
 if (isset($_SESSION['loginUsername'])) {
-	// Special ingredients required
-	$special_ingredients = array("6D","16E","17F","20A","21A","21B","22B","22C","23A","25C","26A","26B","26C","27E","28B","28C","28D");
 	
-	// Mead/cider info required
-	$mead = array("24A","24B","24C","25A","25B","25C","26A","26B","26C","27A","27B","27C","27D","27E","28A","26A","26C","27E","28B","28C","28D");
+	
+	// Need to update to loop through DB
+	do {
+		// Special ingredients required
+		if ($row_styles['brewStyleReqSpec'] == 1) {
+			$special_ingredients[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'];
+		}
+		
+		// Mead/cider info required
+		if (($row_styles['brewStyleStrength'] == 1) || ($row_styles['brewStyleCarb'] == 1) || ($row_styles['brewStyleSweet'] == 1)) {
+			$mead[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'];
+		}
+		
+	} while ($row_styles = mysql_fetch_assoc($styles));
+	
+	
+	
 
 	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
@@ -51,6 +65,7 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 			
+			/*
 			$section = "brew";
 			require(DB.'styles.db.php');
 			
@@ -61,6 +76,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
 				}  while ($row_styles2 = mysql_fetch_assoc($styles2));
 			}
+			*/
 			
 			// print_r($special_ingredients); exit;
 		
@@ -272,7 +288,7 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 		
 		if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-			
+			/*
 			$section = "brew";
 			require(DB.'styles.db.php');
 			
@@ -283,8 +299,8 @@ if (isset($_SESSION['loginUsername'])) {
 					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
 				}  while ($row_styles2 = mysql_fetch_assoc($styles2));
 			}
-			
-			// print_r($special_ingredients); exit;
+			*/
+			//print_r($special_ingredients); exit;
 		
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels";
 			if ($filter != "default") $filename .= "_Category_".$filter;
@@ -304,8 +320,9 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				
 				$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
-				if ($style == "21A") $style_name = "S.H.V.";
-				else $style_name = truncate($row_log['brewStyle'],22);
+				//if ($style == "21A") $style_name = "S.H.V.";
+				//else 
+				$style_name = truncate($row_log['brewStyle'],22);
 				
 				$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
 				$special = strtr($special,$html_remove);

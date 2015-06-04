@@ -21,6 +21,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	if (NHC) $base_url = "../";
 	else $base_url = $base_url;
 	
+	//if ($_POST['keepParticipants'] == "Y") $filter = "participant"; else $filter = $filter;
+	
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
 	mysql_select_db($database, $brewing);
@@ -41,7 +43,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	
 	
 	if ($row_suffix_check['count'] > 0) { 
-		header(sprintf("Location: %s", $base_url."index.php?section=admin&amp;go=archive&amp;msg=6"));
+		header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6"));
 	}
 	
 	else {
@@ -55,6 +57,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		
 		else {
 		
+			if ($_POST['keepParticipants'] != "Y") {
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
 			mysql_select_db($database, $brewing);
 			$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
@@ -91,12 +94,35 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				  $brewerJudgeLikes = $row_name['brewerJudgeLikes'];
 				  $brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
 				  $brewerAHA = $row_name['brewerAHA'];
+			}
 			
 			// Second, rename current tables and recreate new ones.
 			// For hosted accounts, no archiving. ONLY resetting of table data.
-			//if (HOSTED) $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_scores_db_table, $judging_tables_db_table, $judging_scores_bos_db_table, $style_types_db_table);
 			
-			$tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table);
+			if (($filter == "participant") || ($_POST['keepParticipants'] == "Y")) $tables_array = array($brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table,$staff_db_table);
+			else $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table, $staff_db_table);
+			
+			if ($_POST['keepParticipants'] == "Y") {
+				$updateSQL = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
+				mysql_real_escape_string($updateSQL);
+				//echo "<p>".$updateSQL."</p>";
+				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$updateSQL = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
+				mysql_real_escape_string($updateSQL);
+				//echo "<p>".$updateSQL."</p>";
+				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$updateSQL = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
+				mysql_real_escape_string($updateSQL);
+				//echo "<p>".$updateSQL."</p>";
+				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				
+				$updateSQL = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
+				mysql_real_escape_string($updateSQL);
+				//echo "<p>".$updateSQL."</p>";
+				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			}
 			
 			foreach ($tables_array as $table) { 
 			
@@ -108,6 +134,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				}
 				
 				else {
+					
 					$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
 					mysql_real_escape_string($updateSQL);
 					//echo "<p>".$updateSQL."</p>";
@@ -131,109 +158,129 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			mysql_real_escape_string($insertSQL);
 			$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
 			
-			// Insert current user's info into new "users" and "brewer" table
-			$insertSQL = "INSERT INTO $users_db_table (
-				id, 
-				user_name, 
-				password, 
-				userLevel, 
-				userQuestion, 
-				userQuestionAnswer,
-				userCreated
-			) 
-			VALUES 
-			(
-				'1',
-				'$user_name', 
-				'$password', 
-				'0', 
-				'$userQuestion', 
-				'$userQuestionAnswer', 
-				NOW());";
-			//echo "<p>".$insertSQL."</p>";
-			mysql_real_escape_string($insertSQL);
-			$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			
-			$insertSQL = "
-			INSERT INTO $brewer_db_table (
-				id,
-				uid,
-				brewerFirstName,
-				brewerLastName,
-				brewerAddress,
-				brewerCity,
-				brewerState,
-				brewerZip,
-				brewerCountry,
-				brewerPhone1,
-				brewerPhone2,
-				brewerClubs,
-				brewerEmail,
-				brewerNickname,
-				brewerSteward,
-				brewerJudge,
-				brewerJudgeID,
-				brewerJudgeRank,
-				brewerJudgeLikes,
-				brewerJudgeDislikes,
-				brewerJudgeLocation,
-				brewerStewardLocation,
-				brewerJudgeAssignedLocation,
-				brewerStewardAssignedLocation,
-				brewerAssignment,
-				brewerAHA,
-				brewerDiscount,
-				brewerJudgeBOS,
-				brewerDropOff
-			) 
-			VALUES (
-				NULL, 
-				'1', 
-				'$brewerFirstName', 
-				'$brewerLastName', 
-				'$brewerAddress', 
-				'$brewerCity', 
-				'$brewerState', 
-				'$brewerZip', 
-				'$brewerCountry', 
-				'$brewerPhone1', 
-				'$brewerPhone2', 
-				'$brewerClubs', 
-				'$brewerEmail', 
-				'$brewerNickname', 
-				'$brewerSteward', 
-				'$brewerJudge', 
-				'$brewerJudgeID', 
-				'$brewerJudgeRank', 
-				'$brewerJudgeLikes', 
-				'$brewerJudgeDislikes',
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				'$brewerAHA',
-				NULL,
-				NULL,
-				NULL
-			);";
-			//echo "<p>".$insertSQL."</p>";
-			mysql_real_escape_string($insertSQL);
-			$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			
-			
+			if ($_POST['keepParticipants'] != "Y") {
+				
+				// Insert current user's info into new "users" and "brewer" table
+				$insertSQL = "INSERT INTO $users_db_table (
+					id, 
+					user_name, 
+					password, 
+					userLevel, 
+					userQuestion, 
+					userQuestionAnswer,
+					userCreated
+				) 
+				VALUES 
+				(
+					'1',
+					'$user_name', 
+					'$password', 
+					'0', 
+					'$userQuestion', 
+					'$userQuestionAnswer', 
+					NOW());";
+				//echo "<p>".$insertSQL."</p>";
+				mysql_real_escape_string($insertSQL);
+				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				
+				$insertSQL = "
+				INSERT INTO $brewer_db_table (
+					id,
+					uid,
+					brewerFirstName,
+					brewerLastName,
+					brewerAddress,
+					brewerCity,
+					brewerState,
+					brewerZip,
+					brewerCountry,
+					brewerPhone1,
+					brewerPhone2,
+					brewerClubs,
+					brewerEmail,
+					brewerNickname,
+					brewerSteward,
+					brewerJudge,
+					brewerJudgeID,
+					brewerJudgeRank,
+					brewerJudgeLikes,
+					brewerJudgeDislikes,
+					brewerJudgeLocation,
+					brewerStewardLocation,
+					brewerJudgeAssignedLocation,
+					brewerStewardAssignedLocation,
+					brewerAssignment,
+					brewerAHA,
+					brewerDiscount,
+					brewerJudgeBOS,
+					brewerDropOff
+				) 
+				VALUES (
+					NULL, 
+					'1', 
+					'$brewerFirstName', 
+					'$brewerLastName', 
+					'$brewerAddress', 
+					'$brewerCity', 
+					'$brewerState', 
+					'$brewerZip', 
+					'$brewerCountry', 
+					'$brewerPhone1', 
+					'$brewerPhone2', 
+					'$brewerClubs', 
+					'$brewerEmail', 
+					'$brewerNickname', 
+					'$brewerSteward', 
+					'$brewerJudge', 
+					'$brewerJudgeID', 
+					'$brewerJudgeRank', 
+					'$brewerJudgeLikes', 
+					'$brewerJudgeDislikes',
+					NULL,
+					NULL,
+					NULL,
+					NULL,
+					NULL,
+					'$brewerAHA',
+					NULL,
+					NULL,
+					NULL
+				);";
+				//echo "<p>".$insertSQL."</p>";
+				mysql_real_escape_string($insertSQL);
+				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			}
+					
 			// If hosted, insert GH as admin user
 			if ((HOSTED) && ($row_user['user_name'] != "geoff@zkdigital.com")) {
-				
+					
 				$gh_user_name = "geoff@zkdigital.com";
 				$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
+				$random1 = random_generator(7,2);
+				$random2 = random_generator(7,2);
+				require(CLASSES.'phpass/PasswordHash.php');
+				$hasher = new PasswordHash(8, false);
+				$hash = $hasher->HashPassword($gh_password);
+				
+				$query_delete_brewer = sprintf("SELECT id FROM %s WHERE user_name='%s'", $users_db_table, $gh_user_name);
+				$delete_brewer = mysql_query($query_delete_brewer, $brewing) or die(mysql_error()); 
+				$row_delete_brewer = mysql_fetch_assoc($delete_brewer);
+				
+				$delete_user = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_delete_brewer['id']);
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($delete_user);
+				$result = mysql_query($delete_user, $brewing) or die(mysql_error());
+				
+				$delete_brewer = sprintf("DELETE FROM %s WHERE uid='%s'", $brewer_db_table, $row_delete_brewer['id']);
+				mysql_select_db($database, $brewing);
+				mysql_real_escape_string($delete_brewer);
+				$result = mysql_query($delete_brewer, $brewing) or die(mysql_error());
 				
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
 				$hash = $hasher->HashPassword($gh_password);
 				
-				$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES
-		(NULL, 'geoff@zkdigital.com', '%s', '0', 'What was your high school''s mascot?', 'spartan', NOW());", $users_db_table,$hash);
+				$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$gh_user_name,$users_db_table,$hash,$random1,$random2);
 				mysql_real_escape_string($updateSQL);
 				$result = mysql_query($updateSQL, $brewing);
 				
@@ -242,23 +289,33 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
 				
 				$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
-		(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id']);
+		(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
 				mysql_real_escape_string($updateSQL);
 				$result = mysql_query($updateSQL, $brewing);
-				
+					
 			}
 			
 			else {
 				
-				// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-				$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
-				//echo "<p>".$insertSQL."</p>";
-				mysql_real_escape_string($insertSQL);
-				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				if (!HOSTED) {
+					// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
+					$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
+					//echo "<p>".$insertSQL."</p>";
+					mysql_real_escape_string($insertSQL);
+					$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				}
 
 			}
 			
+			
+			if ($_POST['keepParticipants'] == "Y") {
+				header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
+				exit;
+			}
+			
 			// Last, log the user in and redirect 
+			
+			else {
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
 			$login = mysql_query($query_login, $brewing) or die(mysql_error());
 			$row_login = mysql_fetch_assoc($login);
@@ -359,7 +416,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					//$_SESSION['prefsUSCLExLimit'] = $row_prefs['prefsUSCLExLimit'];
 					$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
 					$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
-					
+					$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
 				
 					$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 					$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
@@ -434,6 +491,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					session_destroy();
 					exit;
 					}
+			} // end if ($_POST['keepParticipants'] == "Y");
 		
 		} // end else NHC
 		

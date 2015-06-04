@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 //{{{ License
 // +------------------------------------------------------------------------+
@@ -26,13 +25,9 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
-
 require_once("parser.php");
-
 //{{{ MashStep
 class MashStep extends Parser {
-
 	// fields within MASH_STEP tag
 	public $name;
 	public $version;
@@ -42,7 +37,6 @@ class MashStep extends Parser {
 	public $stepTemp;
 	public $rampTime;
 	public $endTemp;
-
     // extensions
     public $description;
 	public $waterGrainRatio;
@@ -50,11 +44,9 @@ class MashStep extends Parser {
 	public $infuseTemp;
     public $displayStepTemp;
     public $displayInfuseTemp;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "MASH_STEP":
@@ -63,9 +55,7 @@ class MashStep extends Parser {
 			default:
 				break;
 		}
-
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -118,210 +108,98 @@ class MashStep extends Parser {
 		}
 	}
 }
-
 //}}}
-
-
-
 //{{{ Mash
-
 class Mash extends Parser{
-
 	// fields within MASH tag
-
 	public $name;
-
 	public $version;
-
 	public $grainTemp;
-
 	public $tunTemp;
-
 	public $spargeTemp;
-
 	public $ph;
-
 	public $tunWeight;
-
 	public $tunSpecificHeat;
-
 	public $equipAdjust;
-
 	public $notes;
-
-
-
     // extensions
-
     public $displayGrainTemp;
-
     public $displayTunTemp;
-
     public $displaySpageTemp;
-
     public $displayTunWeight;
-
-
-
 	public $mashSteps = array(); // array of MashStep objects
-
 	function startElement($parser,$tagName,$attrs) {
-
 		$this->tag = $tagName;
-
 		switch($tagName){
-
 			case "MASH_STEP":
-
 				$mashStep = new mashStep();
-
 				$mashStep->parse($parser,$this);
-
 				$this->mashSteps[] = $mashStep;
-
 				break;
-
 			default:
-
 				break;
-
 		}
-
 	}
-
-
-
 	function endElement($parser,$tagName) {
-
 		switch($tagName){
-
 			case "MASH":
-
 				xml_set_object($parser,$this->parser);
-
 				break;
-
 			default:
-
 				break;
-
 		}
-
-
-
 	}
-
-
-
 	function nodeData($parser,$data) {
-
 		$data = ltrim($data);
-
 		if($data != ""){
-
 			switch($this->tag){
-
 				case "NAME":
-
 					$this->name = $data;
-
 					break;
-
 				case "VERSION":
-
 					$this->version = $data;
-
 					break;
-
 				case "GRAIN_TEMP":
-
 					$this->grainTemp = $data;
-
 					break;
-
 				case "TUN_TEMP":
-
 					$this->tunTemp = $data;
-
 					break;
-
 				case "SPARGE_TEMP":
-
 					$this->spargeTemp = $data;
-
 					break;
-
 				case "PH":
-
 					$this->ph = $data;
-
 					break;
-
 				case "TUN_WEIGHT":
-
 					$this->tunWeight = $data;
-
 					break;
-
 				case "TUN_SPECIFIC_HEAT":
-
 					$this->tunSpecificHeat = $data;
-
 					break;
-
 				case "EQUIP_ADJUST":
-
 					$this->equipAdjust = $data;
-
 					break;
-
 				case "NOTES":
-
 					$this->notes .= $data;
-
 					break;
-
                 case "DISPLAY_GRAIN_TEMP":
-
 					$this->displayGrainTemp = $data;
-
 					break;
-
 				case "DISPLAY_TUN_TEMP":
-
 					$this->displayTunTemp = $data;
-
 					break;
-
 				case "DISPLAY_SPAGE_TEMP":
-
 					$this->displaySpargeTemp = $data;
-
 					break;
-
 				case "DISPLAY_TUN_WEIGHT":
-
 					$this->displayTunWeight = $data;
-
 					break;
-
 				default:
-
 					break;
-
 			}
-
 		}
-
 	}
-
-
-
 }
-
 //}}}
-
-
-
 ?>
-

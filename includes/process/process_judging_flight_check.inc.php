@@ -1,5 +1,4 @@
 <?php
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	if (NHC) {
@@ -10,7 +9,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	// end if (NHC)
 	
 	else {
-
 		$query_check_received = sprintf("SELECT id,brewCategorySort,brewSubCategory FROM %s WHERE brewReceived='1'", $prefix."brewing");
 		$check_received = mysql_query($query_check_received, $brewing) or die(mysql_error());
 		$row_check_received = mysql_fetch_assoc($check_received);
@@ -110,24 +108,18 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			}
 			
 		} while ($row_check_received = mysql_fetch_assoc($check_received));
-
 	} // end else NHC
-
 if ($go == "judging_tables") { 
 	$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=4"; 
 	header(sprintf("Location: %s", $updateGoTo));
 }
-
 if ($go == "admin_dashboard") { 
 	$updateGoTo = $base_url."index.php?section=admin&msg=4"; 
 	header(sprintf("Location: %s", $updateGoTo));
 }
-
 if ($go == "hidden") { 
 	$updateGoTo = $base_url."index.php?section=admin&go=judging_tables"; 
 	header(sprintf("Location: %s", $updateGoTo));
 }
-
 } else echo "<p>Not available.</p>";
-
 ?>

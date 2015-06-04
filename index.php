@@ -25,11 +25,8 @@ $registration_closed_msg = "";
 if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
 
 $remaining_entries = 0;
-if (($registration_open == 1) && ($entry_window_open == 1)) {
-	if (!empty($row_limits['prefsUserEntryLimit'])) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
-	//elseif (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $remaining_entries = 0;
-	else $remaining_entries = 1;
-}
+if (!empty($row_limits['prefsUserEntryLimit'])) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+else $remaining_entries = 1;
 
 if (($registration_open == "1") && (!$ua)) {
 	if ($comp_entry_limit) {
@@ -42,7 +39,7 @@ if (($registration_open == "1") && (!$ua)) {
 	}
 }
 
-if (($registration_open == "0") && ($ua != "unsupported") && ($section != "admin")) {
+if (($registration_open == "0") && (!$ua) && ($section != "admin")) {
 	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>General registration will open ".$reg_open.".</div>";
 	if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) $judge_reg_open_msg .= "<div class='info'>Judge/steward registration will open ".$judge_open.".</div>";
     if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>"; 
@@ -133,33 +130,42 @@ var _gaq = _gaq || [];
 <div id="content">
 	<div id="content-inner">  
   <?php
-  //print_r($_SESSION);
-  // echo $tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone']; echo "<br>".date('T');
-  /*
-  echo "User: ".$query_user."<br>";
-  echo "Brewer: ".$query_brewer."<br>";
-  echo "Name: ".$query_name."<br>";
-  echo "Prefs: ".$query_prefs."<br>";
-  echo "Comp Info: ".$row_contest_info."<br>";
-  echo "Tables: ".$query_tables."<br>";
-  
-  echo $entry_window_open."<br>";
-  echo $registration_open."<br>";
-  echo judging_date_return()."<br>";
-  echo $remaining_entries;
-  */
-  
-  if ($section != "admin") { ?>
+
+if (TESTING) {
+	echo $_SERVER['HTTP_USER_AGENT'];
+	if ($fx) echo "FIREFOX Detected";
+	print_r($_SESSION);
+	echo $tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone']; echo "<br>".date('T');
+	
+	echo $section."<br>";
+	echo "User: ".$query_user."<br>";
+	echo "Brewer: ".$query_brewer."<br>";
+	echo "Name: ".$query_name."<br>";
+	echo "Prefs: ".$query_prefs."<br>";
+	echo "Comp Info: ".$row_contest_info."<br>";
+	echo "Tables: ".$query_tables."<br>";
+	echo $entry_window_open."<br>";
+	echo $registration_open."<br>";
+	echo judging_date_return()."<br>";
+	echo $remaining_entries."<br>";
+	echo $today."<br>";
+	echo $_SESSION['dataCheck'.$prefix_session]."<br>";
+}
+	
+	if ($section != "admin") { ?>
 	<div id="header">	
 		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-  	</div>
-  <?php  } 
-  if (($_SESSION['prefsUseMods'] == "Y") && ($section != "admin")) include(INCLUDES.'mods_top.inc.php'); // for display consistency
-  echo $closed_msg;
-  echo $registration_open_msg;
-  echo $judge_reg_open_msg;
-  echo $judge_willing_msg;
-  echo $registration_closed_msg;
+	</div>
+	<?php  } 
+	if (($_SESSION['prefsUseMods'] == "Y") && ($section != "admin")) include(INCLUDES.'mods_top.inc.php'); // for display consistency
+	echo $closed_msg;
+	echo $registration_open_msg;
+	echo $judge_reg_open_msg;
+	echo $judge_willing_msg;
+	echo $registration_closed_msg;
+
+
+  
   
 // Check if registration open date has passed
   if (($registration_open == "0") && ($ua != "unsupported")) { 
@@ -241,8 +247,8 @@ var _gaq = _gaq || [];
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") {
-				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
-				else include (SECTIONS.'pay.sec.php');
+				if (NHC) 	include (SECTIONS.'nhc_pay.sec.php');
+				else 		include (SECTIONS.'pay.sec.php');
 			}
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
@@ -258,7 +264,8 @@ var _gaq = _gaq || [];
  
  	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
   
-  	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
+  	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) {  
+	?>  
   	<div class="error">Please register or log in to access this area.</div>
 	  <?php if ($section == "admin") { ?>
       <div id="header">	

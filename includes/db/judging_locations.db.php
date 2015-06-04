@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 		
 	$query_judging = "SELECT * FROM $judging_locations_db_table";
@@ -35,7 +34,6 @@ else {
 	$judging3 = mysql_query($query_judging3, $brewing) or die(mysql_error());
 	$row_judging3 = mysql_fetch_assoc($judging3);
 	$totalRows_judging3 = mysql_num_rows($judging3);
-
 	// Make DB Connections
 	//if ($section != "step5") include(DB.'judging_locations.db.php');
 	
@@ -60,6 +58,5 @@ else {
 		$row_brewers = mysql_fetch_assoc($brewers);
 	
 	}
-
 }
 ?>

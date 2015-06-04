@@ -1,13 +1,15 @@
 <?php 
+
+// -----------------------------------------------------------
+// Version 1.3.1.0
+// -----------------------------------------------------------
+
 require('paths.php');
 mysql_select_db($database, $brewing);
-//require(LIB.'common.lib.php');
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
-//require(DB.'common.db.php');
-//require(INCLUDES.'headers.inc.php');
-$current_version = "1.3.0.4";
+$current_version = "1.3.1.0";
 $section = "update";
 
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
@@ -31,8 +33,15 @@ if (HOSTED) {
 	
 	if ($totalRows_gh_admin_user == 0) {
 		
-		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES
-(NULL, 'geoff@zkdigital.com', 'd9efb18ba2bc4a434ddf85013dbe58f8', '1', 'What was your high school''s mascot?', 'spartan', NOW());", $prefix."users");
+		$gh_user_name = "geoff@zkdigital.com";
+		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
+		$random1 = random_generator(7,2);
+		$random2 = random_generator(7,2);
+		require(CLASSES.'phpass/PasswordHash.php');
+		$hasher = new PasswordHash(8, false);
+		$hash = $hasher->HashPassword($gh_password);
+		
+		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$gh_user_name,$users_db_table,$hash,$random1,$random2);
 		mysql_real_escape_string($updateSQL);
 		$result = mysql_query($updateSQL, $brewing);
 		
@@ -41,7 +50,7 @@ if (HOSTED) {
 		$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
 		
 		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
-(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', 'geoff@zkdigital.com', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);", $prefix."brewer",$row_gh_admin_user1['id']);
+(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);", $brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
 		mysql_real_escape_string($updateSQL);
 		$result = mysql_query($updateSQL, $brewing);
 		
@@ -49,7 +58,7 @@ if (HOSTED) {
 	
 	if ($totalRows_gh_admin_user == 1) {
 		
-		$updateSQL = sprintf("UPDATE %s SET password='d9efb18ba2bc4a434ddf85013dbe58f8' WHERE id='%s'", $prefix."users",$row_gh_admin_user['id']);
+		$updateSQL = sprintf("UPDATE %s SET password='%s' WHERE id='%s'", $prefix."users",$hash,$row_gh_admin_user['id']);
 		mysql_real_escape_string($updateSQL);
 		$result = mysql_query($updateSQL, $brewing); 
 		
@@ -96,7 +105,7 @@ if (file_exists($filename)) {
 			FROM information_schema.tables 
 			WHERE table_schema = '$database' 
 			AND table_name = '$tablename'";
-	
+
 		$log = mysql_query($query_log, $brewing) or die(mysql_error());
 		$row_log = mysql_fetch_assoc($log);
 	
@@ -147,6 +156,36 @@ if (file_exists($filename)) {
 				<?php }
 			
 				if ($action == "update") {
+				
+				/*
+				function check_db_table_column($tablename,$colname) {
+					
+					// Break up into an array
+					$colname = explode(",",$colname);
+					
+					require(CONFIG.'config.php');
+					
+					foreach ($colname as $column) {
+						
+						$a[] = 0;
+					
+						$fields = mysql_list_fields($database, $tablename);
+						$columns = mysql_num_fields($fields);
+					
+						for ($i = 0; $i < $columns; $i++) {
+							$field_array[] = mysql_field_name($fields, $i);
+						}
+						
+					if (in_array($column, $field_array)) $a[] = 0;
+						$a[] = 1;
+					}
+					
+					if (array_sum($a) == 0) return TRUE;
+					else return FALSE;
+					
+				}
+				*/
+					
 				$output = "";
 					// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
@@ -189,21 +228,19 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1200") && ($version < "1210")) {
+						if (($version >= "1200") && ($version < "1300")) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version >= "1210")  {
-							// last verion to have a db update was 1.2.1.0
-							// if 1.2.1.0 later, update only with the 1.3.0.0 changes
+						if ($version >= "1300")  {
+							// last verion to have a db update was 1.3.0.0
+							// if 1.3.0.0 later, update only with the 1.3.1.0 changes
 							include (UPDATE.'current_update.php');
 						}
 				
-				
-				
-					
+									
 					if ($version >= "113") {
 						
 					// Due to session caching introduced in 1.3.0.0, need to destroy the session.	
@@ -220,7 +257,7 @@ if (file_exists($filename)) {
 					//  Finish and Clean Up
 					// -----------------------------------------------------------
 					
-					echo "<p>To take advantage of this version's added features, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update:.</p>";
+					echo "<p>To take advantage of this version's added features, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update the following:</p>";
 					echo "<ul>";
 					echo "<li>Your site preferences by going to: Admin &gt; Preparing &gt; Define &gt; Site Preferences.</li>";
 					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Competition Organization Preferences.</li>";
@@ -248,7 +285,8 @@ if (file_exists($filename)) {
 		
 		// if user is not logged in or a admin...
 		else {
-			echo "<div class='info'>Only top level website administrators are able to access and run this update script.</div>";
+			echo "<div class='info'>Only top level administrators are able to access and run this update script.</div>";
+			if ($row_user_level['userLevel'] > 0) echo "<p>You do not have administrative access to this site.</p>";
 			if (!isset($_SESSION['loginUsername'])) {
 				echo "<p>If you are an administrator of this site, log in and try again.</p>";
 				include (SECTIONS.'login.sec.php');	

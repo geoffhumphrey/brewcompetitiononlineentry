@@ -3,9 +3,7 @@
  * Module:      process_drop_off.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
-
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -57,7 +55,5 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		
 	
 	} // end else NHC
-
 } else echo "<p>Not available.</p>"; 
-
 ?>

@@ -149,6 +149,8 @@ switch($section) {
 	case "brew":
 	if ($action == "add") $header_output = "Add an Entry"; 
 	else $header_output = "Edit an Entry";
+	
+	/*
 		switch ($msg) {
 			case "1-6-D":  $output = "See the area(s) highlighted in RED below. You MUST specify if wheat or rye is used.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 			case "1-16-E": $output = "See the area(s) highlighted in RED below. You MUST specify the beer being cloned, the new style being produced, or the special ingredients and/or process being used. Additional background information on the style and/or beer may be provided to judges to assist in the judging, including style parameters or detailed descriptions of the beer. Beers fitting other Belgian categories should not be entered in this category.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
@@ -182,7 +184,10 @@ switch($section) {
 			case "4": $output = "This competition utilizes custom entry categories. All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries will be deleted from the system after 24 hours.<br />"; break;
 			default: $output = "This entry has not yet been confirmed. Please review the information as listed and correct any errors. "; break;
 		}
-	if (strstr($msg,"1-")) $output .= "Unconfirmed entries will be deleted from the system after 24 hours.";
+		*/
+	$explodies = explode("-",$msg);
+	$output = "Your entry's style requires more information before it can be confirmed. <a id='modal_window_link'  href='".$base_url."output/styles.php?go=".$explodies[1]."-".$explodies[2]."'>Click here</a> to check the style's entry requirements.";
+	if (strstr($msg,"1-")) $output .= " Unconfirmed entries will be deleted from the system after 24 hours.";
 	break;
 	
 	case "brewer":
@@ -354,9 +359,9 @@ switch($section) {
 	elseif ($msg == "5") $output = "Info deleted successfully.";
 	elseif ($msg == "6") $output = "The suffix you entered is already in use, please enter a different one."; 
 	elseif ($msg == "7") { 
-		if (HOSTED) $output = "All competition data has been cleared. "; 
+		if (HOSTED) $output = "The specified competition data has been cleared. "; 
 		else $output = "Archives created successfully. Click the archive name to view. ";
-		$output .= "Rembember to update your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.";
+		$output_extend = "<div class='info'>Remember to update your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</div>";
 	
 	}
 	elseif ($msg == "8") $output = "Archive \"".$filter."\" deleted."; 
@@ -384,6 +389,8 @@ switch($section) {
 	elseif ($msg == "20") $output = "All entries have been marked as paid.";
 	elseif ($msg == "21") $output = "All entries have been marked as received.";
 	elseif ($msg == "22") $output = "All unconfirmed entries are now marked as confirmed.";
+	elseif ($msg == "23") $output = "All participant assignments have been cleared.";
+	elseif ($msg == "24") $output = "A judging number you entered wasn't found in the database. Please check and re-enter.";
 	else $output = "";
 	break;
 }

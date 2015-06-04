@@ -210,13 +210,15 @@ if ($totalRows_brewer > 0) { ?>
 <?php } if ($tb != "view") { ?>
 </body>
 </html>
+<?php if (!$fx) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
     self.print();
 }
-setTimeout('selfPrint()',2000);
-html.push('');
+setTimeout('selfPrint()',3000);
+html.push(''); 
 </script>
+<?php } ?>
 <?php }
 } else echo "<p>Not available.</p>"; ?>

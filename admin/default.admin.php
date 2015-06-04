@@ -51,6 +51,9 @@ if ($_SESSION['userLevel'] <= "1") {
 			
 if ($go == "default") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
+<?php if ($fx) { ?>
+<div class="error">There is a known issue with printing from the Firefox browser. To print all pages properly, RIGHT CLICK on the print link and choose "Open Link in New Tab." Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>
+<?php } ?>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 
 <table>
@@ -86,7 +89,7 @@ if ($go == "default") { ?>
     <tr>
     	<td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=paid">Paid, Rec'd &amp; Confirmed Entries</a>:</td>
         <td class="data"><?php echo get_entry_count("paid-received"); ?></td>
-        <td class="dataLabel" colspan="2"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style">Entry Counts by Style</a></td>
+        <td class="dataLabel" colspan="2">Entry Counts by: <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style">Style</a> or <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle">Sub-Style</a></td>
         <td class="dataLabel"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a>:</td>
         <td class="data"><?php echo get_participant_count('steward'); ?></td>
 	</tr>
@@ -773,7 +776,8 @@ if ($go == "default") { ?>
                 <li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=avail_judges&amp;action=email">All Available Judges</a></li>
 				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=avail_stewards&amp;action=email">All Available Stewards</a></li>
                 <li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=judges&amp;action=email">All Assigned Judges</a></li>
-				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Assigned Stewards</a></li>
+				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=stewards&amp;action=email">All Assigned Stewards</a></li>                
+				<li><a href="<?php echo $base_url; ?>output/email_export.php?section=admin&amp;go=csv&amp;filter=staff&amp;action=email">All Assigned Staff</a></li>
                 <li><a href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a></li>
             </ul>
             <ul class="admin_default">
@@ -848,6 +852,7 @@ if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
 if ($go == "count_by_style")			include (ADMIN.'entries_by_style.admin.php');
+if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
 if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
 

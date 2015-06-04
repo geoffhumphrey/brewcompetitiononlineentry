@@ -1,3 +1,43 @@
+<script type="text/javascript">
+<!--
+// From http://www.dynamicdrive.com/forums/showthread.php?33533-No-Duplicates-Chosen-in-Drop-Down-lists
+function uniqueCoicesSetup(){
+	var warning = 'The place you specified has already been input. Please choose another place or no place (blank).',
+	s = document.getElementsByTagName('select'),
+	f = function (e){
+		var s = uniqueCoicesSetup.ar;
+		for (var o = this.options.selectedIndex, i = s.length - 1; i > -1; --i)
+		if(this != s[i] && o && o == s[i].options.selectedIndex){
+			this.options.selectedIndex = 0;
+			if(e && e.preventDefault)
+			e.preventDefault();
+			alert(warning);
+			return false;
+		}
+	},
+	add = function(el){
+	uniqueCoicesSetup.ar[uniqueCoicesSetup.ar.length] = el;
+	if ( typeof window.addEventListener != 'undefined' ) el.addEventListener( 'change', f, false );
+	else if ( typeof window.attachEvent != 'undefined' ){
+			var t = function() {
+				return f.apply(el);
+			};
+		el.attachEvent( 'onchange', t );
+		}
+	};
+	uniqueCoicesSetup.ar = [];
+	for (var i = s.length - 1; i > -1; --i)
+	if(/nodupe/.test(s[i].className))
+	add(s[i]);
+}
+
+if(typeof window.addEventListener!='undefined')
+window.addEventListener('load', uniqueCoicesSetup, false);
+else if(typeof window.attachEvent!='undefined')
+window.attachEvent('onload', uniqueCoicesSetup);
+// -->
+</script>
+
 <h2><?php 
 if (($action == "edit") && ($id != "default")) echo "Edit Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
 elseif (($action == "add") && ($id != "default")) echo "Add Scores for Table #".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];  
@@ -50,7 +90,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <div class="adminSubNavContainer">
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
 <?php 
-if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
+//if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?> 
 </div>
 <?php } // end if ($dbTable == "default") ?>
 
@@ -113,10 +153,10 @@ if ($id != "default") echo winner_method($_SESSION['prefsWinnerMethod'],2); ?>
     </tr>
 </thead>
 <tbody>
-	<?php 
+	<?php
 	do {
 	
-	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable']); 
+	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter); 
 	$table_score_data = explode("^",$table_score_data);
 	
 	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]); 
@@ -187,7 +227,7 @@ $(document).ready(function() {
 		"sDom": 'irt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[2,'asc']],
+		"aaSorting": [[2,'asc'],[1,'asc']],
 		"bProcessing" : false,
 		"aoColumns": [
 			null,
@@ -271,7 +311,7 @@ $(document).ready(function() {
         
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" /></td>
         <td>
-        <select class="fDrop" name="scorePlace<?php echo $score_id; ?>">
+        <select class="nodupe" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
           <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>

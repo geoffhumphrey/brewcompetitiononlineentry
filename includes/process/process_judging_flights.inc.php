@@ -3,7 +3,6 @@
  * Module:      process_drop_off.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	if (NHC) {
@@ -14,7 +13,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	// end if (NHC)
 	
 	else {
-
 		 if ($action == "add") {
 			foreach($_POST['id'] as $id)	{
 				$flight_number = ltrim($_POST['flightNumber'.$id],"flight");
@@ -126,5 +124,4 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		}
 	
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";?>

@@ -257,7 +257,7 @@ $currency_code = $currency[1];
 		<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>
 		<p>Bottles will not be returned to contest entrants.</p>
 		<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottles with a rubber band only; glue and/or tape are unacceptable.</p>
-		<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified per the 2008 BJCP Style Guidelines. Failure to note such ingredients may impact the judges' scoring of your entry.</p>
+		<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges' scoring of your entry.</p>
 		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>
 		<?php } ?>
         </textarea>

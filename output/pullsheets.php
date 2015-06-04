@@ -21,7 +21,7 @@ if ($go == "judging_tables") include(DB.'output_pullsheets.db.php');
 
 if (($go == "judging_tables") && ($totalRows_tables == 0)) { 
 echo "<body>";
-echo "<p>".$query_tables;
+//echo "<p>".$query_tables;
 echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h1>"; 
 } 
 else {
@@ -97,6 +97,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	foreach (array_unique($a) as $value) {
 		include(DB.'output_pullsheets_entries.db.php');		
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
 			$flight_round = check_flight_number($row_entries['id'],$i);
 			if (check_flight_round($flight_round,$round)) {
@@ -110,7 +111,22 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if ($row_entries['brewInfo'] != "") echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray">
+        <?php 
+		$special = style_convert($style_special,"9");
+		$special = explode("^",$special);
+		$special = $special[4];
+		$strength = $special[5];
+		$carb = $special[6];
+		$sweet = $special[7];
+		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (style_convert($style,"5")) echo "<p>"; 
+		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead2'] != '') && ($carb == "1")) echo $row_entries['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead3'] != '') && ($sweet == "1")) echo $row_entries['brewMead3']."</p>"; 
+		?>
+        </td>
         <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -197,6 +213,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	foreach (array_unique($a) as $value) {
 		include(DB.'output_pullsheets_entries.db.php');
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
 			$flight_round = check_flight_number($row_entries['id'],$i);
 			if ($flight_round != "") {
@@ -210,7 +227,22 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if ($row_entries['brewInfo'] != "") echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+		$special = style_convert($style_special,"9");
+		$special = explode("^",$special);
+		$special = $special[4];
+		$strength = $special[5];
+		$carb = $special[6];
+		$sweet = $special[7];
+		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (style_convert($style,"5")) echo "<p>"; 
+		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead2'] != '') && ($carb == "1")) echo $row_entries['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead3'] != '') && ($sweet == "1")) echo $row_entries['brewMead3']."</p>"; 
+		?>
+        </td>
         <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><?php echo $flight_round; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -297,6 +329,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 	foreach (array_unique($a) as $value) {
 		include(DB.'output_pullsheets_entries.db.php');
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
 	?>
     <tr>
@@ -308,7 +341,22 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if ($row_entries['brewInfo'] != "") echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+		$special = style_convert($style_special,"9");
+		$special = explode("^",$special);
+		$special = $special[4];
+		$strength = $special[5];
+		$carb = $special[6];
+		$sweet = $special[7];
+		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (style_convert($style,"5")) echo "<p>"; 
+		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead2'] != '') && ($carb == "1")) echo $row_entries['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead3'] != '') && ($sweet == "1")) echo $row_entries['brewMead3']."</p>"; 
+		?>
+        </td>
         <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -379,6 +427,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	foreach (array_unique($a) as $value) {
 		include(DB.'output_pullsheets_entries.db.php');
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
 	?>
     <tr>
@@ -390,7 +439,22 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; if ($row_entries['brewInfo'] != "") echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries['brewMead1'] != '') echo $row_entries['brewMead1']."&nbsp;&nbsp;"; if ($row_entries['brewMead2'] != '') echo $row_entries['brewMead2']."&nbsp;&nbsp;"; if ($row_entries['brewMead3'] != '') echo $row_entries['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+		$special = style_convert($style_special,"9");
+		$special = explode("^",$special);
+		$special = $special[4];
+		$strength = $special[5];
+		$carb = $special[6];
+		$sweet = $special[7];
+		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (style_convert($style,"5")) echo "<p>"; 
+		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead2'] != '') && ($carb == "1")) echo $row_entries['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead3'] != '') && ($sweet == "1")) echo $row_entries['brewMead3']."</p>";  
+		?>
+        </td>
         <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -482,7 +546,22 @@ if ($style_type_info[0] == "Y") {
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 
 		?>
         </td>
-        <td class="data bdr1B_gray"><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; if ($row_entries_1['brewInfo'] != "") echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>"; if (style_convert($style,"5")) echo "<p>"; if ($row_entries_1['brewMead1'] != '') echo $row_entries_1['brewMead1']."<br>"; if ($row_entries_1['brewMead2'] != '') echo $row_entries_1['brewMead2']."<br>"; if ($row_entries_1['brewMead3'] != '') echo $row_entries_1['brewMead3']."</p>"; ?></td>
+        <td class="data bdr1B_gray">
+		<?php 
+		$special = style_convert($style_special,"9");
+		$special = explode("^",$special);
+		$special = $special[4];
+		$strength = $special[5];
+		$carb = $special[6];
+		$sweet = $special[7];
+		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (style_convert($style,"5")) echo "<p>"; 
+		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead2'] != '') && ($carb == "1")) echo $row_entries['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries['brewMead3'] != '') && ($sweet == "1")) echo $row_entries['brewMead3']."</p>"; 
+		?>
+        </td>
         <td nowrap="nowrap" class="data bdr1B_gray"><?php echo $row_entries['brewBoxNum']; ?></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box">&nbsp;</p></td>
@@ -507,14 +586,16 @@ if ($style_type_info[0] == "Y") {
 ?>
 </body>
 </html>
+<?php if (!$fx) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
     self.print();
 }
-setTimeout('selfPrint()',2000);
-html.push('');
+setTimeout('selfPrint()',3000);
+html.push(''); 
 </script>
+<?php } ?>
 <?php } 
 else echo "<p>Not available.</p>";
 ?>

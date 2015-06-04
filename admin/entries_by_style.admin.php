@@ -1,11 +1,29 @@
-<?php 
+<?php
+
+if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
+	$beer_end = 23;
+	$mead_array = array('24','25','26');
+	$cider_array = array('27','28');
+	$category_end = 28;
+}
+
+if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+	$beer_end = 34;
+	$mead_array = array('M1','M2','M3','M4');
+	$cider_array = array('C1','C2');
+	$category_end = 34;
+}
+
 include(DB.'styles.db.php');
+
 do { $total_cat[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
 $total_cat = array_unique($total_cat);
 //print_r($total_cat);
+
 $html = "";
 $style_other_count[] = 0;
 $style_other_count_logged[] = 0;
+
 foreach ($total_cat as $cat) {
 	
 	$cat_convert = $cat;
@@ -24,23 +42,25 @@ foreach ($total_cat as $cat) {
 	
 	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
 	
-	if ($cat <= 23) { 
+	if ($cat <= $beer_end) { 
 		$style_type = "Beer"; 
 		$style_beer_count[] .= $row_style_count['count']; 
 		$style_beer_count_logged[] .= $row_style_count_logged['count'];  
 		}
-	if (($cat > 23) && ($cat <= 26)) { 
+		
+	if (in_array($cat,$mead_array)) { 
 		$style_type = "Mead"; 
 		$style_mead_count[] .= $row_style_count['count']; 
 		$style_mead_count_logged[] .= $row_style_count_logged['count']; 
 		}
-	if (($cat > 26) && ($cat <= 28)) { 
+		
+	if (in_array($cat,$cider_array))  { 
 		$style_type = "Cider";
 		$style_cider_count[] .= $row_style_count['count'];
 		$style_cider_count_logged[] .= $row_style_count_logged['count']; 
 		}
-	if ($cat > 28) {
 		
+	if ($cat > $category_end) {
 		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
 		if ($row_style_type['brewStyleType'] > 3)  $source = "custom"; 
 		
@@ -66,9 +86,7 @@ foreach ($total_cat as $cat) {
 			$style_other_count_logged[] .= $row_style_count_logged['count']; 
 		}
 		
-		
 		//$style_type_array[] = $style_type;
-		
 	}
 	
 	if (!empty($cat_name)) { 
@@ -131,6 +149,15 @@ $total_style_count_logged = (array_sum($style_beer_count_logged) + array_sum($st
 $total_style_count_all = (array_sum($style_beer_count) + array_sum($style_mead_count) + array_sum($style_other_count) + array_sum($style_cider_count) + array_sum($style_beer_count_logged) + array_sum($style_mead_count_logged) + array_sum($style_cider_count_logged) + array_sum($style_other_count_logged));
 
 if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
+	
+	$html_count .= "<tfoot>";
+	$html_count .= "<tr class='bdr1T'>"; 
+	$html_count .= "<td nowrap='nowrap'><strong>Totals</strong></td>";
+	$html_count .= "<td nowrap='nowrap'>".$total_style_count_logged."</td>";
+	$html_count .= "<td nowrap='nowrap'>".$total_style_count."</td>";
+	$html_count .= "</tr>";
+	$html_count .= "</tfoot>";
+	
 	$html .= "<tfoot>";
 	$html .= "<tr class='bdr1T'>"; 
 	$html .= "<td nowrap='nowrap'><strong>Totals</strong></td>";
@@ -141,10 +168,11 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 	$html .= "</tfoot>";
 }
 ?>
-<h2>Entry Counts by Style</h2>
+<h2>Entry Count by Style</h2>
 <?php if ($action != "print") { ?>
 <div class="adminSubNavContainer">
    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
+	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/page.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle">Entry Count By Sub-Style</a></span>
 	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" alt="Back"></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=count_by_style&amp;action=print">Print</a></span>
 </div>
 <?php } 

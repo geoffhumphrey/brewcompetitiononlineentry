@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 //{{{ License
 // +------------------------------------------------------------------------+
@@ -26,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Yeast
 class Yeast extends Parser{
 	// fields within YEAST tag
@@ -48,18 +45,15 @@ class Yeast extends Parser{
 	public $maxReuse;
 	public $timesCultured;
 	public $addToSecondary;
-
     // extensions
     public $cultureDate;
     public $displayAmount;
     public $dispMinTemp;
     public $dispMaxTemp;
     public $inventory;
-
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "YEAST":
@@ -68,9 +62,7 @@ class Yeast extends Parser{
 			default:
 				break;
 		}
-
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -145,15 +137,10 @@ class Yeast extends Parser{
 	}
 }
 //}}}
-
-
-
 //{{{ Yeasts
-
 class Yeasts extends Parser{
 	// fields within YEASTS tag
 	public $yeasts = array(); // array of yeast objects
-
 	function startElement($parser,$tagName,$attrs) {
 		switch($tagName){
 			case "YEAST":
@@ -165,7 +152,6 @@ class Yeasts extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "YEASTS":
@@ -174,14 +160,9 @@ class Yeasts extends Parser{
 			default:
 				break;
 		}
-
 	}
-
 	function nodeData($parser,$data) {
-
 	}
-
 }
 //}}}
-
 ?>

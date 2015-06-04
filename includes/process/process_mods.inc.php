@@ -3,12 +3,9 @@
  * Module:      process_mods.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "mods" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-
 if (($_POST['mod_extend_function_admin'] == "") && ($_POST['mod_extend_function'] == 9)) $mod_extend_function_admin = "default"; 
 else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -16,7 +13,6 @@ else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 	}
 	
 	else {
-
 		if ($action == "update") {
 			foreach($_POST['id'] as $id) {  
 				if ($_POST['mod_enable'.$id] == 1) $enable = 1; else $enable = 0;
@@ -106,8 +102,5 @@ else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 		}
 	
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
-
-
 ?>

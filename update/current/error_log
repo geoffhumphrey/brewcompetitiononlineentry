@@ -1,0 +1,13 @@
+[11-May-2015 13:26:40 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 7
+[11-May-2015 13:31:34 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 7
+[11-May-2015 13:35:09 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 7
+[21-May-2015 08:57:33 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 26
+[21-May-2015 09:01:51 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 26
+[21-May-2015 09:32:23 America/Denver] PHP Notice:  Undefined variable: system_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 8
+[21-May-2015 09:32:23 America/Denver] PHP Notice:  Undefined variable: preferences_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 14
+[21-May-2015 09:32:23 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 20
+[21-May-2015 09:34:09 America/Denver] PHP Notice:  Undefined variable: system_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 8
+[21-May-2015 09:34:09 America/Denver] PHP Notice:  Undefined variable: preferences_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 17
+[21-May-2015 09:34:09 America/Denver] PHP Notice:  Undefined variable: styles_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 26
+[21-May-2015 09:36:32 America/Denver] PHP Notice:  Undefined variable: system_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 8
+[21-May-2015 09:36:32 America/Denver] PHP Notice:  Undefined variable: preferences_db_table in /home5/brewcomp/public_html/bcoetest/update/current/data_updates.php on line 17

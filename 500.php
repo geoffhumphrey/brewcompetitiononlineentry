@@ -1,11 +1,6 @@
 <?php
 require('paths.php');
-require(DB.'common.db.php');
-require(LIB.'common.lib.php');
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
-require(INCLUDES.'constants.inc.php');
+require(CONFIG.'bootstrap.php');
 $section = "500";
 ?>
 <html>
@@ -13,7 +8,7 @@ $section = "500";
 <title><?php echo $_SESSION['contestName']; ?> Organized By <?php echo $_SESSION['contestHost']." &gt; Error 500: Internal Server Error"; ?></title>
 <link href="<?php echo $base_url; ?>/css/<?php echo $_SESSION['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
 <?php if ($action == "default") { ?>
-<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>/500.php?action=error" />
+<meta http-equiv="refresh" content="0;URL=<?php echo $base_url; ?>500.php?action=error" />
 <?php } ?>
 
 <body>
@@ -27,7 +22,7 @@ $section = "500";
 			<div id="header">	
 				<div id="header-inner"><h1>500 Error</h1></div>
             </div>
-			<p>Oh, hey! Apparently, there was some sort of error...</p>
+			<div class="error">Oh, hey! Apparently, there was some sort of error...</div>
 			<p>Please use the main navigation above to get where you want to go.</p>
             <p>Cheers!<br>The <?php echo $_SESSION['contestName']; ?> Site Server</p>
         </div>

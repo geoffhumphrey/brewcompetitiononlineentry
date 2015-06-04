@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 	
 	$query_contact = "SELECT * FROM $contacts_db_table";
@@ -13,6 +12,5 @@ else {
 	$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
 	$row_contact = mysql_fetch_assoc($contact);
 	$totalRows_contact = mysql_num_rows($contact);
-
 }
 ?>

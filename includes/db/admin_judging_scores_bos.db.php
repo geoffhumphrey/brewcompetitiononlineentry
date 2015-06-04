@@ -5,9 +5,7 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
-
 	if ($action == "enter") {
 		$query_enter_bos = "SELECT * FROM $judging_scores_db_table";
 		if ($row_style_type['styleTypeBOSMethod'] == "1") $query_enter_bos .= " WHERE scoreType='$filter' AND scorePlace='1'";
@@ -33,6 +31,5 @@ else {
 		$totalRows_bos = mysql_num_rows($bos);
 		
 	}
-
 }
 ?>

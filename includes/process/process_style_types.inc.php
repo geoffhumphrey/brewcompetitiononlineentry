@@ -3,9 +3,7 @@
  * Module:      process_style_types.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "style_types" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -13,7 +11,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	}
 	
 	else {
-
 		if ($action == "add") {
 			$insertSQL = sprintf("INSERT INTO $style_types_db_table (
 			styleTypeName, 
@@ -57,7 +54,5 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 		}
-
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";?>

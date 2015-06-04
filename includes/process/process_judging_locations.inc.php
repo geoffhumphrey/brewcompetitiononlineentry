@@ -3,11 +3,8 @@
  * Module:      process_judging_location.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
-
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
-
 	$judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -16,7 +13,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	// end if (NHC)
 	
 	else {
-
 		if ($action == "add") {
 			$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",
 							   GetSQLValueString($judgingDate, "text"),
@@ -57,5 +53,4 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	} // end else NHC
 	
 } else echo "<p>Not available.</p>";
-
 ?>

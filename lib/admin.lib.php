@@ -39,24 +39,26 @@ function bos_method($value) {
 	return $bos_method;
 }
 
-function bos_entry_info($eid,$table_id) {
+function bos_entry_info($eid,$table_id,$filter) {
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
+	if ($filter == "default") $filter = ""; else $filter = "_".$filter;
+	
 	if ($table_id == "default") $table_id = 1; else $table_id = $table_id;
 	
-	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing", $eid);
+	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing".$filter, $eid);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables".$filter, $table_id);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
 		
-	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $prefix."judging_scores_bos", $eid);
+	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $prefix."judging_scores_bos".$filter, $eid);
 	$bos_place_1 = mysql_query($query_bos_place_1, $brewing) or die(mysql_error());
 	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);	
 	
@@ -672,12 +674,14 @@ function judging_location_avail($loc_id,$judge_avail) {
 	return $return;
 }
 
-function table_score_data($eid,$score_table) {
+function table_score_data($eid,$score_table,$suffix) {
 		
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_entries = sprintf("SELECT id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing", $eid);
+	if ($suffix != "default") $suffix = "_".$suffix; else $suffix = "";
+	
+	$query_entries = sprintf("SELECT id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing".$suffix, $eid);
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 	$row_entries = mysql_fetch_assoc($entries);
 	$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -686,12 +690,12 @@ function table_score_data($eid,$score_table) {
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	
-	$query_tables = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $score_table);
+	$query_tables = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables".$suffix, $score_table);
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	$totalRows_tables = mysql_num_rows($tables);
 	
-	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM %s WHERE id='%s'", $prefix."brewer", $row_entries['brewBrewerID']);
+	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM %s WHERE id='%s'", $prefix."brewer".$suffix, $row_entries['brewBrewerID']);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	

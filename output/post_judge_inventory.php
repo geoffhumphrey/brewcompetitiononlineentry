@@ -89,12 +89,14 @@ if (NHC) $base_url = "../";
 </div>
 </body>
 </html>
+<?php if (!$fx) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
     self.print();
 }
-setTimeout('selfPrint()',2000);
+setTimeout('selfPrint()',3000);
 html.push(''); 
-</script> 
+</script>
+<?php } ?>
 <?php } else echo "<p>Not available.</p>"; ?>

@@ -23,7 +23,7 @@ $section = "401";
 			<div id="header">	
 				<div id="header-inner"><h1>401 Error</h1></div>
             </div>
-			<p>Unfortunately, you do not have permission to make this request. Crikey!</p>
+			<div class="error">Unfortunately, you do not have permission to make this request.</div>
             <p>Please use the main navigation above to get where you want to go.</p>
             <p>Cheers!<br>The <?php echo $_SESSION['contestName']; ?> Site Server</p>
         </div>

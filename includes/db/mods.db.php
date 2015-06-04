@@ -5,14 +5,12 @@
  
   0=none 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin
  */
-
 if (NHC) {
 	// Place NHC SQL calls below
 	
 	
 }
 // end if (NHC)
-
 else {
 		
 	$query_mods = "SELECT * FROM $mods_db_table";
@@ -77,6 +75,5 @@ else {
 		
 		return $output;
 	}
-
 }
 ?>

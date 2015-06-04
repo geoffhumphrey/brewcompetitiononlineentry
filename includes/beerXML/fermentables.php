@@ -1,5 +1,4 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 //{{{ License
 // +------------------------------------------------------------------------+
@@ -26,9 +25,7 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
 require_once("parser.php");
-
 //{{{ Fermentable
 class Fermentable extends Parser{
 	// fields within FERMENTABLES tag
@@ -50,17 +47,14 @@ class Fermentable extends Parser{
 	public $recommendMash;
 	public $ibuGalPerLb;
 	public $extractSubstitute;
-
     // extensions
     public $inventory;
 	public $potential;
 	public $displayColor;
     public $displayAmount;
 	function startElement($parser,$tagName,$attrs) {
-
 		$this->tag = $tagName;
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "FERMENTABLE":
@@ -69,9 +63,7 @@ class Fermentable extends Parser{
 			default:
 				break;
 		}
-
 	}
-
 	function nodeData($parser,$data) {
 		$data = ltrim($data);
 		if($data != ""){
@@ -140,27 +132,19 @@ class Fermentable extends Parser{
 					$this->displayAmount = $data;
 					break;
 				case "EXTRACT_SUBSTITUTE":
-
 				$this->extractSubstitute = $data;
 					break;
-
 			default:
 					break;
 		}
-
 		}
-
 	}
-
-
 }
 //}}}
-
 //{{{ Fermentables
 class Fermentables extends Parser{
 	// fields within FERMENTABLES tag
 	public $fermentables = array(); // array of fermentable objects
-
 	function startElement($parser,$tagName,$attrs) {
 		switch($tagName){
 			case "FERMENTABLE":
@@ -172,7 +156,6 @@ class Fermentables extends Parser{
 				break;
 		}
 	}
-
 	function endElement($parser,$tagName) {
 		switch($tagName){
 			case "FERMENTABLES":
@@ -181,14 +164,9 @@ class Fermentables extends Parser{
 			default:
 				break;
 		}
-
 	}
-
 	function nodeData($parser,$data) {
-
 	}
-
 }
 //}}}
-
 ?>

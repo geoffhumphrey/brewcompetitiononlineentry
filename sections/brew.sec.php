@@ -50,17 +50,17 @@ elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($
 }
 
 else {
-
-if ($totalRows_styles2 > 0) {
-
-	do { 
-		$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
-		$special_required[] = $style_special."-".$row_styles2['brewStyleNum']; 
-	}  while ($row_styles2 = mysql_fetch_assoc($styles2));
-
-// print_r ($special_required);
-
-}
+	/*
+	if ($totalRows_styles2 > 0) {
+	
+		do { 
+			$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
+			$special_required[] = $style_special."-".$row_styles2['brewStyleNum']; 
+		}  while ($row_styles2 = mysql_fetch_assoc($styles2));
+	
+	// print_r ($special_required);
+	}
+	*/
 
 if ($_SESSION['prefsHideRecipe'] == "N") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
@@ -89,83 +89,175 @@ $(document).ready(function()
 <?php 
 
 // Show/hide special ingredients depending upon the style chosen...
-$special_beer = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A");
-$cider = array("27-A","27-D");
-$special_mead = array("24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C");
-$special_cider = array("27-B","27-C","27-E","28-A","28-B","28-C","28-D");
-$all_execptions = array("6-D","16-E","17-F","20-A","21-A","21-B","22-B","22-C","23-A","27-A","27-D","24-A","24-B","24-C","25-A","25-B","25-C","26-A","26-B","26-C","27-B","27-C","27-E","28-A","28-B","28-C","28-D");
 
-if (($action == "edit") && ($msg != "default")) $view = ltrim($msg,"1-"); else $view = $view;
+if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
+	$beer_end = 23;
+	//$mead_begin = 24;
+	//$mead_end = 26;
+	//$cider_begin = 27;
+	//$cider_end = 28;
+}
+
+if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+	$beer_end = 34;
+	//$mead_begin = 35;
+	//$mead_end = 38;
+	//$cider_begin = 39;
+	//$cider_end = 40;
+}
+
+	
+	$query_spec_beer = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleGroup <='%s' OR brewStyleType ='1') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet'],$beer_end);
+	$spec_beer = mysql_query($query_spec_beer, $brewing) or die(mysql_error());
+	$row_spec_beer = mysql_fetch_assoc($spec_beer);
+	do { $special_beer[] = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum']; } while ($row_spec_beer = mysql_fetch_assoc($spec_beer));
+	//print_r($special_beer); echo "<br>";
+	
+	$query_carb_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='0' AND brewStyleCarb='1'", $_SESSION['prefsStyleSet']);
+	$carb_mead = mysql_query($query_carb_mead, $brewing) or die(mysql_error());
+	$row_carb_mead = mysql_fetch_assoc($carb_mead);
+	do { $mead[] = $row_carb_mead['brewStyleGroup']."-".$row_carb_mead['brewStyleNum']; } while ($row_carb_mead = mysql_fetch_assoc($carb_mead));
+	//print_r($mead); echo "<br>";
+	
+	$query_strength_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='0' AND brewStyleStrength='1'", $_SESSION['prefsStyleSet']);
+	$strength_mead = mysql_query($query_strength_mead, $brewing) or die(mysql_error());
+	$row_strength_mead = mysql_fetch_assoc($strength_mead);
+	do { $strength_mead[] = $row_strength_mead['brewStyleGroup']."-".$row_strength_mead['brewStyleNum']; } while ($row_strength_mead = mysql_fetch_assoc($strength_mead));
+	//print_r($mead); echo "<br>";
+	
+	$query_spec_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet']);
+	$spec_mead = mysql_query($query_spec_mead, $brewing) or die(mysql_error());
+	$row_spec_mead = mysql_fetch_assoc($spec_mead);
+	do { $special_mead[] = $row_spec_mead['brewStyleGroup']."-".$row_spec_mead['brewStyleNum']; } while ($row_spec_mead = mysql_fetch_assoc($spec_mead));
+	//print_r($special_mead); echo "<br>";
+	
+	$query_carb_cider = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleType='Cider' OR brewStyleType ='2') AND brewStyleReqSpec='0' AND brewStyleCarb='1'", $_SESSION['prefsStyleSet']);
+	$carb_cider = mysql_query($query_carb_cider, $brewing) or die(mysql_error());
+	$row_carb_cider = mysql_fetch_assoc($carb_cider);
+	do { $cider[] = $row_carb_cider['brewStyleGroup']."-".$row_carb_cider['brewStyleNum']; } while ($row_carb_cider = mysql_fetch_assoc($carb_cider));
+	//print_r($cider); echo "<br>";
+		
+	$query_spec_cider = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE brewStyleVersion='%s' AND (brewStyleType='Cider' OR brewStyleType ='2') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet']);
+	$spec_cider = mysql_query($query_spec_cider, $brewing) or die(mysql_error());
+	$row_spec_cider = mysql_fetch_assoc($spec_cider);
+	
+	do { $special_cider[] = $row_spec_cider['brewStyleGroup']."-".$row_spec_cider['brewStyleNum']; } while ($row_spec_cider = mysql_fetch_assoc($spec_cider));
+	//print_r($special_cider); echo "<br>";
+	
+	$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider);
+	//print_r($all_special_ing_styles); echo "<br>";
+
+function display_array_content_style($arrayname,$method,$base_url) {
+ 	$a = "";
+	sort($arrayname);
+ 	while(list($key, $value) = each($arrayname)) {
+  		if (is_array($value)) {
+			$c = display_array_content($value,'');
+			$d = ltrim($c,"0");
+			$d = str_replace("-","",$c);
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?go=".$c."'>".$d."</a>";
+   		}
+  		else {
+			$e = ltrim($value,"0");
+			$e = str_replace("-","",$value);
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?go=".$value."'>".$e."</a>"; 
+		}
+		if ($method == "1") $a .= "";
+		if ($method == "2") $a .= "&nbsp;&nbsp;";
+		if ($method == "3") $a .= ",";
+  	}
+	$b = rtrim($a, "&nbsp;&nbsp;");
+	$b = rtrim($b, "  ");
+ 	return $b;
+}
+
+
+$specials = display_array_content_style($all_special_ing_styles,2,$base_url); 
+//$specials = str_replace("-","",$specials); 
+$specials = rtrim($specials,", "); 
+//echo $specials;
+//echo "<br>";
+
+if (($action == "edit") && ($msg != "default")) {
+	$view = ltrim($msg,"1-"); 
+	$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
+	$highlight_special    = highlight_required($msg,1,$_SESSION['prefsStyleSet']);
+	$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
+	$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
+}
+elseif ($action == "edit") $view = $view;
 
 ?>
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
+	<?php if ($action == "add") { ?>
 		$("#special").hide("fast");
-		$("#mead-cider").hide("fast");;
+		$("#mead-cider").hide("fast");
 		$("#mead").hide("fast");
-						   
-	<?php if (($action == "edit") && (!in_array($view,$all_execptions))) { ?>
-		$("#special").hide();
-		$("#mead-cider").hide();
-		$("#mead").hide();
 	<?php } ?>
-	<?php if (($action == "edit") && (in_array($view,$special_beer))) { ?>
-		$("#special").show("slow");
-		$("#mead-cider").hide();
-		$("#mead").hide();
-	<?php } ?>
-	<?php if (($action == "edit") && (in_array($view,$cider))) { ?>
-		$("#special").hide();
-		$("#mead-cider").show("slow");
-		$("#mead").hide();
-	<?php } ?>
-	<?php if (($action == "edit") && (in_array($view,$special_mead))) { ?>
-		$("#special").show("slow");
-		$("#mead-cider").show("slow");
-		$("#mead").show("slow");
-	<?php } ?>
-	<?php if (($action == "edit") && (in_array($view,$special_cider))) { ?>
-		$("#special").show("slow");
-		$("#mead-cider").show("slow");
-		$("#mead").hide();
-	<?php } ?>
-	<?php if (($action == "edit") && (in_array($view,$special_required))) { ?>
-		$("#special").show("slow");
-		$("#mead-cider").hide();
-		$("#mead").hide();
-	<?php } ?>
-	<?php if (($action == "edit") && ($msg != "")) { ?>	
-		<?php if (highlight_required($msg,0)) { ?>
-		$("#special").show("slow");
+	<?php if ($action == "edit") { ?>			   
+		<?php if (!in_array($view,$all_special_ing_styles)) { ?>
+			$("#special").hide();
+			$("#mead-cider").hide();
+			$("#mead").hide();
 		<?php } ?>
-		<?php if (highlight_required($msg,1)) { ?>
-		$("#special").show("slow");
+		<?php if (in_array($view,$special_beer)) { ?>
+			$("#special").show("slow");
+			$("#mead-cider").hide();
+			$("#mead").hide();
 		<?php } ?>
-		<?php if (highlight_required($msg,2)) { ?>
-		$("#mead-cider").show("slow");						  
+		<?php if (in_array($view,$cider)) { ?>
+			$("#special").hide();
+			$("#mead-cider").show("slow");
+			$("#mead").hide();
 		<?php } ?>
-		<?php if (highlight_required($msg,3)) { ?>
-		$("#mead-cider").show("slow");
-		$("#mead").show("slow");
-		<?php } ?>
-	<?php }?>
-	
-	$("#type").change(function() {
-	 	$("#special").hide("fast");
-		$("#mead-cider").hide("fast");;
-		$("#mead").hide("fast");
-		if ( 
-			$("#type").val() == "25-C"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
+		<?php if (in_array($view,$special_mead)) { ?>
 			$("#special").show("slow");
 			$("#mead-cider").show("slow");
 			$("#mead").show("slow");
+		<?php } ?>
+		<?php if (in_array($view,$special_cider)) { ?>
+			$("#special").show("slow");
+			$("#mead-cider").show("slow");
+			$("#mead").hide();
+		<?php } ?>
+		<?php //if (in_array($view,$special_required)) { ?>
+			//$("#special").show("slow");
+			//$("#mead-cider").hide();
+			//$("#mead").hide();
+		<?php //} ?>
+		<?php if ($msg != "default") { ?>	
+			<?php if ($highlight_sweetness); { ?>
+			$("#mead-cider").show("slow");
+			<?php } ?>
+			<?php if ($highlight_special) { ?>
+			$("#special").show("slow");
+			<?php } ?>
+			<?php if ($highlight_carb) { ?>
+			$("#mead-cider").show("slow");						  
+			<?php } ?>
+			<?php if ($highlight_strength) { ?>
+			$("#mead-cider").show("slow");
+			$("#mead").show("slow");
+			<?php } ?>
+		<?php }?>
+	<?php } ?>
+	
+	$("#type").change(function() {
+		<?php if ($action == "add") { ?>
+	 	$("#special").hide("fast");
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+		<?php } ?>
+		if ( 
+			$("#type").val() == "99999-A"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
 		}
 		<?php foreach ($cider as $value) { ?>
 		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
 			$("#mead").hide("fast");
 			$("#mead-cider").hide("fast");
@@ -174,9 +266,21 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
+		<?php foreach ($mead as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").show("slow");
+			$("#mead-cider").show("slow");
+			
+		}
+		<?php } ?>
+		
 		<?php foreach ($special_mead as $value) { ?>
 		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
 			$("#mead").hide("fast");
 			$("#mead-cider").hide("fast");
@@ -186,19 +290,22 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
-		<?php foreach ($special_required as $value) { ?>
+		<?php foreach ($strength_mead as $value) { ?>
 		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
 			$("#mead").hide("fast");
-			$("#special").show("slow");
+			$("#mead-cider").hide("fast");
+			$("#mead").show("slow");
+			$("#mead-cider").show("slow");
 		}
 		<?php } ?>
 		
+		
+		
 		<?php foreach ($special_cider as $value) { ?>
 		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
+			$("#type").val() == "<?php echo ltrim($value,"0");?>"){
 			$("#special").hide("fast");
 			$("#mead-cider").hide("fast");
 			$("#mead").hide("fast");
@@ -209,7 +316,7 @@ $(document).ready(function() {
 		
 		<?php foreach ($special_beer as $value) { ?>
 		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
 			$("#mead-cider").hide("fast");
 			$("#mead").hide("fast");
@@ -217,22 +324,10 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
-		<?php 
-		if ($totalRows_custom_styles > 0) {
-		foreach ($a as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo $value; ?>"){
-			$("#mead-cider").hide("fast");
-			$("#special").show("slow");
-			
-		}
-		<?php } 
-		}
-		?>
-		
 		else{
 			$("#special").hide("fast");
 			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
 			
 		}	
 	}
@@ -322,7 +417,7 @@ $brewer_info = explode("^",$brewer_info);
    <td class="data"><?php if (!NHC) { ?><span class="required">Required for all entries</span><?php } ?></td>
 </tr>
 <tr>
-   <td class="dataLabel">Style:</td>
+   <td class="dataLabel"><?php echo str_ireplace("2"," 2",$_SESSION['prefsStyleSet']); ?> Style:</td>
    <td class="data">
    <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
    <input type="hidden" name="brewStyle" id="type" value="<?php echo $view; ?>"><?php echo $row_log['brewCategory'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; ?>
@@ -360,8 +455,15 @@ $brewer_info = explode("^",$brewer_info);
 			elseif ($disable_fields) $selected_disabled = "DISABLED";
 			
 			// Build selection variable
-			$selection = ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+			
+			if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+			else 
+			$selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 			if ($selected_disabled == "DISABLED") $selection .= " [disabled - subcategory entry limit reached]";
+			if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
+			if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
+			if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
+			if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
 		if (!empty($row_styles['brewStyleGroup'])) { ?>
 		<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
    		<?php }
@@ -370,6 +472,15 @@ $brewer_info = explode("^",$brewer_info);
    	<?php } ?>
    	</td>
    	<td class="data"><span class="required">Required for all entries</span><span class="icon"><img src="<?php echo $base_url; ?>images/information.png" /></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/styles.php">View Accepted Styles</a></td>
+</tr>
+<tr>
+	<td class="dataLabel"></td>
+    <td class="data">
+    &spades; = Special Ingredients and/or Classic Style Required<br />
+    &diams; = Strength Required<br />
+    &clubs; = Carbonation Level Required<br />
+    &hearts; = Sweetness Level Required
+    </td>
 </tr>
 </table>
 <div id="special">
@@ -388,10 +499,7 @@ $brewer_info = explode("^",$brewer_info);
 <?php } else { ?>
 <tr>
    <td class="dataLeft">
-   	<p>
-    <span class="required"><em>Required for categories 6D, 16E, 17F, 20, 21, 22B, 22C, 23, 25C, 26A, 26C, 27E, and 28B-D.</em></span><br />
-   	<span class="required"><em>Base style required for categories 20, 21, and 22B</em>.</span> Specify if the entry is based on a classic style (e.g., Blonde Ale or Belgian Tripel). Otherwise, more general categories are acceptable (e.g., &ldquo;wheat ale&rdquo; or &ldquo;porter&rdquo;).
-    </p>
+   	<p><span class="required">Required for the following categories: <?php echo $specials; ?></span></p>
    	<ul>
    	  <li><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the Brewer's Specifics field under &ldquo;General&rdquo; area below to add information <strong>NOT essential to judging your entry</strong>."; ?></li>
       <li>Judges <strong>will not know</strong> the name of your entry. If your special ingredient/classic style is part of your entry's name, be sure each is included below.</li>
@@ -406,7 +514,7 @@ $brewer_info = explode("^",$brewer_info);
   </td>
 </tr>
 <tr>
-   <td class="dataLeft"><input type="text" <?php if (highlight_required($msg,"1")) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60"></td>
+   <td class="dataLeft"><input type="text" <?php if ($highlight_special) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60"></td>
 </tr>
 <tr>
    <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
@@ -414,13 +522,13 @@ $brewer_info = explode("^",$brewer_info);
  <?php } ?>
 </table>
 </div>
-<div id="mead-cider" <?php if (highlight_required($msg,"2")) echo "class=\"special-required\""; ?>>
+<div id="mead-cider" <?php if (($highlight_carb) || ($highlight_sweetness)) echo "class=\"special-required\""; ?>>
 <table>
 <tr>
    <td class="dataLabel" colspan="2">For Mead and Cider:</td>
 </tr>
 <tr>
-   <td class="dataLeft" colspan="2"><em>Required for categories 24, 25, 26, 27, and 28</em></td>
+   <td class="dataLeft" colspan="2"><em>Required for mead and cider categories.</em></td>
 </tr>
 <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
 <tr>
@@ -437,23 +545,33 @@ $brewer_info = explode("^",$brewer_info);
 </tr>
 <?php } else { ?>
 <tr>
-   <td class="dataLeft">Carbonation (Choose ONE):</td>
-   <td class="dataLeft">Sweetness (Choose ONE):</td>
+   <td class="dataLeft">Carbonation:</td>
+   <td class="dataLeft">Sweetness:</td>
 </tr>
 <tr>
-   <td class="data"><input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED";  ?>/> Still<br /><input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED";  ?>/> Petillant<br /><input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED";  ?>/> Sparkling</td>
-   <td class="data"><input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED";  ?> /> Dry<br /><input type="radio" name="brewMead2" value="Semi-Sweet" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED";  ?>/> Semi-Sweet<br /><input type="radio" name="brewMead2" value="Sweet" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> Sweet</td>
+   <td class="data">
+   <input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED";  ?>/> Still<br />
+   <input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED";  ?>/> Petillant<br />
+   <input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED";  ?>/> Sparkling
+   </td>
+   <td class="data">
+   <input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED";  ?> /> Dry<br />
+   <input type="radio" name="brewMead2" value="Medium Dry" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium Dry")) echo "CHECKED";  ?>/> Medium Dry<br />
+   <input type="radio" name="brewMead2" value="Medium" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium")) echo "CHECKED";  ?>/> Medium<br />
+   <input type="radio" name="brewMead2" value="Medium Sweet" id="brewMead2_3"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium Sweet")) echo "CHECKED";  ?>/> Medium Sweet<br />
+   <input type="radio" name="brewMead2" value="Sweet" id="brewMead2_4"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> Sweet
+   </td>
 </tr>
 <?php } ?>
 </table>
 </div>
-<div id="mead" <?php if (highlight_required($msg,"3")) echo "class=\"special-required\"" ?>>
+<div id="mead" <?php if ($highlight_strength) echo "class=\"special-required\"" ?>>
 <table>
 <tr>
    <td class="dataLabel" colspan="2">For Mead:</td>
 </tr>
 <tr>
-   <td class="dataLeft" colspan="2"><em>Required for categories 24, 25, and 26</em></td>
+   <td class="dataLeft" colspan="2"><em>Required for mead categories.</em></td>
 </tr>
 <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
 <tr>
@@ -465,7 +583,7 @@ $brewer_info = explode("^",$brewer_info);
 </tr>
 <?php } else { ?>
 <tr>
-   <td class="dataLeft" colspan="2">Strength (Choose ONE):</td>
+   <td class="dataLeft" colspan="2">Strength:</td>
 </tr>
 <tr>
    <td class="data"><input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> Hydromel (light)<br /><input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED";  ?> /> Standard<br /><input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> /> Sack (strong)</td>

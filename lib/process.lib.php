@@ -1,5 +1,4 @@
 <?php
-
 function check_http($input) {
 	if ($input != "") {
 			if (strstr($input,"http://")) return $input;
@@ -7,7 +6,6 @@ function check_http($input) {
 			if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;		   
 		}
 }
-
  
 function generate_judging_num($style_cat_num) {
 	// Generate the Judging Number each entry 
@@ -70,7 +68,6 @@ function clean_up_url($referer) {
 	// Remove $msg=X from query string
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
-
 	// Remove $id=X from query string
 	$pattern = array("/[0-9]/", "/&id=/");
 	$referer = preg_replace($pattern, "", $referer);
@@ -135,7 +132,6 @@ function generate_judging_numbers($brewing_db_table) {
 	$query_judging_numbers = "SELECT id FROM $brewing_db_table ORDER BY id ASC";
 	$judging_numbers = mysql_query($query_judging_numbers, $brewing) or die(mysql_error());
 	$row_judging_numbers = mysql_fetch_assoc($judging_numbers);
-
 	do { 
 		$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingNumber=%s WHERE id='%s'", "NULL", $row_judging_numbers['id']);
 		mysql_select_db($database, $brewing);
@@ -165,15 +161,17 @@ function generate_judging_numbers($brewing_db_table) {
 	} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 }
 
-
-function check_special_ingredients($style) {
+function check_special_ingredients($style,$version) {
 	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 		
 	$style = explode("-",$style);
-
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $style[0], $style[1]);
+	
+	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
+	else $style_0 = $style[0];
+	
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleVersion = '%s' AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $style_0, $style[1]);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	
@@ -181,43 +179,39 @@ function check_special_ingredients($style) {
 	else return FALSE;
 }
 	  
-function check_carb_sweetness($style) {
+function check_carb_sweetness($style,$styleSet) {
 	
-	$style = str_replace("-","",$_POST['brewStyle']);
-	$style = preg_replace('/[^0-9,]|,[0-9]*$/','',$style);
-	
-	switch($style) {
-		case "24":
-		case "25":
-		case "26":
-		case "27":
-		case "28":
-		return TRUE;
-		break;
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
 		
-		default:
-		return FALSE;
-		break;
-	}
+	$style = explode("-",$style);
+	
+	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
+	else $style_0 = $style[0];
+
+	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $style_0, $style[1], $styleSet);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+	if (($row_brews['brewStyleCarb'] == 1) || ($row_brews['brewStyleSweet'] == 1)) return TRUE;
+	else return FALSE;
 }
 	
+function check_mead_strength($style,$styleSet) {
 	
-function check_mead_strength($style) {
-	
-	$style = str_replace("-","",$_POST['brewStyle']);
-	$style = preg_replace('/[^0-9,]|,[0-9]*$/','',$style); 
-	
-	switch($style) {
-		case "24":
-		case "25":
-		case "26":
-		return TRUE;
-		break;
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
 		
-		default:
-		return FALSE;
-		break;
-	}
-}	
+	$style = explode("-",$style);
+	
+	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
+	else $style_0 = $style[0];
 
+	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $style_0, $style[1], $styleSet);
+	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
+	$row_brews = mysql_fetch_assoc($brews);
+	
+	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
+	else return FALSE;
+}	
  ?>

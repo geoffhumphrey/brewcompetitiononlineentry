@@ -15,11 +15,11 @@ else {
 	$style_count_logged = mysql_query($query_style_count_logged, $brewing) or die(mysql_error());
 	$row_style_count_logged = mysql_fetch_assoc($style_count_logged);
 	
-	if ($cat > 28) {
+	if ($cat > $category_end) {
 	
-	$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$prefix."styles",$cat_convert);
-	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-	$row_style_type = mysql_fetch_assoc($style_type);
+		$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$prefix."styles",$cat_convert);
+		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+		$row_style_type = mysql_fetch_assoc($style_type);
 	
 	}
 }

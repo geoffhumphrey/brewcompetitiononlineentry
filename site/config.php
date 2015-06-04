@@ -1,27 +1,42 @@
 <?php
+
+/**
+ * Module:        config.php 
+ * Description:   This module houses configuration variables for DB connection, etc.
+ *              
+ * Last Modified: May 29, 2015
+ */
+
+/*
+
+
 /*******Set up MySQL connection variables*******
 Generally, this line is left alone.
 */
 $hostname = "localhost";
+
 
 /* 
 Change the word root to the username for your database (generally the same as your login code for your web hosting company).
 INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username = "fred".
 */
-$username = "";
+//$username = "";
+$username = "brewcomp_bcoe";
 
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password = "flintsone".
 */
-$password = "";
+//$password = "";
+$password = "Ze9P#vK9tE";
 
 /*
 The following line is the name of your MySQL database you set up already.  
 If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
 */
-$database = "";
+//$database = "";
+$database = "brewcomp_bcoetest";
 
 /* 
 This line strings the information together and connects to MySQL.  
@@ -72,25 +87,33 @@ Leave as if you have a database dedicated to your BCOE&M installation.
 ******************************************************************************
 
 // Suggested Usage 
-If you wish to define a prefix to the database tables, it is  HIGHLY suggested that you use an underscore (_),
-after a short descriptor that identifies which install is using which tables. For example:
+If you wish to define a prefix to the database tables, it is HIGHLY suggested 
+that you use an underscore (_), after a short descriptor that identifies which 
+install is using which tables. 
+
+Example:
 $prefix = "bcoem1_";
-or
+
+OR
 $prefix = "comp1_";
 
 ******************************************************************************
 */
 
-$prefix = "";
+//$prefix = "";
+$prefix = "maltmadness_";
 
 
 /*
 ******************************************************************************
 Access control for setup.php.
 
-If you are going to go through the installation and setup process, you will need to modify the access check
-statement below. Change the FALSE to a TRUE to disable the access check.
-After finishing the upgrade, be sure to open this file again and change the TRUE back to a FALSE!
+If you are going to go through the installation and setup process, you will 
+need to modify the access check statement below. Change the FALSE to a TRUE 
+to disable the access check.
+
+After finishing setup, be sure to open this file again and change the 
+TRUE back to a FALSE!
  
 */
 
@@ -102,10 +125,11 @@ $setup_free_access = FALSE;
 Set the base URL of your installation. In most cases the default will be OK. 
 
 IF YOU ARE RUNNING YOUR INSTANCE OF BCOE&M IN A SUBFOLDER...
-Add the name of the subdirectory between the quotes of the $sub_directory variable.
+Add the name of the subdirectory between the quotes of the $sub_directory 
+variable.
 * Be sure to INCLUDE a leading slash [/] and NO trailing slash [/]!
 
-For example:
+Example:
 $sub_directory = "/bcoem"; 
 
 WARNING!!!
@@ -121,8 +145,32 @@ $sub_directory = "";
 ******************************************************************************
 Set the base URL of your installation. In most cases the default will be OK. 
 
+IF you are installing on a server where you do not have a domain name set up,
+you'll need to replace the $base_url below with something formatted like this:
+$base_url = "http://ipaddressorhostingdomain/~accountname/subdirectoryname/";
+
+Example:
+$base_url = "http://147.21.160.5/~brewcompetition/bcoem/";
+
+OR:
+$base_url = "http://www.bluehost.com/~brewcompeition/bcoem/";
+
+
 */
 
-$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/"; 
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+
+/*
+******************************************************************************
+Set the server root for your installation. In most cases the default will be OK. 
+
+IF you are installing on a server and will access the software via a sub-domain
+(e.g. http://subdomain.domain.com), comment out the first variable below and 
+uncomment the second variable.
+
+*/
+
+//$server_root = $_SERVER['DOCUMENT_ROOT'];
+$server_root = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT']; 
 
 ?>

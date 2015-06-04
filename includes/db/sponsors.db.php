@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 	
 	if ($action == "edit") $query_sponsors = "SELECT * FROM $sponsors_db_table WHERE id='$id'"; 
@@ -13,6 +12,5 @@ else {
 	$sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
 	$row_sponsors = mysql_fetch_assoc($sponsors);
 	$totalRows_sponsors = mysql_num_rows($sponsors);
-
 }
 ?>

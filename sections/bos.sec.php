@@ -5,6 +5,7 @@
  *              show results.
  * 
  */
+ 
 require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
@@ -70,9 +71,7 @@ require(DB.'winners.db.php');
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
 do { 
-
 include(DB.'output_results_download_sbd.db.php');
-
 if ($totalRows_sbd > 0) {
 $random = random_generator(6,2);		
 ?>        

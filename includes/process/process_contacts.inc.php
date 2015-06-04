@@ -1,8 +1,10 @@
 <?php 
+
 /*
  * Module:      process_contacts.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
+
 
 if ($action == "email") { 
 
@@ -62,6 +64,7 @@ if ($action == "email") {
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 		$headers .= "To: ".$to_name." <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
+		$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 		$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
 		
 		/*

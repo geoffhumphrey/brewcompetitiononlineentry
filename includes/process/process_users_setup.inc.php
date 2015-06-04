@@ -9,9 +9,7 @@ if (NHC) {
 	
 	
 }
-
 else {
-
 	$username = strtolower($_POST['user_name']);
 	if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		$password = md5($_POST['password']);
@@ -45,7 +43,5 @@ else {
 		$GoTo = str_replace($pattern, "", $GoTo); 
 		header(sprintf("Location: %s", stripslashes($GoTo)));	
 	}
-
 } // end else NHC
-
 ?>

@@ -3,9 +3,7 @@
  * Module:      process_special_best_info.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "special_best_info" table
  */
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -47,10 +45,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));					   
 		}
-
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
-
-
 ?>

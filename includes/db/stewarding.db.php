@@ -5,7 +5,6 @@ if (NHC) {
 	
 }
 // end if (NHC)
-
 else {
 	
 	$query_stewarding = "SELECT * FROM $judging_locations_db_table";
@@ -21,6 +20,5 @@ else {
 	$stewarding2 = mysql_query($query_stewarding2, $brewing) or die(mysql_error());
 	$row_stewarding2 = mysql_fetch_assoc($stewarding2);
 	$totalRows_stewarding2 = mysql_num_rows($stewarding2);
-
 }
 ?>

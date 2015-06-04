@@ -88,6 +88,18 @@ include (DB.'styles.db.php');
 <h3>Entries</h3>
 <table>
   <tr>
+    <td class="dataLabel">Styleset to Use:</td>
+    <td nowrap="nowrap" class="data">
+    <select name="prefsStyleSet">
+        <option value="BJCP2008" <?php if ($_SESSION['prefsStyleSet'] == "BJCP2008") echo " SELECTED"; ?> />BJCP 2008</option>
+        <option value="BJCP2015" <?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") echo " SELECTED"; ?> />BJCP 2015</option>
+        <!-- // Future Release
+        <option value="BA2014" <?php if ($_SESSION['prefsStyleSet'] == "BA2014") echo " SELECTED"; ?> />Brewers Association 2014</option>
+        <option value="BA2015" <?php if ($_SESSION['prefsStyleSet'] == "BA2015") echo " SELECTED"; ?> />Brewers Association 2015</option>
+        -->
+    </select>
+    </td>
+  <tr>
     <td class="dataLabel">Printed Entry Form to Use:</td>
     <td nowrap="nowrap" class="data">
     <select name="prefsEntryForm">
@@ -186,11 +198,11 @@ include (DB.'styles.db.php');
   </tr>
   <tr>
     <td class="dataLabel">Hide Entry Recipe Section:</td>
-    <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No</td>
   	<td class="data">Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</td>
   </tr>
 </table>
-<h3>Performance</h3>
+<h3>Performance and Data Clean-Up</h3>
 <table>
   <tr>
   	<td class="dataLabel">Number of Records to Display Per Page:</td>
@@ -198,6 +210,11 @@ include (DB.'styles.db.php');
     <input type="hidden" name="prefsRecordLimit" id="prefsRecordLimit" value="9999" />
     <input name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $_SESSION['prefsRecordPaging']; ?>" size="5" maxlength="11" /></td>
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
+  </tr>
+  <tr>
+  	<td class="dataLabel">Automatically Purge Unconfirmed Entries:</td>
+    <td nowrap="nowrap" class="data"><input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsAutoPurge" value="N" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; ?>/> No</td>
+    <td class="data">Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry. If "No," Admins will have the option to manually purge the entries.</td>
   </tr>
 </table>
 <h3>Localization</h3>

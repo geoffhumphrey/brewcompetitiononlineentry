@@ -363,7 +363,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
             <tbody>
         	<?php do { ?>
             <?php 
-			$received_entry_count_style = get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default");
+			$received_entry_count_style = get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default");
 			if ($received_entry_count_style > 0) { 
 			//if (in_array($row_styles['brewStyle'],$with_received_entries)) {
 			if (!get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) {
@@ -462,13 +462,13 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
             </thead>
             <tbody>
         	<?php do { ?>
-            <?php if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default") > 0) { ?>
+            <?php if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default") > 0) { ?>
             <tr>
             	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
                 <td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
                 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?></td>
                 <td class="data"><?php echo $row_styles['brewStyle'].get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>
-                <td class="data" style="text-align:right;"><?php echo get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default"); ?></td>
+                <td class="data" style="text-align:right;"><?php echo get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default"); ?></td>
             </tr>
             <?php } ?>
             <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
@@ -491,11 +491,11 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 	if ($totalRows_tables > 0) {
 		
 		do { 
-			if (get_table_info($row_styles['brewStyle'],"count","",$dbTable,"default")) { 
+			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default")) { 
 				$a[] = 0;
 				if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
 					$a[] = $row_styles['id'];
-					echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyle'],"count","default",$dbTable,"default")." entries)</li></ul>";  
+					echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li></ul>";  
 				}
 			} 
 		} while ($row_styles = mysql_fetch_assoc($styles));

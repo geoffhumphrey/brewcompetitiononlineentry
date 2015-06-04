@@ -114,17 +114,12 @@
     </p>
 	<p><input type="text" name="captcha_code" size="10" maxlength="6" /><br />Enter the characters above exactly as displayed.</p>
     <p>Can't read the characters?<br /><a href="#" onclick="document.getElementById('captcha').src = '<?php echo $base_url; ?>captcha/securimage_show.php?' + Math.random(); return false">Reload the Captcha Image</a>.</p>
-
  
  */
-
 /* ---------------- PUBLIC Pages Rebuild Info ---------------------
-
 Beginning with the 1.3.0 release, an effort was begun to separate the programming
 layer from the presentation layer for all scripts with this header.
-
 All Public pages have certain variables in common that build the page:
-
 	$warningX = any warnings
   
 	$primary_page_info = any information related to the page
@@ -152,19 +147,15 @@ Declare all variables empty at the top of the script. Add on later...
 	$page_info2 = "";
 	
 	etc., etc., etc.
-
  * ---------------- END Rebuild Info --------------------- */
-
  
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
 include(DB.'brewer.db.php');
-
 require_once(INCLUDES.'recaptchalib.inc.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
-
 if ($go != "default") {
 	
 	do { 
@@ -193,10 +184,8 @@ $header1_1 = "";
 $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
-
 $warning1 .= "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
 $warning2 .= "<div class='closed'>Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>";
-
 $header1_1 .= "<h2>";
 $header1_1 .= "Register ";
 if ($section == "admin") { 
@@ -204,7 +193,6 @@ if ($section == "admin") {
 	else $header1_1 .= " a Participant"; 
 	}
 $header1_1 .= "</h2>";
-
 if ((($registration_open < 2) || ($judge_window_open < 2)) && ($section != "admin") && (!open_limit($totalRows_entry_count,$_SESSION['prefsEntryLimit'],$registration_open))) {
 	$page_info1 .= "<p>Entry into this competition is conducted completely online.</p>";
 	$page_info1 .= "<ul>";
@@ -219,17 +207,12 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && ($section != "admi
 	}
 	$page_info1 .= "</ul>";	
 }
-
-
-
-
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
 if (($action != "print") && ($msg != "default") && ($section != "admin")) echo $msg_output; 
 if (($section != "admin") && ($action != "print")) echo $warning1;
 if (NHC) echo $warning2;
-
 echo $header1_1;
 echo $page_info1;
 if ($go == "default") { ?>

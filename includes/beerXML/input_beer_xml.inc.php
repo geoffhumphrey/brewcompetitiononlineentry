@@ -1,7 +1,5 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
-
 //{{{ License
 // +------------------------------------------------------------------------+
 // | Input Beer XML - takes recipe objects from BeerXMLParser               |
@@ -30,8 +28,6 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-
-
 function generate_judging_num($style_cat_num) {
 	// Generate the Judging Number each entry 
 	require(CONFIG.'config.php');
@@ -45,7 +41,6 @@ function generate_judging_num($style_cat_num) {
 	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
 	return sprintf("%05s",$output) ;
 }
-
 include (INCLUDES.'beerXML/parse_beer_xml.inc.php');
 //{{{ InputBeerXML
 class InputBeerXML {
@@ -86,8 +81,6 @@ class InputBeerXML {
         }
     }
     //}}}
-
-
     //{{{ insertRecipes
     function insertRecipes(){
         foreach($this->recipes->recipes as $recipe){
@@ -96,7 +89,6 @@ class InputBeerXML {
         return $this->insertedRecipes;
     }
     //}}}
-
     //{{{ insertRecipe
     function insertRecipe($recipe){  // inserts into `recipes` DB table
 	include(CONFIG.'config.php');
@@ -112,7 +104,6 @@ class InputBeerXML {
         $counter = array();
 		$vf["brewBrewerFirstName"] = $_POST["brewBrewerFirstName"];
 		$vf["brewBrewerLastName"] = $_POST["brewBrewerLastName"];
-
 		$query_limits = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 		$limits = mysql_query($query_limits, $brewing) or die(mysql_error());
 		$row_limits = mysql_fetch_assoc($limits);
@@ -208,7 +199,6 @@ class InputBeerXML {
             }
         }
 		*/
-
         $counter["hops"] = 0;
         foreach($recipe->hops->hops as $hop){
             $counter["hops"]++;
@@ -222,7 +212,6 @@ class InputBeerXML {
                 $vf["brewHops" . $counter["hops"] . "Form"] = $hop->form;
             }
         }
-
         $counter["yeast"] = 0;
         foreach($recipe->yeasts->yeasts as $yeast){
             $vf["brewYeast"] = strtr($yeast->name, $html_string);
@@ -235,7 +224,6 @@ class InputBeerXML {
                 $vf["brewYeast" . "Amount"] = $this->convertUnit($yeast->amount,"volume"); 
             }        
 		}
-
         $vf["brewOG"] = number_format($recipe->og,3);
         $vf["brewFG"] = number_format($recipe->fg,3);
         // $vf["brewProcedure"] = $recipe->notes;
@@ -266,10 +254,8 @@ class InputBeerXML {
         }
     //}}}
   }
-
 //}}}
 //}}}
 //}}}
 //}}}
 ?>
-

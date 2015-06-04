@@ -3,7 +3,6 @@
  * Module:      process_styles.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
-
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 	
 	if (NHC) {
@@ -13,7 +12,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	}
 	
 	else {
-
 		if ($action == "update") {
 		foreach($_POST['id'] as $id)	{ 
 		
@@ -66,10 +64,16 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		
 		if ($action == "add") {
 			
+			
+		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
+		if ($_SESSION['prefsStyleSet'] == "BJCP2015") $category_end = 34;		
 		mysql_select_db($database, $brewing);
-		$query_style_name = "SELECT brewStyleGroup FROM `".$prefix."styles` ORDER BY id DESC LIMIT 1";
+		$query_style_name = "SELECT brewStyleGroup FROM `".$prefix."styles` WHERE brewStyleGroup > $category_end ORDER BY id DESC LIMIT 1";
 		$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 		$row_style_name = mysql_fetch_assoc($style_name);
+		
+		// Get the difference between the category end and the last number
+		// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
 		$style_add_one = $row_style_name['brewStyleGroup'] + 1;
 		
 		  $insertSQL = sprintf("INSERT INTO $styles_db_table (
@@ -94,13 +98,19 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		  brewStyleGroup, 
 		  brewStyleActive, 
 		  brewStyleOwn,
-		  brewStyleReqSpec
+		  brewStyleVersion,
+		  brewStyleReqSpec,
+		  brewStyleStrength,
+		  brewStyleCarb,
+		  brewStyleSweet
 		  ) 
 		  VALUES (
 		  %s, %s, %s, %s, %s, 
 		  %s, %s, %s, %s, %s, 
 		  %s, %s, %s, %s, %s, 
-		  %s, %s, %s, %s)",
+		  %s, %s, %s, %s, %s,
+		  %s, %s, %s
+		  )",
 							   GetSQLValueString("A", "text"),
 							   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
 							   GetSQLValueString($_POST['brewStyleOG'], "text"),
@@ -119,7 +129,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($style_add_one, "text"),
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
 							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
-							   GetSQLValueString($_POST['brewStyleReqSpec'], "text")
+							   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
+							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
+							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
+							   GetSQLValueString($_POST['brewStyleSweet'], "text")
 							   );
 		
 		
@@ -133,6 +147,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		}
 		
 		if ($action == "edit") {
+			
+			if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = $_POST['brewStyleStrength'];
+			
 			$updateSQL = sprintf("UPDATE $styles_db_table SET 
 			  brewStyleNum=%s, 
 			  brewStyle=%s, 
@@ -155,7 +172,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			  brewStyleGroup=%s,
 			  brewStyleActive=%s, 
 			  brewStyleOwn=%s,
-			  brewStyleReqSpec=%s
+			  brewStyleReqSpec=%s,
+			  brewStyleStrength=%s,
+		  	  brewStyleCarb=%s,
+		  	  brewStyleSweet=%s
 			  
 			  WHERE id=%s",
 							   GetSQLValueString($_POST['brewStyleNum'], "text"),
@@ -177,6 +197,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
 							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
 							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+							   GetSQLValueString($styleStrength, "text"),
+							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
+							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
 							   GetSQLValueString($id, "int"));
 		
 		  mysql_select_db($database, $brewing);
@@ -196,10 +219,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
-
 		}
-
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
 ?>

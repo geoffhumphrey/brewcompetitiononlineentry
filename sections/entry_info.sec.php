@@ -235,7 +235,7 @@ else $header1_7 .= "<a name='judging'></a><h2>Judging Location and Dates</h2>";
 $header1_8 .= "";
 $page_info8 .= "";
 
-$header1_8 .= "<h2>Categories Accepted</h2>";
+$header1_8 .= "<a name='categories'></a><h2>Categories Accepted: ".str_replace("2"," 2",$row_styles['brewStyleVersion'])."</h2>";
 $page_info8 .= "<table class='dataTableCompact' style='border-collapse:collapse;'>";
 $page_info8 .= "<tr>"; 
 
@@ -282,10 +282,11 @@ if ($_SESSION['contestShippingAddress'] != "") {
 	$page_info10 .= $_SESSION['contestShippingAddress'];
 	$page_info10 .= "</p>";
     $page_info10 .= "<h3>Packing and Shipping</h3>";
-    $page_info10 .= "<p>Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Do not over pack! Write clearly: &quot;Fragile. This Side Up.&quot; on the package. Your package should weigh less than 25 pounds. Please refrain from using &quot;messy&quot; packaging materials such a Styrofoam &quot;peanuts&quot; or pellets; please use packaging material such as bubble wrap.</p>";
-    $page_info10 .= "<p>Enclose your <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically  which beer has broken if there is damage during shipment.</p>";
+    $page_info10 .= "<p><strong>Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Please do not over pack!</strong>";
+	$page_info10 .= "<p>Write clearly: &quot;Fragile. This Side Up.&quot; on the package. Please refrain from using &quot;messy&quot; packaging materials such a Styrofoam &quot;peanuts&quot; or pellets; please use packaging material such as bubble wrap.</p>";
+    $page_info10 .= "<p>Enclose <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically which entry has broken if there is damage during shipment.</p>";
     $page_info10 .= "<p>Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.</p>";
-    $page_info10 .= "<p>It is not against any Bureau of Alcohol, Tobacco and Firearms (ATF) regulations or federal laws to ship your entries via privately owned shipping company for analytical purposes. However, <strong>IT IS ILLEGAL TO SHIP ALCOHOLIC BEVERAGES VIA THE U.S. POSTAL SERVICE</strong>. Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs' officials at their discretion. It is solely the entrant's responsibility to follow all applicable laws and regulations.</p>";
+    $page_info10 .= "<p>If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs' officials at their discretion. It is solely the entrant's responsibility to follow all applicable laws and regulations.</p>";
 }
 
 // Drop Off

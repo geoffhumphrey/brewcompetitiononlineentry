@@ -4,9 +4,7 @@ if ($bid != "") {
 	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
 	$row_judging = mysql_fetch_assoc($judging);
 }
-
 // Note: the order of the columns is set to the specifications set by HCCP for import
-
 if ($filter != "winners") {
 	
 	if ($filter == "all") 	$query_sql = "SELECT * FROM $brewing_db_table";
@@ -19,16 +17,11 @@ if ($filter != "winners") {
 	if (($filter == "nopay") && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND brewReceived = '1'";
 	if (($filter == "nopay") && ($bid == "default") && ($view == "all")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL)"; 
 }
-
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
 if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
-
 if ($filter == "winners") $query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
-
 //echo $query_sql."<br />";
-
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
 $num_fields = mysql_num_fields($sql);
-
 ?>

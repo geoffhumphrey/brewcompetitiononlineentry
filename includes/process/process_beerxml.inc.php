@@ -1,5 +1,5 @@
 <?php
-if ($_SESSION['loginUsername') { 
+if ($_SESSION['loginUsername']) { 
 	
 	if (NHC) {
 	// Place NHC SQL calls below
@@ -50,8 +50,6 @@ if ($_SESSION['loginUsername') {
 		else $message = "Invalid file specified.";
 	
 	} // end else
-
 }
 else echo "<p>Not available.</p>";
-
 ?>

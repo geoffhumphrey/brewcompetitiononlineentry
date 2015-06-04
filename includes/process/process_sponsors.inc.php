@@ -3,13 +3,9 @@
  * Module:      process_styles_edit.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table
  */
-
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-
 	$sponsorURL = check_http($_POST['sponsorURL']);
 	$sponsor_name = capitalize($_POST['sponsorName']);
-
 	if (NHC) {
 		// Place NHC SQL calls below
 		
@@ -17,7 +13,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	}
 	
 	else {
-
 		if ($action == "add") {
 			$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel) VALUES (%s, %s, %s, %s, %s, %s)",
 							   GetSQLValueString($sponsor_name, "text"),
@@ -53,9 +48,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));			   
 		}
-
 	} // end else NHC
-
 } else echo "<p>Not available.</p>";
-
 ?>

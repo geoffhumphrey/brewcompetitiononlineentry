@@ -117,11 +117,15 @@ if ($action != "print") {
 	if ($dbTable == "default") {
 		
 		$goto_nav .= "<span class='adminSubNav'>";
-		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=entrant&amp;action=register'>Add a Participant</a>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Add a Participant' title='Add a Participant'></span><a href='".$base_url."index.php?section=admin&amp;go=entrant&amp;action=register'>Add a Participant</a>";
 		$goto_nav .= "</span>";
 		
 		$goto_nav .= "<span class='adminSubNav'>";
-		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=judge&amp;action=register'>Add a Judge/Steward</a>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/user_add.png' alt='Add a Judge/Steward<' title='Add a Judge/Steward<'></span><a href='".$base_url."index.php?section=admin&amp;go=judge&amp;action=register'>Add a Judge/Steward</a>";
+		$goto_nav .= "</span>";
+		
+		$goto_nav .= "<span class='adminSubNav'>";
+		$goto_nav .= "<span class='icon'><img src='".$base_url."images/exclamation.png' alt='Clear All Assignments' title='Clear All Assignments'></span><a onclick=\"return confirm('Are you sure you want to clear all judge/steward/staff and organizer assignments for all participants? This will also clear any judge/steward table assignments and cannot be undone.');\"  href='".$base_url."includes/process.inc.php?dbTable=".$prefix."brewer&amp;action=update&amp;filter=clear'>Clear All Assignments</a>";
 		$goto_nav .= "</span>";
 	
 	} // end if ($dbTable == "default")
@@ -141,7 +145,7 @@ if ($action != "print") {
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page_excel_go.png' alt='Export' title='Export'></span>";
 		if (($filter == "judges") || ($filter == "stewards")) $secondary_nav .= "<a href='".$base_url."output/email_export.php?section=admin&amp;go=csv&amp;filter=".$csv."&amp;action=email'>Export</a>";
-		else $secondary_nav .= "<a href='".$base_url."output/email_export.php'>Export</a>";
+		else $secondary_nav .= "<a href='".$base_url."output/participants_export.php?section=admin&amp;go=csv'>Export</a>";
 		$secondary_nav .= "</span>";
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/page.png' alt='View' title='View'></span>";
@@ -409,7 +413,7 @@ do {
 
 		$output_datatables_add_link = build_action_link("book_add",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
 		$output_datatables_edit_link = build_action_link("pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"Edit the user record for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
-		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['id'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.");
+		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.");
 		else $output_datatables_delete_link = "<span class='icon'><img src='".$base_url."images/bin_closed_fade.png' title='You cannot delete yourself!'></span>";
 		if ($user_info[1] <= "1") $change_icon = "lock_open"; else $change_icon = "lock_edit";
 		$output_datatables_other_link = build_action_link($change_icon,$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s User Level");

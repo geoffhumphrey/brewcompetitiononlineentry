@@ -21,25 +21,9 @@ if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferenc
 
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
-	
+	 
 }
 	
-if (NHC) {
-
-	mysql_select_db($database, $brewing);
-	$query_version = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
-	$version = mysql_query($query_version, $brewing) or die(mysql_error());
-	$row_version = mysql_fetch_assoc($version);
-	
-	//echo $row_version['version'];
-	
-	if ($row_version['version'] != "1.3.0.4") { 
-		$setup_success = FALSE;
-		$setup_relocate = "Location: ".$base_url."update.php";
-	}
-	
-}
-
 if ((!NHC) && (!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
 	
 	$setup_success = FALSE;
@@ -53,6 +37,23 @@ elseif (MAINT) {
 	$setup_relocate = "Location: ".$base_url."maintenance.php";
 	
 }
+
+if (check_setup($prefix."system",$database)) {
+	
+	mysql_select_db($database, $brewing);
+	$query_version = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
+	$version = mysql_query($query_version, $brewing) or die(mysql_error());
+	$row_version = mysql_fetch_assoc($version);
+		
+	//echo $row_version['version'];
+		
+	if ($row_version['version'] != "1.3.1.0") { 
+		$setup_success = FALSE;
+		$setup_relocate = "Location: ".$base_url."update.php";
+	}
+
+}
+	
 
 if (!$setup_success) {
 	

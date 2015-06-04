@@ -341,6 +341,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				}
 		} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
 		
+		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
