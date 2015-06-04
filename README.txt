@@ -5,12 +5,12 @@
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston, Bruce Buerger, Oskar Stephens **
 ** and Luis Balbinot                                                **
-** Release 1.3.1.0 December, 2014                                   **
+** Release 1.3.1.0 June, 2015                                       **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
 ** the software for your own use and customize it for your own      **
-** purposes (http://help.brewcompetition.com/files/license.html).   **
+** purposes (http://brewcompetition.com/license).                   **
 ** http://www.brewcompetition.com                                   **
 ** http://help.brewcompetition.com                                  **
 ** Direct inquiries to prost@brewcompetition.com                    **
@@ -64,7 +64,8 @@ BCOE&M is free and open-source.
 **********************************************************************
 Changes in This Version
 **********************************************************************
-This is an update release.
+Support for BJCP 2015 styles.
+Bug fixes.
 
 For those experiencing any issues related to initial browser-based 
 setup of BCOE&M, the bcoem_baseline_1.3.1.X.sql document is available in 
