@@ -4,7 +4,7 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: May 29, 2015
+ * Last Modified: June 4, 2015
  */
 
 /*
@@ -13,7 +13,7 @@
 /*******Set up MySQL connection variables*******
 Generally, this line is left alone.
 */
-$hostname = "localhost";
+$hostname = "";
 
 
 /* 
@@ -22,21 +22,21 @@ INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username = "fred".
 */
 //$username = "";
-$username = "brewcomp_bcoe";
+$username = "";
 
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password = "flintsone".
 */
 //$password = "";
-$password = "Ze9P#vK9tE";
+$password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
 If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
 */
 //$database = "";
-$database = "brewcomp_bcoetest";
+$database = "";
 
 /* 
 This line strings the information together and connects to MySQL.  
@@ -101,7 +101,7 @@ $prefix = "comp1_";
 */
 
 //$prefix = "";
-$prefix = "maltmadness_";
+$prefix = "";
 
 
 /*
@@ -170,7 +170,7 @@ uncomment the second variable.
 
 */
 
-//$server_root = $_SERVER['DOCUMENT_ROOT'];
-$server_root = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT']; 
+$server_root = $_SERVER['DOCUMENT_ROOT'];
+//$server_root = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT']; 
 
 ?>
