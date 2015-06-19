@@ -54,6 +54,9 @@ if ($go == "default") { ?>
 <?php if ($fx) { ?>
 <div class="error">There is a known issue with printing from the Firefox browser. To print all pages properly, RIGHT CLICK on the print link and choose "Open Link in New Tab." Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>
 <?php } ?>
+<?php if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008")) { ?>
+<div class="info">Your current style set is BJCP 2008. Do you want to <a href="<?php echo $base_url."includes/process.inc.php?action=convert_bjcp"; ?>" onclick="return confirm('Are you sure? This action will convert all entries in the database to conform to the BJCP 2015 style guidelines. Categories will be 1:1 where possible, however some specialty styles may need to be updated by the entrant.');">convert all entries to BJCP 2015</a>?</div>
+<?php } ?>
 <div class="at-a-glance">
 <h3>Numbers at a Glance</h3> 
 <table>
