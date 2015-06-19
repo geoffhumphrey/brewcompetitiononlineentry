@@ -173,7 +173,6 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 	$html .= "<td nowrap='nowrap'>".$total_style_count_logged."</td>";
 	$html .= "<td nowrap='nowrap'>".$total_style_count."</td>";
 	$html .= "<td class='data'>&nbsp;</td>";
-	$html .= "<td class='data'>&nbsp;</td>";
 	$html .= "</tr>";
 	$html .= "</tfoot>";
 }
@@ -209,9 +208,9 @@ if ($total_style_count > 0) { ?>
 <table class="dataTable" id="sortable5">
 <thead>
 	<tr>
-        <th class="bdr1B" width="20%" nowrap="nowrap">Style Type</th>
-		<th class="bdr1B" width="20%"># Logged</th>
-		<th class="bdr1B"># Paid &amp; Received</th>
+        <th class="bdr1B" width="25%" nowrap="nowrap">Style Type</th>
+		<th class="bdr1B" width="15%">Logged</th>
+		<th class="bdr1B">Paid &amp; Received</th>
 	</tr>
 </thead>
 <tbody>
@@ -243,10 +242,10 @@ if ($total_style_count > 0) { ?>
 <table class="dataTable" id="sortable6">
 <thead>
 	<tr>
-		<th class="bdr1B" width="20%">Sub-Style</th>
-        <th class="bdr1B" width="20%">Category</th>
-        <th class="bdr1B" width="15%"># Logged</th>
-		<th class="bdr1B" width="15%"># Paid &amp; Received</th>
+		<th class="bdr1B" width="25%">Sub-Style</th>
+        <th class="bdr1B" width="25%">Category</th>
+        <th class="bdr1B" width="15%">Logged</th>
+		<th class="bdr1B" width="15%">Paid &amp; Received</th>
         <th class="bdr1B">Style Type</th>
 	</tr>
 </thead>

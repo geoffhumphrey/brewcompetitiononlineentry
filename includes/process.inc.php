@@ -182,8 +182,9 @@ else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 // --------------------------- Various Actions ------------------------------- //
 
 if ($action == "delete")						include_once (PROCESS.'process_delete.inc.php');
-elseif ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
+elseif ($action == "beerxml")					include_once (PROCESS.'process_beerxml.inc.php');
 //if ($action == "update_judging_flights")		include_once (PROCESS.'process_judging_flight_check.inc.php'); 
+
 elseif ($action == "purge") {
 	purge_entries("unconfirmed", 0);
 	purge_entries("special", 0); 
@@ -218,6 +219,13 @@ elseif ($action == "check_discount") {
 		}
 		
 		else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
+}
+
+elseif ($action == "convert_bjcp") {
+	
+	bjcp_convert($_SESSION['prefsStyleSet']);
+	//$updateGoTo = $base_url."index.php?section=admin&msg=14";
+	//header(sprintf("Location: %s", $updateGoTo));	
 }
 
 else {

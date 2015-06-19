@@ -334,11 +334,11 @@ if (!empty($bjcp_rank[1])) {
 				} );
 			} );
 	</script> 
-	<table id="sortable_assignments" class="dataTable" style="width:50%;float:left;">
+	<table id="sortable_assignments" class="dataTable" style="width:75%;float:left;">
 	<thead>
 	<tr>
-		<th class="dataHeading bdr1B" width="35%">Location</th>
-		<th class="dataHeading bdr1B" width="35%">Date/Time</th>
+		<th class="dataHeading bdr1B" width="33%">Location</th>
+		<th class="dataHeading bdr1B" width="34%">Date/Time</th>
 		<th class="dataHeading bdr1B">Table</th>
 	</tr>
 	</thead>

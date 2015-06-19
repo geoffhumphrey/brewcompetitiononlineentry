@@ -201,8 +201,12 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 }
 
 function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
+	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
+	
+	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
+	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
 	
 	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
 	
@@ -221,7 +225,7 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
 	}
 	
-	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
+	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup > %s", $prefix."styles",$end);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
@@ -257,7 +261,11 @@ function flight_count($table_id,$method) {
 
 function orphan_styles() { 
 	require(CONFIG.'config.php');
-	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= 29", $prefix."styles");
+	
+	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
+	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
+	
+	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= %s", $prefix."styles",$end);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
@@ -686,7 +694,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_entries = mysql_fetch_assoc($entries);
 	$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 	
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	
@@ -726,7 +734,7 @@ function received_entries() {
 	mysql_select_db($database, $brewing);
 	$style_array = array();
 	
-	$query_styles = sprintf("SELECT brewStyle FROM %s", $prefix."styles");
+	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE brewStyleVersion='%s'", $prefix."styles",$_SESSION['prefsStyleSet']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_array($styles);
 	
@@ -752,7 +760,8 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign Judges to this Table">'.$row_assignments['count']."</a>";
+	if ($row_assignments['count'] == 0) $icon = "user_add.png"; else $icon = "user_edit.png";
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign/Edit Judges at this Table"><span class="icon"><img src="'.$base_url.'images/'.$icon.'"></span></a>'.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -763,7 +772,8 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign Stewards to this Table">'.$row_assignments['count']."</a>";
+	if ($row_assignments['count'] == 0) $icon = "user_add.png"; else $icon = "user_edit.png";
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign/Edit Stewards at this Table"><span class="icon"><img src="'.$base_url.'images/'.$icon.'"></span></a>'.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }

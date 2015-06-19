@@ -108,8 +108,9 @@ if ($go == "default") { ?>
 <div id="menu_container">
 <div id="outer">
 <p>Click the headings below to expand and collapse each category.</p>
+<p><a href="<?php echo $base_url."includes/process.inc.php?action=convert_bjcp"; ?>">Convert to BJCP 2015</a>.</p>
 	<div class="menus">
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span>Help</h4>
+	  <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span>Help</h4>
         <div class="toggle_container">
         	<p class="admin_default_header">Quick Links</p>
             <?php if ($_SESSION['userLevel'] == "0") { ?>
