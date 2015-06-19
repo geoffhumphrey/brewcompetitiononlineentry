@@ -10,7 +10,7 @@
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
 ** the software for your own use and customize it for your own      **
-** purposes (http://help.brewcompetition.com/files/license.html).   **
+** purposes (http://brewcompetition.com/license).                   **
 ** http://www.brewcompetition.com                                   **
 ** http://help.brewcompetition.com                                  **
 ** Direct inquiries to prost@brewcompetition.com                    **
@@ -57,7 +57,11 @@ BCOE&M is free and open-source.
 Changes in This Version
 **********************************************************************
 Support for BJCP 2015 styles.
+<<<<<<< HEAD
 Various bug fixes.
+=======
+Bug fixes.
+>>>>>>> a00a2f27cdb5a0cc75088493ec8f1c18528f7073
 
 For those experiencing any issues related to initial browser-based 
 setup of BCOE&M, the bcoem_baseline_1.3.1.X.sql document is available in 
