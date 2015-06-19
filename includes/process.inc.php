@@ -223,9 +223,18 @@ elseif ($action == "check_discount") {
 
 elseif ($action == "convert_bjcp") {
 	
-	bjcp_convert($_SESSION['prefsStyleSet']);
-	//$updateGoTo = $base_url."index.php?section=admin&msg=14";
-	//header(sprintf("Location: %s", $updateGoTo));	
+	bjcp_convert();
+	
+	session_start();
+	unset($_SESSION['prefs'.$prefix_session]);
+	
+	$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
+	mysql_select_db($database, $brewing);
+	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+		
+	$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=25";
+	header(sprintf("Location: %s", $updateGoTo));
+	
 }
 
 else {
