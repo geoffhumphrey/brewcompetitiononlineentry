@@ -38,14 +38,6 @@ Online documentation and help is available at
 http://help.brewcompetition.com
 
 **********************************************************************
-Hosting
-**********************************************************************
-If you are unable to set up your installation, hosting may be an 
-option for you.
-Go to http://www.brewcompetition.com and click "Hosting" for 
-more information.
-
-**********************************************************************
 About
 **********************************************************************
 The Brew Competition Online Entry and Management (BCOE&M) system is an 
@@ -65,7 +57,11 @@ BCOE&M is free and open-source.
 Changes in This Version
 **********************************************************************
 Support for BJCP 2015 styles.
+<<<<<<< HEAD
+Various bug fixes.
+=======
 Bug fixes.
+>>>>>>> a00a2f27cdb5a0cc75088493ec8f1c18528f7073
 
 For those experiencing any issues related to initial browser-based 
 setup of BCOE&M, the bcoem_baseline_1.3.1.X.sql document is available in 

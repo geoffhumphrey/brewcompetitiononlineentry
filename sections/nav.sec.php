@@ -29,14 +29,20 @@ if (strstr($section,"step")) { ?>
   		<?php } } ?>
   <?php if (isset($_SESSION['loginUsername']))  { ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onclick="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onmouseover="buttonMouseover(event, 'myInfoMenu');"><?php if ($section == "list") echo "<strong>My Info and Entries</strong>"; else echo "My Info and Entries"; ?></a></div></li>
-  <?php } ?>
+      <?php } ?>
+    <li><div class="menuBar"><a class="menuButton" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onclick="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>" onmouseover="buttonMouseover(event, 'PrevWinMenu');"><?php if ($section == "list") echo "<strong>Previous Winners</strong>"; else echo "Previous Winners"; ?></a></div></li>
   <?php if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>index.php?section=admin" onclick="<?php echo $base_url; ?>index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');"><?php if ($section == "admin") echo "<strong>Admin</strong>"; else echo "Admin"; ?></a></div></li>
 <?php } ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
-  <li><?php sessionAuthenticateNav(); ?></li>
+  <li><?php sessionAuthenticateNav(); ?></li><!-- Social Media Links -->  <div align="right">	<a href="http://www.facebook.com/germanfesthbc" target="_blank"><img src="user_images/rfacebook.png" width="50" border="0" alt="German Fest Stein Challenge Facebook" /></a>	<a href="https://twitter.com/#!/GermanFestSC" target="_blank"><img src="user_images/rtwitter.png" width="50" border="0" alt="German Fest Stein Challenge Twitter" /></a>	<a href="https://plus.google.com/b/115093682459461217001/115093682459461217001/posts" target="_blank"><img src="user_images/rgoogle.png" width="50" border="0" alt="German Fest Stein Challenge Google+" /></a>  </div>
 </ul>
-<?php } ?>
+<?php } ?><!-- Past Results Menu Items --><div id="PrevWinMenu" class="menu" onmouseover="menuMouseover(event)"><script type="text/javascript" src="js_includes/menu.js"></script>
+<table>	
+    <tr>	<!-- 2014 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2014Winners.htm" target="_blank" title="2014 Results"> 2014 Results</a></td>	</tr>	
+    <tr>	<!-- 2013 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2013Winners.htm" target="_blank" title="2013 Results"> 2013 Results</a></td>	</tr>	
+    <tr>	<!-- 2012 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2012Winners.htm" target="_blank" title="2012 Results"> 2012 Results</a></td>	</tr>	
+    <tr>	<!-- 2011 Previous Winners  -->		<td><img src="images/award_star_gold_3.png"  /><a href="/2011Winners.htm" target="_blank" title="2011 Results"> 2011 Results</a></td>	</tr></table></div> 
 <?php if (($registration_open > "0") && (isset($_SESSION['loginUsername'])))  { ?> 
 <div id="myInfoMenu" class="menu" onmouseover="menuMouseover(event)">
 	<a class="menuItem" href="<?php echo build_public_url("list","default","default",$sef,$base_url); ?>">Info and List of Entries</a>

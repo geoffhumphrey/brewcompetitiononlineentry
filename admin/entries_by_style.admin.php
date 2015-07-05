@@ -198,9 +198,9 @@ if ($total_style_count > 0) { ?>
 <table class="dataTable" id="sortable1">
 <thead>
 	<tr>
-		<th class="bdr1B" width="20%" nowrap="nowrap">Style Type</th>
-		<th class="bdr1B" width="15%"># Logged</th>
-		<th class="bdr1B"># Paid &amp; Received</th>
+		<th class="bdr1B" width="25%" nowrap="nowrap">Style Type</th>
+		<th class="bdr1B" width="15%">Logged</th>
+		<th class="bdr1B">Paid &amp; Received</th>
 	</tr>
 </thead>
 <tbody>
@@ -231,9 +231,9 @@ if ($total_style_count > 0) { ?>
 <table class="dataTable" id="sortable2">
 <thead>
 	<tr>
-		<th class="bdr1B" width="20%">Category</th>
-        <th class="bdr1B" width="15%"># Logged</th>
-		<th class="bdr1B" width="15%"># Paid &amp; Received</th>
+		<th class="bdr1B" width="25%">Category</th>
+        <th class="bdr1B" width="15%">Logged</th>
+		<th class="bdr1B" width="15%">Paid &amp; Received</th>
         <th class="bdr1B">Style Type</th>
 	</tr>
 </thead>

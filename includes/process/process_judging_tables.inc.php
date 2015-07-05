@@ -54,7 +54,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 		foreach (array_unique($a) as $value) {
 			
-			$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM $styles_db_table WHERE id='%s'", $value);
+			$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 			$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 			$row_styles = mysql_fetch_assoc($styles);
 			
@@ -180,7 +180,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$row_table_style = mysql_fetch_assoc($table_style);
 					//echo $query_table_style."<br>";
 					
-					$query_style = sprintf("SELECT id FROM $styles_db_table WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+					$query_style = sprintf("SELECT id FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 					$style = mysql_query($query_style, $brewing) or die(mysql_error());
 					$row_style = mysql_fetch_assoc($style);
 					//echo $query_style."<br>";
@@ -293,7 +293,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				//echo $query_entry."<br>";
 				
-				$query_style = sprintf("SELECT id FROM $styles_db_table WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+				$query_style = sprintf("SELECT id FROM $styles_db_table WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 				$style = mysql_query($query_style, $brewing) or die(mysql_error());
 				$row_style = mysql_fetch_assoc($style);
 				

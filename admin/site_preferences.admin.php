@@ -127,6 +127,7 @@ include (DB.'styles.db.php');
     <td nowrap="nowrap" class="data"><input name="prefsEntryLimit" type="text" value="<?php echo $row_limits['prefsEntryLimit']; ?>" size="5" maxlength="6" /></td>
     <td class="data">Limit of entries you will accept in the competition. Leave blank if no limit.</td>
   </tr>
+  <?php if ($go == "preferences") { ?>
   <tr>
   	<td class="dataLabel">Entry Limit Per Participant:</td>
     <td nowrap="nowrap" class="data">
@@ -196,6 +197,7 @@ include (DB.'styles.db.php');
     </td>
     <td class="data">Limit of entries that each participant can enter into one of the above sub-categories that <em>have been checked</em>. Leave blank if no limit <strong>for the sub-categories that have been checked above</strong>.</td>
   </tr>
+  <?php } ?>
   <tr>
     <td class="dataLabel">Hide Entry Recipe Section:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No</td>

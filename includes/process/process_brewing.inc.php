@@ -155,8 +155,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			// Get style name from broken parts
 			mysql_select_db($database, $brewing);
-            $SelecedStyleYear = $_SESSION['prefsStyleSet'];
-			$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]' AND brewStyleVersion='$SelecedStyleYear'";
+			$query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'],$styleFix,$style[1]);
 			$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 			$row_style_name = mysql_fetch_assoc($style_name);
 			
@@ -503,8 +502,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			else $styleFix = $style[0];
 			
 			// Get style name from broken parts
-            $SelecedStyleYear = $_SESSION['prefsStyleSet'];
-			$query_style_name = "SELECT * FROM $styles_db_table WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]' AND brewStyleVersion='$SelecedStyleYear'";
+			$query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
 			$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 			$row_style_name = mysql_fetch_assoc($style_name);
 			$check = $row_style_name['brewStyleOwn'];

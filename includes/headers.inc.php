@@ -391,6 +391,7 @@ switch($section) {
 	elseif ($msg == "22") $output = "All unconfirmed entries are now marked as confirmed.";
 	elseif ($msg == "23") $output = "All participant assignments have been cleared.";
 	elseif ($msg == "24") $output = "A judging number you entered wasn't found in the database. Please check and re-enter.";
+	elseif ($msg == "25") $output = "All entry styles have been converted from BJCP 2008 to BJCP 2015.";
 	else $output = "";
 	break;
 }
