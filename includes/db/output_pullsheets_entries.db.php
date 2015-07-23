@@ -1,5 +1,5 @@
 <?php
-$query_styles = sprintf("SELECT brewStyle FROM %s WHERE id='%s'", $style_db_table, $value);
+$query_styles = sprintf("SELECT brewStyle FROM %s WHERE id='%s'", $styles_db_table, $value);
 $styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 $row_styles = mysql_fetch_assoc($styles);
 
