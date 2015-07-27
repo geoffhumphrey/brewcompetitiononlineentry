@@ -117,6 +117,8 @@ include(INCLUDES.'form_check.inc.php');
   ga('send', 'pageview');
 
 </script>
+    <!-- Mail Chimp popup signup -->
+    <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us11.list-manage.com","uuid":"c9b4a89b9a9d9919fbe6ef44d","lid":"2d5ceda968"}) })</script>
 </head>
 <body>
 <a name="top"></a>
@@ -177,7 +179,8 @@ if (TESTING) {
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if ($section == "register")		include (SECTIONS.'register.sec.php');
 	if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
-	
+	if ($section == "mailchimp") 	include (SECTIONS.'mailchimp.sec.php');
+      
 	if (isset($_SESSION['loginUsername'])) {
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
 		if ($section == "user") 	include (SECTIONS.'user.sec.php');
@@ -207,6 +210,8 @@ if (TESTING) {
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if ($section == "register") 	include (SECTIONS.'register.sec.php');
 	if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
+    if ($section == "mailchimp") 	include (SECTIONS.'mailchimp.sec.php');
+      
 	if (isset($_SESSION['loginUsername'])) {
 		//echo $registration_open;
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
@@ -239,6 +244,7 @@ if (TESTING) {
 	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
+    if ($section == "mailchimp") 	include (SECTIONS.'mailchimp.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		if ($_SESSION['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');

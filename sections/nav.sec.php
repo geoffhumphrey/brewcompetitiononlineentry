@@ -18,6 +18,7 @@ if (strstr($section,"step")) { ?>
   <?php if (get_contact_count() > 0) { ?>
   <li><?php if ($section != "contact") { ?><a href="<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>">Contact</a><?php } else { ?>Contact<?php } ?></li>
   <?php } ?>
+  <li><a href="<?php echo build_public_url("mailchimp","default","default",$sef,$base_url); ?>">Email List Sign Up</a></li>
   <?php if (($registration_open == 1) && (!open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)))  { ?>
   <?php if (!isset($_SESSION['loginUsername'])) { ?><li><?php if ($section != "register") { ?><a href="<?php echo build_public_url("register","default","default",$sef,$base_url); ?>">Register</a><?php } else { ?>Register<?php } ?></li><?php } ?>
   <?php } ?>
@@ -35,10 +36,11 @@ if (strstr($section,"step")) { ?>
   <li><div class="menuBar"><a class="menuButton" href="<?php echo $base_url; ?>index.php?section=admin" onclick="<?php echo $base_url; ?>index.php?section=admin" onmouseover="buttonMouseover(event, 'adminMenu');"><?php if ($section == "admin") echo "<strong>Admin</strong>"; else echo "Admin"; ?></a></div></li>
 <?php } ?>
   <li><a href="http://help.brewcompetition.com/index.html" title="BCOE&amp;M Help" target="_blank">BCOE&amp;M Help Site</a></li>
-  <li><?php sessionAuthenticateNav(); ?></li><!-- Social Media Links -->  <div align="right">	<a href="http://www.facebook.com/germanfesthbc" target="_blank"><img src="user_images/rfacebook.png" width="50" border="0" alt="German Fest Stein Challenge Facebook" /></a>	<a href="https://twitter.com/#!/GermanFestSC" target="_blank"><img src="user_images/rtwitter.png" width="50" border="0" alt="German Fest Stein Challenge Twitter" /></a>	<a href="https://plus.google.com/b/115093682459461217001/115093682459461217001/posts" target="_blank"><img src="user_images/rgoogle.png" width="50" border="0" alt="German Fest Stein Challenge Google+" /></a>  </div>
+  <li><?php sessionAuthenticateNav(); ?></li><!-- Social Media Links -->  <div align="right">	<a href="http://www.facebook.com/germanfesthbc" target="_blank"><img src="user_images/rfacebook.png" width="50" border="0" alt="German Fest Stein Challenge Facebook" /></a>	<a href="https://twitter.com/#!/GermanFestSC" target="_blank"><img src="user_images/rtwitter.png" width="50" border="0" alt="German Fest Stein Challenge Twitter" /></a>	<a href="https://plus.google.com/b/115093682459461217001/115093682459461217001/posts" target="_blank"><img src="user_images/rgoogle.png" width="50" border="0" alt="German Fest Stein Challenge Google+" /></a> </div>
 </ul>
 <?php } ?><!-- Past Results Menu Items --><div id="PrevWinMenu" class="menu" onmouseover="menuMouseover(event)"><script type="text/javascript" src="js_includes/menu.js"></script>
 <table>	
+    <tr>	<!-- 2015 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2015Winners.htm" target="_blank" title="2015 Results"> 2015 Results</a></td>	</tr>
     <tr>	<!-- 2014 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2014Winners.htm" target="_blank" title="2014 Results"> 2014 Results</a></td>	</tr>	
     <tr>	<!-- 2013 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2013Winners.htm" target="_blank" title="2013 Results"> 2013 Results</a></td>	</tr>	
     <tr>	<!-- 2012 Previous Winners  -->		<td><img src="images/award_star_gold_1.png"  /><a href="/2012Winners.htm" target="_blank" title="2012 Results"> 2012 Results</a></td>	</tr>	
