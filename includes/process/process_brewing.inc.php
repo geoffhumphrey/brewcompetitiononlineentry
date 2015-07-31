@@ -149,10 +149,10 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$styleTrim = ltrim($style[0], "0"); 
 			if (($style [0] < 10) && (preg_match("/^[[:digit:]]+$/",$style [0]))) $styleFix = "0".$style[0];
 			else $styleFix = $style[0];
-			
+						
 			if (NHC) $brewJudgingNumber = "";
 			else $brewJudgingNumber = generate_judging_num($styleTrim);
-			
+						
 			// Get style name from broken parts
 			mysql_select_db($database, $brewing);
 			$query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'],$styleFix,$style[1]);
@@ -465,6 +465,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			// Finally, relocate
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+			
+			//echo $styleTrim."<br>";
+			//echo $brewJudgingNumber."<br>";
+			//echo $insertSQL."<br>";
+			//echo $insertGoTo;
+			//exit;
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 			
 		} // end if ($action == "add")

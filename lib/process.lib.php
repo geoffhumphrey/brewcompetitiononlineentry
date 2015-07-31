@@ -8,6 +8,18 @@ function check_http($input) {
 }
  
 function generate_judging_num($style_cat_num) {
+	
+	// Need to convert mead and cider categories for BJCP2015 to numerals (all contain alphas, which break the script)
+	switch ($style_cat_num) {
+		case "C1": $style_cat_num = "38"; break;
+		case "C2": $style_cat_num = "39"; break;
+		case "M1": $style_cat_num = "40"; break;
+		case "M2": $style_cat_num = "41"; break;
+		case "M3": $style_cat_num = "42"; break;
+		case "M4": $style_cat_num = "43"; break;
+		default: $style_cat_num = $style_cat_num;
+	}
+	
 	// Generate the Judging Number each entry 
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -18,7 +30,8 @@ function generate_judging_num($style_cat_num) {
 	
 	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
 	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return sprintf("%05s",$output) ;
+	return sprintf("%05s",$output);
+	
 }
 
 function ucwordspecific($str,$delimiter) {
@@ -108,8 +121,8 @@ function purge_entries($type, $interval) {
 	}
 	
 	if ($type == "special") {
-		$query_check = sprintf("SELECT a.id,a.brewInfo,a.brewCategorySort,a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='')", $prefix."brewing",$prefix."styles");
-		if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
+		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
@@ -214,6 +227,7 @@ function check_mead_strength($style,$styleSet) {
 	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
 	else return FALSE;
 }
+
 
 // Map BJCP2008 Styles to BJCP2015 Styles
 function bjcp_convert() {

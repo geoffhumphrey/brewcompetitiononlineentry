@@ -171,7 +171,7 @@ if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) 	$deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
 elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5"; 
-elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 		$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
+elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 			$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
 else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 
 //echo $insertGoTo;
@@ -233,8 +233,7 @@ elseif ($action == "convert_bjcp") {
 	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 		
 	$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=25";
-	header(sprintf("Location: %s", $updateGoTo));
-	
+	header(sprintf("Location: %s", $updateGoTo));	
 }
 
 else {

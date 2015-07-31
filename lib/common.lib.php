@@ -226,8 +226,8 @@ function purge_entries($type, $interval) {
 	}
 	
 	if ($type == "special") {
-		$query_check = sprintf("SELECT a.id,a.brewInfo,a.brewCategorySort,a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='')", $prefix."brewing",$prefix."styles");
-		if ($interval > 0) $query_check .=" AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
+		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
@@ -1675,6 +1675,7 @@ function style_convert($number,$type,$base_url="") {
 		$row_style = mysql_fetch_assoc($style);
 		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$row_style['brewStyle']."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
 		break;
+		$style_convert = $query_style;
 	}
 	return $style_convert;
 }
@@ -1789,23 +1790,26 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
   	}
 	
 	if (($method == "count_total") && ($param == "default")) {
-		
+		$lala = "";
 		$a = explode(",", $row_table['tableStyles']);
 			foreach ($a as $value) {
 				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
+				$query_styles = "SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
-				$c[] = $totalRows_style_count ;
+				$c[] = $totalRows_style_count;
+				// DEBUG
+				$lala .= $query_style_count."<br>";
 			}
 	$d = array_sum($c);
-	return $d; 
+	return $d;
+	//return $lala;
   	}
 	
 	
@@ -1870,11 +1874,11 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			foreach ($a as $value) {
 				require(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
+				$query_styles = "SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewReceived='1'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];

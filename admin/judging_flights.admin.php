@@ -212,7 +212,7 @@ echo "<p><span class='dataLabel'>Table Location:</span>".table_location($row_tab
 if (($action == "assign") && ($filter == "rounds")) { 
 	if ($totalRows_tables > 0) { 
 ?>
-<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignmens WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
+<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>" onsubmit="return confirm('Caution!\nALL applicable judging/stewarding assignments WILL BE DELETED \nIF you have CHANGED a table\'s round assignment.\nDo you wish to continue?');">
 <p style="margin-top: 3em"><input type="submit" class="button" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));

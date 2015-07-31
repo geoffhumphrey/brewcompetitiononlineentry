@@ -22,136 +22,102 @@ html, body {
 	background-color: #fff;
 	margin: 5px 5px 5px 5px;
 }
-
 body, caption, input, textarea, select, option, legend, fieldset  {
 	font-size: 12px;
 	font-family: Arial,Helvetica, Geneva, sans-serif;
 }
-
 option {
 }
-
 th, td {
 	font-family: inherit;
 }
-
 td {
 	font-size: inherit;
 }
-
 pre, code {
 }
-
 p {
 	margin: 0;
 }
-
-
 /* Links */
 a:link {
 	color: #000;
 }
-
 a:visited {
 	color: #000;
 }
-
 a:hover, a:focus {
 	color: #000;
 	text-decoration: none;
 }
-
 a:active {
 	color:#000;
 }
-
 /** headings **/
 h1 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.9em;
 	margin: 1em 0 1.25em 0;
 }
-
 h2 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.5em;
 	margin: 1em 0 1em 0;
 }
-
 h3 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.3em;
 	margin: 1em 0 1em 0;
 }
-
 h4, h5, h6 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 }
-
 /** lists **/
 ul, ol {
 }
-
 ul ul, ul ol, ol ol, ol ul {
 }
-
 li {
 }
-
 ul { 
 }
-
 ul ul { 
 }
-
 ul ul ul { 
 }
-
 ul ul ul ul { 
 }
-
 ol { 
 }
-
 ol ol { 
 }
-
 ol ol ol { 
 }
-
 dt  {
 }
-
 dd {
 }
-
 /** tables **/
 table {
 }
-
 td {
 	padding: .5em 2em .5em .5em;
 }
-
 th {
 	padding: 1em .5em 1em .5em;
 	font-size: 1.1em;
 	text-align: left;
 	background-color: #dddddd;
 }
-
 /** images **/
 img  {
 }
-
 /** horizontal rules **/
 hr  {
 }
-
 /** forms **/
 form {
 }
-
 button, menu, textarea, label, submit, .submit, select, input {
 	border: 1px solid #aaaaaa;
 	background-color: #dedede;
@@ -159,13 +125,10 @@ button, menu, textarea, label, submit, .submit, select, input {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
-
 select, optgroup, option  {
 }
-
 textarea {
 }
-
 /* --------------------- common.css Overrides -------------------- */
 /* **************************************************************
    Customize below the various default elements in common.css. 
@@ -177,56 +140,45 @@ textarea {
 /* ------------------------------- Content ------------------------------- */
 #content {
 }
-
 #content-inner {
 }
-
 #content-inner-no-nav {
 	padding: 1em;
 }
-
 #content-inner h2 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.5em;
 	font-weight: bold;
 	padding: 1em 0 .5em 0;
 }
-
 #content-inner-no-nav h2 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.5em;
 	font-weight: bold;
 	padding: 1.5em 0 .25em 0;
 }
-
 #content-inner .menu {
 	border: 1px solid #ddd;
 	background-color: #eee;
 }
-
 #content-inner .menu a {
 	color: #aaa;
 }
-
 #content-inner .menu a.menuItem:hover, 
 #content-inner .menu a.menuItemHighlight {
 	background-color: #ddd;
 	color: #fff;
 }
-
 #container {
 	position: relative;
 	min-height: 95%;
 	background-color: #fff;
 }
-
 /* ------------------------------- Nav ------------------------------- */
 #navigation { 
 }
-
 #navigation-inner {
 }
-
 #navigation-inner a,
 #navigation-inner a:visited,
 #navigation-inner a:hover,
@@ -234,59 +186,48 @@ textarea {
 #navigation-inner a:active{
 	
 }
-
 #navigation-inner .menu {
 	border: 1px solid #aaa;
 	background-color: #eee;
 }
-
 #navigation-inner .menu a {
 	color: #aaa;
 	font-weight: normal;
 }
-
 #navigation-inner .menu a.menuItem:hover, 
 #navigation-inner .menu a.menuItemHighlight {
 	background-color: #aaa;
 	color: #FFF;
 }
-
 #nav {
 	margin: 0;
 	padding: 0;
 }
-
 #nav ul {
 	padding-left: 0;	
 }
-
 #nav li {
 	display: inline;
 	list-style-type: none;
 	padding: 0 1em 0 0;
 	margin: 0;
 }
-
 #nav li a {
 	color: #fff;
 	font-weight: normal;
 }
-
 #nav li a:visited {
 	color: #fff;
 }
-
 #nav li a:hover,
 #nav li a:focus {
 	color: #FC3;
 	text-decoration: none;
 }
-
 #nav li a:active,{
 	color: #FC3;
 	text-decoration: none;
 }
-
 #break {
 	display: inline;
 	vertical-align: middle;
@@ -295,94 +236,72 @@ textarea {
 	font-style: italic;
 	font-size: .8em;
 }
-
 /* ------------------------------- Header ------------------------------- */
 #header {
 	width: auto;
 	height: auto;
 }
-
 #header-inner {
 	margin: 0em 0 2em 0;
 }
-
 #header-inner h1 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 1.9em;
 	padding: 0 0 .25em 0;
 	font-weight: bold;
 }
-
 /* ------------------------------- Footer ------------------------------- */
 #footer {
 	bottom: 15px;
 	width: 100%;
 }
-
 #footer-inner {
 	padding: 1em;
 	font-size: .8em;
 }
-
 #footer-inner a {
 	color:#FFF;
 }
-
 #footer-inner a:visited {
 	color: #fff;
 }
-
 #footer-inner a:hover,
 #footer-inner a:focus {
 	color: #FC3;
 	text-decoration: none;
 }
-
 #footer-inner a:active,{
 	color: #FC3;
 	text-decoration: none;
 }
-
 /* ------------------------------- Data Display ------------------------------- */
 .dataTable {
 	width: 650px;
 }
-
 .dataTable th {
 	background-color: #bbb;
 }
-
 .dataTable td {
 }
-
 .dataHeading {
 }
-
 .dataList {
 }
-
 .dataLabel {
 }
-
 .data {
 }
-
 .data-left {
 }
-
 .icon {
 }
-
 .dataTableCompact  { 
 }
-
 .dataTableCompact td { 
 }
-
 .dataTableCompact th {
 	background-color: #ddd;
 }
-
 /* ------------------------------- Forms ------------------------------- */
 .button { 
 	font-weight: bold;
@@ -391,148 +310,111 @@ textarea {
 .button:hover {
 	background-color: #eee;
 }
-
 .paypal {
 }
-
 /* ------------------------------- Collapse jquery ------------------------------- */
 .trigger {
 	color: #aaa;
 }
-
 .trigger a {
 }
-
 .trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
 }
-
 .toggle_container {
 /* Use the following for accordian */
 /* display: none */
 }
-
 .toggle_container a {
 /* Use the following for accordian */
 /* display: block */
 }
-
 /* ------------------------------- Admin ------------------------------- */
 .admin {
 }
-
 .admin_default {
 	margin: 0 0 1.5em 0;
 	padding: 0 .5em 0 0;
 }
-
 .admin_default ul {
 	display: inline;
 }
-
 .admin_default li {
 	display: inline;
 	list-style-type: none;
 	padding: 0 1.5em 0 0;
 	margin: 0;
 }
-
 .admin_default li li {
 	display: inline;
 	list-style-type: none;
 	padding: 0 1.5em 0 0;
 	margin: 0;
 }
-
 .admin_default_header {
 	font-size: 1em;
 	font-weight: bold;
 	margin: 1.5em 0 .5em 0;
 	padding: 0 0 .5em 0;
 }
-
 /* -- Admin Menu -- */
 .menu {	
 }
-
 /* -- Admin Sub-Navigation -- */
 .adminSubNavContainer {
 }
-
 .adminSubNav {
 }
-
 /* ------------------------------- Sponsor Display ------------------------------- */
 #sponsor {
 }
-
 #sponsor li {
 }
-
 .looper {
 }
-
 .looper_large {
 }
-
 .looper_large th {
 }
-
 .looper_large .location {
 }
-
 .looper_large .logo {
 }
-
 .looper_large .info {
 }
-
 /* ------------------------------- Setup ------------------------------- */
 .setupTitle {
 }
-
 /* ------------------------------- Colors ------------------------------- */
 .red {
 }
-
 .green {
 }
-
 .yellow {
 }
-
 .orange {
 }
-
 .blue { 
 }
-
 /* ------------------------------- Borders ------------------------------- */
 .bdr1 {
 	border: 1px solid #000;
 }
-
 .bdr1T {
 	border-top: 1px solid #000;
 }
-
 .bdr1B {
 	border-bottom: 1px solid #000;
 }
-
 .bdr1B_dashed {
 }
-
 .bdr1T_dashed {
 }
-
 .bdr1B_gray {
 border-bottom: 1px solid #cccccc;
 }
-
 .bdr1L_gray {
 border-left: 1px solid #cccccc;
 }
-
 /* --------------------- messages.css Overrides -------------------- */
 /* **************************************************************
    Customize below the various default elements in messages.css - 
@@ -542,22 +424,16 @@ border-left: 1px solid #cccccc;
 */
 .info {
 }
-
 .closed {
 }
-
 .error {
 }
-
 .required {
 }
-
 .judge-alert {
 }
-
 .bos {
 }
-
 /* --------------------- menus.css Overrides -------------------- */
 /* **************************************************************
    Copy and paste the elements you wish to override from 
@@ -573,12 +449,10 @@ border-left: 1px solid #cccccc;
 #menu_container .trigger a:focus {
 	background-color: $fff;
 }
-
 #menu_container .trigger.open a:link, 
 #menu_container .trigger.open a:visited {
 	background-color: #fff;
 }
-
 /* --------------------- sorting.css Overrides -------------------- */
 /* **************************************************************
    Copy and paste the elements you wish to override from 
@@ -590,42 +464,33 @@ border-left: 1px solid #cccccc;
 */
 .paging_full_numbers {
 }
-
 .paging_full_numbers span.paginate_button,
  	.paging_full_numbers span.paginate_active {
 }
-
 .paging_full_numbers span.paginate_button {
 }
-
 .paging_full_numbers span.paginate_button:hover {
 	background-color: #eee;
 }
-
 .sorting_asc {
 	cursor: pointer;
 }
-
 .sorting_desc {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
-
 .sorting {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
-
 .sorting_asc_disabled {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
-
 .sorting_desc_disabled {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
-
 /* --------------------- Custom/Print Specific Styles -------------------- */
 .table_card {
 	width: 600px;
@@ -633,7 +498,6 @@ border-left: 1px solid #cccccc;
 	margin-right: auto;
 	text-align: center;
 }
-
 .table_card h1 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 11em;
@@ -641,7 +505,6 @@ border-left: 1px solid #cccccc;
 	padding: 0;
 	text-align: center;
 }
-
 .table_card h2 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-style: italic;
@@ -650,7 +513,6 @@ border-left: 1px solid #cccccc;
 	padding: 0;
 	text-align: center;
 }
-
 .table_card h3 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 2em;
@@ -658,7 +520,6 @@ border-left: 1px solid #cccccc;
 	padding: 0;
 	text-align: center;
 }
-
 .table_card h4 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.5em;
@@ -666,7 +527,6 @@ border-left: 1px solid #cccccc;
 	padding: 1em 0;
 	text-align: center;
 }
-
 .table_card .dataTable {
 	width: 100%;
 	font-family: Arial, Verdana, Helvetica, sans-serif;
@@ -674,16 +534,13 @@ border-left: 1px solid #cccccc;
 	margin: 1em 0;
 	border-collapse: collapse;
 }
-
 .table_card .dataTable th {
 	display: none;
 }
-
 .table_card .dataTable td {
 	text-align: left;
 	padding: 10px 5px;
 }
-
 .table_card hr {
 	border: 0;
 	color: #000000;
@@ -692,7 +549,6 @@ border-left: 1px solid #cccccc;
 	width: 100%;
 	margin: 2.25em 0 2.25em 0;
 }
-
 .box {
 	border: 1px solid #000;
 	min-height: 50px;
@@ -701,7 +557,6 @@ border-left: 1px solid #cccccc;
 	max-width: 75px;
 	width: 50px;
 }
-
 .box_small {
 	border: 1px solid #000;
 	height: 20px;
@@ -709,4 +564,3 @@ border-left: 1px solid #cccccc;
 	vertical-align: text-top;
 	margin: 0;
 }
-

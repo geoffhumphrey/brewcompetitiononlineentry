@@ -169,7 +169,7 @@ if (NHC) {
 } // end if (NHC)
 else {
 	
-		$bid = $_SESSION['user_id'];
+	$bid = $_SESSION['user_id'];
 	include (DB.'entries.db.php');
 	
 	$total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter);
@@ -330,7 +330,7 @@ else {
 	// Display
 	// --------------------------------------------------------------
 	if (($action != "print") && ($msg != "default")) echo $msg_output;
-	if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) && ((judging_date_return() > 0) || (NHC))) echo $competition_logo;
+	if ((($_SESSION['contestLogo'] != "") && (file_exists($server_root.$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) && ((judging_date_return() > 0) || (NHC))) echo $competition_logo;
 	if ($action != "print") echo $print_page_link;
 	
 	if ($total_entry_fees > 0) { 

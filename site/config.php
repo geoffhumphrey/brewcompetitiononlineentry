@@ -4,38 +4,37 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: June 4, 2015
+ * Last Modified: July 27, 2015
  */
 
 /*
 
 
 /*******Set up MySQL connection variables*******
+
+REFER TO YOUR WEB HOST'S DOCUMENTATION regarding connecting to MySQL via PHP - variables may be different than provided below.
+
 Generally, this line is left alone.
 */
-$hostname = "";
-
+$hostname = "localhost";
 
 /* 
-Change the word root to the username for your database (generally the same as your login code for your web hosting company).
+Provide the username for your database (generally the same as your login for your web hosting company).
 INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username = "fred".
 */
-//$username = "";
 $username = "";
 
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password = "flintsone".
 */
-//$password = "";
 $password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
-If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
+If you haven't set up the database yet, please refer to http://help.brewcompetition.com/index.html?installation.html for setup instructions. 
 */
-//$database = "";
 $database = "";
 
 /* 
@@ -86,7 +85,7 @@ Leave as if you have a database dedicated to your BCOE&M installation.
 
 ******************************************************************************
 
-// Suggested Usage 
+Suggested Usage 
 If you wish to define a prefix to the database tables, it is HIGHLY suggested 
 that you use an underscore (_), after a short descriptor that identifies which 
 install is using which tables. 
@@ -100,7 +99,6 @@ $prefix = "comp1_";
 ******************************************************************************
 */
 
-//$prefix = "";
 $prefix = "";
 
 
@@ -112,8 +110,8 @@ If you are going to go through the installation and setup process, you will
 need to modify the access check statement below. Change the FALSE to a TRUE 
 to disable the access check.
 
-After finishing setup, be sure to open this file again and change the 
-TRUE back to a FALSE!
+After finishing setup, be sure to open this file again and change TRUE back 
+to FALSE!
  
 */
 
@@ -134,8 +132,9 @@ $sub_directory = "/bcoem";
 
 WARNING!!!
 IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
-Otherwise, the URLs will not be generated correctly
-Directions are in the .htaccess file
+Otherwise, the URLs will not be generated correctly.
+
+Directions are in the .htaccess file.
 
 */
 
@@ -150,10 +149,10 @@ you'll need to replace the $base_url below with something formatted like this:
 $base_url = "http://ipaddressorhostingdomain/~accountname/subdirectoryname/";
 
 Example:
-$base_url = "http://147.21.160.5/~brewcompetition/bcoem/";
+$base_url = "http://123.45.678.9/~accountname/bcoem/";
 
 OR:
-$base_url = "http://www.bluehost.com/~brewcompeition/bcoem/";
+$base_url = "http://www.yourhost.com/~accountname/bcoem/";
 
 
 */

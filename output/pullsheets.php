@@ -487,11 +487,13 @@ if ($id != "default") $a[] = $id;
 foreach ($a as $type) {
 	
 	$style_type_info = style_type_info($type);
+	//echo $style_type_info;
 	$style_type_info = explode("^",$style_type_info);
 
 if ($style_type_info[0] == "Y") { 
 
 	include(DB.'output_pullsheets_bos.db.php');
+	//echo $query_bos."<br>";
 
 ?>
     <div id="header">	
@@ -534,7 +536,11 @@ if ($style_type_info[0] == "Y") {
 <tbody>
 	<?php do {
 	include(DB.'output_pullsheets_bos_entries.db.php');
+	
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
+	//echo $query_entries_1."<br>";
+	//echo $style."<br><br>";
+	
 	
 	?>
     <tr>
@@ -548,13 +554,15 @@ if ($style_type_info[0] == "Y") {
         </td>
         <td class="data bdr1B_gray">
 		<?php 
+		$style_special = $row_entries_1['brewCategorySort']."^".$row_entries_1['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		$special = style_convert($style_special,"9");
+		//echo $special."<br>";
 		$special = explode("^",$special);
 		$special = $special[4];
 		$strength = $special[5];
 		$carb = $special[6];
 		$sweet = $special[7];
-		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
+		echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; 
 		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (($row_entries['brewMead1'] != '') && ($strengh == "1")) echo $row_entries['brewMead1']."&nbsp;&nbsp;"; 

@@ -171,27 +171,27 @@ if (TESTING) {
   if (($registration_open == "0") && ($ua != "unsupported")) { 
   	
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "login")		include (SECTIONS.'login.sec.php');
+	if ($section == "login")			include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
-	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
+	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if ($section == "register")		include (SECTIONS.'register.sec.php');
-	if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
+	if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
 	
 	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "list") 	include (SECTIONS.'list.sec.php');
-		if ($section == "user") 	include (SECTIONS.'user.sec.php');
+		if ($section == "list") 		include (SECTIONS.'list.sec.php');
+		if ($section == "user") 		include (SECTIONS.'user.sec.php');
 		if ($section == "pay") {
-				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
-				else include (SECTIONS.'pay.sec.php');
+				if (NHC) 			include (SECTIONS.'nhc_pay.sec.php');
+				else 				include (SECTIONS.'pay.sec.php');
 			}
 		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
 			
 		if ($_SESSION['userLevel'] <= "1") {
-			if ($section == "admin")	include (ADMIN.'default.admin.php');
+			if ($section == "admin")		include (ADMIN.'default.admin.php');
 			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 			}
@@ -201,31 +201,31 @@ if (TESTING) {
   // Check if registration close date has passed. If so, display "registration end" message.
   if (($registration_open == "2") && (!$ua)) { 
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "login")		include (SECTIONS.'login.sec.php');
+	if ($section == "login")			include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php'); 
-	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php'); 
+	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-	if ($section == "register") 	include (SECTIONS.'register.sec.php');
+	if ($section == "register") 		include (SECTIONS.'register.sec.php');
 	if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
 		//echo $registration_open;
-		if ($section == "list") 	include (SECTIONS.'list.sec.php');
+		if ($section == "list") 		include (SECTIONS.'list.sec.php');
 		if ($section == "pay") {
 				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
 				else include (SECTIONS.'pay.sec.php');
 			}
 		
-		if ($section == "user") 	include (SECTIONS.'user.sec.php');
+		if ($section == "user") 		include (SECTIONS.'user.sec.php');
 		if (($entry_window_open < 2) && ($_SESSION['userLevel'] == "2")) {
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');	
 		}
 		if ($_SESSION['userLevel'] <= "1") {
 			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 			if ($section == "admin")	include (ADMIN.'default.admin.php');
-			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
+			if ($section == "judge") include (SECTIONS.'judge.sec.php');
 			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 			}
 		}
@@ -233,26 +233,28 @@ if (TESTING) {
   
   // If registration is currently open
   if (($registration_open == "1") && (!$ua)) {
-  	if ($section == "register") 	include (SECTIONS.'register.sec.php');
-	if ($section == "login")		include (SECTIONS.'login.sec.php');
+  	if ($section == "register") 		include (SECTIONS.'register.sec.php');
+	if ($section == "login")			include (SECTIONS.'login.sec.php');
 	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
 	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
-	if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
+	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
 	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 	if (isset($_SESSION['loginUsername'])) {
-		if ($_SESSION['userLevel'] <= "1") { if ($section == "admin")	include (ADMIN.'default.admin.php'); }
-		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
-		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
-		if ($section == "pay") {
-				if (NHC) 	include (SECTIONS.'nhc_pay.sec.php');
-				else 		include (SECTIONS.'pay.sec.php');
+		if ($_SESSION['userLevel'] <= "1") { 
+				if ($section == "admin")	include (ADMIN.'default.admin.php'); 
 			}
-		if ($section == "list") 	include (SECTIONS.'list.sec.php');
+		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
+		if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
+		if ($section == "pay") {
+				if (NHC) 			include (SECTIONS.'nhc_pay.sec.php');
+				else 				include (SECTIONS.'pay.sec.php');
+			}
+		if ($section == "list") 		include (SECTIONS.'list.sec.php');
 		if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
-		if ($section == "user") 	include (SECTIONS.'user.sec.php');
+		if ($section == "user") 		include (SECTIONS.'user.sec.php');
 		if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 	}
   } // End registration date check.

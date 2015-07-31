@@ -1,47 +1,53 @@
--- --------------------------------------------------------
-
+-- -------------------------------------------------------------------------
 --
--- This baseline sql document is ONLY for new installations.
--- Use ONLY if you experience problems with the browser-based
--- setup function.
+-- This baseline sql document is *ONLY* for new installations.
+-- Use *ONLY* if you experience problems with the browser-based setup.
+--
+-- -------------------------------------------------------------------------
 -- 
-
+-- UPDATED 07.31.2015
+--
+-- -------------------------------------------------------------------------
 --
 -- Sets up a basic install and baseline data for version 1.3.1.X.
--- Import this DB structure and dummy data via phpMyAdmin or 
--- shell access.
--- Adds a top-level adimin user:
--- - Username: user.baseline@brewcompetition.com
--- - Password: bcoem
--- - Security question: What is your favorite all-time beer to drink?
--- - Answer: pabst
+-- Import this DB structure and dummy data via phpMyAdmin or shell access.
+-- Adds a top-level admin user:
+--   - Username: user.baseline@brewcompetition.com
+--   - Password: bcoem
+--   - Security question: What is your favorite all-time beer to drink?
+--   - Answer: pabst
 -- !! CHANGE THIS USER'S PASSWORD *IMMEDIATELY* FOR SECURITY !!
--- !! CHANGE THIS USER's SECURITY ANSWER *IMMEDIATELY* VIA PHPMYADMIN !!
--- If the password above does not work, use the password reset
+-- !! CHANGE THIS USER's SECURITY ANSWER IMMEDIATELY **VIA PHPMYADMIN** OR 
+--    ON THE LAST LINE OF THIS DOCUMENT !!
+-- If the password above does not work, use the password forgot/reset
 -- function:
 -- www.yoursite.com/index.php?section=login&go=password&action=forgot
 --
-
+-- -------------------------------------------------------------------------
 --
+-- Be sure to edit the config.php file to your environment.
 -- Each DB table is has a prefix of baseline_
--- You can change that here by doing a global find/replace.
+-- be sure to define the $prefix variable - e.g., $prefix = "baseline_"
+-- You can change the baseline_ prefix here by doing a global find/replace.
 -- Be sure to update/alter the $prefix variable in config.php.
 --
-
--- --------------------------------------------------------
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
--- --------------------------------------------------------
-
+-- -------------------------------------------------------------------------
+-- 
+-- Once you have installed the DB tables, browse to your site and log in.
+-- Update the default information to suit your own needs. Be sure to update:
+--   -  Site Preferences
+--   -  Competition Organization Preferences
+--   -  Competition Info
+--   -  Style Types
+--   -  Accepted Style Categories
+--   -  Judging Locations/Dates
+--   -  Drop-off Locations
+--   -  Competition Contacts
+--   -  Sponsors
 --
--- Table structure for table `baseline_archive`
---
+-- -------------------------------------------------------------------------
+-- 
+-- BEGIN MYSQL
 
 DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
@@ -52,12 +58,6 @@ CREATE TABLE IF NOT EXISTS `baseline_archive` (
   `archiveSuffix` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_brewer`
---
 
 DROP TABLE IF EXISTS `baseline_brewer`;
 CREATE TABLE IF NOT EXISTS `baseline_brewer` (
@@ -95,26 +95,16 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_brewer`
---
-
 INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`) VALUES
-(1, 1, 'Comp', 'Coordinator', '1234 Main St', 'Anytown', 'USA', '000001', 'United States', '3035551234', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_brewing`
---
+(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 DROP TABLE IF EXISTS `baseline_brewing`;
 CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `brewName` varchar(255) DEFAULT NULL,
   `brewStyle` varchar(255) DEFAULT NULL,
-  `brewCategory` varchar(4) DEFAULT NULL,
-  `brewCategorySort` varchar(4) DEFAULT NULL,
+  `brewCategory` char(2) DEFAULT NULL,
+  `brewCategorySort` char(2) DEFAULT NULL,
   `brewSubCategory` char(1) DEFAULT NULL,
   `brewBottleDate` date DEFAULT NULL,
   `brewDate` date DEFAULT NULL,
@@ -456,7 +446,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `brewBrewerLastName` varchar(255) DEFAULT NULL,
   `brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
   `brewWinner` char(1) DEFAULT NULL,
-  `brewWinnerCat` varchar(3) DEFAULT NULL,
+  `brewWinnerCat` varchar(5) DEFAULT NULL,
   `brewWinnerSubCat` varchar(3) DEFAULT NULL,
   `brewWinnerPlace` varchar(3) DEFAULT NULL,
   `brewBOSRound` char(1) DEFAULT NULL,
@@ -471,12 +461,6 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_contacts`
---
-
 DROP TABLE IF EXISTS `baseline_contacts`;
 CREATE TABLE IF NOT EXISTS `baseline_contacts` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -487,18 +471,8 @@ CREATE TABLE IF NOT EXISTS `baseline_contacts` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_contacts`
---
-
 INSERT INTO `baseline_contacts` (`id`, `contactFirstName`, `contactLastName`, `contactPosition`, `contactEmail`) VALUES
-(1, 'Comp', 'Coordinator', 'Competition Coordinator', 'user.baseline@brewcompetition.com');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_contest_info`
---
+(1, 'Default', 'Admin', 'Competition Coordinator', 'user.baseline@brewcompetition.com');
 
 DROP TABLE IF EXISTS `baseline_contest_info`;
 CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
@@ -541,18 +515,8 @@ CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `baseline_contest_info`
---
-
 INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contestHostWebsite`, `contestHostLocation`, `contestRegistrationOpen`, `contestRegistrationDeadline`, `contestEntryOpen`, `contestEntryDeadline`, `contestJudgeOpen`, `contestJudgeDeadline`, `contestRules`, `contestAwardsLocation`, `contestAwardsLocName`, `contestAwardsLocDate`, `contestAwardsLocTime`, `contestContactName`, `contestContactEmail`, `contestEntryFee`, `contestEntryFee2`, `contestEntryFeeDiscount`, `contestEntryFeeDiscountNum`, `contestCategories`, `contestBottles`, `contestShippingAddress`, `contestShippingName`, `contestAwards`, `contestLogo`, `contestBOSAward`, `contestWinnersComplete`, `contestEntryCap`, `contestEntryFeePassword`, `contestEntryFeePasswordNum`, `contestID`, `contestCircuit`, `contestVolunteers`) VALUES
-(1, 'Sample Competition', 'Sample Brew Club', 'http://www.brewcompetition.com', 'Denver, CO', '1436997600', '1439679600', '1436997600', '1439679600', '1435788000', '1440284400', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once. For example, participants may enter a Belgian Pale (16B) and Belgian Saison (16C), but may not enter two Saisons, even if they are different brews.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '1701 Bryant Street, Denver, CO 80204', 'Baseline Awards Location', NULL, '1440640800', NULL, NULL, 7, NULL, 'N', NULL, NULL, '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottles with a rubber band only; glue and/or tape are unacceptable.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified per the the style guidelines. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '1701 Bryant Street, Denver, CO 80204', 'Baseline Shipping Address', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', 'sample_logo.png', NULL, NULL, NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_countries`
---
+(1, 'Baseline Data', 'Baseline', NULL, NULL, '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', NULL, NULL, NULL, '1438349037', NULL, NULL, 8, NULL, 'N', NULL, NULL, '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottles with a rubber band only; glue and/or tape are unacceptable.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', NULL, NULL, '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, NULL, NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>');
 
 DROP TABLE IF EXISTS `baseline_countries`;
 CREATE TABLE IF NOT EXISTS `baseline_countries` (
@@ -560,10 +524,6 @@ CREATE TABLE IF NOT EXISTS `baseline_countries` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `baseline_countries`
---
 
 INSERT INTO `baseline_countries` (`id`, `name`) VALUES
 (1, 'United States'),
@@ -811,12 +771,6 @@ INSERT INTO `baseline_countries` (`id`, `name`) VALUES
 (352, 'Zimbabwe'),
 (353, 'Other');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_drop_off`
---
-
 DROP TABLE IF EXISTS `baseline_drop_off`;
 CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -828,18 +782,8 @@ CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_drop_off`
---
-
 INSERT INTO `baseline_drop_off` (`id`, `dropLocation`, `dropLocationName`, `dropLocationPhone`, `dropLocationWebsite`, `dropLocationNotes`) VALUES
-(1, '1234 Main Street, Anytown, CO 80111', 'Sample Drop Off', '3035551234', 'http://www.brewcompetition.com', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_assignments`
---
+(1, '1340 Pennsylvania St, Denver, CO 80203', 'Baseline Dropoff Location', '123.456.7890', NULL, NULL);
 
 DROP TABLE IF EXISTS `baseline_judging_assignments`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
@@ -853,12 +797,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_flights`
---
-
 DROP TABLE IF EXISTS `baseline_judging_flights`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -868,12 +806,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
   `flightRound` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_locations`
---
 
 DROP TABLE IF EXISTS `baseline_judging_locations`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
@@ -886,18 +818,8 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_judging_locations`
---
-
 INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `judgingLocName`, `judgingLocation`, `judgingRounds`) VALUES
-(1, '1440253800', NULL, 'Sample Location', '1701 Bryant Street, Denver, CO 80204', 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_preferences`
---
+(1, '1500129000', NULL, 'Baseline Judging Location', '1340 Pennsylvania St, Denver, CO 80203', 2);
 
 DROP TABLE IF EXISTS `baseline_judging_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
@@ -909,18 +831,8 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_judging_preferences`
---
-
 INSERT INTO `baseline_judging_preferences` (`id`, `jPrefsQueued`, `jPrefsFlightEntries`, `jPrefsMaxBOS`, `jPrefsRounds`) VALUES
-(1, 'Y', 12, 7, 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_scores`
---
+(1, 'Y', 12, 3, 2);
 
 DROP TABLE IF EXISTS `baseline_judging_scores`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
@@ -935,12 +847,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_scores_bos`
---
-
 DROP TABLE IF EXISTS `baseline_judging_scores_bos`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -951,12 +857,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
   `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom stylesr',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_judging_tables`
---
 
 DROP TABLE IF EXISTS `baseline_judging_tables`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
@@ -969,12 +869,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
   `tableStewards` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_mods`
---
 
 DROP TABLE IF EXISTS `baseline_mods`;
 CREATE TABLE IF NOT EXISTS `baseline_mods` (
@@ -991,12 +885,6 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
   `mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_preferences`
---
 
 DROP TABLE IF EXISTS `baseline_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_preferences` (
@@ -1049,18 +937,8 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_preferences`
---
-
 INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, '$', 'Y', 'N', NULL, 'N', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'N', 'N', 'N', 50, 'BJCP2015', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_special_best_data`
---
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0);
 
 DROP TABLE IF EXISTS `baseline_special_best_data`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
@@ -1073,12 +951,6 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_special_best_info`
---
-
 DROP TABLE IF EXISTS `baseline_special_best_info`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1089,12 +961,6 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
   `sbi_display_places` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_sponsors`
---
 
 DROP TABLE IF EXISTS `baseline_sponsors`;
 CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
@@ -1108,12 +974,6 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_staff`
---
-
 DROP TABLE IF EXISTS `baseline_staff`;
 CREATE TABLE IF NOT EXISTS `baseline_staff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1125,12 +985,6 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
   `staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_styles`
---
 
 DROP TABLE IF EXISTS `baseline_styles`;
 CREATE TABLE IF NOT EXISTS `baseline_styles` (
@@ -1156,16 +1010,12 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleOwn` varchar(255) DEFAULT 'bcoe',
   `brewStyleVersion` varchar(20) DEFAULT NULL,
   `brewStyleReqSpec` tinyint(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
-  `brewStyleStrength` int(1) DEFAULT NULL COMMENT 'Requires strength? 0=No, 1=Yes',
-  `brewStyleCarb` int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
-  `brewStyleSweet` int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
-  `brewStyleTags` varchar(255) DEFAULT NULL,
+  `brewStyleStrength` int(1) DEFAULT NULL,
+  `brewStyleCarb` int(1) DEFAULT NULL,
+  `brewStyleSweet` int(1) DEFAULT NULL,
+  `brewStyleTags` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=227 ;
-
---
--- Dumping data for table `baseline_styles`
---
 
 INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) VALUES
 (1, 'A', 'Lite American Lager', 'Light Lager', '1.028', '1.040', '0.998', '1.008', '3.2', '4.2', '8', '12', '2', '3', 'Lager', 'A lower gravity and lower calorie beer than standard international lagers. Strong flavors are a fault. Designed to appeal to the broadest range of the general public as possible.Commercial Examples: Bitburger Light, Sam Adams Light, Heineken Premium Light, Miller Lite, Bud Light, Coors Light, Baltika #1 Light, Old Milwaukee Light, Amstel Light. ', 'http://www.bjcp.org/2008styles/style01.php#1a', '01', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, ''),
@@ -1330,7 +1180,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (158, 'C', 'American Brown Ale', 'Amber and Brown American Beer', '1.045', '1.060', '1.010', '1.016', '4.3', '6.2', '20', '30', '18', '35', 'Ale', 'A malty but hoppy beer frequently with chocolate and caramel flavors. The hop flavor and aroma complements and enhances the malt rather than clashing with it. Commercial Examples: Big Sky Moose Drool Brown Ale, Cigar City Maduro Brown Ale, Bell&rsquo;s Best Brown, Smuttynose Old Brown Dog Ale, Brooklyn Brown Ale, Lost Coast Downtown Brown, Avery Ellie&rsquo;s Brown Ale.', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, brown-ale-family, balanced, hoppy'),
 (159, 'A', 'American Porter', 'American Porter and Stout', '1.050', '1.070', '1.012', '1.018', '4.8', '6.5', '25', '50', '22', '40', 'Ale', 'A substantial, malty dark beer with a complex and flavorful dark malt character. Commercial Examples: Great Lakes Edmund Fitzgerald Porter, Anchor Porter, Smuttynose Robust Porter, Sierra Nevada Porter, Deschutes Black Butte Porter, Boulevard Bully! Porter.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, porter-family, bitter, roasty, hoppy'),
 (160, 'B', 'American Stout', 'American Porter and Stout', '1.050', '1.075', '1.010', '1.022', '5.0', '7.0', '35', '75', '30', '40', 'Ale', 'A fairly strong, highly roasted, bitter, hoppy dark stout. Has the body and dark flavors typical of stouts with a more aggressive American hop character and bitterness. Commercial Examples: Rogue Shakespeare Stout, Deschutes Obsidian Stout, Sierra Nevada Stout, North Coast Old No. 38, Avery Out of Bounds Stout.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, stout-family, bitter, roasty, hoppy'),
-(161, 'C', 'Russian Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.030', '8.0', '12.0', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess. Commercial Examples: American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty'),
+(161, 'C', 'Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.030', '8.0', '12.0', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess. Commercial Examples: American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty'),
 (162, 'A', 'American IPA', 'IPA', '1.056', '1.070', '1.008', '1.014', '5.5', '7.5', '40', '70', '6', '14', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties. The balance is hop-forward, with a clean fermentation profile, dryish finish, and clean, supporting malt allowing a creative range of hop character to shine through.  Commercial Examples: Russian River Blind Pig IPA, Bell&rsquo;s Two-Hearted Ale, Firestone Walker Union Jack, Alpine Duet, New Belgium Ranger IPA, Fat Heads Head Hunter, Stone IPA, Lagunitas IPA.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy'),
 (163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients. Entry Instructions: Entrant must specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. Entrant must specify specific type of Specialty IPA from the library of known types listed in the Style Guidelines, or as amended by the BJCP web site; or the entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). Currently Defined Types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy'),
 (164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10.0', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer. Commercial Examples: Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell&rsquo;s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy'),
@@ -1353,7 +1203,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (181, 'B', 'Belgian Dubbel', 'Trappist Ale', '1.062', '1.075', '1.008', '1.018', '6.0', '7.6', '15', '25', '10', '17', 'Ale', 'A deep reddish-copper, moderately strong, malty, complex Trappist ale with rich malty flavors, dark or dried fruit esters, and light alcohol blended together in a malty presentation that still finishes fairly dry.\rComments: Most commercial examples are in the 6.5 - 7% ABV range. Traditionally bottle-conditioned (&quot;refermented in the bottle&quot;). Commercial Examples: Westmalle Dubbel, St. Bernardus Pater 6, La Trappe Dubbel, Corsendonk Abbey Brown Ale, Grimbergen Double, Affligem Dubbel, Chimay Premiere (Red), Pater Lieven Bruin, Duinen Dubbel, St. Feuillien Brune, New Belgium Abbey Belgian Style Ale, Stoudts Abbey Double Ale, Russian River Benediction, Flying Fish Dubbel, Lost Abbey Lost and Found Abbey Ale, Allagash Double.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, western-europe, traditional-style, malty'),
 (182, 'C', 'Belgian Tripel', 'Trappist Ale', '1.075', '1.085', '1.008', '1.014', '7.5', '9.5', '20', '40', '4.5', '7', 'Ale', 'A pale, somewhat spicy, dry, strong Trappist ale with a pleasant rounded malt flavor and firm bitterness. Quite aromatic, with spicy, fruity, and light alcohol notes combining with the supportive clean malt character to produce a surprisingly drinkable beverage considering the high alcohol level. Commercial Examples: Westmalle Tripel, La Rulles Tripel, St. Bernardus Tripel, Chimay Cinq Cents (White), Watou Tripel, Val-Dieu Triple, Affligem Tripel, Grimbergen Tripel, La Trappe Tripel, Witkap Pater Tripel, Corsendonk Abbey Pale Ale, St. Feuillien Tripel.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, western-europe, traditional-style, bitter'),
 (183, 'D', 'Belgian Dark Strong Ale', 'Trappist Ale', '1.075', '1.110', '1.010', '1.024', '8.0', '11.0', '20', '35', '12', '22', 'Ale', 'A dark, complex, very strong Belgian ale with a delicious blend of malt richness, dark fruit flavors, and spicy elements. Complex, rich, smooth and dangerous. Commercial Examples: Westvleteren 12, Rochefort 10, St. Bernardus Abt 12, Gouden Carolus Grand Cru of the Emperor, Achel Extra Brune, Rochefort 8, Southampton Abbot 12, Chimay Grande Reserve, Lost Abbey Judgment Day.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, western-europe, traditional-style, malty'),
-(184, 'A', 'Historical Beer', 'Historical Beer', '', '', '', '', '', '', '', '', '', '', '', 'The Historical Beer category contains styles that either have all but died out in modern times, or that were much more popular in past times and are known only through recreations. This category can also be used for traditional or indigenous beers of cultural importance within certain countries. Placing a beer in the historical category does not imply that it is not currently being produced, just that it is a very minor style or perhaps is in the process of rediscovery by craft brewers. Entry Instructions: The entrant must either specify a style with a BJCP-supplied description, or provide a similar description for the judges of a different style. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it. Currently defined examples: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented, lag'),
+(184, 'A', 'Historical Beer', 'Historical Beer', '', '', '', '', '', '', '', '', '', '', '', 'The Historical Beer category contains styles that either have all but died out in modern times, or that were much more popular in past times and are known only through recreations. This category can also be used for traditional or indigenous beers of cultural importance within certain countries. Placing a beer in the historical category does not imply that it is not currently being produced, just that it is a very minor style or perhaps is in the process of rediscovery by craft brewers. Entry Instructions: The entrant must either specify a style with a BJCP-supplied description, or provide a similar description for the judges of a different style. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it. Currently defined examples: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented, lagered, pilsner-family, bitter, hoppy, any-fermentation,  porter-family, high-strength, spice'),
 (185, 'A', 'Brett Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'An interesting and refreshing variation on the base style, often drier and fruitier than expected, with at most a light acidity. Funky notes are generally restrained in 100% Brett examples, except in older examples. Entry Instructions: The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer'),
 (186, 'B', 'Mixed Fermentation Sour Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a base style of beer. Entry Instructions: The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. Commercial Examples: Bruery Tart of Darkness, Jolly Pumpkin Calabaza Blanca, Cascade Vlad the Imp Aler, Russian River Temptation, Boulevard Love Child, Hill Farmstead Bi', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour'),
 (187, 'C', 'Soured Fruit Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit beer. Entry Instructions: Entrant must specify the type of fruit used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items. Commercial Examples: Russian River Supplication, Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Belgium Eric&rsquo;s Ale, The Lost Abbey Cuvee de Tomme, The Bruery Sour In The Rye with Kumquats, Captain Lawrence Cuvee de Castleton, Almanac Dogpatch Sour, Upright Fatali Four, New Belgium Kick, New Glarus Belgian Red.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit'),
@@ -1398,12 +1248,6 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.070', '0.995', '1.010', '5.0', '9.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result. Entry Instructions: Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used. Commercial Examples: [US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, ''),
 (226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.100', '0.995', '1.020', '5.0', '12.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories. Entry Instructions: Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_style_types`
---
-
 DROP TABLE IF EXISTS `baseline_style_types`;
 CREATE TABLE IF NOT EXISTS `baseline_style_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1414,20 +1258,10 @@ CREATE TABLE IF NOT EXISTS `baseline_style_types` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
---
--- Dumping data for table `baseline_style_types`
---
-
 INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
 (1, 'Beer', 'bcoe', 'Y', 1),
 (2, 'Cider', 'bcoe', 'Y', 1),
 (3, 'Mead', 'bcoe', 'Y', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_system`
---
 
 DROP TABLE IF EXISTS `baseline_system`;
 CREATE TABLE IF NOT EXISTS `baseline_system` (
@@ -1439,18 +1273,8 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_system`
---
-
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '1.3.1.0', '2015-05-31', '2015-06-01 14:25:35', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_themes`
---
+(1, '1.3.1.0', '2015-05-31', '2015-07-31 07:17:41', 1);
 
 DROP TABLE IF EXISTS `baseline_themes`;
 CREATE TABLE IF NOT EXISTS `baseline_themes` (
@@ -1460,20 +1284,10 @@ CREATE TABLE IF NOT EXISTS `baseline_themes` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
---
--- Dumping data for table `baseline_themes`
---
-
 INSERT INTO `baseline_themes` (`id`, `themeTitle`, `themeFileName`) VALUES
 (1, 'BCOE&amp;M Default', 'default'),
 (2, 'Bruxellensis', 'bruxellensis'),
 (3, 'Claussenii', 'claussenii');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `baseline_users`
---
 
 DROP TABLE IF EXISTS `baseline_users`;
 CREATE TABLE IF NOT EXISTS `baseline_users` (
@@ -1487,9 +1301,5 @@ CREATE TABLE IF NOT EXISTS `baseline_users` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `baseline_users`
---
-
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$s4XveVAjK.VKmnPrcYRXvuPcwjRH1lOpwvOyxFXBy6qW9hBzb39te', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2015-06-01 13:47:36');
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2015-07-31 13:19:39');

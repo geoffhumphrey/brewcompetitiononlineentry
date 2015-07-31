@@ -155,12 +155,12 @@ function display_array_content_style($arrayname,$method,$base_url) {
 			$c = display_array_content($value,'');
 			$d = ltrim($c,"0");
 			$d = str_replace("-","",$c);
-			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?go=".$c."'>".$d."</a>";
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php#".$d."'>".$d."</a>";
    		}
   		else {
 			$e = ltrim($value,"0");
 			$e = str_replace("-","",$value);
-			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?go=".$value."'>".$e."</a>"; 
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php#".$e."'>".$e."</a>"; 
 		}
 		if ($method == "1") $a .= "";
 		if ($method == "2") $a .= "&nbsp;&nbsp;";
@@ -379,7 +379,7 @@ else $collapse_icon = '<span class="icon"><img src="'.$base_url.'images/add.png"
 <?php } ?> 
 <input type="hidden" name="brewJudgingNumber" value="<?php echo $row_log['brewJudgingNumber']; ?>">
 <h2>Required Information</h2>
-<p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" <?php if (($action == "add") && ($remaining_entries == 0) && ($_SESSION['user_level'] == 2)) echo "DISABLED"; ?> /></p>
+<p><input type="submit" class="button" value="Submit Entry" alt="Submit Entry" <?php if (($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) echo "DISABLED"; ?> /></p>
 <table>
 <?php
 if (($filter == "admin") || ($filter == "default")) $brewer_id = $_SESSION['user_id']; else $brewer_id = $filter; 

@@ -67,14 +67,6 @@ if ($setup_success) {
 	// check to see if all judging numbers have been generated. If not, generate
 	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 	
-	if ($_SESSION['prefsAutoPurge'] == 1) {
-		// Automatically purge all unconfirmed entries
-		purge_entries("unconfirmed", 1);
-		
-		// Purge entries without defined special ingredients designated to particular styles that require them
-		purge_entries("special", 1);
-	}
-	
 	// Check if judging flights are up-to-date
 	if (!check_judging_flights()) $check_judging_flights = TRUE;
 	else $check_judging_flights = FALSE;

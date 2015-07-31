@@ -46,8 +46,8 @@ if (($action != "print") && ($msg != "default")) echo $msg_output;
 if (($action != "print") && ($go != "default")) echo admin_help($go,$header_output,$action,$filter);
 if ($_SESSION['userLevel'] <= "1") {
 			if (($totalRows_dropoff == "0") && ($go == "default")) echo "<div class='error' style='margin-top: 15px;'>No drop-off locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=dropoff\">Add a drop-off location</a>?</div>";
-			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
-			if (($totalRows_contact == "0") && ($go == "default")) echo "<div class='error'style='margin-top: 15px;'>No competition contacts have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=contacts\">Add a competition contact</a>?</div>";
+			if (($totalRows_judging == "0") && ($go == "default")) echo "<div class='error' style='margin-top: 15px;'>No judging dates/locations have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=judging\">Add a judging location</a>?</div>";
+			if (($totalRows_contact == "0") && ($go == "default")) echo "<div class='error' style='margin-top: 15px;'>No competition contacts have been specified. <a href=\"index.php?section=admin&amp;action=add&amp;go=contacts\">Add a competition contact</a>?</div>";
 			
 if ($go == "default") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
@@ -121,7 +121,6 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
 <div id="menu_container">
 <div id="outer">
 <p>Click the headings below to expand and collapse each category.</p>
-<p><a href="<?php echo $base_url."includes/process.inc.php?action=convert_bjcp"; ?>">Convert to BJCP 2015</a>.</p>
 	<div class="menus">
 	  <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span>Help</h4>
         <div class="toggle_container">
