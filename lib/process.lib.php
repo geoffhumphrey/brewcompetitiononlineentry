@@ -9,6 +9,16 @@ function check_http($input) {
  
 function generate_judging_num($style_cat_num) {
 	
+	
+	
+	// Generate the Judging Number each entry 
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
+	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
+	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
+	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
+		
 	// Need to convert mead and cider categories for BJCP2015 to numerals (all contain alphas, which break the script)
 	switch ($style_cat_num) {
 		case "C1": $style_cat_num = "38"; break;
@@ -19,14 +29,6 @@ function generate_judging_num($style_cat_num) {
 		case "M4": $style_cat_num = "43"; break;
 		default: $style_cat_num = $style_cat_num;
 	}
-	
-	// Generate the Judging Number each entry 
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
-	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
-	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
-	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
 	
 	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
 	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;

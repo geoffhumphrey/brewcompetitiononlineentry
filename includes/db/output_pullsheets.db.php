@@ -6,4 +6,6 @@ else $query_tables .= " ORDER BY tableNumber";
 $tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 $row_tables = mysql_fetch_assoc($tables);
 $totalRows_tables = mysql_num_rows($tables);
+
+// echo $query_tables;
 ?>

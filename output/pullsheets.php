@@ -32,6 +32,7 @@ else {
 if ($_SESSION['jPrefsQueued'] == "N") {
 if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id == "default"))
 do { 
+
 $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
@@ -93,7 +94,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <tbody>
     <?php 
 	$a = explode(",", $row_tables['tableStyles']);
-	
+	//print_r($a);
 	foreach (array_unique($a) as $value) {
 		include(DB.'output_pullsheets_entries.db.php');		
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -143,8 +144,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     </div>
 </div>
 <?php if ($flights == 0) { ?><div style="page-break-after:always;"></div><?php } ?>
-<?php 	} 
-	while ($row_tables = mysql_fetch_assoc($tables)); 
+<?php 	} while ($row_tables = mysql_fetch_assoc($tables)); 
 
 
 if ((($go == "judging_tables") || ($go == "judging_locations")) &&  ($id != "default")) { 

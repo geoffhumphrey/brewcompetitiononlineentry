@@ -1659,11 +1659,11 @@ function style_convert($number,$type,$base_url="") {
 		
 		// Get Style Name
 		case "8":
-		$query_styles = sprintf("SELECT brewStyle FROM %s WHERE id='%s'",$styles_db_table,$number);
+		$query_styles = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table,$number);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$style_convert = $row_styles['brewStyle'];
+		$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$row_styles['brewStyle'];
 		
 		break;
 		

@@ -156,7 +156,9 @@ echo "<p><span class='dataLabel'>Table Location:</span>".table_location($row_tab
 <tbody>
 	<?php 
 	$a = explode(",", $row_tables_edit['tableStyles']); 
-
+	
+	// print_r($a);
+	
 	foreach (array_unique($a) as $value) {
 		
 		$style_name = style_convert($value,"8");

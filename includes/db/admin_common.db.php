@@ -26,7 +26,7 @@ else {
 			
 			$query_tables = "SELECT * FROM $judging_tables_db_table";
 			if (($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
-			if (($section = "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
+			if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
 			
 			$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 			$row_tables = mysql_fetch_assoc($tables);

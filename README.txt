@@ -5,12 +5,12 @@
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston, Bruce Buerger, Oskar Stephens **
 ** and Luis Balbinot                                                **
-** Release 1.3.1.0 June, 2015                                       **
+** Release 1.3.1.0 BETA2 August, 2015                               **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
 ** the software for your own use and customize it for your own      **
-** purposes (http://help.brewcompetition.com/files/license.html).   **
+** purposes (http://www.brewcompetition.com/license).               **
 ** http://www.brewcompetition.com                                   **
 ** http://help.brewcompetition.com                                  **
 ** Direct inquiries to prost@brewcompetition.com                    **
@@ -49,15 +49,16 @@ The biggest challenges of organizing a homebrewing competition is
 knowing who has entered what and how many, organizing judging 
 efficiently, and reporting the results of the competition in a timely 
 manner. BCOE&M provides a single online interface to collect entry and 
-participant data, organize judging tables and assignments, collect 
-scores, and report the results.
+participant data, organize judging tables and assignments, input  
+scoring data, and report the results.
 
 BCOE&M is free and open-source.
+
 **********************************************************************
 Changes in This Version
 **********************************************************************
 Support for BJCP 2015 styles.
-Various bug fixes.
+Various bug fixes reported after BETA release.
 
 For those experiencing any issues related to initial browser-based 
 setup of BCOE&M, the bcoem_baseline_1.3.1.X.sql document is available in 

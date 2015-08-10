@@ -51,16 +51,19 @@ foreach ($subcats as $subcat) {
 		$style_beer_count[] .= $row_substyle_count['count']; 
 		$style_beer_count_logged[] .= $row_substyle_count_logged['count'];  
 		}
+	
 	if (in_array($substyle[0],$mead_array)) { 
 		$style_type = "Mead"; 
 		$style_mead_count[] .= $row_substyle_count['count']; 
 		$style_mead_count_logged[] .= $row_substyle_count_logged['count']; 
 		}
+	
 	if (in_array($substyle[0],$cider_array))  { 
 		$style_type = "Cider";
 		$style_cider_count[] .= $row_substyle_count['count'];
 		$style_cider_count_logged[] .= $row_substyle_count_logged['count']; 
 		}
+	
 	if ($substyle[0] > $category_end) {
 		
 		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
