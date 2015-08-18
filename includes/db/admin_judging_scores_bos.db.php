@@ -29,7 +29,7 @@ else {
 		$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
 		$row_bos = mysql_fetch_assoc($bos);
 		$totalRows_bos = mysql_num_rows($bos);
-		
+		//echo $query_bos;
 	}
 }
 ?>

@@ -44,42 +44,40 @@ function bos_entry_info($eid,$table_id,$filter) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	if ($filter == "default") $filter = ""; else $filter = "_".$filter;
-	
 	if ($table_id == "default") $table_id = 1; else $table_id = $table_id;
 	
-	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing".$filter, $eid);
+	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing", $eid);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables".$filter, $table_id);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
 		
-	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $prefix."judging_scores_bos".$filter, $eid);
+	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $prefix."judging_scores_bos", $eid);
 	$bos_place_1 = mysql_query($query_bos_place_1, $brewing) or die(mysql_error());
 	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);	
 	
 	$return = 
-	$row_entries_1['brewStyle']."^".  // 0
-	$row_entries_1['brewCategorySort']."^".  // 1
-	$row_entries_1['brewCategory']."^".  // 2
-	$row_entries_1['brewSubCategory']."^".  // 3
-	$row_entries_1['brewBrewerFirstName']."^".  // 4
-	$row_entries_1['brewBrewerLastName']."^".  // 5
-	$row_entries_1['brewJudgingNumber']."^".   // 6
-	$row_tables_1['id']."^".  // 7
-	$row_tables_1['tableName']."^".   // 8
-	$row_tables_1['tableNumber']."^".  // 9
-	$row_bos_place_1['scorePlace']."^".  // 10
-	$row_bos_place_1['scoreEntry']."^".  // 11
-	$row_entries_1['brewName']."^".  // 12
-	$row_entries_1['id']."^".   // 13
-	$row_bos_place_1['id']."^".   // 14
-	$row_entries_1['brewBrewerID']  // 15
-	;
+	$row_entries_1['brewStyle']."^".  			// 0
+	$row_entries_1['brewCategorySort']."^".  	// 1
+	$row_entries_1['brewCategory']."^".  		// 2
+	$row_entries_1['brewSubCategory']."^".  		// 3
+	$row_entries_1['brewBrewerFirstName']."^".  	// 4
+	$row_entries_1['brewBrewerLastName']."^".  	// 5
+	$row_entries_1['brewJudgingNumber']."^".   	// 6
+	$row_tables_1['id']."^".  					// 7
+	$row_tables_1['tableName']."^".   			// 8
+	$row_tables_1['tableNumber']."^".  			// 9
+	$row_bos_place_1['scorePlace']."^".  		// 10
+	$row_bos_place_1['scoreEntry']."^".  		// 11
+	$row_entries_1['brewName']."^".  			// 12
+	$row_entries_1['id']."^".   					// 13
+	$row_bos_place_1['id']."^".   				// 14
+	$row_entries_1['brewBrewerID']; 				// 15
+	
 	return $return;
 }
 

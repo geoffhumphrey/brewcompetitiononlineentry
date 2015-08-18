@@ -1428,7 +1428,7 @@ function style_convert($number,$type,$base_url="") {
 			case "16": $style_convert = "Dark British Beer"; break;
 			case "17": $style_convert = "Strong British Ale"; break;
 			case "18": $style_convert = "Pale American Ale"; break;
-			case "19": $style_convert = "Dark American Beer"; break;
+			case "19": $style_convert = "Amber and Brown American Beer"; break;
 			case "20": $style_convert = "American Porter and Stout"; break;
 			case "21": $style_convert = "IPA"; break;
 			case "22": $style_convert = "Strong American Ale"; break;
@@ -2009,7 +2009,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 		$totalRows_location = mysql_num_rows($location);
 		
 		if ($totalRows_location == 1) {
-			$table_location = $row_location['judgingLocName']." - ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
+			$table_location = $row_location['judgingLocName']."<br>".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
 		}
 		else $table_location = ""; 
 	}

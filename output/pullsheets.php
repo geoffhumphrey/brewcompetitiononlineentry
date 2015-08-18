@@ -5,7 +5,7 @@ require(CONFIG.'bootstrap.php');
 require(DB.'admin_common.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 include(LIB.'output.lib.php');
-if ($go == "judging_tables") include(DB.'output_pullsheets.db.php');
+include(DB.'output_pullsheets.db.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -45,10 +45,10 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			if ($row_tables['tableLocation'] != "") { ?>
             <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
-            <p>** Please Note:</p>
+            <p style="padding-top: 15px">** Please Note:</p>
             <ul>
             	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
-               	<li>If entries are missing, all entries have not been assigned to a flight or round <?php if ($round != "default") echo "OR they have been assigned to a different round"; ?>.</li>
+               	<li>If entries are missing, all entries have not been assigned to a flight or round<?php if ($round != "default") echo " OR they have been assigned to a different round"; ?>.</li>
             </ul>
             <?php } ?>
         </div>
@@ -161,7 +161,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
             <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
-            <p>** Please Note:</p>
+            <p style="padding-top: 15px">** Please Note:</p>
             <ul>
             	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
                	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>

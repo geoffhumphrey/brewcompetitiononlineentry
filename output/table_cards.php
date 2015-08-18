@@ -48,7 +48,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[0,'asc']],
+                        "aaSorting": [[1,'asc'],[0,'asc']],
                         "bProcessing" : false,
                         "aoColumns": [
                                 { "asSorting": [  ] },
@@ -72,7 +72,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 						$rank = str_replace(",",", ",$judge_info['3']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']." (".$rank.")"; ?></td>
+                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
             	<td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
@@ -82,7 +82,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
     </table>
     <?php } ?>
     <table class="dataTable">
-    <?php for($i=0; $i<(10-$totalRows_assignments); $i++) { ?>
+    <?php for($i=0; $i<(8-$totalRows_assignments); $i++) { ?>
     <tr>
     	<td class="bdr1B">&nbsp;</td>
     </tr>
@@ -107,7 +107,7 @@ if ($id != "default") {
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[0,'asc']],
+                        "aaSorting": [[1,'asc'],[0,'asc']],
                         "bProcessing" : false,
                         "aoColumns": [
                                 { "asSorting": [  ] },
@@ -131,7 +131,7 @@ if ($id != "default") {
 						$rank = str_replace(",",", ",$judge_info['3']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']." (".$rank.")"; ?></td>
+                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
             	<td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
@@ -141,7 +141,7 @@ if ($id != "default") {
     </table>
     <?php } ?>
     <table class="dataTable">
-    <?php for($i=0; $i<(14-$totalRows_assignments); $i++) { ?>
+    <?php for($i=0; $i<(12-$totalRows_assignments); $i++) { ?>
     <tr>
     	<td class="bdr1B">&nbsp;</td>
     </tr>

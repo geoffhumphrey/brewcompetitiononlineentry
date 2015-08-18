@@ -155,12 +155,12 @@ function display_array_content_style($arrayname,$method,$base_url) {
 			$c = display_array_content($value,'');
 			$d = ltrim($c,"0");
 			$d = str_replace("-","",$c);
-			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php#".$d."'>".$d."</a>";
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$c."'>".$d."</a>";
    		}
   		else {
 			$e = ltrim($value,"0");
 			$e = str_replace("-","",$value);
-			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php#".$e."'>".$e."</a>"; 
+			$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$value."'>".$e."</a>"; 
 		}
 		if ($method == "1") $a .= "";
 		if ($method == "2") $a .= "&nbsp;&nbsp;";
@@ -476,7 +476,7 @@ $brewer_info = explode("^",$brewer_info);
 <tr>
 	<td class="dataLabel"></td>
     <td class="data">
-    &spades; = Special Ingredients and/or Classic Style Required<br />
+    &spades; = Specific Type, Special Ingredients and/or Classic Style Required<br />
     &diams; = Strength Required<br />
     &clubs; = Carbonation Level Required<br />
     &hearts; = Sweetness Level Required
@@ -486,7 +486,7 @@ $brewer_info = explode("^",$brewer_info);
 <div id="special">
 <table>
 <tr>
-   <td class="dataLabel">Special Ingredients and/or Classic Style:</td>
+   <td class="dataLabel">Specific Type, Special Ingredients and/or Classic Style:</td>
 </tr>
 
 <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>

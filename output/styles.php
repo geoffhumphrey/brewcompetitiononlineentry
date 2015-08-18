@@ -51,9 +51,6 @@ a:active {
             <?php } ?>
             </div>
         </div>
-        <?php if ($go == "default") { ?>
-        <p>Skip to Category: <?php for ($i=1; $i <= $row_styles_count['brewStyleGroup']; $i++) { ?><a href="#<?php echo $i; ?>" title="Skip to <?php if ($i > 10) $s = "0".$i; else $s = $i; echo style_convert($s,1); ?>"><?php echo $i; ?></a>&nbsp;&nbsp;<?php } ?></p>
-        <?php } ?>
 <?php if ($totalRows_styles > 0) { ?>
 <?php do { 
 $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide');
@@ -86,7 +83,7 @@ else {
 </table>
 <table>
   <tr>
-  	<td class="data-left"><p><?php echo $info; ?></p></td>
+  	<td class="data-left"><p style="padding-bottom: 15px;"><?php echo $info; ?></p></td>
   </tr>
 </table>
 <table class="dataTable">
@@ -146,10 +143,10 @@ else {
     </td>
    </tr>
   </table>
-<p><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
+<p style="padding-top: 20px;"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
 </div>
-<?php if ($go == "default") { ?>
-<p><a href="#top">Top of Page</a></p>
+<?php if (($go == "default") && ($view == "default")) { ?>
+<p style="padding-top: 10px;"><a href="#top">Top of Page</a></p>
 <?php }
 	} 
  } while ($row_styles = mysql_fetch_assoc($styles)); ?>

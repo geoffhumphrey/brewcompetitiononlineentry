@@ -1,3 +1,43 @@
+<script type="text/javascript">
+<!--
+// From http://www.dynamicdrive.com/forums/showthread.php?33533-No-Duplicates-Chosen-in-Drop-Down-lists
+function uniqueCoicesSetup(){
+	var warning = 'The place you specified has already been input. Please choose another place or no place (blank).',
+	s = document.getElementsByTagName('select'),
+	f = function (e){
+		var s = uniqueCoicesSetup.ar;
+		for (var o = this.options.selectedIndex, i = s.length - 1; i > -1; --i)
+		if(this != s[i] && o && o == s[i].options.selectedIndex){
+			this.options.selectedIndex = 0;
+			if(e && e.preventDefault)
+			e.preventDefault();
+			alert(warning);
+			return false;
+		}
+	},
+	add = function(el){
+	uniqueCoicesSetup.ar[uniqueCoicesSetup.ar.length] = el;
+	if ( typeof window.addEventListener != 'undefined' ) el.addEventListener( 'change', f, false );
+	else if ( typeof window.attachEvent != 'undefined' ){
+			var t = function() {
+				return f.apply(el);
+			};
+		el.attachEvent( 'onchange', t );
+		}
+	};
+	uniqueCoicesSetup.ar = [];
+	for (var i = s.length - 1; i > -1; --i)
+	if(/nodupe/.test(s[i].className))
+	add(s[i]);
+}
+
+if(typeof window.addEventListener!='undefined')
+window.addEventListener('load', uniqueCoicesSetup, false);
+else if(typeof window.attachEvent!='undefined')
+window.attachEvent('onload', uniqueCoicesSetup);
+// -->
+</script>
+
 <h2>
 <?php if ($action == "enter") echo "Enter/Edit BOS Places - ".$row_style_type['styleTypeName']; else echo "Best of Show (BOS) Entries and Places"; 
 if ($dbTable != "default") echo ": ".get_suffix($dbTable); 
@@ -205,7 +245,8 @@ include(DB.'admin_judging_scores_bos.db.php');
 	<?php 
 	do {
 		
-		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default");
+		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default",$filter);
+		//echo $bos_entry_info;
 		$bos_entry_info = explode("^",$bos_entry_info);
 		//print_r($bos_entry_info);
 		//echo "<br>";
@@ -227,7 +268,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td class="data"><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $bos_entry_info[11]; ?>" /></td>
         <td>
-        <select name="scorePlace<?php echo $score_id; ?>">
+        <select class="nodupe" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
           <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>

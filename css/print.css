@@ -278,27 +278,38 @@ textarea {
 .dataTable {
 	width: 650px;
 }
+
 .dataTable th {
 	background-color: #bbb;
 }
+
 .dataTable td {
 }
+
 .dataHeading {
 }
+
 .dataList {
 }
+
 .dataLabel {
 }
+
 .data {
 }
+
 .data-left {
 }
+
 .icon {
 }
+
 .dataTableCompact  { 
 }
+
 .dataTableCompact td { 
 }
+
 .dataTableCompact th {
 	background-color: #ddd;
 }
@@ -310,20 +321,25 @@ textarea {
 .button:hover {
 	background-color: #eee;
 }
+
 .paypal {
 }
 /* ------------------------------- Collapse jquery ------------------------------- */
 .trigger {
 	color: #aaa;
 }
+
 .trigger a {
 }
+
 .trigger a:link, .trigger a:visited, .trigger a:hover, .trigger a:active {
 }
+
 .toggle_container {
 /* Use the following for accordian */
 /* display: none */
 }
+
 .toggle_container a {
 /* Use the following for accordian */
 /* display: block */
@@ -331,25 +347,30 @@ textarea {
 /* ------------------------------- Admin ------------------------------- */
 .admin {
 }
+
 .admin_default {
 	margin: 0 0 1.5em 0;
 	padding: 0 .5em 0 0;
 }
+
 .admin_default ul {
 	display: inline;
 }
+
 .admin_default li {
 	display: inline;
 	list-style-type: none;
 	padding: 0 1.5em 0 0;
 	margin: 0;
 }
+
 .admin_default li li {
 	display: inline;
 	list-style-type: none;
 	padding: 0 1.5em 0 0;
 	margin: 0;
 }
+
 .admin_default_header {
 	font-size: 1em;
 	font-weight: bold;
@@ -362,6 +383,7 @@ textarea {
 /* -- Admin Sub-Navigation -- */
 .adminSubNavContainer {
 }
+
 .adminSubNav {
 }
 /* ------------------------------- Sponsor Display ------------------------------- */
@@ -369,16 +391,22 @@ textarea {
 }
 #sponsor li {
 }
+
 .looper {
 }
+
 .looper_large {
 }
+
 .looper_large th {
 }
+
 .looper_large .location {
 }
+
 .looper_large .logo {
 }
+
 .looper_large .info {
 }
 /* ------------------------------- Setup ------------------------------- */
@@ -387,31 +415,41 @@ textarea {
 /* ------------------------------- Colors ------------------------------- */
 .red {
 }
+
 .green {
 }
+
 .yellow {
 }
+
 .orange {
 }
+
 .blue { 
 }
 /* ------------------------------- Borders ------------------------------- */
 .bdr1 {
 	border: 1px solid #000;
 }
+
 .bdr1T {
 	border-top: 1px solid #000;
 }
+
 .bdr1B {
 	border-bottom: 1px solid #000;
 }
+
 .bdr1B_dashed {
 }
+
 .bdr1T_dashed {
 }
+
 .bdr1B_gray {
 border-bottom: 1px solid #cccccc;
 }
+
 .bdr1L_gray {
 border-left: 1px solid #cccccc;
 }
@@ -424,14 +462,19 @@ border-left: 1px solid #cccccc;
 */
 .info {
 }
+
 .closed {
 }
+
 .error {
 }
+
 .required {
 }
+
 .judge-alert {
 }
+
 .bos {
 }
 /* --------------------- menus.css Overrides -------------------- */
@@ -462,31 +505,40 @@ border-left: 1px solid #cccccc;
    NOT edit the file itself!
    **************************************************************
 */
+
 .paging_full_numbers {
 }
+
 .paging_full_numbers span.paginate_button,
  	.paging_full_numbers span.paginate_active {
 }
+
 .paging_full_numbers span.paginate_button {
 }
+
 .paging_full_numbers span.paginate_button:hover {
 	background-color: #eee;
 }
+
 .sorting_asc {
 	cursor: pointer;
 }
+
 .sorting_desc {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
+
 .sorting {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
+
 .sorting_asc_disabled {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
 }
+
 .sorting_desc_disabled {
 	background: url('../images/spacer.gif') no-repeat center right;
 	cursor: pointer;
@@ -498,6 +550,7 @@ border-left: 1px solid #cccccc;
 	margin-right: auto;
 	text-align: center;
 }
+
 .table_card h1 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 11em;
@@ -505,14 +558,16 @@ border-left: 1px solid #cccccc;
 	padding: 0;
 	text-align: center;
 }
+
 .table_card h2 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-style: italic;
-	font-size: 3em;
+	font-size: 5em;
 	margin: 0;
 	padding: 0;
 	text-align: center;
 }
+
 .table_card h3 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 2em;
@@ -520,6 +575,7 @@ border-left: 1px solid #cccccc;
 	padding: 0;
 	text-align: center;
 }
+
 .table_card h4 {
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.5em;
@@ -527,6 +583,7 @@ border-left: 1px solid #cccccc;
 	padding: 1em 0;
 	text-align: center;
 }
+
 .table_card .dataTable {
 	width: 100%;
 	font-family: Arial, Verdana, Helvetica, sans-serif;
@@ -534,13 +591,16 @@ border-left: 1px solid #cccccc;
 	margin: 1em 0;
 	border-collapse: collapse;
 }
+
 .table_card .dataTable th {
 	display: none;
 }
+
 .table_card .dataTable td {
 	text-align: left;
 	padding: 10px 5px;
 }
+
 .table_card hr {
 	border: 0;
 	color: #000000;
@@ -549,6 +609,7 @@ border-left: 1px solid #cccccc;
 	width: 100%;
 	margin: 2.25em 0 2.25em 0;
 }
+
 .box {
 	border: 1px solid #000;
 	min-height: 50px;
@@ -557,6 +618,7 @@ border-left: 1px solid #cccccc;
 	max-width: 75px;
 	width: 50px;
 }
+
 .box_small {
 	border: 1px solid #000;
 	height: 20px;
