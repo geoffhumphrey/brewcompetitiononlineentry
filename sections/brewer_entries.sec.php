@@ -242,7 +242,7 @@ if (($action != "print") && ($entry_window_open > 0)) {
 	// Display Add Entry, Beer XML and Print List of Entries Links
 	if ((judging_date_return() > 0) && (!$comp_entry_limit)) echo $remaining_message;
 	echo "<div class='adminSubNavContainer'>";
-	if (($remaining_entries > 0) && ($registration_open < 2) && ($entry_window_open == 1) && (judging_date_return() > 0) && (!$comp_entry_limit)) {
+	if (($remaining_entries > 0) && ($entry_window_open == 1) && (judging_date_return() > 0) && (!$comp_entry_limit)) {
 		echo $add_entry_link;
 		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) echo $beer_xml_link;
 		}
@@ -384,12 +384,12 @@ do {
 	// Print Forms
 	$alt_title = "";
 	$alt_title .= "Print ";
-	if (!NHC) $alt_title .= "Entry Form and ";
+	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= "Entry Form and ";
 	$alt_title .= "Bottle Labels ";
 	$alt_title .= "for ".$row_log['brewName'];
 	$link_text = "";
 	$link_text .= "Print ";
-	if (!NHC) $link_text .= "Entry Form/"; 
+	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $link_text .= "Entry Form/"; 
 	$link_text .= "Bottle Labels";
 	$print_forms_link =  build_action_link("printer",$base_url,$_SESSION['user_id'],$go,"delete",$filter,$row_log['id'],$brewing_db_table,$alt_title,2,$link_text);
 	

@@ -56,14 +56,16 @@ if ($action == "email") {
 		
 		// Build the message
 		$message = "<html>" . "\r\n";
-		//$message .= "<head>" . $subject."</head>" . "\r\n";
-		$message .= "<body>" . $message_post. "\r\n". "</body>" . "\r\n";
+		$message .= "<body>";
+		$message .= "<p>". $message_post. "</p>";
+		$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
+		$message .= "</body>" . "\r\n";
 		$message .= "</html>";
 		
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
-		$headers .= "To: ".$to_name." <".$to_email.">, " . "\r\n";
-		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
+		$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
+		$headers .= "From: ".$_SESSION['contestName']." Server <noreply@".$_SERVER['SERVER_NAME'].">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
 		$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 		$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
 		
@@ -72,6 +74,10 @@ if ($action == "email") {
 		echo $to_email."<br>";
 		echo $to_name."<br>";
 		echo $headers."<br>";
+		echo "To: ".$to_name." ".$to_email."<br>";
+		echo "From: ".$_SESSION['contestName']." Server noreply@".$_SERVER['SERVER_NAME']."<br>";
+		echo "Reply-To: ".$from_name." ".$from_email."<br>";
+		echo "CC: ".$from_name." ".$from_email."<br>";
 		echo $message;
 		*/
 		

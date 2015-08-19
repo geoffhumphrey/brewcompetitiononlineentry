@@ -47,7 +47,10 @@ if (($registration_open == "0") && (!$ua) && ($section != "admin")) {
 
 if (($registration_open == "2") && (!$ua)) {
 	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { 
-    	$registration_closed_msg .= "<div class='closed'>Entry registration closed ".$reg_closed.".</div>";
+    	$registration_closed_msg .= "<div class='closed'>";
+		$registration_closed_msg .= "Registration closed ".$reg_closed.".";
+		if ($entry_window_open == "1") $registration_closed_msg .= "<br>Participants who already have registered accounts may add entries into the system until ".$entry_closed.".";
+		$registration_closed_msg .= "</div>";
 		if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $registration_closed_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>";
 	}
 }

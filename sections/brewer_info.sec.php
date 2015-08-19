@@ -90,6 +90,7 @@ if (!empty($_SESSION['brewerAHA'])) {
 // Build Judge Info Display
 
 	$judge_info = "";
+	echo $a;
 	$a = explode(",",$_SESSION['brewerJudgeLocation']);
 	arsort($a);
 	foreach ($a as $value) {
@@ -253,8 +254,7 @@ if (!empty($bjcp_rank[1])) {
     <td class="dataLabel">Categories Preferred:</td>
     <td class="data">
     <?php 
-    if ($_SESSION['brewerJudgeLikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeLikes'],4),2),", ");
-    else echo "N/A";		
+    if ($_SESSION['brewerJudgeLikes'] != "") echo style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
     ?>
     </td>
 </tr>
@@ -262,7 +262,7 @@ if (!empty($bjcp_rank[1])) {
     <td class="dataLabel">Categories Not Preferred:</td>
     <td class="data">
     <?php 
-    if ($_SESSION['brewerJudgeDislikes'] != "") echo rtrim(display_array_content(style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url),2),", "); 
+    if ($_SESSION['brewerJudgeDislikes'] != "") echo style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url);
     else echo "N/A";		
     ?>
     </td>
@@ -274,7 +274,7 @@ if (!empty($bjcp_rank[1])) {
     <?php if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) echo yes_no($_SESSION['brewerJudge'],$base_url); elseif ((!empty($_SESSION['brewerJudge'])) && ($action == "print")) echo yes_no($_SESSION['brewerJudge'],$base_url,3); else echo "None entered"; ?>
     </td>
 </tr>
-<?php if ($_SESSION['brewerJudge'] == "Y") { ?>
+<?php if (($_SESSION['brewerJudge'] == "Y") && (!empty($judge_info))) { ?>
 <tr>
     <td class="dataLabel">Judging Availability:</td>
     <td>
@@ -355,7 +355,7 @@ if (!empty($bjcp_rank[1])) {
     <td class="dataLabel">Available to Steward?</td>
     <td class="data"><?php if ((!empty($_SESSION['brewerSteward'])) && ($action != "print")) echo yes_no($_SESSION['brewerSteward'],$base_url); elseif ((!empty($_SESSION['brewerSteward'])) && ($action == "print")) echo yes_no($_SESSION['brewerSteward'],$base_url,3); else echo "None entered"; ?></td>
 </tr>
-<?php if ($_SESSION['brewerSteward'] == "Y") { ?>
+<?php if (($_SESSION['brewerSteward'] == "Y") && (!empty($steward_info))) { ?>
 <tr>
 		
     	<td class="dataLabel">Stewarding Availability:</td>

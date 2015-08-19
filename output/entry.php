@@ -23,6 +23,8 @@ if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && (
   	exit();
 }
 
+if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 23; else $category_end = 34;
+
 if ($prefix == "final_") $brewing_info['id'] = sprintf("%06s",$brewing_info['id']);
 else $brewing_info['id'] = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
@@ -37,6 +39,11 @@ $brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);
 $brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
 $brewer_info['brewerEmail'] = strtr($brewer_info['brewerEmail'],$html_remove);
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
+
+// Barcode
+$barcode = $brewing_info['id'];
+if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
+$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 
 // Get some values that are easier to work with in the templates
 $brewing_info['carbonation'] = 'unknown';
@@ -98,7 +105,7 @@ switch ($brewing_info['brewMead3']) {
 }
 
 // Style name
-if ($brewing_info['brewCategory'] < 29) { 
+if ($brewing_info['brewCategory'] < $category_end) { 
   	$brewing_info['styleName'] = $brewing_info['brewStyle'];
  	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
 }
@@ -117,13 +124,6 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 		$region = nhc_region($prefix,3);
 	}
 	
-	// Barcode for nhc-entry.html template
-	$barcode = $brewing_info['id'];
-	
-	if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
-	
-	// Using code from http://www.barcodephp.com
-	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 }
 
 //if (($_SESSION['prefsEntryForm'] != "N") || ($go == "recipe")) { 
@@ -294,16 +294,26 @@ if ($go == "default") {
 	if ($_SESSION['prefsEntryForm'] == "B") { 
 		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 	}
+	
+	if ($_SESSION['prefsEntryForm'] == "E") { 
+		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry-label-only.html');
+	}
+	
 	if ($_SESSION['prefsEntryForm'] == "M") { 
 		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
 	}
+	
 	if ($_SESSION['prefsEntryForm'] == "U") { 
 		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
 	}
+	
 	if ($_SESSION['prefsEntryForm'] == "N") { 
-		if ((NHC) && ($prefix == "final_")) $TBS->LoadTemplate(TEMPLATES.'nhc-entry-final-round.html');
-		elseif (NHC) $TBS->LoadTemplate(TEMPLATES.'nhc-entry.html');
-		else $TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
+		$TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
+		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
+	}
+	
+	if ($_SESSION['prefsEntryForm'] == "C") { 
+		$TBS->LoadTemplate(TEMPLATES.'barcode-entry-label-only.html');
 		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 }

@@ -150,11 +150,11 @@ if ($contact_count > 0) {
 
 // Registration Window
 $header1_2 .= "<a name='reg_window'></a><h2>Registration Window</h2>";
-$page_info2 .= sprintf("<p>You will be able to register your entries beginning %s through %s.</p>", $reg_open, $reg_closed);
+$page_info2 .= sprintf("<p>You will be able to register your personal information beginning %s through %s.</p>", $reg_open, $reg_closed);
 
 // Entry Window
 $header1_3 .= "<a name='entry_window'></a><h2>Entry Window</h2>";
-$page_info3 .= sprintf("<p>Entries will be accepted at our shipping and drop-off locations beginning %s through %s.</p>",$entry_open, $entry_closed);
+$page_info3 .= sprintf("<p>You will be able to add your entries to the system beginning %s through %s. Entries will be accepted at our shipping and drop-off locations during this window as well.</p>",$entry_open, $entry_closed);
 
 // Entry Fees
 $header1_4 .= "<a name='entry'></a><h2>Entry Fees</h2>";
@@ -203,11 +203,11 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 
 // Payment
 $header1_6 .= "<a name='payment'></a><h2>Payment</h2>";
-$page_info6 .= "<p>After registering and inputting entries, all participants must pay their entry fee(s).</p>";
+$page_info6 .= "<p>After registering your personal information and adding your entries to the system, you must pay your entry fee(s). Accepted payment methods are:</p>";
 $page_info6 .= "<ul>";
 if ($_SESSION['prefsCash'] == "Y") $page_info6 .= "<li>Cash</li>";
 if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>Check, made out to <em>%s</em></li>",$_SESSION['prefsCheckPayee']);
-if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= "<li>PayPal</li>";
+if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= "<li>Credit/debit card and e-check, via PayPal</li>";
 //if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
 $page_info6 .= "</ul>";
 

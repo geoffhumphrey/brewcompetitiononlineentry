@@ -66,9 +66,10 @@ $page_info2 .= "<ul>";
 $page_info2 .= sprintf("<li>Open: %s.</li>",$reg_open);
 $page_info2 .= sprintf("<li>Close: %s.</li>",$reg_closed);
 $page_info2 .= "</ul>";
+$page_info2 .= sprintf("<p><em>** Please note: The Registration Window open date is for registration of your personal information only. You will not be able to add your entries into the system until the Entry Window opens on %s.</em></p>",$entry_open);
 if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) $page_info2 .= " <p>If you have already registered, please <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or steward.</p>";
 $page_info2 .= "<h2>Entry Window</h2>";
-$page_info2 .= "<p><strong>Entries will be accepted</strong> at our shipping and drop-off locations between the following dates:</p>";
+$page_info2 .= "<p>You will be able to add your entries into the system and entries will be accepted at our shipping and drop-off locations between the following dates:</p>";
 $page_info2 .= "<ul>";
 $page_info2 .= sprintf("<li>Open: %s.</li>",$entry_open);
 $page_info2 .= sprintf("<li>Close: %s.</li>",$entry_closed);
@@ -89,7 +90,7 @@ else $page_info3 .= sprintf("<p>If you are willing to judge or steward, please r
 
 $header1_4 .= "<h2>Entries</h2>"; 
 $page_info4 .= "<p>";
-$page_info4 .= sprintf("Participants will be able to add their entry data via this website and entries will be accepted at drop-off and shipping locations between %s and %s. ",$entry_open,$entry_closed);
+$page_info4 .= sprintf("You will be able to your entries into the system and entries will be accepted at drop-off and shipping locations between %s and %s. ",$entry_open,$entry_closed);
 $page_info4 .= "</p>";
 $page_info4 .= "<p>";
 $page_info4 .= "All entries must be received by our shipping location ";
@@ -106,14 +107,14 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 	$header1_8 .= "<h2>Per Entrant Limits</h2>";
 	
 	if (!empty($row_limits['prefsUserEntryLimit'])) {
-		if ($row_limits['prefsUserEntryLimit'] == 1) $page_info8 .= sprintf("<p>Each entrant is limited to %s entry for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
-		else $page_info8 .= sprintf("<p>Each entrant is limited to %s entries for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
+		if ($row_limits['prefsUserEntryLimit'] == 1) $page_info8 .= sprintf("<p>You are limited to %s entry for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
+		else $page_info8 .= sprintf("<p>You are limited to %s entries for this competition.</p>",readable_number($row_limits['prefsUserEntryLimit'])." (".$row_limits['prefsUserEntryLimit'].")");
 	}
 	
 	if (!empty($row_limits['prefsUserSubCatLimit'])) { 
 		$page_info8 .= "<p>";
-		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info8 .= sprintf("Each entrant is limited to %s entry per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
-		else $page_info8 .= sprintf("Each entrant is limited to %s entries per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info8 .= sprintf("You are limited to %s entry per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		else $page_info8 .= sprintf("You are limited to %s entries per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
 		if (!empty($row_limits['prefsUSCLExLimit'])) $page_info8 .= " (exceptions are detailed below)";
 		$page_info8 .= ".";
 		$page_info8 .= "</p>";
@@ -123,8 +124,8 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 	if (!empty($row_limits['prefsUSCLExLimit'])) { 
 	$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
 	if (count($excepted_styles) == 1) $sub = "sub-category"; else $sub = "sub-categories";
-		if ($row_limits['prefsUSCLExLimit'] == 1) $page_info8 .= sprintf("<p>Each entrant is limited to %s for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
-		else $page_info8 .= sprintf("<p>Each entrant is limited to %s entries for for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
+		if ($row_limits['prefsUSCLExLimit'] == 1) $page_info8 .= sprintf("<p>You are limited to %s entry for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
+		else $page_info8 .= sprintf("<p>You are limited to %s entries for for the following %s: </p>",readable_number($row_limits['prefsUSCLExLimit'])." (".$row_limits['prefsUSCLExLimit'].")",$sub);
 		$page_info8 .= style_convert($row_limits['prefsUSCLEx'],"7");
 
 	}

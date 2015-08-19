@@ -410,7 +410,8 @@ function currency_info($input,$method) {
 		
 		switch ($input) {
 			
-			
+			case "$": $currency_code = "$^USD";
+			break;
 			case "R$": $currency_code = "R$^BRL";
 			break;
 			case "pound": $currency_code = "&pound;^GBP";
@@ -430,8 +431,6 @@ function currency_info($input,$method) {
 			case "S$": $currency_code = "$^SGD";
 			break;
 			case "T$": $currency_code = "$^TWD";
-			break;
-			case "$": $currency_code = "$^USD";
 			break;
 			case "Ft": $currency_code = "Ft^HUF";
 			break;
@@ -525,7 +524,8 @@ function currency_info($input,$method) {
 	
 	if ($method == 2) {
 		
-	$currency_code = array(	   
+	$currency_code = array(	
+			"$^$ Dollar - U.S.^USD",   
 			"R$^R$ Brazilian Real^BRL",
 			"pound^&pound; British Pound^GBP",
 			"czkoruna^K&#269; Czech Koruna^CZK",
@@ -536,7 +536,6 @@ function currency_info($input,$method) {
 			"N$^$ Dollar - New Zealand^NZD",
 			"S$^$ Dollar - Singapore^SGD",
 			"T$^$ Dollar - Taiwan (New)^TWD",
-			"$^$ Dollar - U.S.^USD",
 			"Ft^Ft Hungarian Forint^HUF",
 			"shekel^&#8362; Israeli New Shekel^ILS",
 			"yen^&yen; Japanese Yen^JPY",
@@ -1613,12 +1612,13 @@ function style_convert($number,$type,$base_url="") {
 	    mysql_select_db($database, $brewing);
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
-			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$value); 
+			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$value); 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
 			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php#".$trimmed.$row_style['brewStyleNum']."' title='View ".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
 		}
+		$style_convert = rtrim(implode(", ",$style_convert),", ");
 		break;
 		
 		case "5":

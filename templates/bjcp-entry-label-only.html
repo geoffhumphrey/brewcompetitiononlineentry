@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
+<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
+<style type="text/css">
+<!--
+body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt; word-spacing: 0.008em; line-height:normal; }
+h1							{ font-size: 1.8em; }
+h2							{ font-size: 1.5em; }
+table						{ border-collapse: collapse; width: 100%; }
+table td					{ padding: 2px; }
+table th					{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
+.headerTitle 				{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+.headerTitleSm 				{ font-size: 12px; font-weight: bold; margin: 0; padding: 0 0 4px 0; }
+.headerTitleSm h1			{ font-size: 14px; font-weight: bold; font-style: italic; margin: 0; padding: 0 0 4px 0; }
+.bottle, .medium 			{ font-size: 9px; } 
+.small 						{ font-size: .7em; margin: 0; } 
+#printContainer 			{ width: 100%; }
+.bdr1_thick	 				{ border: 5px solid #000000; }
+.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
+.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
+.bdr1B 						{ border-bottom: 1px solid #000000; }
+.bdr1L 						{ border-left: 1px solid #000000; }
+.bdr1R 						{ border-right: 1px solid #000000; } 
+.bdr1T 						{ border-top: 1px solid #000000; }
+.bdr1R_dashed				{ border-right: 1px dashed #000000; }
+.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
+.headerItalic 		    	{ font-size: 8px; font-style: italic; }
+table.small	td				{ padding: 1px 2px 1px 3px; }
+table.bottleLabel			{ border-collapse: collapse; width: 600px; vertical-align:top; }
+table.bottleLabel-inner		{ margin: 5px; width: 280px; padding: 2px; }
+table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: top; }
+.box						{ border: 1px solid #bbb; width: 100%; height: 50px; vertical-align: middle; background-color: #eee; padding-top: 40px; font-style: italic; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;}
+-->
+</style>
+</head>
+<body>
+<div id="printContainer">
+<a name="labels_top" id="labelsOtop"></a>
+<!-- div for non-print header -->
+<div>
+[onshow;block=div;when [var.action]!='print']
+<table>
+  <tr>
+    <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  </tr>
+</table>
+</div> <!-- end non-print header-->
+<a name="labels" id="labels"></a>
+<table align="center" class="bottleLabel">
+  <tr>
+    <td align="center">
+    <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div></td>
+      </tr>
+    </table>
+    </td>
+    <td align="center">
+      <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td align="center"><table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm">
+          <div align="center">ATTACH ONE FORM TO EACH BOTTLE</div>
+        </div></td>
+      </tr>
+    </table></td>
+    <td align="center">
+      <table class="bdr1_thick bottle bottleLabel-inner">
+      <tr>
+        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>BOTTLE ID FORM</div></td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Entry #</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Street Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">City</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">State</td>
+        <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
+        <td width="5%">Zip</td>
+        <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Phone Number</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Email Address</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Name of Beer</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Category Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
+      </tr>
+      <tr>
+        <td width="5%" nowrap="nowrap">Subcategory Entered</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">Homebrew Club</td>
+        <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
+      </tr>
+      <tr>
+        <td colspan="4"><div align="center">
+          <div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE</div>
+        </div></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<div>
+[onshow_c;block=div;when [var.action]!='print']
+<table>
+  <tr>
+  	<td>&nbsp;</td>
+    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  </tr>
+</table>
+</div> <!-- end non-print header -->
+</div>
+<div>
+[onshow;block=div;when [var.action]=='print']
+<script type="text/javascript">
+function selfPrint(){
+    self.focus();
+    self.print();
+}
+setTimeout('selfPrint()',2000);
+html.push('');
+</script>
+</div>
+</body>
+</html>

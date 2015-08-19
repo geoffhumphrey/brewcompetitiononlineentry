@@ -92,7 +92,7 @@ include (DB.'styles.db.php');
     <td nowrap="nowrap" class="data">
     <select name="prefsStyleSet">
         <option value="BJCP2008" <?php if ($_SESSION['prefsStyleSet'] == "BJCP2008") echo " SELECTED"; ?> />BJCP 2008</option>
-        <option value="BJCP2015" <?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") echo " SELECTED"; ?> />BJCP 2015</option>
+        <option value="BJCP2015" <?php if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) echo " SELECTED"; ?> />BJCP 2015</option>
         <!-- // Future Release
         <option value="BA2014" <?php if ($_SESSION['prefsStyleSet'] == "BA2014") echo " SELECTED"; ?> />Brewers Association 2014</option>
         <option value="BA2015" <?php if ($_SESSION['prefsStyleSet'] == "BA2015") echo " SELECTED"; ?> />Brewers Association 2015</option>
@@ -104,7 +104,9 @@ include (DB.'styles.db.php');
     <td nowrap="nowrap" class="data">
     <select name="prefsEntryForm">
         <option value="B" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
-        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> /><?php if (NHC) echo "NHC - 1 Page with Barcode"; else echo "BJCP Official - With Barcode"; ?></option>
+        <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official - Bottle Label Only</option>
+        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />BJCP Official With Barcode</option>
+        <option value="C" <?php if ($_SESSION['prefsEntryForm'] == "C") echo " SELECTED"; ?> />BJCP Official With Barcode - Bottle Label Only</option>
         <option value="M" <?php if ($_SESSION['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
         <option value="U" <?php if ($_SESSION['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
     </select>
