@@ -25,19 +25,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$totalRows_check_empty = mysql_num_rows($check_empty);
 		
 		if ($totalRows_check_empty > 0) {
-			$empty_array[] = $row_check_flights['flightEntryID'];
+			do { $empty_array[] = $row_check_empty['flightEntryID']; } while ($row_check_empty = mysql_fetch_assoc($check_empty));
 		}
 		
 		// Put all of the flightEntryIDs into an array
-		do {
-			$flight_array[] = $row_check_flights['flightEntryID'];
-			
-		} while ($row_check_flights = mysql_fetch_assoc($check_flights));
+		do { $flight_array[] = $row_check_flights['flightEntryID']; } while ($row_check_flights = mysql_fetch_assoc($check_flights));
 		
 		
 		do {
-			
-			
 			// 
 			if ($totalRows_check_empty > 0) {
 				

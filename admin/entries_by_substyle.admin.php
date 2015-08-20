@@ -14,9 +14,9 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 }
 
 include(DB.'styles.db.php');
-do { $subcats[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle']."-".$row_styles['brewStyleCategory']; } while ($row_styles = mysql_fetch_assoc($styles));
+do { $subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']; } while ($row_styles = mysql_fetch_assoc($styles));
 $subcats = array_unique($subcats);
-//print_r($subcats);
+// print_r($subcats);
 
 $html = "";
 $style_other_count[] = 0;
@@ -34,7 +34,7 @@ foreach ($subcats as $subcat) {
 	
 	// Perform query in appropriate db table rows
 	
-	$substyle = explode("-",$subcat);
+	$substyle = explode("|",$subcat);
 	
 	$query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 	$substyle_count = mysql_query($query_substyle_count, $brewing) or die(mysql_error());

@@ -79,6 +79,18 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable);
 		</div>
 	</span>
     <?php } ?>
+    <span class="adminSubNav">
+    <span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" alt="Print BOS Pullsheets" title="Print BOS Pullsheets" /></span>
+		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_3');">Print...</a></div>
+		<div id="scoresMenu_bos_3" class="menu" onmouseover="menuMouseover(event)">
+		<?php do { 
+			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
+			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a>
+		<?php }
+		} while ($row_style_type = mysql_fetch_assoc($style_type));
+		?>
+		</div>
+	</span>
 </div>
 <?php } ?>
 <?php if ($dbTable == "default") { ?>

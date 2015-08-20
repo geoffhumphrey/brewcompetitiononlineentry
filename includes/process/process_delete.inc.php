@@ -18,7 +18,18 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	// end if (NHC)
 	
 	else {
-	
+		
+		if ($go == "judging_scores") {
+			
+			mysql_select_db($database, $brewing);
+			$deleteScore = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores",$id);
+			mysql_real_escape_string($deleteScore);
+			$Result = mysql_query($deleteScore, $brewing);
+			
+			header(sprintf("Location: %s", $deleteGoTo));
+		}
+		
+		
 		if ($go == "special_best") {
 			mysql_select_db($database, $brewing);
 			
@@ -271,7 +282,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		  $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
 		  mysql_real_escape_string($deleteSQL);
 		  $result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
-		  
+		
+		 
 		if ($dbTable == "archive") { 
 		  $dropTable = "DROP TABLE users_$filter";
 		  mysql_real_escape_string($dropTable);

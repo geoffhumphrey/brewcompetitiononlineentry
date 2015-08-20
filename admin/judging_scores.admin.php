@@ -84,7 +84,22 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <span class="adminSubNav">
 		<span class="icon"><img src="<?php echo $base_url; ?>images/award_star_gold_2.png" alt="View BOS Entries and Places" title="View BOS Entries and Places" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">View BOS Entries and Places</a>
     </span>
-    <?php } } // end if ($dbTable == "default") ?>
+    <?php } } // end if ($dbTable == "default") 
+	if ($id == "default") {
+	?>
+    <span class="adminSubNav">
+    <span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" alt="Print BOS Pullsheets" title="Print BOS Pullsheets" /></span>
+		<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoresMenu_bos_3');">Print...</a></div>
+		<div id="scoresMenu_bos_3" class="menu" onmouseover="menuMouseover(event)">
+		<?php do { 
+			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
+			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a>
+		<?php }
+		} while ($row_style_type = mysql_fetch_assoc($style_type));
+		?>
+		</div>
+	</span>
+    <?php } ?>
 </div>
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
@@ -190,7 +205,12 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td class="data"><?php echo $score_place; ?></td>  
         <td class="data"><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $table_score_data[10]; ?> scores" title="Edit the <?php echo $table_score_data[10]; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $table_score_data[10]; ?>" title="Print the scores for <?php echo $table_score_data[10]; ?>"></a></span>
+        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit the <?php echo $table_score_data[10]; ?> scores" title="Edit the <?php echo $table_score_data[10]; ?> scores"></a></span>
+        
+        <span class="icon"><a href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete this score for entry #<?php echo $row_scores['eid']; ?>" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" onclick="return confirm('Are you sure? This will delete the score and/or place for this entry.');"></a></span>
+        <!--
+        <span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $table_score_data[9]; ?>"><img src="<?php echo $base_url; ?>images/printer.png"  border="0" alt="Print the scores for <?php echo $table_score_data[10]; ?>" title="Print the scores for <?php echo $table_score_data[10]; ?>"></a></span>
+        -->
         </td>
         <?php } ?>
     </tr>
@@ -207,7 +227,7 @@ else echo "<p>No scores have been entered. If tables have been defined, use the 
 if (NHC) echo "<div class='error'>A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";
 ?>
 <?php if ($id != "default") { ?>
-<form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>">
+<form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>&amp;id=<?php echo $id; ?>">
 <script type="text/javascript" language="javascript">
 $('.fDrop').live('change', function (event) {
     var cI = $(this);
