@@ -21,13 +21,15 @@ function version_check($version) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	if ($version != "1.3.1.0") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.1.0","2015-05-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.1.0","2015-08-21","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
 }
 
-if (strpos($section, 'step') === FALSE) version_check($version);
+if ((!HOSTED) && (strpos($section, 'step') === FALSE))  {
+	version_check($version);
+}
 
 // ---------------------------------------------------  
 

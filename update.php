@@ -24,16 +24,11 @@ date_default_timezone_set('America/Denver');
 
 if (HOSTED) {
 	
-	$gh_user_name = "geoff@zkdigital.com";
-	
-	$query_gh_admin_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-	$gh_admin_user = mysql_query($query_gh_admin_user, $brewing);
-	$row_gh_admin_user = mysql_fetch_assoc($gh_admin_user);
-	$totalRows_gh_admin_user = mysql_num_rows($gh_admin_user);
-	
-	if ($totalRows_gh_admin_user == 0) {
+	if ($action == "default") {
 		
-		$gh_user_name = "geoff@zkdigital.com";
+		require(LIB.'common.lib.php');
+		
+		$gh_user_name = "geoff@zkdigital.com";	
 		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
 		$random1 = random_generator(7,2);
 		$random2 = random_generator(7,2);
@@ -41,27 +36,37 @@ if (HOSTED) {
 		$hasher = new PasswordHash(8, false);
 		$hash = $hasher->HashPassword($gh_password);
 		
-		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$gh_user_name,$users_db_table,$hash,$random1,$random2);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		$query_gh_admin_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
+		$gh_admin_user = mysql_query($query_gh_admin_user, $brewing);
+		$row_gh_admin_user = mysql_fetch_assoc($gh_admin_user);
+		$totalRows_gh_admin_user = mysql_num_rows($gh_admin_user);
 		
-		$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-		$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
-		$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
+		if ($totalRows_gh_admin_user == 0) {
+			
+			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$users_db_table,$gh_user_name,$hash,$random1,$random2);
+			mysql_real_escape_string($updateSQL);
+			$result = mysql_query($updateSQL, $brewing);
+					
+			$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
+			$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
+			$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
+			
+			$updateSQL1 = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
+	(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '000000');", $brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
+			mysql_real_escape_string($updateSQL1);
+			$result = mysql_query($updateSQL1, $brewing);
+			
+			
+		}
 		
-		$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
-(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);", $brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
-		
-	}
+		if ($totalRows_gh_admin_user == 1) {
+			
+			$updateSQL2 = sprintf("UPDATE %s SET password='%s', userQuestion='%s', userQuestionAnswer='%s', userLevel='%s' WHERE id='%s'", $prefix."users",$hash,$random1,$random2,$row_gh_admin_user['id'],"0");
+			mysql_real_escape_string($updateSQL2);
+			$result = mysql_query($updateSQL2, $brewing); 
+			
+		}
 	
-	if ($totalRows_gh_admin_user == 1) {
-		
-		$updateSQL = sprintf("UPDATE %s SET password='%s' WHERE id='%s'", $prefix."users",$hash,$row_gh_admin_user['id']);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing); 
-		
 	}
 	
 }
@@ -85,21 +90,26 @@ if (HOSTED) {
 		<div id="header-inner"><h1>BCOE&amp;M <?php echo $current_version; ?> Database Update Script</h1></div>
   	</div>
 <?php
+
 $sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
 $filename = $_SERVER['DOCUMENT_ROOT'].$sub_folder."/includes/version.inc.php";
+
+/* ---- DEBUG ----
+//echo $updateSQL."<br>";
+//echo $updateSQL1."<br>";
+//echo $updateSQL2."<br>";
 //echo $filename;
+*/
+
+
+
 if (file_exists($filename)) {
 	
 	//require(DB.'archive.db.php'); 
 	
 	function check_setup($tablename, $database) {
 		require(CONFIG.'config.php');
-		/*
-		if(!$database) {
-			$res = mysql_query("SELECT DATABASE()");
-			$database = mysql_result($res, 0);
-		}
-		*/
+		
 		$query_log = "
 			SELECT COUNT(*) AS count 
 			FROM information_schema.tables 
