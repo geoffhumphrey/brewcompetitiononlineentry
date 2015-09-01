@@ -7,6 +7,74 @@
  * 
  */
 
+/* ---------------- USER Pages Rebuild Info ---------------------
+
+Beginning with the 1.3.0 release, an effort was begun to separate the programming
+layer from the presentation layer for all scripts with this header.
+
+All Public pages have certain variables in common that build the page:
+  
+	$primary_page_info = any information related to the page
+	$primary_links = top of page links
+	$secondary_links = sublinks
+	
+	$header1_X = an <h2> header on the page
+	$header2_X = an <h3> subheader on the page
+	
+	$page_infoX = the bulk of the information on the page.
+	
+	$labelX = the various labels in a table or on a form
+	$table_headX = all table headers (column names)
+	$table_bodyX = table body info
+	$messageX = various messages to display
+	
+	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
+	
+Declare all variables empty at the top of the script. Add on later...
+	$primary_page_info = "";
+	$header1_1 = "";
+	$page_info1 = "";
+	$header1_2 = "";
+	$page_info2 = "";
+	
+	$table_head1 = "";
+	$table_body1 = "";
+	
+	etc., etc., etc.
+
+ * ---------------- END Rebuild Info --------------------- */
+ 
+ 
+$primary_page_info = "";
+$primary_links = "";
+$secondary_links = "";
+$header1_1 = "";
+$page_info1 = "";
+$header1_2 = "";
+$page_info2 = "";
+$table_head1 = "";
+$table_body1 = "";
+ 
+// Page specific variables
+$entry_message = "";
+$remaining_message = "";
+$discount_fee_message = "";
+$entry_fee_message = "";
+$nhc_message_1 = "";
+$nhc_message_2 = "";
+$add_entry_link = "";
+$beer_xml_link = "";
+$print_list_link = "";
+$pay_fees_message = "";
+$firefox_warning = "";
+
+
+
+// Build Headers
+$header1_1 .= "<a name='list'></a><h2>Entries</h2>";
+ 
+$firefox_warning .= "<div class='error'>There is a known issue with printing from the Firefox browser. To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+
 // Show Scores?
 if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
 
@@ -32,17 +100,6 @@ if (($totalRows_log > 0) && ($action != "print")) {
 }
 
 // Build Messages and Links
-$entry_message = "";
-$remaining_message = "";
-$discount_fee_message = "";
-$entry_fee_message = "";
-$nhc_message_1 = "";
-$nhc_message_2 = "";
-$add_entry_link = "";
-$beer_xml_link = "";
-$print_list_link = "";
-$pay_fees_message = "";
-
 if (($registration_open >= 1) && ($entry_window_open >=1)) {
 	$entry_message .= "<div class='adminSubNavContainer'>";
 	$entry_message .= "<span class='adminSubNav'>";
@@ -81,23 +138,21 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 		$remaining_message .= "</div>";
 	}
 	
-	//if (($entry_window_open == 1) && (!$comp_entry_limit)) {
-		// Build Add Entry Link
-		$add_entry_link .= "<span class='adminSubNav'>";
-		$add_entry_link .= "<span class='icon'><img src='".$base_url."images/book_add.png'  border='0' alt='Add Entry' title='Add Entry' /></span>";
-		$add_entry_link .= "<a href='";
-		if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; 
-		else $add_entry_link .= "index.php?section=brew&amp;action=add'";
-		$add_entry_link .= "'>Add an Entry</a>";
-		$add_entry_link .= "</span>";
-		
-		// Build Beer XML Link
-		$beer_xml_link .= "<span class='adminSubNav'>";
-		$beer_xml_link .= "<span class='icon'><img src='".$base_url."images/page_code.png' border='0' alt='Add Entry Using BeerXML' title='Add Entry Using BeerXML' /></span>";
-		$beer_xml_link .= "<a href='".build_public_url("beerxml","default","default",$sef,$base_url)."'>Import Entries Using BeerXML</a>";
-		$beer_xml_link .= "</span>";
-	//}
+	// Build Add Entry Link
+	$add_entry_link .= "<span class='adminSubNav'>";
+	$add_entry_link .= "<span class='icon'><img src='".$base_url."images/book_add.png'  border='0' alt='Add Entry' title='Add Entry' /></span>";
+	$add_entry_link .= "<a href='";
+	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; 
+	else $add_entry_link .= "index.php?section=brew&amp;action=add'";
+	$add_entry_link .= "'>Add an Entry</a>";
+	$add_entry_link .= "</span>";
 	
+	// Build Beer XML Link
+	$beer_xml_link .= "<span class='adminSubNav'>";
+	$beer_xml_link .= "<span class='icon'><img src='".$base_url."images/page_code.png' border='0' alt='Add Entry Using BeerXML' title='Add Entry Using BeerXML' /></span>";
+	$beer_xml_link .= "<a href='".build_public_url("beerxml","default","default",$sef,$base_url)."'>Import Entries Using BeerXML</a>";
+	$beer_xml_link .= "</span>";
+
 	// Build Print List of Entries Link
 	$print_list_link .= "<span class='adminSubNav'>";
 	$print_list_link .= "<span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print Entry List' title='Print Entry List' /></span>";
@@ -224,53 +279,39 @@ if (($registration_open >= 1) && ($entry_window_open >=1)) {
 
 } // end if (($registration_open == 1) && (($entry_open == 1) || ($entry_open == 2))) 
 
-
-// ------------------------ Display -------------------------------
-
-echo "<a name='list'></a><h2>Entries</h2>";
-
-if ($fx) echo  "<div class='error'>There is a known issue with printing from the Firefox browser. To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
-
-// Display Warnings and Entry Message
-if (($totalRows_log > 0) && ($action != "print")) {
-	echo $warnings; 
-	echo $entry_message;
-}
-
-if (($action != "print") && ($entry_window_open > 0)) { 
-
-	// Display Add Entry, Beer XML and Print List of Entries Links
-	if ((judging_date_return() > 0) && (!$comp_entry_limit)) echo $remaining_message;
-	echo "<div class='adminSubNavContainer'>";
+// Compile Primary Links
+// Add Entry, Beer XML and Print List of Entries Links
+	if ((judging_date_return() > 0) && (!$comp_entry_limit)) $primary_links .= $remaining_message;
+	$primary_links .= "<div class='adminSubNavContainer'>";
 	if (($remaining_entries > 0) && ($entry_window_open == 1) && (judging_date_return() > 0) && (!$comp_entry_limit)) {
-		echo $add_entry_link;
-		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) echo $beer_xml_link;
+		$primary_links .= $add_entry_link;
+		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $primary_links .= $beer_xml_link;
 		}
-	echo $print_list_link;
-	echo "</div>";
+	$primary_links .= $print_list_link;
+	$primary_links .= "</div>";
+
+// Compile Messages
+// Entry Fee and Discount Info
+if (($registration_open >= 1) && ($entry_window_open >= 1)) {
+	if ((!NHC) || ((NHC) && ($prefix != "final_"))) { 
+		$page_info1 .= "<div class='adminSubNavContainer'>";
+		$page_info1 .=  $entry_fee_message;
+		if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $page_info1 .=  $discount_fee_message;
+		$page_info1 .=  "</div>";
+		$page_info1 .=  "<div class='adminSubNavContainer'>";
+		$page_info1 .=  $pay_fees_message;	
+		$page_info1 .=  "</div>";
+	} // end if ((!NHC) || ((NHC) && ($prefix != "final_"))) 
+} // end if if (judging_date_return() > 0) 
+
+if (NHC) { 
+	if (($entry_window_open > 0) && ($prefix != "final_")) $page_info2 .=  $nhc_message_1;
+	if ($show_scores) $page_info2 .=  $nhc_message_2;
+} // end if (NHC)
 
 
-	// Display Entry Fee and Discount Messages
-	if (($registration_open >= 1) && ($entry_window_open >= 1)) {
-		if ((!NHC) || ((NHC) && ($prefix != "final_"))) { 
-			echo "<div class='adminSubNavContainer'>";
-			echo $entry_fee_message;
-			if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) echo $discount_fee_message;
-			echo "</div>";
-			echo "<div class='adminSubNavContainer'>";
-			echo $pay_fees_message;	
-			echo "</div>";
-		} // end if ((!NHC) || ((NHC) && ($prefix != "final_"))) 
-	} // end if if (judging_date_return() > 0) 
-	
-	if (NHC) { 
-		if (($entry_window_open > 0) && ($prefix != "final_")) echo $nhc_message_1;
-		if ($show_scores) echo $nhc_message_2;
-	} // end if (NHC)
+// Build user's entry information
 
-} // end if ($action != "print") 
-
-if (($totalRows_log > 0) && ($entry_window_open >= 1)) { 
 $entry_output = "";
 
 do {
@@ -425,6 +466,27 @@ do {
 	
 } while ($row_log = mysql_fetch_assoc($log));
 
+// --------------------------------------------------------------
+// Display
+// --------------------------------------------------------------
+
+echo $header1_1;
+if ($fx) echo $firefox_warning;
+
+// Display Warnings and Entry Message
+if (($totalRows_log > 0) && ($action != "print")) {
+	echo $warnings; 
+	echo $entry_message;
+}
+
+// Display links and other information
+if (($action != "print") && ($entry_window_open > 0)) { 
+	echo $primary_links;
+	echo $page_info1;
+	echo $page_info2;
+}
+
+if (($totalRows_log > 0) && ($entry_window_open >= 1)) { 
 ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -477,6 +539,8 @@ do {
 <?php echo $entry_output; ?>
 </tbody>
 </table>
-<?php } // end if ($totalRows_log > 0)
-if ($entry_window_open == 0) echo "<p>You will be able to add entries on or after $entry_open.</p>"; 
+<?php }
+if ($entry_window_open == 0) echo sprintf("<p>You will be able to add entries on or after %s.</p>",$entry_open); 
 ?>
+
+<!-- Page Rebuild completed 08.27.15 --> 

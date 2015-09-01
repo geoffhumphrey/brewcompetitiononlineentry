@@ -7,7 +7,7 @@
 //$styles_db_table = "baseline_styles";
 
 // Update System table
-$sql = "UPDATE `".$system_db_table."` SET version = '1.3.1.0', version_date = '2015-05-31' WHERE id = 1";
+$sql = "UPDATE `".$system_db_table."` SET version = '1.3.1.0', version_date = '2015-08-21' WHERE id = 1";
 mysql_select_db($database, $brewing);
 mysql_real_escape_string($sql);
 $result = mysql_query($sql, $brewing); 
@@ -29,6 +29,26 @@ mysql_real_escape_string($sql);
 $result = mysql_query($sql, $brewing); 
 //echo $sql."<br>";
 $output .=  "<li>Auto purge set to \"Yes.\"</li>";
+
+// Get any custom styles and hold in variables to insert later
+$query_custom_styles = sprintf("SELECT * FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
+$custom_styles = mysql_query($query_custom_styles, $brewing) or die(mysql_error());
+$row_custom_styles = mysql_fetch_assoc($custom_styles); 
+$totalRows_custom_styles = mysql_num_rows($custom_styles);
+
+//echo $totalRows_custom_styles."<br>";
+
+if ($totalRows_custom_styles > 0) {
+	
+	$a = "";
+	
+	do {
+		
+		$a[] .= $row_custom_styles['id']."|".$row_custom_styles['brewStyleNum']."|".$row_custom_styles['brewStyle']."|".$row_custom_styles['brewStyleCategory']."|".$row_custom_styles['brewStyleOG']."|".$row_custom_styles['brewStyleOGMax']."|".$row_custom_styles['brewStyleFG']."|".$row_custom_styles['brewStyleFGMax']."|".$row_custom_styles['brewStyleABV']."|".$row_custom_styles['brewStyleABVMax']."|".$row_custom_styles['brewStyleIBU']."|".$row_custom_styles['brewStyleIBUMax']."|".$row_custom_styles['brewStyleSRM']."|".$row_custom_styles['brewStyleSRMMax']."|".$row_custom_styles['brewStyleType']."|".$row_custom_styles['brewStyleInfo']."|".$row_custom_styles['brewStyleLink']."|".$row_custom_styles['brewStyleGroup']."|".$row_custom_styles['brewStyleActive']."|".$row_custom_styles['brewStyleOwn'];
+				
+	} while ($row_custom_styles = mysql_fetch_assoc($custom_styles));
+		
+}
 
 // Empty the current Styles table
 $sql = "TRUNCATE `".$styles_db_table."`";
@@ -302,4 +322,80 @@ mysql_real_escape_string($sql);
 $result = mysql_query($sql, $brewing);
 //echo $sql;
 $output .=  "<li>Style data updated successfully in the database.</li>";
+
+// Add custom styles to Styles DB
+
+foreach ($a as $custom_style) {
+	
+	$custom_style_data = explode("|",$custom_style);
+	$new_custom = ($custom_style_data[17] + 6);
+	
+	$sql = "INSERT INTO `".$styles_db_table."` ";
+	$sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`) ";
+	$sql .= "VALUES ";
+	$sql .= "(NULL, '".$custom_style_data[1]."', '".$custom_style_data[2]."', '".$custom_style_data[3]."', '".$custom_style_data[4]."', '".$custom_style_data[5]."', '".$custom_style_data[6]."', '".$custom_style_data[7]."', '".$custom_style_data[8]."', '".$custom_style_data[9]."', '".$custom_style_data[10]."', '".$custom_style_data[11]."', '".$custom_style_data[12]."', '".$custom_style_data[13]."', '".$custom_style_data[14]."', '".$custom_style_data[15]."', '".$custom_style_data[16]."', '".$new_custom."', '".$custom_style_data[18]."', '".$custom_style_data[19]."');";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($sql);
+	$result = mysql_query($sql, $brewing);
+	
+	// Update any defined judging tables with new id
+	
+	$query_custom_style_id = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1", $prefix."styles");
+	$custom_style_id = mysql_query($query_custom_style_id, $brewing) or die(mysql_error());
+	$row_custom_style_id = mysql_fetch_assoc($custom_style_id);
+	//echo $query_custom_style_id."<br>";
+	//echo $row_custom_style_id['id']."<br>";
+	
+	$query_custom_style_table = sprintf("SELECT id,tableStyles FROM %s", $prefix."judging_tables");
+	$custom_style_table = mysql_query($query_custom_style_table, $brewing) or die(mysql_error());
+	$row_custom_style_table = mysql_fetch_assoc($custom_style_table);
+	//echo $query_custom_style_table."<br>";
+	
+	do {
+		$b = "";
+		$new_table_styles = "";
+		
+		//echo $row_custom_style_table['id']."<br>";
+		//echo $row_custom_style_table['tableStyles']."<br>";
+		
+		$table_styles = explode(",",$row_custom_style_table['tableStyles']);
+		//print_r($table_styles);
+		
+		if (in_array($custom_style_data[0],$table_styles)) {
+			
+			foreach ($table_styles as $b) {
+				if ($custom_style_data[0] == $b) $new_table_styles[] .= $row_custom_style_id['id'];
+				else $new_table_styles[] .= $b;
+				
+			}
+			
+			$insert = implode(",",$new_table_styles);
+			
+			$sql = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'",$prefix."judging_tables",$insert,$row_custom_style_table['id']);
+			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($sql);
+			$result = mysql_query($sql, $brewing);
+			
+			//echo $sql."<br>";
+		}
+		
+		else {
+			
+			$insert = $row_custom_style_table['tableStyles'];
+			
+		}	
+		
+	} while ($row_custom_style_table = mysql_fetch_assoc($custom_style_table));
+	
+	
+	// Update any entries with new style number
+	
+	$sql = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='A', brewStyle='%s' WHERE brewCategorySort='%s'",$prefix."brewing", $new_custom, $new_custom, $custom_style_data[2], $custom_style_data[17]);
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($sql);
+	$result = mysql_query($sql, $brewing);
+	
+}
+
+
 ?>

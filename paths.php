@@ -24,9 +24,10 @@ define('OUTPUT',ROOT.'output'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 
 require(CONFIG.'config.php');
+
 //Global definitions
 define('HOSTED', FALSE); 		// Top-level constant for use in a hosted environment and shared db tables.
-define('MAINT', FALSE); 		// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
+define('MAINT', FALSE); 			// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
 define('NHC', FALSE); 			// Top-level constant for specialized NHC functionality. Set to FALSE for production.
 define('NHC-TESTING', FALSE); 	// Top-level constant for testing NHC functionality. Set to FALSE for production.
 define('TESTING', FALSE); 		// Top-level constant for testing functionality. Set to FALSE for production.

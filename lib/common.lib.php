@@ -1367,7 +1367,7 @@ function style_convert($number,$type,$base_url="") {
 	$styles_db_table = $prefix."styles";
 	
 	mysql_select_db($database, $brewing);
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec FROM %s WHERE brewStyleGroup='%s' AND brewStyleVersion='%s'",$styles_db_table,$number,$_SESSION['prefsStyleSet']); 
+	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$_SESSION['prefsStyleSet']); 
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -1672,7 +1672,7 @@ function style_convert($number,$type,$base_url="") {
 		// 
 		case "9":
 		$number = explode("^",$number);
-		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND brewStyleVersion='%s'",$styles_db_table,$number[0],$number[1],$_SESSION['prefsStyleSet']); 
+		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$_SESSION['prefsStyleSet']); 
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$row_style['brewStyle']."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
@@ -1855,7 +1855,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$input = explode("^",$input);
 	
 	/*
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup FROM $styles_db_table WHERE brewStyleNum='%s' AND brewStyleGroup='%s' AND brewStyleVersion='%s'",$input[0],$input[1],$_SESSION['prefsStyleSet']);
+	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup FROM $styles_db_table WHERE brewStyleNum='%s' AND brewStyleGroup='%s' AND (brewStyleVersion='%s'  OR brewStyleOwn='custom'))",$input[0],$input[1],$_SESSION['prefsStyleSet']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	echo $query_style."<br>";
@@ -2332,7 +2332,7 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$entry = mysql_query($query_entry, $brewing) or die(mysql_error());
 		$row_entry = mysql_fetch_assoc($entry);
 		
-		$query_style = sprintf("SELECT brewStyle FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+		$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		
@@ -3003,7 +3003,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	if ($style_break[0] <= 9) $style_num = "0".$style_break[0];
 	else $style_num = $style_break[0];
 	
-	$query_style = sprintf("SELECT id FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$style_num,$style_break[1]); 
+	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$style_num,$style_break[1]); 
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -3037,7 +3037,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "0") { // mead cider sweetness
 		
-		$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		$totalRows_check = mysql_num_rows($check);
@@ -3050,7 +3050,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
 	
-		$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
@@ -3061,7 +3061,7 @@ function highlight_required($msg,$method,$version) {
 
 	if ($method == "2") { // mead cider carb
 	
-		$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
@@ -3072,7 +3072,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "3") { // mead strength
 	
-		$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
@@ -3149,7 +3149,7 @@ function styles_active($method) {
 	
 	if ($method == 0) { // Active Styles
 		
-		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleVersion='%s' AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
+		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		$totalRows_styles = mysql_num_rows($styles);
@@ -3171,7 +3171,7 @@ function styles_active($method) {
 	
 	if ($method == 2) {
 		
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE brewStyleVersion='%s' AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		$totalRows_styles = mysql_num_rows($styles);

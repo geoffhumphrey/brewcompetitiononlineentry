@@ -55,7 +55,8 @@ if ($go == "default") { ?>
 <div class="error">There is a known issue with printing from the Firefox browser. To print all pages properly, RIGHT CLICK on the print link and choose "Open Link in New Tab." Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>
 <?php } ?>
 <?php 
-if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0)) { 
+if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0)) {
+	
 	include(DB.'admin_judging_tables.db.php');
 	
 	$query_flights = sprintf("SELECT id FROM %s", $judging_flights_db_table);

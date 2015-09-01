@@ -135,24 +135,23 @@ var _gaq = _gaq || [];
   <?php
 
 if (TESTING) {
-	echo $_SERVER['HTTP_USER_AGENT'];
-	if ($fx) echo "FIREFOX Detected";
-	print_r($_SESSION);
-	echo $tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone']; echo "<br>".date('T');
+	echo "User Agent: ".$_SERVER['HTTP_USER_AGENT']."<br>";
+	if ($fx) echo "FIREFOX Detected<br>";
 	
-	echo $section."<br>";
-	echo "User: ".$query_user."<br>";
-	echo "Brewer: ".$query_brewer."<br>";
-	echo "Name: ".$query_name."<br>";
-	echo "Prefs: ".$query_prefs."<br>";
-	echo "Comp Info: ".$row_contest_info."<br>";
-	echo "Tables: ".$query_tables."<br>";
-	echo $entry_window_open."<br>";
-	echo $registration_open."<br>";
-	echo judging_date_return()."<br>";
-	echo $remaining_entries."<br>";
-	echo $today."<br>";
-	echo $_SESSION['dataCheck'.$prefix_session]."<br>";
+	echo "Time Zone Name: ".$tz."<br>"; 
+	echo "Time Zone: ".date('T')."<br>";
+	echo "Time Zone Offset: ".$timezone_offset."<br>"; 
+	echo "Time Zone Preferences: ".$_SESSION['prefsTimeZone']."<br>"; 
+	echo "<p>";
+	echo "Section: ".$section."<br>";
+	echo "Entry Window Status: ".$entry_window_open."<br>";
+	echo "Registration Status: ".$registration_open."<br>";
+	echo "Judging Status: ".judging_date_return()."<br>";
+	echo "Remaining Entries: ".$remaining_entries."<br>";
+	echo "</p>";
+	echo "<p>Session Variables: ";
+	print_r($_SESSION);
+	echo "</p>";
 }
 	
 	if ($section != "admin") { ?>

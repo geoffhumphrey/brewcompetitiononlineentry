@@ -204,7 +204,7 @@ function check_carb_sweetness($style,$styleSet) {
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
 	else $style_0 = $style[0];
 
-	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $style_0, $style[1], $styleSet);
+	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $styleSet);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	
@@ -222,7 +222,7 @@ function check_mead_strength($style,$styleSet) {
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
 	else $style_0 = $style[0];
 
-	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $style_0, $style[1], $styleSet);
+	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $styleSet);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	

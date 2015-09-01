@@ -1,8 +1,8 @@
 <?php
 /**
- * Module:      winners_category.sec.php 
+ * Module:      winners_subcategory.sec.php 
  * Description: This module displays the winners entered into the database.
- *              Displays by style category.
+ *              Displays by style subcategory.
  * 
  */
 
@@ -45,14 +45,21 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-$a = styles_active(0);
+if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
+else $category_end = 34;
+ 
+$a = styles_active(2);
 foreach (array_unique($a) as $style) {
 	
-	include(DB.'winners_category.db.php');
+	$style = explode("^",$style);
+	
+	include(DB.'winners_subcategory.db.php');
 	
 	// Display all winners 
-	if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
-	if ($row_score_count['count'] > "0")   {
+	if ($row_entry_count['count'] > 0) {
+		if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
+		if ($row_score_count['count'] > 0) { 
+		
 		
 		$primary_page_info = "";
 		$header1_1 = "";
@@ -62,13 +69,11 @@ foreach (array_unique($a) as $style) {
 		
 		$table_head1 = "";
 		$table_body1 = "";
-		
-		
+				
 		// Build headers		
 		$header1_1 .= "<h3>";
-		$header1_1 .= "Category ".ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")";
+		$header1_1 .= "Category ".ltrim($style[0],"0").$style[1].": ".$style[2]." (".$row_entry_count['count']." ".$entries.")";
 		$header1_1 .= "</h3>";
-		
 		
 		// Build table headers
 		$table_head1 .= "<tr>";
@@ -86,6 +91,8 @@ foreach (array_unique($a) as $style) {
 			
 		do { 
 			$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+			if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
+			else $style_long = $row_scores['brewStyle'];
 			
 			$table_body1 .= "<tr>";
 			
@@ -114,7 +121,7 @@ foreach (array_unique($a) as $style) {
 			
 			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
 			else $table_body1 .= "<td class='data'>";
-			$table_body1 .= $style.": ".$row_scores['brewStyle'];
+			$table_body1 .= $style.": ".$style_long;
 			$table_body1 .= "</td>";
 			
 			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
@@ -132,17 +139,16 @@ foreach (array_unique($a) as $style) {
 			$table_body1 .= "</tr>";
 			
 		 } while ($row_scores = mysql_fetch_assoc($scores)); 
-		 
-		
+
 $random1 = "";	
 $random1 .= random_generator(7,2);
-		 
+
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
-		 
-echo $header1_1; 
+	
 ?>
+<?php echo $header1_1; ?></h3>
  <script type="text/javascript" language="javascript">
  $(document).ready(function() {
 	$('#sortable<?php echo $random1; ?>').dataTable( {
@@ -150,7 +156,7 @@ echo $header1_1;
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
+		"aaSorting": [<?php if ($action == "print") { ?>[0,'asc']<?php } ?>],
 		"bProcessing" : false,
 		"aoColumns": [
 			{ "asSorting": [  ] },
@@ -172,9 +178,11 @@ echo $header1_1;
 	<?php echo $table_body1; ?>
 </tbody>
 </table>
-<?php 	} // end if > 0
-	} // end foreach
+<?php 	} 
+	} 
+} 
 ?>
+
 
 <!-- Public Page Rebuild completed 08.26.15 --> 
 

@@ -5,63 +5,148 @@
  *              show results.
  * 
  */
- 
+
+/* ---------------- PUBLIC Pages Rebuild Info ---------------------
+
+Beginning with the 1.3.0 release, an effort was begun to separate the programming
+layer from the presentation layer for all scripts with this header.
+
+All Public pages have certain variables in common that build the page:
+  
+	$primary_page_info = any information related to the page
+	
+	$header1_X = an <h2> header on the page
+	$header2_X = an <h3> subheader on the page
+	
+	$page_infoX = the bulk of the information on the page.
+	$print_page_link = the "Print This Page" link
+	$competition_logo = display of the competition's logo
+	
+	$labelX = the various labels in a table or on a form
+	$table_headX = all table headers (column names)
+	$table_bodyX = table body info
+	$messageX = various messages to display
+	
+	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
+	$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
+	
+Declare all variables empty at the top of the script. Add on later...
+	$primary_page_info = "";
+	$header1_1 = "";
+	$page_info1 = "";
+	$header1_2 = "";
+	$page_info2 = "";
+	
+	$table_head1 = "";
+	$table_body1 = "";
+	
+	etc., etc., etc.
+
+ * ---------------- END Rebuild Info --------------------- */
+
+
 require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
-	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
-	sort($a);
-	foreach ($a as $type) {
+	do { 
+		$a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+		sort($a);
+		
+		foreach ($a as $type) {
 	
-		include(DB.'output_results_download_bos.db.php');
+			include(DB.'output_results_download_bos.db.php');
 			
 			if ($totalRows_bos > 0) { 
+				
+				$header1_1 = "";
+				$table_head1 = "";
+				$table_body1 = "";
+				
+				// Build headers
+				$header1_1 .= "<h3>Best of Show &ndash; ".$row_style_type['styleTypeName']."</h3>";
+				
+				// Build table headers
+				$table_head1 .= "<tr>";
+				$table_head1 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Place</th>";
+				$table_head1 .= "<th class='dataList bdr1B' width='25%'>Brewer(s)</th>";
+				$table_head1 .= "<th class='dataList bdr1B' width='25%'>Entry Name</th>";
+				$table_head1 .= "<th class='dataList bdr1B' width='25%'>Style</th>";
+				$table_head1 .= "<th class='dataList bdr1B'>Club</th>";
+				
+				do {
+					
+					$table_body1 .= "<tr>";
+				
+					if ($action == "print") { 
+						$table_body1 .= "<td class='data' style='bdr1B'>";
+						$table_body1 .= display_place($row_bos['scorePlace'],1);
+						$table_body1 .= "</td>";
+					}
+					
+					else {
+						$table_body1 .= "<td class='data'>";
+						$table_body1 .= display_place($row_bos['scorePlace'],2);
+						$table_body1 .= "</td>";
+					}
+					
+					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+					else $table_body1 .= "<td class='data'>";
+					$table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
+					if ($row_bos['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_bos['brewCoBrewer'];
+					$table_body1 .= "</td>";
+					
+					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+					else $table_body1 .= "<td class='data'>";
+					$table_body1 .= $row_bos['brewName'];
+					$table_body1 .= "</td>";
+					
+					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+					else $table_body1 .= "<td class='data'>";
+					$table_body1 .= $style.": ".$row_bos['brewStyle'];
+					$table_body1 .= "</td>";
+					
+					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+					else $table_body1 .= "<td class='data'>";
+					$table_body1 .= $row_bos['brewerClubs'];
+					$table_body1 .= "</td>";
+					
+					$table_body1 .= "</tr>";
+					
+				} while ($row_bos = mysql_fetch_assoc($bos));
 			
-			$random = random_generator(6,2);
-			
-	if ($action == "print") echo '<div id="header"><div id="header-inner">'; 
-	?>
-	<h3>Best of Show &ndash; <?php echo $row_style_type['styleTypeName']; ?></h3>
-    <?php if ($action == "print") echo "</div></div>";	?>
-	<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable<?php echo $random; ?>').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [],
-			"bProcessing" : false,
-			"aoColumns": [
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-				]
-			} );
+	$random = "";	 
+	$random = random_generator(7,2);
+
+// --------------------------------------------------------------
+// Display
+// --------------------------------------------------------------
+	
+echo $header1_1; ?>
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#sortable<?php echo $random; ?>').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [],
+		"bProcessing" : false,
+		"aoColumns": [
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] }
+			]
 		} );
-	</script>
+	} );
+</script>
 <table class="dataTable" id="sortable<?php echo $random; ?>">
 <thead>
-	<tr>
-    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <th class="dataList bdr1B" width="20%">Brewer(s)</th>
-        <th class="dataList bdr1B" width="20%">Entry Name</th>
-        <th class="dataList bdr1B" width="20%">Style</th>
-        <th class="dataList bdr1B" width="39%">Club</th>
-    </tr>
+	<?php echo $table_head1; ?>
 </thead>
 <tbody>
-	<?php do { 	?>
-	<tr>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_bos['scorePlace'],2); else echo display_place($row_bos['scorePlace'],1); ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_bos['brewerFirstName']." ".$row_bos['brewerLastName']; if ($row_bos['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$row_bos['brewCoBrewer']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_bos['brewName']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $row_bos['brewerClubs']; ?></td>
-    </tr>
-    <?php } while ($row_bos = mysql_fetch_assoc($bos)); ?>
+	<?php echo $table_body1; ?>
 </tbody>
 </table>
 <?php 	
@@ -70,16 +155,90 @@ require(DB.'winners.db.php');
   
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
-do { 
-include(DB.'output_results_download_sbd.db.php');
-if ($totalRows_sbd > 0) {
-$random = random_generator(6,2);		
-?>        
-<h3>Best of Show &ndash; <?php echo $row_sbi['sbi_name']; ?></h3>
-<?php if ($row_sbi['sbi_description'] != "") echo "<p>".$row_sbi['sbi_description']."</p>"; ?>
+	do { 
+		include(DB.'output_results_download_sbd.db.php');
+			if ($totalRows_sbd > 0) {
+				
+				$header2_1 = "";
+				$table_head2 = "";
+				$table_body2 = "";
+				
+				// Build page headers
+				$header2_1 .= "<h3>Best of Show &ndash; ".$row_sbi['sbi_name']."</h3>";
+				if ($row_sbi['sbi_description'] != "") $header2_1 .= "<p>".$row_sbi['sbi_description']."</p>";
+				
+				// Build table headers
+				$table_head2 .= "<tr>";
+				if ($row_sbi['sbi_display_places'] == "1") $table_head1 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Place</th>";
+				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Brewer(s)</th>";
+				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Entry Name</th>";
+				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Style</th>";
+				$table_head2 .= "<th class='dataList bdr1B'>Club</th>";
+				
+				// Build table body
+				do {
+					$brewer_info = explode("^",brewer_info($row_sbd['bid']));
+					$entry_info = explode("^",entry_info($row_sbd['eid']));
+					$style = $entry_info['5'].$entry_info['2'];
+					
+					$table_body2 .= "<tr>";
+					
+					if ($row_sbi['sbi_display_places'] == "1") {
+						
+						if ($action == "print") { 
+							$table_body2 .= "<td class='data' style='bdr1B'>";
+							$table_body2 .= display_place($row_sbd['sbd_place'],0); 
+							$table_body2 .= "</td>";
+						}
+						
+						else {
+							$table_body2 .= "<td class='data'>";
+							$table_body2 .= display_place($row_sbd['sbd_place'],3);
+							$table_body2 .= "</td>";
+						}
+						
+					}
+					
+					if ($action == "print") $table_body2 .= "<td class='data' style='bdr1B'>";
+					else $table_body2 .= "<td class='data'>";
+					$table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
+					if (!empty($entry_info['4'])) $table_body2 .=  "<br />Co-Brewer: ".$entry_info['4'];
+					$table_body2 .= "</td>";
+					
+					if ($action == "print") $table_body2 .= "<td class='data' style='bdr1B'>";
+					else $table_body2 .= "<td class='data'>";
+					$table_body2 .= $entry_info['0'];
+					$table_body2 .= "</td>";
+					
+					if ($action == "print") $table_body2 .= "<td class='data' style='bdr1B'>";
+					else $table_body2 .= "<td class='data'>";
+					$table_body2 .= $style.": ".$entry_info['3'];
+					$table_body2 .= "</td>";
+					
+					if ($action == "print") $table_body2 .= "<td class='data' style='bdr1B'>";
+					else $table_body2 .= "<td class='data'>";
+					$table_body2 .= $brewer_info['8'];
+					$table_body2 .= "</td>";
+					
+					$table_body2 .= "</tr>";
+					
+					
+				} while ($row_sbd = mysql_fetch_assoc($sbd));
+				
+				$random1 = "";
+				$random1 .= random_generator(7,2);
+			
+
+// --------------------------------------------------------------
+// Display
+// --------------------------------------------------------------
+			
+echo $header2_1; 
+
+?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable<?php echo $random; ?>').dataTable( {
+		$('#sortable<?php echo $random1; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -98,35 +257,20 @@ $random = random_generator(6,2);
 			} );
 		} );
 	</script>
-<table class="dataTable" id="sortable<?php echo $random; ?>">
+<table class="dataTable" id="sortable<?php echo $random1; ?>">
 <thead>
-	<tr>
-    	<?php if ($row_sbi['sbi_display_places'] == "1") { ?>
-        <th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
-        <?php } ?>
-        <th class="dataList bdr1B" width="25%">Brewer(s)</th>
-        <th class="dataList bdr1B" width="25%">Entry Name</th>
-        <th class="dataList bdr1B" width="25%">Style</th>
-        <th class="dataList bdr1B" width="24%">Club</th>
-    </tr>
+	<?php echo $table_head2; ?>
 </thead>
 <tbody>
-	<?php do { 
-	$brewer_info = explode("^",brewer_info($row_sbd['bid']));
-	$entry_info = explode("^",entry_info($row_sbd['eid']));
-	$style = $entry_info['5'].$entry_info['2'];
-	?>
-	<tr>
-        <?php if ($row_sbi['sbi_display_places'] == "1") { ?><td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php if ($action != "print") echo display_place($row_sbd['sbd_place'],3); else echo display_place($row_sbd['sbd_place'],0); ?></td><?php } ?>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['0']." ".$brewer_info['1']; if (!empty($entry_info['4'])) echo "<br />Co-Brewer: ".$entry_info['4']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $entry_info['0']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $style.": ".$entry_info['3']; ?></td>
-        <td class="data" <?php if ($action == "print") echo 'style="bdr1B"'; ?>><?php echo $brewer_info['8']; ?></td>    
-    </tr>
-    <?php } while ($row_sbd = mysql_fetch_assoc($sbd)); ?>
+	<?php echo $table_body2; ?>
 </tbody>
 </table>
 <?php }
 	} while ($row_sbi = mysql_fetch_assoc($sbi));
 } 
 ?>
+
+
+<!-- Public Page Rebuild completed 08.26.15 --> 
+
+

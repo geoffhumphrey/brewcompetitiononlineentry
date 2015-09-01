@@ -39,7 +39,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				if (in_array($row_check_received['id'],$empty_array)) {
 					
 					// First, get the id of the entry's style category/subcategory
-					$query_style = sprintf("SELECT id FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']); 
+					$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']); 
 					$style = mysql_query($query_style, $brewing) or die(mysql_error());
 					$row_style = mysql_fetch_assoc($style);
 					//echo $query_style."<br>";
@@ -74,7 +74,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			if (!in_array($row_check_received['id'],$flight_array)) {
 				
 				// First, get the id of the entry's style category/subcategory
-				$query_style = sprintf("SELECT id FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']); 
+				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']); 
 				$style = mysql_query($query_style, $brewing) or die(mysql_error());
 				$row_style = mysql_fetch_assoc($style);
 				//echo $query_style."<br>";

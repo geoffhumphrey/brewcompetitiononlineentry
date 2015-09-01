@@ -68,7 +68,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") $category_end = 34;		
 		mysql_select_db($database, $brewing);
-		$query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
+		$query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
 		$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 		$row_style_name = mysql_fetch_assoc($style_name);
 		

@@ -692,7 +692,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_entries = mysql_fetch_assoc($entries);
 	$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 	
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	
@@ -732,7 +732,7 @@ function received_entries() {
 	mysql_select_db($database, $brewing);
 	$style_array = array();
 	
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE brewStyleVersion='%s'", $prefix."styles",$_SESSION['prefsStyleSet']);
+	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles",$_SESSION['prefsStyleSet']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_array($styles);
 	

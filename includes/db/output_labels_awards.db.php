@@ -28,7 +28,7 @@ do {
 } while ($row_bos = mysql_fetch_assoc($bos));
 
 if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
-	$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleActive='Y' AND brewStyleVersion='%s' ORDER BY brewStyleGroup ASC", $styles_db_table, $_SESSION['prefsStyleSet']);
+	$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleActive='Y' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC", $styles_db_table, $_SESSION['prefsStyleSet']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
@@ -70,7 +70,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
 elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
-	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE brewStyleActive='Y' AND brewStyleVersion='%s' ORDER BY brewStyleGroup,brewStyleNum ASC", $styles_db_table, $_SESSION['prefsStyleSet']);
+	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE brewStyleActive='Y' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC", $styles_db_table, $_SESSION['prefsStyleSet']);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);

@@ -8,7 +8,7 @@ if ($section == "step7") {
 }
 
 else $styleSet = $_SESSION['prefsStyleSet'];
-$query_styles = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s'",$styles_db_table,$styleSet);
+$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
 if ($view != "default") {
 		$explodies = explode("-",$view);
 		$query_styles .= sprintf(" AND brewStyleGroup='%s' AND brewStyleNum='%s'",$explodies[0],$explodies[1]);
@@ -31,7 +31,7 @@ $row_styles = mysql_fetch_assoc($styles);
 $totalRows_styles = mysql_num_rows($styles);
 
 if ($section != "list") {
-	$query_styles2 = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s'",$styles_db_table,$_SESSION['prefsStyleSet']);
+	$query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$_SESSION['prefsStyleSet']);
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
