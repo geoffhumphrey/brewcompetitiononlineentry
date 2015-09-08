@@ -50,6 +50,7 @@ foreach ($a as $type) {
 			if ($filter == "entry") $output .= '<p>#'.$row_scores['id'].'</p>';
 			else $output .= '<p>#'.readable_judging_number($row_scores['brewCategorySort'],$row_scores['brewJudgingNumber']).'</p>';
 			$output .= '<p><strong>'.$row_scores['brewInfo'].'</strong></p>';
+			$output .= '<p><strong>'.$row_scores['brewComments'].'</strong></p>';
 			if ($type == 2) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</p>';
 			if ($type == 3) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</p>';
 			$output .= '</td>';

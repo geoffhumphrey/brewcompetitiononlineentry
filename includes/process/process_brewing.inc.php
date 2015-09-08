@@ -378,7 +378,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			  
 			// Check if entry requires special ingredients or a classic style
 			if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
-				  
+				
 				if ($_POST['brewInfo'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
 					mysql_select_db($database, $brewing);
@@ -601,7 +601,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			// Check if entry requires special ingredients or a classic style, if so, override the $updateGoTo variable with another and redirect
 			if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
-				  
+				
 				if ($_POST['brewInfo'] == "") {
 					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
 					mysql_real_escape_string($updateSQL);
@@ -624,8 +624,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			 
 			 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
 			 
-			 
-			  
 			 if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 				 
 				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "")) {
@@ -670,47 +668,21 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			}
 			 
 			/*
-			// Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
-			if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
-				 
-				if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == "") || ($_POST['brewMead3'] == "")) {
-					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+			
+			// Check if style does 
+			if (!check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
+				
+				if ($_POST['brewInfo'] != "") {
+					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewInfo=Null WHERE id=%s", GetSQLValueString($id, "text"));
+					mysql_real_escape_string($updateSQL);
 					mysql_select_db($database, $brewing);
 					mysql_real_escape_string($updateSQL);
 					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 				}
 				
-				if ($section == "admin") {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == ""))  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
-					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-				}
-				
-				else {
-					if (($_POST['brewMead1'] == "") || ($_POST['brewMead2'] == ""))  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
-					else $updateGoTo = $base_url."index.php?section=list&msg=2";
-				}
-				  
-			 }
-			 
-			 
-			 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
-				 
-				if ($_POST['brewMead3'] == "") {
-					$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-				}
-				
-				if ($section == "admin") {
-					if ($_POST['brewMead3'] == "")  $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
-					else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-				}
-				
-				else {
-					if ($_POST['brewMead3'] == "")  $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
-					else $updateGoTo = $base_url."index.php?section=list&msg=2";
-				}
+				if ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+							
+				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 				  
 			 }
 			

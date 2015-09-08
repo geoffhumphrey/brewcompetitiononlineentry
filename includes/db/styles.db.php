@@ -9,10 +9,12 @@ if ($section == "step7") {
 
 else $styleSet = $_SESSION['prefsStyleSet'];
 $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
-if ($view != "default") {
+
+if (($view != "default") && ($section == "output_styles")) {
 		$explodies = explode("-",$view);
 		$query_styles .= sprintf(" AND brewStyleGroup='%s' AND brewStyleNum='%s'",$explodies[0],$explodies[1]);
 	}
+
 if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 elseif (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
 elseif (($section == "admin") && ($go == "count_by_style")) $query_styles .= " AND brewStyleActive='Y'";
@@ -40,6 +42,6 @@ if ($section != "list") {
 	$totalRows_styles2 = mysql_num_rows($styles2);
 }
 
-//echo $query_styles;
+// echo $query_styles;
 
 ?>

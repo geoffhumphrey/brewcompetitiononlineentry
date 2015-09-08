@@ -83,6 +83,21 @@ $(document).ready(function()
 		return false;
 	}
 	);
+	
+	$("#brewComments").keyup(function()
+	{
+		var box=$(this).val();
+		var main = box.length * 100;
+		var value= (main / <?php echo $_SESSION['prefsSpecialCharLimit']; ?>);
+		var count= <?php echo $_SESSION['prefsSpecialCharLimit']; ?> - box.length;
+		
+		if(box.length <= <?php echo $_SESSION['prefsSpecialCharLimit']; ?>)
+		{
+		$('#count-comments').html(count);
+		}
+		return false;
+	}
+	);
 }
 );
 </script>
@@ -194,7 +209,7 @@ $(document).ready(function() {
 		$("#special").hide("fast");
 		$("#mead-cider").hide("fast");
 		$("#mead").hide("fast");
-	<?php } ?>
+	<?php } // end if ($action == "add") ?>
 	<?php if ($action == "edit") { ?>			   
 		<?php if (!in_array($view,$all_special_ing_styles)) { ?>
 			$("#special").hide();
@@ -220,29 +235,8 @@ $(document).ready(function() {
 			$("#special").show("slow");
 			$("#mead-cider").show("slow");
 			$("#mead").hide();
-		<?php } ?>
-		<?php //if (in_array($view,$special_required)) { ?>
-			//$("#special").show("slow");
-			//$("#mead-cider").hide();
-			//$("#mead").hide();
-		<?php //} ?>
-		<?php if ($msg != "default") { ?>	
-			<?php if ($highlight_sweetness); { ?>
-			$("#mead-cider").show("slow");
-			<?php } ?>
-			<?php if ($highlight_special) { ?>
-			$("#special").show("slow");
-			<?php } ?>
-			<?php if ($highlight_carb) { ?>
-			$("#mead-cider").show("slow");						  
-			<?php } ?>
-			<?php if ($highlight_strength) { ?>
-			$("#mead-cider").show("slow");
-			$("#mead").show("slow");
-			<?php } ?>
-		<?php }?>
+		<?php } // end if ($action == "edit") ?>
 	<?php } ?>
-	
 	$("#type").change(function() {
 		<?php if ($action == "add") { ?>
 	 	$("#special").hide("fast");
@@ -457,8 +451,7 @@ $brewer_info = explode("^",$brewer_info);
 			// Build selection variable
 			
 			if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
-			else 
-			$selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+			else $selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 			if ($selected_disabled == "DISABLED") $selection .= " [disabled - subcategory entry limit reached]";
 			if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
 			if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
@@ -488,7 +481,6 @@ $brewer_info = explode("^",$brewer_info);
 <tr>
    <td class="dataLabel">Specific Type, Special Ingredients and/or Classic Style:</td>
 </tr>
-
 <?php if ((NHC) && ($prefix == "final_") && ($action == "edit") && ($_SESSION['userLevel'] == 2)) { ?>
 <tr>
 	<td class="dataLeft">
@@ -513,15 +505,29 @@ $brewer_info = explode("^",$brewer_info);
     </ul>
   </td>
 </tr>
-<tr>
-   <td class="dataLeft"><input type="text" <?php if ($highlight_special) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60"></td>
-</tr>
-<tr>
-   <td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
-</tr>
+    <tr>
+       <td class="dataLeft">
+       	<input type="text" <?php if ($highlight_special) echo "class=\"special-required\""; ?> name="brewInfo" id="brewInfo" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60">
+       </td>
+    </tr>
+    <tr>
+       	<td class="dataLeft">Characters remaining: <span id="count" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
+    </tr>
  <?php } ?>
 </table>
 </div>
+<table>
+	<tr>
+       <td class="dataLabel"><a name="specifics"></a>Brewer's Specifics:</td>
+	</tr>
+	<tr>
+    	<td class="dataLeft"><p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, etc.).<br><em>Provide only if you wish the judges to <strong>fully</strong> consider what you specify when evaluating and scoring your entry.</em></p>
+        <input type="text" name="brewComments" id="brewComments" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" size="60"></td>
+    </tr>
+    <tr>
+       	<td class="dataLeft">Characters remaining: <span id="count-comments" style="font-weight:bold"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></td>
+    </tr>
+</table>
 <div id="mead-cider" <?php if (($highlight_carb) || ($highlight_sweetness)) echo "class=\"special-required\""; ?>>
 <table>
 <tr>
@@ -609,20 +615,13 @@ if (NHC) { ?>
 <h4 class="trigger"><?php echo $collapse_icon; ?>General</h4>
 <div class="toggle_container">
 <table>
-<tr>
-   <td class="dataLabel">Amount Brewed:</td>
-   <td class="data"><input name="brewYield" type="text" size="10" value="<?php if ($action == "edit") echo $row_log['brewYield']; ?>">&nbsp;<?php echo $_SESSION['prefsLiquid2']; ?></td>
-</tr>
-<tr>
-  <td class="dataLabel">Color (SRM)</td>
-  <td class="data"><input name="brewWinnerCat" type="text" size="10" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" /></td>
-</tr>
     <tr>
-       <td class="dataLabel"><a name="specifics"></a>Brewer's Specifics:</td>
-       <td class="data"><em>Only use to record special procedures, brewing techniques, etc.</em></td>
-	</tr>
+       <td class="dataLabel">Amount Brewed:</td>
+       <td class="data"><input name="brewYield" type="text" size="10" value="<?php if ($action == "edit") echo $row_log['brewYield']; ?>">&nbsp;<?php echo $_SESSION['prefsLiquid2']; ?></td>
+    </tr>
     <tr>
-    	<td colspan="2"><textarea name="brewComments" cols="60" rows="5" id="brewComments"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea></td>
+      <td class="dataLabel">Color (SRM)</td>
+      <td class="data"><input name="brewWinnerCat" type="text" size="10" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" /></td>
     </tr>
 </table>
 </div>

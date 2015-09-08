@@ -2407,7 +2407,7 @@ function check_special_ingredients($style,$version) {
 		
 	$style = explode("-",$style);
 
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleVersion = '%s' AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $version, $style[0], $style[1]);
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $version, $style[0], $style[1]);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	

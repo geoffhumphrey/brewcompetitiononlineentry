@@ -176,7 +176,7 @@ function generate_judging_numbers($brewing_db_table) {
 	} while ($row_judging_numbers = mysql_fetch_assoc($judging_numbers));
 }
 
-function check_special_ingredients($style,$version) {
+function check_special_ingredients($style,$styleSet) {
 	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -186,7 +186,7 @@ function check_special_ingredients($style,$version) {
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
 	else $style_0 = $style[0];
 	
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleVersion = '%s' AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $style_0, $style[1]);
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $_SESSION['prefsStyleSet']);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	
@@ -204,7 +204,7 @@ function check_carb_sweetness($style,$styleSet) {
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
 	else $style_0 = $style[0];
 
-	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $styleSet);
+	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $_SESSION['prefsStyleSet']);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	
