@@ -60,7 +60,8 @@ if ($setup_success) {
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
 	
-	// Data Integrity Checks
+	// ---------------------------- Data Integrity Checks 	---------------------------- 
+	
 	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
 	if ((!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
 	
@@ -71,6 +72,8 @@ if ($setup_success) {
 	if (!check_judging_flights()) $check_judging_flights = TRUE;
 	else $check_judging_flights = FALSE;
 	
+	//  ---------------------------- Time Related Globals 	---------------------------- 
+	
 	// Set timezone globals
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
 	date_default_timezone_set($timezone_prefs);
@@ -80,63 +83,22 @@ if ($setup_success) {
 	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 	
+	// ---------------------------- Browser Checks 			---------------------------- 
+	
 	// Check for IE and redirect if not using a version beyond 7
 	$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
 	$msie_key = array_search('MSIE', $ua_array);
 	$ua = FALSE;
-	if($msie_key !== false) { // you found MSIE browser
+	if($msie_key !== false) {
 		$msie_version_key = $msie_key + 1;
 		$msie_version = intval($ua_array[$msie_version_key]);
 		if ($msie_version <= 7) $ua = TRUE;
 	}
 	
 	// Check for Firefox (printing issues persist with Firefox)
-	//$ua_fx_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
-	//$fx_key = array_search('Firefox', $ua_fx_array);
 	
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE) $fx = TRUE;
 	else $fx = FALSE;
-	
-	if (NHC) {
-		
-		/*
-		
-		// ---------------------------------------------------------
-		// BELOW WILL BE MOST LIKELY BE DEPRECATED FOR NHC 2014 ON
-		// ---------------------------------------------------------
-		
-		if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) {
-			// compare region prefix to the actual region that the user is registered to
-			// if they do not match, destroy the session - saves confusion and cheating
-			if ($_SESSION['userLevel'] == 2) {
-			$query_check_region = sprintf("SELECT email,regionPrefix FROM nhcentrant WHERE email='%s'", $_SESSION['loginUsername']);
-			$check_region = mysql_query($query_check_region, $brewing) or die(mysql_error());
-			$row_check_region = mysql_fetch_assoc($check_region);
-			
-			if (($row_check_region['regionPrefix'] != $prefix) && ($_SESSION['loginUsername'] != "geoff@zkdigital.com") && ($_SESSION['loginUsername'] != "janis@brewersassociation.org")) session_destroy();
-			}			
-		}
-		
-		// ---------------------------------------------------------
-		// END DEPRECATED CODE
-		// ---------------------------------------------------------
-		
-		*/
-		
-		// ONLY for NHC application
-		// Check to see if SSL is in place and redirect to non SSL instance if not on pay screens
-		if ($section != "pay") {
-			
-			$https = ((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off')) ? true : false;
-			if ($https)  {
-				$location = "http://www.brewingcompetition.com".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
-				header("Location: $location");
-				exit;
-			}
-			
-		}
-		
-	} // end if (NHC)
 	
 } // end if ($setup_success);
 ?>

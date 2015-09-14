@@ -102,7 +102,7 @@ require(DB.'winners.db.php');
 					
 					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
 					else $table_body1 .= "<td class='data'>";
-					$table_body1 .= $style.": ".$row_bos['brewStyle'];
+					$table_body1 .= $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle'];
 					$table_body1 .= "</td>";
 					
 					if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";

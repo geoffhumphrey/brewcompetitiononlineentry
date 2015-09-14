@@ -2501,15 +2501,7 @@ function data_integrity_check() {
 	} while ($row_user_check = mysql_fetch_assoc($user_check));
 	
 	// Check if there are "blank" entries. If so, delete.
-	$query_blank = sprintf("SELECT id FROM %s WHERE 
-							 (brewStyle IS NULL OR brewStyle = '')
-							 AND 
-							 (brewCategory IS NULL OR brewCategory = '')
-							 AND 
-							 (brewCategorySort IS NULL OR brewCategorySort = '')
-							 AND 
-							 (brewBrewerID IS NULL OR brewBrewerID = '')
-							 ",$prefix."brewing");
+	$query_blank = sprintf("SELECT id FROM %s WHERE (brewStyle IS NULL OR brewStyle = '') AND (brewCategory IS NULL OR brewCategory = '') AND (brewCategorySort IS NULL OR brewCategorySort = '') AND (brewBrewerID IS NULL OR brewBrewerID = '')",$prefix."brewing");
 	$blank = mysql_query($query_blank, $brewing) or die(mysql_error());
 	$row_blank = mysql_fetch_assoc($blank);
 	$totalRows_blank = mysql_num_rows($blank);
@@ -2523,11 +2515,7 @@ function data_integrity_check() {
 	
 	
 	// Check if there are "blanks" in the brewer table. If so, delete.
-	$query_blank1 = sprintf("SELECT id FROM %s WHERE 
-							 (brewerFirstName IS NULL OR brewerFirstName = '')
-							 AND 
-							 (brewerLastName IS NULL OR brewerLastName = '')
-							 ",$prefix."brewer");
+	$query_blank1 = sprintf("SELECT id FROM %s WHERE (brewerFirstName IS NULL OR brewerFirstName = '') AND (brewerLastName IS NULL OR brewerLastName = '')",$prefix."brewer");
 	$blank1 = mysql_query($query_blank1, $brewing) or die(mysql_error());
 	$row_blank1 = mysql_fetch_assoc($blank1);
 	$totalRows_blank1 = mysql_num_rows($blank1);
@@ -2572,33 +2560,7 @@ function data_integrity_check() {
 			}
 		}
 	}
-	
-	/* Erase judging and stewarding assignments of the organizer if any
-	// INTERIM MEASURE. Incorporate this check once the 
-	// judging/stewarding/staff methodology is reworked
-	$query_org = sprintf("SELECT uid FROM %s WHERE brewerAssignment='O'",$prefix."brewer");
-	$org = mysql_query($query_org, $brewing) or die(mysql_error());
-	$row_org = mysql_fetch_assoc($org);
-	$totalRows_org = mysql_num_rows($org);
-	
-	if ($totalRows_org > 0) {
-		
-		$query_org_judging = sprintf("SELECT id FROM %s WHERE bid='%s'",$prefix."judging_assignments", $row_org['uid']);
-		$org_judging = mysql_query($query_org_judging, $brewing) or die(mysql_error());
-		$row_org_judging = mysql_fetch_assoc($org_judging);
-		$totalRows_org_judging = mysql_num_rows($org_judging);
-		
-		if ($totalRows_org_judging > 0) {
-			
-			do {
-				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_assignments", $row_org_judging['id']);
-				$result = mysql_query($deleteSQL, $brewing) or die(mysql_error());
-			} while ($row_org_judging = mysql_fetch_assoc($org_judging));
 
-		}
-		
-	}
-	*/
 	if ($_SESSION['prefsAutoPurge'] == 1) {
 		// Next, purge all entries that are unconfirmed
 		purge_entries("unconfirmed", 1);
@@ -2731,7 +2693,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 }
 
 function available_at_location($location,$role,$round) {
-	// Returnds the number of judges available per location/date
+	// Returns the number of judges available per location/date
 	// Takes into account assignments in the judging_assignments table
 	// and returns a total number available less those who have been 
 	// assigned to the location and round.

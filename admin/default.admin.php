@@ -859,29 +859,29 @@ if ($go == "judging_preferences") 	    include (ADMIN.'judging_preferences.admin
 if ($go == "judging_tables") 	    	include (ADMIN.'judging_tables.admin.php');
 if ($go == "judging_flights") 	    	include (ADMIN.'judging_flights.admin.php');
 if ($go == "judging_scores") 	    	include (ADMIN.'judging_scores.admin.php');
-if ($go == "judging_scores_bos")    	include (ADMIN.'judging_scores_bos.admin.php');
+if ($go == "judging_scores_bos")    		include (ADMIN.'judging_scores_bos.admin.php');
 if ($go == "participants") 				include (ADMIN.'participants.admin.php');
 if ($go == "entries") 					include (ADMIN.'entries.admin.php');
 if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
 if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
-if ($go == "count_by_style")			include (ADMIN.'entries_by_style.admin.php');
+if ($go == "count_by_style")				include (ADMIN.'entries_by_style.admin.php');
 if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
-if (($action == "register") && ($go == "judge")) 	include (SECTIONS.'register.sec.php');
+if (($action == "register") && ($go == "judge")) 		include (SECTIONS.'register.sec.php');
 if (($action == "register") && ($go == "entrant")) 	include (SECTIONS.'register.sec.php');
 
-if ($_SESSION['userLevel'] == "0") {
-	if ($go == "styles") 	    			include (ADMIN.'styles.admin.php');
-	if ($go == "archive") 	    			include (ADMIN.'archive.admin.php');
-	if ($go == "make_admin") 				include (ADMIN.'make_admin.admin.php');
-	if ($go == "contest_info") 				include (ADMIN.'competition_info.admin.php');
-	if ($go == "preferences") 				include (ADMIN.'site_preferences.admin.php');
-	if ($go == "sponsors") 	   			 	include (ADMIN.'sponsors.admin.php');
-	if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
-	if ($go == "special_best") 	    		include (ADMIN.'special_best.admin.php');
-	if ($go == "special_best_data") 	    include (ADMIN.'special_best_data.admin.php');
-	if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
-}
+	if ($_SESSION['userLevel'] == "0") {
+		if ($go == "styles") 	    			include (ADMIN.'styles.admin.php');
+		if ($go == "archive") 	    			include (ADMIN.'archive.admin.php');
+		if ($go == "make_admin") 				include (ADMIN.'make_admin.admin.php');
+		if ($go == "contest_info") 				include (ADMIN.'competition_info.admin.php');
+		if ($go == "preferences") 				include (ADMIN.'site_preferences.admin.php');
+		if ($go == "sponsors") 	   			 	include (ADMIN.'sponsors.admin.php');
+		if ($go == "style_types")    			include (ADMIN.'style_types.admin.php');
+		if ($go == "special_best") 	    		include (ADMIN.'special_best.admin.php');
+		if ($go == "special_best_data") 	    	include (ADMIN.'special_best_data.admin.php');
+		if ($go == "mods") 	    				include (ADMIN.'mods.admin.php');
+	}
 }
 else echo "<div class=\"error\">You do not have sufficient privileges to access this area.</div>";
 ?>

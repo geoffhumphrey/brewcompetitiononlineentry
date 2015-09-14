@@ -103,11 +103,13 @@ function score_style_data($value) {
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	
+	if ($row_styles['brewStyleType'] == "") $styleType = 1; else $styleType = $row_styles['brewStyleType'];
+	
 	$return = 
 	$row_styles['brewStyleGroup']."^". //0
 	$row_styles['brewStyleNum']."^". //1
 	$row_styles['brewStyle']."^". //2
-	$row_styles['brewStyleType']."^"; //3
+	$styleType; //3
 	return $return;
 
 }

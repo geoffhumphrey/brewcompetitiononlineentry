@@ -201,7 +201,7 @@ if (file_exists($filename)) {
 						$version = str_replace(".","",$version);
 						if ($version < "113") {
 							$output .= "<div class='error'>Your installed version is incompatible with this update script.</div>
-							<p>Please update your database and files manually through version 1.1.2 to utilize the update feature.</p>
+							<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>
 							";
 						}
 						if (($version == "113") || ($version == "1130")) {
@@ -211,6 +211,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -220,6 +221,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -228,6 +230,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -235,12 +238,14 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.0_update.php');
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						if (($version >= "1200") && ($version < "1300")) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -273,7 +278,6 @@ if (file_exists($filename)) {
 					echo "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Competition Organization Preferences.</li>";
 					echo "<li>Your competition's specific information by going to: Admin &gt; Preparing &gt; Edit &gt; Competition Info.</li>";
 					echo "</ul>";
-					
 					echo "<div class='info'>Updates Performed Are Detailed Below</div>";
 					echo $output;
 					
@@ -287,8 +291,8 @@ if (file_exists($filename)) {
 			else {
 				echo "<div class='info'>The installed version (".$version.") is the same as the version for upgrade. No updates are necessary.</div>";
 				echo "<ul>";
-				echo "<li>Go to the <a href='index.php'>Home Page</a>.</li>";
-				echo "<li>Go to the <a href='index.php?section=admin'>Admin Dashboard</a>.</li>";
+				echo "<li>Go to the <a href='".$base_url."'>Home Page</a>.</li>";
+				echo "<li>Go to the <a href='".$base_url."index.php?section=admin'>Admin Dashboard</a>.</li>";
 				echo "</ul>";
 			}
 		} // end check of user level

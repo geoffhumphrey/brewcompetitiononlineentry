@@ -1,4 +1,13 @@
 <?php
+$query_style_type = "SELECT * FROM $style_types_db_table"; 
+if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
+if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
+if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
+if ((($go == "judging_tables") || ($go == "judging_scores_bos")) && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
+$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+$row_style_type = mysql_fetch_assoc($style_type);
+$totalRows_style_type = mysql_num_rows($style_type); 
+
 if (NHC) {
 	// Place NHC SQL calls below
 	
@@ -16,7 +25,8 @@ else {
 		$enter_bos = mysql_query($query_enter_bos, $brewing) or die(mysql_error());
 		$row_enter_bos = mysql_fetch_assoc($enter_bos);
 		$totalRows_enter_bos = mysql_num_rows($enter_bos);
-		//echo $query_enter_bos;
+		//echo $query_enter_bos."<br>";
+		
 	}
 	
 	else {
