@@ -17,35 +17,21 @@ mysql_select_db($database, $brewing);
 
 
 if (($action == "email") && ($id != "default")) {
-	
-	
-	
-	if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-	}
-	// end if (NHC)
-	
-	else {
-	
-		$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
-		$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-		$row_forgot = mysql_fetch_assoc($forgot);
-		$totalRows_forgot = mysql_num_rows($forgot);
 		
-		$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
-		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-		$row_brewer = mysql_fetch_assoc($brewer);
-		$totalRows_brewer = mysql_num_rows($brewer);
+	$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
+	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+	$row_forgot = mysql_fetch_assoc($forgot);
+	$totalRows_forgot = mysql_num_rows($forgot);
 	
-		$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
-		$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
+	$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
+
+	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
+	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 	
-	}
-	
-	
-	
+		
 	$to_recipient = $first_name." ".$last_name;
 	$to_email = $row_forgot['user_name'];
 	$subject = $_SESSION['contestName'].": ID Verification Request";

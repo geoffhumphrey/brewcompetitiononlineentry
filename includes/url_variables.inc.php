@@ -87,7 +87,7 @@ if (isset($_GET['limit'])) {
   $limit = (get_magic_quotes_gpc()) ? $_GET['limit'] : addslashes($_GET['limit']);
 }
 
-// ------------------ Only applies to function utilized in the /includes/process.inc.php file
+// ------------------ Only applies to function utilized in the /includes/data_cleanup.inc.php file
 $purge = "default";
 if (isset($_GET['purge'])) {
   $purge = (get_magic_quotes_gpc()) ? $_GET['purge'] : addslashes($_GET['purge']);

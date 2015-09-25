@@ -103,7 +103,7 @@ function clean_up_url($referer) {
 }
 
 function purge_entries($type, $interval) {
-		
+	
 	require(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);
 	

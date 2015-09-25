@@ -386,7 +386,7 @@ if ($go == "default") { ?>
                         <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                     </select>
                 </td>
-                <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_COOKIE['prefsTimeZone'], $row_stewarding['judgingDate'], $_COOKIE['prefsDateFormat'],  $_COOKIE['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+                <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
             </tr>
         </table>
     <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
@@ -412,7 +412,7 @@ if ($go == "default") { ?>
                     <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                 </select>
                 </td>
-                <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_COOKIE['prefsTimeZone'], $row_judging3['judgingDate'], $_COOKIE['prefsDateFormat'],  $_COOKIE['prefsTimeFormat'], "long", "date-time").")"; ?></td>
+                <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
             </tr>
         </table>
     <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>

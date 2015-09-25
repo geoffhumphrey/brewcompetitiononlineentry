@@ -58,8 +58,8 @@ if ((($action == "default") || ($action == "login") || ($action == "logout")) &&
 if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE; else $foget_form_display = FALSE;
 if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
 	$verify_form_display = TRUE;
-	if (empty($username)) $username_check = $_POST['loginUsername'];
-	else $username_check = $username;
+	$username = $_POST['loginUsername'];
+	$username_check = $_POST['loginUsername'];
 	$user_check = user_check($username_check);
 	$user_check = explode("^",$user_check);
 	

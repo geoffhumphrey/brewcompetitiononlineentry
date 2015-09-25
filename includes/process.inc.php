@@ -181,7 +181,7 @@ else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 //session_start();
 // --------------------------- Various Actions ------------------------------- //
 
-if ($action == "delete")						include_once (PROCESS.'process_delete.inc.php');
+if ($action == "delete")							include_once (PROCESS.'process_delete.inc.php');
 elseif ($action == "beerxml")					include_once (PROCESS.'process_beerxml.inc.php');
 //if ($action == "update_judging_flights")		include_once (PROCESS.'process_judging_flight_check.inc.php'); 
 

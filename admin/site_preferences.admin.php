@@ -216,9 +216,9 @@ include (DB.'styles.db.php');
     <td class="data">The number of records  displayed per page when viewing lists (e.g., when viewing the entries or participants list). Generally, the default value will work for most installations.</td>
   </tr>
   <tr>
-  	<td class="dataLabel">Automatically Purge Unconfirmed Entries:</td>
+  	<td class="dataLabel">Automatically Purge Unconfirmed Entries and Perform Data Clean Up:</td>
     <td nowrap="nowrap" class="data"><input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; ?>/> No</td>
-    <td class="data">Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry. If "No," Admins will have the option to manually purge the entries.</td>
+    <td class="data">Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If "No," Admins will have the option to manually purge the entries.</td>
   </tr>
 </table>
 <h3>Localization</h3>

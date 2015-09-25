@@ -63,7 +63,9 @@ if ($setup_success) {
 	// ---------------------------- Data Integrity Checks 	---------------------------- 
 	
 	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
-	if ((!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
+	if ($_SESSION['prefsAutoPurge'] == 1) {
+		if ((!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
+	}
 	
 	// check to see if all judging numbers have been generated. If not, generate
 	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
@@ -80,7 +82,8 @@ if ($setup_success) {
 	$tz = date_default_timezone_get();
 	
 	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
+	$bool = date("I"); 
+	if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 	
 	// ---------------------------- Browser Checks 			---------------------------- 

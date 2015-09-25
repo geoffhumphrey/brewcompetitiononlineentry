@@ -471,7 +471,7 @@ do {
 // --------------------------------------------------------------
 
 echo $header1_1;
-if ($fx) echo $firefox_warning;
+if (($fx) && ($action != "print")) echo $firefox_warning;
 
 // Display Warnings and Entry Message
 if (($totalRows_log > 0) && ($action != "print")) {

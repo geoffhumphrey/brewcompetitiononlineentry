@@ -1618,7 +1618,7 @@ function style_convert($number,$type,$base_url="") {
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php#".$trimmed.$row_style['brewStyleNum']."' title='View ".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
+			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."' title='View ".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
 		}
 		$style_convert = rtrim(implode(", ",$style_convert),", ");
 		break;
@@ -1652,7 +1652,11 @@ function style_convert($number,$type,$base_url="") {
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
-			if ($row_style['brewStyleOwn'] == "bcoe") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</li>";
+			
+			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+			else $style_name = $row_style['brewStyle'];
+			
+			if ($row_style['brewStyleOwn'] == "bcoe") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
 			else $style_convert .= "<li>Custom Style: ".$row_style['brewStyle']."</li>";
 		}
 		$style_convert .= "</ul>";
@@ -1665,7 +1669,10 @@ function style_convert($number,$type,$base_url="") {
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$row_styles['brewStyle'];
+		if ($row_styles['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+		else $style_name = $row_styles['brewStyle'];
+		
+		$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$style_name;
 		
 		break;
 		
@@ -1675,7 +1682,11 @@ function style_convert($number,$type,$base_url="") {
 		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$_SESSION['prefsStyleSet']); 
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
-		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$row_style['brewStyle']."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
+		
+		if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+		else $style_name = $row_style['brewStyle'];
+		
+		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$style_name."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
 		break;
 		$style_convert = $query_style;
 	}

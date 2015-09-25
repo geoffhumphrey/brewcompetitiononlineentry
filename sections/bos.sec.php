@@ -169,7 +169,7 @@ if ($totalRows_sbi > 0) {
 				
 				// Build table headers
 				$table_head2 .= "<tr>";
-				if ($row_sbi['sbi_display_places'] == "1") $table_head1 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Place</th>";
+				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Place</th>";
 				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Brewer(s)</th>";
 				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Entry Name</th>";
 				$table_head2 .= "<th class='dataList bdr1B' width='25%'>Style</th>";

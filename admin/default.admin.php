@@ -40,6 +40,8 @@ echo "Tables Edit: ".$query_tables_edit."<br>";
 echo "Style Type: ".$query_style_type."<br>";
 echo "Total tables: ".$totalRows_tables;
 */
+
+if ($purge == "cleanup") echo "<div class='error'>Data clean-up completed.</div>"; 
 if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_top.inc.php');
 if (($setup_free_access == TRUE) && ($action != "print")) echo "<div class='error'>The &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>";
 if (($action != "print") && ($msg != "default")) echo $msg_output; 
@@ -121,6 +123,7 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
 </div>
 <div id="menu_container">
 <div id="outer">
+
 <p>Click the headings below to expand and collapse each category.</p>
 	<div class="menus">
 	  <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span>Help</h4>
@@ -170,7 +173,19 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
         </div>
         <?php } ?>
         <?php if ($_SESSION['userLevel'] == "0") { ?>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png"  /></span>Defining Preferences</h4>
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/wand.png"  /></span>Database Maintenance</h4>
+		<div class="toggle_container">
+			<p class="admin_default_header">Data Integrity</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=cleanup" onclick="return confirm('Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.');">Perform Data Clean-Up</a></li>
+			</ul>
+            <p class="admin_default_header">Confirm or Purge Unconfirmed Entries</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a></li>
+			</ul>
+		</div>
+        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png"  /></span>Defining Preferences</h4>
 		<div class="toggle_container">
 			<p class="admin_default_header">Define</p>
 			<ul class="admin_default">

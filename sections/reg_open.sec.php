@@ -43,7 +43,7 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 include(DB.'judging_locations.db.php'); 
-
+$message1 = "";
 $header1_2 = ""; 
 $page_info2 = "";
 $header1_3 = ""; 
@@ -59,22 +59,12 @@ $page_info7 = "";
 $header1_8 = ""; 
 $page_info8 = "";
 
-
-$header1_2 .= "<h2>Registration Window</h2>";
-$page_info2 .= "<p><strong>Online registration</strong> on this site will take place between the following dates:</p> ";
-$page_info2 .= "<ul>";
-$page_info2 .= sprintf("<li>Open: %s.</li>",$reg_open);
-$page_info2 .= sprintf("<li>Close: %s.</li>",$reg_closed);
-$page_info2 .= "</ul>";
+$header1_2 .= "<h2>Online Registration Window</h2>";
+$page_info2 .= sprintf("<p>Online registration on this site will take place between <strong>%s</strong> and <strong>%s</strong>.</p>", $reg_open, $reg_closed);
 $page_info2 .= sprintf("<p><em>** Please note: The Registration Window open date is for registration of your personal information only. You will not be able to add your entries into the system until the Entry Window opens on %s.</em></p>",$entry_open);
 if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) $page_info2 .= " <p>If you have already registered, please <a href='".build_public_url("login","default","default",$sef,$base_url)."'>log in</a> to add, view, edit, or delete your entries as well as indicate that you are willing to judge or steward.</p>";
-$page_info2 .= "<h2>Entry Window</h2>";
-$page_info2 .= "<p>You will be able to add your entries into the system and entries will be accepted at our shipping and drop-off locations between the following dates:</p>";
-$page_info2 .= "<ul>";
-$page_info2 .= sprintf("<li>Open: %s.</li>",$entry_open);
-$page_info2 .= sprintf("<li>Close: %s.</li>",$entry_closed);
-$page_info2 .= "</ul>";
-
+$page_info2 .= "<h2>Online Entry Window</h2>";
+$page_info2 .= sprintf("<p>You will be able to add your entries into the system between <strong>%s</strong> and <strong>%s</strong>.</p>", $entry_open, $entry_closed);
 $header1_3 .= "<h2>Judging and Stewarding</h2>"; 
 
 if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) { 
@@ -88,15 +78,12 @@ elseif (($registration_open == "1") && (isset($_SESSION['loginUsername']))) {
 }
 else $page_info3 .= sprintf("<p>If you are willing to judge or steward, please return to register on or after %s.</p>",$judge_open);
 
-$header1_4 .= "<h2>Entries</h2>"; 
+$header1_4 .= "<h2>Entry Drop-Off and Shipping</h2>"; 
+$page_info4 .= sprintf("<p>Drop-off and shipping locations will begin accepting entries on <strong>%s</strong>. </p>",$entry_open);
 $page_info4 .= "<p>";
-$page_info4 .= sprintf("You will be able to your entries into the system and entries will be accepted at drop-off and shipping locations between %s and %s. ",$entry_open,$entry_closed);
-$page_info4 .= "</p>";
-$page_info4 .= "<p>";
-$page_info4 .= "All entries must be received by our shipping location ";
-if ($totalRows_dropoff > 0) $page_info4 .= "or at a drop-off location ";
-$page_info4 .= sprintf("by %s and will not be accepted after that date/time. ",$entry_closed);
-$page_info4 .= "For details, see the <a href='".build_public_url("entry","default","default",$sef,$base_url)."'>Entry Information</a> page.</p>";
+$page_info4 .= "";
+$page_info4 .= sprintf("<p>All entries must be received at our shipping location or at a drop-off location by <strong>%s</strong> and will not be accepted after that date/time. For details, see the <a href='%s'>Entry Information</a> page.</p></p>",$entry_closed, build_public_url("entry","default","default",$sef,$base_url));
+
 if ($row_limits['prefsEntryLimit'] != "") {
 	$header1_5 .= "<h2>Entry Limit</h2>";
 	$page_info5 .= sprintf("<p>There is a limit of %s entries for this competition.</p>",readable_number($row_limits['prefsEntryLimit'])." (".$row_limits['prefsEntryLimit'].")");
@@ -113,8 +100,8 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 	
 	if (!empty($row_limits['prefsUserSubCatLimit'])) { 
 		$page_info8 .= "<p>";
-		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info8 .= sprintf("You are limited to %s entry per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
-		else $page_info8 .= sprintf("You are limited to %s entries per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info8 .= sprintf("You are limited to %s entry per sub-category ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		else $page_info8 .= sprintf("You are limited to %s entries per sub-category ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
 		if (!empty($row_limits['prefsUSCLExLimit'])) $page_info8 .= " (exceptions are detailed below)";
 		$page_info8 .= ".";
 		$page_info8 .= "</p>";
@@ -133,9 +120,9 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 }
 
 if ($entry_window_open == 1) {
-	$header1_6 .= "<h2>Enter Your Brews</h2>"; 
+	$header1_6 .= "<h2>Add Your Entries</h2>"; 
 	$page_info6 .= "<p>";
-	$page_info6 .= "To enter your brews, ";
+	$page_info6 .= "To add your entries into the system, ";
 	if (!isset($_SESSION['loginUsername'])) $page_info6 .= "please proceed through the <a href='".build_public_url("register","default","default",$sef,$base_url)."'>registration process</a>.";
 	else $page_info6 .= "use the <a href='".build_public_url("brew","entry","add",$sef,$base_url)."'>add an entry form</a>.";
 	$page_info6 .= "</p>";
@@ -167,16 +154,17 @@ else {
 
 echo $header1_2;
 echo $page_info2;
-echo $header1_3;
-echo $page_info3;
 echo $header1_4;
 echo $page_info4;
 echo $header1_5;
 echo $page_info5;
+
 echo $header1_8;
 echo $page_info8;
 echo $header1_6;
 echo $page_info6;
+echo $header1_3;
+echo $page_info3;
 echo $header1_7;
 echo $page_info7;
 

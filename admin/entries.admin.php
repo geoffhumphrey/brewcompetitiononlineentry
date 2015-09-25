@@ -4,7 +4,8 @@
 			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." entries.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries ($totalRows_entry_count).</div>";
 	}
 }
-if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been deleted from the database</div>"; ?>
+if ($purge == "purge") echo "<div class='error'>All unconfirmed entries have been deleted from the database.</div>"; 
+?>
 <h2><?php if ($view == "paid") echo "Paid "; if ($view == "unpaid") echo "Unpaid "; ?> Entries<?php if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <?php if ($action != "print") { ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
@@ -58,8 +59,9 @@ if ($purge == "true") echo "<div class='error'>All unconfirmed entries have been
     <span class="adminSubNav">...then uncheck those that aren't paid and/or received.</span>
 </div>
 <div class="adminSubNavContainer">
-  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a> or <span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span>
-</div>
+  	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a> Unconfirmed Entries</span>
+    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span> 
+	</div>
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 
