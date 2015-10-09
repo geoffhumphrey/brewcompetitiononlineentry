@@ -14,21 +14,18 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 }
 
 include(DB.'styles.db.php');
-do { $subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']; } while ($row_styles = mysql_fetch_assoc($styles));
-$subcats = array_unique($subcats);
-// print_r($subcats);
+do { $subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']; } 
+while ($row_styles = mysql_fetch_assoc($styles));
 
 $html = "";
 $style_other_count[] = 0;
-$style_other_count_logged[] = 0;
-
 $style_beer_count[] = 0;
 $style_mead_count[] = 0;
 $style_cider_count[] = 0;
-
 $style_beer_count_logged[] = 0;
 $style_mead_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
+$style_other_count_logged[] = 0;
 
 foreach ($subcats as $subcat) {
 	
@@ -44,30 +41,35 @@ foreach ($subcats as $subcat) {
 	$substyle_count_logged = mysql_query($query_substyle_count_logged, $brewing) or die(mysql_error());
 	$row_substyle_count_logged = mysql_fetch_assoc($substyle_count_logged);
 	
-	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
+	$substyle_cat_num = ltrim($substyle[0],"0");
 	
-	if ($substyle[0] <= $beer_end) {
+	if ($substyle_cat_num <= $beer_end) {
 		$count_beer = TRUE;
 		$count_mead = FALSE;
 		$count_cider = FALSE;
 		$other_count = FALSE;
 	}
 	
-	if (in_array($substyle[0],$mead_array)) {
+	if (in_array($substyle_cat_num,$mead_array)) {
 		$count_beer = FALSE;
 		$count_mead = TRUE;
 		$count_cider = FALSE;
 		$other_count = FALSE;
 	}
 	
-	if (in_array($substyle[0],$cider_array)) {
+	if (in_array($substyle_cat_num,$cider_array)) {
 		$count_beer = FALSE;
 		$count_mead = FALSE;
 		$count_cider = TRUE;
 		$other_count = FALSE;
 	}
 	
-	if ($substyle[0] > $category_end) {
+	if ($substyle_cat_num > $category_end) {
+		
+		$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$substyle_cat_num);
+		$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
+		$row_style_type = mysql_fetch_assoc($style_type);
+		
 		$count_beer = FALSE;
 		$count_mead = FALSE;
 		$count_cider = FALSE;
@@ -95,7 +97,7 @@ foreach ($subcats as $subcat) {
 	if ($other_count) {
 		
 		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
-		if ($row_style_type['brewStyleType'] > 3)  $source = "custom"; 
+		else $source = "custom"; 
 		
 		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 		
@@ -123,6 +125,19 @@ foreach ($subcats as $subcat) {
 		//$style_type_array[] = $style_type;
 		
 	}
+	
+	
+	// ------ DEBUG ------
+	//print_r($subcats);
+	//echo "<br>";
+	//echo $query_substyle_count."<br>";
+	//echo $query_substyle_count_logged."<br>";
+	//echo $substyle[2]." --------- Paid/Received: ".$row_substyle_count['count']." Logged: ".$row_substyle_count_logged['count']."<br>";
+	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
+	//echo $row_style_type['brewStyleType']."<br>";
+	//echo $style_type."<br>";
+	//echo $source."<br>";
+	
 	
 	if (!empty($substyle)) { 
 	

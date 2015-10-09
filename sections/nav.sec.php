@@ -389,23 +389,19 @@ if (strstr($section,"step")) { ?>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=email">All Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email&amp;view=all">All Paid Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=email">Paid &amp; Received Entries</a>
-    <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;action=hccp">All Non-Paid  Entries</a>
+    <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email&amp;view=all">All Non-Paid Entries</a>
 	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=email">Non-Paid &amp; Received Entries</a>
 </div>
-<div id="adminMenu_Exporting_Tab" class="menu">
-	<a class="menuItem" href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=tab&amp;action=hccp">All Participants</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=tab&amp;action=hccp">All Entries</a>
-</div>
+
 <div id="adminMenu_Exporting_CSV" class="menu">
 <!--
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;action=all&amp;filter=all">All Entries (All Data)</a>
 -->
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv">All Entries (Limited Data)</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;view=all">All Paid Entries</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid&amp;action=hccp">Paid &amp; Received Entries</a>
+	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=paid">Paid &amp; Received Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;view=all">All Non-Paid Entries</a>
-	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay&amp;action=hccp">Non-Paid &amp; Received Entries</a>
+	<a class="menuItem" href="<?php echo $base_url; ?>output/entries_export.php?section=admin&amp;go=csv&amp;filter=nopay">Non-Paid &amp; Received Entries</a>
     <a class="menuItem" href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=csv">All Participants</a>
     <!-- 
 	<a class="menuItem" href="<?php echo $base_url; ?>output/participants_export.php?section=admin&amp;go=csv&amp;filter=winners">Winners</a>

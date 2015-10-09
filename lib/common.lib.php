@@ -730,45 +730,6 @@ function currency_info($input,$method) {
 	
 }
 
-# Pagination
-/*
-function paginate($display, $pg, $total) {
-  if(isset($_SERVER['QUERY_STRING']) && trim(
-    $_SERVER['QUERY_STRING']) != '') {
-    	if(stristr($_SERVER['QUERY_STRING'], 'pg='))
-      	$query_str = '?'.preg_replace('/pg=\d+/', 'pg=', 
-        $_SERVER['QUERY_STRING']);
-    	else
-      	$query_str = '?'.$_SERVER['QUERY_STRING'].'&pg=';
-  		} 	
-	else
-    $query_str = '?pg=';
-    
-  $pages = ($total <= $display) ? 1 : ceil($total / $display);
-
-  $first = '<span id="sortable_first" class="first paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.'1">First</a></span>';
-  $prev =  '<span id="sortable_previous" class="previous paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.($pg - 1).'">Previous</a></span>';
-  $next =  '<span id="sortable_next" class="next paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.($pg + 1).'">Next</a></span>';
-  $last =  '<span id="sortable_last" class="last paginate_button"><a href="'.$_SERVER['PHP_SELF'].$query_str.$pages.'">Last</a></span>';
-   
-  echo '<div id="sortable_paginate" class="dataTables_paginate paging_full_numbers">';
-  echo ($pg > 1) ? "$first$prev" : '<span id="sortable_first" class="first paginate_button">First</span><span id="sortable_previous" class="previous paginate_button">Previous</span>';
-  
-  // limit the number of page links displayed  
-  $begin = $pg - 8;
-  while($begin < 1)
-    $begin++;
-  $end = $pg + 8;
-  while($end > $pages)
-    $end--;
-  for($i=$begin; $i<=$end; $i++)
-    echo ($i == $pg) ? ' <span class="paginate_active">'.$i.'</span> ' : '<span class="paginate_button"><a href="'.
-      $_SERVER['PHP_SELF'].$query_str.$i.'">'.$i.'</a></span>';
-      echo ($pg < $pages) ? "$next$last" : '<span id="sortable_next" class="next paginate_button">Next</span><span id="sortable_last" class="last paginate_button">Last</span>';
-  echo '</div>';
-}
-*/
-
 function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
 	require(CONFIG.'config.php');
 	

@@ -160,10 +160,10 @@ if ($action != "print") {
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print This List' title='Print This List'></span>";
 		$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants\");'>Print This List</a></div>";
 		$secondary_nav .= "<div id='printMenu_participants' class='menu' onmouseover='menuMouseover(event)'>";
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=brewer_name'>By Last Name</a>";
-		if (($filter == "judges") || ($filter == "stewards")) $secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=club'>By Club</a>";
-		if ($filter == "judges")$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=judge_id'>By Judge ID</a>";
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=default&amp;psort=psort=judge_rank'>By Judge Rank</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=brewer_name'>By Last Name</a>";
+		if (($filter == "judges") || ($filter == "stewards")) $secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=club'>By Club</a>";
+		if ($filter == "judges")$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=judge_id'>By Judge ID</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=psort=judge_rank'>By Judge Rank</a>";
 		$secondary_nav .= "</span>";
 		$secondary_nav .= "</div>";
 		$secondary_nav .= "</div>";
@@ -174,8 +174,8 @@ if ($action != "print") {
 			$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print All' title='Print All'></span>";
 			$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants_all\");'>Print All</a></div>";
 			$secondary_nav .= "<div id='printMenu_participants_all' class='menu' onmouseover='menuMouseover(event)'>";
-			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
-			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
+			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
+			$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
 			$secondary_nav .= "</div>";
 			$secondary_nav .= "</span>";
 			$secondary_nav .= "</div>";
@@ -190,11 +190,11 @@ if ($action != "print") {
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/printer.png' alt='Print All' title='Print All'></span>";
 		$secondary_nav .= "<div class='menuBar'><a class='menuButton' href='#' onclick='#' onmouseover='buttonMouseover(event, \"printMenu_participants_all\");'>Print All</a></div>";
 		$secondary_nav .= "<div id='printMenu_participants_all' class='menu' onmouseover='menuMouseover(event)'>";
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=brewer_name'>By Last Name</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=club>By Club</a>";
 		if ($filter == "judges") {
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=judge_id'>By Judge ID</a>";
-		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?".$_SERVER['QUERY_STRING']."&amp;action=print&amp;view=all&amp;psort=judge_rank>By Judge Rank</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=judge_id'>By Judge ID</a>";
+		$secondary_nav .= "<a id='modal_window_link' class='menuItem' href='".$base_url."'output/print.php?section=admin&amp;go=participants&amp;action=print&amp;view=all&amp;psort=judge_rank>By Judge Rank</a>";
 		}
 		$secondary_nav .= "</div>";
 		$secondary_nav .= "</span>";
@@ -461,7 +461,7 @@ if ($row_participant_count['count'] > 0) { ?>
 			"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
 			"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
 			"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
-			"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+			"iDisplayLength" : <?php if ($action == "print") echo "99999"; else echo round($_SESSION['prefsRecordPaging']); ?>,
 			"sDom": '<?php echo $output_datatables_sDom; ?>',
 			"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
 			"aaSorting": [<?php echo $output_datatables_aaSorting; ?>],

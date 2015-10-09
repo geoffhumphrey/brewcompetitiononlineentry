@@ -159,7 +159,51 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
 				<li><a href="http://help.brewcompetition.com" title="Help" target="_blank">All Help Topics</a></li>
     		</ul>
         </div>
-        <?php if (($_SESSION['prefsUseMods'] == "Y") && ($_SESSION['userLevel'] == "0") && (!HOSTED)) { ?>
+        
+        
+        
+        <?php if ($_SESSION['userLevel'] == "0") { ?>
+        
+        
+        
+        <!-- DB Maintenance -->
+		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/wand.png"  /></span>Database Maintenance</h4>
+		<div class="toggle_container">
+			<p class="admin_default_header">Data Integrity</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=cleanup" onclick="return confirm('Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.');">Perform Data Clean-Up</a></li>
+			</ul>
+            <p class="admin_default_header">Confirm or Purge Unconfirmed Entries</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=unconfirmed" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a></li>
+			</ul>
+            <p class="admin_default_header">Purge Data</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=entries" onclick="return confirm('Are you sure you want to delete all entries and associated data including scores and bos scores? This cannot be undone.');">Entries</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=participants" onclick="return confirm('Are you sure you want to delete all non-admin participants and associated data? This cannot be undone.');">Participants</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=tables" onclick="return confirm('Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments? This cannot be undone.');">Judging Tables</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=scores" onclick="return confirm('Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.');">Scores</a></li>
+                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=custom" onclick="return confirm('Are you sure you want to delete all custom winning categories and associated data? This cannot be undone.');">Custom Winning Categories</a></li>
+            </ul>
+            <ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=purge-all" onclick="return confirm('Are you sure you want to delete entry, participant, judging table, score, and custom winner category data? This cannot be undone.');">Purge All of the Above</a></li>
+            </ul>
+		</div>
+        
+        <!-- Preferences -->
+        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png"  /></span>Defining Preferences</h4>
+		<div class="toggle_container">
+			<p class="admin_default_header">Define</p>
+			<ul class="admin_default">
+				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Site Preferences</a></li>
+    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a></li>
+			</ul>
+		</div>
+        <?php } ?>
+      
+        <?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>
+        <!-- Custom Modules -->
         <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/brick.png"  /></span>Custom Modules</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
@@ -172,28 +216,7 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
             </ul>
         </div>
         <?php } ?>
-        <?php if ($_SESSION['userLevel'] == "0") { ?>
-		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/wand.png"  /></span>Database Maintenance</h4>
-		<div class="toggle_container">
-			<p class="admin_default_header">Data Integrity</p>
-			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=cleanup" onclick="return confirm('Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.');">Perform Data Clean-Up</a></li>
-			</ul>
-            <p class="admin_default_header">Confirm or Purge Unconfirmed Entries</p>
-			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a></li>
-                <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a></li>
-			</ul>
-		</div>
-        <h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/cog.png"  /></span>Defining Preferences</h4>
-		<div class="toggle_container">
-			<p class="admin_default_header">Define</p>
-			<ul class="admin_default">
-				<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Site Preferences</a></li>
-    			<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization Preferences</a></li>
-			</ul>
-		</div>
-        <?php } ?>
+        
 		<h4 class="trigger"><span class="icon"><img src="<?php echo $base_url; ?>images/wrench.png"  /></span>Preparing</h4>
 		<div class="toggle_container">
         	<p class="admin_default_header">Manage/View</p>
@@ -203,7 +226,7 @@ if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SE
 			    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Accepted Style Categories</a></li>   
 			</ul>
             <ul class="admin_default">
-            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Custom Winner Categories</a></li>
+            	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Custom Winning Categories</a></li>
 			</ul>
             <?php } ?>
             <ul class="admin_default">

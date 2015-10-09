@@ -30,22 +30,22 @@ if ($purge == "purge") echo "<div class='error'>All unconfirmed entries have bee
   	<span class="adminSubNav">
     	<span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries');">Print <em>This</em> List</a></div>
   		<div id="printMenu_entries" class="menu" onmouseover="menuMouseover(event)">
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_number">By Entry Number</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=judging_number">By Judging Number</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=category">By Category</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=brewer_name">By Brewer Last Name</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_name">By Entry Name</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Category</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name">By Brewer Last Name</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a>
   		</div>
   </span>
   <?php if (($totalRows_entry_count > $limit) && ($filter == "default")) { ?>
   <span class="adminSubNav">
     	<span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries_all');">Print <em>All</em></a></div>
   		<div id="printMenu_entries_all" class="menu" onmouseover="menuMouseover(event)">
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_number">By Entry Number</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=judging_number">By Judging Number</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=category">By Category</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name">By Brewer Last Name</a>
-  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_name">By Entry Name</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_number">By Entry Number</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=judging_number">By Judging Number</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=category">By Category</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=brewer_name">By Brewer Last Name</a>
+  			<a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_name">By Entry Name</a>
   		</div>
   </span>
   <?php } ?>
@@ -60,7 +60,7 @@ if ($purge == "purge") echo "<div class='error'>All unconfirmed entries have bee
 </div>
 <div class="adminSubNavContainer">
   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a> Unconfirmed Entries</span>
-    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span> 
+    <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=unconfirmed" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span> 
 	</div>
 <?php } 
 } ?>

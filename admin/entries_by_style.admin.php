@@ -14,27 +14,23 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 }
 
 include(DB.'styles.db.php');
-do { 
-	$accepted_categories[] = $row_styles['brewStyleGroup']; 
-} 
+do { $accepted_categories[] = $row_styles['brewStyleGroup']; } 
 while ($row_styles = mysql_fetch_assoc($styles));
 $total_cat = array_unique($accepted_categories);
-
 //print_r($total_cat);
-//echo "<br>";
-
 $html = "";
 $style_other_count[] = 0;
-$style_other_count_logged[] = 0;
 $style_beer_count[] = 0;
 $style_mead_count[] = 0;
 $style_cider_count[] = 0;
-	
 $style_beer_count_logged[] = 0;
 $style_mead_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
+$style_other_count_logged[] = 0;
 
 foreach ($total_cat as $cat) {
+	
+	
 	
 	$cat_convert = $cat;
 	$cat_name = style_convert($cat_convert,1);
@@ -116,9 +112,10 @@ foreach ($total_cat as $cat) {
 		$style_cider_count_logged[] .= $row_style_count_logged['count']; 
 	}
 	
-	if ($count_other) {
+	if ($other_count) {
+		
 		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
-		if ($row_style_type['brewStyleType'] > 3)  $source = "custom"; 
+		else  $source = "custom"; 
 		
 		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 		
@@ -160,14 +157,18 @@ foreach ($total_cat as $cat) {
 	}
 	
 	
-	/*
+	
 	// ------ DEBUG ------
-	echo $query_style_count."<br>";
-	echo $query_style_count_logged."<br>";
-	echo $cat_convert." ".$cat_name." ".$row_style_count['count']." ".$row_style_count_logged['count']."<br>";
-	$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
-	echo $style_type."<br>";
-	*/
+	
+	//echo "<br>";
+	//echo $query_style_count."<br>";
+	//echo $query_style_count_logged."<br>";
+	//echo $cat_convert." ".$cat_name." Paid/Received: ".$row_style_count['count']." Logged: ".$row_style_count_logged['count']."<br>";
+	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
+	//echo $row_style_type['brewStyleType']."<br>";
+	//echo $style_type."<br>";
+	//echo $source."<br>";
+	
 } 
 
 
@@ -205,8 +206,8 @@ if ($beer_total > 0) {
 	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>";
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%' nowrap='nowrap'>Beer</td>";
-	$html_count .= "<td>".$beer_total."</td>";
 	$html_count .= "<td>".$beer_total_logged."</td>";
+	$html_count .= "<td>".$beer_total."</td>";
 	$html_count .= "</tr>";
 }
 
