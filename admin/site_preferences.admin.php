@@ -327,8 +327,8 @@ include (DB.'styles.db.php');
     <td class="dataLabel">Liquid (Large):</td>
     <td class="data">
     <select name="prefsLiquid2">
-    <option value="gallons" <?php if ($_SESSION['prefsLiquid1'] == "gallons") echo "SELECTED"; ?>>gallons</option>
-    <option value="litres" <?php if ($_SESSION['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>liters</option>
+    <option value="gallons" <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "SELECTED"; ?>>gallons</option>
+    <option value="litres" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "SELECTED"; ?>>liters</option>
     </select>    </td>
     </tr>
   
