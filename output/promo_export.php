@@ -16,7 +16,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	if ($action == "word") {
 		header("Content-Type: application/msword;"); 
-		header("Content-Disposition: attachment; filename=".str_replace(" ", "_", $_SESSION['contestName'])."_Promo.doc");
+		header("Content-Disposition: attachment; filename=".str_replace(" ", "_", $_SESSION['contestName'])."_Promo.docx");
 	}
 	
 	if ($action == "html") { 

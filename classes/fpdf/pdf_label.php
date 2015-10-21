@@ -48,7 +48,7 @@ class PDF_Label extends FPDF {
 	var $_Y_Space;				// Vertical space between 2 labels
 	var $_X_Number;				// Number of labels horizontally
 	var $_Y_Number;				// Number of labels vertically
-	var $_Width;				// Width of label
+	var $_Width;					// Width of label
 	var $_Height;				// Height of label
 	var $_Line_Height;			// Line height
 	var $_Padding;				// Padding
@@ -58,19 +58,19 @@ class PDF_Label extends FPDF {
 
 	// List of label formats
 	var $_Avery_Labels = array(
-		'5160' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>3,	'marginTop'=>10.7,		'NX'=>3,	'NY'=>10,	'SpaceX'=>3.175,	'SpaceY'=>0,	'width'=>66.675,	'height'=>25.4,		'font-size'=>9),
-		'5395' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>17.526,	'marginTop'=>13.208,		'NX'=>2,	'NY'=>4,	'SpaceX'=>9.398,	'SpaceY'=>7.874,	'width'=>85.852,	'height'=>59.182,		'font-size'=>12),
-		//'5160' => array('paper-size'=>'letter', 'metric'=>'in', 'marginLeft'=>0.1875, 	'marginTop'=>0.5, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>0.15625, 	'SpaceY'=>0, 	'width'=>2.75, 		'height'=>1.075, 	'font-size'=>9), 
-		//'5160'=>array('paper-size'=>'letter', 'metric'=>'mm', 'marginLeft'=>4, 'marginTop'=>11, 'NX'=>3, 'NY'=>10, 'SpaceX'=>3.175, 'SpaceY'=>0, 'width'=>66.675, 'height'=>25.4, 'font-size'=>9),
-		'OL32' 		=> array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>6.35, 	'marginTop'=>9.52, 		'NX'=>11, 		'NY'=>14, 		'SpaceX'=>6.35, 'SpaceY'=>6.35, 	'width'=>12.7, 		'height'=>12.7,		'font-size'=>7),
-		'OL5275WR'	=> array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>15.82, 	'marginTop'=>16.6, 		'NX'=>9, 	 	'NY'=>12, 	'SpaceX'=>1.6, 	'SpaceY'=>1.6, 		'width'=>19.05, 	'height'=>19.05,	'font-size'=>7),
-		'5161' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>0.967,	'marginTop'=>10.7,		'NX'=>2,	'NY'=>10,	'SpaceX'=>3.967,	'SpaceY'=>0,	'width'=>101.6,		'height'=>25.4,		'font-size'=>8),
-		'5162' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>0.97,		'marginTop'=>20.224,	'NX'=>2,	'NY'=>7,	'SpaceX'=>4.762,	'SpaceY'=>0,	'width'=>100.807,	'height'=>35.72,	'font-size'=>8),
-		'5163' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>1.762,	'marginTop'=>10.7, 		'NX'=>2,	'NY'=>5,	'SpaceX'=>3.175,	'SpaceY'=>0,	'width'=>101.6,		'height'=>50.8,		'font-size'=>8),
-		'5164' => array('paper-size'=>'letter',	'metric'=>'in',	'marginLeft'=>0.148,	'marginTop'=>0.5, 		'NX'=>2,	'NY'=>3,	'SpaceX'=>0.2031,	'SpaceY'=>0,	'width'=>4.0,		'height'=>3.33,		'font-size'=>12),
-		'8600' => array('paper-size'=>'letter',	'metric'=>'mm',	'marginLeft'=>7.1, 		'marginTop'=>19, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>9.5, 		'SpaceY'=>3.1, 	'width'=>66.6, 		'height'=>25.4,		'font-size'=>8),
-		'L7163'=> array('paper-size'=>'A4',		'metric'=>'mm',	'marginLeft'=>5,		'marginTop'=>15, 		'NX'=>2,	'NY'=>7,	'SpaceX'=>25,		'SpaceY'=>0,	'width'=>99.1,		'height'=>38.1,		'font-size'=>9),
-		'3422' => array('paper-size'=>'A4',		'metric'=>'mm',	'marginLeft'=>0,		'marginTop'=>8.5, 		'NX'=>3,	'NY'=>8,	'SpaceX'=>0,		'SpaceY'=>0,	'width'=>70,		'height'=>35,		'font-size'=>9)
+		'5160' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>3,			'marginTop'=>10.7,		'NX'=>3,		'NY'=>10,	'SpaceX'=>3.175,		'SpaceY'=>0,		'width'=>66.675,		'height'=>25.4,		'font-size'=>9),
+		'5395' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>17.526,	'marginTop'=>13.208,		'NX'=>2,		'NY'=>4,		'SpaceX'=>9.398,		'SpaceY'=>7.874,	'width'=>85.852,		'height'=>59.182,	'font-size'=>12),
+	//	'5160' 		=> array('paper-size'=>'letter', 	'metric'=>'in', 'marginLeft'=>0.1875, 	'marginTop'=>0.5, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>0.15625, 	'SpaceY'=>0, 	'width'=>2.75, 		'height'=>1.075, 	'font-size'=>9), 
+	//	'5160'		=> array('paper-size'=>'letter', 	'metric'=>'mm', 'marginLeft'=>4, 		'marginTop'=>11, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>3.175, 	'SpaceY'=>0, 	'width'=>66.675, 	'height'=>25.4, 	'font-size'=>9),
+		'OL32' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>6.35, 		'marginTop'=>9.52, 		'NX'=>11, 	'NY'=>14, 	'SpaceX'=>6.35, 		'SpaceY'=>6.35, 	'width'=>12.7, 		'height'=>12.7,		'font-size'=>7),
+		'OL5275WR'	=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>15.82, 	'marginTop'=>16.6, 		'NX'=>9, 	'NY'=>12, 	'SpaceX'=>1.6, 		'SpaceY'=>1.6, 	'width'=>19.05, 		'height'=>19.05,		'font-size'=>7),
+		'5161' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>0.967,		'marginTop'=>10.7,		'NX'=>2,		'NY'=>10,	'SpaceX'=>3.967,		'SpaceY'=>0,		'width'=>101.6,		'height'=>25.4,		'font-size'=>8),
+		'5162' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>0.97,		'marginTop'=>20.224,		'NX'=>2,		'NY'=>7,		'SpaceX'=>4.762,		'SpaceY'=>0,		'width'=>100.807,	'height'=>35.72,		'font-size'=>8),
+		'5163' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>1.762,		'marginTop'=>10.7, 		'NX'=>2,		'NY'=>5,		'SpaceX'=>3.175,		'SpaceY'=>0,		'width'=>101.6,		'height'=>50.8,		'font-size'=>8),
+		'5164' 		=> array('paper-size'=>'letter',		'metric'=>'in',	'marginLeft'=>0.148,		'marginTop'=>0.5, 		'NX'=>2,		'NY'=>3,		'SpaceX'=>0.2031,	'SpaceY'=>0,		'width'=>4.0,		'height'=>3.33,		'font-size'=>12),
+		'8600' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>7.1, 		'marginTop'=>19, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>9.5, 		'SpaceY'=>3.1, 	'width'=>66.6, 		'height'=>25.4,		'font-size'=>8),
+		'L7163'		=> array('paper-size'=>'A4',			'metric'=>'mm',	'marginLeft'=>5,			'marginTop'=>15, 		'NX'=>2,		'NY'=>7,		'SpaceX'=>25,		'SpaceY'=>0,		'width'=>99.1,		'height'=>38.1,		'font-size'=>9),
+		'3422' 		=> array('paper-size'=>'A4',			'metric'=>'mm',	'marginLeft'=>0,			'marginTop'=>8.5, 		'NX'=>3,		'NY'=>8,		'SpaceX'=>0,			'SpaceY'=>0,		'width'=>70,			'height'=>35,		'font-size'=>9)
 	);
 
 	// Constructor
@@ -98,8 +98,8 @@ class PDF_Label extends FPDF {
 	function _Set_Format($format) {
 		$this->_Margin_Left	= $this->_Convert_Metric($format['marginLeft'], $format['metric']);
 		$this->_Margin_Top	= $this->_Convert_Metric($format['marginTop'], $format['metric']);
-		$this->_X_Space 	= $this->_Convert_Metric($format['SpaceX'], $format['metric']);
-		$this->_Y_Space 	= $this->_Convert_Metric($format['SpaceY'], $format['metric']);
+		$this->_X_Space 		= $this->_Convert_Metric($format['SpaceX'], $format['metric']);
+		$this->_Y_Space 		= $this->_Convert_Metric($format['SpaceY'], $format['metric']);
 		$this->_X_Number 	= $format['NX'];
 		$this->_Y_Number 	= $format['NY'];
 		$this->_Width 		= $this->_Convert_Metric($format['width'], $format['metric']);

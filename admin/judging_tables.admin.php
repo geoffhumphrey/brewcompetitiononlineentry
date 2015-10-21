@@ -126,8 +126,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 		</div>
 	</td>
     <td class="data">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/rosette.png" alt="View Scores"></span>
-    	<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoreMenu');">View Scores...</a></div>
+    	<span class="icon"><img src="<?php echo $base_url; ?>images/rosette.png" alt="View Scores"></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'scoreMenu');">View Scores...</a></div>
   		<div id="scoreMenu" class="menu" onmouseover="menuMouseover(event)">
   			<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&go=judging_scores">By Table</a>
     		<a class="menuItem" href="<?php echo $base_url; ?>index.php?section=admin&go=judging_scores&amp;filter=category">By Category</a>

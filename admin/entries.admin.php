@@ -61,7 +61,24 @@ if ($purge == "purge") echo "<div class='error'>All unconfirmed entries have bee
 <div class="adminSubNavContainer">
   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png" /></span><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" onclick="return confirm('Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.');">Confirm All</a> Unconfirmed Entries</span>
     <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/exclamation.png"  /></span><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=unconfirmed" onclick="return confirm('Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.');">Purge All</a> Unconfirmed Entries.</span> 
-	</div>
+</div>
+
+
+<div class="adminSubNavContainer">
+	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/wand.png"  /></span>Regenerate Judging Numbers:  
+	<div class="menuBar">
+        <a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'menu_generate');">Key Off Of... (Select One)</a>
+        <div id="menu_generate" class="menu" onmouseover="menuMouseover(event)">
+        <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Entry Number (Ascending)</a>
+        <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=DESC">Entry Number (Descending)</a>
+        <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=ASC">Entry Name (Ascending)</a>
+        <a class="menuItem" onclick="return confirm('Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " THIS WILL OVER-WRITE *ALL* JUDGING NUMBERS, including those that have been assigned via the barcode scanning function."; ?>');" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=entries&amp;action=generate_judging_numbers&amp;sort=brewName&amp;dir=DESC">Entry Name (Descending)</a>
+        </div>
+    </div>
+    </span>
+</div>
+
+
 <?php } 
 } ?>
 <?php if ($dbTable == "default") { 

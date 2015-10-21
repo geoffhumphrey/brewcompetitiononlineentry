@@ -202,7 +202,7 @@ if ($view == "xml") {
 	do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysql_fetch_assoc($stewards));	
 	do { $st[] = $row_staff['uid']; } while ($row_staff = mysql_fetch_assoc($staff));
 	do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysql_fetch_assoc($organizer));
-	$filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.".$view;
+	$filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
 	$output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"; 
 	$output .= "<OrgReport>\n";	
 	$output .= "\t<CompData>\n";
@@ -423,7 +423,7 @@ if ($view == "xml") {
 		$output .= "</OrgReport>";
 		
 		header("Content-Type: application/force-download");
-		header("Content-Disposition: attachment; filename='".$filename."'");
+		header("Content-Disposition: attachment; filename=".$filename."");
 		header("Pragma: no-cache");
 		header("Expires: 0");
 	

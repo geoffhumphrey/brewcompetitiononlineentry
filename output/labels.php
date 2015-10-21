@@ -32,10 +32,13 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels";
-			if ($filter != "default") $filename .= "_Category_".$filter;
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
+			if ($filter != "default") 	$filename .= "_Category_".$filter;
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',8);
 		
@@ -80,11 +83,14 @@ if (isset($_SESSION['loginUsername'])) {
 			
 			// print_r($special_ingredients); exit;
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels";
-			if ($filter != "default") $filename .= "_Category_".$filter;
-			$filename .= "_Special_Mead-Cider";
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
+			if ($filter != "default") 	$filename .= "_Category_".$filter;
+										$filename .= "_Special_Mead-Cider";
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160'); 
 			
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',10);
@@ -126,10 +132,13 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-judging") && ($view == "default")) {
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels";
-			if ($filter != "default") $filename .= "_Category_".$filter;
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Judging_Numbers";
+			if ($filter != "default") 	$filename .= "_Category_".$filter;
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160'); 
 			
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',8);
@@ -161,8 +170,11 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-judging-round") && ($view == "default")) {
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels";
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels_Judging_Numbers";
 			//if ($filter != "default") $filename .= "_Category_".$filter;
+			if ($psort == "OL32") 		$filename .= "_.50_Inch";
+			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
+			if ($filter == "recent")		$filename .= "_Added_After_Reg_Close";
 			$filename .= ".pdf";
 			
 			$pdf = new PDF_Label($psort); 
@@ -198,8 +210,11 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "default")) {
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels";
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels_Entry_Numbers";
 			//if ($filter != "default") $filename .= "_Category_".$filter;
+			if ($psort == "OL32") 		$filename .= "_.50_Inch";
+			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
+			if ($filter == "recent")		$filename .= "_Added_After_Reg_Close";
 			$filename .= ".pdf";
 		
 			$pdf = new PDF_Label($psort); 
@@ -235,13 +250,16 @@ if (isset($_SESSION['loginUsername'])) {
 		if (($go == "entries") && ($action == "bottle-category-round") && ($view == "default")) {
 	
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels_Category_Only";
-			if ($filter != "default") $filename .= "_Category_".$filter;
+			if ($filter != "default") 	$filename .= "_Category_".$filter;
+			if ($psort == "OL32") 		$filename .= "_.50_Inch";
+			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
 			$filename .= ".pdf";
 			
-			$pdf = new PDF_Label('OL32'); 
+			$pdf = new PDF_Label($psort); 
 			
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','',7);
+			if ($psort == "OL32") $pdf->SetFont('Arial','',7);
+			else $pdf->SetFont('Arial','',10);
 		
 			// Print labels
 			do {
@@ -257,16 +275,20 @@ if (isset($_SESSION['loginUsername'])) {
 			$pdf->Output($filename,'D');
 			
 		}
-		
-		if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "OL5275WR")) {
+		/*
+		if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "default")) {
 		
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels";
 			if ($filter != "default") $filename .= "_Category_".$filter;
+			if ($psort == "OL5275WR") $filename .= "_.75_Inch";
+			else $filename .= "_.50_Inch";
 			$filename .= ".pdf";
-			$pdf = new PDF_Label($view); 
+			
+			$pdf = new PDF_Label($psort);
 			
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','',7);
+			if ($psort == "OL32") $pdf->SetFont('Arial','',7);
+			else $pdf->SetFont('Arial','',10);
 		
 			// Print labels
 			do {
@@ -286,7 +308,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$pdf->Output($filename,'D');
 			
 		}
-		
+		*/
 		if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
 			/*
 			$section = "brew";
@@ -302,11 +324,14 @@ if (isset($_SESSION['loginUsername'])) {
 			*/
 			//print_r($special_ingredients); exit;
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels";
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Judging_Numbers";
 			if ($filter != "default") $filename .= "_Category_".$filter;
 			$filename .= "_Special_Mead-Cider";
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
 			
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',10);
@@ -354,7 +379,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','B',20);
 			
-			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Nametags.pdf";
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Nametags_Avery5395.pdf";
 			
 			do {
 				
@@ -382,11 +407,15 @@ if (isset($_SESSION['loginUsername'])) {
 	
 	
 		if (($go == "participants") && ($action == "judging_labels") && ($id == "default")) {
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',9);
 			
-			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Judge_Scoresheet_Labels.pdf";
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Judge_Scoresheet_Labels";
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";
 			
 			do {
 				
@@ -435,57 +464,64 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 		
 		if (($go == "participants") && ($action == "address_labels")) {
-		$pdf = new PDF_Label('5160'); 
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','',8);
-		
-		if ($filter == "with_entries") { 
-			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels.pdf";
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
+			 
+			$pdf->AddPage();
+			$pdf->SetFont('Arial','',8);
 			
-			do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysql_fetch_assoc($with_entries));
+			if ($filter == "with_entries") { 
+				$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels";
+				
+				do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysql_fetch_assoc($with_entries));
+				
+			}
 			
-		}
-		else $filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Participant_Address_Labels.pdf";	
-		
-		do {
+			else $filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Participant_Address_Labels";
 			
-			if (strlen($row_brewer['brewerState']) <= 3) $brewerState = strtoupper($row_brewer['brewerState']);
-			else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
-		
-				if ($filter == "with_entries") { 
-					if (in_array($row_brewer['uid'],$with_entries_array)) { 
-					
-					$user_entry_count = user_entry_count($row_brewer['uid']);
-					
-					if ($user_entry_count == 1) $entry_count ="(". $user_entry_count." Entry)";
-					else $entry_count = "(".$user_entry_count." Entries)";
-					
-					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
-					$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
-					ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
-					$entry_count,
-					ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-					ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-					$brewerState,
-					$row_brewer['brewerZip'],
-					$brewer_country
-					);
-					$pdf->Add_Label($text);
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";	
+			
+			do {
+				
+				if (strlen($row_brewer['brewerState']) <= 3) $brewerState = strtoupper($row_brewer['brewerState']);
+				else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
+			
+					if ($filter == "with_entries") { 
+						if (in_array($row_brewer['uid'],$with_entries_array)) { 
+						
+						$user_entry_count = user_entry_count($row_brewer['uid']);
+						
+						if ($user_entry_count == 1) $entry_count ="(". $user_entry_count." Entry)";
+						else $entry_count = "(".$user_entry_count." Entries)";
+						
+						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+						$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
+						ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
+						$entry_count,
+						ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
+						ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
+						$brewerState,
+						$row_brewer['brewerZip'],
+						$brewer_country
+						);
+						$pdf->Add_Label($text);
+						}
 					}
-				}
-				else {
-					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
-					$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-					ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
-					ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-					ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-					$brewerState,
-					$row_brewer['brewerZip'],
-					$brewer_country
-					);
-					$pdf->Add_Label($text);
-				}
-		} while ($row_brewer = mysql_fetch_assoc($brewer));
+					else {
+						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+						$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
+						ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))), 
+						ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
+						ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
+						$brewerState,
+						$row_brewer['brewerZip'],
+						$brewer_country
+						);
+						$pdf->Add_Label($text);
+					}
+			} while ($row_brewer = mysql_fetch_assoc($brewer));
 		
 		//$pdf->Output();
 		ob_end_clean();
@@ -495,11 +531,16 @@ if (isset($_SESSION['loginUsername'])) {
 
 	
 		if (($go == "judging_scores") && ($action == "awards")) {
-			$pdf = new PDF_Label('5160'); 
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','',9);
 			
-			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Award_Labels.pdf";
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Award_Labels";
+			
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";
 			
 			include(DB.'output_labels_awards.db.php');
 				
@@ -516,7 +557,8 @@ if (isset($_SESSION['loginUsername'])) {
 // --------------------------------------------------------
 
 	if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
-		$pdf = new PDF_Label('5160'); 
+		if ($psort == "3422") $pdf = new PDF_Label('3422');
+		else $pdf = new PDF_Label('5160'); 
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','',8);
 
@@ -526,7 +568,10 @@ if (isset($_SESSION['loginUsername'])) {
 		$last_name = ucfirst(strtolower($last_name));
 		
 		//echo $query_brewer;
-		$filename .= $first_name."_".$last_name."_Judge_Scoresheet_Labels.pdf";
+		$filename .= $first_name."_".$last_name."_Judge_Scoresheet_Labels";
+		if ($psort == "3422") 		$filename .= "_Avery3422";
+		else 						$filename .= "_Avery5160";
+		$filename .= ".pdf";
 		
 		//$rank = str_replace(",",", ",$row_brewer['brewerJudgeRank']);
 		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);

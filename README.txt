@@ -5,7 +5,7 @@
 ** Developed by Geoff Humphrey - zkdigital.com                      **
 ** With contributions by Mark Alston, Bruce Buerger, Oskar Stephens **
 ** and Luis Balbinot                                                **
-** Release 1.3.1.0 August, 2015                                     **
+** Release 1.3.2.0 October, 2015                                    **
 ** This software is free, open source, and is covered under the     **
 ** General Public License (GPL) from the Open Source Initiative.    **
 ** Therefore, you are permitted to download the full source code of **
@@ -57,13 +57,14 @@ BCOE&M is free and open-source.
 **********************************************************************
 Changes in This Version
 **********************************************************************
-Support for BJCP 2015 styles.
-Various bug fixes reported after BETA release. Addresses GitHub issues
-474, 473, 472, 471, and 468.
+Various bug fixes. Addresses GitHub issues 480, 481, 482, 483, 486,
+489, 490, 491, 492, 498, 500, 502, 505.
 
+Added support for A4 mailing labels.
+Added manual triggering of database cleanup and purge functions.
 
 For those experiencing any issues related to initial browser-based 
-setup of BCOE&M, the bcoem_baseline_1.3.1.X.sql document is available in 
+setup of BCOE&M, the bcoem_baseline_1.3.2.X.sql document is available in 
 the package. It contains the necessary database structure and dummy 
 data for a new installation that can be installed manually via 
 phpMyAdmin or shell access. Be sure to follow the directions in the

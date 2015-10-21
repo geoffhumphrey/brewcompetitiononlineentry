@@ -180,8 +180,8 @@ if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUs
 	
 	if (!empty($row_limits['prefsUserSubCatLimit'])) { 
 		$page_info16 .= "<p>";
-		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("Each entrant is limited to %s entry per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
-		else $page_info16 .= sprintf("Each entrant is limited to %s entries per sub-style ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("Each entrant is limited to %s entry per sub-category ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
+		else $page_info16 .= sprintf("Each entrant is limited to %s entries per sub-category ",readable_number($row_limits['prefsUserSubCatLimit'])." (".$row_limits['prefsUserSubCatLimit'].")");
 		if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= " (exceptions are detailed below)";
 		$page_info16 .= ".";
 		$page_info16 .= "</p>";

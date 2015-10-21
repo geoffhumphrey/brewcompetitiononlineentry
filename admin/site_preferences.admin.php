@@ -327,8 +327,8 @@ include (DB.'styles.db.php');
     <td class="dataLabel">Liquid (Large):</td>
     <td class="data">
     <select name="prefsLiquid2">
-    <option value="gallons" <?php if ($_SESSION['prefsLiquid1'] == "gallons") echo "SELECTED"; ?>>gallons</option>
-    <option value="litres" <?php if ($_SESSION['prefsLiquid1'] == "litres") echo "SELECTED"; ?>>liters</option>
+    <option value="gallons" <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "SELECTED"; ?>>gallons</option>
+    <option value="litres" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "SELECTED"; ?>>liters</option>
     </select>    </td>
     </tr>
   
@@ -392,18 +392,6 @@ include (DB.'styles.db.php');
     <td class="data"><input name="prefsPaypalAccount" type="text" size="35" maxlength="255" value="<?php echo $_SESSION['prefsPaypalAccount']; ?>"></td>
     <td class="data">Indicate the email address associated with your PayPal account.<br />Please note that you need to have a verified bank account with PayPal to accept credit cards for payment. More information is contained in the &quot;Merchant Services&quot; area of your PayPal account.</td>
   </tr>
-  <!--
-   <tr>
-  	<td class="dataLabel">Google Wallet for Payment:</td>
-   	<td class="data"><input type="radio" name="prefsGoogle" value="Y" id="prefsGoogle_0"  <?php //if ($_SESSION['prefsGoogle'] == "Y") echo "CHECKED";  if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsGoogle" value="N" id="prefsGoogle_1" <?php //if ($_SESSION['prefsGoogle'] == "N") echo "CHECKED"; ?>/> No</td>
-  	<td class="data">Do you want to accept credit card payments via Google Wallet?</td>
-  </tr> 
-  <tr>
-    <td class="dataLabel">Google Merchant ID:</td>
-    <td class="data"><input name="prefsGoogleAccount" type="text" size="35" value="<?php //echo $_SESSION['prefsGoogleAccount']; ?>"></td>
-    <td class="data">Indicate your Google Merchant ID.<br />Please note that a <a href="https://checkout.google.com/sell/" target="_blank">Google Wallet/Checkout</a> account is required to accept payments through Google. To function properly, your account must be <a href="https://support.google.com/checkout/sell/bin/answer.py?hl=en&amp;ctx=cartwizard_acceptunsigned&amp;answer=113366" target="_blank">set up to accept unsigned carts</a>.</td>
-  </tr>
-  -->
   <tr>
   	<td class="dataLabel">Entrant Pays Checkout Fees:</td>
    	<td class="data"><input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($_SESSION['prefsTransFee'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes&nbsp;&nbsp;<input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; ?>/> No</td>

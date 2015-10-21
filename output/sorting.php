@@ -53,6 +53,7 @@ if ($totalRows_entries > 0) {
 				<?php } ?>
 				null,
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] } 
 				]
 			} );
@@ -79,6 +80,7 @@ if ($totalRows_entries > 0) {
     <?php do { 
 	$info = brewer_info($row_entries['brewBrewerID']);
 	$brewer_info = explode("^",$info);
+	if ($brewer_info[14] == "United States") $phone = format_phone_us($brewer_info[2]); else $phone = $brewer_info[2];
 	?>
     <tr>
         <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_entries['id']); ?></td>
@@ -89,9 +91,9 @@ if ($totalRows_entries > 0) {
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewSubCategory']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $brewer_info[2]."<br>".$brewer_info[6]; ?></td>
-        <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
-        <td class="data bdr1B_gray"><?php if ($row_entries['brewReceived'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>X</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
+        <td class="data bdr1B_gray"><?php echo $brewer_info[6]."<br>".$phone; ?></td>
+        <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>&#10003;</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
+        <td class="data bdr1B_gray"><p class="box_small"></p></td>
         <td class="data bdr1B_gray"><p class="box"></p></td>
     </tr>
 

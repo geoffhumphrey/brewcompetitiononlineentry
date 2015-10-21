@@ -16,6 +16,27 @@ Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd
 
 */
 
+// --------------------------------------------------------
+// VERSION
+// --------------------------------------------------------
+
+// Define the current version
+
+$current_version = "1.3.2.0";
+
+// --------------------------------------------------------
+
+
+// --------------------------------------------------------
+// DB UPDATE
+// --------------------------------------------------------
+// IF there is a DB update, change the following to TRUE
+// IF there is NO DB update, change the following to FALSE
+
+$db_update = FALSE;
+
+// --------------------------------------------------------
+
 //Error reporting
 error_reporting(0);	// comment out to debug
 //error_reporting(E_ALL); // uncomment to debug 

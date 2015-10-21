@@ -192,7 +192,8 @@ elseif ($action == "purge") {
 
 elseif ($action == "generate_judging_numbers") {
 	generate_judging_numbers($prefix."brewing");	
-	if ($go == "hidden") $updateGoTo = $base_url."index.php"; 
+	if ($go == "hidden") $updateGoTo = $base_url."index.php";
+	elseif ($go == "entries") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=14";
 	else $updateGoTo = $base_url."index.php?section=admin&msg=14";
 	header(sprintf("Location: %s", $updateGoTo));		
 }

@@ -3,7 +3,8 @@
 *        Document Name: default.css
 *        Description:   BCOE&M default theme
 *		 Color scheme:  #37517B (dark blue)
-                        #acc0c7 (medium-light blue)						#bec8d8 (light blue)
+                        #acc0c7 (medium-light blue)
+						#bec8d8 (light blue)
 */
 @import url("html_elements.css");
 @import url("common.css");
@@ -324,6 +325,9 @@ textarea {
 	font-weight: bold;
 	margin: 1.5em 0 .5em 0;
 	padding: 0 0 .5em 0;
+}
+.admin_default_label {
+	font-style:italic;
 }
 /* -- Admin Menu -- */
 .menu {	

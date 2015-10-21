@@ -7,8 +7,8 @@
  
 $footer = "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ";
 if (NHC) $footer .= "&ndash; NHC Edition &copy;2009-".date('Y');
-elseif (HOSTED) $footer .= $version." &ndash; Hosted Edition &copy;2009-".date('Y')." by <a href='http://www.zkdigital.com' target='_blank'>zkdigital.com</a>.";
-else $footer .= $version." &copy;2009-".date('Y')." by <a href='http://www.zkdigital.com' target='_blank'>zkdigital.com</a>.";
+elseif (HOSTED) $footer .= $current_version." &ndash; Hosted Edition &copy;2009-".date('Y');
+else $footer .= $current_version." &copy;2009-".date('Y');
 if (TESTING) {
 		$mtime = microtime(); 
 		$mtime = explode(" ",$mtime); 

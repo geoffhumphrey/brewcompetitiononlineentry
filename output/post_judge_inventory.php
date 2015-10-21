@@ -67,7 +67,18 @@ if (NHC) $base_url = "../";
         </tr>
     </thead>
     <tbody>
-    <?php do { ?>
+    <?php do { 
+	
+		// Query scores table for each entry. If no score and not placing, or if score is not entered at all, put on the list
+		
+		$query_post_inventory_entry = sprintf("SELECT id,scoreEntry,scorePlace FROM %s WHERE eid='%s'",$prefix."judging_scores",$row_post_inventory['id']);
+		$post_inventory_entry = mysql_query($query_post_inventory_entry, $brewing) or die(mysql_error());
+		$row_post_inventory_entry = mysql_fetch_assoc($post_inventory_entry);
+		$totalRows_post_inventory_entry = mysql_num_rows($post_inventory_entry);
+		
+		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
+		
+	?>
     	<tr>
         	<td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_post_inventory['id']); ?></td> 
             <td class="data bdr1B_gray"><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
@@ -78,7 +89,9 @@ if (NHC) $base_url = "../";
             <td class="data bdr1B_gray"><?php echo $row_post_inventory['scoreEntry']; ?></td>
             <?php } ?>
         </tr>
-    <?php } while ($row_post_inventory = mysql_fetch_assoc($post_inventory)); ?>
+    <?php 
+		}
+	} while ($row_post_inventory = mysql_fetch_assoc($post_inventory)); ?>
     </tbody>
     </table>
     <!-- END page content -->

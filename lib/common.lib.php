@@ -9,8 +9,8 @@
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 1.3.1.0, change version in system table if not
-// There are database structure or data updates for version 1.3.1.0
+// Current version is 1.3.2.0, change version in system table if not
+// There are NO database structure or data updates for version 1.3.2.0
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
@@ -20,8 +20,8 @@ function version_check($version) {
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	if ($version != "1.3.1.0") {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.1.0","2015-08-21","1");
+	if ($version != $current_version) {
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.2.0","2015-10-31","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
@@ -2124,19 +2124,19 @@ function brewer_info($uid) {
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = 
 	$row_brewer_info['brewerFirstName']."^". 		// 0
-	$row_brewer_info['brewerLastName']."^". 		// 1
+	$row_brewer_info['brewerLastName']."^". 			// 1
 	$row_brewer_info['brewerPhone1']."^". 			// 2
-	$row_brewer_info['brewerJudgeRank']."^".		// 3
+	$row_brewer_info['brewerJudgeRank']."^".			// 3
 	$row_brewer_info['brewerJudgeID']."^".			// 4
 	$row_brewer_info['brewerJudgeBOS']."^".			// 5
-	$row_brewer_info['brewerEmail']."^".			// 6
-	$row_brewer_info['uid']."^".					// 7
-	$row_brewer_info['brewerClubs']."^".			// 8
+	$row_brewer_info['brewerEmail']."^".				// 6
+	$row_brewer_info['uid']."^".						// 7
+	$row_brewer_info['brewerClubs']."^".				// 8
 	$row_brewer_info['brewerDiscount']."^".			// 9
 	$row_brewer_info['brewerAddress']."^".			// 10
 	$row_brewer_info['brewerCity']."^".				// 11
-	$row_brewer_info['brewerState']."^".			// 12
-	$row_brewer_info['brewerZip'];					// 13
+	$row_brewer_info['brewerState']."^".				// 12
+	$row_brewer_info['brewerZip']."^".				// 13
 	$row_brewer_info['brewerCountry'];				// 14
 	return $r;
 }
@@ -2372,14 +2372,14 @@ function entries_unconfirmed($user_id) {
 	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
 }
 
-function check_special_ingredients($style,$version) {
+function check_special_ingredients($style,$style_version) {
 	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 		
 	$style = explode("-",$style);
 
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $version, $style[0], $style[1]);
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $style_version, $style[0], $style[1]);
 	$brews = mysql_query($query_brews, $brewing) or die(mysql_error());
 	$row_brews = mysql_fetch_assoc($brews);
 	
@@ -2963,7 +2963,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	return $return;
 }
 
-function highlight_required($msg,$method,$version) {
+function highlight_required($msg,$method,$style_version) {
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -2971,7 +2971,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "0") { // mead cider sweetness
 		
-		$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		$totalRows_check = mysql_num_rows($check);
@@ -2984,7 +2984,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
 	
-		$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
@@ -2995,7 +2995,7 @@ function highlight_required($msg,$method,$version) {
 
 	if ($method == "2") { // mead cider carb
 	
-		$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
@@ -3006,7 +3006,7 @@ function highlight_required($msg,$method,$version) {
 	
 	if ($method == "3") { // mead strength
 	
-		$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$version,$explodies[1],$explodies[2]);
+		$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
 		$check = mysql_query($query_check, $brewing) or die(mysql_error());
 		$row_check = mysql_fetch_assoc($check);
 		
