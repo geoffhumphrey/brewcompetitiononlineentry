@@ -85,7 +85,7 @@ if ($_SESSION['userLevel'] <= "1") {
 if ($go == "default") { ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
 <?php if ($fx) { ?>
-<div class="error">There is a known issue with printing from the Firefox browser. To print all pages properly, RIGHT CLICK on the print link and choose "Open Link in New Tab." Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>
+<div class="warning">There is a known issue with printing from the Firefox browser. To print all pages properly, RIGHT CLICK on the print link and choose "Open Link in New Tab." Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>
 <?php } ?>
 <?php 
 if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0)) {

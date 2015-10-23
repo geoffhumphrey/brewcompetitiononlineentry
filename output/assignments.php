@@ -119,20 +119,17 @@ if ($totalRows_brewer > 0) { ?>
 	<div id="content-inner">
     <div id="header">	
 		<div id="header-inner">
-        	<h1><?php echo $_SESSION['contestName']; ?></h1>
-        	<h2><?php if ($filter == "S") echo "Steward "; else echo "Judge "; ?>Sign In</h2>
+        	<h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo " Steward "; else echo " Judge "; ?>Sign In</h2>
         </div>
     </div>
-    <?php if ($filter == "J") { ?>
     <p>Please be sure to check if your BJCP Judge ID is correct. If it is not, or if you have one and it is not listed, please enter it on the form.</p>
     <p>If your name is not on the list below, sign in on the attached sheet(s).</p>
-    <?php } ?>
     <table class="dataTable" id="sortable">
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="30%">Name</th>
-        <?php if ($filter == "J") { ?>
         <th class="dataHeading bdr1B" width="20%">Judge ID</th>
+        <?php if ($filter == "J") { ?>
         <th class="dataHeading bdr1B" width="10%">Signed Waiver?</th>
         <?php } ?>
         <th class="dataHeading bdr1B">Signature</th>

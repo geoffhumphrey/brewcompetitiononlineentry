@@ -289,10 +289,12 @@ else {
 		$row_prefs = mysql_fetch_assoc($prefs);
 		$totalRows_prefs = mysql_num_rows($prefs);
 		
+		/*
 		$query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
 		$themes = mysql_query($query_themes, $brewing) or die(mysql_error());
 		$row_themes = mysql_fetch_assoc($themes);
 		$totalRows_themes = mysql_num_rows($themes);
+		*/
 	}
 	
 	// Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup

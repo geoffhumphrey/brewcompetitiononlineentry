@@ -1,15 +1,16 @@
 <?php 
 
 // -----------------------------------------------------------
-// Version 1.3.2.0
+// Version 1.3.1.0 and 1.3.2.0
 // -----------------------------------------------------------
 
+$current_version = "1.3.2.0";
 require('paths.php');
 mysql_select_db($database, $brewing);
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
-$current_version = "1.3.2.0";
+
 $section = "update";
 
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
@@ -251,7 +252,7 @@ if (file_exists($filename)) {
 						
 						if ($version >= "1300")  {
 							// last verion to have a db update was 1.3.0.0
-							// if 1.3.0.0 later, update only with the 1.3.2.0 changes
+							// if 1.3.0.0 later, update only with the 1.3.1.0 and 1.3.2.0 changes
 							include (UPDATE.'current_update.php');
 						}
 				

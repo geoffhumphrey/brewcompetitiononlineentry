@@ -9,81 +9,75 @@
    and produce your own.
    **************************************************************
 */
-.info {
-	color: #000099;
+
+
+.info, .help {
+	color: #0055BD;
 	font-size: 1.2em;
 	font-weight: bold;
-	margin: 0 0 1em 0;
+	margin: 0 0 20px 0;
 	padding: .5em .5em .5em 2.2em;
-	background-image: url(../images/information.png);
-	background-position: .5em;
+	background-position: .5em 50%;
 	background-repeat: no-repeat;
-	background-color: #B7D9FF;
-	border: 1px solid #000099;
+	background-color: #D1E6FF;
+	border: 1px solid #B7D9FF;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
 .help {
-	color: #000099;
+	background-image: url(../images/help.png);
+}
+
+.info {
+	background-image: url(../images/information.png);
+}
+
+.closed, .success {
+	color: #3c763d;
 	font-size: 1.2em;
 	font-weight: bold;
-	margin: 0 0 1em 0;
+	margin: 0 0 20px 0;
 	padding: .5em .5em .5em 2.2em;
-	background-image: url(../images/help.png);
-	background-position: .5em;
+	background-image: url(../images/tick.png);
+	background-position: .5em 50%;
 	background-repeat: no-repeat;
-	background-color: #B7D9FF;
-	border: 1px solid #000099;
+	background-color: #dff0d8;
+	border: 1px solid #d6e9c6;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
-.closed, .success {
-	color: #0A4A06;
+.warning {
+	color: #8a6d3b;
 	font-size: 1.2em;
 	font-weight: bold;
-	margin: .5em 0 1em 0;
+	margin: 0 0 20px 0;
 	padding: .5em .5em .5em 2.2em;
-	background-image: url(../images/tick.png);
-	background-position: .5em;
+	background-image: url(../images/error.png);
+	background-position: .5em 50%;
 	background-repeat: no-repeat;
-	background-color: #E0FDDF;
-	border: 1px solid #0A4A06;
+	background-color: #fcf8e3;
+    border: 1px solid #faebcc;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
 .error {
-	color: #FF0000;
+	color: #a94442;
 	font-size: 1.2em;
 	font-weight: bold;
-	margin: 0 0 1em 0;
+	margin: 0 0 20px 0;
 	padding: .5em .5em .5em 2.2em;
-	background-image: url(../images/error.png);
-	background-position:.5em;
+	background-image: url(../images/exclamation.png);
+	background-position: .5em 50%;
 	background-repeat: no-repeat;
-	background-color: #FFFF99;
-	border: 1px solid #FF0000;
+    background-color: #f2dede;
+	border: 1px solid #ebccd1;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-}
-.error2 {
-	color: #C13100;
-	font-size: 1.2em;
-	font-weight: bold;
-	margin: 0 0 1em 0;
-	padding: .5em .5em .5em 2.2em;
-	background-image: url(../images/error.png);
-	background-position:.5em;
-	background-repeat: no-repeat;
-	background-color: #FFFBD0;
-	border: 1px solid #C13100;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
+	}
 .required {
 	color: #FF0000;
 	padding: .25em .5em .25em 1.7em;
@@ -115,9 +109,8 @@
 	color: #000;
 	margin: 0;
 	padding: .5em;
-	background-position: .5em;
-	background-color: #eee;
-	border: 1px solid #ccc;
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;

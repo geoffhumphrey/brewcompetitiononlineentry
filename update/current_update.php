@@ -2,7 +2,11 @@
 
 // -----------------------------------------------------------
 // Version 1.3.2.0
-// This version only includes one DB update, albiet a pretty
+// This version does not have a DB update.
+
+// If version is below 1.3.1.0, the following will run
+
+// Version 1.3.1.0 did have one DB update, albiet a pretty
 // major one. The Styles table will be altered and updated with
 // the BJCP 2015 styles.
 // -----------------------------------------------------------
@@ -34,6 +38,6 @@ include ('current/alter_tables.php');
 // include ('current/alter_tables3.php'); // Not needed for 1.3.2.0
 // include ('current/alter_tables4.php'); // Not needed for 1.3.2.0
 // include ('current/alter_tables5.php'); // Not needed for 1.3.2.0
-include ('current/data_updates.php');
+include ('current/data_updates.php'); // Only needed for versions below 1.3.2.0
 	
 ?>

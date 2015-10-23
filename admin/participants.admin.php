@@ -255,11 +255,11 @@ if ($action == "print") {
 	}
 	
 	if ($filter == "judges") 	{ 
-		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null, null, null { \"asSorting\": [  ] }";
 	}
 	
 	if ($filter == "stewards") 	{
-		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null, null, null, null, null";
 	}
 	
 
@@ -276,12 +276,12 @@ else {
 	
 	if ($filter == "judges") 	{ 
 		$output_datatables_aaSorting .= "[0,'asc']";
-		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, null, null, null, { \"asSorting\": [  ] }";
 	}
 	
 	if ($filter == "stewards") 	{
 		$output_datatables_aaSorting .= "[0,'asc']";
-		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, null,	null, null, null, null, { \"asSorting\": [  ] }";
 	}
 
 }
@@ -291,7 +291,7 @@ $output_datatables_head .= "<tr>";
 $output_datatables_head .= "<th width='5%' class='dataHeading bdr1B'>Last</th>";
 $output_datatables_head .= "<th width='5%' class='dataHeading bdr1B'>First</th>";
 $output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Info</th>";
-$output_datatables_head .= "<th width='22%' class='dataHeading bdr1B'>";
+$output_datatables_head .= "<th width='17%' class='dataHeading bdr1B'>";
 if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "Location(s) Available"; 
 else $output_datatables_head .= "Club";
 $output_datatables_head .= "</th>";
@@ -302,11 +302,13 @@ if ($filter == "default") {
 $output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Assigned As</th>";
 if ($filter != "default") { 
 	if ($filter == "judges") {
-		$output_datatables_head .= "<th width='8%' class='dataHeading bdr1B'>ID</th>";
+		$output_datatables_head .= "<th width='5%' class='dataHeading bdr1B'>ID</th>";
 		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Rank</th>";
+		
 	}
-	
+	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Assigned to Table(s)</th>";
 	$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
+	
 }
 $output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>Date Created</th>";
 if (($action != "print") && ($dbTable == "default")) $output_datatables_head .= "<th class='dataHeading bdr1B'>Actions</th>";
@@ -329,6 +331,9 @@ do {
 	
 	$user_info = user_info($row_brewer['uid']);
 	$user_info = explode("^",$user_info);
+	
+	$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+	$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 	
 	if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
 	if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
@@ -399,8 +404,12 @@ do {
 				$output_datatables_body .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
 			}
 			$output_datatables_body .= "</td>";
+			
 		}
+		if ($filter == "judges") $output_datatables_body .= "<td class='dataList'>".rtrim($table_assign_judge,",&nbsp;")."</td>";
+		if ($filter == "stewards") $output_datatables_body .= "<td class='dataList'>".rtrim($table_assign_steward,",&nbsp;")."</td>";
 		$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
+		
 	}
 	
 	

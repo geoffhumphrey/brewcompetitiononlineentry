@@ -4,12 +4,17 @@
 *        Description:   Styles designed for printing clearly on paper
 *		 
 */
+
 @import url("html_elements.css");
 @import url("common.css");
 @import url("messages.css");
 @import url("menus.css");
 @import url("sorting.css");
+@import url(https://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic,900,900italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic);
+
 /* --------------------- html_elements.css Overrides -------------------- */
+
 /* **************************************************************
    Customize below the various default elements in  
    html_lements.css. 
@@ -20,11 +25,11 @@
 */
 html, body {
 	background-color: #fff;
-	margin: 5px 5px 5px 5px;
+	margin: 0;
 }
 body, caption, input, textarea, select, option, legend, fieldset  {
-	font-size: 12px;
-	font-family: Arial,Helvetica, Geneva, sans-serif;
+	font-size: 11px;
+	font-family: 'Open Sans', Arial, Helvetica, Geneva, sans-serif;
 }
 option {
 }
@@ -37,7 +42,7 @@ td {
 pre, code {
 }
 p {
-	margin: 0;
+	margin: 0 0 .75em 0;
 }
 /* Links */
 a:link {
@@ -54,23 +59,32 @@ a:active {
 	color:#000;
 }
 /** headings **/
+h1, h2, h3, h4, h5, h6 {
+	text-align: left;
+}
+
 h1 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 1.9em;
-	margin: 1em 0 1.25em 0;
+	font-family: 'Merriweather', serif;
+	font-weight: 900;
+	font-size: 2.2em;
+	padding: 0;
 }
 h2 {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: 'Merriweather', serif;
+	font-weight: 900;
 	font-size: 1.5em;
-	margin: 1em 0 1em 0;
+	padding: .5em 0 0 0;
 }
 h3 {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: 'Merriweather', serif;
+	font-weight: 900;
 	font-size: 1.3em;
-	margin: 1em 0 1em 0;
+	padding: .5em 0 0 0;
 }
 h4, h5, h6 {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: 'Merriweather', serif;
+	font-weight: 700;
+	padding: .5em 0 0 0;
 }
 /** lists **/
 ul, ol {
@@ -130,6 +144,7 @@ select, optgroup, option  {
 textarea {
 }
 /* --------------------- common.css Overrides -------------------- */
+
 /* **************************************************************
    Customize below the various default elements in common.css. 
    
@@ -145,17 +160,20 @@ textarea {
 #content-inner-no-nav {
 	padding: 1em;
 }
-#content-inner h2 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 1.5em;
-	font-weight: bold;
-	padding: 1em 0 .5em 0;
+#content-inner h1, #content-inner-no-nav h1 {
+	text-align: left;
 }
-#content-inner-no-nav h2 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 1.5em;
-	font-weight: bold;
-	padding: 1.5em 0 .25em 0;
+#content-inner h2, #content-inner-no-nav h2 {
+	text-align: left;
+}
+#content-inner h3, #content-inner-no-nav h3 {
+	text-align: left;
+}
+#content-inner h4, #content-inner-no-nav h4 {
+	text-align: left;
+}
+#content-inner h5, #content-inner-no-nav h5 {
+	text-align: left;
 }
 #content-inner .menu {
 	border: 1px solid #ddd;
@@ -242,13 +260,8 @@ textarea {
 	height: auto;
 }
 #header-inner {
-	margin: 0em 0 2em 0;
 }
 #header-inner h1 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 1.9em;
-	padding: 0 0 .25em 0;
-	font-weight: bold;
 }
 /* ------------------------------- Footer ------------------------------- */
 #footer {
@@ -545,62 +558,44 @@ border-left: 1px solid #cccccc;
 }
 /* --------------------- Custom/Print Specific Styles -------------------- */
 .table_card {
-	width: 600px;
+	width: 95%;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 }
-
+.table_card h1,h2,h3,h4 {
+	font-family: 'Merriweather', serif;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
 .table_card h1 {
-	font-family: Arial, Verdana, Helvetica, sans-serif;
-	font-size: 11em;
-	margin: 0;
-	padding: 0;
-	text-align: center;
+	font-size: 7em;
 }
-
 .table_card h2 {
-	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-style: italic;
-	font-size: 5em;
-	margin: 0;
-	padding: 0;
-	text-align: center;
+	font-size: 3em;
 }
-
 .table_card h3 {
-	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 2em;
-	margin: 0;
-	padding: 0;
-	text-align: center;
 }
-
 .table_card h4 {
-	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-family: 'Open Sans', Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.5em;
-	margin: 0;
-	padding: 1em 0;
-	text-align: center;
 }
-
 .table_card .dataTable {
 	width: 100%;
-	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 1.3em;
 	margin: 1em 0;
 	border-collapse: collapse;
 }
-
 .table_card .dataTable th {
 	display: none;
 }
-
 .table_card .dataTable td {
 	text-align: left;
 	padding: 10px 5px;
 }
-
 .table_card hr {
 	border: 0;
 	color: #000000;
@@ -609,7 +604,6 @@ border-left: 1px solid #cccccc;
 	width: 100%;
 	margin: 2.25em 0 2.25em 0;
 }
-
 .box {
 	border: 1px solid #000;
 	min-height: 50px;
@@ -618,11 +612,14 @@ border-left: 1px solid #cccccc;
 	max-width: 75px;
 	width: 50px;
 }
-
 .box_small {
 	border: 1px solid #000;
 	height: 20px;
 	width: 20px;
 	vertical-align: text-top;
 	margin: 0;
+}
+.print_checkmark {
+	font-size: 1.2em;
+	padding: 0;
 }

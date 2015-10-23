@@ -136,20 +136,20 @@ If no judges are listed below, no judge indicated that they are available for th
             </thead>
             <tbody>
                 <tr>
-                    <td class="red" style="color: #FFF;">Red</td>
-                    <td class="data red" style="color: #FFF;">One or more styles are on the participant's "dislikes" list.</td> 
+                    <td class="red">Red</td>
+                    <td class="data red">One or more styles are on the participant's "dislikes" list.</td> 
                 </tr>
                 <tr>
-                    <td class="green" style="color: #FFF;">Green</td>
-                    <td class="data green" style="color: #FFF;">One or more styles are on the participant's "likes" list.</td>
+                    <td class="green">Green</td>
+                    <td class="data green">One or more styles are on the participant's "likes" list.</td>
                 </tr>
                 <tr>
-                  <td class="blue" style="color: #FFF;">Blue</td>
-                  <td class="data blue" style="color: #FFF;">Disabled; participant has an entry at this table.</td>
+                  <td class="blue">Blue</td>
+                  <td class="data blue">Disabled; participant has an entry at this table.</td>
                 </tr>
                 <tr>
-                  <td class="purple" style="color: #FFF;">Purple</td>
-                  <td class="data purple" style="color: #FFF;">Particpant is already assigned to this table/flight.</td>
+                  <td class="purple">Purple</td>
+                  <td class="data purple">Particpant is already assigned to this table/flight.</td>
                 </tr>
                 <tr>
                     <td class="orange">Orange</td>

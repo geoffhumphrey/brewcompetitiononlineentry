@@ -62,18 +62,18 @@ if ($totalRows_entries > 0) {
     <table class="dataTable" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-    	<th width="1%" class="dataHeading bdr1B">Entry #</th>
+    	<th width="5%" class="dataHeading bdr1B">Entry #</th>
     	<?php if ($view == "default") { ?>
-        <th width="1%" class="dataHeading bdr1B">Judging #</th>
+        <th width="5%" class="dataHeading bdr1B">Judging #</th>
 		<?php } ?>
-        <th width="25%" class="dataHeading bdr1B">Brewer</th>
+        <th width="20%" class="dataHeading bdr1B">Brewer</th>
         <th class="dataHeading bdr1B">Entry Name</th>
-        <th width="25%" class="dataHeading bdr1B">Style</th>
-        <th width="1%" class="dataHeading bdr1B">Sub</th>
+        <th width="20%" class="dataHeading bdr1B">Style</th>
+        <th width="5%" class="dataHeading bdr1B">Sub</th>
         <th width="5%" class="dataHeading bdr1B">Contact</th>
-        <th width="1%" class="dataHeading bdr1B">Paid?</th>
-        <th width="1%" class="dataHeading bdr1B">Sorted?</th>
-        <th width="1%" class="dataHeading bdr1B">Location/Box</th>
+        <th width="5%" class="dataHeading bdr1B">Paid?</th>
+        <th width="5%" class="dataHeading bdr1B">Sorted?</th>
+        <th width="5%" class="dataHeading bdr1B">Location/Box</th>
     </tr>
     </thead>
     <tbody>
@@ -91,8 +91,8 @@ if ($totalRows_entries > 0) {
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewSubCategory']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $brewer_info[6]."<br>".$phone; ?></td>
-        <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span style='font-size:1.7em'>&#10003;</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
+        <td class="data bdr1B_gray"><span class="small"><?php echo $brewer_info[6]; ?></span><br><?php echo $phone; ?></td>
+        <td class="data bdr1B_gray"><?php if ($row_entries['brewPaid'] == "1") echo "<p class='box_small' style='vertical-align:middle; text-align: center;'><span class='print_checkmark'>&#10003;</span></p>"; else echo "<p class='box_small'></p>"; ?></td>
         <td class="data bdr1B_gray"><p class="box_small"></p></td>
         <td class="data bdr1B_gray"><p class="box"></p></td>
     </tr>

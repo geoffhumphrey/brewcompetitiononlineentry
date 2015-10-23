@@ -73,7 +73,7 @@ $firefox_warning = "";
 // Build Headers
 $header1_1 .= "<a name='list'></a><h2>Entries</h2>";
  
-$firefox_warning .= "<div class='error'>There is a known issue with printing from the Firefox browser. To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+$firefox_warning .= "<div class='warning'>There is a known issue with printing from the Firefox browser. To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox's native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
 
 // Show Scores?
 if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
@@ -95,7 +95,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 			$warnings .= "</div>"; 
 		}
 		
-	if (entries_no_special($_SESSION['user_id'])) $warnings .= "<div class='error2'>You have entries that require you to define special ingredients. For each highlighted entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
+	if (entries_no_special($_SESSION['user_id'])) $warnings .= "<div class='warning'>You have entries that require you to define special ingredients. For each highlighted entry below with a <span class='icon'><img src='".$base_url."images/exclamation.png'></span> icon, click \"Edit\" to add your special ingredients. Entries without special ingredients in categories that require them will be deleted automatically after 24 hours.</div>";
 	
 }
 

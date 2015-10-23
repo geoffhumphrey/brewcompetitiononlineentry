@@ -469,7 +469,7 @@ if ($view == "default") { // printing from browser
 					else $output_judges .=  judge_points($uid,$judge_info['5']);
 					$output_judges .= "</td>";
 					$output_judges .= "<td class='bdr1B_gray'>";
-					if ($bos_judge) $output_judges .= "X";
+					if ($bos_judge) $output_judges .= "&#10003;";
 					else $output_judges .= "&nbsp;";
 					$output_judges .= "</td>";
 					$output_judges .= "</tr>";
@@ -491,7 +491,7 @@ if ($view == "default") { // printing from browser
 				$output_judges .= "1.0"; 
 				$output_judges .= "</td>";
 				$output_judges .= "<td class='bdr1B_gray'>";
-				$output_judges .= "X";
+				$output_judges .= "&#10003;";
 				$output_judges .= "</td>";
 				$output_judges .= "</tr>";
 			}

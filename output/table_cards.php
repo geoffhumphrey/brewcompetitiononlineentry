@@ -72,10 +72,10 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 						$rank = str_replace(",",", ",$judge_info['3']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
+                <td width="75%"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
                 <td class="data" width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td class="data" width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            	<td class="data"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
+            	<td class="data" width="5%" nowrap="nowrap"><?php if ($_SESSION['jPrefsQueued'] == "N") echo $flight; ?></td>
         </tr>
                 <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
     </tbody>
@@ -140,6 +140,7 @@ if ($id != "default") {
     </tbody>
     </table>
     <?php } ?>
+    <?php if ($totalRows_assignments < 8) { ?>
     <table class="dataTable">
     <?php for($i=0; $i<(12-$totalRows_assignments); $i++) { ?>
     <tr>
@@ -147,6 +148,7 @@ if ($id != "default") {
     </tr>
     <?php } ?>
     </table>
+    <?php } ?>
 </div>
 <?php } 
 }

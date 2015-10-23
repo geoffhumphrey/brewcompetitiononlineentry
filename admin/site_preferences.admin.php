@@ -1,5 +1,8 @@
 <?php 
 include (DB.'styles.db.php');
+
+// Theme file name and name array
+$theme_name = array("default|BCOE&amp;M Default","bruxellensis|Bruxellensis", "claussenii|Claussenii");
 ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
 <form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
@@ -61,9 +64,11 @@ include (DB.'styles.db.php');
     <td class="dataLabel">Site Theme:</td>
     <td nowrap="nowrap" class="data">
     <select name="prefsTheme">
-    <?php do { ?>
-    <option value="<?php echo $row_themes['themeFileName']; ?>" <?php if ($_SESSION['prefsTheme'] ==  $row_themes['themeFileName']) echo " SELECTED"; ?> /><?php echo  $row_themes['themeTitle']; ?></option>
-    <?php } while ($row_themes = mysql_fetch_assoc($themes)); ?>
+    <?php foreach ($theme_name as $theme) { 
+	$themes = explode("|",$theme);
+	?>
+    <option value="<?php echo $themes['0']; ?>" <?php if ($_SESSION['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
+    <?php } ?>
     </select>
     </td>
   	<td class="data">&nbsp;</td>

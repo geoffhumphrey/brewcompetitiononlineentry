@@ -41,18 +41,17 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <div id="header">	
 		<div id="header-inner">
         	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
-            <?php 
-			if ($row_tables['tableLocation'] != "") { ?>
-            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-            <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
-            <p style="padding-top: 15px">** Please Note:</p>
-            <ul>
-            	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
-               	<li>If entries are missing, all entries have not been assigned to a flight or round<?php if ($round != "default") echo " OR they have been assigned to a different round"; ?>.</li>
-            </ul>
-            <?php } ?>
         </div>
 	</div>
+    <?php if ($row_tables['tableLocation'] != "") { ?>
+    <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
+    <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
+    <p style="padding-top: 15px">** Please Note:</p>
+    <ul>
+        <li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
+        <li>If entries are missing, all entries have not been assigned to a flight or round<?php if ($round != "default") echo " OR they have been assigned to a different round"; ?>.</li>
+    </ul>
+    <?php } ?>
     <?php 
 	for($i=1; $i<$flights+1; $i++) { 
 	$random =  random_generator(5,2)
@@ -158,7 +157,10 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <div id="header">	
 		<div id="header-inner">
         	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
-            <?php if ($row_tables['tableLocation'] != "") { ?>
+            
+        </div>
+	</div>
+    <?php if ($row_tables['tableLocation'] != "") { ?>
             <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
             <p><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></p>
             <?php } ?>
@@ -167,9 +169,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
             	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
                	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
             </ul>
-        </div>
-	</div>
-     <?php 
+    <?php 
 	for($i=1; $i<$flights+1; $i++) { 
 	$random = random_generator(5,1);
 	?>
@@ -286,13 +286,13 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
     <div id="header">	
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
-            <?php if ($row_tables['tableLocation'] != "") { ?>
-            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-            <p><?php echo "Entries: ". $entry_count; ?></p>
-            <p>** Note: if there are no entries below, this table has not been assigned to a round.</p>
-            <?php } ?>
         </div>
 	</div>
+    <?php if ($row_tables['tableLocation'] != "") { ?>
+    <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
+    <p><?php echo "Entries: ". $entry_count; ?></p>
+    <p>** Note: if there are no entries below, this table has not been assigned to a round.</p>
+    <?php } ?>
     <?php if ($entry_count > 0) { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -385,12 +385,12 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <div id="header">	
 		<div id="header-inner">
         	<h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
-            <?php if ($row_tables['tableLocation'] != "") { ?>
-            <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-            <p><?php echo "Entries: ". $entry_count; ?></p>
-            <?php } ?>
         </div>
 	</div>
+    <?php if ($row_tables['tableLocation'] != "") { ?>
+    <h2><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
+    <p><?php echo "Entries: ". $entry_count; ?></p>
+    <?php } ?>
     <?php if ($entry_count > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -544,7 +544,6 @@ if ($style_type_info[0] == "Y") {
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	//echo $query_entries_1."<br>";
 	//echo $style."<br><br>";
-	
 	
 	?>
     <tr>

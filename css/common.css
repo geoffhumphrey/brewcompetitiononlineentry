@@ -31,6 +31,9 @@
 #container {
 	padding-top: 40px;
 }
+.small {
+	font-size: .75em;
+}
 /* ------------------------------- Nav ------------------------------- */
 #navigation { 
 	position: fixed;
@@ -248,25 +251,39 @@ background-image: none;
 }
 /* ------------------------------- Colors ------------------------------- */
 .red {
+	color: #FFF;
 	background-color: #C00;
 }
 .green {
+	color: #FFF;
 	background-color: #393;
 }
 .yellow {
+	color: #FFF;
 	background-color: #FC3;
 }
 .orange {
 	background-color: #f90;
 }
 .blue { 
+	color: #FFF;
 	background-color: #09F;
 }
 .purple { 
+	color: #FFF;
 	background-color: #306;
 }
 .brown{
+	color: #FFF;
 	background-color:#804000;
+}
+.light_blue {
+	color: #FFF;
+	background-color:#00CCFF;
+}
+.pink {
+	color: #FFF;
+	background-color:#FF3399;	
 }
 /* ------------------------------- Borders ------------------------------- */
 .bdr1 {

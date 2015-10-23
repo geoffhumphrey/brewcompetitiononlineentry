@@ -1687,7 +1687,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	$row_table = mysql_fetch_assoc($table);
 	
 	if ($method == "basic") {
-		$return = $row_table['tableNumber']."^".$row_table['tableName']."^".$row_table['tableLocation'];
+		$return = $row_table['tableNumber']."^".$row_table['tableName']."^".$row_table['tableLocation']."^".$row_table['id'];
 		return $return;
 	}
 	
@@ -2644,19 +2644,24 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 			//$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
-			$output .= "\t\t<tr>\n";
+			
 			if ($method2 == 0) {
+				$output .= "\t\t<tr>\n";
 				$output .= "\t\t\t<td class='dataList'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
 				$output .= "\t\t\t<td class='dataList'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
+				$output .= "\t\t</tr>\n";
+			}
+			elseif ($method2 == "1") {
+				$output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 			}
 			else {
 				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
 				$output .= "\t\t\t<td class='dataList bdr1B'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";	
-				
+				$output .= "\t\t</tr>\n";
 			}
-			$output .= "\t\t</tr>\n";
+			
 			//$output .= "\t</table>\n";
 			
 		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
