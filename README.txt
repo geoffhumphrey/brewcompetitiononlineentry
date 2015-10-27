@@ -57,8 +57,8 @@ BCOE&M is free and open-source.
 **********************************************************************
 Changes in This Version
 **********************************************************************
-Various bug fixes. Addresses GitHub issues 480, 481, 482, 483, 486,
-489, 490, 491, 492, 498, 500, 502, 505.
+Various bug fixes. Addresses GitHub issues 448, 480, 481, 482, 483, 486,
+489, 490, 491, 492, 498, 500, 502, 505, 506.
 
 Added support for A4 mailing labels.
 Added manual triggering of database cleanup and purge functions.
