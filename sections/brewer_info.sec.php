@@ -136,7 +136,7 @@ $aha_number = "";
 
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
-$brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1");
+$brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable);
 $assignment_array = str_replace(", ",",",$brewer_assignment);
 $assignment_array = explode(",", $assignment_array);
 if ((!in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $judge_available_not_assigned = TRUE; else $judge_available_not_assigned = FALSE;

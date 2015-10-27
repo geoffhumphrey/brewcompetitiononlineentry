@@ -1,7 +1,7 @@
 <?php 
 /*
- * Module:      process_drop_off.inc.php
- * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
+ * Module:      process_judging_flights.inc.php
+ * Description: This module does all the heavy lifting for adding/editing info in the "judging_flights" table
  */
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	

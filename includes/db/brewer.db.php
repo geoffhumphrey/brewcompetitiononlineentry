@@ -45,17 +45,26 @@ elseif ((($section == "admin") && ($go == "participants") && ($filter == "defaul
 	$totalRows_brewer = mysql_num_rows($brewer);
 	}
 // Viewing available judges query (not assigned)
-elseif (($section == "admin") && ($go == "participants") && ($filter == "judges")   && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName";
-	if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
+elseif (($section == "admin") && ($go == "participants") && ($filter == "judges") && ($dbTable == "default")) {
+	$query_brewer = "SELECT * FROM $brewer_db_table";
+	if ($id == "default") {
+		$query_brewer .= " WHERE brewerJudge='Y' ORDER BY brewerLastName";
+		if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
+	}
+		
+	if ($id != "default") $query_brewer .= sprintf(" WHERE id='%s'",$id);	
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);
 	}
 // Viewing available stewards query (not assigned)
 elseif (($section == "admin") && ($go == "participants") && ($filter == "stewards") && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerSteward='Y' ORDER BY brewerLastName";
-	if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
+	$query_brewer = "SELECT * FROM $brewer_db_table";
+	if ($id == "default") {
+		$query_brewer .= " WHERE brewerSteward='Y' ORDER BY brewerLastName";
+		if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
+	}
+	if ($id != "default") $query_brewer .= sprintf(" WHERE id='%s'",$id);	
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);

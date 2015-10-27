@@ -1,6 +1,14 @@
 <?php 
 include(DB.'styles.db.php'); 
 include(DB.'admin_judging_tables.db.php');
+
+// Check and see if scores have been entered for this table already
+$query_table_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'",$judging_scores_db_table,$id);
+$table_scores = mysql_query($query_table_scores, $brewing) or die(mysql_error());
+$row_table_scores = mysql_fetch_assoc($table_scores);
+if ($row_table_scores['count'] > 0) $already_scored = TRUE; else $already_scored = FALSE;
+
+// If so, activate the JS popup warnings if unchecking styles
 ?>
 <h2><?php 
 if ($action == "edit") echo "Edit Table"; 
@@ -68,7 +76,7 @@ if ($dbTable != "default") echo ": ".get_suffix($dbTable); ?></h2>
 <table class="dataTableCompact">
 
 <tr>
-	<td><strong>Step 1: </strong>Assign Judges and Stewards</td>
+	<td><strong>Step 1: </strong>Assign Participants as Judges or Stewards</td>
 	<td><span class="icon"><img src="<?php echo $base_url; ?>images/user_add.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Particpants as Judges</a></td>
     <td><span class="icon"><img src="<?php echo $base_url; ?>images/user_add.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Particpants as Stewards</a></td>
 </tr>
@@ -463,7 +471,7 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
         	<?php do { ?>
             <?php if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default") > 0) { ?>
             <tr>
-            	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default")) echo "checked "; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
+            	<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default")) echo " checked"; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
                 <td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
                 <td class="data"><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?></td>
                 <td class="data"><?php echo $row_styles['brewStyle'].get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>
@@ -481,7 +489,26 @@ else echo "<p>No tables have been defined yet. <a href='index.php?section=admin&
 <p><input type="submit" class="button" value="Update Table"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
-<?php } // end if ($action == "edit") ?>
+<?php 
+
+if ($already_scored) {
+
+?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('input[type="checkbox"]').click(function(){
+            if($(this).is(":checked")){
+                confirm("Are you sure you want to change this table\'s styles? All scores entered for the table will be deleted if you add this style.");
+            }
+            else if($(this).is(":not(:checked)")){
+                confirm("Are you sure you want to change this table\'s styles? All scores entered for the table will be deleted if you remove this style.");
+            }
+        });
+    });
+</script>
+
+<?php } 
+} // end if ($action == "edit") ?>
 
 
 <?php if (($action == "default") && ($filter == "orphans")) { ?>

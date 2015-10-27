@@ -156,18 +156,26 @@ if (($filter == "default") && ($msg == "9"))  {
 
 if (($section == "admin") && (($action == "update") || ($action == "assign"))) {
 	$secondary_nav .= "<div class='adminSubNavContainer'>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign Judges</a>";
-	$secondary_nav .= "</span>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign BOS Judges</a>";
-	$secondary_nav .= "</span>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign Stewards</a>";
-	$secondary_nav .= "</span>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign Staff</a>";
-	$secondary_nav .= "</span>";
+	if ($filter != "judges") {
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign/Unassign Participants as Judges</a>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign/Unassign Participants as BOS Judges</a>";
+		$secondary_nav .= "</span>";
+		$secondary_nav .= "</div>";
+	}
+	$secondary_nav .= "<div class='adminSubNavContainer'>";
+	if ($filter != "stewards") {
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign/Unassign Participants as Stewards</a>";
+		$secondary_nav .= "</span>";
+	}
+	if ($filter != "staff") {
+		$secondary_nav .= "<span class='adminSubNav'>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign/Unassign Participants as Staff</a>";
+		$secondary_nav .= "</span>";
+	}
 	$secondary_nav .= "</div>";
 }
 
@@ -269,13 +277,13 @@ if ($section != "step5") {
 		}
 		$form_submit_button .= "<p><input type='submit' class='button' name='Submit' value='";
 		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
+		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default"); 
 		else $form_submit_button .= "Submit";
 		$form_submit_button .= "' />";
 		$form_submit_button .= "&nbsp;";
 		$form_submit_button .= "<span class='required'>Click";
 		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3"); 
+		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default"); 
 		else $form_submit_button .= "Submit";
 		$form_submit_button .= " <em>before</em> paging through records.</span></p>";
 	
@@ -306,14 +314,15 @@ if ($section != "step5") {
 		
 		do {
 			
-			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1");
+			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable);
 			$assignment_checked = str_replace(", ",",",$brewer_assignment);
-			$assignment_checked = explode(",",$assignment_checked);
-			if ((!empty($assignment_checked)) && ($filter == "judges") && (in_array("Judge",$assignment_checked))) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (in_array("Steward",$assignment_checked))) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "staff") && (in_array("Staff",$assignment_checked))) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (in_array("BOS Judge",$assignment_checked))) $checked = "CHECKED";
+			//$assignment_checked = explode(",",$assignment_checked);
+			if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS Judge') !== false)) $checked = "CHECKED";
 			else $checked = "";	
+			
 			if ($filter == "bos") { 
 			$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
 				if (!empty($bos_judge_eligible)) {
@@ -505,7 +514,7 @@ $(function() {
 <?php if (($action == "update") && ($bid == "default")) {  ?>
 <table>
  <tr>
-   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3"); ?> To:</td>
+   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3","default","default"); ?> To:</td>
    <td class="data">
    <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>

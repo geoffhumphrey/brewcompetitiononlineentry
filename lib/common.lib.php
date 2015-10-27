@@ -2317,7 +2317,7 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	return $r;
 }
 
-function brewer_assignment($uid,$method){
+function brewer_assignment($uid,$method,$id,$dbTable){
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);	
@@ -2331,9 +2331,15 @@ function brewer_assignment($uid,$method){
 		switch($method) {
 			case "1": // 
 				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
-				if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
 				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS Judge";
-				if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward"; 
+				if (($id == "default") && ($dbTable == "default")) {
+					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges&amp;id=".$uid."' title='View this judge&rsquo;s table assignments and entry categories'>Judge</a>";
+					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards&amp;id=".$uid."' title='View this steward&rsquo;s table assignments and entry categories'>Steward</a>";
+				}
+				else {
+					if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
+					if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward";
+				}
 				if ($row_staff_check['staff_staff'] == "1") $r[] .= "Staff";
 			break;
 			case "staff_judge": // for $filter URL variable
@@ -2633,6 +2639,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	mysql_select_db($database, $brewing);
 	
 	$output = "";
+	$output_extend = "";
 	
 	$query_table_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysql_query($query_table_assignments, $brewing) or die(mysql_error());
@@ -2653,7 +2660,9 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				$output .= "\t\t</tr>\n";
 			}
 			elseif ($method2 == "1") {
-				$output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' title='Assign/Unassign Stewards to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				
 			}
 			else {
 				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
@@ -2666,7 +2675,10 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			
 		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
 	}
-	return $output;
+	
+	if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
+	
+	return $output.$output_extend;
 }
 
 function available_at_location($location,$role,$round) {

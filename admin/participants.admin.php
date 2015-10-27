@@ -207,18 +207,20 @@ if ($action != "print") {
 		$secondary_nav .= "<div class='adminSubNavContainer'>";
  		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
-		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign Judges</a>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign/Unassign Participants as Judges</a>";
  		$secondary_nav .= "</span>";
 		$secondary_nav .= "<span class='adminSubNav'>";
-		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign BOS Judges</a>";
+		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign/Unassign Participants as BOS Judges</a>";
 		$secondary_nav .= "</span>";
+		$secondary_nav .= "</div>";
+		$secondary_nav .= "<div class='adminSubNavContainer'>";
     	$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
-		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign Stewards</a>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign/Unassign Participants as Stewards</a>";
  		$secondary_nav .= "</span>";
 		$secondary_nav .= "<span class='adminSubNav'>";
 		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='Assign' title='Assign'></span>";
-		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign Staff</a>";
+		$secondary_nav .= "<a href='". $base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign/Unassign Participants as Staff</a>";
  		$secondary_nav .= "</span>";
 		if ($totalRows_tables > 1) {
             $secondary_nav .= "<span class='adminSubNav'>";
@@ -340,13 +342,13 @@ do {
 	
 	if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 	unset($brewer_assignment);
-	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1");
+	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable);
 	//$judge_array = str_replace(", ",",",$brewer_assignment);
 	//$judge_array = explode(",",$judge_array);
 	//if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
 	if ($action == "print") $output_datatables_body .= "<tr class='bdr1B_gray'>";
 	else $output_datatables_body .= "<tr>";
-	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName']."</td>";
+	$output_datatables_body .= "<td class='dataList'><a name='".$row_brewer['uid']."'>".$row_brewer['brewerLastName']."</a></td>";
 	$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerFirstName']."</td>";
 	
 	$output_datatables_body .= "<td class='dataList'>";

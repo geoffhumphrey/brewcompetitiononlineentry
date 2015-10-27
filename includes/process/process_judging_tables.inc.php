@@ -48,8 +48,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$row_table_rounds = mysql_fetch_assoc($table_rounds);
 		if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
 		
-		// Add all entries affected entries to Flight1
-		
 		$a = explode(",",$table_styles);
 		
 		foreach (array_unique($a) as $value) {
@@ -63,6 +61,17 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$row_entries = mysql_fetch_assoc($entries);
 			
 			do {
+			// Update any scores that have been entered already for the entry with the new table number
+			$updateSQL = sprintf("UPDATE $judging_scores_db_table SET scoreTable=%s WHERE eid=%s",
+						   GetSQLValueString($row_table['id'], "text"),
+						   GetSQLValueString($row_entries['id'], "text"));
+			//echo $updateSQL."<br>";
+			mysql_select_db($database, $brewing);
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			// Add all entries affected entries to Flight1
+			
 			
 			// Check if entry is already in the judging_flights table
 			$query_empty_count = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_entries['id']);
@@ -111,6 +120,22 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	}
 	
 	if ($action == "edit") {
+		
+		
+		// Check to see if table styles are different.
+		$query_table = sprintf("SELECT tableStyles FROM $judging_tables_db_table WHERE id='%s'",$id);
+		$table = mysql_query($query_table, $brewing) or die(mysql_error());
+		$row_table = mysql_fetch_assoc($table);
+		
+		// If so, delete all associated scores
+		if ($table_styles != $row_table['tableStyles']) {
+			
+			$deleteScore = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $prefix."judging_scores",$id);
+			mysql_real_escape_string($deleteScore);
+			$Result = mysql_query($deleteScore, $brewing);
+			
+		}
+		
 	
 		$updateSQL = sprintf("UPDATE $judging_tables_db_table SET 
 		tableName=%s, 
@@ -211,7 +236,26 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='%s'", $style_id);
 					$style = mysql_query($query_style, $brewing) or die(mysql_error());
 					$row_style = mysql_fetch_assoc($style);
-				
+					
+					
+					/*
+					$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+					$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+					$row_entries = mysql_fetch_assoc($entries);
+
+					do {
+						// Update any scores that have been entered already for the entry with the new table number
+						$updateSQL = sprintf("UPDATE $judging_scores_db_table SET scoreTable=%s WHERE eid=%s",
+									   GetSQLValueString($id, "text"),
+									   GetSQLValueString($row_entries['id'], "text"));
+						//echo $updateSQL."<br>";
+						mysql_select_db($database, $brewing);
+						mysql_real_escape_string($updateSQL);
+						$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					} while ($row_entries = mysql_fetch_assoc($entries));
+					*/
+					
+									
 					//echo $query_style."<br>";
 					
 					$table_style = $row_style['brewStyleGroup'].$row_style['brewStyleNum'];
