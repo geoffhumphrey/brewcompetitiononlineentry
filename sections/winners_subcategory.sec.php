@@ -139,8 +139,14 @@ foreach (array_unique($a) as $style) {
 			$table_body1 .= "</tr>";
 			
 		 } while ($row_scores = mysql_fetch_assoc($scores)); 
+
 $random1 = "";	
-$random1 .= random_generator(7,2);		
+$random1 .= random_generator(7,2);
+
+// --------------------------------------------------------------
+// Display
+// --------------------------------------------------------------
+	
 ?>
 <?php echo $header1_1; ?></h3>
  <script type="text/javascript" language="javascript">
