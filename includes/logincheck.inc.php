@@ -113,11 +113,11 @@ else {
 			$check = $hasher->CheckPassword($password, $stored_hash);
 		}
 		
-		/*
-		echo $query_login."<br>";
-		echo $password."<br>";
-		echo $check."<br>";
-		*/
+		
+		//echo $query_login."<br>";
+		//echo $password."<br>";
+		//echo $check."<br>";
+		//exit;
 		
 	} // end if ($section != "update")
 

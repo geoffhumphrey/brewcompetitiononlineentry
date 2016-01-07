@@ -17,6 +17,5 @@ if (TESTING) {
 		$totaltime = ($endtime - $starttime); 
 		$footer .= "&nbsp;Page created in ".number_format($totaltime, 3)." seconds."; 
 	}
-
 echo $footer;
 ?>

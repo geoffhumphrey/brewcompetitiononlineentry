@@ -43,7 +43,10 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/my_info.html' title='BCOE&amp;M Help: My Info and Entries'>My Info and Entries Help</a></p>";
+
+$user_remaining_entries = 0;
+if (!empty($row_limits['prefsUserEntryLimit'])) $user_remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+else $user_remaining_entries = 1;
 
 function pay_to_print($prefs_pay,$entry_paid) { 
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
@@ -62,9 +65,6 @@ if (NHC) {
 $judging_date = judging_date_return();
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
-
-// Display messages if conditions are right
-if (($action != "print") && ($msg != "default")) echo $msg_output;
 
 // Add the help link for the page
 if ($action != "print") echo $help_link;

@@ -1,6 +1,6 @@
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable_judge').dataTable( {
+		$('#sortable_judge').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -16,7 +16,7 @@
 
 	// Table Assignments
 	 $(document).ready(function() {
-		$('#judge_assignments').dataTable( {
+		$('#judge_assignments').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -32,7 +32,7 @@
 
 	
 	 $(document).ready(function() {
-		$('#sortable_steward').dataTable( {
+		$('#sortable_steward').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -47,7 +47,7 @@
 		} );
 		
 	$(document).ready(function() {
-		$('#steward_assignments').dataTable( {
+		$('#steward_assignments').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -125,9 +125,6 @@ $table_body3 = "";
 
 // Page specific variables
 $user_edit_links = "";
-$edit_user_info_link = "";
-$edit_email_link = "";
-$edit_password_link = "";
 $name = "";
 $email = "";
 $phone = "";
@@ -136,7 +133,7 @@ $aha_number = "";
 
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
-$brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable);
+$brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
 $assignment_array = str_replace(", ",",",$brewer_assignment);
 $assignment_array = explode(",", $assignment_array);
 if ((!in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) $judge_available_not_assigned = TRUE; else $judge_available_not_assigned = FALSE;
@@ -149,44 +146,19 @@ else $assignment = "";
 $header1_1 .= "<h2>Info</h2>";
 
 // Build primary page info (thank you message)
-$primary_page_info .= sprintf("<p>Thank you for entering the %s, %s.",$_SESSION['contestName'],$_SESSION['brewerFirstName']); 
-if (($totalRows_log > 0) && ($action != "print")) $primary_page_info .= " <a href='#list'>View your entries</a>.</p>";
+$primary_page_info .= sprintf("<p class=\"lead\">Thank you for entering the %s, %s. <small>Your account details are listed below.</small></p>",$_SESSION['contestName'],$_SESSION['brewerFirstName']); 
+if ($totalRows_log > 0) $primary_page_info .= "<p class=\"lead hidden-print\"><small>Take a moment to <a href=\"#entries\">review your entries</a> or <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">pay your entry fees</a>.</small></p>";
 
-if ($action != "print") { 
-	// Build Edit My Info link
-	$edit_user_info_link .= "<a href='".$base_url."index.php?";
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID']; 
-	else $edit_user_info_link .= "action=add&amp;section=brewer&amp;go=judge";
-	$edit_user_info_link .= "'>Edit My Info</a>";
 	
-	// Build Change My Email Address link
-	$edit_email_link .= "<a href='".$base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID']."'>Change My Email Address</a>";
 	
-	// Build Change My Email Address link
-	$edit_password_link .= "<a href='".$base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID']."'>Change My Password</a>";
+	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"...\">";
+	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_info_link."\"><span class=\"fa fa-user\"></span> Edit Account</a>";
+	if (!NHC) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> Change Email</a>";
+	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-lock\"></span> Change Password</a>";
+	if (($entry_window_open == "1") && (!$comp_entry_limit)) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
+	//$user_edit_links .= "<button class=\"btn btn-default\" onclick=\"window.print();\"><span class=\"fa fa-print\"></span> Print</a>";
+	$user_edit_links .= "</div><!-- ./button group -->";
 	
-	$user_edit_links .= "<div class='adminSubNavContainer'>";
-	
-	$user_edit_links .= "<span class='adminSubNav'>";
-	$user_edit_links .= "<span class='icon'><img src='".$base_url."images/user_edit.png' /></span>";
-	$user_edit_links .= $edit_user_info_link;
-	$user_edit_links .= "</span>";
-	
-	if (!NHC) {
-	$user_edit_links .= "<span class='adminSubNav'>";
-	$user_edit_links .= "<span class='icon'><img src='".$base_url."images/email_edit.png' /></span>";
-	$user_edit_links .= $edit_email_link;
-	$user_edit_links .= "</span>";
-	}
-	
-	$user_edit_links .= "<span class='adminSubNav'>";
-	$user_edit_links .= "<span class='icon'><img src='".$base_url."images/key.png' /></span>";
-	$user_edit_links .= $edit_password_link;
-	$user_edit_links .= "</span>";
-	
-	$user_edit_links .= "</div>";
-} // end if ($action != "print")
-
 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];
@@ -227,14 +199,14 @@ if (!empty($_SESSION['brewerAHA'])) {
 			
 				if ($judging_location_info[0] > 0) {
 					$judge_info .= "<tr>\n";
-					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-					if ($action == "print") $judge_info .= yes_no(substr($value, 0, 1),$base_url,3); else $judge_info .= yes_no(substr($value, 0, 1),$base_url);
+					$judge_info .= "<td>";
+					$judge_info .= yes_no(substr($value, 0, 1),$base_url);
 					$judge_info .= "</td>\n";
-					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
+					$judge_info .= "<td>";
 					$judge_info .= $judging_location_info[1];
 					$judge_info .= "</td>\n";
-					if ($action == "print") $judge_info .= "<td class='dataList bdr1B'>"; else $judge_info .= "<td class='dataList'>";
-					$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+					$judge_info .= "<td>";
+					$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 					$judge_info .= "</td>\n";
 					$judge_info .= "</tr>";
 				}
@@ -256,14 +228,14 @@ $steward_info = "";
 				
 					if ($judging_location_info[0] > 0) {
 						$steward_info .= "<tr>\n";
-						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-						if ($action == "print") $steward_info .= yes_no(substr($value, 0, 1),$base_url,3); else $steward_info .= yes_no(substr($value, 0, 1),$base_url);
+						$steward_info .= "<td>";
+						$steward_info .= yes_no(substr($value, 0, 1),$base_url);
 						$steward_info .= "</td>\n";
-						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
+						$steward_info .= "<td>";
 						$steward_info .= $judging_location_info[1];
 						$steward_info .= "</td>\n";
-						if ($action == "print") $steward_info .= "<td class='dataList bdr1B'>"; else $steward_info .= "<td class='dataList'>";
-						$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+						$steward_info .= "<td>";
+						$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 						$steward_info .= "</tr>";
 					}
 				}
@@ -278,84 +250,85 @@ else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSIO
 
 // Build User Info table body
 
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel' width='5%'>Name:</td>";
-$table_body1 .= "<td class='data'>".$name."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Email:</td>";
-$table_body1 .= "<td class='data'>".$email."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Address:</td>";
-$table_body1 .= "<td class='data'>".$address."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>City:</td>";
-$table_body1 .= "<td class='data'>".$city."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>State or Province:</td>";
-$table_body1 .= "<td class='data'>".$state."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Zip or Postal Code:</td>";
-$table_body1 .= "<td class='data'>".$zip."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Country:</td>";
-$table_body1 .= "<td class='data'>".$country."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Phone Number(s):</td>";
-$table_body1 .= "<td class='data'>".$phone."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>AHA Number:</td>";
-$table_body1 .= "<td class='data'>".$aha_number."&nbsp;&nbsp;<em>*An <a href='http://www.homebrewersassociation.org/' target='_blank'>American Homebrewers Association</a> (AHA) membership is required if one of your entries is selected for a <a href='http://www.greatamericanbeerfestival.com/the-competition/pro-am-competition/' target='_blank'>Great American Beer Festival Pro-Am</a>.</em></td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Drop Off Location:</td>";
-$table_body1 .= "<td class='data'>".dropoff_location($_SESSION['brewerDropOff'])."</td>";
-$table_body1 .= "</tr>";
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Club:</td>";
-$table_body1 .= "<td class='data'>".$club."</td>";
-$table_body1 .= "</tr>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Name</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$name."</div>";
+$table_body1 .= "</div>";
 
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Available to Judge?</td>";
-$table_body1 .= "<td class='data'>";
-if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) $table_body1 .= yes_no($_SESSION['brewerJudge'],$base_url); 
-elseif ((!empty($_SESSION['brewerJudge'])) && ($action == "print")) $table_body1 .= yes_no($_SESSION['brewerJudge'],$base_url,3); 
-else $table_body1 .= "None entered";
-$table_body1 .= "</td>";
-$table_body1 .= "</tr>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Email</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$email."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Address</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$address."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>City</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$city."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>State/Province</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$state."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Zip/Postal Code</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$zip."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Country</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$country."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Phone</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$phone."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>AHA Number</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\"><a href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.\" data-placement=\"right\">".$aha_number."</a></div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Drop Off Location</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".dropoff_location($_SESSION['brewerDropOff'])."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Club</strong></div>";
+$table_body1 .=  "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$club."</div>";
+$table_body1 .= "</div>";
 
 if ($entry_discount) {
 
-	$table_body1 .= "<tr>";
-	$table_body1 .= "<td class='dataLabel'>Entry Fee Discount:</td>";
-	$table_body1 .= "<td class='data'>".$discount."</td>";
-	$table_body1 .= "</tr>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Fee Discount</strong></div>";
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$discount."</div>";
+	$table_body1 .= "</div>";
 	
 }
+
+
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Judge?</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) $table_body1 .= yes_no($_SESSION['brewerJudge'],$base_url); 
+else $table_body1 .= "None entered";
+$table_body1 .= "</div>";
+$table_body1 .= "</div>";
 
 if (!empty($assignment)) {
 	
-	$table_body1 .= "<tr>";
-    $table_body1 .= "<td class='dataLabel'>Assigned As:</td>";
-    $table_body1 .= "<td class='data'>".$brewer_assignment."</td>";
-	$table_body1 .= "</tr>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+    $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Assigned As</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$brewer_assignment."</div>";
+	$table_body1 .= "</div>";
 	
 }
 
 
-if ((in_array("Judge",$assignment_array)) && ($action != "print")) { 
-	$table_body1 .= "<tr>";
-    $table_body1 .= "<td class='dataLabel'>&nbsp;</td>";
-    $table_body1 .= "<td class='data'><span class='icon'><img src='".$base_url."images/page_white_acrobat.png'  border='0' alt='Print your judging scoresheet labels' title='Judging scoresheet labels'></span><a href='".$base_url."output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."'>Print Judging Scoresheet Labels</a><span class='data'>(Avery 5160 PDF Download)</span></td>";
-	$table_body1 .= "</tr>";
+if (in_array("Judge",$assignment_array)) { 
+	$table_body1 .= "<div class=\"row bcoem-account-info hidden-print\">";
+    $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>&nbsp;</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print Judging Scoresheet Labels: <a href=\"".$base_url."output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 5160\">A4</a></div>";
+	$table_body1 .= "</div>";
 } // end if (in_array("Judge",$assignment_array)) && ($action != "print"))
 
 
@@ -367,47 +340,51 @@ if ($_SESSION['brewerJudge'] == "Y") {
 	$display_rank = bjcp_rank($bjcp_rank[0],2);
 	if (!empty($bjcp_rank[1])) $display_rank .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
 	
-	$table_body1 .= "<tr>";
-	$table_body1 .= "<td class='dataLabel'>BJCP Judge ID:</td>";
-    $table_body1 .= "<td class='data'>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>BJCP ID</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 	if ($_SESSION['brewerJudgeID'] > "0") $table_body1 .= $_SESSION['brewerJudgeID']; else $table_body1 .= "N/A";
-	$table_body1 .= "</td>";
-	$table_body1 .= "</tr>";
-	$table_body1 .= "<td class='dataLabel'>Beer Judge Ranks and Designations:</td>";
-	$table_body1 .= "<td class='data'>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Designations</strong></div>";
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 	if ($_SESSION['brewerJudgeRank'] != "") $table_body1 .= str_replace("<br />",", ",$display_rank); else $table_body1 .= "N/A";
-	$table_body1 .= "</td>";
-	$table_body1 .= "<tr>";
-	$table_body1 .= "<td width='10%' class='dataLabel'>Mead Judge Endorsement:</td>";
-  	$table_body1 .= "<td colspan='2' class='data'>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Mead Judge?</strong></div>";
+  	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 	if ($action == "print") $table_body1 .= yes_no($_SESSION['brewerJudgeMead'],$base_url,3); else $table_body1 .= yes_no($_SESSION['brewerJudgeMead'],$base_url); 
-	$table_body1 .= "</td>";
-	$table_body1 .= "</tr>";
-	$table_body1 .= "<td class='dataLabel'>Categories Preferred:</td>";
-    $table_body1 .= "<td class='data'>";
-    if ($_SESSION['brewerJudgeLikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
-    $table_body1 .= "</td>";
-	$table_body1 .= "<tr>";
-	$table_body1 .= "<td class='dataLabel'>Categories Not Preferred:</td>";
-    $table_body1 .= "<td class='data'>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Preferred</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+    if ($_SESSION['brewerJudgeLikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeLikes'],4,$base_url); else $table_body1 .= "N/A";	
+    $table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Non-Preferred</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
     if ($_SESSION['brewerJudgeDislikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url); else $table_body1 .= "N/A";		
-    $table_body1 .= "</td>";
-	$table_body1 .= "</tr>";
+    $table_body1 .= "</div>";
+	$table_body1 .= "</div>";
 
 	if (!empty($judge_info)) {
-		$table_body1 .= "<tr>";
-		$table_body1 .= "<td class='dataLabel'>Judge Availability:</td>";
-		$table_body1 .= "<td>";
+		$table_body1 .= "<div class=\"row bcoem-account-info\">";
+		$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Availability</strong></div>";
+		$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 		if (($assignment == "judge") || (empty($assignment))) {
 			
 			if (empty($table_assign_judge)) {
 										
-					$table_body1 .= "<table id='sortable_judge' class='dataTable' style='width:50%;float:left;'>";
+					$table_body1 .= "<table id=\"sortable_judge\" class=\"table table-condensed table-hover table-striped table-bordered dataTable\">";
     				$table_body1 .= "<thead>";
     				$table_body1 .= "<tr>";
-        			$table_body1 .= "<th class='dataHeading bdr1B' width='15%'>Yes/No</th>";
-        			$table_body1 .= "<th class='dataHeading bdr1B' width='40%'>Location</th>";
-        			$table_body1 .= "<th class='dataHeading bdr1B'>Date/Time</th>";
+        			$table_body1 .= "<th width=\"10%\">Yes/No</th>";
+        			$table_body1 .= "<th>Location</th>";
+        			$table_body1 .= "<th>Date/Time</th>";
     				$table_body1 .= "</tr>";
     				$table_body1 .= "</thead>";
     				$table_body1 .= "<tbody>";
@@ -419,28 +396,28 @@ if ($_SESSION['brewerJudge'] == "Y") {
 			
 			else $table_body1 .= "No data retrieved.";
 		}
-		if ((!empty($table_assign_judge)) && (!empty($assignment))) $table_body1 .= sprintf("** You have already been assigned as a %s to a table. If you wish to change your availabilty and/or withdraw your role, <a href='%s'>contact</a> the competition organizer or judge coordinator.",$assignment,build_public_url("contact","default","default",$sef,$base_url));
-		$table_body1 .= "</td>";
-		$table_body1 .= "</tr>";
+		if ((!empty($table_assign_judge)) && (!empty($assignment))) $table_body1 .= sprintf("** You have already been assigned as a %s to a table. If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">contact</a> the competition organizer or judge coordinator.",$assignment,build_public_url("contact","default","default","default",$sef,$base_url));
+		$table_body1 .= "</div>";
+		$table_body1 .= "</div>";
 		
 		if ((!$judge_available_not_assigned) && (!empty($table_assign_judge))) { 
-			$table_body1 .= "<tr>";
-			$table_body1 .= "<td class='dataLabel'>Table Assignment(s):</td>";
-			$table_body1 .= "<td>";
-				$table_body1 .= "<table id='judge_assignments' class='dataTable' style='width:75%;float:left;'>";
+			$table_body1 .= "<div class=\"row bcoem-account-info\">";
+			$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Table Assignment(s):</strong></div>";
+			$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+				$table_body1 .= "<table id=\"judge_assignments\" class=\"table table-condensed table-hover table-striped table-bordered dataTable\">";
 				$table_body1 .= "<thead>";
 				$table_body1 .= "<tr>";
-				$table_body1 .= "<th class='dataHeading bdr1B' width='33%'>Location</th>";
-				$table_body1 .= "<th class='dataHeading bdr1B' width='34%'>Date/Time</th>";
-				$table_body1 .= "<th class='dataHeading bdr1B'>Table</th>";
+				$table_body1 .= "<th width=\"33%\">Location</th>";
+				$table_body1 .= "<th width=\"34%\">Date/Time</th>";
+				$table_body1 .= "<th>Table</th>";
 				$table_body1 .= "</tr>";
 				$table_body1 .= "</thead>";
 				$table_body1 .= "<tbody>";
 				$table_body1 .= $table_assign_judge;
 				$table_body1 .= "</tbody>";
 				$table_body1 .= "</table>";
-			$table_body1 .= "</td>";
-			$table_body1 .= "</tr>";
+			$table_body1 .= "</div>";
+			$table_body1 .= "</div>";
 		} // end if ((!$judge_available_not_assigned) && (!empty($table_assign_judge))) 
 	
 	} // end if (!empty($judge_info))
@@ -449,30 +426,29 @@ if ($_SESSION['brewerJudge'] == "Y") {
 
 
 
-$table_body1 .= "<tr>";
-$table_body1 .= "<td class='dataLabel'>Available to Steward?</td>";
-$table_body1 .= "<td class='data'>";
-if ((!empty($_SESSION['brewerSteward'])) && ($action != "print")) $table_body1 .= yes_no($_SESSION['brewerSteward'],$base_url); 
-elseif ((!empty($_SESSION['brewerSteward'])) && ($action == "print")) $table_body1 .= yes_no($_SESSION['brewerSteward'],$base_url,3); 
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Steward?</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+if ((!empty($_SESSION['brewerSteward'])) && ($action != "print")) $table_body1 .= yes_no($_SESSION['brewerSteward'],$base_url);
 else $table_body1 .= "None entered";
-$table_body1 .= "</td>";
-$table_body1 .= "</tr>";
+$table_body1 .= "</div>";
+$table_body1 .= "</div>";
 
 if ($_SESSION['brewerSteward'] == "Y") {
 	if (!empty($steward_info)) {
-		$table_body1 .= "<tr>";
-		$table_body1 .= "<td class='dataLabel'>Steward Availability:</td>";
-		$table_body1 .= "<td>";
+		$table_body1 .= "<div class=\"row bcoem-account-info\">";
+		$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Availability</strong></div>";
+		$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 		if (($assignment == "steward") || (empty($assignment))) {
 			
 			if (empty($table_assign_steward)) {
 										
-					$table_body1 .= "<table id='sortable_steward' class='dataTable' style='width:50%;float:left;'>";
+					$table_body1 .= "<table id=\"sortable_steward\" class=\"table table-condensed table-hover table-striped table-bordered \">";
     				$table_body1 .= "<thead>";
     				$table_body1 .= "<tr>";
-        			$table_body1 .= "<th class='dataHeading bdr1B' width='15%'>Yes/No</th>";
-        			$table_body1 .= "<th class='dataHeading bdr1B' width='40%'>Location</th>";
-        			$table_body1 .= "<th class='dataHeading bdr1B'>Date/Time</th>";
+        			$table_body1 .= "<th width=\"10%\">Yes/No</th>";
+        			$table_body1 .= "<th>Location</th>";
+        			$table_body1 .= "<th>Date/Time</th>";
     				$table_body1 .= "</tr>";
     				$table_body1 .= "</thead>";
     				$table_body1 .= "<tbody>";
@@ -484,31 +460,32 @@ if ($_SESSION['brewerSteward'] == "Y") {
 			
 			else $table_body1 .= "No data retrieved.";
 		}
-		if ((!empty($table_assign_steward)) && (!empty($assignment))) $table_body1 .= sprintf("** You have already been assigned as a %s to a table. If you wish to change your availabilty and/or withdraw your role, <a href='%s'>contact</a> the competition organizer or judge coordinator.",$assignment,build_public_url("contact","default","default",$sef,$base_url));
-		$table_body1 .= "</td>";
-		$table_body1 .= "</tr>";
+		if ((!empty($table_assign_steward)) && (!empty($assignment))) $table_body1 .= sprintf("** You have already been assigned as a %s to a table. If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">contact</a> the competition organizer or judge coordinator.",$assignment,build_public_url("contact","default","default","default",$sef,$base_url));
+		$table_body1 .= "</div>";
+		$table_body1 .= "</div>";
 		
 		if ((!$steward_available_not_assigned) && (!empty($table_assign_steward))) { 
-			$table_body1 .= "<tr>";
-			$table_body1 .= "<td class='dataLabel'>Table Assignment(s):</td>";
-			$table_body1 .= "<td>";
-				$table_body1 .= "<table id='steward_assignments' class='dataTable' style='width:75%;float:left;'>";
+			$table_body1 .= "<div class=\"row bcoem-account-info\">";
+			$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Assignment(s)</strong></div>";
+			$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+				$table_body1 .= "<table id=\"steward_assignments\" class=\"table table-striped table-bordered\">";
 				$table_body1 .= "<thead>";
 				$table_body1 .= "<tr>";
-				$table_body1 .= "<th class='dataHeading bdr1B' width='33%'>Location</th>";
-				$table_body1 .= "<th class='dataHeading bdr1B' width='34%'>Date/Time</th>";
-				$table_body1 .= "<th class='dataHeading bdr1B'>Table</th>";
+				$table_body1 .= "<th width=\"33%\">Location</th>";
+				$table_body1 .= "<th width=\"34%\">Date/Time</th>";
+				$table_body1 .= "<th >Table</th>";
 				$table_body1 .= "</tr>";
 				$table_body1 .= "</thead>";
 				$table_body1 .= "<tbody>";
 				$table_body1 .= $table_assign_steward;
 				$table_body1 .= "</tbody>";
 				$table_body1 .= "</table>";
-			$table_body1 .= "</td>";
-			$table_body1 .= "</tr>";
+			$table_body1 .= "</div>";
+			$table_body1 .= "</div>";
 		} // end if ((!$judge_available_not_assigned) && (!empty($table_assign_judge)))
 	}
 }
+
 
 
 // --------------------------------------------------------------
@@ -517,16 +494,19 @@ if ($_SESSION['brewerSteward'] == "Y") {
 
 // Display primary page info and subhead
 echo $primary_page_info;
+// Display User Edit Links
+echo "<div class=\"bcoem-account-info\">";
+echo $user_edit_links; 
+echo "</div>";
 echo $header1_1;
 
-// Display User Edit Links
-echo $user_edit_links; 
+
 
 ?>
 <!-- Display User Info -->
-<table class="dataTable">
+<!-- <table class="table table-responsive bcoem-user-info-table"> -->
 <?php echo $table_body1; ?>
-</table>
+<!-- </table> -->
 
 
 <!-- Page Rebuild completed 08.27.15 --> 

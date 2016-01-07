@@ -1,5 +1,6 @@
 <?php
 function get_timezone($offset) {
+	$offset = number_format($offset,3);
 	$timezones = array( 
         '-12.000'=>'Pacific/Kwajalein', 
         '-11.000'=>'Pacific/Midway', 

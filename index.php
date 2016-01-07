@@ -9,6 +9,25 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 include(DB.'mods.db.php');
 
+if ($section == "admin") {
+	
+	// Redirect if non-admins try to access admin functions
+	if (!$logged_in) { header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0")); exit; }
+	if (($logged_in) && ($_SESSION['userLevel'] > 1)) { header(sprintf("Location: %s", $base_url."index.php?msg=4")); exit; }
+	
+	include(LIB.'admin.lib.php');
+	include(DB.'admin_common.db.php');
+	include(DB.'judging_locations.db.php'); 
+	include(DB.'stewarding.db.php'); 
+	include(DB.'dropoff.db.php'); 
+	include(DB.'contacts.db.php');
+	
+	if (($go == "default") || ($go == "entries")) {
+		$totalRows_entry_count = total_paid_received("default","default");
+		$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
+	}
+}
+
 if (TESTING) {
 	$mtime = microtime(); 
 	$mtime = explode(" ",$mtime); 
@@ -16,273 +35,220 @@ if (TESTING) {
 	$starttime = $mtime; 
 }
 
-$closed_msg = "";
-$registration_open_msg = "";
-$judge_reg_open_msg = "";
-$judge_willing_msg = "";
-$registration_closed_msg = "";
-
-if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
-
-$remaining_entries = 0;
-if (!empty($row_limits['prefsUserEntryLimit'])) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
-else $remaining_entries = 1;
-
-if (($registration_open == "1") && (!$ua)) {
-	if ($comp_entry_limit) {
-		
-		if ($section != "admin") { 
-			$closed_msg .= "<div class='closed'>The limit of ".readable_number($row_limits['prefsEntryLimit'])." (".$row_limits['prefsEntryLimit'].") entries has been reached. No further entries will be accepted."; 
-			if (!isset($_SESSION['loginUsername'])) $closed_msg .= " However, judges and stewards may still <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>."; 
-			$closed_msg .="</div>"; 
-		}
-	}
+if ($section == "admin") {
+	$container_main = "container-fluid";
+	$nav_container = "navbar-inverse";
+}
+	
+else { 
+	$container_main = "container";
+	$nav_container = "navbar-default";
 }
 
-if (($registration_open == "0") && (!$ua) && ($section != "admin")) {
-	if (!isset($_SESSION['loginUsername'])) $registration_open_msg .= "<div class='closed'>General registration will open ".$reg_open.".</div>";
-	if ((!isset($_SESSION['loginUsername'])) && ($judge_window_open == "0")) $judge_reg_open_msg .= "<div class='info'>Judge/steward registration will open ".$judge_open.".</div>";
-    if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $judge_willing_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>"; 
-}
-
-if (($registration_open == "2") && (!$ua)) {
-	if ((($section != "admin") || ($_SESSION['userLevel'] > "1")) && (judging_date_return() > 0)) { 
-    	$registration_closed_msg .= "<div class='closed'>";
-		$registration_closed_msg .= "Registration closed ".$reg_closed.".";
-		if ($entry_window_open == "1") $registration_closed_msg .= "<br>Participants who already have registered accounts may add entries into the system until ".$entry_closed.".";
-		$registration_closed_msg .= "</div>";
-		if ((!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1")) $registration_closed_msg .= "<div class='info'>If you are willing to be a judge or steward, please <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>register here</a>.<br>Judge/steward registration will close ".$judge_closed.".</div>";
-	}
-}
+$tinymce_load = array("contest_info","special_best","styles");
+$datetime_load = array("contest_info","judging","testing");
+$datatables_load = array("admin","list");
 
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo $_SESSION['contestName']; ?> Organized By <?php echo $_SESSION['contestHost']." &gt; ".$header_output; ?></title>
-<link href="<?php echo $base_url; ?>css/<?php echo $_SESSION['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery-ui-1.8.18.custom.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo $base_url; ?>css/sorting.css" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.tabs.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.position.min.js"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>css/jquery.ui.timepicker.css?v=0.3.0" type="text/css" />
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jquery.ui.timepicker.js?v=0.3.0"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
-<link rel="stylesheet" href="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/fancybox/jquery.fancybox.pack.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#modal_window_link").fancybox({
-				'width'				: '85%',
-				'maxHeight'			: '85%',
-				'fitToView'			: false,
-				'scrolling'         : 'auto',
-				'openEffect'		: 'elastic',
-				'closeEffect'		: 'elastic',
-				'openEasing'     	: 'easeOutBack',
-				'closeEasing'   	: 'easeInBack',
-				'openSpeed'         : 'normal',
-				'closeSpeed'        : 'normal',
-				'type'				: 'iframe',
-				'helpers' 			: {	title : { type : 'inside' } }
-			});
-
-		});
-	</script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/delete.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/jump_menu.js" ></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/smoothscroll.js" ></script>
-<?php if (isset($_SESSION['loginUsername'])) { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/menu.js"></script>
-<?php } 
-if ($section == "admin") { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/tinymce.init.js"></script>
-<?php } 
-if (($section == "brew") || ($section == "brewer") || ($section == "user")  || ($section == "register") || ($section == "contact")) 
-include(INCLUDES.'form_check.inc.php'); 
-?>
-<!--
-<script type="text/javascript">
-var _gaq = _gaq || [];
-  //_gaq.push(['_setAccount', '<?php // echo $google_analytics; ?>']);
-  //_gaq.push(['_setAccount', 'UA-7085721-23']);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
--->
-</head>
-<body>
-<a name="top"></a>
-<div id="container">
-<div id="navigation">
-	<div id="navigation-inner"><?php include (SECTIONS.'nav.sec.php'); ?></div>
-</div>
-<div id="content">
-	<div id="content-inner">  
-  <?php
-
-if (TESTING) {
-	echo "User Agent: ".$_SERVER['HTTP_USER_AGENT']."<br>";
-	if ($fx) echo "FIREFOX Detected<br>";
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
+    
+	<!-- Load jQuery / http://jquery.com/ -->
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	
-	echo "Time Zone Name: ".$tz."<br>"; 
-	echo "Time Zone: ".date('T')."<br>";
-	echo "Time Zone Offset: ".$timezone_offset."<br>"; 
-	echo "Time Zone Preferences: ".$_SESSION['prefsTimeZone']."<br>"; 
-	echo "<p>";
-	echo "Section: ".$section."<br>";
-	echo "Entry Window Status: ".$entry_window_open."<br>";
-	echo "Registration Status: ".$registration_open."<br>";
-	echo "Judging Status: ".judging_date_return()."<br>";
-	echo "Remaining Entries: ".$remaining_entries."<br>";
-	echo "</p>";
-	echo "<p>Session Variables: ";
-	print_r($_SESSION);
-	echo "</p>";
-}
+    <!-- Load Bootstrap / http://www.getbootsrap.com -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Load DataTables / https://www.datatables.net -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
 	
-	if ($section != "admin") { ?>
-	<div id="header">	
-		<div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-	</div>
-	<?php  } 
-	if (($_SESSION['prefsUseMods'] == "Y") && ($section != "admin")) include(INCLUDES.'mods_top.inc.php'); // for display consistency
-	echo $closed_msg;
-	echo $registration_open_msg;
-	echo $judge_reg_open_msg;
-	echo $judge_willing_msg;
-	echo $registration_closed_msg;
-
-
-  
-  
-// Check if registration open date has passed
-  if (($registration_open == "0") && ($ua != "unsupported")) { 
-  	
-	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "login")			include (SECTIONS.'login.sec.php');
-	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
-	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
-	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
-	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
-	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-	if ($section == "register")		include (SECTIONS.'register.sec.php');
-	if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
+    <!-- Load Fancybox / http://www.fancyapps.com -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
 	
-	if (isset($_SESSION['loginUsername'])) {
-		if ($section == "list") 		include (SECTIONS.'list.sec.php');
-		if ($section == "user") 		include (SECTIONS.'user.sec.php');
-		if ($section == "pay") {
-				if (NHC) 			include (SECTIONS.'nhc_pay.sec.php');
-				else 				include (SECTIONS.'pay.sec.php');
-			}
-		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
+    <?php if (($section == "admin") && (in_array($go,$datetime_load))) { ?>
+    <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/datetime.js"></script>
+    <?php } ?>
+	
+	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
+    <!-- Load TinyMCE -->
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+	<?php } ?>
+	
+	<?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
+    <!-- Load Off-Canvas Menu JS for Admin -->
+    <!-- Based upon Theme Armada's code at http://blog.themearmada.com/off-canvas-slide-menu-for-bootstrap/ -->
+    <script src="https://cdn.jsdelivr.net/jquery.navgoco/0.1.3/jquery.navgoco.min.js"></script>
+    <?php } ?>
+	
+	<!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+    
+    <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
+	
+	<!-- Load BCOE&M Custom JS -->
+    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/bcoem_custom.js"></script>
+    
+    <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+    <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+  	</head>
+	<body>
+	
+    <!-- MAIN NAV -->
+	<div class="<?php echo $container_main; ?> hidden-print">
+		<?php include (SECTIONS.'nav.sec.php'); ?>
+	</div><!-- container -->   
+    <!-- ./MAIN NAV -->
+    
+    <!-- ALERTS -->
+    <div class="<?php echo $container_main; ?> bcoem-warning-container">
+    	<?php include (SECTIONS.'alerts.sec.php'); ?>
+    </div><!-- ./container --> 
+    <!-- ./ALERTS -->
+    
+    <!-- MODS TOP -->
+    <div class="container"> 
+    
+    </div>
+    <!-- ./MODS TOP -->
+    
+    <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
+    <!-- Admin Pages (Fluid Layout) -->
+    <div class="container-fluid">
+       	<?php if ($go == "default") { ?>
+        <!-- Admin Dashboard - Has sidebar -->
+        <div class="row">
+        	<div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
+            <div class="page-header">
+        		<h1><?php echo $header_output; ?></h1>
+            </div>    
+            <?php include (ADMIN.'default.admin.php'); ?> 
+            </div><!-- ./left column -->
+            <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            	<?php include (ADMIN.'sidebar.admin.php'); ?>       
+            </div><!-- ./sidebar -->
+        </div><!-- ./row -->
+        <?php } else { ?>
+      	<!-- Admin Page - full width of viewport -->
+        	<div class="page-header">
+        		<h1><?php echo $header_output; ?></h1>
+        	</div>
+            <?php 
+			if ($go == "judging") 	    			include (ADMIN.'judging_locations.admin.php');
+			if ($go == "judging_preferences") 	    include (ADMIN.'judging_preferences.admin.php');
+			if ($go == "judging_tables") 	    	include (ADMIN.'judging_tables.admin.php');
+			if ($go == "judging_flights") 	    	include (ADMIN.'judging_flights.admin.php');
+			if ($go == "judging_scores") 	    	include (ADMIN.'judging_scores.admin.php');
+			if ($go == "judging_scores_bos")    		include (ADMIN.'judging_scores_bos.admin.php');
+			if ($go == "participants") 				include (ADMIN.'participants.admin.php');
+			if ($go == "entries") 					include (ADMIN.'entries.admin.php');
+			if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
+			if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
+			if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
+			if ($go == "count_by_style")				include (ADMIN.'entries_by_style.admin.php');
+			if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
+			if ($action == "register")				include (SECTIONS.'register.sec.php');
 			
-		if ($_SESSION['userLevel'] <= "1") {
-			if ($section == "admin")		include (ADMIN.'default.admin.php');
-			if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
-			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
-			}
-		}
-  }
-  
-  // Check if registration close date has passed. If so, display "registration end" message.
-  if (($registration_open == "2") && (!$ua)) { 
-	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "login")			include (SECTIONS.'login.sec.php');
-	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
-	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php'); 
-	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
-	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
-	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-	if ($section == "register") 		include (SECTIONS.'register.sec.php');
-	if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
-	if (isset($_SESSION['loginUsername'])) {
-		//echo $registration_open;
-		if ($section == "list") 		include (SECTIONS.'list.sec.php');
-		if ($section == "pay") {
-				if (NHC) include (SECTIONS.'nhc_pay.sec.php');
-				else include (SECTIONS.'pay.sec.php');
-			}
+				if ($_SESSION['userLevel'] == "0") {
+					if ($go == "styles") 	    	include (ADMIN.'styles.admin.php');
+					if ($go == "archive") 	    	include (ADMIN.'archive.admin.php');
+					if ($go == "make_admin") 		include (ADMIN.'make_admin.admin.php');
+					if ($go == "contest_info") 		include (ADMIN.'competition_info.admin.php');
+					if ($go == "preferences") 		include (ADMIN.'site_preferences.admin.php');
+					if ($go == "sponsors") 	   		include (ADMIN.'sponsors.admin.php');
+					if ($go == "style_types")    	include (ADMIN.'style_types.admin.php');
+					if ($go == "special_best") 	    include (ADMIN.'special_best.admin.php');
+					if ($go == "special_best_data") 	include (ADMIN.'special_best_data.admin.php');
+					if ($go == "mods") 	    		include (ADMIN.'mods.admin.php');
+					if ($go == "upload")				include (ADMIN.'upload.admin.php');
+				}
+			
+			} ?>
+    </div><!-- ./container-fluid -->    
+    <!-- ./Admin Pages -->
+    <?php } else { ?>
+    <!-- Public Pages (Fixed Layout with Sidebar) -->
+    <div class="container"> 
+    	<div class="row">
+    		<div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
+            <div class="page-header">
+        		<h1><?php echo $header_output; ?></h1>
+        	</div> 
+            
+            <?php if ($section == "testing") { ?>
+            
+            <?php } ?>
+            
+        	<?php 
 		
-		if ($section == "user") 		include (SECTIONS.'user.sec.php');
-		if (($entry_window_open < 2) && ($_SESSION['userLevel'] == "2")) {
-			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');	
-		}
-		if ($_SESSION['userLevel'] <= "1") {
-			if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
-			if ($section == "admin")	include (ADMIN.'default.admin.php');
-			if ($section == "judge") include (SECTIONS.'judge.sec.php');
-			if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
-			}
-		}
-  }
-  
-  // If registration is currently open
-  if (($registration_open == "1") && (!$ua)) {
-  	if ($section == "register") 		include (SECTIONS.'register.sec.php');
-	if ($section == "login")			include (SECTIONS.'login.sec.php');
-	if ($section == "rules") 		include (SECTIONS.'rules.sec.php');
-	if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-	if ($section == "default") 		include (SECTIONS.'default.sec.php');
-	if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
-	if ($section == "past_winners") 	include (SECTIONS.'past_winners.sec.php');
-	if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
-	if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-	if (isset($_SESSION['loginUsername'])) {
-		if ($_SESSION['userLevel'] <= "1") { 
-				if ($section == "admin")	include (ADMIN.'default.admin.php'); 
-			}
-		if ($section == "brewer") 	include (SECTIONS.'brewer.sec.php');
-		if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
-		if ($section == "pay") {
-				if (NHC) 			include (SECTIONS.'nhc_pay.sec.php');
-				else 				include (SECTIONS.'pay.sec.php');
-			}
-		if ($section == "list") 		include (SECTIONS.'list.sec.php');
-		if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
-		if ($section == "user") 		include (SECTIONS.'user.sec.php');
-		if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
-	}
-  } // End registration date check.
-
-  if ($ua) { 
-  	echo "<div class='error'>Unsupported browser.</div><p>Your version of Internet Explorer, as detected by our scripting, is not supported by "; if (NHC) 	echo "the NHC online registration system."; else echo "BCOE&amp;M.</p>"; echo "<p>Please <a href='http://windows.microsoft.com/en-US/internet-explorer/download-ie'>download and install the latest version</a> for your operating system. Alternatively, you can use the latest version of another browser (<a href='http://www.google.com/chrome'>Chrome</a>, <a href='http://www.mozilla.org/en-US/firefox/new/'>Firefox</a>, <a href='http://www.apple.com/safari/'>Safari</a>, etc.).</p>"; 
-  	echo "<p>The information provided by your browser and used by our script is: ".$_SERVER['HTTP_USER_AGENT']."</p>";
-  }
- 
- 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_bottom.inc.php');
-  
-  	if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "brewer") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) {  
-	?>  
-  	<div class="error">Please register or log in to access this area.</div>
-	  <?php if ($section == "admin") { ?>
-      <div id="header">	
-        <div id="header-inner"><h1><?php echo $header_output; ?></h1></div>
-      </div>
-      <?php } ?>
-  <?php } ?>
-  	</div>
-</div>
-</div>
-<a name="bottom"></a>
-<div id="footer">
-	<div id="footer-inner"><?php include (SECTIONS.'footer.sec.php'); ?></div>
-</div>
+				if ($section == "default") 		include (SECTIONS.'default.sec.php');
+				if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
+				if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
+				if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
+				if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
+				if ($section == "register")		include (SECTIONS.'register.sec.php');
+				if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
+				if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
+				if ($section == "login")		include (SECTIONS.'login.sec.php');
+				
+				if ($logged_in) {
+					if ($section == "list") 	include (SECTIONS.'list.sec.php');
+					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
+					if ($section == "user") 	include (SECTIONS.'user.sec.php');
+				}
+						
+			?>
+            </div><!-- ./left column -->
+            <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            	<?php include (SECTIONS.'sidebar.sec.php'); ?>         
+            </div><!-- ./sidebar -->
+        </div><!-- ./row -->
+    	<!-- ./Public Pages -->
+        <?php } ?>
+    </div><!-- ./container -->
+    <!-- ./Public Pages -->
+    
+    <!-- Mods Bottom -->
+    <div class="container"> 
+    
+    </div>
+    <!-- ./Mods Bottom -->
+    
+    <!-- Footer -->
+    <footer class="footer hidden-xs hidden-sm hidden-md">
+    	<nav class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom bcoem-footer">
+            <div class="<?php echo $container_main; ?> text-center">
+                <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small"><?php include (SECTIONS.'footer.sec.php'); ?></p>
+            </div>
+    	</nav>
+    </footer><!-- ./footer --> 
+	<!-- ./ Footer -->
+    
+    
+    
 </body>
 </html>

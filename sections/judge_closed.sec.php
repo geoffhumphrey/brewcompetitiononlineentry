@@ -43,12 +43,12 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-$header1_1 = "";
-$page_info1 = "";
+$header_jc_1 = "";
+$page_info_jc_1 = "";
 
-$header1_1 .= sprintf("<h2>Thanks To All Who Participated in the %s</h2>",$_SESSION['contestName']);
-$page_info1 = sprintf("<p>There were <strong>%s</strong> entries judged and <strong>%s</strong> registered participants, judges, and stewards.</p>",get_entry_count('received'),get_participant_count('default'));
+$header_jc_1 .= sprintf("<p class='lead'>Thanks to all who participated in the %s.</p>",$_SESSION['contestName']);
+$page_info_jc_1 .= sprintf("<p class='lead'><small>There were <strong class='text-success'>%s</strong> entries judged and <strong class='text-success'>%s</strong> registered participants, judges, and stewards.</small></p>",get_entry_count('received'),get_participant_count('default'));
 
-echo $header1_1;
-echo $page_info1;
+echo $header_jc_1;
+echo $page_info_jc_1;
 ?>

@@ -9,25 +9,39 @@
 
 
 ?> 
-<h2><?php if ($action == "add") echo "Add Entries to Custom Winning Category: ".$row_sbi['sbi_name']; elseif ($action == "edit") echo "Edit Entries in Custom Winning Category: ".$row_sbi['sbi_name']; else echo "Custom Winning Category Entries"; ?></h2>
-<div class="adminSubNavContainer">
-   	<span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
-    </span>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a>
-    </span>
-    <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">Back to the Custom Winning Category Entry List</a>
-    </span>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add Entries to the ".$row_sbi['sbi_name']." Custom Category"; elseif ($action == "edit") echo ": Edit Entries in the ".$row_sbi['sbi_name']." Custom Category"; else echo " Custom Category Entries"; ?></p>
+
+<div class="bcoem-admin-element hidden-print">
+<!-- View Button Group Dropdown -->
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-eye"></span> View...   
+        <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">All Custom Categories</a></li>
+			<?php if ($totalRows_sbd > 0) { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">All Custom Category Entries</a><li>
+			<?php } ?>
+        </ul>
+    </div><!-- ./button group -->
+	
+	<div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-plus-circle"></span> Add/Edit Entries For...   
+        <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+			<?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
+        </ul>
+    </div><!-- ./button group -->
+	
+	
+	
 </div>
-<div class="adminSubNavContainer">
-    <span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/award_star_add.png" /></span>Add/Edit Custom Winning Category Entries For: <?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
-    </span>
-</div>
+
 <?php if (($action == "default") || ($action == "list")) { ?>
-<p>Custom winner categories are useful if your competition features unique "best of" competition categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
+<p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
 	<?php if ($totalRows_sbd > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {
@@ -36,7 +50,7 @@
                 "sPaginationType" : "full_numbers",
                 "bLengthChange" : true,
                 "iDisplayLength" : <?php echo $limit; ?>,
-                "sDom": 'irtip',
+                "sDom": 'rtp',
                 "bStateSave" : false,
                 "aaSorting": [[0,'asc'],[1,'asc']],
                 "aoColumns": [
@@ -51,16 +65,16 @@
                 } );
             } );
         </script>
-    <table class="dataTable" id="sortable">
+    <table class="table table-responsive table-bordered table-striped" id="sortable">
      <thead>
      <tr>
-      <th class="dataHeading bdr1B">Custom Category</th>
-      <th class="dataHeading bdr1B">Place</th>
-      <th class="dataHeading bdr1B">Entry #</th>
-      <th class="dataHeading bdr1B">Judging #</th>
-      <th class="dataHeading bdr1B">Entry Name</th>
-      <th class="dataHeading bdr1B">Brewer</th>
-      <th class="dataHeading bdr1B">Actions</th>
+      <th>Custom Category</th>
+      <th>Place</th>
+      <th>Entry</th>
+      <th>Judging</th>
+      <th>Entry Name</th>
+      <th>Brewer</th>
+      <th>Actions</th>
      </tr>
      </thead>
      <tbody>
@@ -71,18 +85,20 @@
 	
 	?>
      <tr>
-      <td width="15%" class="dataList"><?php echo $special_best_info[1]; ?></td>
-      <td width="1%" class="dataList"><?php echo $row_sbd['sbd_place']; ?></td>
-      <td width="1%" class="dataList"><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
-      <td width="1%" class="dataList">
+      <td><?php echo $special_best_info[1]; ?></td>
+      <td><?php echo $row_sbd['sbd_place']; ?></td>
+      <td><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
+      <td>
 	  <?php 
 	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
 	  else echo readable_judging_number($info[3],$info[6]); 
 	  ?></td>
-      <td width="20%" class="dataList"><?php echo $info[0]; ?></td>
-      <td width="20%" class="dataList"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
-      <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sbd['brewName']; ?>" title="Edit <?php echo $row_sbd['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete','id',<?php echo $row_sbd['id']; ?>,'Are you sure you want to delete? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete" title="Delete"></a></span>
+      <td><?php echo $info[0]; ?></td>
+      <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
+      <td nowrap="nowrap">
+	  
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Category entries"><span class="fa fa-pencil"></span></a> 
+	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Category"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
       </td>
      </tr>
     <?php
@@ -90,27 +106,42 @@
      </tbody>
     </table>
     <?php } 
-	else 
-	echo "
-	<p>There are no entries found in any custom winner category.</p>
-	<p>Add Winners for Custom Winning Cateory: ".score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table)."</p>";
+	else echo "<p>There are no entries found in any custom category.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&id=<?php echo $id; ?>" name="form1">
-<table>
-<?php if ($action == "add") { for ($i=1; $i <= $row_sbi['sbi_places']; $i++) { ?>
+<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&id=<?php echo $id; ?>" name="form1">
+
+<?php 
+if ($action == "add") { 
+	for ($i=1; $i <= $row_sbi['sbi_places']; $i++) { 
+?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
-  <tr>
-    <td class="dataLabel">Winning Entry <?php echo $i; ?>'s Judging Number:</td>
-    <td class="data"><input name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value=""></td>
-    <td class="dataLabel">Place:</td>
-    <td class="data">
-    <input name="sbd_place<?php echo $i; ?>" type="text" size="5" value="">
     <input type="hidden" name="sid<?php echo $i; ?>" value="<?php echo $id; ?>">
-    </td>
-  </tr>
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_judging_no<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winning Entry <?php echo $i; ?>'s Judging Number</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_judging_no<?php echo $i; ?>" name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value="" placeholder="" <?php if ($i == 1) echo "autofocus"; ?>>
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $i; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
+	
+	
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_place<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Place</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_place<?php echo $i; ?>" name="sbd_place<?php echo $i; ?>" type="text" value="">
+				<span class="input-group-addon" id="sbd_place<?php echo $i; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
+	
   <?php } 
-	}
+	} // end if ($action == "add")
 	if ($action == "edit") { 
 		do { 
 		$info = explode("^", entry_info($row_sbd['eid']));
@@ -120,20 +151,48 @@ if (($action == "add") || ($action == "edit")) { ?>
   <input type="hidden" name="eid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['eid']; ?>" />
   <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
-  <tr>
-    <td class="dataLabel">Winning Entry <em>Judging</em> Number:</td>
-    <td class="data"><input name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($info[6] > 0) {
+  
+  
+  <div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_judging_no<?php echo $row_sbd['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winning Entry's Judging Number</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_judging_no<?php echo $row_sbd['id']; ?>" name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($info[6] > 0) {
 	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
 	  else echo readable_judging_number($info[3],$info[6]); 
 	}
-	  ?>"></td>
-    <td class="dataLabel">Place:</td>
-    <td class="data"><input name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" size="5" value="<?php echo $row_sbd['sbd_place']; ?>"></td>
-    <td class="dataLabel">Entry Name:</td> 
-	<td class="data"><?php echo $info[0]; ?></td>
-    <td class="dataLabel">Brewer:</td>
-	<td class="data"><?php $info = explode("^", brewer_info($row_sbd['bid'])); echo $info[0]." ".$info[1]; ?></td>
-  </tr>
+	  ?>" placeholder="">
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
+	
+	
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_place<?php  echo $row_sbd['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Place</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_place<?php  echo $row_sbd['id']; ?>" name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" value="<?php echo $row_sbd['sbd_place']; ?>">
+				<span class="input-group-addon" id="sbd_place<?php  echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
+	
+	<div class="form-group"><!-- Form Group NOT REQUIRED  -->
+		<label for="<?php echo $info[0]; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Name</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<p class="form-control-static"><?php echo $info[0]; ?></p>
+		</div>
+	</div><!-- ./Form Group -->
+	<?php $info2 = explode("^", brewer_info($row_sbd['bid'])); ?>
+	<div class="form-group"><!-- Form Group NOT REQUIRED  -->
+		<label for="<?php echo $info2[0].$info2[1]; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Brewer</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<p class="form-control-static"><?php  echo $info2[0]." ".$info2[1]; ?></p>
+		</div>
+	</div><!-- ./Form Group -->
   	<?php } while($row_sbd = mysql_fetch_assoc($sbd)); 
 	
 	if ($totalRows_sbd < $row_sbi['sbi_places']) {
@@ -144,18 +203,38 @@ if (($action == "add") || ($action == "edit")) { ?>
     <input type="hidden" name="id[]" value="<?php echo $random; ?>" />
     <input type="hidden" name="entry_exists<?php echo $random; ?>" value="N" />
     <input type="hidden" name="sid<?php echo $random; ?>" value="<?php echo $id; ?>">
-  <tr>
-    <td class="dataLabel">Winning Entry <em>Judging</em> Number:</td>
-    <td class="data"><input name="sbd_judging_no<?php echo $random; ?>" type="text" size="10" maxlength="255" value=""></td>
-    <td class="dataLabel">Place:</td>
-    <td class="data"><input name="sbd_place<?php echo $random; ?>" type="text" size="5" value=""></td>
-  </tr>
+	
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_judging_no<?php echo $random; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winning Entry's Judging Number</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_judging_no<?php echo $random; ?>" name="sbd_judging_no<?php echo $random; ?>" type="text" size="10" maxlength="255" value="" placeholder="">
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $random; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="sbd_place<?php echo $random; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Place</label>
+		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<!-- Input Here -->
+				<input class="form-control" id="sbd_place<?php echo $random; ?>" name="sbd_place<?php echo $random; ?>" type="text" value="">
+				<span class="input-group-addon" id="sbd_place<?php echo $random; ?>-2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- ./Form Group -->
   <?php }
 	}
 	?>
   <?php } ?>
-</table>
-<p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries in this Custom Winning Category"></p>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+
+<div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+		<div class="col-sm-offset-3 col-sm-10">
+			<input type="submit" name="Submit" id="updateSBD" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries" />
+		</div>
+	</div>
+</div>
 </form>
 <?php } ?>

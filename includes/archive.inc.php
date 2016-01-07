@@ -35,7 +35,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	
 	else {
 	
-		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM $archive_db_table WHERE archiveSuffix = '%s';", $suffix);
+		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
 		$suffix_check = mysql_query($query_suffix_check, $brewing) or die(mysql_error());
 		$row_suffix_check = mysql_fetch_assoc($suffix_check);
 		
@@ -99,30 +99,104 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			// Second, rename current tables and recreate new ones.
 			// For hosted accounts, no archiving. ONLY resetting of table data.
 			
-			if (($filter == "participant") || ($_POST['keepParticipants'] == "Y")) $tables_array = array($brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table,$staff_db_table);
-			else $tables_array = array($users_db_table, $brewer_db_table, $brewing_db_table, $sponsors_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_tables_db_table, $style_types_db_table, $special_best_data_db_table, $special_best_info_db_table, $judging_scores_bos_db_table, $staff_db_table);
+			if (!HOSTED) $tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
+			if (HOSTED) $tables_array = array($users_db_table, $brewer_db_table, $special_best_info_db_table, $special_best_data_db_table, $style_types_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 			
-			if ($_POST['keepParticipants'] == "Y") {
-				$updateSQL = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			if (!HOSTED) $truncate_tables_array = array();
+			
+			$keep_participants = FALSE;
+			
+			if (!HOSTED) {
+				if ($_POST['keepDropoff'] != "Y") {
+					$truncate_tables_array[] = $drop_off_db_table;
+				}
 				
-				$updateSQL = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				if ($_POST['keepSponsors'] != "Y") {
+					$truncate_tables_array[] = $sponsors_db_table;
+				}
 				
-				$updateSQL = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				if ($_POST['keepLocations'] != "Y") {
+					$truncate_tables_array[] = $judging_locations_db_table;
+				}
 				
-				$updateSQL = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
-				mysql_real_escape_string($updateSQL);
-				//echo "<p>".$updateSQL."</p>";
-				$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-			}
+				if ($_POST['keepParticipants'] != "Y") {
+					$tables_array[] = $users_db_table;
+					$tables_array[] = $brewer_db_table;
+				}
+				
+				if ($_POST['keepSpecialBest'] != "Y") {
+					$tables_array[] = $special_best_info_db_table;
+					$tables_array[] = $special_best_data_db_table;
+				}
+				
+				if ($_POST['keepStyleTypes'] != "Y") {
+					$tables_array[] = $style_types_db_table;
+				}
+				
+				//print_r($tables_array);
+				
+				if ($_POST['keepParticipants'] == "Y") {
+					$updateSQL = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$keep_participants = TRUE;
+				}
+				
+				if ($_POST['keepSpecialBest'] == "Y") {
+					$updateSQL = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "INSERT INTO ".$special_best_info_db_table."_".$suffix." SELECT * FROM ".$special_best_info_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "RENAME TABLE ".$special_best_data_db_table." TO ".$special_best_data_db_table."_".$suffix.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+										
+					$keep_participants = TRUE;
+				}
+			
+				if ($_POST['keepStyleTypes'] == "Y") {
+					$updateSQL = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$updateSQL = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
+					mysql_real_escape_string($updateSQL);
+					//echo "<p>".$updateSQL."</p>";
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					
+					$keep_participants = TRUE;
+				}
+			} // end if (!HOSTED);
 			
 			foreach ($tables_array as $table) { 
 			
@@ -149,106 +223,37 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		
 			}
 			
-			$insertSQL = "
-			INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES
-				(1, 'Beer', 'bcoe', 'Y', 1),
-				(2, 'Cider', 'bcoe', 'Y', 3),
-				(3, 'Mead', 'bcoe', 'Y', 3)
-			";
-			mysql_real_escape_string($insertSQL);
-			$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			if (!HOSTED) {
+				foreach ($truncate_tables_array as $table) { 
+					
+					$updateSQL = "TRUNCATE ".$table.";";
+					mysql_real_escape_string($updateSQL);
+					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					//echo "<p>".$updateSQL."</p>";
+					
+				}
+			}
 			
-			if ($_POST['keepParticipants'] != "Y") {
+			if (($_POST['keepStyleTypes'] != "Y") || (HOSTED)) {
+				$insertSQL = "
+				INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'Y', 3), (3, 'Mead', 'bcoe', 'Y', 3)";
+				mysql_real_escape_string($insertSQL);
+				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			}
+			
+			if (($_POST['keepParticipants'] != "Y") || (HOSTED))  {
 				
 				// Insert current user's info into new "users" and "brewer" table
-				$insertSQL = "INSERT INTO $users_db_table (
-					id, 
-					user_name, 
-					password, 
-					userLevel, 
-					userQuestion, 
-					userQuestionAnswer,
-					userCreated
-				) 
-				VALUES 
-				(
-					'1',
-					'$user_name', 
-					'$password', 
-					'0', 
-					'$userQuestion', 
-					'$userQuestionAnswer', 
-					NOW());";
-				//echo "<p>".$insertSQL."</p>";
+				$insertSQL = "INSERT INTO $users_db_table (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) VALUES ('1', '$user_name', '$password', '0', '$userQuestion', '$userQuestionAnswer', NOW());";
 				mysql_real_escape_string($insertSQL);
 				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				//echo "<p>".$insertSQL."</p>";
 				
-				$insertSQL = "
-				INSERT INTO $brewer_db_table (
-					id,
-					uid,
-					brewerFirstName,
-					brewerLastName,
-					brewerAddress,
-					brewerCity,
-					brewerState,
-					brewerZip,
-					brewerCountry,
-					brewerPhone1,
-					brewerPhone2,
-					brewerClubs,
-					brewerEmail,
-					brewerNickname,
-					brewerSteward,
-					brewerJudge,
-					brewerJudgeID,
-					brewerJudgeRank,
-					brewerJudgeLikes,
-					brewerJudgeDislikes,
-					brewerJudgeLocation,
-					brewerStewardLocation,
-					brewerJudgeAssignedLocation,
-					brewerStewardAssignedLocation,
-					brewerAssignment,
-					brewerAHA,
-					brewerDiscount,
-					brewerJudgeBOS,
-					brewerDropOff
-				) 
-				VALUES (
-					NULL, 
-					'1', 
-					'$brewerFirstName', 
-					'$brewerLastName', 
-					'$brewerAddress', 
-					'$brewerCity', 
-					'$brewerState', 
-					'$brewerZip', 
-					'$brewerCountry', 
-					'$brewerPhone1', 
-					'$brewerPhone2', 
-					'$brewerClubs', 
-					'$brewerEmail', 
-					'$brewerNickname', 
-					'$brewerSteward', 
-					'$brewerJudge', 
-					'$brewerJudgeID', 
-					'$brewerJudgeRank', 
-					'$brewerJudgeLikes', 
-					'$brewerJudgeDislikes',
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					'$brewerAHA',
-					NULL,
-					NULL,
-					NULL
-				);";
-				//echo "<p>".$insertSQL."</p>";
+				$insertSQL = "INSERT INTO $brewer_db_table (id, uid, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerNickname, brewerSteward, 	brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeLocation, brewerStewardLocation, brewerJudgeAssignedLocation, brewerStewardAssignedLocation, brewerAssignment, brewerAHA, brewerDiscount, brewerJudgeBOS, brewerDropOff) VALUES (NULL, '1', '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity',  '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerNickname', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes', NULL, NULL, NULL, NULL, NULL, '$brewerAHA', NULL, NULL, NULL);";
 				mysql_real_escape_string($insertSQL);
 				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				//echo "<p>".$insertSQL."</p>";
+				
 			}
 					
 			// If hosted, insert GH as admin user
@@ -307,14 +312,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 			
-			
-			if ($_POST['keepParticipants'] == "Y") {
+			// If participants were kept, no need to  kill session and re-login
+			// Just redirect
+			if ($keep_participants) {
 				header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
 				exit;
 			}
 			
-			// Last, log the user in and redirect 
-			
+			// If no participants were kept except admin users, log the user in and redirect 
 			else {
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
 			$login = mysql_query($query_login, $brewing) or die(mysql_error());
@@ -498,6 +503,5 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	} // end else if ($row_suffix_check['count'] > 0)
 	
 } // end if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))
-	
-else echo "<p>Not available.</p>";
+
 ?>

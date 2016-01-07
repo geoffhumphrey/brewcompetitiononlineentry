@@ -45,8 +45,6 @@ Declare all variables empty at the top of the script. Add on later...
 
 include(DB.'contacts.db.php');
 require_once(INCLUDES.'recaptchalib.inc.php');
-if (($action != "print") && ($msg != "default")) echo $msg_output; 
-
 
 if ($_SESSION['prefsContact'] == "N") {
 	$page_info = "";
@@ -77,18 +75,18 @@ if ($_SESSION['prefsContact'] == "Y") {
    
    	mysql_free_result($contacts);
 
-	$primary_page_info = "<p>Use the form below to contact individuals involved with coordinating this competition.</p>";
-	$label1 = "Contact:";
-	$label2 = "Your Name (First and Last):";
-	$label3 = "Your Email Address:";
-	$label4 = "Subject:";
-	$label5 = "Message:";
-	$label6 = "CAPTCHA:";
+	$primary_page_info = "<p>Use the form below to contact a competition official. All fields with a star are <span class=\"text-warning\">required</span>.</p>";
+	$label1 = "Contact";
+	$label2 = "Your Name";
+	$label3 = "Your Email";
+	$label4 = "Subject";
+	$label5 = "Message";
+	$label6 = "Are You Human?";
 
 	$required_label = "Required";
 
 	if ($msg == "1") {
-		$message1 = "<p>Additionally, a copy has been sent to the email address you provided.</p><p>Would you like to send <a href='".build_public_url("contact","default","default",$sef,$base_url)."'>another message</a>?</p>";
+		$message1 = "<p>Additionally, a copy has been sent to the email address you provided.</p><p>Would you like to send <a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>another message</a>?</p>";
 		echo $message1; 
 	}
 	
@@ -96,56 +94,88 @@ if ($_SESSION['prefsContact'] == "Y") {
 		
 	echo $primary_page_info;
 ?>
-        <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
-        <table class="dataTable">
-        <tr>
-            <td class="dataLabel" width="5%"><?php echo $label1; ?></td>
-            <td class="data" width="25%">
-            <select name="to">
-                <?php echo $option; ?>
-            </select>
-            </td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-        </tr>
-        <tr>
-            <td class="dataLabel"><?php echo $label2; ?></td>
-            <td class="data"><input name="from_name" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_name']; ?>"></td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-        </tr>
-        <tr>
-            <td class="dataLabel"><?php echo $label3; ?></td>
-            <td class="data"><input name="from_email" type="text" size="50" value="<?php if ($msg == "2") echo $_COOKIE['from_email']; ?>"></td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-        </tr>
-        <tr>
-            <td class="dataLabel"><?php echo $label4; ?></td>
-            <td class="data"><input name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; else echo $_COOKIE['contestName']; ?>" size="50"></td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-        </tr>
-        <tr>
-            <td class="dataLabel"><?php echo $label5; ?></td>
-            <td class="data"><textarea name="message" cols="50" rows="10" class="mceNoEditor"><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea></td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-        </tr>
-        <tr>
-            <td class="dataLabel"><?php echo $label6; ?></td>
-            <td class="data">
-            <?php echo recaptcha_get_html($publickey, null, true); ?>
-            </td>
-            <td class="data"><span class="required"><?php echo $required_label; ?></span></td>
-            <td class="data">&nbsp;</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td colspan="2" class="data"><input name="submit" type="submit" class="button" value="Send Message"></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td colspan="2" class="data"><input name="clear" type="button" class="button" value="Clear Values" onClick="window.location.href='<?php echo build_public_url("contact","default","default",$sef,$base_url); ?>'"></td>
-        </tr>
-        </table>
+        <form data-toggle="validator" role="form" class="form-horizontal" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
+        	<div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label1; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <!-- Input Here -->
+                <select class="selectpicker" name="to">
+                    <?php echo $option; ?>
+                </select>
+                </div>
+            </div><!-- Form Group -->
+
+            <div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label2; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                	<div class="input-group has-warning">
+                    	<span class="input-group-addon" id="from_name-addon1"><span class="fa fa-user"></span></span>
+                		<!-- Input Here -->
+                		<input class="form-control" name="from_name" type="text" size="35" value="<?php if ($msg == "2") echo $_COOKIE['from_name']; ?>" autofocus required>
+                        <span class="input-group-addon" id="from_name-addon2"><span class="fa fa-star"></span></span>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div><!-- Form Group -->
+            
+            <div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label3; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                	<div class="input-group has-warning">
+                    	<span class="input-group-addon" id="from_email-addon3">@</span>
+                		<!-- Input Here -->
+                		<input class="form-control" name="from_email" type="email" size="35" value="<?php if ($msg == "2") echo $_COOKIE['from_email']; ?>" required>
+                        <span class="input-group-addon" id="from_email-addon2"><span class="fa fa-star"></span></span>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div><!-- Form Group -->
+            
+            <div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label4; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                	<div class="input-group has-warning">
+                    	<span class="input-group-addon" id="subject-addon5"><span class="fa fa-info-circle"></span></span>
+                		<!-- Input Here -->
+                		<input class="form-control" name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; else echo $_COOKIE['contestName']; ?>" required>
+                        <span class="input-group-addon" id="subject-addon2"><span class="fa fa-star"></span></span>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div><!-- Form Group -->
+            
+        	<div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label5; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                	<div class="input-group has-warning">
+                    	<span class="input-group-addon" id="contact-addon7"><span class="fa fa-pencil"></span></span>
+                		<!-- Input Here -->
+                		<textarea class="form-control" name="message" rows="6" required><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea>
+                        <span class="input-group-addon" id="XXX-addon2"><span class="fa fa-star"></span></span>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div><!-- Form Group -->
+            
+            <div class="form-group">
+            	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label6; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                	<div class="input-group">
+                        <!-- Input Here -->
+                        <?php echo recaptcha_get_html($publickey, null, true); ?>
+                    </div>
+                </div>
+            </div><!-- Form Group -->
+            
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-xs-12">
+                	<!-- Input Here -->
+                  	<button name="submit" type="submit" class="btn btn-primary" >Send Message <span class="fa fa-send"></span> </button>
+                </div>
+            </div><!-- Form Group -->
+            
         <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
-        </form>
+        </form>    
 <?php } // end if ($msg != 1);
 } // end if ($_SESSION['prefsContact'] == "Y")
  

@@ -66,7 +66,7 @@ $message8 = "";
 $message9 = "";
 
 // Build Links
-$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/beerxml_import.html' title='BCOE&amp;M Help: BeerXML'>My Info and Entries Help</a></p>";
+$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/beerxml_import.html' title='BCOE&amp;M Help: BeerXML'>My Account Help</a></p>";
 
 // Build Messages
 
@@ -157,10 +157,9 @@ else {
 		}
 		elseif (!$_FILES['userfile']) $message .= "";
 		else $message .= "Invalid file specified.";
-		if (($action != "print") && ($msg != "default")) echo $msg_output;
 		if (!empty($message)) $message7 .= "<div class='error'>".$message."</div>";
 		if (entries_unconfirmed($_SESSION['user_id']) > 0) { 
-			$message8 .=  "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
+			$message8 .=  "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
 		} 
 	}
 }

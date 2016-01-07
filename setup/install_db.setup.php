@@ -5,8 +5,8 @@ if ($setup_free_access == TRUE) {
 
 	if ($action == "default") { 
 	
-		$output .= "<div class='info'>To begin setup and install, the necessary database tables need to be instantiated.</div>";
-		$output .= " <p>Click &quot;install&quot; below to install the database schema into the following database:</p>";
+		$setup_alerts .= "<div class=\"alert alert-info\"><strong>To begin setup and install, the necessary database tables need to be instantiated.</strong> These tables hold all of your competition data.</div>";
+		$output .= "<p>Click the &ldquo;Install DB Tables&rdquo; button below to install the database schema into the following database:</p>";
 		$output .= "<ul>";
 		$output .= "<li>".$database."</li>";
 		$output .= "</ul>";
@@ -17,15 +17,23 @@ if ($setup_free_access == TRUE) {
 			$output .= "</ul>";
 		}
 		
-		$output .= "<div style='padding: 20px; margin: 30px 0 0 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; border-radius: 6px; -webkit-border-radius: 6px;
-		-moz-border-radius: 6px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='".$base_url."setup.php?section=step0&amp;action=install-db' onclick='return confirm(\"Are you sure? This will install all database elements.\");'>Install DB Tables</a></div>";
+		$output .= "<a class=\"btn btn-lg btn-primary\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-download\"></span> Install DB Tables</a>";
 		
 		}
 		
 	if ($action == "install-db") {
+		
+		$setup_alerts .= "<div class=\"alert alert-success\"><strong>All database tables and default data have been installed successfully.</strong></div>
+		<div class=\"alert alert-info\"><strong>The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
+		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-chevron-right\"><span></a></div>";
 	
-		$output .= "<div class='info'>Database Tables Install Details are Below.</div>";
-		$output .= "<ul>";
+		//$setup_alerts .= "<div class=\"alert alert-info\"><strong>Database tables install details are below.</strong></div>";
+		$output .= "<div class=\"panel panel-primary\">";
+		$output .= "<div class=\"panel-heading\"><strong>Table Installation Details</strong></div>";
+		$output .= "<div class=\"panel-body\">";
+		$output .= "<p>Status of database tables installation.</p>";
+		$output .= "</div>";
+		$output .= "<ul class=\"list-group\">";
 		
 		// ------------------- 
 		// Archive Table (v1.3.0.0 done)
@@ -48,7 +56,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Archive</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Archive</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -100,7 +108,7 @@ if ($setup_free_access == TRUE) {
 		
 		
 		
-		$output .= "<li><strong>Participants</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Participants</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Brewing Table (v1.3.0.0 done)
@@ -477,7 +485,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Entries</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Entries</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -501,7 +509,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Contacts</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Contacts</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -556,13 +564,14 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Competition Info</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
 		// Countries Table (v1.3.0.0 done)
 		// -------------------
 		
+		/*
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$countries_db_table` (
 		  `id` int(11) NOT NULL DEFAULT '0',
@@ -827,7 +836,8 @@ if ($setup_free_access == TRUE) {
 		mysql_real_escape_string($sql);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
-		$output .= "<li><strong>Countries</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Countries</strong> table was installed successfully.</li>";
+		*/
 		
 		// ------------------- 
 		// Drop Off Table
@@ -851,7 +861,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Drop Off Locations</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Drop Off Locations</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Assignments Table
@@ -876,7 +886,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		//echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Assignments</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Assignments</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Flights Table (v1.3.0.0 done)
@@ -899,7 +909,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Flights</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Flights</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Locations Table (v1.3.0.0 done)
@@ -923,7 +933,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Locations</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Locations</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -955,7 +965,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Preferences</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Preferences</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -982,7 +992,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Scores</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Scores</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -1007,7 +1017,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Scores BOS</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Scores BOS</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -1033,7 +1043,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Judging Tables</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Tables</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Mods Table
@@ -1120,7 +1130,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Preferences</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Special Best Data Table (v1.3.0.0 done)
@@ -1144,7 +1154,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Special Best Data</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Data</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Special Best Info Table (v1.3.0.0 done)
@@ -1168,7 +1178,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Special Best Info</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Info</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Sponsors Table (v1.3.0.0 done)
@@ -1192,7 +1202,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Sponsors</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Sponsors</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Staff Table (v1.3.0.0 done)
@@ -1216,7 +1226,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Staff</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Staff</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Styles Table (v1.3.2.0 done 05.21.15)
@@ -1256,8 +1266,8 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
-		if ($result) $output .= "<li><strong>Styles</strong> table installed successfully.</li>";
-		else $output .= "<li><strong>Styles</strong> table NOT installed successfully.</li>";
+		if ($result) $output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Styles</strong> table was installed successfully.</li>";
+		else $output .= "<li class\"list-group-item list-group-item-danger\"><span class=\"fa fa-check text-success\"></span> The <strong>Styles</strong> table NOT installed successfully.</li>";
 		
 		$sql = "INSERT INTO `".$styles_db_table."` ";
 		$sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
@@ -1527,7 +1537,7 @@ if ($setup_free_access == TRUE) {
 		//echo $sql;
 		//exit;
 		
-		$output .= "<li><strong>Styles</strong> data installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
 		
 		// ------------------- 
 		// Style Types Table
@@ -1546,7 +1556,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
-		$output .= "<li><strong>Style Types</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Style Types</strong> table was installed successfully.</li>";
 		
 		$sql = "
 		INSERT INTO `$style_types_db_table` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
@@ -1559,7 +1569,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Style Types</strong> data installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Style Types</strong> data installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -1579,7 +1589,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
-		$output .= "<li><strong>System</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
 		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.3.2.0', '2015-05-31', NOW( ),'0');";
 		mysql_select_db($database, $brewing);
@@ -1587,7 +1597,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>System</strong> data installed successfully.</li>";	
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
 		
 		
 		// ------------------- 
@@ -1606,7 +1616,7 @@ if ($setup_free_access == TRUE) {
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
-		$output .= "<li><strong>Themes</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Themes</strong> table was installed successfully.</li>";
 		
 		$sql = "
 		INSERT INTO `$themes_db_table` (`id`, `themeTitle`, `themeFileName`) VALUES
@@ -1619,7 +1629,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li><strong>Themes</strong> data installed successfully.</li>";	
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Themes</strong> data installed successfully.</li>";	
 		
 		
 		// ------------------- 
@@ -1666,9 +1676,10 @@ if ($setup_free_access == TRUE) {
 			$result = mysql_query($sql, $brewing);
 		}
 		
-		$output .= "<li><strong>Users</strong> table installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
 	
 		$output .=  "</ul>";
+		$output .=  "</div>";
 		
 		
 		// ------------------------------
@@ -1677,20 +1688,10 @@ if ($setup_free_access == TRUE) {
 		
 		
 		// -------------------------------
-		
-		$success =  "
-		<h2>All database tables and default data have been installed successfully.</h2>
-		<h3>However, the setup process is not done!</h3>
-		<p>Click &ldquo;Continue&rdquo; below to setup and customize your installation.</p>
-		<div style='padding: 20px; margin: 30px 0 30px 0; background-color: #ddd; border: 1px solid #aaa; width: 200px; border-radius: 6px; -webkit-border-radius: 6px;
-		-moz-border-radius: 6px; text-align: center; font-size: 1.6em; font-weight: bold;'><a href='".$base_url."setup.php?section=step1'>Continue</a></div>
-		";
-		
-		echo $success;
 
 	}
 
-	echo $output;
+	//echo $output;
 
 }
 

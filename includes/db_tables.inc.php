@@ -12,7 +12,6 @@ if ($dbTable == "default") {
 	$brewing_db_table = $prefix."brewing";
 	$contacts_db_table = $prefix."contacts";
 	$contest_info_db_table = $prefix."contest_info";
-	$countries_db_table = $prefix."countries";
 	$drop_off_db_table = $prefix."drop_off";
 	$judging_assignments_db_table = $prefix."judging_assignments";
 	$judging_flights_db_table = $prefix."judging_flights";
@@ -41,7 +40,6 @@ else {
 	$brewing_db_table = $prefix."brewing".$suffix;
 	$contacts_db_table = $prefix."contacts";
 	$contest_info_db_table = $prefix."contest_info";
-	$countries_db_table = $prefix."countries";
 	$drop_off_db_table = $prefix."drop_off";
 	$judging_assignments_db_table = $prefix."judging_assignments".$suffix;
 	$judging_flights_db_table = $prefix."judging_flights".$suffix;

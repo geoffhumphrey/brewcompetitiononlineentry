@@ -26,13 +26,13 @@ else {
 		
 	}
 	
-	if ($action == "edit") {
+	
 		
 		$query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
+		if ($action == "default") $query_entry_count .= " WHERE brewReceived='1'";
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-		$row = mysql_fetch_array($result);
+		$row_entry_count = mysql_fetch_array($result);
 		
-	}
 	
 }
 ?>

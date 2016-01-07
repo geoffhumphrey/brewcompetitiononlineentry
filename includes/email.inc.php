@@ -1082,10 +1082,7 @@ if (!defined('ISEMAIL_VALID')) {
 	return ($diagnose) ? $final_status : ($final_status < ISEMAIL_THRESHOLD);
 }
 $email = $_GET['email'];
-if (is_email($email)) echo "Email Format: <span style='color:green'>Valid</span>";
-else echo "Email Format: <span style='color:red'>Invalid!</span>";
-//if (!preg_match('/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/i', $email)) echo "Email Format: <span style='color:red'>Invalid!</span>";
-//else echo "Email Format: <span style='color:green'>Valid</span>";
-//if (filter_var($email, FILTER_VALIDATE_EMAIL)) echo "Email Format: <span style='color:green'>Valid</span>";
-//else echo "Email Format: <span style='color:red'>Invalid!</span>";
+if (is_email($email)) echo "<span class=\"text-success\"><span class=\"fa fa-check\"></span> Email format is valid.</span>";
+else echo "<span class=\"text-danger\"><span class=\"fa fa-exlamation-circle\"></span> Email format is not valid!</span>";
+
 ?> 

@@ -51,11 +51,10 @@ $message1 = "";
 $message2 = "";
 
 // Build Messages
-if (($action != "print") && ($msg != "default")) $message0 .= $msg_output;
-if (isset($_SESSION['loginUsername'])) $message1 .= "<div class='error'>You are already logged in.</div>";
+if (isset($_SESSION['loginUsername'])) $message1 .= "<p class=\"lead\">You are already logged in.</p>";
 
 if ((($action == "default") || ($action == "login") || ($action == "logout")) && (!isset($_SESSION['loginUsername']))) $login_form_display = TRUE; else $login_form_display = FALSE;
-if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE; else $foget_form_display = FALSE;
+if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE; else $forget_form_display = FALSE;
 if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
 	$verify_form_display = TRUE;
 	$username = $_POST['loginUsername'];
@@ -64,7 +63,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$user_check = explode("^",$user_check);
 	
 	if (($user_check[0] == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='error'>There is no email address in the system that matches the one you entered.</div><p><a href='%s'>Try again?</a>",build_public_url("login","password","forgot",$sef,$base_url));
+		$message2 .= sprintf("<div class='alert alert-danger'>There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
 	}
 	
 }
@@ -73,8 +72,8 @@ else $verify_form_display = FALSE;
 // Build Links
 
 if ($section != "update") {
-	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p><span class='icon'><img src='%simages/exclamation.png' alt='Exclamation' /></span><span class='data'>Have you <a href='%s'>registered your account</a> yet?</span></p>",$base_url,build_public_url("register","default","default",$sef,$base_url));
-	if ($login_form_display) $primary_links .= sprintf("<p><span class='icon'><img src='%simages/exclamation.png' alt='Exclamation' /></span><span class='data'>Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</span></p>",$base_url,build_public_url("login","password","forgot",$sef,$base_url));
+	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Have you <a href='%s'>registered your account</a> yet?</p>",build_public_url("register","default","default","default",$sef,$base_url));
+	if ($login_form_display) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</p>",$base_url."index.php?section=login&amp;go=password&amp;action=forgot");
 }
 
 
@@ -85,55 +84,81 @@ echo $primary_links;
 ?>
 
 <?php if ($login_form_display) { ?>
-<form action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
-<table class="dataTable">
-	<tr>
-    	<td class="dataLabel" width="5%">Email Address:</td>
-    	<td class="data"><input name="loginUsername" type="text" class="submit" size="40" <?php if ($username != "default") echo "value=\"".$username."\""; ?>></td>
-  	</tr>
-  	<tr>
-    	<td class="dataLabel">Password:</td>
-    	<td class="data"><input name="loginPassword" type="password" class="submit" size="25"></td>
-  	</tr>
-</table>
-<p><input type="submit" class="button" value="Login"></p>
+<form class="form-horizontal" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
+	<div class="form-group">
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
+		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" autofocus required>
+				<span class="input-group-addon" id="login-addon2"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div><!-- Form Group -->
+	<div class="form-group">
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
+		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+			<div class="input-group has-warning">
+				<span class="input-group-addon" id="login-addon3"><span class="fa fa-lock"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="loginPassword" type="password" required>
+				<span class="input-group-addon" id="login-addon4"><span class="fa fa-star"></span></span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<!-- Input Here -->
+			<button name="submit" type="submit" class="btn btn-primary" >Log In <span class="fa fa-sign-in" aria-hidden="true"></span> </button>
+		</div>
+	</div><!-- Form Group -->
 </form>
 <?php } ?>
 
 <?php if ($forget_form_display) { ?>
-<p>To reset your password, enter the email address you used when you registered.</p>
-<form action="<?php echo build_public_url("login","verify","forgot",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
-<table class="dataTable">
-	<tr>
-    	<td class="dataLabel" width="5%">Email Address:</td>
-    	<td class="data"><input name="loginUsername" type="text" class="submit" size="40" <?php if ($username != "default") echo "value=\"".$username."\""; ?>></td>
-  	</tr>
-    	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" class="button" value="Submit"></td>
-  	</tr>
-</table>
+<p class="lead">To reset your password, enter the email address you used when you registered.</p>
+<form class="form-horizontal" action="<?php echo build_public_url("login","verify","forgot","default",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
+	<div class="form-group">
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
+		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group">
+				<span class="input-group-addon" id="reset-addon1"><span class="fa fa-envelope"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="loginUsername" type="text" value="<?php if ($username != "default") echo $username; ?>" autofocus>
+			</div>
+		</div>
+	</div><!-- Form Group -->
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<!-- Input Here -->
+			<button name="submit" type="submit" class="btn btn-primary" >Verify <span class="fa fa-check-circle" aria-hidden="true"></span> </button>
+		</div>
+	</div><!-- Form Group -->
 </form>
 <?php } ?>
 <?php if ($verify_form_display) {
-	if ((empty($message2)) || (empty($msg))) { ?>
-	<form action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
-	<table class="dataTable">
-	<tr>
-    	<td class="dataLabel" width="5%">ID Verification Question:</td>
-        <td class="data"><?php echo $user_check[1]; ?></td>
-    </tr>
-    <tr>
-    	<td class="dataLabel">Answer:</td>
-        <td class="data"><input name="userQuestionAnswer" type="text" size="40"  /></td>
-    </tr>
-    <tr>
-    	<td class="dataLabel">&nbsp;</td>
-    	<td class="data"><input type="submit" class="button" value="Reset Password"></td>
-  	</tr>
-	</table>
-	<input name="loginUsername" type="hidden" class="submit" size="40" value="<?php echo $username; ?>">
-	</form>
-    <?php if ($_SESSION['prefsContact'] == "Y") { ?><p>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" onClick="return confirm('An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.');">Get it via email</a>.</p><?php } ?>
-	<?php }
+	if ((empty($message2)) || (empty($msg))) { ?>	
+	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $user_check[1]; ?></em></small></p>
+	<?php if ($_SESSION['prefsContact'] == "Y") { ?><p class='lead'><small>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" onClick="return confirm('An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.');">Get it via email</a>.</small></p><?php } ?>
+<form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
+	<div class="form-group">
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Answer</label>
+		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group">
+				<span class="input-group-addon" id="id-verify-addon1"><span class="fa fa-bullhorn"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="userQuestionAnswer" type="text" autofocus>
+			</div>
+		</div>
+	</div><!-- Form Group -->
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<!-- Input Here -->
+			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-lock" aria-hidden="true"></span></button>
+		</div>
+	</div><!-- Form Group -->
+</form>
+    <?php }
 	}
 ?>

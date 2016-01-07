@@ -1,5 +1,47 @@
 <?php
 
+function is_dir_empty ($dir){ 
+     return (($files = @scandir($dir)) && count($files) <= 2); 
+}
+
+
+function directory_contents_dropdown($directory,$file_name_selected) {
+	
+	$handle = opendir($directory);
+	$filelist[] = "";
+	
+	while ($file = readdir($handle)) {
+		
+		$filetype_ok = FALSE;
+		
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+    	$mime_type = finfo_file($finfo, $directory.$file);
+		switch ($mime_type) {
+			case "image/jpeg": $filetype_ok = TRUE; break;
+			case "image/png":  $filetype_ok = TRUE; break;
+			case "image/gif":  $filetype_ok = TRUE; break;
+		}
+		
+	   if ((!is_dir($file)) && (!is_link($file)) && ($filetype_ok)) {
+			$filelist[] .= $file;
+	   }
+	   
+	}
+	
+	sort($filelist, SORT_NATURAL | SORT_FLAG_CASE);
+	
+	$return = "";
+	foreach ($filelist as $filename) {
+		$selected = "";
+		if ($file_name_selected == $filename) $selected = " selected";
+		$return .= "<option value=\"".$filename."\"".$selected.">";
+		$return .= $filename;
+		$return .= "</option>";
+	}
+	
+	return $return;
+}
+
 function table_count_total($input) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -46,17 +88,29 @@ function bos_entry_info($eid,$table_id,$filter) {
 	
 	if ($table_id == "default") $table_id = 1; else $table_id = $table_id;
 	
-	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $prefix."brewing", $eid);
+	if ($filter != "default") {
+		$entry_db_table = $prefix."brewing_".$filter;
+		$judging_tables_db_table = $prefix."judging_tables_".$filter;
+		$bos_scores_db_table = $prefix."judging_scores_bos_".$filter;
+	}
+	
+	else {
+		$entry_db_table = $prefix."brewing";
+		$judging_tables_db_table = $prefix."judging_tables";
+		$bos_scores_db_table = $prefix."judging_scores_bos";
+	}
+	
+	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $entry_db_table, $eid);
 	$entries_1 = mysql_query($query_entries_1, $brewing) or die(mysql_error());
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 
-	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
+	$query_tables_1 = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $judging_tables_db_table, $table_id);
 	$tables_1 = mysql_query($query_tables_1, $brewing) or die(mysql_error());
 	$row_tables_1 = mysql_fetch_assoc($tables_1);
 	$totalRows_tables = mysql_num_rows($tables_1);
 		
-	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $prefix."judging_scores_bos", $eid);
+	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $bos_scores_db_table, $eid);
 	$bos_place_1 = mysql_query($query_bos_place_1, $brewing) or die(mysql_error());
 	$row_bos_place_1 = mysql_fetch_assoc($bos_place_1);	
 	
@@ -186,14 +240,10 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row_tables = mysql_fetch_assoc($tables);
 		$totalRows_tables = mysql_num_rows($tables);
 		
-		$table_choose = '<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, \'menu_categories'.$random.'\');">For Table #...</a></div>';
-		$table_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
-		
 		do {
-			$table_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a>';
+			$table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
 		} while ($row_tables = mysql_fetch_assoc($tables));
 		
-		$table_choose .= '</div>';
 	}
 	
 	return $table_choose;
@@ -300,18 +350,18 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 	//echo $query_tables;
 	
 	if ($totalRows_tables > 0) {
-	$r = "<select name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	$r .= "<option>Choose Below:</option>";
+	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
+	//$r .= "<option selected disabled>Add scores to...</option>";
 		do { 
 		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-        	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>"; 
+        	$r .= "<li class=\"small\"><a href=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."</a></li>"; 
 		} while ($row_tables = mysql_fetch_assoc($tables));
-     $r .= "</select>";
+     //$r .= "</select>";
 	} 
-	 else $r = "No tables have been defined.";
+	 else $r = "<li class=\"disabled small\"><a href=\"#\">No tables have been defined</a></li>";
 	 return $r;
 }
 
@@ -322,21 +372,25 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
 	$row_sbi = mysql_fetch_assoc($sbi);
 	$totalRows_sbi = mysql_num_rows($sbi); 
-	//echo $query_tables;
+	
 	if ($totalRows_sbi > 0) {
-	$r = "<select name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	$r .= "<option>Choose Below:</option>";
+	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
+	//$r .= "<option>Choose Below:</option>";
 		do { 
 		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $special_best_data_db_table WHERE sid='%s'", $row_sbi['id']);
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-        	$r .= "<option value=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</option>";
+        	$r .= "<li class=\"small\"><a href=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</a></li>";
 		} while ($row_sbi = mysql_fetch_assoc($sbi));
-     $r .= "</select>";
+     //$r .= "</select>";
 	} 
-	else $r = "No custom winning categories have been defined.";
-	 return $r;
+	else { 
+		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";
+		$r .= "<li role=\"separator\" class=\"divider\"></li>";
+		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
+	}
+	return $r;
 }
 
 function participant_choose($brewer_db_table) {
@@ -348,10 +402,10 @@ function participant_choose($brewer_db_table) {
 	$row_brewers = mysql_fetch_assoc($brewers);
 	
 	$output = "";
-	$output .= "<select name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\">";
-	$output .= "<option value=\"\">Choose Below:</option>";
+	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\"  data-live-search=\"true\">";
+	$output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
 	do { 
-		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
+		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
 	} while ($row_brewers = mysql_fetch_assoc($brewers)); 
 	$output .= "</select>";
 	
@@ -760,8 +814,15 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($row_assignments['count'] == 0) $icon = "user_add.png"; else $icon = "user_edit.png";
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" title="Assign/Edit Judges at this Table"><span class="icon"><img src="'.$base_url.'images/'.$icon.'"></span></a>'.$row_assignments['count'];
+	if ($row_assignments['count'] == 0) {
+		$icon = "fa-plus-circle";
+		$title = "Add judges to this table.";
+	}
+	else {
+		$icon = "fa-edit";
+		$title = "Edit judges assigned to this table.";
+	}
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa '.$icon.'"></span></a> '.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -772,8 +833,15 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
-	if ($row_assignments['count'] == 0) $icon = "user_add.png"; else $icon = "user_edit.png";
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" title="Assign/Edit Stewards at this Table"><span class="icon"><img src="'.$base_url.'images/'.$icon.'"></span></a>'.$row_assignments['count'];
+	if ($row_assignments['count'] == 0) {
+		$icon = "fa-plus-circle";
+		$title = "Add stewards to this table.";
+	}
+	else {
+		$icon = "fa-edit";
+		$title = "Edit stewards assigned to this table.";
+	}
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa '.$icon.'"></span></a> '.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }

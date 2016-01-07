@@ -16,7 +16,7 @@ include (LIB.'date_time.lib.php');
 
 include(INCLUDES.'version.inc.php');
 
-function version_check($version) {
+function version_check($version,$current_version) {
 	
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
@@ -28,7 +28,7 @@ function version_check($version) {
 }
 
 if ((!HOSTED) && (strpos($section, 'step') === FALSE))  {
-	version_check($version);
+	version_check($version,$current_version);
 }
 
 // ---------------------------------------------------  
@@ -51,47 +51,48 @@ function designations($judge_array,$display) {
 function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$link_text="default") {
 
 	$return = "";
-	$return .= "<span class='icon'>";
+	//$return .= "<a>";
 	
 	if (($method == 1) || ($method == 2)) {
-		$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;"; 
+		$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
+		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;"; 
 	}
 
-	if ($icon == "bin_closed") {
-		$return .= "<a href=\"javascript:DelWithCon('includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."','id',".$id.",'".$alt_title."');\" title=\"".$alt_title."\">";
+	if ($icon == "fa-trash-o") {
+		$return .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\" data-confirm=\"".$alt_title."\">";
 	}
 
 	else {
 		
 		if ($method == 2) { // print form link
-			$return .= "<a id='modal_window_link' href='".$base_url."output/entry.php?";
+			$return .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.php?";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
-			$return .= "' title='".$alt_title."'>";	
+			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\">";	
 		} 
 		
 		else {
-			$return .= "<a href='".$base_url."index.php?section=".$section;
+			$return .= "<a href=\"".$base_url."index.php?section=".$section;
 			if ($go != "default") $return .= "&amp;go=".$go;
 			if ($action != "default") $return .= "&amp;action=".$action;
 			if ($filter != "default") $return .= "&amp;filter=".$filter;
 			if ($id != "default") $return .= "&amp;id=".$id;
-			$return .= "' title='".$alt_title."'>";	
+			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\">";	
 		}
 	}
 	
 	if (($method == 1) || ($method == 2)) {
 		$return .= $link_text;
-		$return .= "</a>";
-		$return .= "</span>";
 	}
 	
 	else {
-		$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>"; 
-		$return .= "</a>";
-		$return .= "</span>";
+		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>"; 
+		$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
+		
 	}
-
+	
+	//$return .= "</span>";
+	$return .= "</a>";
 	return $return;
 }
 
@@ -99,38 +100,38 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 
 	$return = "";
 	
-	$return .= "<a href='".$base_url."output/".$filename."?section=".$section;
+	$return .= "<a href=\"".$base_url."output/".$filename."?section=".$section;
 	if ($go != "default") $return .= "&amp;go=".$go;
 	if ($action != "default") $return .= "&amp;action=".$action;
 	if ($filter != "default") $return .= "&amp;filter=".$filter;
 	if ($id != "default") $return .= "&amp;id=".$id;
-	$return .= "' title='".$alt_title."'";
-	if ($modal_window) $return .= " id='modal_window_link'";
+	$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\"";
+	if ($modal_window) $return .= " id=\"modal_window_link\"";
 	$return .= ">";	
-	$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'></a>";
+	$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
 	$return .= "</span>";
-
+	$return .= "</a>";
 	return $return;
 }
 
 
 
-function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_reqired) {
+function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_required) {
 	$return = "";
 	if (strpos($section, 'step') !== FALSE) $section = "setup"; else $section = $section;
-	$return .= "<form method='post' id='form1' name='form1' action='".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
+	$return .= "<form class=\"form-horizontal\" method=\"post\" id=\"form1\" name=\"form1\" action=\"".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
 	if ($go != "default") $return .= "&amp;go=".$go;
 	if ($action != "default") $return .= "&amp;action=".$action;
 	if ($filter != "default") $return .= "&amp;filter=".$filter;
 	if ($id != "default") $return .= "&amp;id=".$id;
-	$return .= "'";
-	if ($check_reqired) $return .= " onsubmit='return CheckRequiredFields()'";
+	$return .= "\"";
+	if ($check_required) $return .= " data-toggle=\"validator\" role=\"form\"";
 	$return .= ">";
 	
 	return $return;
 }
 
-function build_public_url($section="default",$go="default",$action="default",$sef,$base_url) {
+function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url) {
 	
 	include(CONFIG.'config.php');
 	if (NHC) {
@@ -145,12 +146,14 @@ function build_public_url($section="default",$go="default",$action="default",$se
 			if ($section != "default") $url .= $section."/";
 			if ($go != "default") $url .= $go."/";
 			if ($action != "default") $url .= $action."/";
+			if ($id != "default") $url .= $id."/";
 			return rtrim($url,"/");		
 		}
 		if ($sef == "false") {
 			$url = $base_url."index.php?section=".$section;
 			if ($go != "default") $url .= "&amp;go=".$go;
 			if ($action != "default") $url .= "&amp;action=".$action;
+			if ($id != "default") $url .= "&amp;id=".$id;
 			return $url;
 		}
 	}
@@ -276,7 +279,7 @@ function random_generator($digits,$method){
 	return $random_generator;
 } // end of function
 
-function relocate($referer,$page,$msg,$id) {
+function relocate($referer,$page,$msg,$id,$keep_id="default") {
 	
 	include(CONFIG.'config.php');
 	
@@ -292,10 +295,16 @@ function relocate($referer,$page,$msg,$id) {
 	$pattern = array("/[0-9]/", "/&id=/");
 	$referer = preg_replace($pattern, "", $referer);
 	
-	// Remove $pg=X from query string and add back in
+	if ($keep_id != "default") { // Add $id back in if specified
+		$referer .= "&id=".$id;
+	}
+	
+	// Remove $pg=X from query string
+	$pattern = array("/[0-9]/", "/&pg=/");
+	$referer = str_replace($pattern,"",$referer);
+		
+	// Add back $pg back in if present
 	if ($page != "default") { 
-		$pattern = array("/[0-9]/", "/&pg=/");
-		$referer = str_replace($pattern,"",$referer);
 		$referer .= "&pg=".$page; 
 	}
 	
@@ -798,7 +807,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	if (($bid != "default") && ($filter == "default")) { 
 	// Get each entrant's number of entries
 	mysql_select_db($database, $brewing);
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $bid);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_array($entries);
 		$totalRows_entries = $row_entries['count'];
@@ -1281,7 +1290,7 @@ function total_not_paid_brewer($bid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 
-	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $bid);
+	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $prefix."brewing", $bid);
 	$all = mysql_query($query_all, $brewing) or die(mysql_error());
 	$row_all = mysql_fetch_assoc($all);
 	$totalRows_all = $row_all['count'];
@@ -1579,7 +1588,7 @@ function style_convert($number,$type,$base_url="") {
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."' title='View ".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
+			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."' data-toggle='tooltip' title='".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
 		}
 		$style_convert = rtrim(implode(", ",$style_convert),", ");
 		break;
@@ -1607,7 +1616,7 @@ function style_convert($number,$type,$base_url="") {
 		case "7":
 		$a = explode(",",$number);
 		$style_convert = "";
-		$style_convert .= "<ul>";
+		$style_convert .= "<ul class=\"list-group\">";
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'",$styles_db_table,$value);
@@ -1617,8 +1626,8 @@ function style_convert($number,$type,$base_url="") {
 			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
 			else $style_name = $row_style['brewStyle'];
 			
-			if ($row_style['brewStyleOwn'] == "bcoe") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
-			else $style_convert .= "<li>Custom Style: ".$row_style['brewStyle']."</li>";
+			if ($row_style['brewStyleOwn'] == "bcoe") $style_convert .= "<li class=\"list-group-item\">".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
+			else $style_convert .= "<li class=\"list-group-item\">Custom Style: ".$row_style['brewStyle']."</li>";
 		}
 		$style_convert .= "</ul>";
 		
@@ -1742,7 +1751,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			$a = explode(",", $row_table['tableStyles']);
 			$b = $input;
 			foreach ($a as $value) {
-				if ($value == $input) $c = "<br><em>Assigned to Table #".$row_table['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table['id']."'>".$row_table['tableName']."</a></em>";
+				if ($value == $input) $c = "<br><em>Assigned to Table ".$row_table['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table['id']."'>".$row_table['tableName']."</a></em>";
 			}
 		} while ($row_table = mysql_fetch_assoc($table));
 	return $c;
@@ -1983,7 +1992,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 		$totalRows_location = mysql_num_rows($location);
 		
 		if ($totalRows_location == 1) {
-			$table_location = $row_location['judgingLocName']."<br>".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
+			$table_location = $row_location['judgingLocName'].", ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
 		}
 		else $table_location = ""; 
 	}
@@ -2116,10 +2125,12 @@ function get_contact_count() {
 	return $contactCount;
 }
 
-function brewer_info($uid) {
+function brewer_info($uid,$filter="default") {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount,brewerAddress,brewerCity,brewerState,brewerZip,brewerCountry FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	if ($filter == "default") $brewer_db_table = $prefix."brewer";
+	else $brewer_db_table = $prefix."brewer_".$filter;
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount,brewerAddress,brewerCity,brewerState,brewerZip,brewerCountry FROM %s WHERE uid='%s'", $brewer_db_table, $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
 	$r = 
@@ -2195,15 +2206,15 @@ function display_place($place,$method) {
 	}
 	if ($method == "2") { 
 		switch($place){
-			case "1": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class='fa fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class='fa fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class='fa fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "4": $place = "<span class=\"icon\"><img src=\"".$base_url."images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
+			case "4": $place = "<span class='fa fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "5": $place = "<span class=\"icon\"><img src=\"".$base_url."images/rosette.png\"></span>HM";
+			case "5": $place = "<span class='fa fa-trophy text-forest-green'></span> HM";
 			break;
 			default: $place = "N/A";
 			}
@@ -2211,13 +2222,13 @@ function display_place($place,$method) {
 	
 	if ($method == "3") { 
 		switch($place){
-			case "1": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_gold_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class='fa fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_silver_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class='fa fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class=\"icon\"><img src=\"".$base_url."images/medal_bronze_3.png\"></span>".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class='fa fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			default: $place = "<span class=\"icon\"><img src=\"".$base_url."images/rosette.png\"></span>".addOrdinalNumberSuffix($place);
+			default: $place = "<span class='fa fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
 	}
 	
@@ -2270,10 +2281,6 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 		$r = "Administrative Advance";
 	}
 	
-	if ($method == "") {
-		$r = "";	
-	}
-	
 	
 	if ($method < 6) {
 	$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
@@ -2317,14 +2324,20 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	return $r;
 }
 
-function brewer_assignment($uid,$method,$id,$dbTable){
+function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default"){
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);	
-	$query_staff_check = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."staff", $uid);
+	mysql_select_db($database, $brewing);
+	
+	if ($archive != "default") $staff_db_table = $prefix."staff_".$archive;
+	else $staff_db_table = $prefix."staff";
+	$query_staff_check = sprintf("SELECT * FROM %s WHERE uid='%s'", $staff_db_table, $uid);
 	$staff_check = mysql_query($query_staff_check, $brewing) or die(mysql_error());
 	$row_staff_check = mysql_fetch_assoc($staff_check);
 	$totalRows_staff_check = mysql_num_rows($staff_check);
+	
+	if ($row_staff_check['staff_judge'] == "1") $assignment = "judges";
+	if ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
 	
 	if ($totalRows_staff_check > 0) {
 	$r[] = "";
@@ -2332,9 +2345,9 @@ function brewer_assignment($uid,$method,$id,$dbTable){
 			case "1": // 
 				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
 				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS Judge";
-				if (($id == "default") && ($dbTable == "default")) {
-					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges&amp;id=".$uid."' title='View this judge&rsquo;s table assignments and entry categories'>Judge</a>";
-					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href='".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards&amp;id=".$uid."' title='View this steward&rsquo;s table assignments and entry categories'>Steward</a>";
+				if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
+					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges&amp;id=".$uid."\" data-toggle=\"tooltip\" data-placement=\"top\"  title=\"View this judge&rsquo;s table assignments and entry categories\">Judge</a>";
+					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards&amp;id=".$uid."\" data-toggle=\"tooltip\" data-placement=\"top\"  title=\"View this steward&rsquo;s table assignments and entry categories\">Steward</a>";
 				}
 				else {
 					if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
@@ -2373,9 +2386,17 @@ function entries_unconfirmed($user_id) {
 	$query_entry_check = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='0'", $prefix."brewing", $user_id);
 	$entry_check = mysql_query($query_entry_check, $brewing) or die(mysql_error());
 	$row_entry_check = mysql_fetch_assoc($entry_check);
-	$totalRows_entry_check = mysql_num_rows($entry_check); 
-	
-	if ($totalRows_entry_check > 0)	return $totalRows_entry_check; else return 0;
+	$totalRows_entry_check = mysql_num_rows($entry_check);
+		
+	if ($totalRows_entry_check > 0)	{
+		
+		do {
+			$r[] = $row_entry_check['id'];			
+		} while ($row_entry_check = mysql_fetch_assoc($entry_check));
+
+	}
+	else $r = array("0");
+	return $r;
 }
 
 function check_special_ingredients($style,$style_version) {
@@ -2656,18 +2677,18 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				$output .= "\t\t<tr>\n";
 				$output .= "\t\t\t<td class='dataList'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= "\t\t\t<td class='dataList'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";
+				$output .= "\t\t\t<td class='dataList'>Table ".$table_info[0]." - ".$table_info[1]."</td>\n";
 				$output .= "\t\t</tr>\n";
 			}
 			elseif ($method2 == "1") {
-				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
-				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' title='Assign/Unassign Stewards to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 				
 			}
 			else {
 				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= "\t\t\t<td class='dataList bdr1B'>Table #".$table_info[0]." - ".$table_info[1]."</td>\n";	
+				$output .= "\t\t\t<td class='dataList bdr1B'>Table ".$table_info[0]." - ".$table_info[1]."</td>\n";	
 				$output .= "\t\t</tr>\n";
 			}
 			
@@ -2761,6 +2782,7 @@ function judge_steward_availability($input,$method) {
 		arsort($a);
 		foreach ($a as $value) {
 		if ($value != "") {
+			$return = "";
 			$b = substr($value, 2);
 			$c = substr($value, 0, 1);
 				if ($c == "Y") {
@@ -2795,7 +2817,7 @@ function judge_entries($uid,$method) {
 	
 	if ($totalRows_judge_entries > 0) {
 		do { 
-			if ($method == 1) $entries[] = "<a href='".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."' title='View the ".$row_judge_entries['brewStyle']." Entries'>".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>"; 
+			if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>"; 
 			else $entries[] = $row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory'];
 			} 
 			while ($row_judge_entries = mysql_fetch_assoc($judge_entries));
@@ -3074,19 +3096,22 @@ function judging_location_info($id) {
 
 // Functions unique to this script
 function yes_no($input,$base_url,$method=0) {
+	$output = "";
 	if ($method != 3) {
 		if (($input == "Y") || ($input == 1)) { 
-			$output = "<span class='icon'><img src='".$base_url."images/tick.png' alt='Yes' title='Yes'></span>";
+			$output .= "<span class='fa fa-check text-success'></span> ";
 			if ($method == 0) $output .= "Yes";
+			
 		}
 		else {
-			$output = "<span class='icon'><img src='".$base_url."images/cross.png' alt='No' title='No'></span>";
+			$output .= "<span class='fa fa-times text-danger'></span> ";
 			if ($method == 0) $output .= "No";
+			
 		}
 	}
 	if ($method == 3) {
-		if (($input == "Y") || ($input == 1)) $output = "Yes";
-		else $output = "No";
+		if (($input == "Y") || ($input == 1)) $output .= "Yes";
+		else $output .= "No";
 		
 	}
 	return $output;

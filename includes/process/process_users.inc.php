@@ -97,7 +97,7 @@ else {
 	*/
 	  }
 	 }
-	 else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=3"));
+	 else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&view=".$view."&msg=3"));
 	}
 	
 	// ---------------------------  Editing a User -------------------------------------------

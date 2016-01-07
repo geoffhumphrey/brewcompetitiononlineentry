@@ -146,12 +146,12 @@ foreach ($total_cat as $cat) {
 	
 	if (!empty($cat_name)) { 
 	
-		if ($action == "print") $html .= "<tr class='bdr1B_gray'>"; 
+		if ($action == "print") $html .= "<tr>"; 
 		else $html .= "<tr>";
-		$html .= "<td nowrap='nowrap' width='25%'>".$cat_convert." - ".$cat_name."</td>";
-		$html .= "<td nowrap='nowrap'>".$row_style_count_logged['count']."</td>";
-		$html .= "<td nowrap='nowrap'>".$row_style_count['count']."</td>";
-		$html .= "<td class='data'>".$style_type."</td>";
+		$html .= "<td>".$cat_convert." - ".$cat_name."</td>";
+		$html .= "<td>".$row_style_count_logged['count']."</td>";
+		$html .= "<td>".$row_style_count['count']."</td>";
+		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
 		$html .= "</tr>";
 	
 	}
@@ -203,7 +203,7 @@ echo "<br>";
 
 $html_count = "";
 if ($beer_total > 0) {
-	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>";
+	if ($action == "print") $html_count.= "<tr>";
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%' nowrap='nowrap'>Beer</td>";
 	$html_count .= "<td>".$beer_total_logged."</td>";
@@ -212,7 +212,7 @@ if ($beer_total > 0) {
 }
 
 if ($mead_total > 0) {
-	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
+	if ($action == "print") $html_count.= "<tr>"; 
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%' nowrap='nowrap'>Mead</td>";
 	$html_count .= "<td>".$mead_total_logged."</td>";
@@ -222,7 +222,7 @@ if ($mead_total > 0) {
 
 if ($cider_total > 0) {
 	
-	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
+	if ($action == "print") $html_count.= "<tr>"; 
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%'>Cider</td>";
 	$html_count .= "<td>".$cider_total_logged."</td>";
@@ -232,7 +232,7 @@ if ($cider_total > 0) {
 
 if (($other_total > 0) || ($other_total_logged > 0)) {
 		
-	if ($action == "print") $html_count.= "<tr class='bdr1B_gray'>"; 
+	if ($action == "print") $html_count.= "<tr>"; 
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%'>Other</td>";
 	$html_count .= "<td>".$other_total."</td>";
@@ -255,21 +255,23 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 	$html_count .= "</tfoot>";
 	
 	$html .= "<tfoot>";
-	$html .= "<tr class='bdr1T'>"; 
-	$html .= "<td nowrap='nowrap'><strong>Totals</strong></td>";
-	$html .= "<td nowrap='nowrap'>".$total_style_count_logged."</td>";
-	$html .= "<td nowrap='nowrap'>".$total_style_count."</td>";
-	$html .= "<td class='data'>&nbsp;</td>";
+	$html .= "<tr>"; 
+	$html .= "<td><strong>Totals</strong></td>";
+	$html .= "<td>".$total_style_count_logged."</td>";
+	$html .= "<td>".$total_style_count."</td>";
+	$html .= "<td class=\"hidden-xs hidden-sm\">&nbsp;</td>";
 	$html .= "</tr>";
 	$html .= "</tfoot>";
 }
 ?>
-<h2>Entry Count by Style</h2>
+
+<p class="lead"><?php echo $_SESSION['contestName']; ?> entry count by broken down by style.</p>
+
 <?php if ($action != "print") { ?>
-<div class="adminSubNavContainer">
-   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
-	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/page.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle">Entry Count By Sub-Style</a></span>
-	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/printer.png" alt="Back"></span><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.php?section=admin&amp;go=count_by_style&amp;action=print">Print</a></span>
+<div class="bcoem-admin-element hidden-print">
+	<div class="btn-group" role="group" aria-label="add-custom-winning">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle"><span class="fa fa-eye"></span> View Entry Count by Sub-Style</a>
+    </div><!-- ./button group -->
 </div>
 <?php } 
 if ($total_style_count > 0) { ?>
@@ -291,19 +293,19 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="dataTable" id="sortable1">
+<table class="table table-responsive table-striped table-bordered table-hover" id="sortable1">
 <thead>
 	<tr>
-		<th class="bdr1B" width="25%" nowrap="nowrap">Style Type</th>
-		<th class="bdr1B" width="15%">Logged</th>
-		<th class="bdr1B">Paid &amp; Received</th>
+		<th>Style Type</th>
+		<th>Logged</th>
+		<th>Paid &amp; Received</th>
 	</tr>
 </thead>
 <tbody>
 <?php echo $html_count; ?>
 </tbody>
 </table>
-<div style="margin-bottom: 20px;"></div>
+
 <?php } ?>
 
 <h3>Breakdown By Style</h3>
@@ -324,13 +326,13 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="dataTable" id="sortable2">
+<table class="table table-responsive table-striped table-bordered table-hover" id="sortable2">
 <thead>
 	<tr>
-		<th class="bdr1B" width="25%">Category</th>
-        <th class="bdr1B" width="15%">Logged</th>
-		<th class="bdr1B" width="15%">Paid &amp; Received</th>
-        <th class="bdr1B">Style Type</th>
+		<th>Category</th>
+        <th>Logged</th>
+		<th>Paid &amp; Received</th>
+        <th class="hidden-xs hidden-sm">Style Type</th>
 	</tr>
 </thead>
 <tbody>

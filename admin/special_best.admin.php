@@ -6,21 +6,36 @@
  */
 
 ?>
-<h2><?php if ($action == "add") echo "Add a Custom Winning Category"; elseif ($action == "edit") echo "Edit a Custom Winning Category"; else echo "Custom Winning Categories"; ?></h2>
-<div class="adminSubNavContainer">
-   	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin">Back to Admin Dashboard</a></span>
-    	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Back to the Custom Winning Category List</a></span>
-        <?php } else { ?>
-        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/award_star_add.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">Add a Custom Winning Category</a></span>
-   		<?php } if ($totalRows_sbd > 0) { ?>
-        <span class="adminSubNav"><span class="icon"><img src="<?php echo $base_url; ?>images/award_star_gold_2.png" /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">View Custom Winning Category Entires</a></span>
-        <?php } ?>
-    </span>
-</div>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Category"; elseif ($action == "edit") echo ": Edit a Custom Category"; else echo " Custom Categories"; ?></p>
 <?php if ($action == "default") { ?>
-    <p>Custom winner categories are useful if your competition features unique "best of" competition categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
-	<?php if ($totalRows_sbi > 0) { ?>
+    <p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
+<?php } ?>
+<div class="bcoem-admin-element hidden-print">
+	
+    <!-- View Button Group Dropdown -->
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-eye"></span> View...   
+        <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+			<?php if (($action == "add") || ($action == "edit")) { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">All Custom Categories</a></li>
+			<?php } if ($totalRows_sbd > 0) { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">All Custom Category Entries</a><li>
+			<?php } else { ?>
+			<li class="small"><a href="#"><span class="text-muted disabled">All Custom Category Entries</span></a><li>
+			<?php } ?>
+        </ul>
+    </div><!-- ./button group -->
+	
+	<?php if ($action == "default") { ?>
+	<div class="btn-group" role="group" aria-label="add-custom-winning">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Category</a>
+    </div><!-- ./button group -->
+	<?php } ?>
+</div>
+<?php if (($totalRows_sbi > 0) && ($action == "default")) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {
             $('#sortable').dataTable( {
@@ -28,7 +43,7 @@
                 "sPaginationType" : "full_numbers",
                 "bLengthChange" : true,
                 "iDisplayLength" : <?php echo $limit; ?>,
-                "sDom": 'irtip',
+                "sDom": 'rtp',
                 "bStateSave" : false,
                 "aaSorting": [[4,'asc']],
                 "aoColumns": [
@@ -42,15 +57,15 @@
                 } );
             } );
         </script>
-    <table class="dataTable" id="sortable">
+    <table class="table table-responsive table-striped table-bordered" id="sortable">
      <thead>
      <tr>
-      <th class="dataHeading bdr1B">Name</th>
-      <th class="dataHeading bdr1B">Description</th>
-      <th class="dataHeading bdr1B">Places</th>
-      <th class="dataHeading bdr1B">Places Displayed?</th>
-      <th class="dataHeading bdr1B">Rank</th>
-      <th class="dataHeading bdr1B">Actions</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Places</th>
+      <th>Places Displayed?</th>
+      <th>Rank</th>
+      <th>Actions</th>
      </tr>
      </thead>
      <tbody>
@@ -58,77 +73,94 @@
 		$sbd_count = sbd_count($row_sbi['id']);
 	 ?>
      <tr>
-      <td width="20%" class="dataList"><?php echo $row_sbi['sbi_name']; ?></td>
-      <td width="35%" class="dataList"><?php echo $row_sbi['sbi_description']; ?></td>
-      <td width="5%" class="dataList"><?php echo $row_sbi['sbi_places']; ?></td>
-      <td width="5%" class="dataList"><?php if ($row_sbi['sbi_display_places'] == 1) echo "Yes"; else echo "No" ?></td>
-      <td width="25%" class="dataList"><?php echo $row_sbi['sbi_rank']; ?></td>
-      <td class="dataList" nowrap="nowrap">
-      <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sbi['sbi_name']; ?>" title="Edit <?php echo $row_sbi['sbi_name']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete','id',<?php echo $row_sbi['id']; ?>,'Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sbi['sbi_name']; ?>" title="Delete <?php echo $row_sbi['sbi_name']; ?>"></a></span>
-      <?php if ($sbd_count > 0) { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_edit.png" alt="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } else { ?><span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>"><img src="<?php echo $base_url; ?>images/rosette_add.png" alt="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>" /></a></span><?php } ?>
+      <td width="20%"><?php echo $row_sbi['sbi_name']; ?></td>
+      <td><?php echo $row_sbi['sbi_description']; ?></td>
+      <td><?php echo $row_sbi['sbi_places']; ?></td>
+      <td><?php if ($row_sbi['sbi_display_places'] == 1) echo "<span class=\"fa fa-check text-success\"></span>"; else echo "<span class=\"fa fa-times text-danger\"></span>" ?></td>
+      <td><?php echo $row_sbi['sbi_rank']; ?></td>
+      <td>
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-pencil"></span></a> 
+	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a> 
+	  <?php if ($sbd_count > 0) { ?>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-pencil-square-o"></span></a> 
+	  <?php } else { ?>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-plus-circle-sign"></span></a>
+	  <?php } ?>
+	  
       </td>
      </tr>
     <?php } while($row_sbi = mysql_fetch_assoc($sbi)) ?>
      </tbody>
     </table>
-    <?php } else echo "<p>There are no custom winner categories were found in the database.</p>";
-} 
-if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
-<table>
-  <tr>
-    <td class="dataLabel">Custom Winning Category Name:</td>
-    <td colspan="2" class="data"><input name="sbi_name" type="text" size="30" maxlength="255" value="<?php if ($action == "edit") echo $row_sbi['sbi_name']; ?>"></td>
-    </tr>
-  <tr>
-    <td class="dataLabel">Description:</td>
-    <td class="data" colspan="2"><textarea name="sbi_description" class="submit mceNoEditor" cols="70" rows="15"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea><!-- <p><a href="javascript:toggleEditor('sbi_description');">Enable/Disable Rich Text</a></p>--></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Places:</td>
-    <td class="data"><input name="sbi_places" type="text" size="5" value="<?php if ($action == "edit") echo $row_sbi['sbi_places']; ?>"></td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  
-  <tr>
-    <td class="dataLabel">Display Places?</td>
-    <td class="data">
-    	<input type="radio" name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if (($row_sbi['sbi_display_places'] == "1") || ($action == "add")) echo "CHECKED"; ?> />Yes<br />
-        <input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ($row_sbi['sbi_display_places'] == "0") echo "CHECKED"; ?> />No
-    </td>
-    <td class="data">&nbsp;</td>
-  </tr>
+<?php } if (($totalRows_sbi == 0) && ($action == "default")) echo "<p>No custom categories were found in the database.</p>"; ?>
+<?php if (($action == "add") || ($action == "edit")) { ?>
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 
-  <tr>
-    <td class="dataLabel">Rank:</td>
-    <td class="data">
-    <select name="sbi_rank">
-    	<option value="1" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "1")) echo " SELECTED"; ?>>1</option>
-        <option value="2" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "2")) echo " SELECTED"; ?>>2</option>
-        <option value="3" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "3")) echo " SELECTED"; ?>>3</option>
-        <option value="4" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "4")) echo " SELECTED"; ?>>4</option>
-        <option value="5" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "5")) echo " SELECTED"; ?>>5</option>
-        <option value="6" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "6")) echo " SELECTED"; ?>>6</option>
-        <option value="7" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "7")) echo " SELECTED"; ?>>7</option>
-        <option value="8" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "8")) echo " SELECTED"; ?>>8</option>
-        <option value="9" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "9")) echo " SELECTED"; ?>>9</option>
-        <option value="10" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "10")) echo " SELECTED"; ?>>10</option>
-        <option value="11" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "11")) echo " SELECTED"; ?>>11</option>
-        <option value="12" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "12")) echo " SELECTED"; ?>>12</option>
-        <option value="13" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "13")) echo " SELECTED"; ?>>13</option>
-        <option value="14" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "14")) echo " SELECTED"; ?>>14</option>
-        <option value="15" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "15")) echo " SELECTED"; ?>>15</option>
-        <option value="16" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "16")) echo " SELECTED"; ?>>16</option>
-        <option value="17" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "17")) echo " SELECTED"; ?>>17</option>
-        <option value="18" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "18")) echo " SELECTED"; ?>>18</option>
-        <option value="19" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "19")) echo " SELECTED"; ?>>19</option>
-        <option value="20" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == "20")) echo " SELECTED"; ?>>20</option>
-    </select>
-    </td>
-    <td class="data">Determines this category's rank in the display order. The lower the number, the higher priority.</td>
-  </tr>
-</table>
-<p><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Winning Category"></p>
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="sbi_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="sbi_name" name="sbi_name" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_name']; ?>" placeholder="Pro-Am with XXX Brewery, People's Choice, etc." data-error="The the custom category's name is required." autofocus required>
+			<span class="input-group-addon" id="sbi_name-addon2"><span class="fa fa-star"></span></span>
+		</div>
+		<span class="help-block with-errors"></span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
+	<label for="sbi_description" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
+    <div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<textarea class="form-control" name="sbi_description" rows="6"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea>
+	 </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="sbi_places" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Places</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<input class="form-control" id="sbi_places" name="sbi_places" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_places']; ?>" placeholder="">
+		<span id="helpBlock" class="help-block">The number of places available for the category.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+	<label for="sbi_display_places" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Places?</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group">
+			<!-- Input Here -->
+			<label class="radio-inline">
+				<input type="radio"  name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if (($row_sbi['sbi_display_places'] == "1") || ($action == "add")) echo "CHECKED"; ?>> Yes
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ($row_sbi['sbi_display_places'] == "0") echo "CHECKED"; ?> />No
+			</label>
+		</div>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="sbi_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rank</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="sbi_rank" id="sbi_rank">
+		<?php for($i=1; $i<=20; $i++) { ?>
+		<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Determines this category's rank in the display order. The lower the number, the higher priority.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<input type="submit" name="updateSpecialBest" id="updateSpecialBest" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Category">
+		</div>
+	</div>
+</div>
+
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } ?>

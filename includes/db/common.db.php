@@ -313,13 +313,13 @@ else {
 
 	}
 
-	if ($section == "rules") {
+	//if ($section == "rules") {
 		
 		$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
 		$contest_rules = mysql_query($query_contest_rules, $brewing) or die(mysql_error());
 		$row_contest_rules = mysql_fetch_assoc($contest_rules);	
 			
-	}
+	//}
 	
 	if ($section == "volunteers") {
 	

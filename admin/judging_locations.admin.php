@@ -66,12 +66,12 @@ $goto_nav = "";
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";
 if ($filter == "stewards") 	$staff_row_field = "staff_steward";
-if ($filter == "staff") 	$staff_row_field = "staff_staff";
+if ($filter == "staff") 		$staff_row_field = "staff_staff";
 if ($filter == "bos") 		$staff_row_field = "staff_judge_bos";
 
 if ($filter == "judges") 	$filter_readable .= "Judges";  
 if ($filter == "stewards") 	$filter_readable .= "Stewards";
-if ($filter == "staff") 	$filter_readable .= "Staff"; 
+if ($filter == "staff") 		$filter_readable .= "Staff"; 
 if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
 
 // *****************************************************************************
@@ -80,104 +80,15 @@ if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
 
 
 // Build Subtitle
-$subtitle = "<h2>";
-if ($action == "add") $subtitle .= "Add a Judging Location"; 
-elseif ($action == "edit") $subtitle .= "Edit a Judging Location"; 
-elseif ($action == "update") $subtitle .= "Make Final ".$filter_readable." Location Assignments"; 
-elseif ($action == "assign") $subtitle .= "Assign Participants as ".$filter_readable;
-else $subtitle .= "Judging Locations &amp; Dates";
-$subtitle .= "</h2>";
-
-
-// Build Page Info
-
-if (($section == "admin") && (($action == "update") || ($action == "assign"))) {
-	$primary_page_info .= "<p>";
-	if (($bid == "default") && ($filter != "bos")) $primary_page_info .= "Choose ".$filter." to assign.";  
-	elseif ($bid != "default") $primary_page_info .= "Check below which ".$filter." will be assigned to the ".$row_judging['judgingLocName']. " location."; 
-	elseif ($filter == "bos") $primary_page_info .= "Choose the judges that will judge in the Best of Show round(s) and be awarded 0.5 BJCP experience points.";
-	$primary_page_info .= "</p>";
-}
-    
 if ($section != "step5") {
-// Build Go To Nav
-	$goto_nav .= "<div class='adminSubNavContainer'>";
-	  // Back to Dashboard
-	$goto_nav .= "<span class='adminSubNav'>";
-	$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin'>Back to Admin Dashboard</a>";
-	$goto_nav .= "</span>";
-	
-	if ($action == "assign") {
-	  	// Back to Main Functional Area
-		$goto_nav .= "<span class='adminSubNav'>";
-		$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=participants'>Back to Participants</a>";
-		$goto_nav .= "</span>";
-	}
-	
-	if (($section == "admin") && ((($action == "add") || ($action == "edit")) && ($section != "step3"))) {
-		$goto_nav .= "<span class='adminSubNav'>";
-		$goto_nav .= "<span class='icon'><img src='".$base_url."images/arrow_left.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=judging'>Back to Judging Location List</a>";
-		$goto_nav .= "</span>";
-	}
-	
-	$goto_nav .= "</div>";
-
-if (($section == "admin") && (($section != "step5") && ($filter == "default"))) {
-	if ($action != "add") {
-		$goto_nav .= "<div class='adminSubNavContainer'>";
-		$goto_nav .= "<span class='adminSubNav'>";
-		$goto_nav .= "<span class='icon'><img src='".$base_url."images/page_add.png' alt='Back' title='Back'></span><a href='".$base_url."index.php?section=admin&amp;go=judging&amp;action=add'>Add a Judging Location</a>";
-		$goto_nav .= "</span>";
-		$goto_nav .= "</div>";
-	}
-}
+	if ($action == "add") $subtitle .= ": Add a Judging Location"; 
+	elseif ($action == "edit") $subtitle .= ": Edit a Judging Location"; 
+	elseif ($action == "update") $subtitle .= ": Make Final ".$filter_readable." Location Assignments"; 
+	elseif ($action == "assign") $subtitle .= ": Assign Participants as ".$filter_readable;
+	else $subtitle .= ": Judging Locations &amp; Dates";
 }
 
-// Build Secondary Nav
 
-if (($filter == "default") && ($msg == "9"))  {
-	$secondary_nav .= "<div class='error'>Add another judging location, date, or time?</div>";
-	$secondary_nav .= "<div class='adminSubNavContainer'>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/tick.png' alt='Yes' title='Yes'></span>";
-	$secondary_nav .= "<a href='".$base_url;
-	if ($section == "step5") $secondary_nav .= "setup.php?section=step5"; 
-	else $secondary_nav .= "index.php?section=admin&amp;go=judging"; 
-	$secondary_nav .= "'>Yes</a>";
-	$secondary_nav .= "</span>";
-	$secondary_nav .= "<span class='adminSubNav'>";
-	$secondary_nav .= "<span class='icon'><img src='".$base_url."images/cross.png' alt='Yes' title='Yes'></span>";
-	$secondary_nav .= "<a href='".$base_url;
-	if ($section == "step5") $secondary_nav .= "setup.php?section=step6"; else $secondary_nav .= "index.php?section=admin";
-    $secondary_nav .= "'>No</a>";
-	$secondary_nav .= "</span>";
-	$secondary_nav .= "</div>";
-}
-
-if (($section == "admin") && (($action == "update") || ($action == "assign"))) {
-	$secondary_nav .= "<div class='adminSubNavContainer'>";
-	if ($filter != "judges") {
-		$secondary_nav .= "<span class='adminSubNav'>";
-		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges'>Assign/Unassign Participants as Judges</a>";
-		$secondary_nav .= "</span>";
-		$secondary_nav .= "<span class='adminSubNav'>";
-		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos'>Assign/Unassign Participants as BOS Judges</a>";
-		$secondary_nav .= "</span>";
-		$secondary_nav .= "</div>";
-	}
-	$secondary_nav .= "<div class='adminSubNavContainer'>";
-	if ($filter != "stewards") {
-		$secondary_nav .= "<span class='adminSubNav'>";
-		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards'>Assign/Unassign Participants as Stewards</a>";
-		$secondary_nav .= "</span>";
-	}
-	if ($filter != "staff") {
-		$secondary_nav .= "<span class='adminSubNav'>";
-		$secondary_nav .= "<span class='icon'><img src='".$base_url."images/user_edit.png' alt='' title=''></span><a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff'>Assign/Unassign Participants as Staff</a>";
-		$secondary_nav .= "</span>";
-	}
-	$secondary_nav .= "</div>";
-}
 
 // Build Secondary Page Info
 
@@ -196,11 +107,11 @@ if ($filter == "stewards") {
 
 if ($filter == "staff") {
 	
-	$secondary_page_info .= "<h3>Staff</h3>";
+	$secondary_page_info .= "<h5>Staff</h5>";
 	$secondary_page_info .= "<p>According to <a href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, staff members are &quot;...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge.&quot;";
 	$secondary_page_info .= "<p>If a staff member is not on this list, <a href='".$base_url."index.php?section=admin&go=participants&action=add'>add them to the database</a>.</p>";
 	
-	$secondary_page_info .= "<h3>Organizer</h3>";
+	$secondary_page_info .= "<h5>Organizer</h5>";
 	$secondary_page_info .= "<p>According to <a href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, the Organizer is &quot;...the single program participant who completes and signs the application to register or sanction a competition and who in all ways assumes responsibility for the direction of that competition.&quot;</p>";
 	$secondary_page_info .= "<p>If the organizer is not on this list, <a href='".$base_url."index.php?section=admin&go=participants&action=add'>add them to the database</a>.</p>";
 
@@ -223,30 +134,30 @@ if ($section != "step5") {
 		$output_datatables_aaSorting = "[1,'asc']";
 		$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
 		$output_datatables_head .= "<tr>";
-		$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Name</th>";
-		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Date</th>";
-		$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Start Time</th>";
-		$output_datatables_head .= "<th width='30%' class='dataHeading bdr1B'>Address</th>";
-		$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'># of Rounds</th>";
-		$output_datatables_head .= "<th class='dataHeading bdr1B'>Actions</th>";
+		$output_datatables_head .= "<th>Name</th>";
+		$output_datatables_head .= "<th>Date</th>";
+		$output_datatables_head .= "<th>Start Time</th>";
+		$output_datatables_head .= "<th>Address</th>";
+		$output_datatables_head .= "<th># of Rounds</th>";
+		$output_datatables_head .= "<th>Actions</th>";
 		$output_datatables_head .= "</tr>";
 		$output_datatables_head .= "";
 		
 		do {
 			
-			$output_datatables_edit_link = build_action_link("pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
+			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
 			
-			$output_datatables_delete_link = build_action_link("bin_closed",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
+			$output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
 			
-			$output_datatables_actions = $output_datatables_edit_link.$output_datatables_delete_link;
+			$output_datatables_actions = $output_datatables_edit_link." ".$output_datatables_delete_link;
 			
 			$output_datatables_body .= "<tr>";
-			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocName']."</td>";
-			$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
-			$output_datatables_body .= "<td class='dataList'>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
-			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingLocation']."</td>";
-			$output_datatables_body .= "<td class='dataList'>".$row_judging_locs['judgingRounds']."</td>";
-			$output_datatables_body .= "<td class='dataList' nowrap='nowrap'>".$output_datatables_actions."</td>";
+			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
+			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
+			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
+			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
+			$output_datatables_body .= "<td>".$row_judging_locs['judgingRounds']."</td>";
+			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 			
 		} while($row_judging_locs = mysql_fetch_assoc($judging_locs));
@@ -262,30 +173,31 @@ if ($section != "step5") {
 	if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) { 
 	
 		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
+		$form_organizer_select = "";
 		
-		// Needed to place the organizer designation dropdown after <form> element
 		if ($filter == "staff") {
-			$form_submit_url .= "<p><strong>Designate the Competition Organizer:</strong><span class='data'>";
-			$form_submit_url .= "<select name='Organizer'>";
-			$form_submit_url .= "<option value=''>Choose Below:</option>";
+			
 			do {
-				$form_submit_url .= "<option value='".$row_brewers['uid']."'";
-				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_submit_url .= " SELECTED";
-				$form_submit_url .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+				$form_organizer_select .= "<option value=\"".$row_brewers['uid']."\"";
+				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " SELECTED";
+				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
+				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " (Selected Competition Organizer)";
+				$form_organizer_select .= "</option>";
 			} while ($row_brewers = mysql_fetch_assoc($brewers));
-			$form_submit_url .= "</select></span></p>";
+			
 		}
-		$form_submit_button .= "<p><input type='submit' class='button' name='Submit' value='";
+		
 		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default"); 
+		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default",$filter); 
+		elseif ($action == "add") $form_submit_button .= "Add Judging Location";
+		elseif ($action == "edit") $form_submit_button .= "Edit Judging Location";
 		else $form_submit_button .= "Submit";
-		$form_submit_button .= "' />";
-		$form_submit_button .= "&nbsp;";
-		$form_submit_button .= "<span class='required'>Click";
-		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName']; 
-		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default"); 
-		else $form_submit_button .= "Submit";
-		$form_submit_button .= " <em>before</em> paging through records.</span></p>";
+		
+		$form_submit_button_help .= "Click ";
+		if ($action == "update") $form_submit_button_help .= "Assign to ".$row_judging['judgingLocName']; 
+		elseif ($action == "assign") $form_submit_button_help .= "Assign as ".brewer_assignment($filter,"3",$id,"default",$filter); 
+		else $form_submit_button_help .= "Submit";
+		$form_submit_button_help .= " <em>before</em> paging through records.";
 	
 		if ($filter == "judges") 		$output_datatables_aaSorting = "[4,'desc']";
 		elseif ($filter == "bos") 		$output_datatables_aaSorting = "[5,'desc']";
@@ -298,23 +210,23 @@ if ($section != "step5") {
 		
 		
 		$output_datatables_head .= "<tr>";
-		$output_datatables_head .= "<th width='1%' class='dataHeading bdr1B'><input type='checkbox' onclick='toggleChecked(this.checked)' title='Check/Uncheck All'></th>";
-		$output_datatables_head .= "<th width='20%' class='dataHeading bdr1B'>Name</th>";
-		$output_datatables_head .= "<th class='dataHeading bdr1B'>Assigned As</th>";
-		if ($filter == "bos") $output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Placing Entries</th>";
+		$output_datatables_head .= "<th width=\"1%\" nowrap><div class=\"checkbox\"><label><input type=\"checkbox\" name=\"all\" id=\"checkAll\" title=\"Check/Uncheck All\"></label></div></th>";
+		$output_datatables_head .= "<th>Name</th>";
+		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Assigned As</th>";
+		if ($filter == "bos") $output_datatables_head .= "<th>Placing Entries</th>";
 		if (($filter == "judges") || ($filter == "bos")) {
-			$output_datatables_head .= "<th width='10%' class='dataHeading bdr1B'>ID</th>";
-			$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Rank</th>";
+			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">ID</th>";
+			$output_datatables_head .= "<th>Rank</th>";
 		}
 		if (($filter == "judges") || ($filter == "stewards")) {
-			$output_datatables_head .= "<th width='25%' class='dataHeading bdr1B'>Location Preferences</th>";
-			$output_datatables_head .= "<th width='15%' class='dataHeading bdr1B'>Has Entries In...</th>";
+			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Location Preferences</th>";
+			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Has Entries In...</th>";
 		}
 		$output_datatables_head .= "</tr>";
 		
 		do {
 			
-			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable);
+			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter);
 			$assignment_checked = str_replace(", ",",",$brewer_assignment);
 			//$assignment_checked = explode(",",$assignment_checked);
 			if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
@@ -351,23 +263,23 @@ if ($section != "step5") {
 					}
 				$output = rtrim($output,"<br>");
 			}
-			if (empty($output)) $output_location = "<span class='icon'><img src='".$base_url."images/exclamation.png'></span>None specified.";
+			if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> None specified.";
 			else $output_location = $output;
 			
 			$output_datatables_body .= "<tr>";
-			$output_datatables_body .= "<td class='dataList'>";
-			$output_datatables_body .= "<input type='hidden' name='uid[]' value='".$row_brewer['uid']."' />";
-			$output_datatables_body .= "<input name='".$staff_row_field.$row_brewer['uid']."' type='checkbox' class='checkbox' value='1' ".$checked; 
+			$output_datatables_body .= "<td>";
+			$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
+			$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked; 
 			if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
 			if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
 			if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
-			$output_datatables_body .= " />";
+			$output_datatables_body .= " /></label></div>";
 			$output_datatables_body .= "</td>";
-			$output_datatables_body .= "<td class='dataList'>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
-			$output_datatables_body .= "<td class='dataList'>".$brewer_assignment."</td>";
+			$output_datatables_body .= "<td>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
+			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$brewer_assignment."</td>";
 			
 			if ($filter == "bos") {
-				$output_datatables_body .= "<td class='dataList'>";
+				$output_datatables_body .= "<td>";
 				if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places; 
 				else $output_datatables_body .= "&nbsp;";
 				$output_datatables_body .= "</td>";
@@ -378,8 +290,8 @@ if ($section != "step5") {
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 				$display_rank = bjcp_rank($bjcp_rank[0],1);
 			
-				$output_datatables_body .= "<td class='dataList'>".strtoupper($row_brewer['brewerJudgeID'])."</td>";
-				$output_datatables_body .= "<td class='dataList'>".$display_rank;
+				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
+				$output_datatables_body .= "<td>".$display_rank;
 				if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
 				if (!empty($bjcp_rank[1])) {
 					$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
@@ -388,8 +300,8 @@ if ($section != "step5") {
 			}
 			
 			if (($filter == "judges") || ($filter == "stewards")) { 			
-				$output_datatables_body .= "<td class='dataList'>".$output_location."</td>";
-				$output_datatables_body .= "<td class='dataList'>".judge_entries($row_brewer['uid'],1)."</td>";
+				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
+				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".judge_entries($row_brewer['uid'],1)."</td>";
 			}
 			
 			$output_datatables_body .= "</tr>";
@@ -409,10 +321,13 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	if ($go == "default") $go = "setup"; else $go = $go;
 	if ($section == "step5") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,"1",$judging_locations_db_table,TRUE);
 	else $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
-	$form_submit_button .= "<input type='submit' class='button' value='";
-	if ($action == "edit") $form_submit_button .= "Update"; 
-	else $form_submit_button .= "Submit";
-	$form_submit_button .= "'>";
+	if ($action == "add") $form_submit_button .= "Add Judging Location";
+		elseif ($action == "edit") $form_submit_button .= "Edit Judging Location";
+		else $form_submit_button .= "Submit";
+	//$form_submit_button .= "<input type=\"submit\" class=\"button\" value='";
+	//if ($action == "edit") $form_submit_button .= "Update"; 
+	//else $form_submit_button .= "Submit";
+	//$form_submit_button .= "'>";
 	
 	$judging_date = "";
 	$judging_time = "";
@@ -427,33 +342,163 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 
 // Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
-echo $subtitle;
-echo $primary_page_info;
-if ($section != "step5") echo $goto_nav;
-echo $secondary_nav;
-echo $secondary_page_info;
+//echo $subtitle;
+//echo $primary_page_info;
+//if ($section != "step5") echo $goto_nav;
+//echo $secondary_nav;
+//echo $secondary_page_info;
 
 // Display HTML/JS elements and compiled PHP elements
-if (!empty($output_no_records)) echo $output_no_records; 
-if (!empty($output_datatables_body)) { 
-	if (!empty($form_submit_url)) echo $form_submit_url.$form_submit_button; 
+//if (!empty($output_no_records)) echo $output_no_records; 
 ?>
+<?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
+<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
+<?php if (($filter == "default") && ($msg == "9"))  {
+	if ($section == "step5") $judge_loc_url_yes .= "setup.php?section=step5"; 
+	else $judge_loc_url_yes .= "index.php?section=admin&amp;go=judging"; 
+	if ($section == "step5") $judge_loc_url_no .= "setup.php?section=step6"; 
+	else $judge_loc_url_no .= "index.php?section=admin";
+?>
+
+<!-- Setup Adding Judging Locations -->
+<p class="lead">Add another judging location, date, or time?</p>
+<div class="btn-group" role="group" aria-label="judge-loc-yes">
+    <a class="btn btn-success" href="<?php echo $base_url.$judge_loc_url_yes; ?>"><span class="fa fa-check"></span> Yes</a>
+</div><!-- ./button group -->
+<div class="btn-group" role="group" aria-label="judge-loc-no">
+    <a class="btn btn-danger" href="<?php echo $base_url.$judge_loc_url_no; ?>"><span class="fa fa-times"></span> No</a>
+</div><!-- ./button group -->
+<?php } // end if (($filter == "default") && ($msg == "9")) ?>
+<?php if ($section != "step5") { ?>
+<div class="bcoem-admin-element hidden-print">
+	<!-- Page Navigation Elements -->
+	
+
+	<?php if (($action == "add") || ($action == "edit")) { ?>
+	<!-- Postion 1: View All Button -->
+	<div class="btn-group" role="group" aria-label="...">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging"><span class="fa fa-arrow-circle-left"></span> All Judging Locations</a>
+    </div><!-- ./button group -->
+	<?php } ?>
+	<?php if (($action == "default") || ($action == "edit")) { ?>
+	<div class="btn-group" role="group" aria-label="...">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Judging Location</a>
+    </div><!-- ./button group -->
+	<?php } ?>
+
+	<?php if ($filter != "default") { ?>
+    <!-- All Participants Button -->
+	<div class="btn-group" role="group" aria-label="...">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants"><span class="fa fa-arrow-circle-left"></span> All Participants</a>
+    </div><!-- ./button group -->
+	
+	<!-- View Participants Dropdown -->
+    <div class="btn-group" role="group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<span class="fa fa-eye"></span> View...   
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+        	<?php if ($action == "assign") { ?>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">All Participants</a></li>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=judges">Available Judges</a><li>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Available Stewards</a><li>
+            <?php } ?>
+            <?php if (($section == "admin") && ((($action == "add") || ($action == "edit")))) { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;filter=stewards">Judging Location List</a><li>
+            <?php } ?>
+		</ul>
+	</div><!-- ./button group -->
+    <?php } ?>
+	
+	<?php if (($section == "admin") && (($action == "update") || ($action == "assign"))) { ?>
+	
+	<!-- Assign/Unassign Judges/Stewards Dropdown -->
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<span class="fa fa-check-circle"></span> Assign/Unassign...  
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+        	<?php if ($filter != "judges") { ?>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Judges</a></li>
+            <?php } ?>
+            <?php if ($filter != "bos") { ?>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">BOS Judges</a><li>
+			<?php } ?>
+            <?php if ($filter != "stewards") { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Stewards</a><li>
+            <?php } ?>
+            <?php if ($filter != "staff") { ?>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Staff</a><li>
+            <?php } ?>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables">Judges/Stewards to Tables</a><li>
+		</ul>
+	</div><!-- ./button group -->
+	
+	<?php if ($filter == "staff") { ?>
+    <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <select class="selectpicker" name="Organizer">
+            <option value="" selected disabled>Designate the Competition Organizer</option>
+            <?php echo $form_organizer_select; ?>
+            </select>
+        </div>
+    </div><!-- ./button group -->
+    <?php } ?>
+	
+	<?php if ($filter != "default") { ?>
+	<div class="btn-group pull-right" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#bjcpStatusModal">
+              BJCP Rules
+            </button>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="bjcpStatusModal" tabindex="-1" role="dialog" aria-labelledby="bjcpStatusModalLabel">
+      	<div class="modal-dialog" role="document">
+        	<div class="modal-content">
+          		<div class="modal-header bcoem-admin-modal">
+            		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            		<h4 class="modal-title" id="bjcpStatusModalLabel">BJCP Rules</h4>
+          		</div>
+                <div class="modal-body">
+                    <?php echo $secondary_page_info; ?>
+                </div>
+        	</div>
+      	</div>
+    </div><!-- ./modal -->
+	<?php } ?>
+	<?php } // end if (($section == "admin") && (($action == "update") || ($action == "assign"))) ?>
+</div><!-- ./bcoem-admin-element hidden-print -->
+<?php } // end if ($section != "step5") ?>
+
+<?php if (!empty($output_datatables_body)) { ?>
 <script type="text/javascript" language="javascript">
+//<![CDATA[
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
 			"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
 			"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
 			"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
 			"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
-			"sDom": '<?php echo $output_datatables_sDom; ?>',
+			"sDom": 'rtp',
 			"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
 			"aaSorting": [<?php echo $output_datatables_aaSorting; ?>],
 			"bProcessing" : <?php echo $output_datatables_bProcessing; ?>,
 			"aoColumns": [ <?php echo $output_datatables_aoColumns; ?> ]
 			} );
 		} );
+
+	$(window).load(function(){
+		$("#checkAll").change(function () {
+			$("input:checkbox").prop('checked', $(this).prop("checked"));
+		});
+	});
+//]]>	
 </script>
-<table class="dataTable" id="sortable">
+<table class="table table-responsive table-bordered table-striped" id="sortable">
 <thead>
 <?php echo $output_datatables_head; ?>
 </thead>
@@ -461,7 +506,13 @@ if (!empty($output_datatables_body)) {
 <?php echo $output_datatables_body; ?>
 </tbody>
 </table>
-<?php if (!empty($form_submit_url)) echo $form_submit_button."</form>"; ?>
+<?php if (!empty($form_submit_url)) { ?>
+<div class="bcoem-admin-element hidden-print">
+	<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo $form_submit_button; ?>" />
+    <span id="helpBlock" class="help-block"><?php echo $form_submit_button_help; ?></span>
+</div>
+</form>
+<?php } ?>
 
 <?php } // end if (($action == "default") && (!empty($output_datatables_body)))
 
@@ -469,43 +520,75 @@ if (!empty($output_datatables_body)) {
 // -------------------------------- Add/Edit Form ---------------------------------------------
 
 if (($output_add_edit) && ($msg != 9)) { ?>
-<script>
-$(function() {
-	$('#judgingDate').datepicker({ dateFormat: 'yy-mm-dd', showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
-	$('#judgingTime').timepicker({ showPeriod: true, showLeadingZero: true });
-	
-});
-</script>
-<?php if (!empty($form_submit_url)) echo $form_submit_url; ?> 
-<table>
-  <tr>
-    <td class="dataLabel">Date:</td>
-    <td class="data"><input id="judgingDate" name="judgingDate" type="text" size="20" value="<?php echo $judging_date; ?>"></td>
-    <td class="data"><span class="required">Required</span></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Start Time:</td>
-    <td class="data"><input id="judgingTime" name="judgingTime" size="10" value="<?php echo $judging_time; ?>"></td>
-    <td class="data"><span class="required">Required</span></td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Name:</td>
-    <td class="data"><input name="judgingLocName" size="30" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>"></td>
-    <td class="data"><span class="required">Required</span> <em>Provide the name of the judging location.</em></td>
-  </tr>
-  
-  <tr>
-    <td class="dataLabel">Address:</td>
-    <td class="data"><input name="judgingLocation" size="50" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>"></td>
-    <td class="data"><span class="required">Required</span> <em>Provide the street address, city, and zip code.</em></td>
-  </tr>
-  <tr>
-    	<td class="dataLabel">Judging Rounds:</td>
-    	<td class="data"><input name="judgingRounds" size="5" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; else echo "2"; ?>"></td>
-        <td class="data"><span class="required">Required</span> <em>Provide the number of judging rounds anticipated for this location (<strong>not</strong> including Best of Show).</em></td>
-  	</tr>
-</table>
-<?php if (!empty($form_submit_button)) echo $form_submit_button; ?>
+<?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
+
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
+			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+		</div>
+		<span id="helpBlock" class="help-block">Provide the name of the judging location.</span>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group date has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingDate1" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php echo $current_date; ?>" required>
+			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+		</div>
+        <span class="help-block with-errors"></span>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingTime" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingTime1" name="judgingTime" type="text" size="10" maxlength="255" value="<?php echo $judging_time; ?>" placeholder="<?php echo $current_time; ?>" required>
+			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+		</div>
+        <span class="help-block with-errors"></span>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
+			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+		</div>
+        <span class="help-block with-errors"></span>
+        <span id="helpBlock" class="help-block">Provide the street address, city, and zip/postal code.</span>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rounds</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingRounds" name="judgingRounds" type="number" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; ?>" placeholder="" required>
+        	<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+        </div>
+        <span class="help-block with-errors"></span>
+		<span id="helpBlock" class="help-block">Provide the number of judging rounds anticipated for this location (<strong>not</strong> including Best of Show).</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<?php if (!empty($form_submit_button)) { ?>
+<div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo $form_submit_button; ?>" />
+		</div>
+	</div>
+</div>
+<?php } ?>
 <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=judging"; ?>">
 </form>
 <?php } ?>
@@ -514,9 +597,9 @@ $(function() {
 <?php if (($action == "update") && ($bid == "default")) {  ?>
 <table>
  <tr>
-   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3","default","default"); ?> To:</td>
+   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3","default","default","default"); ?> To:</td>
    <td class="data">
-   <select name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
+   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>

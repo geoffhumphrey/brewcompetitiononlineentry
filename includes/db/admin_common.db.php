@@ -73,7 +73,7 @@ else {
 	$total_fees_unpaid = ($total_fees - $total_fees_paid);
 	$total_nopay_received = total_nopay_received($go,"default");
 	
-	if ($go == "default") {
+	if (($go == "default") || ($go == "participants")) {
 		$query_with_entries = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FROM %s",$prefix."brewing");
 		$with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
 		$row_with_entries = mysql_fetch_assoc($with_entries);

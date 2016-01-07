@@ -7,6 +7,7 @@ if ((($go == "judging_tables") || ($go == "judging_scores_bos")) && ($action == 
 $style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
 $row_style_type = mysql_fetch_assoc($style_type);
 $totalRows_style_type = mysql_num_rows($style_type); 
+//echo $query_style_type."<br>";
 
 if (NHC) {
 	// Place NHC SQL calls below
@@ -39,7 +40,7 @@ else {
 		$bos = mysql_query($query_bos, $brewing) or die(mysql_error());
 		$row_bos = mysql_fetch_assoc($bos);
 		$totalRows_bos = mysql_num_rows($bos);
-		//echo $query_bos;
+		//echo $query_bos."<br>";
 	}
 }
 ?>

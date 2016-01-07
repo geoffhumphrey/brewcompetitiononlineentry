@@ -1,38 +1,54 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>[onshow.brewing_info.brewName] Entry/Recipe Form</title>
-<script type="text/javascript" src="../js_includes/smoothscroll.js"></script>
-<style type="text/css">
-<!--
-body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
-table					{ border-collapse: collapse; width: 100%; }
-table td				{ padding: 2px; }
-table th				{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
-.headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
-.headerTitleSm 			{ font-size: 12px; font-weight: bold; margin: 0; padding: 0 0 4px 0; }
-.headerTitleSm h1		{ font-size: 14px; font-weight: bold; font-style: italic; margin: 0; padding: 0 0 4px 0; }
-.bottle, .medium 		{ font-size: .9em; } 
-.small 					{ font-size: .7em; margin: 0; } 
-#printContainer 		{ width: 100%; }
-.bdr1_thick	 			{ border: 5px solid #000000; }
-.bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
-.bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
-.bdr1B 					{ border-bottom: 1px solid #000000; }
-.bdr1L 					{ border-left: 1px solid #000000; }
-.bdr1R 					{ border-right: 1px solid #000000; }
-.bdr1T 					{ border-top: 1px solid #000000; }
-.bdr1R_dashed			{ border-right: 1px dashed #000000; }
-.bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
-.headerItalic 		    { font-size: 8px; font-style: italic; }
-table.small	td			{ padding: 1px 2px 1px 3px; }
-table.bottleLabel		{ border-collapse: collapse; width: 700px; }
-table.bottleLabel-inner	{ margin: 15px; width: 325px }
-table.bottleLabel-inner	td { padding: 5px; text-align: left; }
-.error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-image: url(../images/error.png); background-position: center left; background-repeat: no-repeat; }
--->
-</style>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>[onshow.brewing_info.brewName] Recipe Form</title>
+    <!-- Load Bootstrap and jQuery -->
+    <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Load Font Awesome -->
+    <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+	<style type="text/css">
+    <!--
+    body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
+    table					{ border-collapse: collapse; width: 100%; }
+    table td				{ padding: 2px; }
+    table th				{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
+    .headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+    .headerTitleSm 			{ font-size: 12px; font-weight: bold; margin: 0; padding: 0 0 4px 0; }
+    .headerTitleSm h1		{ font-size: 14px; font-weight: bold; font-style: italic; margin: 0; padding: 0 0 4px 0; }
+    .bottle, .medium 		{ font-size: .9em; } 
+    .small 					{ font-size: .7em; margin: 0; } 
+    #printContainer 		{ width: 100%; }
+    .bdr1_thick	 			{ border: 5px solid #000000; }
+    .bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
+    .bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
+    .bdr1B 					{ border-bottom: 1px solid #000000; }
+    .bdr1L 					{ border-left: 1px solid #000000; }
+    .bdr1R 					{ border-right: 1px solid #000000; }
+    .bdr1T 					{ border-top: 1px solid #000000; }
+    .bdr1R_dashed			{ border-right: 1px dashed #000000; }
+    .bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
+    .headerItalic 		    { font-size: 8px; font-style: italic; }
+    table.small	td			{ padding: 1px 2px 1px 3px; }
+    table.bottleLabel		{ border-collapse: collapse; width: 700px; }
+    table.bottleLabel-inner	{ margin: 15px; width: 325px }
+    table.bottleLabel-inner	td { padding: 5px; text-align: left; }
+    .error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-position: center left; background-repeat: no-repeat; }
+    -->
+    </style>
 </head>
 <body>
 <!--
@@ -48,9 +64,9 @@ http://www.tinybutstrong.com/
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td><span class="error">If any items are missing, close this window and edit the entry.</span></td>
-    <td width="5%" nowrap="nowrap"><img src = "../images/eye.png"  />&nbsp;<a href="#labels">View Bottle Labels</a>&nbsp;&nbsp;&nbsp;</td>
-    <td width="5%" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+    <td><h4 class="text-danger">If any items are missing, close this window and edit the entry.</h4></td>
+    <td width="5%" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">View Bottle Labels</a></h3></td>
+    <td width="5%" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
@@ -93,7 +109,7 @@ http://www.tinybutstrong.com/
 <div>
 <h2>Recipe</h2>
 [onshow;block=div;when [var.totalFermentables]!='0']
-<h3>Grains and Fermentables</h3>
+<h4>Grains and Fermentables</h4>
 <table>
   <tr>
     <th>Amount</th>
@@ -115,7 +131,7 @@ http://www.tinybutstrong.com/
 </div>
 <div>
 [onshow;block=div;when [var.totalHops]!='0']
-<h3>Hops</h3>
+<h4>Hops</h4>
 <table>
   <tr>
     <th>Amount (oz)</th>
@@ -135,12 +151,12 @@ http://www.tinybutstrong.com/
 </div>
 <div>
 [onshow;block=div;when [var.brewing_info.brewYeast]!='']
-<h3>Yeast</h3>
+<h4>Yeast</h4>
 <p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
 </div>
 <div>
 [onshow;block=div;when [var.brewing_info.brewOG]!='']
-<h3>Processes</h3>
+<h4>Processes</h4>
 <ul>
   <li>OG: [onshow.brewing_info.brewOG;frm='0.000']</li>
   <li>FG: [onshow.brewing_info.brewFG;frm='0.000']</li>
@@ -393,9 +409,7 @@ days.</p>
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-  	<td>&nbsp;</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/arrow_up.png"  /><a href="#labels_top">Top</a>&nbsp;&nbsp;&nbsp;</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->

@@ -72,12 +72,12 @@ foreach (array_unique($a) as $style) {
 		
 		// Build table headers
 		$table_head1 .= "<tr>";
-		$table_head1 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Place</th>";
-		$table_head1 .= "<th class='dataList bdr1B' width='25%'>Brewer(s)</th>";
-		$table_head1 .= "<th class='dataList bdr1B' width='25%'>Entry Name</th>";
-		$table_head1 .= "<th class='dataList bdr1B' width='25%'>Style</th>";
-		$table_head1 .= "<th class='dataList bdr1B'>Club</th>";
-		if ($filter == "scores") $table_head1 .= "<th class='dataList bdr1B' width='1%' nowrap='nowrap'>Score</th>";
+		$table_head1 .= "<th width='1%'>Place</th>";
+		$table_head1 .= "<th width='20%'>Brewer(s)</th>";
+		$table_head1 .= "<th width='20%'>Entry Name</th>";
+		$table_head1 .= "<th width='20%'>Style</th>";
+		$table_head1 .= "<th>Club</th>";
+		if ($filter == "scores") $table_head1 .= "<th width='1%'>Score</th>";
 		$table_head1 .= "</tr>";
 		
 		// Build table body
@@ -90,40 +90,40 @@ foreach (array_unique($a) as $style) {
 			$table_body1 .= "<tr>";
 			
 			if ($action == "print") { 
-				$table_body1 .= "<td class='data' style='bdr1B'>";
+				$table_body1 .= "<td>";
 				$table_body1 .= display_place($row_scores['scorePlace'],1);
 				$table_body1 .= "</td>";
 			}
 			
 			else {
-				$table_body1 .= "<td class='data'>";
+				$table_body1 .= "<td>";
 				$table_body1 .= display_place($row_scores['scorePlace'],2);
 				$table_body1 .= "</td>";
 			}
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-			else $table_body1 .= "<td class='data'>";
+			if ($action == "print") $table_body1 .= "<td>";
+			else $table_body1 .= "<td>";
 			$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
 			if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+			if ($action == "print") $table_body1 .= "<td>";
 			else $table_body1 .= "<td class='data'>";
 			$table_body1 .= $row_scores['brewName'];
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+			if ($action == "print") $table_body1 .= "<td>";
 			else $table_body1 .= "<td class='data'>";
 			$table_body1 .= $style.": ".$row_scores['brewStyle'];
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+			if ($action == "print") $table_body1 .= "<td>";
 			else $table_body1 .= "<td class='data'>";
 			$table_body1 .= $row_scores['brewerClubs'];
 			$table_body1 .= "</td>";
 			
 			if ($filter == "scores") { 
-				if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
+				if ($action == "print") $table_body1 .= "<td>";
 				else $table_body1 .= "<td class='data'>";
 				$table_body1 .= $row_scores['scoreEntry'];
 				$table_body1 .= "</td>";
@@ -164,7 +164,7 @@ echo $header1_1;
 		} );
 	} );
 </script>
-<table class="dataTable" id="sortable<?php echo $random1; ?>">
+<table class="table table-responsive table-striped table-bordered dataTable" id="sortable<?php echo $random1; ?>">
 <thead>
 	<?php echo $table_head1; ?>
 </thead>

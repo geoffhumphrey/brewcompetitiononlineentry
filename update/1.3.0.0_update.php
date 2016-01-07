@@ -1,5 +1,5 @@
 <?php 
-$output .= "<h2>Version 1.3.0.0, 1.3.0.1, etc...</h2>";
+$output .= "<h4>Version 1.3.0.0, 1.3.0.1, etc...</h4>";
 $output .= "<ul>";
 
 

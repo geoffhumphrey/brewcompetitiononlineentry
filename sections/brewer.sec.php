@@ -15,209 +15,418 @@ if ($section != "step2") {
 }
 
 include(DB.'brewer.db.php');
-
+include (DB.'dropoff.db.php');
+// Get table assignments and build flags
 $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-
 if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) $table_assignment = TRUE;
 if ((empty($table_assign_judge)) && (empty($table_assign_steward))) $table_assignment = FALSE;
 
-if (($action != "print") && ($msg != "default")) echo $msg_output; 
+// Build info message
 if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  { 
-$info_msg = "<div class='info'>The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</div>";
+$info_msg = "<p class=\"lead\">The information here beyond your first name, last name, and club is strictly for record-keeping and contact purposes. <small>A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</small></p>\n";
+
+
+// Build form action link
+if ($section == "step2") $form_action = $base_url."includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=".$brewer_db_table;
+else {
+	$form_action = $base_url."includes/process.inc.php?section=";
+	if ($section == "brewer") $form_action .= "list"; 
+	else $form_action .= "admin"; 
+	$form_action .= "&amp;go=".$go."&amp;filter=".$filter."&amp;action=".$action."&amp;dbTable=".$brewer_db_table; 
+	if ($action == "edit") $form_action .= "&amp;id=".$row_brewer['id'];
+}
+
+// Define phone number configuration
+if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
+
+
 if ($go != "admin") echo $info_msg;
-if ($section == "step2") { 
 ?>
-<form action="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()"> 
+
+<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <span class="input-group-addon" id="brewerFirstName-addon1"><span class="fa fa-user"></span></span>
+                <!-- Input Here -->
+                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus>
+                <span class="input-group-addon" id="brewerFirstName-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerLastName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Name</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <span class="input-group-addon" id="brewerLastName-addon1"><span class="fa fa-user"></span></span>
+                <!-- Input Here -->
+                <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerLastName-addon2"><span class="fa fa-star"></span></span>
+            </div>
+            <span class="help-block">Please enter only <em>one</em> person&rsquo;s name. You will be able to identify a co-brewer when adding your entries.</span>
+        </div>
+    </div><!-- ./Form Group -->
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Street Address</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <span class="input-group-addon" id="brewerAddress-addon1"><span class="fa fa-home"></span></span>
+                <!-- Input Here -->
+                <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerAddress-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+
+
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerCity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">City</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerCity-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerState" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">State/Province</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerState" name="brewerState" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerState-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerZip" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Zip/Postal Code</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerZip" name="brewerZip" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerZip-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+
+
+	<div class="form-group"><!-- Form Group REQUIRED Select -->
+        <label for="brewerCountry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Country</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 has-warning">
+        <!-- Input Here -->
+        <select class="selectpicker" name="brewerCountry" id="brewerCountry">
+            <?php foreach ($countries as $country) {  ?>
+            <option value="<?php echo $country; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $country)) echo "selected"; ?>><?php echo $country; ?></option>
+            <?php } ?>
+        </select>
+        </div>
+    </div><!-- ./Form Group -->
+
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewerPhone1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Phone 1</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <span class="input-group-addon" id="brewerPhone1-addon1"><span class="fa fa-phone"></span></span>
+                <!-- Input Here -->
+                <input class="form-control" id="brewerPhone1" name="brewerPhone1" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone1']; ?>" placeholder="">
+                <span class="input-group-addon" id="brewerPhone1-addon2"><span class="fa fa-star"></span></span>
+            </div>
+        </div>
+    </div><!-- ./Form Group -->
+
+	<div class="form-group"><!-- Form Group Text Input -->
+        <label for="brewerPhone2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Phone 2</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        	<!-- Input Here -->
+       		<input class="form-control" id="brewerPhone2" name="brewerPhone2" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerPhone2']; ?>" placeholder="">
+        </div>
+    </div><!-- ./Form Group -->
+    
+    
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="brewerDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop Off Location</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="brewerDropOff" id="brewerDropOff">
+        <?php do { ?>
+            <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
+        <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+            <option disabled="disabled">-------------</option>
+    		<option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>>I'm Shipping My Entries</option>
+        </select>
+        </div>
+    </div><!-- ./Form Group -->
+
+    <div class="form-group"><!-- Form Group Text Input -->
+        <label for="brewerClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Club(s)</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        	<!-- Input Here -->
+       		<input class="form-control" id="brewerClubs" name="brewerClubs" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
+        </div>
+    </div><!-- ./Form Group -->
+    
+    <div class="form-group"><!-- Form Group Text Input -->
+        <label for="brewerAHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">AHA Member Number</label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        	<!-- Input Here -->
+       		<input class="form-control" id="brewerAHA" name="brewerAHA" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" placeholder="">
+            <span class="help-block">To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    
+    <?php if (($go != "entrant") && ($section != "step2")) { ?>
+    <!-- Judging and Stewarding Preferences or Assignments -->
+    
+		<?php if ($table_assignment) { ?>
+        <!-- Already assigned to a table, can't change preferences -->
+        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+    	<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+        
+        <?php } // end if ($table_assignment) 
+		else { ?>
+        <!-- Judging preferences -->
+        <div class="form-group"><!-- Form Group Radio INLINE -->
+            <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "checked"; ?>> Yes
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "checked"; ?>> No
+                    </label>
+                </div>
+                <p class="bcoem-form-info small">Are you willing and qualified to serve as a judge in this competition?</p>
+            </div>
+        </div><!-- ./Form Group -->
+        <?php if ($totalRows_judging > 1) { ?>
+        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+            <label for="brewerJudgeLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Location Availability</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+            <?php do { ?>
+            <p class="bcoem-form-info"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
+            <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation">
+                <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+            </select>
+            
+            <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?> 
+            </div>
+        </div><!-- ./Form Group -->
+        <?php } ?>
+        
+        <div class="form-group"><!-- Form Group Text Input -->
+            <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP ID</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="">
+            </div>
+        </div><!-- ./Form Group -->
+        
+        <div class="form-group"><!-- Form Group Radio INLINE -->
+            <label for="brewerJudgeMead" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Mead Judge Endorsement</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?>> Yes
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "N")) echo "CHECKED"; ?>> No
+                    </label>
+                </div>
+                <p class="bcoem-form-info small">Have you passed the BJCP Mead Judge exam?</p>
+            </div>
+        </div><!-- ./Form Group -->
+        <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
+        <div class="form-group"><!-- Form Group Radio STACKED -->
+            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Rank</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice",$judge_array)) echo "CHECKED"; else echo "CHECKED" ?>> Novice *
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>> Rank Pending
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Apprentice" <?php if (($action == "edit") && in_array("Apprentice",$judge_array)) echo "CHECKED"; ?>> Apprentice **
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                             <input type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>> Provisional ***
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Recognized" <?php if (($action == "edit") && in_array("Recognized",$judge_array)) echo "CHECKED"; ?>> Recognized
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Certified" <?php if (($action == "edit") && in_array("Certified",$judge_array)) echo "CHECKED"; ?>> Certified
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="National" <?php if (($action == "edit") && in_array("National",$judge_array)) echo "CHECKED"; ?>> National
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                             <input type="radio" name="brewerJudgeRank[]" value="Master" <?php if (($action == "edit") && in_array("Master",$judge_array)) echo "CHECKED"; ?>> Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Honorary Master" <?php if (($action == "edit") && in_array("Honorary Master",$judge_array)) echo "CHECKED"; ?>> Honorary Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Grand Master" <?php if (($action == "edit") && in_array("Grand Master",$judge_array)) echo "CHECKED"; ?>> Grand Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Honorary Grand Master" <?php if (($action == "edit") && in_array("Honorary Grand Master",$judge_array)) echo "CHECKED"; ?>>Honorary Grand Master
+                        </label>
+                    </div>
+                </div>
+                <div class="bcoem-form-info small">
+                	<p>* The <em>Novice</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.</p>
+                    <p>** The <em>Apprentice</em> rank is for those who have taken the BJCP Legacy Beer Exam, but did not pass one or more of the sections. This rank has been phased out.</p>
+                    <p>*** The <em>Provisional</em> rank is for those have taken the BJCP Beer Judge Entrance Exam, have passed, but have not yet taken the BJCP Beer Judging Exam.</p>
+                    </p>
+                </div>
+            </div>
+        </div><!-- ./Form Group -->
+        <div class="form-group"><!-- Form Group Radio STACKED -->
+            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Designations</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Professional Brewer" <?php if (($action == "edit") && in_array("Professional Brewer",$judge_array)) echo "CHECKED"; ?>> Professional Brewer
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone" <?php if (($action == "edit") && in_array("Certified Cicerone",$judge_array)) echo "CHECKED"; ?>> Certified Cicerone
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Master Cicerone" <?php if (($action == "edit") && in_array("Master Cicerone",$judge_array)) echo "CHECKED"; ?>> Master Cicerone
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>>Judge with Sensory Training
+                        </label>
+                    </div>
+                 </div>
+                <div class="bcoem-form-info small">
+                	<p>Only the first two checked will appear on your Judge Scoresheet Labels</p>
+                    </p>
+                </div>
+            </div>
+        </div><!-- ./Form Group -->
+        <?php 
+		$pref_endRow = 0;
+		$pref_columns = 3;  // number of columns
+		$pref_hloopRow1 = 0; // first row flag
+		?>
+        <div class="form-group"><!-- Form Group Checkbox  -->
+            <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
+            
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <p><strong class="text-danger">For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it – there's no need to check all that your available to judge.</p>
+            	<!-- <div class="row"> -->
+                <?php do { ?>
+                	<div class="checkbox">
+                        <label>
+                        	<input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
+                    	</label>
+                    </div>
+                
+                <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+               	<!-- </div> -->
+            </div>
+        </div><!-- ./Form Group -->
+        <div class="form-group"><!-- Form Group Checkbox  -->
+            <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Non Preferred Styles</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            	<p><strong class="text-danger">There is no need to mark those styles for which you have entries</strong>; the system will not allow you to be assigned to any table where you have entries.</p>
+                <!-- <div class="row"> -->
+                <?php do { ?>
+                <!-- Input Here -->
+                    <div class="checkbox">
+                        <label>
+                        	<input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
+                    	</label>
+                    </div>
+                <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>
+               	<!-- </div> -->
+            </div>
+        </div><!-- ./Form Group -->
+        <!-- Stewarding preferences -->
+        <div class="form-group"><!-- Form Group Radio INLINE -->
+            <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "checked"; ?>> Yes
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "checked"; ?>> No
+                    </label>
+                </div>
+                <p class="bcoem-form-info small">Are you willing to serve as a steward in this competition?</p>
+            </div>
+        </div><!-- ./Form Group -->
+        <?php if ($totalRows_judging > 1) { ?>
+        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+            <label for="brewerStewardLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding Location Availability</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+            <?php do { ?>
+            <p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
+            <select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation">
+                <option value="<?php echo "N-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+                <option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+            </select>
+            
+            <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?> 
+            </div>
+        </div><!-- ./Form Group -->
+        <?php } ?>
+        
+        <?php } ?>
+    <?php } // end if (($go != "entrant") && ($section != "step2")) ?>
+   
+<?php if ($section == "step2") { ?>
 <input name="brewerSteward" type="hidden" value="N" />
 <input name="brewerJudge" type="hidden" value="N" />
 <input name="brewerEmail" type="hidden" value="<?php echo $go; ?>" />
 <input name="uid" type="hidden" value="<?php echo $row_brewerID['id']; ?>" />
-<?php } else { ?>
-<form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "brewer") echo "list"; else echo "admin"; echo "&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $brewer_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$row_brewer['id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<?php } 
-if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
-?>
-<p><span class="icon"><img src="<?php echo $base_url; ?>images/help.png"  /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/my_info.html" title="BCOE&amp;M Help: My Info and Entries">My Info and Entries Help</a></p>
-<p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
-<table class="dataTable">
-<tr>
-      <td class="dataLabel" width="5%">First Name:</td>
-      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" size="32" maxlength="20" <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly style='color:#666; background-color: #eee; border: 1px solid #666;'"; ?>></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td rowspan="2" class="data">Please enter only <em>one</em> person's name.<br />
-      You will be able to identify a co-brewer when adding your entries.</td>
-</tr>
-<tr>
-      <td class="dataLabel">Last Name:</td>
-      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32" maxlength="20"  <?php if (((NHC) && ($prefix == "final_")) && ($_SESSION['userLevel'] > 1)) echo "readonly"; ?></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-    </tr>
-<tr>
-      <td class="dataLabel">Street Address:</td>
-      <td class="data"><input type="text" name="brewerAddress" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-      <td class="dataLabel">City:</td>
-      <td class="data"><input type="text" name="brewerCity" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-      <td class="dataLabel">State or Province:</td>
-      <td class="data"><input type="text" name="brewerState" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-      <td class="dataLabel">Zip or Postal Code:</td>
-      <td class="data"><input type="text" name="brewerZip" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-  	<td class="dataLabel">Country:</td>
-  	<td class="data">
-    <select name="brewerCountry">
-    	<?php do { ?>
-        <option value="<?php echo $row_countries['name']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $row_countries['name'])) echo "selected"; ?>><?php echo $row_countries['name']; ?></option>
-        <?php } while ($row_countries = mysql_fetch_assoc($countries)); ?>
-    </select>
-    </td>
-  	<td nowrap="nowrap" class="data"><span class="required">Required</span></td>
-  	<td class="data">&nbsp;</td>
-</tr>
-<tr>
-      <td class="dataLabel">Phone 1:</td>
-      <td class="data"><input type="text" name="brewerPhone1" value="<?php if ($action == "edit") { if ($us_phone) echo format_phone_us($row_brewer['brewerPhone1']); else echo $row_brewer['brewerPhone1']; } ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data"><span class="required">Required</span></td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-      <td class="dataLabel">Phone 2:</td>
-      <td class="data"><input type="text" name="brewerPhone2" value="<?php if ($action == "edit") { if ($us_phone) echo format_phone_us($row_brewer['brewerPhone2']); else echo $row_brewer['brewerPhone2']; } ?>" size="32"></td>
-      <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
-      <td class="data">&nbsp;</td>
-</tr>
-<tr>
-  <td class="dataLabel">Drop-Off Location:</td>
-  <td class="data">
-  <select name="brewerDropOff">
-    <?php 
-	include (DB.'dropoff.db.php');
-	do { ?>
-    <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-    <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
-    <option disabled="disabled">-------------</option>
-    <option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>>I'm Shipping My Entries</option>
-  </select>
-  </td>
-  <td colspan="2" nowrap="nowrap" class="data">Please indicate where you will be dropping off your entries.</td>
-  </tr>
-<?php if (NHC) { ?>
-<tr>
-      <td class="dataLabel">Club Name:</td>
-      <td class="data" colspan="3">
-      <select name="brewerClubs" id="brewerClubs">
-      <?php do { ?>
-      	<option value="<?php echo $row_clubs['ClubName']; ?>" <?php if ($row_brewer['brewerClubs'] == $row_clubs['ClubName']) echo "SELECTED"; ?>><?php echo $row_clubs['ClubName']; ?></option>
-      <?php } while ($row_clubs = mysql_fetch_assoc($clubs)); ?>
-      </select>
-      </td>
-</tr>
-<?php } else { ?>
-<tr>
-      <td class="dataLabel">Club Name:</td>
-      <td class="data"><input type="text" name="brewerClubs" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" size="32" maxlength="200"></td>
-      <td width="5%" nowrap="nowrap" class="data">&nbsp;</td>
-      <td class="data">&nbsp;</td>
-</tr>
 <?php } ?>
-<tr>
-  <td class="dataLabel">AHA Member Number:</td>
-  
-  <td class="data">
-  <?php if (($section != "step2") && ($row_brewer['brewerAHA'] >= "999999994")) { // For use with NHC ?>
-  Pending<input type="hidden" name="brewerAHA" value="<?php echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
-  <?php } else { ?>
-  <input type="text" name="brewerAHA" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" size="11" maxlength="9" />
-  <?php } ?>
-  </td>
-  <td colspan="2" class="data"><?php if (NHC) echo "To qualify for the discounted entry fees of ".$currency_symbol.$_SESSION['contestEntryFeePasswordNum']." per entry, you need to be a member of the American Homebrewers Association (AHA). If you are not currently a member, you can purchase a membership when you pay for your entries to take advantage of the discounted rate."; else echo "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member."; ?></td>
-</tr>
-<?php if (($go != "entrant") && ($section != "step2")) { ?>
-<?php if (!$table_assignment) { ?>
-<tr>
-      <td class="dataLabel">Stewarding:</td>
-      <td class="data">Are you willing be a steward in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "CHECKED"; ?>/> No</td>
-      <td class="data">&nbsp;</td>
-</tr>
-<?php if ($totalRows_judging > 1) { ?>
-<tr>
-<td class="dataLabel">Stewarding<br />Location Availabilty:</td>
-<td colspan="3" class="data">
-<?php do { ?>
-	<table class="dataTableCompact">
-    	<tr>
-        	<td width="1%" nowrap="nowrap">
-                <select name="brewerStewardLocation[]" id="brewerStewardLocation">
-                	<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
-                </select>
-            </td>
-            <td class="data"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
-        </tr>
-    </table>
-<?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
-</td>
-</tr>
-<?php } 
-}
-if (!$table_assignment) { ?>
-<tr>
-      <td class="dataLabel">Judging:</td>
-      <td class="data">Are you willing and qualified to judge in this competition?</td>
-      <td width="5%" nowrap="nowrap" class="data"><input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "CHECKED"; ?> /> Yes<br /><input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "CHECKED"; ?>/> No</td>
-      <td class="data">&nbsp;</td>
-</tr>
-<?php if ($totalRows_judging > 1) { ?>
-<tr>
-<td class="dataLabel">Judging<br />Location Availability:</td>
-<td class="data" colspan="3">
-<?php do { ?>
-	<table class="dataTableCompact">
-    	<tr>
-        	<td width="1%" nowrap="nowrap">
-            <select name="brewerJudgeLocation[]" id="brewerJudgeLocation">
-				<option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-      			<option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
-            </select>
-            </td>
-            <td class="data"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></td>
-        </tr>
-    </table>
-<?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
-</td>
-</tr>
-<?php 
-	}
-} else { ?>
-    <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-    <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-<?php 	 
-	} 
-} ?>
-<?php if (($go == "judge") || (($go == "admin") && ($action == "add"))) { ?>
-<tr>
-	<td colspan="4"><a name="judge"></a><div class="error">Please complete the following information and click "Submit Brewer Information."</div></td>
-</tr>
-<?php } ?>
-<?php if ($action == "edit") include ('judge_info.sec.php'); ?>
-</table>
-<p><input name="submit" type="submit" class="button" value="Submit Brewer Information" /></p>
 <?php if ($section != "step2") { ?>
 	<input name="brewerEmail" type="hidden" value="<?php if ($filter != "default") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>" />
 	<input name="uid" type="hidden" value="<?php if (($action == "edit") && ($row_brewer['uid'] != "")) echo  $row_brewer['uid']; elseif (($action == "edit") && ($_SESSION['userLevel'] <= "1") && (($_SESSION['loginUsername']) != $row_brewer['brewerEmail'])) echo $row_user_level['id']; else echo $_SESSION['user_id']; ?>" />
@@ -225,11 +434,37 @@ if (!$table_assignment) { ?>
     <input name="brewerStewardAssignedLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardAssignedLocation'];?>" />
     <?php if ($go == "entrant") { ?>
 	<input name="brewerJudge" type="hidden" value="N" />
-	<input name="brewerSteward" type="hidden" value="N" /> 
+	<input name="brewerSteward" type="hidden" value="N" />
 	<?php } ?>
-<?php } ?>
-	<input type="hidden" name="relocate" value="<?php if ($go == "entrant") echo $base_url."index.php?section=list"; else  echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
-</form>
-<?php }
-else echo "<div class=\"error\">You can only edit your own profile.</div>";
+<?php } 
+if ($action == "add") {
+	$submit_icon = "plus";
+	$submit_text = "Add Account Info";
+}
+
+if ($action == "edit") {
+	$submit_icon = "pencil";
+	$submit_text = "Edit Account Info";
+}
+
+else {
+	$submit_icon = "plus";
+	$submit_text = "Add Admin User Info";
+}
+
 ?>
+<?php if ($go == "admin") { ?>
+	<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id,"yes"); ?>">
+<?php } else { ?>
+    <input type="hidden" name="relocate" value="<?php echo $base_url; ?>index.php?section=list">
+<?php } ?>
+<div class="form-group">
+    <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+        <!-- Input Here -->
+        <button name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?> <span class="fa fa-<?php echo $submit_icon; ?>"></span> </button>
+    </div>
+</div><!-- Form Group -->
+</form>
+<?php } // LINE 25 or so... end if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1"))) 
+else echo "<p class='lead'>You can only edit your own profile.</p>";
+?> 

@@ -282,55 +282,23 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		  $deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
 		  mysql_real_escape_string($deleteSQL);
 		  $result1 = mysql_query($deleteSQL, $brewing) or die(mysql_error());
-		
 		 
-		if ($dbTable == "archive") { 
-		  $dropTable = "DROP TABLE users_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE brewing_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE brewer_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE sponsors_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE judging_assignments_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE judging_flights_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE judging_scores_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE judging_scores_bos_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE judging_tables_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  $dropTable = "DROP TABLE style_types_$filter";
-		  mysql_real_escape_string($dropTable);
-		  $Result = mysql_query($dropTable, $brewing) or die(mysql_error());
-		  
-		  header(sprintf("Location: %s", $deleteGoTo));
+		if ($dbTable == $prefix."archive") { 
+		
+			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
+			
+			foreach ($tables_array as $table) { 
+				$table = $table."_".$filter;
+				if (table_exists($table)) {
+					$dropTable = sprintf("DROP TABLE %s",$table);
+					mysql_real_escape_string($dropTable);
+					$Result = mysql_query($dropTable, $brewing) or die(mysql_error());
+					//echo $dropTable."<br>";
+				}
+			}
 		}
 		  
-		if ($dbTable != "archive") { 
-		  header(sprintf("Location: %s", $deleteGoTo));
-		}
+		header(sprintf("Location: %s", $deleteGoTo));
 	
 	} // end else NHC
 	

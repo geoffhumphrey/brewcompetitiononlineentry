@@ -1,35 +1,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>[onshow.brewing_info.brewName] Recipe Form</title>
-<style type="text/css">
-<!--
-body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt;  word-spacing: 0.008em; line-height:normal; }
-table						{ border-collapse: collapse; width: 100%; }
-table td					{ padding: 2px; }
-.headerTitle 				{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
-.headerTitleSm 				{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
-.bottle, .medium 			{ font-size: 9px; } 
-.small 						{ font-size: 8px; margin: 0; } 
-#printContainer 			{ width: 100%; }
-.bdr1_thick	 				{ border: 5px solid #000000; }
-.bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
-.bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
-.bdr1B 						{ border-bottom: 1px solid #000000; }
-.bdr1L 						{ border-left: 1px solid #000000; }
-.bdr1R 						{ border-right: 1px solid #000000; }
-.bdr1T 						{ border-top: 1px solid #000000; }
-.bdr1R_dashed				{ border-right: 1px dashed #000000; }
-.bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
-.headerItalic 		    	{ font-size: 8px; font-style: italic; }
-table.small	td				{ padding: 1px 2px 1px 2px; }
-table.bottleLabel			{ border-collapse: collapse; width: 100%; }
-table.bottleLabel-inner		{ margin: 15px; width: 300px; }
-table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: top; }
-.error 						{ color: #FF0000; font-size: 1.3em; font-weight: bold; margin: 1em 0 1em 0; padding: .5em .5em .5em 2.2em; background-position:.5em; background-image: url(../images/error.png); background-repeat: no-repeat; background-color: #FFFF99; border: 1px solid #FF0000; border-radius: 5px; }
--->
-</style>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>[onshow.brewing_info.brewName] Recipe Form</title>
+    <!-- Load Bootstrap and jQuery -->
+    <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Load Font Awesome -->
+    <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+    <style type="text/css">
+    <!--
+    body 						{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 9pt;  word-spacing: 0.008em; line-height:normal; }
+    table						{ border-collapse: collapse; width: 100%; }
+    table td					{ padding: 2px; }
+    .headerTitle 				{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
+    .headerTitleSm 				{ font-size: 15px; font-weight: bold; margin: 0; padding: 0; }
+    .bottle, .medium 			{ font-size: 9px; } 
+    .small 						{ font-size: 8px; margin: 0; } 
+    #printContainer 			{ width: 100%; }
+    .bdr1_thick	 				{ border: 5px solid #000000; }
+    .bdr1B_thick	 			{ border-bottom: 5px solid #000000; }
+    .bdr1B_thick_dotted 		{ border-bottom: 3px dotted #000000; }
+    .bdr1B 						{ border-bottom: 1px solid #000000; }
+    .bdr1L 						{ border-left: 1px solid #000000; }
+    .bdr1R 						{ border-right: 1px solid #000000; }
+    .bdr1T 						{ border-top: 1px solid #000000; }
+    .bdr1R_dashed				{ border-right: 1px dashed #000000; }
+    .bdr1B_dashed				{ border-bottom: 1px dashed #000000; }
+    .headerItalic 		    	{ font-size: 8px; font-style: italic; }
+    table.small	td				{ padding: 1px 2px 1px 2px; }
+    table.bottleLabel			{ border-collapse: collapse; width: 100%; }
+    table.bottleLabel-inner		{ margin: 15px; width: 300px; }
+    table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: top; }
+    .error 						{ color: #FF0000; font-size: 1.3em; font-weight: bold; margin: 1em 0 1em 0; padding: .5em .5em .5em 2.2em; background-position:.5em; background-repeat: no-repeat; background-color: #FFFF99; border: 1px solid #FF0000; border-radius: 5px; }
+    -->
+    </style>
 </head>
 <body>
 <div id="printContainer">
@@ -39,8 +56,8 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td>If any items are missing, close this window and edit the entry.</td>
-    <td width="5%" align="right" nowrap="nowrap"><img src = "../images/printer.png"  />&nbsp;<a href="?go=recipe&amp;action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></td>
+    <td><h3 class="text-danger">If any items are missing, close this window and edit the entry.</h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.php?go=recipe&amp;action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
   </tr>
 </table>
 <div class="error">THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please <u>DO NOT</u> include a copy of it with your entry shipment.</div>
@@ -134,60 +151,60 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
       <tr>
       
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_still;block=td;when [var.brewing_info.sparkling]='Still']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_still;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Still</td>
         
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_dry;block=td;when [var.brewing_info.sweetness]='dry']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_dry;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Dry</td>
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_hydromel;block=td;when [var.brewing_info.meadType]='hydromel']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_hydromel;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Hydromel (light mead)</td>
       </tr>
       <tr>
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_petillant;block=td;when [var.brewing_info.sparkling]='Petillant']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_petillant;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Petillant</td>
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_ssweet;block=td;when [var.brewing_info.sweetness]='Semi-Sweet']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_ssweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Semi-Sweet</td>
         
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_stdmead;block=td;when [var.brewing_info.meadType]='standard']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_stdmead;block=td;default]
         </td>
         <td nowrap="nowrap">Standard Mead</td>
@@ -196,31 +213,31 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
       
       <tr>
          <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='Sparkling']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_sparkling;block=td;default]
         </td>     
         <td width="23%" nowrap="nowrap">Sparkling</td>
         
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_sweet;block=td;when [var.brewing_info.sweetness]='sweet']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_sweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Sweet</td>
         
         <td width="2%">
-           <img src="../images/check.jpg" border="0">
+           <span class="fa fa-check-square-o"></span>
            [onshow_sack;block=td;when [var.brewing_info.meadType]='sack']
         </td>
         <td width="2%">
-           <img src="../images/box.jpg" border="0">
+           <span class="fa fa-square-o">
            [onshow_sack;block=td;default]
         </td>
         <td nowrap="nowrap">Sack (strong mead)</td>
@@ -278,21 +295,21 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
           <td colspan="2" nowrap="nowrap"><em><strong>YEAST CULTURE</strong></em></td>
  
           <td width="1%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_lyeast;block=td;when [var.brewing_info.brewYeastForm]='Liquid']
           </td>
           <td width="1%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_lyeast;block=td;default]
           </td>
           <td>Liquid</td>
           
           <td width="1%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_dyeast;block=td;when [var.brewing_info.brewYeastForm]='Dry']
           </td>
           <td width="1%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_dyeast;block=td;default]
           </td>
           <td>Dried</td>
@@ -300,21 +317,21 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
         <tr>
           <td colspan="2" nowrap="nowrap">Did you use a starter?</td>
             <td width="1%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_withstarter;block=td;when [var.brewing_info.brewYeastStarter]='Y']
           </td>
           <td width="1%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_withstarter;block=td;default]
           </td>
           <td>Yes</td>
           
           <td width="1%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_withoutstarter;block=td;when [var.brewing_info.brewYeastStarter]='N']
           </td>
           <td width="1%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_withoutstarter;block=td;default]
           </td>
           <td>No</td>
@@ -341,22 +358,22 @@ table.bottleLabel-inner	td 	{ padding: 2px; text-align: left; vertical-align: to
         <tr>
           <td align="left" valign="top"><strong><em>CARBONATION</em></strong></td>
           <td width="5%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_fcarb;block=td;when [var.brewing_info.carbonation]='forced']
           </td>
           <td width="5%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_fcarb;block=td;default]
           </td>
           <td>forced CO<sub>2</sub></td>
           
           
           <td width="5%">
-             <img src="../images/check.jpg" border="0">
+             <span class="fa fa-check-square-o"></span>
              [onshow_carb;block=td;when [var.brewing_info.carbonation]='bottleConditioned']
           </td>
           <td width="5%">
-             <img src="../images/box.jpg" border="0">
+             <span class="fa fa-square-o">
              [onshow_carb;block=td;default]
           </td>
           

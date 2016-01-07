@@ -1,22 +1,26 @@
 <?php include(DB.'sponsors.db.php'); ?>
-<h2><?php if ($action == "add") echo "Add a Sponsor"; elseif ($action == "edit") echo "Edit a Sponsor"; else echo "Sponsors"; ?></h2>
-<div class="adminSubNavContainer">
-   	<span class="adminSubNav">
-    	<?php if (($action == "add") || ($action == "edit")) { ?>
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/arrow_left.png" alt="Back"></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Back to Sponsor List</a>
-        <?php } else { ?>
-        <span class="icon"><img src="<?php echo $base_url; ?>images/award_star_add.png"  /></span><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add">Add a Sponsor</a>
-   		<?php } ?>
-    </span>
-   	<span class="adminSubNav">
-    	<span class="icon"><img src="<?php echo $base_url; ?>images/picture_add.png"  /></span><a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link" class="data"><?php if (($action == "add") || ($action == "edit")) echo "Upload the Sponsor's Logo Image"; else echo "Upload a Sponsor Logo Image"; ?></a>
-	</span>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
+
+<div class="bcoem-admin-element hidden-print">
+<?php if (($action == "add") || ($action == "edit")) { ?>
+	<div class="btn-group" role="group" aria-label="add-sponsor">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors"><span class="fa fa-eye"></span> View All Sponsors</a>
+    </div><!-- ./button group -->
+<?php } else { ?>
+	<div class="btn-group" role="group" aria-label="add-sponsor">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Sponsor</a>
+    </div><!-- ./button group -->
+    <div class="btn-group" role="group" aria-label="upload-sponsor">		
+		<a class="btn btn-primary" href="admin/upload.admin.php" id="modal_window_link"><span class="fa fa-upload"></span> Upload Sponsor Logo Images</a>
+	</div>
+<?php } ?>
 </div>
+
 <?php if ($totalRows_sponsors > 0) { ?>
 <?php if ($action == "default") { ?>
-<div class="adminSubNavContainer">
-<p><span class="icon"><img src="<?php echo $base_url; ?>images/tick.png"  alt="Yes" title="Yes"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
-<p><span class="icon"><img src="<?php echo $base_url; ?>images/cross.png"  alt="No" title="No"></span> =  No logo.
+<div class="bcoem-admin-element hidden-print">
+<p><span class="fa fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
+<p><span class="fa fa-times text-danger"></span> =  No logo.
 </div>
 <?php } ?>
 <?php if ($action == "default") { ?>
@@ -27,11 +31,10 @@
 			"sPaginationType" : "full_numbers",
 			"bLengthChange" : true,
 			"iDisplayLength" : <?php echo $limit; ?>,
-			"sDom": 'irtip',
+			"sDom": 'rtp',
 			"bStateSave" : false,
 			"aaSorting": [[0,'asc']],
 			"aoColumns": [
-				null,
 				null,
 				null,
 				null,
@@ -42,82 +45,118 @@
 			} );
 		} );
 	</script>
-<table class="dataTable" id="sortable">
+<table class="table table-responsive table-striped table-bordered" id="sortable">
  <thead>
  <tr>
-  <th class="dataHeading bdr1B">Sponsor Name</th>
-  <th class="dataHeading bdr1B">Sponsor Location</th>
-  <th class="dataHeading bdr1B">Website Address</th>
-  <th class="dataHeading bdr1B">Level</th>
-  <th class="dataHeading bdr1B">Logo?</th>
-  <th class="dataHeading bdr1B">Description/Text</th>
-  <th class="dataHeading bdr1B">Actions</th>
+  <th>Sponsor Name</th>
+  <th>Sponsor Location</th>
+  <th>Level</th>
+  <th>Logo?</th>
+  <th>Description/Text</th>
+  <th>Actions</th>
  </tr>
  </thead>
  <tbody>
  <?php do { ?>
  <tr>
-  <td width="20%" class="dataList"><?php echo $row_sponsors['sponsorName']; ?></td>
-  <td width="15%" class="dataList"><?php echo $row_sponsors['sponsorLocation']; ?></td>
-  <td width="5%" class="dataList"><a href="<?php echo $row_sponsors['sponsorURL']; ?>" id="modal_window_link"><?php echo $row_sponsors['sponsorURL']; ?></a></td>
-  <td width="5%" class="dataList"><?php echo $row_sponsors['sponsorLevel']; ?></td>
-  <td width="5%" class="dataList"><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><img src="<?php echo $base_url; ?>images/tick.png"  alt="Yes"><?php } else { ?><img src="<?php echo $base_url; ?>images/cross.png"  alt="No"><?php } ?></td>
-  <td width="25%" class="dataList"><?php echo $row_sponsors['sponsorText']; ?></td>
-  <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>"><img src="<?php echo $base_url; ?>images/pencil.png"  border="0" alt="Edit <?php echo $row_sponsors['sponsorName']; ?>" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete','id',<?php echo $row_sponsors['id']; ?>,'Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?>? This cannot be undone.');"><img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_sponsors['sponsorName']; ?>" title="Delete <?php echo $row_sponsors['sponsorName']; ?>"></a></span></td>
+  <td><?php echo $row_sponsors['sponsorName']; ?></td>
+  <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
+  <td><?php echo $row_sponsors['sponsorLevel']; ?></td>
+  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-check text-success"></span><?php } else { ?><span class="fa fa-times text-danger"></span><?php } ?></td>
+  <td><?php echo $row_sponsors['sponsorText']; ?></td>
+  <td nowrap="nowrap">
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-pencil"></span></a> 
+  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
+  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-link\"></span></a> "; ?> 
+  </td>
  </tr>
 <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
-<?php } } else { ?>
+<?php } } else { 
+if ($action == "default") { ?>
 <p>There are no sponsors in the database.</p>
-<?php } ?>
+<?php } } ?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
-<table>
-  <tr>
-    <td class="dataLabel">Sponsor Name:</td>
-    <td class="data"><input name="sponsorName" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorName']; ?>"></td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Sponsor Location:</td>
-    <td class="data"><input name="sponsorLocation" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorLocation']; ?>"></td>
-    <td class="data">&nbsp;</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Sponsor Level:</td>
-    <td class="data">
-    <select name="sponsorLevel">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="sponsorName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group has-warning">
+            <!-- Input Here -->
+            <input class="form-control" id="sponsorName" name="sponsorName" type="text" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorName']; ?>" placeholder="" data-error="The sponsor's name is required" autofocus required>
+            <span class="input-group-addon" id="sponsorName-addon2"><span class="fa fa-star"></span></span>
+        </div>
+        <div class="help-block with-errors"></div>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="sponsorLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="sponsorLocation" name="sponsorLocation" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorLocation']; ?>" placeholder="">
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="sponsorLevel" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Level</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="sponsorLevel" id="sponsorLevel">
     	<option value="1" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "1")) echo " SELECTED"; ?>>1</option>
         <option value="2" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "2")) echo " SELECTED"; ?>>2</option>
         <option value="3" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "3")) echo " SELECTED"; ?>>3</option>
         <option value="4" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "4")) echo " SELECTED"; ?>>4</option>
         <option value="5" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "5")) echo " SELECTED"; ?>>5</option>
     </select>
-    </td>
-    <td class="data">1 is the highest level of sponsorship; 5 is the lowest.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Website Address:</td>
-    <td class="data"><input name="sponsorURL" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorURL']; ?>"></td>
-    <td class="data">Be sure to include the entire website address, including the http:// (e.g., http://www.google.com).</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Logo Image Name:</td>
-    <td class="data"><input name="sponsorImage" type="text" size="50" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorImage']; ?>"></td>
-    <td class="data">Be sure to enter the <em>exact name</em> of the file (e.g., sponsor_logo.jpg) that has been <a href="admin/upload.admin.php" title="Upload Sponsor Logo Image" id="modal_window_link">uploaded</a>.</td>
-  </tr>
-  <tr>
-    <td class="dataLabel">Description:</td>
-    <td class="data"><input name="sponsorText"type="text" size="80" value="<?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?>" /></td>
-    <td class="data">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</td>
-  </tr>
-  <tr>
-  	<td>&nbsp;</td>
-  	<td colspan="2" class="data"><input name="submit" type="submit" class="button" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor"></td>
-  </tr>
-</table>
+	<span id="helpBlock" class="help-block">Indicate the level of the sponsor. 1 is the highest level; 5 the lowest.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="sponsorURL" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Website</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="sponsorURL" name="sponsorURL" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorURL']; ?>" placeholder="">
+		<span id="helpBlock" class="help-block">Be sure to include the full website URL including the http://</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <?php  	
+	$directory = (USER_IMAGES);
+	$empty = is_dir_empty($directory); 
+	
+	if (!$empty) { ?>
+    <select class="selectpicker" name="sponsorImage" id="sponsorImage">
+       <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
+    </select>
+    <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
+    <span id="helpBlock" class="help-block">If the directory is empty or a file is not on the list, use the &ldquo;Upload Logo Images&rdquo; button below.</span>
+    <a class="btn btn-sm btn-primary" href="admin/upload.admin.php" id="modal_window_link"><span class="fa fa-upload"></span> Upload Logo Images</a>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="sponsorText" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="sponsorText" name="sponsorText" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?>" placeholder="">
+		<span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
+    </div>
+</div><!-- ./Form Group -->
+<div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<input type="submit" name="Submit" id="updateConatact" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor" />
+		</div>
+	</div>
+</div>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php } ?>

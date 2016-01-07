@@ -89,7 +89,7 @@ if (NHC) {
 	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 	}
 	
-	if (($filter != "admin") && (!$resp->is_valid)) {
+	if (($view == "default") && ($filter != "admin") && (!$resp->is_valid)) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
@@ -112,7 +112,7 @@ if (NHC) {
 	header(sprintf("Location: %s", $location));
 	}
 	
-	elseif ($_POST['user_name'] != $_POST['user_name2']) {
+	elseif (($view == "default") && ($_POST['user_name'] != $_POST['user_name2'])) {
 	setcookie("user_name", $_POST['user_name'], 0, "/");
 	setcookie("user_name2", $_POST['user_name2'], 0, "/");
 	setcookie("password", $_POST['password'], 0, "/");
@@ -131,7 +131,7 @@ if (NHC) {
 	setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
 	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
 	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
-	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=16";
+	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
 	else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
 	header(sprintf("Location: %s", $location));
 
@@ -362,12 +362,13 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 			$row_brewer = mysql_fetch_assoc($brewer);
-			$insertGoTo = $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge";
+			if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
+			else $insertGoTo = $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge";
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
 		else { 
 			$pattern = array('\'', '"');
-			//$insertGoTo = $base_url."index.php?section=admin";
+			$insertGoTo = $base_url."index.php?section=admin";
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}

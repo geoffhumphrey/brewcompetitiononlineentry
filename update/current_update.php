@@ -11,7 +11,7 @@
 // the BJCP 2015 styles.
 // -----------------------------------------------------------
 
-$output .= "<h2>Version ".$current_version."...</h2>";
+$output .= "<h4>Version ".$current_version."...</h4>";
 
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 

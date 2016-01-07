@@ -520,10 +520,10 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			elseif ($_POST['brewerAssignment'] == "S") $updateSQL2 = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 
 			else $updateSQL2 = "UPDATE $brewer_db_table SET brewerNickname=NULL WHERE id='".$id."'"; 
 			
-			////echo $updateSQL."<br>";
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
 			mysql_real_escape_string($updateSQL2);
 			$result2 = mysql_query($updateSQL2, $brewing) or die(mysql_error());
 			
@@ -535,7 +535,13 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-			//echo $updateGoTo;
+			
+			/*
+			echo $updateSQL."<br>";
+			echo $updateSQL2."<br>";
+			echo $updateGoTo;
+			exit;
+			*/
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
 		}
 		

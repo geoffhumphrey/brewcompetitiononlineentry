@@ -47,7 +47,6 @@ $print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.
 $competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
 $page_info = $row_contest_rules['contestRules'];
 
-if (($action != "print") && ($msg != "default")) echo $msg_output; 
 if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) echo $competition_logo; 
 if ($action != "print") echo $print_page_link; 
 echo $page_info; 

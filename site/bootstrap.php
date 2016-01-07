@@ -37,10 +37,6 @@ $db_update = FALSE;
 
 // --------------------------------------------------------
 
-//Error reporting
-error_reporting(0);	// comment out to debug
-//error_reporting(E_ALL); // uncomment to debug 
-
 // reCAPTCHA Public Key
 $publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
 
@@ -69,10 +65,10 @@ if ($setup_success) {
 	require(INCLUDES.'headers.inc.php');
 	require(INCLUDES.'constants.inc.php');
 	require(INCLUDES.'scrubber.inc.php');
+	require(LIB.'help.lib.php');
 	
-	// Redirect if section not in list
-	
-	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores");
+	// Redirect if section not the array	
+	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing");
 	if (!in_array($section,$section_array)) { 
 		header(sprintf("Location: %s",$base_url."404.php"));
 		exit;
@@ -92,8 +88,10 @@ if ($setup_success) {
 	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 	
 	// Check if judging flights are up-to-date
-	if (!check_judging_flights()) $check_judging_flights = TRUE;
-	else $check_judging_flights = FALSE;
+	//if (!check_judging_flights()) $check_judging_flights = TRUE;
+	//else $check_judging_flights = FALSE;
+	
+	$check_judging_flights = FALSE;
 	
 	//  ---------------------------- Time Related Globals 	---------------------------- 
 	
@@ -123,6 +121,9 @@ if ($setup_success) {
 	
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE) $fx = TRUE;
 	else $fx = FALSE;
+	
+	// Get theme
+	$theme = $base_url."css/".$_SESSION['prefsTheme'].".css";
 	
 } // end if ($setup_success);
 ?>

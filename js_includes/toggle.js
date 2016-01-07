@@ -7,26 +7,6 @@ Useful link: http://www.learningjquery.com/2007/03/accordion-madness
 ------------------------------------------------ */
 $(function() {
     $('#outer h4.trigger').wrapInner('<a style="display:block" href="#" title="expand/collapse"></a>');
-   
-    /*demo 1 - div.demo:eq(0) - Accordion slide effect with first section initially expanded
-    $('#outer div.demo:eq(0)').find('h4.expand:eq(0)').addClass('open').end()
-    .find('div.collapse:gt(0)').hide().end()
-    .find('h4.expand').click(function() {
-        $(this).toggleClass('open').siblings().removeClass('open').end()
-        .next('div.collapse').slideToggle().siblings('div.collapse:visible').slideUp();
-        return false;
-    });
-    
-    //demo 2 - div.demo:eq(1) - Accordion slide effect with first section initially expanded. Always keeps one section visible 
-    $('#outer div.demo:eq(1)').find('h4.expand:eq(0)').addClass('open').end()
-    .find('div.collapse:gt(0)').hide().end()
-    .find('h4.expand').click(function() {
-        $(this).addClass('open').siblings().removeClass('open').end()
-        .next('div.collapse:hidden').slideToggle().siblings('div.collapse:visible').slideUp();
-        return false;
-    });
-    */
-    //demo 3 - div.demo:eq(2) - Queued Slide Effects 
     $('#outer div.menus:eq(0)').find('h4.trigger:eq(0)').addClass('open').end()
     .find('div.toggle_container:gt(0)').hide().end()
     .find('h4.trigger').each(function() {

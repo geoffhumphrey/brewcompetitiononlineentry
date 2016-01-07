@@ -5,15 +5,14 @@
  * 
  */
  
-$fields = 10;
+$fields = 15;
+if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form
 if ($action == "add") {
 	include(INCLUDES.'process/process_barcode_check_in.inc.php');
 }
- 
- ?>
- 
+?>
 <script type="text/javascript">
 function moveOnMax(field,nextFieldID){
   if(field.value.length >= field.maxLength){
@@ -25,8 +24,7 @@ function moveOnCheck(field,nextFieldID){
 }
 document.form1.first.focus();
 var p = false;
-</script>
-<script type="text/javascript">
+
 $(function() {
  
     $("form").bind("keypress", function(e) {
@@ -36,7 +34,7 @@ $(function() {
 });
 </script>
 <?php if ($entry_list != "") { ?>
-<div class="info"><?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
+<div class="alert alert-info"><?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
 <?php } 
 if (!empty($flag_jnum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -49,7 +47,7 @@ foreach ($flag_jnum as $num) {
 	}
 }
 ?>
-<div class="error">The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
+<div class="alert alert-danger">The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
 <?php }  
 if (!empty($flag_enum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -62,50 +60,68 @@ foreach ($flag_enum as $num) {
 	}
 }
 ?>
-<div class="error">The following entries already have 6 digit judging numbers assigned to them - the original 6 digit judging number has been kept. <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
+<div class="alert alert-danger">The following entries already have 6 digit judging numbers assigned to them - the original 6 digit judging number has been kept. <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
 <?php } ?>
-<h2>Check-In Entries with a Barcode Reader/Scanner</h2>
-<p>This function is intended to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank">available for download at brewcompetition.com</a>. </p>
-<p>Also available are <a href="http://www.brewcompetition.com/downloads/entry_check-in.pdf" target="_blank">suggested usage instructions</a>.</p>
-<p>Use the form below to check in entries and assign their judging number in the system using a barcode reader/scanner. You can enter up to <?php echo $fields; ?> at a time. You can also record each entry's box location <?php if (!NHC) { ?>and whether the entry has been paid<?php } ?>.</p>
-<ul>
-  <li>The cursor will move automatically between fields if the maximum number of characters is input (4 for Entry Number, 6 for Judging Number, and 5 for Box Number).</li>
-  <li>Use the TAB key to move between fields, to skip a field, or if the cursor does not move after data is input.</li>
-  <li>Use the space bar to place a checkmark in the &quot;Paid&quot; box.</li>
-</ul>
+<p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
+<div class="bcoem-admin-element">
+    <p>Use the form below to check in entries and assign their judging number in the system using a barcode reader/scanner.</p>
+<div class="btn-group" role="group" aria-label="barcodeInfo">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#barcodeInfoModal">
+          Barcode Check-In Info
+        </button>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="barcodeInfoModal" tabindex="-1" role="dialog" aria-labelledby="barcodeInfoModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="barcodeInfoModalLabel">Barcode Check-In Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>You can check-in up to <?php echo $fields; ?> entries at a time. You can also record each entry's box location <?php if (!NHC) { ?>and whether the entry has been paid<?php } ?>.</p>
+                    <ul>
+                      <li>The cursor will move automatically between fields if the maximum number of characters is input (<?php echo $maxlength; ?> for Entry Number, 6 for Judging Number, and 5 for Box Number).</li>
+                      <li>Use the TAB key to move between fields, to skip a field, or if the cursor does not move after data is input.</li>
+                      <li>Use the space bar to place a checkmark in the &quot;Paid&quot; box.</li>
+                    </ul>
+                <p>This function is intended to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank">available for download at brewcompetition.com</a>. </p>
+                <p>Also available are <a href="http://www.brewcompetition.com/downloads/entry_check-in.pdf" target="_blank">suggested usage instructions</a>.</p>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+</div>
 
 <form method="post" action="index.php?section=admin&amp;go=checkin&amp;action=add" id="form1" onsubmit = "return(p)">
-	<table>
-		<?php if (NHC) { 
-		for ($i=1; $i <= $fields; $i++) { ?>
-		<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
-		<tr>
-			<td class="dataLabel">Entry Number:</td>
-			<td class="data"><input type="text" size="10" <?php if ((NHC) && ($prefix == "final_")) { ?>maxlength="6"<?php } else { ?>maxlength="4"<?php } ?> id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" /><?php if ($i == "1") { ?><script>document.getElementById('eid1').focus()</script><?php } ?></td>
-			<td class="dataLabel">Judging Number:</td>
-			<td class="data"><input type="text" size="10" maxlength="6" id="judgingNumber<?php echo $i; ?>" name="judgingNumber<?php echo $i; ?>" onkeyup="moveOnMax(this,'box<?php echo $i; ?>')" /></td>
-			<td class="dataLabel">Box Number</td>
-			<td class="data"><input type="text" size="10" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>"  onkeyup="moveOnMax(this,'eit<?php echo ($i+1); ?>')" /></td>
-		</tr>
-		<?php } 
-		} 
-		else { 
-		for ($i=1; $i <= $fields; $i++) { ?>
-		<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
-		<tr>
-			<td class="dataLabel">Entry Number:</td>
-			<td class="data"><input type="text" size="10" <?php if ((NHC) && ($prefix == "final_")) { ?>maxlength="6"<?php } else { ?>maxlength="4"<?php } ?> id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" /><?php if ($i == "1") { ?><script>document.getElementById('eid1').focus()</script><?php } ?></td>
-			<td class="dataLabel">Judging Number:</td>
-			<td class="data"><input type="text" size="10" maxlength="6" id="judgingNumber<?php echo $i; ?>" name="judgingNumber<?php echo $i; ?>" onkeyup="moveOnMax(this,'box<?php echo $i; ?>')" /></td>
-			<td class="dataLabel">Box Number</td>
-			<td class="data"><input type="text" size="10" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>"  onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" /></td>
-			<td class="dataLabel">Paid?</td>
-			<td class="data"><input type="checkbox" id="brewPaid<?php echo $i; ?>" name="brewPaid<?php echo $i; ?>" value="1" onClick="moveOnCheck(this,'eid<?php echo ($i+1); ?>')" />
-		</tr>
-		<?php } 
-		} ?>
-	</table>
-	<p><input type="submit" value="Submit" class="button" onClick = "javascript: p=true;"/></p>
+
+<div class="form-inline">
+	<?php for ($i=1; $i <= $fields; $i++) { 
+	
+	?>
+    <div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+    	<label for="">Entry Number</label>
+    	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" /><?php if ($i == "1") { ?><script>document.getElementById('eid1').focus()</script><?php } ?>
+  	</div>
+  	<div class="form-group">
+    	<label for="">Judging Number</label>
+    	<input type="text" class="form-control" maxlength="6" id="judgingNumber<?php echo $i; ?>" name="judgingNumber<?php echo $i; ?>" onkeyup="moveOnMax(this,'box<?php echo $i; ?>')" />
+  	</div>
+    <div class="form-group">
+    	<label for="">Box Number</label>
+    	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>"  onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
+  	</div>
+    <div class="form-group">
+    	<label for="">Paid</label>
+    	<input type="checkbox" class="form-control" id="brewPaid<?php echo $i; ?>" name="brewPaid<?php echo $i; ?>" value="1" onClick="moveOnCheck(this,'eid<?php echo ($i+1); ?>')" />
+  	</div>
+    </div>
+  	<?php } ?>
+</div>
+<p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
  
  
