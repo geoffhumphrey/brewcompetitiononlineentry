@@ -106,15 +106,15 @@ window.location.reload();
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-success fileinput-button">
                 <i class="fa fa-plus-circle"></i>
-                <span>Add files...</span>
+                <span>Add Logos...</span>
             </span>
             <button type="submit" class="btn btn-primary start">
                 <i class="fa fa-upload"></i>
-                <span>Start upload</span>
+                <span>Upload All</span>
             </button>
             <button type="reset" class="btn btn-warning cancel">
                 <i class="fa fa-ban"></i>
-                <span>Cancel upload</span>
+                <span>Cancel Upload</span>
             </button>
           </div>
     
@@ -169,7 +169,7 @@ window.location.reload();
 </form>
 
 <script>
-// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+// Get the template HTML and remove it from the doumenthe template HTML and remove it from the document
 var previewNode = document.querySelector("#template");
 previewNode.id = "";
 var previewTemplate = previewNode.parentNode.innerHTML;

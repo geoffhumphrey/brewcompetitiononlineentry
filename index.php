@@ -45,14 +45,15 @@ else {
 	$nav_container = "navbar-default";
 }
 
+// Load libraries only when needed for performance
 $tinymce_load = array("contest_info","special_best","styles");
 $datetime_load = array("contest_info","judging","testing");
-$datatables_load = array("admin","list");
+if ((judging_date_return() == 0) && ($registration_open == "2")) $datatables_load = array("admin","list","default");
+else $datatables_load = array("admin","list");
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="en"><head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -68,25 +69,27 @@ $datatables_load = array("admin","list");
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+   
+    <?php if (in_array($section,$datatables_load)) { ?>
     <!-- Load DataTables / https://www.datatables.net -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
-	
+	<?php } ?>
+    
     <!-- Load Fancybox / http://www.fancyapps.com -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-	
+    
     <?php if (($section == "admin") && (in_array($go,$datetime_load))) { ?>
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/datetime.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/datetime.min.js"></script>
     <?php } ?>
 	
 	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
@@ -95,9 +98,9 @@ $datatables_load = array("admin","list");
 	<?php } ?>
 	
 	<?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
-    <!-- Load Off-Canvas Menu JS for Admin -->
-    <!-- Based upon Theme Armada's code at http://blog.themearmada.com/off-canvas-slide-menu-for-bootstrap/ -->
-    <script src="https://cdn.jsdelivr.net/jquery.navgoco/0.1.3/jquery.navgoco.min.js"></script>
+    <!-- Load Off-Canvas Menu for Admin -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
     <?php } ?>
 	
 	<!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
@@ -106,15 +109,15 @@ $datatables_load = array("admin","list");
     <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
-	
-	<!-- Load BCOE&M Custom JS -->
-    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/bcoem_custom.js"></script>
     
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+	
+	<!-- Load BCOE&M Custom JS -->
+    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
   	</head>
 	<body>
 	
@@ -130,11 +133,13 @@ $datatables_load = array("admin","list");
     </div><!-- ./container --> 
     <!-- ./ALERTS -->
     
+    <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- MODS TOP -->
     <div class="container"> 
-    
+    	<?php include(INCLUDES.'mods_top.inc.php'); ?>
     </div>
     <!-- ./MODS TOP -->
+    <?php } ?>
     
     <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
     <!-- Admin Pages (Fluid Layout) -->
@@ -197,30 +202,23 @@ $datatables_load = array("admin","list");
     		<div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <div class="page-header">
         		<h1><?php echo $header_output; ?></h1>
-        	</div> 
-            
-            <?php if ($section == "testing") { ?>
-            
-            <?php } ?>
-            
+        	</div>             
         	<?php 
-		
 				if ($section == "default") 		include (SECTIONS.'default.sec.php');
 				if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 				if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
 				if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-				if ($section == "sponsors") 	include (SECTIONS.'sponsors.sec.php');
+				if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
 				if ($section == "register")		include (SECTIONS.'register.sec.php');
-				if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
+				if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
 				if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
-				if ($section == "login")		include (SECTIONS.'login.sec.php');
+				if ($section == "login")			include (SECTIONS.'login.sec.php');
 				
 				if ($logged_in) {
-					if ($section == "list") 	include (SECTIONS.'list.sec.php');
+					if ($section == "list") 		include (SECTIONS.'list.sec.php');
 					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
-					if ($section == "user") 	include (SECTIONS.'user.sec.php');
+					if ($section == "user") 		include (SECTIONS.'user.sec.php');
 				}
-						
 			?>
             </div><!-- ./left column -->
             <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
@@ -232,23 +230,23 @@ $datatables_load = array("admin","list");
     </div><!-- ./container -->
     <!-- ./Public Pages -->
     
+    <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- Mods Bottom -->
     <div class="container"> 
-    
+    	<?php include(INCLUDES.'mods_bottom.inc.php'); ?>
     </div>
     <!-- ./Mods Bottom -->
+    <?php } ?>
     
     <!-- Footer -->
     <footer class="footer hidden-xs hidden-sm hidden-md">
-    	<nav class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom bcoem-footer">
+    	<div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom bcoem-footer">
             <div class="<?php echo $container_main; ?> text-center">
                 <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small"><?php include (SECTIONS.'footer.sec.php'); ?></p>
             </div>
-    	</nav>
+    	</div>
     </footer><!-- ./footer --> 
 	<!-- ./ Footer -->
-    
-    
     
 </body>
 </html>

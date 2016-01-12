@@ -2,22 +2,35 @@
 
 // Multiple file upload
 // http://webrewrite.com/create-drag-drop-multiple-file-upload-using-dropzonejs/
-
-/*
-
-foreach($_FILES['file']['name'] as $index=>$name) {
-	$filename = $name;
-	
-	if(!file_exists("images/".$filename)) {
-		move_uploaded_file($_FILES["file"]["tmp_name"][$index],"images/" . $filename);
+require('../paths.php');
+$upload_dir = (USER_IMAGES);
+// Multiple file upload
+foreach($_FILES['file']['name'] as $index=>$name){
+$filename = $name;
+if(!file_exists($upload_dir.$filename)){
+move_uploaded_file($_FILES["file"]["tmp_name"][$index],$upload_dir. $filename);
 	}
 } 
 
-*/
- 
 /*
-require('../paths.php');
-require(CONFIG.'bootstrap.php');
+$upload_url = $url_dir."/user_images/";
+
+$uploaddir = (USER_IMAGES);
+$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+
+echo '<pre>';
+if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+    echo "File is valid, and was successfully uploaded.\n";
+} else {
+    echo "Possible file upload attack!\n";
+}
+
+echo 'Here is some more debugging info:';
+print_r($_FILES);
+
+echo "</pre>";
+*/
+/*
 
 function do_upload($upload_dir, $upload_url) {
 	
@@ -38,6 +51,22 @@ function do_upload($upload_dir, $upload_url) {
 	else $message .= ($result)?"<strong>The label image $file_name was uploaded successfully.</strong>" : "An error has occurred, please try again.";
 	return $message;
 }
+
+
+foreach($_FILES['file']['name'] as $index=>$name) {
+	$filename = $name;
+	move_uploaded_file($_FILES["file"]["tmp_name"][$index],$upload_dir.$filename);
+	if(!file_exists($upload_dir.$filename)) {	
+	}
+	echo "YES - ".$filename."<br>";
+} 
+echo $upload_dir;
+ 
+
+require('../paths.php');
+require(CONFIG.'bootstrap.php');
+
+
 
 $fileCornfirm = "default";
 

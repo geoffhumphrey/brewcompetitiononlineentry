@@ -97,7 +97,23 @@ Declare all variables empty at the top of the script. Add on later...
 	
 	etc., etc., etc.
  * ---------------- END Rebuild Info --------------------- */
- 
+
+$warning1 = "";
+$warning2 = "";
+$primary_page_info = "";
+$header1_1 = "";
+$page_info1 = "";
+$header1_2 = "";
+$page_info2 = "";
+
+if (($registration_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['user_level'] == 2))) {
+	
+	$page_info1 .= "<p class=\"lead\">Account registration has closed. <span class=\"small\">Thank you for your interest.</p>";
+	echo $page_info1;
+}
+
+else {
+
 include(DB.'judging_locations.db.php');
 include(DB.'stewarding.db.php'); 
 include(DB.'styles.db.php'); 
@@ -129,13 +145,7 @@ if ($go != "default") {
    		} while ($row_dropoff = mysql_fetch_assoc($dropoff));
 	} 
 }
-$warning1 = "";
-$warning2 = "";
-$primary_page_info = "";
-$header1_1 = "";
-$page_info1 = "";
-$header1_2 = "";
-$page_info2 = "";
+
 $warning1 .= "<p class=\"lead\">The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes. <small>A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</small></p>";
 $warning2 .= "<div class=\"alert alert-warning\"><strong>Reminder:</strong> You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>";
 $header1_1 .= "<p class=\"lead\">";
@@ -654,4 +664,5 @@ if ($go == "default") { ?>
 </script>
 </form>
 <?php } 
+}
 ?>

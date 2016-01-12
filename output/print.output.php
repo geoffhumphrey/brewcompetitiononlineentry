@@ -20,7 +20,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
     <!-- Load Bootstrap and jQuery -->
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/print.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/print.min.css">
     
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

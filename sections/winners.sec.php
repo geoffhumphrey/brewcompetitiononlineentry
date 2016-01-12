@@ -71,12 +71,12 @@ if ($entry_count > 0) {
 			
 			// Build table headers
 			$table_head1 .= "<tr>";
-			$table_head1 .= "<th width='5%'>Place</th>";
-			$table_head1 .= "<th width='25%'>Brewer(s)</th>";
-			$table_head1 .= "<th width='20%'>Entry Name</th>";
-			$table_head1 .= "<th width='25%'>Style</th>";
+			$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
+			$table_head1 .= "<th width=\"25%\">Brewer(s)</th>";
+			$table_head1 .= "<th width=\"20%\">Entry Name</th>";
+			$table_head1 .= "<th width=\"25%\">Style</th>";
 			$table_head1 .= "<th>Club</th>";
-			if ($filter == "scores") $table_head1 .= "<th width='5%'>Score</th>";
+			if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
 			$table_head1 .= "</tr>";
 			
 			// Build table body

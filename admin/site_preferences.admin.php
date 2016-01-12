@@ -112,24 +112,27 @@ $(document).ready(function(){
 				</button>
 			</div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Enable or disable your installation's contact form. This may be necessary if your site's server does not support PHP's <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
+		
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enable or disable your installation's contact form. This may be necessary if your site's server does not support PHP's <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
 	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
@@ -165,24 +168,26 @@ $(document).ready(function(){
             </button>
         </div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="SEFModal" tabindex="-1" role="dialog" aria-labelledby="SEFModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="entryFormModalLabel">SEF URLs Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Generally, &ldquo;Yes&rdquo;  is good for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;No&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
-						<p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
     </div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="SEFModal" tabindex="-1" role="dialog" aria-labelledby="SEFModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="entryFormModalLabel">SEF URLs Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Generally, &ldquo;Yes&rdquo;  is good for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;No&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
+                <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsUseMods" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Custom Modules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -234,33 +239,33 @@ $(document).ready(function(){
 	<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="entryFormModal">
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">
-				   Entry Form Info
-				</button>
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">Entry Form Info</button>
 			</div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="entryFormModal" tabindex="-1" role="dialog" aria-labelledby="entryFormModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="entryFormModalLabel">Entry Form Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>The <em>BJCP Official</em> option displays U.S. weights and measures.</p>
-						<p>The <em>BJCP Official With Barcode</em> option displays the official BJCP recipe form with four bottle labels that feature a scannable barcode.</p>
-						<p>The <em>BJCP Official With Barcode - Bottle Label Only</em> option displays four bottle labels that feature a scannable barcode.</p>
-						<p>Both barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>.</p>
-						<p>BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a> to generate all barcodes</strong>. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
 	</span>
 	</div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="entryFormModal" tabindex="-1" role="dialog" aria-labelledby="entryFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="entryFormModalLabel">Entry Form Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>The <em>BJCP Official</em> option displays U.S. weights and measures.</p>
+                <p>The <em>BJCP Official With Barcode</em> option displays the official BJCP recipe form with four bottle labels that feature a scannable barcode.</p>
+                <p>The <em>BJCP Official With Barcode - Bottle Label Only</em> option displays four bottle labels that feature a scannable barcode.</p>
+                <p>Both barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>.</p>
+                <p>BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a> to generate all barcodes</strong>. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Entry Recipe Section</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -281,24 +286,26 @@ $(document).ready(function(){
 				</button>
 			</div>
 			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header bcoem-admin-modal">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="hideRecipeModalLabel">Hide Entry Recipe Section Info</h4>
-						</div>
-						<div class="modal-body">
-							<p>Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</p>
-						</div>
-					</div>
-				</div>
-			</div><!-- ./modal -->
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="hideRecipeModalLabel">Hide Entry Recipe Section Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If enabled, the BeerXML Import function will not be available.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Special Ingredients</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -316,24 +323,26 @@ $(document).ready(function(){
 				</button>
 			</div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="charLimitModal" tabindex="-1" role="dialog" aria-labelledby="charLimitModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="charLimitModalLabel">Character Limit Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Limit of characters allowed for the Special Ingredients section when adding an entry. 50 characters is the maximum recommended when utilizing the &ldquo;Bottle Labels with Special Ingredients&rdquo; report.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
 	</span>
 	</div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="charLimitModal" tabindex="-1" role="dialog" aria-labelledby="charLimitModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="charLimitModalLabel">Character Limit Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Limit of characters allowed for the Special Ingredients section when adding an entry. 50 characters is the maximum recommended when utilizing the &ldquo;Bottle Labels with Special Ingredients&rdquo; report.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -409,24 +418,27 @@ $(document).ready(function(){
 				</button>
 			</div>
 			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header bcoem-admin-modal">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="exceptdSubstylesModalLabel">Entry Limit For Excepted Sub-Styles Info</h4>
-						</div>
-						<div class="modal-body">
-							<p>Limit of entries that each participant can enter into one of the sub-styles that have been checked. Leave blank if no limit <strong>for the sub-categories that have been checked</strong>.</p>
-						</div>
-					</div>
-				</div>
-			</div><!-- ./modal -->
 		</span>
 		</div>
 	</div><!-- ./Form Group -->
 </div><!-- ./subStyleExeptions -->
+<!-- Modal -->
+<div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exceptdSubstylesModalLabel">Entry Limit For Excepted Sub-Styles Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Limit of entries that each participant can enter into one of the sub-styles that have been checked. Leave blank if no limit <strong>for the sub-categories that have been checked</strong>.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <?php } ?>
 
 <h3>Performance and Data Clean-Up</h3>
@@ -458,24 +470,26 @@ $(document).ready(function(){
 				</button>
 			</div>
 			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="purgeModal" tabindex="-1" role="dialog" aria-labelledby="purgeModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header bcoem-admin-modal">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="purgeModalLabel">Automatically Purge Info</h4>
-						</div>
-						<div class="modal-body">
-							<p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If "No," Admins will have the option to manually purge the entries.</p>
-						</div>
-					</div>
-				</div>
-			</div><!-- ./modal -->
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="purgeModal" tabindex="-1" role="dialog" aria-labelledby="purgeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="purgeModalLabel">Automatically Purge Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If "No," Admins will have the option to manually purge the entries.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <h3>Localization</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
@@ -662,24 +676,27 @@ $(document).ready(function(){
 				</button>
 			</div>
 			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="currencyModal" tabindex="-1" role="dialog" aria-labelledby="currencyModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header bcoem-admin-modal">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="currencyModalLabel">Currency Info</h4>
-						</div>
-						<div class="modal-body">
-							<p>The currencies available in the list <em>above the dashed line</em> are those that are currently accepted by PayPal.</p>
-						</div>
-					</div>
-				</div>
-			</div><!-- ./modal -->
+			
 		</span>
 	</div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="currencyModal" tabindex="-1" role="dialog" aria-labelledby="currencyModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="currencyModalLabel">Currency Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>The currencies available in the list <em>above the dashed line</em> are those that are currently accepted by PayPal.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsPayToPrint" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Pay to Print Paperwork</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -700,25 +717,27 @@ $(document).ready(function(){
             </button>
         </div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="payPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPrintModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="payPrintModalLabel">Pay to Print Paperwork Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Indicate if the entry must be marked as paid to be able to print associated paperwork.</p>
-						<p>The default of &ldquo;No&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="payPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPrintModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="payPrintModalLabel">Pay to Print Paperwork Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate if the entry must be marked as paid to be able to print associated paperwork.</p>
+                <p>The default of &ldquo;No&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsCash" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Cash for Payment</label>
@@ -785,25 +804,28 @@ $(document).ready(function(){
                PayPal Account Email Info
             </button>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="payPalPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPalPrintModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="payPalPrintModalLabel">PayPal Account Email Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Indicate the email address associated with your PayPal account.</p>
-						<p>Please note that you need to have a verified bank account with PayPal to accept credit cards for payment. More information is contained in the &quot;Merchant Services&quot; area of your PayPal account.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
 		</span>
     </div>
 </div><!-- ./Form Group -->
 
+<!-- Modal -->
+<div class="modal fade" id="payPalPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPalPrintModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="payPalPrintModalLabel">PayPal Account Email Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate the email address associated with your PayPal account.</p>
+                <p>Please note that you need to have a verified bank account with PayPal to accept credit cards for payment. More information is contained in the &quot;Merchant Services&quot; area of your PayPal account.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsTransFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entrant Pays Checkout Fees</label>
@@ -823,25 +845,28 @@ $(document).ready(function(){
                Entrant Pays Checkout Fees Info
             </button>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="payPalFeeModal" tabindex="-1" role="dialog" aria-labelledby="payPalFeeModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="payPalFeeModalLabel">Entrant Pays Checkout Fees Info</h4>
-					</div>
-					<div class="modal-body">
-						<p>Do you want participants paying via PayPal also pay the transaction fees?</p>
-						<p>PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</p>
-					</div>
-				</div>
-			</div>
-		</div><!-- ./modal -->
+		
 		</span>
 	</div>
 </div><!-- ./Form Group -->
-
+<!-- Modal -->
+<div class="modal fade" id="payPalFeeModal" tabindex="-1" role="dialog" aria-labelledby="payPalFeeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="payPalFeeModalLabel">Entrant Pays Checkout Fees Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want participants paying via PayPal also pay the transaction fees?</p>
+                <p>PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <h3>Sponsors</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Sponsors</label>

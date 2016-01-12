@@ -281,13 +281,24 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                Competition Organization Info
             </button>
         </div>
-        <!-- Modal -->
+        
+        
+        <?php if (((NHC) && ($prefix == "_final")) || (!NHC) && ($totalRows_style_type > 0)) { ?>
+        <div class="btn-group" role="group" aria-label="BOSModal">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#BOSModal">
+               Best of Show Settings Info
+            </button>
+        </div>
+        
+    </div>
+    
+    <!-- Modal -->
         <div class="modal fade" id="compOrgModal" tabindex="-1" role="dialog" aria-labelledby="compOrgModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bcoem-admin-modal">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="entryFormModalLabel">Competition Organization Info</h4>
+                        <h4 class="modal-title" id="compOrgModalLabel">Competition Organization Info</h4>
                     </div>
                     <div class="modal-body">
                         <p><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition organization preferences</a> are set to:</p>
@@ -300,16 +311,14 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                             <?php } ?>
                         </ul>
                     </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div><!-- ./modal -->
-        <?php if (((NHC) && ($prefix == "_final")) || (!NHC) && ($totalRows_style_type > 0)) { ?>
-        <div class="btn-group" role="group" aria-label="BOSModal">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#BOSModal">
-               Best of Show Settings Info
-            </button>
-        </div>
-        <!-- Modal -->
+
+		<!-- Modal -->
         <div class="modal fade" id="BOSModal" tabindex="-1" role="dialog" aria-labelledby="BOSModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -325,10 +334,14 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                         <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
                     </ul>
                     </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div><!-- ./modal -->
-    </div>
+    
+    
     <?php } ?>
     <?php } // end if (($action == "default") && ($filter == "default") && ($dbTable == "default")); ?>
 <?php } // end if ($action != "print"); ?>

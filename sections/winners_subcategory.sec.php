@@ -77,12 +77,12 @@ foreach (array_unique($a) as $style) {
 		
 		// Build table headers
 		$table_head1 .= "<tr>";
-		$table_head1 .= "<th width='1%'>Place</th>";
-		$table_head1 .= "<th width='25%'>Brewer(s)</th>";
-		$table_head1 .= "<th width='25%'>Entry Name</th>";
-		$table_head1 .= "<th width='25%'>Style</th>";
+		$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
+		$table_head1 .= "<th width=\"25%\">Brewer(s)</th>";
+		$table_head1 .= "<th width=\"25%\">Entry Name</th>";
+		$table_head1 .= "<th width=\"25%\">Style</th>";
 		$table_head1 .= "<th>Club</th>";
-		if ($filter == "scores") $table_head1 .= "<th width='1%'>Score</th>";
+		if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
 		$table_head1 .= "</tr>";
 		
 		// Build table body

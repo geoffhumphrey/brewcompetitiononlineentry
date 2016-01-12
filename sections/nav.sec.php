@@ -11,6 +11,16 @@ else $sef = $sef;
 
 $active_class = " class=\"active\"";
 
+if ($section == "asdfasdfasdfasdfasd") {
+	$admin_link = "#";
+	$admin_tooltip = "Admin Menu";
+}
+
+else {
+	$admin_link = $base_url."index.php?section=admin";
+	$admin_tooltip = "Admin Dashboard";
+}
+
 // TESTING
 if (TESTING) {
 	$logged_in = TRUE;
@@ -122,9 +132,77 @@ if ($logged_in)  {
 }
 
 ?>
-
+<?php if (($logged_in) && ($admin_user)) { ?>
+<div class="navmenu navmenu-inverse navmenu-fixed-right offcanvas">
+<div class="navmenu-brand">Admin Essentials Menu</div>
+        <ul class="nav navmenu-nav">
+        	<li role="separator" class="divider"></li>
+            <li><a href="<?php echo $base_url; ?>index.php?section=admin">Admin Dashboard</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Competition Preparation <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Edit Competition Info</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage Custom Categories</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage Drop-Off Locations</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage Judging Locations</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Manage Sponsors</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entries and Participants <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage Entries</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Manage Participants</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges">Assign Judges</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards">Assign Stewards</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick">Quick Register a Judge/Steward</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sorting <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
+                    <?php if ($_SESSION['prefsEntryForm'] == "N") { ?>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Via Barcode Scanner</a></li>
+                   <?php } ?>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Organizing <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage Tables</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards to Tables</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Add BOS Judges</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scoring <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reporting <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default">Table Cards</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets - Judging Numbers</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos">BOS Pullsheets</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip">BOS Cup Mats - Judging Numbers</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry">BOS Cup Mats - Entry Numbers</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners">Winners with Scores</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+<?php } ?>
 	<!-- Fixed navbar -->
-    <nav class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
+    <div class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
       <div class="<?php echo $container_main; ?>">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bcoem-navbar-collapse" aria-expanded="false">
@@ -155,8 +233,8 @@ if ($logged_in)  {
           	<li><a href="javascript:window.print()" role="button" data-toggle="tooltip" data-placement="bottom" title="Print"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
-            <?php if ($admin_user) { ?>
-            <li<?php if ($section == "admin") echo $active_class; ?>><a href="<?php echo $link_admin; ?>" role="button" data-toggle="tooltip" data-placement="bottom" title="Admin Dashboard"><span class="fa fa-dashboard"></span></a></li>
+			<?php if ($admin_user) { ?>
+            <li><a href="#" role="button" data-tooltip="true" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><span class="fa fa-dashboard"></span></a></li>
             <?php } ?>
             <li class="dropdown">
                 <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="right"><span class="fa fa-user"></span> <span class="caret"></span></a>
@@ -183,6 +261,6 @@ if ($logged_in)  {
           </div>
         </div><!--/.nav-collapse -->
       </div>
-    </nav>
+    </div>
     
     <?php if ($help_icon) echo $help; ?>

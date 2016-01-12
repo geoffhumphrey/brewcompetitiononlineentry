@@ -11,7 +11,7 @@
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Sponsor</a>
     </div><!-- ./button group -->
     <div class="btn-group" role="group" aria-label="upload-sponsor">		
-		<a class="btn btn-primary" href="admin/upload.admin.php" id="modal_window_link"><span class="fa fa-upload"></span> Upload Sponsor Logo Images</a>
+		<a class="btn btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Sponsor Logo Images</a>
 	</div>
 <?php } ?>
 </div>
@@ -138,7 +138,7 @@ if ($action == "default") { ?>
     </select>
     <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
     <span id="helpBlock" class="help-block">If the directory is empty or a file is not on the list, use the &ldquo;Upload Logo Images&rdquo; button below.</span>
-    <a class="btn btn-sm btn-primary" href="admin/upload.admin.php" id="modal_window_link"><span class="fa fa-upload"></span> Upload Logo Images</a>
+    <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Images</a>
     </div>
 </div><!-- ./Form Group -->
 
