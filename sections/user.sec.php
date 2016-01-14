@@ -127,7 +127,7 @@ httpxml.send(null);
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Change Email <span class="fa fa-envelope" aria-hidden="true"></span> </button>
+			<button name="submit" type="submit" class="btn btn-primary" >Change Email</button>
 		</div>
 	</div><!-- Form Group -->
 <?php } ?>
@@ -137,7 +137,7 @@ httpxml.send(null);
         <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <span class="input-group-addon" id="passwordOld-addon1"><span class="fa fa-lock"></span></span>
+                <span class="input-group-addon" id="passwordOld-addon1"><span class="fa fa-key"></span></span>
                 <input class="form-control" name="passwordOld" type="password" placeholder="" id="passwordOld" required>
                 <span class="input-group-addon" id="passwordOld-addon2"><span class="fa fa-star"></span></span>
             </div>
@@ -150,7 +150,7 @@ httpxml.send(null);
         <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <span class="input-group-addon" id="password-addon1"><span class="fa fa-lock"></span></span>
+                <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
                 <input class="form-control" name="password" type="password" placeholder="" id="newPassword" data-match="#passwordOld" data-match-error="The passwords that you entered do not match." >
                 <span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
             </div>
@@ -161,7 +161,7 @@ httpxml.send(null);
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Change Password <span class="fa fa-lock" aria-hidden="true"></span> </button>
+			<button name="submit" type="submit" class="btn btn-primary" >Change Password</button>
 		</div>
 	</div><!-- Form Group -->
 

@@ -131,12 +131,12 @@ if ($logged_in)  {
 	else $add_entry_link .= "index.php?section=brew&amp;action=add";
 }
 
-?>
-<?php if (($logged_in) && ($admin_user)) { ?>
-<div class="navmenu navmenu-inverse navmenu-fixed-right offcanvas">
+
+if (($logged_in) && ($admin_user)) { ?>
+<div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
 <div class="navmenu-brand">Admin Essentials Menu</div>
         <ul class="nav navmenu-nav">
-        	<li role="separator" class="divider"></li>
+        	<li class="disabled"><a href="#"><em class="bcoem-admin-menu-disabled">Click Admin Dashboard for All Options</em></a></li>
             <li><a href="<?php echo $base_url; ?>index.php?section=admin">Admin Dashboard</a></li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Competition Preparation <span class="caret"></span></a>
@@ -175,7 +175,7 @@ if ($logged_in)  {
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage Tables</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards to Tables</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Add BOS Judges</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=bos">Add BOS Judges</a></li>
                 </ul>
             </li>
             <li class="dropdown">
@@ -192,10 +192,17 @@ if ($logged_in)  {
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets - Judging Numbers</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos">BOS Pullsheets</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip">BOS Cup Mats - Judging Numbers</a></li>
+                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat">BOS Cup Mats - Judging Numbers</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry">BOS Cup Mats - Entry Numbers</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners">Winners with Scores</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
                 </ul>
             </li>
         </ul>
@@ -221,23 +228,20 @@ if ($logged_in)  {
                 <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
-                <?php if ((!$logged_in) && ($registration_open == "1") && (!$comp_entry_limit)) { ?>
+                <?php if ((!$logged_in) && ($registration_open == "1") && (($total_entries <= $row_limits['prefsEntryLimit']))) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>">Register</a></li>
    				<?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
-            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-placement="left" title="Help" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
+            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-placement="bottom" title="Help" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
           	<li><a href="javascript:window.print()" role="button" data-toggle="tooltip" data-placement="bottom" title="Print"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
-			<?php if ($admin_user) { ?>
-            <li><a href="#" role="button" data-tooltip="true" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><span class="fa fa-dashboard"></span></a></li>
-            <?php } ?>
             <li class="dropdown">
-                <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="right"><span class="fa fa-user"></span> <span class="caret"></span></a>
+                <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="bottom"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                 	<li class="dropdown-header">User: <?php echo $_SESSION['loginUsername']; ?></li>
                     <li role="separator" class="divider"></li>
@@ -246,7 +250,7 @@ if ($logged_in)  {
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1">Change Email</a></li>
                     <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1">Change Password</a></li> 
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1">Entries</a></li>
-                    <?php if (($entry_window_open == "1") && (!$comp_entry_limit)) { ?>
+                    <?php if (($entry_window_open == "1") && (($total_entries <= $row_limits['prefsEntryLimit']))) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
                     <?php } ?> 
                     <li><a href="<?php echo $link_pay; ?>">Pay Entry Fees</a></li>
@@ -254,7 +258,13 @@ if ($logged_in)  {
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php">Log Out</a></li>
                 </ul>
             </li>
+            <?php if ($admin_user) { ?>
+            <li id="admin-arrow"><a href="#" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> Admin</a></li>
+            <?php } ?>
             <?php } else { ?>
+            
+            
+            
             <li<?php if ($section == "login") echo $active_class; ?>><a href="<?php echo $link_login; ?>" role="button">Log In</a></li>
             <?php } ?>
             </ul>

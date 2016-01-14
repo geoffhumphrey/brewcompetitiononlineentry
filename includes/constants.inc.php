@@ -37,9 +37,9 @@ $currency = explode("^",currency_info($_SESSION['prefsCurrency'],1));
 $currency_symbol = $currency[0];
 $currency_code = $currency[1];
 
-$comp_entry_limit = (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open));
-if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 $total_entries = $totalRows_entry_count;
+
+if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 if ((!empty($row_limits['prefsEntryLimit'])) && ($total_entries > $comp_entry_limit_near)) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
 $current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date");

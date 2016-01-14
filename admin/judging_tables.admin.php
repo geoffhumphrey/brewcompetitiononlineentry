@@ -312,7 +312,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                         </ul>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -335,7 +335,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                     </ul>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -431,7 +431,7 @@ if ($totalRows_tables > 0) { ?>
     </tbody>
 </table>
 <?php } 
-else echo "<p>No tables have been defined yet. <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\">Add a table?</a></p>";
+else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
 } // end if ($action == "default") ?>
 
 

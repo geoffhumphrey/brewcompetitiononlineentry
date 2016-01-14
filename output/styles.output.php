@@ -1,5 +1,5 @@
 <?php 
-$section = "output_styles";
+$section = "styles";
 include(DB.'styles.db.php');
 ?>
     <div class="page-header"><a name="top"></a>
@@ -12,8 +12,8 @@ include(DB.'styles.db.php');
 <?php if ($totalRows_styles > 0) { ?>
 <?php do { 
 $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide');
-if ($go == "default") $replacement2 = array('<br><br><strong class="text-danger">Entry Instructions:</strong>','<br><br><strong class="text-primary">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
-else $replacement2 = array('<br><br><strong class="text-danger">Entry Instructions:</strong>','<br><br><strong class="text-primary">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
+if ($go == "default") $replacement2 = array('<p><strong class="text-danger">Entry Instructions:</strong>','<p><strong class="text-info">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
+else $replacement2 = array('<p><strong class="text-danger">Entry Instructions:</strong>','<p><strong class="text-info">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
 $info = str_replace($replacement1,$replacement2,$row_styles['brewStyleInfo']);
 
     if (($sort == "brewStyleSRM") 	&& (($row_styles['brewStyleSRM'] == "") || ($row_styles['brewStyleSRM'] == "N/A"))) echo ""; 
@@ -34,7 +34,8 @@ else {
 	<li><strong>Number:</strong></li>
     <li><?php echo $row_styles['brewStyleGroup']; ?><?php echo $row_styles['brewStyleNum']; ?></li>
 </ul>
-
+<?php echo "<p>".$info."</p>"; ?>
+<?php //echo "<p>".$row_styles['brewStyleInfo']."</p>"; ?>
 <table class="table table-bordered table-striped">
     <tr>
         <th class="dataLabel data bdr1B">OG Range</th>

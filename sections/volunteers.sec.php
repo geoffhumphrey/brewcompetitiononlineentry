@@ -53,9 +53,6 @@ $page_info_vol_2 = "";
 $header_vol_1_3 = "";
 $page_info_vol_3 = "";
 
-$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
-$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
-
 $header_vol_1_1 .= "<h2>Judges and Stewards</h2>";
 if (($judge_window_open > 0) && (!$logged_in)) { 
 	$page_info_vol_1 .= sprintf("<p>If you <em>have</em> registered, <a href='%s'>log in</a> and then choose <em>Edit Account</em> to indicate that you are willing to judge or  steward.</p>",build_public_url("login","default","default","default",$sef,$base_url));

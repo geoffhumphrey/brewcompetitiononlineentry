@@ -11,6 +11,9 @@ include(DB.'styles.db.php');
 if (isset($_SESSION['loginUsername'])) {
 	
 	
+	if ($psort == "3422") $number_of_labels = "24";
+	if ($psort == "5160") $number_of_labels = "30";
+	
 	// Need to update to loop through DB
 	do {
 		// Special ingredients required
@@ -444,7 +447,7 @@ if (isset($_SESSION['loginUsername'])) {
 				//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
 				if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
 				else $judge_id = "";
-				for($i=0; $i<30; $i++) {
+				for($i=0; $i<$number_of_labels; $i++) {
 					
 					$text = sprintf("\n%s %s\n%s %s\n%s",
 					$first_name,
@@ -584,7 +587,7 @@ if (isset($_SESSION['loginUsername'])) {
 		//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
 		if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
 		else $judge_id = "";
-		for($i=0; $i<30; $i++) {
+		for($i=0; $i<$number_of_labels; $i++) {
 			
 			$text = sprintf("\n%s %s\n%s %s\n%s",
 			$first_name, 

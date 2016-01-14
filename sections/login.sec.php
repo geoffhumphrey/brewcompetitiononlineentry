@@ -100,7 +100,7 @@ echo $primary_links;
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
 		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
-				<span class="input-group-addon" id="login-addon3"><span class="fa fa-lock"></span></span>
+				<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="loginPassword" type="password" required>
 				<span class="input-group-addon" id="login-addon4"><span class="fa fa-star"></span></span>
@@ -155,7 +155,7 @@ echo $primary_links;
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-lock" aria-hidden="true"></span></button>
+			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-key" aria-hidden="true"></span></button>
 		</div>
 	</div><!-- Form Group -->
 </form>

@@ -54,7 +54,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	//$return .= "<a>";
 	
 	if (($method == 1) || ($method == 2)) {
-		$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
+		$return .= "<span class=\"fa ".$icon."\"></span>";
 		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;"; 
 	}
 
@@ -65,7 +65,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	else {
 		
 		if ($method == 2) { // print form link
-			$return .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.php?";
+			$return .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\">";	
@@ -87,7 +87,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	
 	else {
 		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>"; 
-		$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
+		$return .= "<span class=\"fa ".$icon."\"></span>";
 		
 	}
 	
@@ -1588,7 +1588,7 @@ function style_convert($number,$type,$base_url="") {
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-			$style_convert[] = "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."' data-toggle='tooltip' title='".$row_style['brewStyle']."'>".$trimmed.$row_style['brewStyleNum']."</a>";
+			$style_convert[] = "<a id=\"modal_window_link\" href=\"".$base_url."output/print.output.php?section=styles&amp;view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."&amp;tb=true\" data-toggle=\"tooltip\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
 		}
 		$style_convert = rtrim(implode(", ",$style_convert),", ");
 		break;
@@ -2346,8 +2346,8 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
 				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS Judge";
 				if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
-					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges&amp;id=".$uid."\" data-toggle=\"tooltip\" data-placement=\"top\"  title=\"View this judge&rsquo;s table assignments and entry categories\">Judge</a>";
-					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards&amp;id=".$uid."\" data-toggle=\"tooltip\" data-placement=\"top\"  title=\"View this steward&rsquo;s table assignments and entry categories\">Steward</a>";
+					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Judge</a>";
+					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Steward</a>";
 				}
 				else {
 					if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
@@ -2681,8 +2681,8 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				$output .= "\t\t</tr>\n";
 			}
 			elseif ($method2 == "1") {
-				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
-				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 				
 			}
 			else {
@@ -2697,7 +2697,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		} while ($row_table_assignments = mysql_fetch_assoc($table_assignments));
 	}
 	
-	if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
+	//if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
 	
 	return $output.$output_extend;
 }
@@ -2947,15 +2947,6 @@ function open_or_closed($now,$date1,$date2) {
 		return $output;
 }
 
-function open_limit($total_entries,$limit,$registration_open) {
-	// Check to see if the limit of entries has been reached
-	if ($limit != "") {
-		if (($total_entries >= $limit) && ($registration_open == "1")) return TRUE;
-		else return FALSE;
-	}
-	else return FALSE;
-}
-
 function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
 	/*
 	$style = Style category and subcategory number
@@ -3099,19 +3090,19 @@ function yes_no($input,$base_url,$method=0) {
 	$output = "";
 	if ($method != 3) {
 		if (($input == "Y") || ($input == 1)) { 
-			$output .= "<span class='fa fa-check text-success'></span> ";
-			if ($method == 0) $output .= "Yes";
+			$output = "<span class='fa fa-check text-success'></span> ";
+			if ($method == 0) $output = "Yes";
 			
 		}
 		else {
 			$output .= "<span class='fa fa-times text-danger'></span> ";
-			if ($method == 0) $output .= "No";
+			if ($method == 0) $output = "No";
 			
 		}
 	}
 	if ($method == 3) {
-		if (($input == "Y") || ($input == 1)) $output .= "Yes";
-		else $output .= "No";
+		if (($input == "Y") || ($input == 1)) $output = "Yes";
+		else $output = "No";
 		
 	}
 	return $output;

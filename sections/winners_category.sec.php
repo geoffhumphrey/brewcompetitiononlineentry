@@ -164,7 +164,7 @@ echo $header1_1;
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered dataTable" id="sortable<?php echo $random1; ?>">
+<table class="table table-responsive table-striped table-bordered table-responsive" id="sortable<?php echo $random1; ?>">
 <thead>
 	<?php echo $table_head1; ?>
 </thead>

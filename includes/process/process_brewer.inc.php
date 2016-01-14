@@ -441,22 +441,38 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		// --------------------------------------- Editing a Participant ----------------------------------------
 		if ($action == "edit") {
 			if ($_POST['brewerJudge'] == "Y") {
-				if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-				elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
-				
+				if ($_POST['brewerJudgeLocation'] != "") {
+					if (is_array($_POST['brewerJudgeLocation'])) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+					else $location_pref1 = $_POST['brewerJudgeLocation'];
+				}
 			}
 			else $location_pref1 = "";
 			
 			if ($_POST['brewerSteward'] == "Y") {
-				if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-				elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+				if ($_POST['brewerStewardLocation'] != "") {
+					if (is_array($_POST['brewerStewardLocation'])) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+					else $location_pref2 = $_POST['brewerStewardLocation'];
+				}
 			}
 			else $location_pref2 = "";
 		
-			if ($_POST['brewerJudgeLikes'] != "") $likes = implode(",",$_POST['brewerJudgeLikes']); else $likes = "";
-			if ($_POST['brewerJudgeDislikes'] != "") $dislikes = implode(",",$_POST['brewerJudgeDislikes']); else $dislikes = "";
-			
-			if ($_POST['brewerJudgeRank'] != "") $rank = implode(",",$_POST['brewerJudgeRank']); else $rank = "";
+			if ($_POST['brewerJudgeLikes'] != "") {
+				if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
+				else $likes = $_POST['brewerJudgeLikes']; 
+				}
+			else $likes = "";
+
+			if ($_POST['brewerJudgeDislikes'] != "") { 
+				if (is_array($_POST['brewerJudgeDislikes'])) $dislikes = implode(",",$_POST['brewerJudgeDislikes']);
+				else $dislikes = $_POST['brewerJudgeDislikes']; 
+				}
+			else $dislikes = "";
+
+			if ($_POST['brewerJudgeRank'] != "") {
+				if (is_array($_POST['brewerJudgeRank'])) $rank = implode(",",$_POST['brewerJudgeRank']);
+				else $rank = $_POST['brewerJudgeRank'];
+			}
+			else $rank = "";
 			
 			$updateSQL = sprintf("UPDATE $brewer_db_table SET 
 				uid=%s,
@@ -482,8 +498,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				brewerJudgeDislikes=%s, 
 				brewerJudgeLocation=%s, 
 				brewerStewardLocation=%s,
-				brewerDropOff=%s
-				",
+				brewerDropOff=%s",
 								   GetSQLValueString($_POST['uid'], "int"),
 								   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 								   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -511,7 +526,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 								   );
 			// Numbers 999999994 through 999999999 are reserved for NHC applications.
 			if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
-			$updateSQL .= sprintf(", brewerAHA=%s",GetSQLValueString($_POST['brewerAHA'], "text"));
+				$updateSQL .= sprintf(", brewerAHA=%s",GetSQLValueString($_POST['brewerAHA'], "text"));
 			}
 			
 			$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));

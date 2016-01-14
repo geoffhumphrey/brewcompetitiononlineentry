@@ -89,21 +89,23 @@ if ($section != "admin") {
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
 		
-		// Entry Window Dates
-		$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";
-		$header1_200 .= "<div class=\"panel-heading\">";
-		$header1_200 .= "<h4 class=\"panel-title\">Entry Registration is";
-		if ($entry_window_open == 1) $header1_200 .= " Open";
-		else $header1_200 .= " Closed";
-		$header1_200 .= "</h4>";
-		$header1_200 .= "</div>";
-		$page_info200 .= "<div class=\"panel-body\">";
-		$page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
-		$page_info200 .= "</div>";
-		$page_info200 .= "</div>";
+		
 
 	}
 
+	// Entry Window Dates
+	$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";
+	$header1_200 .= "<div class=\"panel-heading\">";
+	$header1_200 .= "<h4 class=\"panel-title\">Entry Registration is";
+	if ($entry_window_open == 1) $header1_200 .= " Open";
+	else $header1_200 .= " Closed";
+	$header1_200 .= "</h4>";
+	$header1_200 .= "</div>";
+	$page_info200 .= "<div class=\"panel-body\">";
+	$page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
+	$page_info200 .= "</div>";
+	$page_info200 .= "</div>";
+	
 	// Customized display for users looking at their account summary
 	if (($logged_in) && (($section == "list") || ($section == "pay"))) {
 		$total_not_paid = total_not_paid_brewer($_SESSION['user_id']);

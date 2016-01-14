@@ -268,7 +268,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered table-hover dataTable" id="sortable5">
+<table class="table table-responsive table-striped table-bordered" id="sortable5">
 <thead>
 	<tr>
         <th>Style Type</th>
@@ -302,7 +302,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered table-hover dataTable" id="sortable6">
+<table class="table table-responsive table-striped table-bordered" id="sortable6">
 <thead>
 	<tr>
 		<th>Sub-Style</th>

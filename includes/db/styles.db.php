@@ -10,7 +10,7 @@ if ($section == "step7") {
 else $styleSet = $_SESSION['prefsStyleSet'];
 $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
 
-if (($view != "default") && ($section == "output_styles")) {
+if (($view != "default") && ($section == "styles")) {
 		$explodies = explode("-",$view);
 		$query_styles .= sprintf(" AND brewStyleGroup='%s' AND brewStyleNum='%s'",$explodies[0],$explodies[1]);
 	}
@@ -22,7 +22,7 @@ elseif ((($section == "judge") && ($go == "judge")) || ($action == "add") || ($a
 elseif (($section == "beerxml") && ($msg != "default")) $query_styles .= " AND brewStyleActive='Y' AND brewStyleOwn='bcoe'";
 elseif ($section == "sorting") $query_styles .= " AND brewStyleActive='Y'";
 elseif ($section == "list") $query_styles .= sprintf(" AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log['brewCategorySort'], $row_log['brewSubCategory']);
-elseif ($section == "output_styles") {
+elseif ($section == "styles") {
 	if ($filter == "default") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 	else $query_styles .= " AND brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum";
 }

@@ -199,7 +199,7 @@ $page_info8 .= "";
 
 if ($entry_window_open < 2) $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s Categories Accepted</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']));
 else $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s Judging Categories</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']));
-$page_info8 .= "<table class=\"table table-striped table-bordered\">";
+$page_info8 .= "<table class=\"table table-striped table-bordered table-responsive\">";
 $page_info8 .= "<tr>"; 
 
 $styles_endRow = 0;

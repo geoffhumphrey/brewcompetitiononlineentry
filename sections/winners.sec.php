@@ -73,7 +73,7 @@ if ($entry_count > 0) {
 			$table_head1 .= "<tr>";
 			$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
 			$table_head1 .= "<th width=\"25%\">Brewer(s)</th>";
-			$table_head1 .= "<th width=\"20%\">Entry Name</th>";
+			$table_head1 .= "<th width=\"25%\">Entry Name</th>";
 			$table_head1 .= "<th width=\"25%\">Style</th>";
 			$table_head1 .= "<th>Club</th>";
 			if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
@@ -163,7 +163,7 @@ $random1 .= random_generator(7,2);
 	} );
 </script>
 <?php echo $header1_1; ?>
-<table class="table table-responsive table-striped table-bordered dataTable" id="sortable<?php echo $random1; ?>">
+<table class="table table-responsive table-striped table-bordered table-responsive" id="sortable<?php echo $random1; ?>">
 <thead>
 	<?php echo $table_head1; ?>
 </thead>

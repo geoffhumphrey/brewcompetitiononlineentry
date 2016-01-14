@@ -38,7 +38,7 @@ if ($id == "default") { ?>
                         } );
                 } );
         </script>
-    <table class="dataTable table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     </thead>
     <tbody>
@@ -62,7 +62,7 @@ if ($id == "default") { ?>
     </tbody>
     </table>
     <?php } ?>
-    <table class="dataTable table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
     <?php for($i=0; $i<(8-$totalRows_assignments); $i++) { ?>
     <tr>
     	<td>&nbsp;</td>
@@ -99,7 +99,7 @@ if ($id != "default") {
                         } );
                 } );
         </script>
-    <table class="dataTable table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     </thead>
     <tbody>
@@ -122,7 +122,7 @@ if ($id != "default") {
     </table>
     <?php } ?>
     <?php if ($totalRows_assignments < 8) { ?>
-    <table class="dataTable table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
     <?php for($i=0; $i<(12-$totalRows_assignments); $i++) { ?>
     <tr>
     	<td>&nbsp;</td>

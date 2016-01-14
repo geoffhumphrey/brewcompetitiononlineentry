@@ -466,6 +466,9 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
                 <div class="modal-body">
                     <?php echo $secondary_page_info; ?>
                 </div>
+                <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
         	</div>
       	</div>
     </div><!-- ./modal -->

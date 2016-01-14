@@ -143,12 +143,12 @@ do {
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exlamation-circle text-danger\"></span> No";
 	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exlamation-circle\"></span>";
-	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url);
+	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
 	$entry_output .= "</td>";
 	
 	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
-	$entry_output .= yes_no($row_log['brewPaid'],$base_url);
+	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
 	$entry_output .= "</td>";
 	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
@@ -170,7 +170,7 @@ do {
 		
 		$entry_output .= "<td>";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
-			if ($action != "print") $entry_output .= "<span class =\"fa fa-check\"></span>"; 
+			if ($action != "print") $entry_output .= "<span class =\"fa fa-check text-success\"></span>"; 
 			else $entry_output .= "Yes"; 
 			}
 		else $entry_output .= "&nbsp;";
@@ -215,7 +215,7 @@ do {
 	// Print Recipe
 	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-book\"><span></a>&nbsp;&nbsp;";
 	
-	if ($comp_entry_limit) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
+	if (($total_entries > $row_limits['prefsEntryLimit'])) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
 	
 	if ($entry_window_open == 1) {
 	$delete_alt_title = "Delete ".$row_log['brewName'];
@@ -305,12 +305,12 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th>#</th>
   	<th>Name</th>
   	<th>Style</th>
-  	<th class="hidden-xs hidden-sm">Confirmed?</th> 
-  	<th class="hidden-xs hidden-sm">Paid?</th> 
+  	<th class="hidden-xs hidden-sm">Confirmed</th> 
+  	<th class="hidden-xs hidden-sm">Paid</th> 
     <th class="hidden-xs hidden-sm">Updated</th>
   	<?php if ($show_scores) { ?>
   	<th>Score</th>
-    <th class="hidden-xs hidden-sm">Mini-BOS?</th>
+    <th class="hidden-xs hidden-sm" nowrap>Mini-BOS</th>
   	<th>Winner?</th>
   	<?php } ?>
     <th class="hidden-print">Actions</th>

@@ -293,7 +293,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered table-hover" id="sortable1">
+<table class="table table-responsive table-striped table-bordered" id="sortable1">
 <thead>
 	<tr>
 		<th>Style Type</th>
@@ -326,7 +326,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered table-hover" id="sortable2">
+<table class="table table-responsive table-striped table-bordered " id="sortable2">
 <thead>
 	<tr>
 		<th>Category</th>

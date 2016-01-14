@@ -63,13 +63,13 @@ require(DB.'winners.db.php');
 				$table_body1 = "";
 				
 				// Build headers
-				$header1_1 .= "<h3>Best of Show &ndash; ".$row_style_type['styleTypeName']."</h3>";
+				$header1_1 .= "<h2>Best of Show &ndash; ".$row_style_type['styleTypeName']."</h2>";
 				
 				// Build table headers
 				$table_head1 .= "<tr>";
-				$table_head1 .= "<th width='5%'>Place</th>";
+				$table_head1 .= "<th width='5%' nowrap>Place</th>";
 				$table_head1 .= "<th width='25%'>Brewer(s)</th>";
-				$table_head1 .= "<th width='20%'>Entry Name</th>";
+				$table_head1 .= "<th width='25%'>Entry Name</th>";
 				$table_head1 .= "<th width='25%'>Style</th>";
 				$table_head1 .= "<th>Club</th>";
 				
@@ -129,7 +129,7 @@ echo $header1_1; ?>
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [],
+		"aaSorting": [[0,'asc']],
 		"bProcessing" : false,
 		"aoColumns": [
 			{ "asSorting": [  ] },

@@ -79,7 +79,7 @@ httpxml.send(null);
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
-				<span class="input-group-addon" id="password-addon1"><span class="fa fa-lock"></span></span>
+				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>">
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>

@@ -7,7 +7,7 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (isset($_SESSION['loginUsername'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,18 +45,20 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
     <div class="container-fluid">
             
     	<?php
+		if ($_SESSION['userLevel'] <= 1) {
+			if ($section == "assignments") 	include (OUTPUT.'assignments.output.php');
+			if ($section == "bos-mat") 		include (OUTPUT.'bos_mat.output.php');
+			if ($section == "dropoff") 		include (OUTPUT.'dropoff.output.php');
+			if ($section == "summary") 		include (OUTPUT.'participant_summary.output.php');
+			if ($section == "inventory") 	include (OUTPUT.'post_judge_inventory.output.php');
+			if ($section == "pullsheets") 	include (OUTPUT.'pullsheets.output.php');
+			if ($section == "results") 		include (OUTPUT.'results.output.php');
+			if ($section == "sorting") 		include (OUTPUT.'sorting.output.php');
+			if ($section == "staff") 		include (OUTPUT.'staff_points.output.php');
+			if ($section == "table-cards") 	include (OUTPUT.'table_cards.output.php');
+		}
 		
-		if ($section == "assignments") 	include (OUTPUT.'assignments.output.php');
-		if ($section == "bos-mat") 		include (OUTPUT.'bos_mat.output.php');
-		if ($section == "dropoff") 		include (OUTPUT.'dropoff.output.php');
-		if ($section == "summary") 		include (OUTPUT.'participant_summary.output.php');
-		if ($section == "inventory") 	include (OUTPUT.'post_judge_inventory.output.php');
-		if ($section == "pullsheets") 	include (OUTPUT.'pullsheets.output.php');
-		if ($section == "results") 		include (OUTPUT.'results.output.php');
-		if ($section == "sorting") 		include (OUTPUT.'sorting.output.php');
-		if ($section == "staff") 		include (OUTPUT.'staff_points.output.php');
-		if ($section == "styles") 		include (OUTPUT.'styles.output.php');
-		if ($section == "table-cards") 	include (OUTPUT.'table_cards.output.php');
+		if ($section == "styles") 			include (OUTPUT.'styles.output.php'); 
 		
 		if ($section == "admin") {
 			include(LIB.'admin.lib.php');

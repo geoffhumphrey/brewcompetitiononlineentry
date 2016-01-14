@@ -4,7 +4,7 @@ $bcoem_help_title .= "";
 $bcoem_help_body .= "<p></p>";
 $content = TRUE;
 */
-$bcoem_dashboard_help_array = array("comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am","winner-rpt","bjcp-points");
+$bcoem_dashboard_help_array = array("comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am");
 
 function bcoem_dashboard_help($content) {
 	$bcoem_dashboard_help_title = "";
@@ -81,8 +81,8 @@ function bcoem_dashboard_help($content) {
 		
 		case "preferences":
 		$bcoem_dashboard_help_title .= "Preferences Help";
-		$bcoem_dashboard_help_body .= "<p>Website Preferences are those that affect the behavior of your BCOE&amp;M installation, such as the overall site theme, styleset to use, entry limit, per-participant entry limit, units of measurement, currency and localization, etc.</p>";
-		$bcoem_dashboard_help_body .= "<p>Competition Organization Preferences are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
+		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=preferences\">Website Preferences</a> are those that affect the behavior of your BCOE&amp;M installation, such as the overall site theme, styleset to use, entry limit, per-participant entry limit, units of measurement, currency and localization, etc.</p>";
+		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\">Competition Organization Preferences</a> are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
 		break;
 		
 		case "reports":
@@ -174,44 +174,43 @@ function bcoem_dashboard_help($content) {
 		
 		case "materials":
 		$bcoem_dashboard_help_title .= "How Do I Print Judging Day Materials?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
+		$bcoem_dashboard_help_body .= "<p>After all tables have been defined and judges and stewards have been assigned to them, you are now ready to print the materials needed to help run the competition.</p>";
+		$bcoem_dashboard_help_body .= "<p>Available materials are:</p>";
+		$bcoem_dashboard_help_body .= "<ul>";
+		$bcoem_dashboard_help_body .= "<li>Pullsheets detailing the entries cellarpeople retrieve for each table.</li>";
+		$bcoem_dashboard_help_body .= "<li>Table cards to identify physical tables, detailing the table name and the judges and stewards assigned to it.</li>";
+		$bcoem_dashboard_help_body .= "<li>Sign-in sheets for judges and stewards.</li>";
+		$bcoem_dashboard_help_body .= "<li>Assignment sheets for judges and stewards.</li>";
+		$bcoem_dashboard_help_body .= "<li>Scoresheet labels for each judge to affix to scoresheets.</li>";
+		$bcoem_dashboard_help_body .= "<li>Nametags for judges, stewards, and staff.</li>";
+		$bcoem_dashboard_help_body .= "</ul>";
 		break;
 		
 		case "bos-judges":
 		$bcoem_dashboard_help_title .= "How Do I Assign Best of Show Judges?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
+		$bcoem_dashboard_help_body .= "<p>To assign judges for the best of show (BOS) round, you can do so via the <a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos\">Assign Participants as Best of Show Judges</a> function.</p>";
+		$bcoem_dashboard_help_body .= "<p>For a BJCP sanctioned competition, it is best practice to only choose ranked judges for the BOS panel of judges.</p>"; 
+		$bcoem_dashboard_help_body .= "<p>The Assign Participants as Best of Show Judges screen details the available judges and sorts them by rank. It also details whether each judge has any entries that have placed in the competition. Judges cannot serve on the panel if one or more of their entries will be judged in the best of show round.</p>";
 		break;
 		
 		case "bos-results":
 		$bcoem_dashboard_help_title .= "How Do I Enter Scores and BOS Results?";
-		$bcoem_dashboard_help_body .= "";
+		$bcoem_dashboard_help_body .= "<p>After entries have been judged and scores and places have been awarded for each table, administrators can enter into scores into the system from the <a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores\">Manage Scores</a> function. Choose the table from the &ldquo;Add or Update Scores For...&rdquo; drop-down menu.<p>";
+		$bcoem_dashboard_help_body .= "<p>Scores for each entry and apporopriate places designated can be input. At a minimum, places must be entered for Best of Show entries to be recognized by the system for the Best of Show round pullsheets.</p>";
+		$bcoem_dashboard_help_body .= "<p>Once the Best of Show round has been judged, administrators can input the results by selecting the appropriate style type from the &ldquo;Add or Update...&rdquo; drop-down menu from the <a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores_bos\">Manage Best of Show (BOS) Entries and Places</a> function.</p>";
 		$bcoem_dashboard_help_body .= "";
 		break;
 				
 		case "winning":
 		$bcoem_dashboard_help_title .= "How Do I Display Winning Entries?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
+		$bcoem_dashboard_help_body .= "<p>Once scores and Best of Show results have been entered, the system will automatically display the results on the <a href=\"".$base_url."\">home page</a> after the designated Winner Display Delay prescribed by administrators has passed. This delay is input via the <a href=\"".$base_url."index.php?section=admin&amp;go=preferences\">Website Preferences</a> function.";
 		break;
 		
 		case "pro-am":
 		$bcoem_dashboard_help_title .= "How Do I Display Pro-Am Winner(s)?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
-		break;
-		
-		case "winner-rpt":
-		$bcoem_dashboard_help_title .= "How Do I Print a Winner Report?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
-		break;
-		
-		case "bjcp-points":
-		$bcoem_dashboard_help_title .= "How Do I Report BJCP Judging Points?";
-		$bcoem_dashboard_help_body .= "";
-		$bcoem_dashboard_help_body .= "";
+		$bcoem_dashboard_help_body .= "<p>Pro-am winners can be input and displayed using the <a href=\"".$base_url."index.php?section=admin&amp;go=special_best\">Custom Categories</a> function. Custom categories are not limited to pro-am opportunities, however.</p>";
+		$bcoem_dashboard_help_body .= "<p>Any overall winning category can be defined by administrators - the sky is the limit here. Best Entry Name? Sure. Most Unique Ingredient? Absolutely. Custom categories are where the personality of your competition can be displayed.</p>";
+		$bcoem_dashboard_help_body .= "<p>All custom category winning entries are displayed on the home page with the overall results of the competition, just below the Best of Show winners.</p>";
 		break;
 	}
 	

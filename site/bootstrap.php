@@ -123,7 +123,7 @@ if ($setup_success) {
 	else $fx = FALSE;
 	
 	// Get theme
-	$theme = $base_url."css/".$_SESSION['prefsTheme'].".css";
+	$theme = $base_url."css/".$_SESSION['prefsTheme'].".min.css";
 	
 } // end if ($setup_success);
 ?>

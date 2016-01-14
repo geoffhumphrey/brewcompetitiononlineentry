@@ -158,7 +158,7 @@ if ($section == "admin") {
 $header1_1 .= "</p>";
 if (($go != "default") && ($section != "admin")) $page_info1 .= "<p>To register for the competition, create your online account by filling out the form below.</p>";
 if ($view == "quick") $page_info1 .= "<p>Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.</p>";
-if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && (!open_limit($totalRows_entry_count,$_SESSION['prefsEntryLimit'],$registration_open))) {
+if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && (($total_entries <= $row_limits['prefsEntryLimit']))) {
 	$page_info1 .= "<p>Entry into this competition is conducted completely online.</p>";
 	$page_info1 .= "<ul>";
 	if (!NHC) {
@@ -280,7 +280,7 @@ if ($go == "default") { ?>
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
 		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
-				<span class="input-group-addon" id="password-addon1"><span class="fa fa-lock"></span></span>
+				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" required>
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>

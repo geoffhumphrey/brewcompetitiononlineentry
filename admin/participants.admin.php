@@ -70,6 +70,7 @@ $form_submit_button = "";
 $output_no_records = "";
 $output_add_edit = FALSE;
 $output_hide_print = "";
+$output_assignment_modals = "";
 
 if ($action != "print") {
 	$output_hide_print .= "hidden-md hidden-sm hidden-xs";	
@@ -193,7 +194,11 @@ do {
 	$user_info = explode("^",$user_info);
 	
 	$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+	$table_assign_judge = rtrim($table_assign_judge,",&nbsp;");
 	$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+	$table_assign_steward = rtrim($table_assign_steward,",&nbsp;");
+	
+	$judge_entries = judge_entries($row_brewer['uid'],1);
 	
 	if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
 	if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
@@ -203,6 +208,41 @@ do {
 	if ($dbTable != "default") $archive = get_suffix($dbTable);
 	else $archive = "default"; 
 	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
+	
+	if (!empty($brewer_assignment)) {
+		// Build assignment modal for participants
+		unset($assignment_modal_body);
+		if ((strpos($brewer_assignment,"Judge") !== false)  ||(strpos($brewer_assignment,"Steward") !== false) ) {
+			
+			
+			if (strpos($brewer_assignment,"Judge") !== false) {
+				if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
+				else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
+			}
+			if (strpos($brewer_assignment,"Steward") !== false) {
+				if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
+				else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
+			}
+			if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in the following categories: ".$judge_entries."</p>";
+			$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
+			$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+			$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
+			$output_assignment_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+			$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+			$output_assignment_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".$row_brewer['uid']."\">Assignment(s) for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."</h4>\n";
+			$output_assignment_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+			$output_assignment_modals .= "\t\t\t<div class=\"modal-body\">\n";
+			$output_assignment_modals .= "\t\t\t\t".$assignment_modal_body."\n";
+			$output_assignment_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+			$output_assignment_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+			$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+			$output_assignment_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+			$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
+			$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
+			$output_assignment_modals .= "</div><!-- ./modal -->\n";
+		}
+	}
+	
 	//$judge_array = str_replace(", ",",",$brewer_assignment);
 	//$judge_array = explode(",",$judge_array);
 	//if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
@@ -293,18 +333,18 @@ do {
 		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s User Level");
 		else $output_datatables_other_link = "<span class=\"fa fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
 		if (strpos($brewer_assignment,'Judge') !== false)  {
-			$output_datatables_view_link = build_output_link("fa-file",$base_url,"labels.php","admin","participants","judging_labels","default",$row_brewer['id'],"default","Download judging labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." (Avery 5160)",FALSE);
+			$output_datatables_view_link = "<a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." - Letter (Avery 5160)\"><span class=\"fa fa-file\"></span></a> <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." - A4 (Avery 3422)\"><span class=\"fa fa-file-text\"></span></a>";
 		}
 		else $output_datatables_view_link = "";
 		$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['id'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
 		$output_datatables_email_link .= "<a href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-envelope\"></span></a>";
 		
 		if ($us_phone) {
-			$output_datatables_phone_link = "<span class=\"fa fa-phone text-primary\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone: ".format_phone_us($row_brewer['brewerPhone1'])."\"></span>";
+			$output_datatables_phone_link = "<a href=\#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-phone\"></span></a>";
 		}
 		
 		else {
-			$output_datatables_phone_link = "<span class=\"fa fa-phone text-primary\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone: ".$row_brewer['brewerPhone1']."\"></span>";	
+			$output_datatables_phone_link = "<a href=\#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-phone\"></span></a>";	
 		}
 		
 		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_view_link;
@@ -324,7 +364,7 @@ $output_datatables_body .= "</tr>";
 //echo $goto_nav;
 //echo $secondary_nav;
 //echo $secondary_page_info;
-
+echo $output_assignment_modals;
 ?>
 
 <?php if ($action == "print") { ?>
@@ -460,6 +500,9 @@ $output_datatables_body .= "</tr>";
                             <strong class="text-info">Available Stewards</strong><span class="pull-right"><?php echo get_participant_count('steward'); ?></span>
                         </div>
                     </div>
+                    <div class="modal-footer">
+            			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            		</div>
                 </div>
             </div>
         </div><!-- ./modal -->
