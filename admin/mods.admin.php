@@ -66,7 +66,7 @@ function mod_info($info,$method) {
 </div>
 <?php if ($action == "default") { ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
-	<p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. <!-- Provided in the program package are templates for reports (both on-screen and printed) and simple HTML. These are located in the &ldquo;Mods&rdquo; sub-folder. --> Guidelines to adding and using custom modules are provided in the BCOE&amp;M help site. All files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to &quot;include&quot; files with other exensions).</p>
+	<p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are two sample HTML files. These are located in the &ldquo;Mods&rdquo; sub-folder. Guidelines to adding and using custom modules are provided in the BCOE&amp;M help site. All files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to &quot;include&quot; files with other exensions).</p>
   	<p>For the program to use any custom module, its information MUST be added into the database. The corresponding file should be uploaded to the &ldquo;mods&rdquo; sub-folder via secure FTP (using a php-based upload script is <em>not</em> secure).</p>
 	<p><em><strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
 
@@ -78,7 +78,7 @@ function mod_info($info,$method) {
                 "sPaginationType" : "full_numbers",
                 "bLengthChange" : true,
                 "iDisplayLength" : <?php echo $limit; ?>,
-                "sDom": 'irtip',
+                "sDom": 'rt',
                 "bStateSave" : false,
                 "aaSorting": [[0,'asc']],
                 "aoColumns": [

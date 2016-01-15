@@ -66,7 +66,7 @@ $message8 = "";
 $message9 = "";
 
 // Build Links
-$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/beerxml_import.html' title='BCOE&amp;M Help: BeerXML'>My Account Help</a></p>";
+//$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/beerxml_import.html' title='BCOE&amp;M Help: BeerXML'>My Account Help</a></p>";
 
 // Build Messages
 
@@ -116,51 +116,59 @@ else {
 
 	if ($php_OK) {
 		$upload_form_display = TRUE;
-		$message = "";
-		$return = "";
-		include (INCLUDES.'beerXML/input_beer_xml.inc.php');
-		$MAX_SIZE = 2000000;
-		$FILE_MIMES = array('text/xml');
-		$FILE_EXTS  = array('.xml');
-		$DELETABLE  = false;
-		$url_this =  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		
-		if(!$_REQUEST['inserted'] == "true") $_SESSION['recipes'] = "";
-		
-		if ($_FILES['userfile']) {
-			$file_type = $_FILES['userfile']['type'];
-			$file_name = $_FILES['userfile']['name'];
-			$file_ext = strtolower(substr($file_name,strrpos($file_name,".")));  	
+		if ($go == "upload") {
+			$message = "";
+			$return = "";
+			include (INCLUDES.'beerXML/input_beer_xml.inc.php');
+			$MAX_SIZE = 2000000;
+			$FILE_MIMES = array('text/xml');
+			$FILE_EXTS  = array('.xml');
+			$DELETABLE  = false;
+			$url_this =  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 			
-			// File size check
-			if ($_FILES['userfile']['size'] > $MAX_SIZE) 
-			$message .= "The file size is over 2MB.  Please adjust the size and try again.";
-			  
-			//File type and extension check
-			elseif (!in_array($file_type, $FILE_MIMES) && !in_array($file_ext, $FILE_EXTS))
-			$message .= "Sorry, that file type is not allowed to be uploaded.  Only .xml file extensions are allowed.";
-			  
-			// Check if file uploaded, if so, parse.
-			elseif(is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+			if(!$_REQUEST['inserted'] == "true") $_SESSION['recipes'] = "";
+			
+			if ($_FILES['userfile']) {
 				
-				$input = new InputBeerXML($_FILES['userfile']['tmp_name']);
 				
-				if($_POST["insert_type"] == "recipes"){
-					$insertedRecipes = $input->insertRecipes();
-					if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " entries added.";
-					else $message .= ucwords(readable_number(count($insertedRecipes))) . " entry added.";
-				} 
+				$file_type = $_FILES['userfile']['type'];
+				$file_name = $_FILES['userfile']['name'];
+				$file_ext = strtolower(substr($file_name,strrpos($file_name,".")));  	
 				
-				$_SESSION['recipes'] = $recipes;
+				// File size check
+				if ($_FILES['userfile']['size'] > $MAX_SIZE) 
+				$message .= "The file size is over 2MB.  Please adjust the size and try again.";
+				  
+				//File type and extension check
+				elseif (!in_array($file_type, $FILE_MIMES) && !in_array($file_ext, $FILE_EXTS))
+				$message .= "Sorry, that file type is not allowed to be uploaded.  Only .xml file extensions are allowed.";
+				  
+				// Check if file uploaded, if so, parse.
+				elseif(is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+					
+					$input = new InputBeerXML($_FILES['userfile']['tmp_name']);
+					
+					if($_POST["insert_type"] == "recipes"){
+						$insertedRecipes = $input->insertRecipes();
+						if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " entries added.";
+						else $message .= ucwords(readable_number(count($insertedRecipes))) . " entry added.";
+					} 
+					
+					$_SESSION['recipes'] = $recipes;
+					$message .= " ".$_FILES['userfile']['name']." has been uploaded and the brew has been added to your list of entries.";
+				}
+				
+				
+				/*
+				//header(sprintf("Location: %s", stripslashes($updateGoTo)));
+				//print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=1'</script>";
+				*/
 			}
-			print "<script>window.location.href='index.php?section=".$section."&action=importXML&msg=1'</script>";
+			elseif (!$_FILES['userfile']) $message .= "";
+			else $message .= "Invalid file specified.";
+			if (!empty($message)) $message7 .= "<p><strong class=\"text-danger\">".$message."</strong> However, it has not been confirmed. To confirm your entry, access your <a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">entries list</a> for further instructions.</p><p>Or, you can add upload another BeerXML entry below.</p>";
 		}
-		elseif (!$_FILES['userfile']) $message .= "";
-		else $message .= "Invalid file specified.";
-		if (!empty($message)) $message7 .= "<div class='error'>".$message."</div>";
-		if (entries_unconfirmed($_SESSION['user_id']) > 0) { 
-			$message8 .=  "<div class='error'>You have unconfirmed entries. Please go to <a href='".build_public_url("list","default","default","default",$sef,$base_url)."'>your entry list</a> to confirm all your entry data. Unconfirmed entry data will be deleted every 24 hours.</div>";
-		} 
 	}
 }
 if (!$php_OK) $message9 .= "<div class='error'>Your server's version of PHP does not support the BeerXML import feature.</div><p>PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version.".</p>";
@@ -176,31 +184,23 @@ echo $message3;
 echo $message4;
 echo $message5;
 echo $message6;
-echo $message7;
-echo $message8;
+//echo $message8;
 echo $message9;
-echo $help_link;
 
 if ($upload_form_display) { ?>
-<p>Browse for your BeerXML compliant file on your hard drive click <em>Upload</em>.</p>
-<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post">
-<table>
-<tr>
-    <td class="dataLabel">BeerXML File:</td>
-    <td class="data"><input name="userfile" type="file" class="texta" id="userfile" size="60"></td>
-</tr>
-<tr>
-    <td>&nbsp;</td>
-    <td class="data"><input name="upload" type="submit" class="button" value="Upload" /></td>
-</table>
+<p class="lead">Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.</p>
+<?php echo $message7; ?>
+<form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post" action="<?php echo $base_url; ?>index.php?section=beerxml&amp;go=upload">
+
+<div class="fileinput fileinput-new" data-provides="fileinput">
+    <span class="btn btn-default btn-file"><span>Choose BeerXML File</span><input type="file" name="userfile" /></span>
+    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
+</div>
+
+<p><input class="btn btn-primary" name="upload" type="submit" class="button" value="Upload" /></p>
 <input type="hidden" name="insert_type" value="recipes" />
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>" />
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>" />
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>" />
 </form>
 <?php } ?>
-
-
-<!-- Public Page Rebuild completed 08.27.15 --> 
-
-

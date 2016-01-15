@@ -72,13 +72,15 @@
         </div>
     <?php } ?>
     
-    <?php if ($fx) { ?>
+    <?php //if ($fx) { ?>
     	<!-- Firefox printing issue -->
+        <!--
     	<div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         	<strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly, RIGHT CLICK on the link and choose &ldquo;Open Link in New Tab.&rdquo; Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.?
         </div>
-    <?php } ?>
+        -->
+    <?php //} ?>
     
     <?php if ($bjcp_2008) { ?>
     	<!-- BJCP 2008 convert to 2015 -->

@@ -11,7 +11,8 @@ $table_header7 = "Actions";
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; ?> Archives</p>
 <?php if (HOSTED) { ?>
-<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of data, use the links below.</p> 
+<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of data, use the links below.</p>
+<p>Custom category, custom style type, drop-off location, judging location, and sponsor data <strong class="text-success">will not be purged</strong>. Admins will need to update these for future competition instances.</p>
 <h3>Option 1</h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">

@@ -640,11 +640,13 @@ if ($go == "default") { ?>
 	
 <?php } // end if ($go != "entrant") ?>	
 	<?php if ($section != "admin") { ?>
+   	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
 	<div class="form-group">
 		<label for="recaptcha" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA</label>
 		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
+                <!-- <div class="g-recaptcha" data-sitekey="6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W"></div> -->
 				<?php echo recaptcha_get_html($publickey, null, true); ?>
 			</div>
 		</div>

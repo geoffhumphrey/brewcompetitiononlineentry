@@ -9,10 +9,18 @@
 
 /*
 
-reCaptcha Global Key for BCOE&M
+reCaptcha Global Keys for BCOE&M
 
+--- Version 1 ---
 Public Key: 	6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7
 Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd 
+
+Future Version
+--- No CAPTCHA (Version 2) ---
+Public Key:		6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W
+Private Key:	6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb
+
+http://www.codediesel.com/security/integrating-googles-new-nocaptcha-recaptcha-in-php/
 
 */
 
@@ -22,7 +30,7 @@ Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd
 
 // Define the current version
 
-$current_version = "1.3.2.0";
+$current_version = "2.0.0";
 
 // --------------------------------------------------------
 

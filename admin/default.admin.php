@@ -962,7 +962,7 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        <?php if (($_SESSION['userLevel'] == "0") && (!HOSTED)) { ?>
+                        <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Archives</strong>

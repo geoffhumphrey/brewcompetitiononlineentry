@@ -47,20 +47,30 @@ if (check_setup($prefix."system",$database)) {
 	//echo $row_version['version'];
 	
 	if ($row_version_check['version'] != $current_version) { 
-		$setup_success = FALSE;
 		
-		// Change version number in DB ONLY if there is no need to run the update scripts 
-		if (!$db_update) {
+		// Run update scripts
+		if ($db_update) {
+			$setup_success = FALSE;
+			$setup_relocate = "Location: ".$base_url."update.php";
+			//exit;
+		}
+		
+		// Change version number in DB ONLY if there is no need to run the update scripts
+		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.2.0","2015-10-31","1");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system","2.0.0","2016-01-31");
 			mysql_select_db($database, $brewing);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+			mysql_real_escape_string($updateSQL);
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			
 			$setup_relocate = "Location: ".$base_url;
 			
+			$setup_success = TRUE;
+			//echo $updateSQL."<br>";
+			//echo $database;
+			//exit;
 		}
 		
-		else $setup_relocate = "Location: ".$base_url."update.php";
 	}
 
 }

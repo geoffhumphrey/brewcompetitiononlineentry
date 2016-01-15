@@ -129,10 +129,18 @@ if ($logged_in)  {
 	$add_entry_link .= $base_url;
 	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; 
 	else $add_entry_link .= "index.php?section=brew&amp;action=add";
+	
+	// Build Add Entry BeerXML Link
+	$add_entry_beerxml_link = "index.php?section=beerxml";
+	
 }
 
 
 if (($logged_in) && ($admin_user)) { ?>
+
+
+
+
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
 <div class="navmenu-brand">Admin Essentials Menu</div>
         <ul class="nav navmenu-nav">
@@ -252,6 +260,7 @@ if (($logged_in) && ($admin_user)) { ?>
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1">Entries</a></li>
                     <?php if (($entry_window_open == "1") && (($total_entries <= $row_limits['prefsEntryLimit']))) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
+                    <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>">Import an Entry Using BeerXML</a><?php } ?>
                     <?php } ?> 
                     <li><a href="<?php echo $link_pay; ?>">Pay Entry Fees</a></li>
                     <li role="separator" class="divider"></li>

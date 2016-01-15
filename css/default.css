@@ -1283,6 +1283,10 @@ bcoem-admin-menu-disabled {
 	color: #B0BEC5; !important
 }
 
+.navmenu { 
+	font-size: .9em;
+}
+
 /**  Footer **/
 
 .footer .navbar-inverse  a {
@@ -1309,6 +1313,10 @@ footer .navbar {
 }
 
 /** Other **/
+
+.btn-group { 
+	padding: 0 0 3px 0; 
+}
 
 @media (min-width: 768px) {
   

@@ -21,7 +21,7 @@ function version_check($version,$current_version) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	if ($version != $current_version) {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","1.3.2.0","2015-10-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.0.0","2016-01-31","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}

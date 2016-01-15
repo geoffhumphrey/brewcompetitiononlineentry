@@ -182,7 +182,7 @@ switch($section) {
 				case "1-28-D": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify all major ingredients and adjuncts. You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "2": $output = "<strong>Info edited successfully.</strong><br />"; break;
 				case "3": $output = "<strong>There was an error.</strong> Please try again.<br />"; break;
-				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries will be deleted from the system after 24 hours.<br />"; break;
+				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries may be deleted from the system without warning.<br />"; break;
 				default: $output = "<strong>This entry has not yet been confirmed.</strong> Please review the information as listed and correct any errors. "; break;
 			}
 		}
@@ -191,12 +191,12 @@ switch($section) {
 		switch ($msg) {
 				case "2": $output = "<strong>Info edited successfully.</strong><br />"; break;
 				case "3": $output = "<strong>There was an error.</strong> Please try again.<br />"; break;
-				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries will be deleted from the system after 24 hours.<br />"; break;
+				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries may be deleted from the system without warning.<br />"; break;
 				default: $output = "<strong>More information is required for your entry to be accepted and confirmed.</strong> See the area(s) highlighted in RED below."; break;
 		}
 	}
 	
-	if ((strstr($msg,"1-")) && ($_SESSION['prefsAutoPurge'] == 1)) $output .= "Unconfirmed entries will be deleted from the system after 24 hours.";
+	if ((strstr($msg,"1-")) && ($_SESSION['prefsAutoPurge'] == 1)) $output .= "Unconfirmed entries may be deleted from the system without warning.";
 	break;
 	
 	case "brewer":

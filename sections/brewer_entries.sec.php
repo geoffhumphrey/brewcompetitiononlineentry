@@ -92,7 +92,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exlamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
+			$warnings .= "<strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}
@@ -141,8 +141,8 @@ do {
 	
 	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
-	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exlamation-circle text-danger\"></span> No";
-	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exlamation-circle\"></span>";
+	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
+	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exclamation-circle\"></span>";
 	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
 	$entry_output .= "</td>";
 	
@@ -254,7 +254,6 @@ do {
 // --------------------------------------------------------------
 
 echo $header1_1;
-if (($fx) && ($action != "print")) echo $firefox_warning;
 
 // Display Warnings and Entry Message
 if (($totalRows_log > 0) && ($action != "print")) {

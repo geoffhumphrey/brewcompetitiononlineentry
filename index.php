@@ -218,6 +218,7 @@ else $datatables_load = array("admin","list");
 					if ($section == "list") 		include (SECTIONS.'list.sec.php');
 					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 					if ($section == "user") 		include (SECTIONS.'user.sec.php');
+					if ($section == "beerxml") 		include (SECTIONS.'beerxml.sec.php');
 				}
 			?>
             </div><!-- ./left column -->
