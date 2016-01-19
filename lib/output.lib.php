@@ -141,7 +141,7 @@ function filename($input) {
 }
 
 // --------------------------------------------------------
-// The following applies to /output/entry.php
+// The following applies to /output/entry.output.php
 // --------------------------------------------------------
 
 function pay_to_print($prefs_pay,$entry_paid) { 

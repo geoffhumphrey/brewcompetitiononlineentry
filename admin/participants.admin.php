@@ -340,11 +340,11 @@ do {
 		$output_datatables_email_link .= "<a href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-envelope\"></span></a>";
 		
 		if ($us_phone) {
-			$output_datatables_phone_link = "<a href=\#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-phone\"></span></a>";
+			$output_datatables_phone_link = "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-phone\"></span></a>";
 		}
 		
 		else {
-			$output_datatables_phone_link = "<a href=\#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-phone\"></span></a>";	
+			$output_datatables_phone_link = "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-phone\"></span></a>";	
 		}
 		
 		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_view_link;

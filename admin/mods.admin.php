@@ -140,7 +140,7 @@ function mod_info($info,$method) {
     <?php } else echo "<p>No custom modules were found in the database.</p>";
 } 
 if (($action == "add") || ($action == "edit")) { ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/usable_forms.js"></script>
+
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 
 
@@ -263,7 +263,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank">
-		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone)</option>
+		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone - Not Displayed)</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Core Content</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Core Content</option>
 	</select>

@@ -53,7 +53,8 @@ else $datatables_load = array("admin","list");
 
 ?>
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -84,23 +85,28 @@ else $datatables_load = array("admin","list");
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
     
-    <?php if (($section == "admin") && (in_array($go,$datetime_load))) { ?>
+    <?php if (($section == "admin") && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/datetime.min.js"></script>
     <?php } ?>
 	
 	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
-    <!-- Load TinyMCE -->
+    <!-- Load TinyMCE / https://www.tinymce.com/ -->
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 	<?php } ?>
 	
 	<?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
-    <!-- Load Off-Canvas Menu for Admin -->
+    <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+		<?php if (($section == "admin") && ($go == "upload")) { ?>
+        <!-- Load DropZone / http://www.dropzonejs.com -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
+        <script src="<?php echo $base_url;?>js_includes/dz.min.js"></script>
+        <?php } ?>
     <?php } ?>
 	
 	<!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
@@ -118,8 +124,8 @@ else $datatables_load = array("admin","list");
 	
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
-  	</head>
-	<body>
+</head>
+<body>
 	
     <!-- MAIN NAV -->
 	<div class="<?php echo $container_main; ?> hidden-print">

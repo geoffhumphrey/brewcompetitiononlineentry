@@ -1279,7 +1279,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 
 /**  Admin Off-Canvas Nav **/
 
-bcoem-admin-menu-disabled {
+.bcoem-admin-menu-disabled {
 	color: #B0BEC5; !important
 }
 
@@ -1381,17 +1381,18 @@ footer .navbar {
 /** Sponsors **/
 .bcoem-sponsor-name h5 {
 	font-size: 1.15em;
+	padding: 0;
 }
 
 .bcoem-sponsor-name {
-	min-height: 60px;
 }
+
 .bcoem-sponsor-location {
-	min-height: 65px;
+	padding: 0 0 15px 0;
 }
 
 .bcoem-sponsor-text {
-	padding: 5px 0;
+	padding: 10px 0;
 }
 
 /** Forms **/
@@ -1669,15 +1670,24 @@ table.dataTable thead th.sorting:after {
 	font-size: 14px !important;
 }
 
-
 .paging_full_numbers a.paginate_button {
     color: #263238 !important;
 }
+
 .paging_full_numbers a.paginate_active {
     color: #263238 !important;
 }
+
 .dataTables_paginate .paginate_button .active {
   
   background-color: #ECEFF1;
   border-color: #B0BEC5;
+}
+
+/** Dropzone Overrides **/
+.dropzone {
+	border-radius: 5px;
+	background-color: #ECEFF1;
+	border: 1px solid #B0BEC5;
+	margin: 0 0 15px 0;
 }

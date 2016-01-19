@@ -2344,7 +2344,7 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 		switch($method) {
 			case "1": // 
 				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
-				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS Judge";
+				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
 				if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
 					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Judge</a>";
 					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Steward</a>";

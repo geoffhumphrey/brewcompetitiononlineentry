@@ -114,10 +114,6 @@ if ((($registration_open == 1) && ($entry_window_open == 1) && (($total_entries 
 	if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 	
 ?>
-
-<!-- Load Conditional Toggle Configuration -->
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/toggle.js"></script>
-
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
@@ -504,7 +500,7 @@ $(document).ready(function()
                         </div>
             		</div><!-- ./Form Group -->
                     <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Amount Brewed</label>
+                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Color</label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <!-- Input Here -->
                             <input class="form-control" name="brewWinnerCat" type="text" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" placeholder="SRM" ?>

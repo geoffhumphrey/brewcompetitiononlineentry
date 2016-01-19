@@ -367,7 +367,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					// Entry Fees
 					$_SESSION['contestEntryFee'] = $row_contest_info['contestEntryFee'];
 					$_SESSION['contestEntryFee2'] = $row_contest_info['contestEntryFee2'];
-					//$_SESSION['contestEntryFeePassword'] = $row_contest_info['contestEntryFeePassword'];
 					$_SESSION['contestEntryFeePasswordNum'] = $row_contest_info['contestEntryFeePasswordNum'];
 					$_SESSION['contestEntryCap'] = $row_contest_info['contestEntryCap'];
 					$_SESSION['contestEntryFeeDiscount'] = $row_contest_info['contestEntryFeeDiscount'];
@@ -392,8 +391,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
 					$_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
 					$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
-					// $_SESSION['prefsGoogle'] = $row_prefs['prefsGoogle'];
-					// $_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
 					$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
 					$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
 					$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
@@ -411,14 +408,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['prefsContact'] = $row_prefs['prefsContact'];
 					$_SESSION['prefsTimeZone'] = $row_prefs['prefsTimeZone'];
 					$_SESSION['prefsTimeFormat'] = $row_prefs['prefsTimeFormat'];
-					//$row_limits['prefsEntryLimit'] = $row_prefs['prefsEntryLimit'];
-					//$_SESSION['prefsUserEntryLimit'] = $row_prefs['prefsUserEntryLimit'];
-					//$_SESSION['prefsUserSubCatLimit'] = $row_prefs['prefsUserSubCatLimit'];
 					$_SESSION['prefsPayToPrint'] = $row_prefs['prefsPayToPrint'];
 					$_SESSION['prefsHideRecipe'] = $row_prefs['prefsHideRecipe'];
 					$_SESSION['prefsUseMods'] = $row_prefs['prefsUseMods'];
-					//$_SESSION['prefsUSCLEx'] = $row_prefs['prefsUSCLEx'];
-					//$_SESSION['prefsUSCLExLimit'] = $row_prefs['prefsUSCLExLimit'];
 					$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
 					$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
 					$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];

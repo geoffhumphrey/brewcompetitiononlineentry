@@ -98,7 +98,7 @@ httpxml.send(null);
 <?php if ($action == "username") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="user_name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Email</label>
-        <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="user_name-addon1"><span class="fa fa-envelope"></span></span>
@@ -113,7 +113,7 @@ httpxml.send(null);
 
 	<div class="form-group"><!-- Form Group Checkbox INLINE -->
         <label for="sure" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Are You Sure?</label>
-        <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="checkbox-inline">
@@ -125,7 +125,7 @@ httpxml.send(null);
     </div><!-- ./Form Group -->
 
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-9 col-xs-12">
+		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
 			<button name="submit" type="submit" class="btn btn-primary" >Change Email</button>
 		</div>
@@ -134,7 +134,7 @@ httpxml.send(null);
 <?php if ($action == "password") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="passwordOld" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Old Password</label>
-        <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="passwordOld-addon1"><span class="fa fa-key"></span></span>
@@ -147,7 +147,7 @@ httpxml.send(null);
 
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="password" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Password</label>
-        <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
@@ -159,7 +159,7 @@ httpxml.send(null);
     </div><!-- ./Form Group -->
 
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-9 col-xs-12">
+		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
 			<button name="submit" type="submit" class="btn btn-primary" >Change Password</button>
 		</div>

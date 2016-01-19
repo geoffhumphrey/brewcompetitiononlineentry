@@ -100,25 +100,25 @@ $currency_code = $currency[1];
     </div>
 </div><!-- ./Form Group -->
 
-
+<?php if ($section != "step4") { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <!-- Input Here -->
     
-    <select class="selectpicker" name="contestLogo" id="contestLogo">
+    <select class="selectpicker" data-width="auto"  name="contestLogo" id="contestLogo">
        <?php 
 		   $directory = (USER_IMAGES);
-			//echo $directory;
-			//echo directory_contents_dropdown($directory,$row_contest_info['contestLogo']); 
+			echo $directory;
+			echo directory_contents_dropdown($directory,$row_contest_info['contestLogo']); 
        ?>
     </select>
     
     <span id="helpBlock" class="help-block">Choose the file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</span>
-    <a class="btn btn-sm btn-primary" href="admin/upload.admin.php" id="modal_window_link"><span class="fa fa-upload"></span> Upload Logo Image</a>
+    <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Image</a>
     </div>
 </div><!-- ./Form Group -->
-
+<?php } ?>
 <h3>Entry Window</h3>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>

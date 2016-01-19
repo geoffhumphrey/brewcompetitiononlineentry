@@ -1,15 +1,15 @@
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 --
 -- This baseline sql document is *ONLY* for new installations.
 -- Use *ONLY* if you experience problems with the browser-based setup.
 --
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 10.31.2015
+-- UPDATED 01.19.2016 for Version 2.0.0
 --
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 --
--- Sets up a basic install and baseline data for version 1.3.2.X.
+-- Sets up a basic install and baseline data for version 2.0.X.
 -- Import this DB structure and dummy data via phpMyAdmin or shell access.
 -- Adds a top-level admin user:
 --   - Username: user.baseline@brewcompetition.com
@@ -23,15 +23,15 @@
 -- function:
 -- www.yoursite.com/index.php?section=login&go=password&action=forgot
 --
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 --
 -- Be sure to edit the config.php file to your environment.
 -- Each DB table is has a prefix of baseline_
--- be sure to define the $prefix variable - e.g., $prefix = "baseline_"
+-- be sure to define the $prefix variable in config.php (e.g., $prefix = "baseline_";)
 -- You can change the baseline_ prefix here by doing a global find/replace.
 -- Be sure to update/alter the $prefix variable in config.php.
 --
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 -- 
 -- Once you have installed the DB tables, browse to your site and log in.
 -- Update the default information to suit your own needs. Be sure to update:
@@ -45,9 +45,11 @@
 --   -  Competition Contacts
 --   -  Sponsors
 --
--- -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 -- 
 -- BEGIN MYSQL
+--
+-- ------------------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
@@ -517,259 +519,6 @@ CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
 
 INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contestHostWebsite`, `contestHostLocation`, `contestRegistrationOpen`, `contestRegistrationDeadline`, `contestEntryOpen`, `contestEntryDeadline`, `contestJudgeOpen`, `contestJudgeDeadline`, `contestRules`, `contestAwardsLocation`, `contestAwardsLocName`, `contestAwardsLocDate`, `contestAwardsLocTime`, `contestContactName`, `contestContactEmail`, `contestEntryFee`, `contestEntryFee2`, `contestEntryFeeDiscount`, `contestEntryFeeDiscountNum`, `contestCategories`, `contestBottles`, `contestShippingAddress`, `contestShippingName`, `contestAwards`, `contestLogo`, `contestBOSAward`, `contestWinnersComplete`, `contestEntryCap`, `contestEntryFeePassword`, `contestEntryFeePasswordNum`, `contestID`, `contestCircuit`, `contestVolunteers`) VALUES
 (1, 'Baseline Data', 'Baseline', NULL, NULL, '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', NULL, NULL, NULL, '1438349037', NULL, NULL, 8, NULL, 'N', NULL, NULL, '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottles with a rubber band only; glue and/or tape are unacceptable.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', NULL, NULL, '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, NULL, NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>');
-
-DROP TABLE IF EXISTS `baseline_countries`;
-CREATE TABLE IF NOT EXISTS `baseline_countries` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `baseline_countries` (`id`, `name`) VALUES
-(1, 'United States'),
-(2, 'Australia'),
-(3, 'Canada'),
-(4, 'Ireland'),
-(5, 'United Kingdom'),
-(101, 'Afghanistan'),
-(102, 'Albania'),
-(103, 'Algeria'),
-(104, 'American Samoa'),
-(105, 'Andorra'),
-(106, 'Angola'),
-(107, 'Anguilla'),
-(108, 'Antarctica'),
-(109, 'Antigua and Barbuda'),
-(110, 'Argentina'),
-(111, 'Armenia'),
-(113, 'Aruba'),
-(115, 'Austria'),
-(116, 'Azerbaijan'),
-(118, 'Bahamas'),
-(119, 'Bahrain'),
-(120, 'Bangladesh'),
-(121, 'Barbados'),
-(122, 'Belarus'),
-(123, 'Belgium'),
-(124, 'Belize'),
-(125, 'Benin'),
-(126, 'Bermuda'),
-(127, 'Bhutan'),
-(128, 'Bolivia'),
-(129, 'Bosnia and Herzegovina'),
-(130, 'Botswana'),
-(131, 'Bouvet Island'),
-(132, 'Brazil'),
-(133, 'British Indian Ocean Territory'),
-(134, 'Brunei Darussalam'),
-(135, 'Bulgaria'),
-(136, 'Burkina Faso'),
-(137, 'Burundi'),
-(138, 'Cambodia'),
-(139, 'Cameroon'),
-(141, 'Cape Verde'),
-(142, 'Cayman Islands'),
-(143, 'Central African Republic'),
-(144, 'Chad'),
-(145, 'Chile'),
-(146, 'China'),
-(147, 'Christmas Island'),
-(148, 'Cocos (Keeling) Islands'),
-(149, 'Colombia'),
-(150, 'Comoros'),
-(151, 'Congo'),
-(152, 'Congo, The Democratic Republic of The'),
-(153, 'Cook Islands'),
-(154, 'Costa Rica'),
-(155, 'Cote D''ivoire'),
-(156, 'Croatia'),
-(157, 'Cuba'),
-(158, 'Cyprus'),
-(160, 'Czech Republic'),
-(161, 'Denmark'),
-(162, 'Djibouti'),
-(163, 'Dominica'),
-(164, 'Dominican Republic'),
-(165, 'Easter Island'),
-(166, 'Ecuador'),
-(167, 'Egypt'),
-(168, 'El Salvador'),
-(169, 'Equatorial Guinea'),
-(170, 'Eritrea'),
-(171, 'Estonia'),
-(172, 'Ethiopia'),
-(173, 'Falkland Islands (Malvinas)'),
-(174, 'Faroe Islands'),
-(175, 'Fiji'),
-(176, 'Finland'),
-(177, 'France'),
-(178, 'French Guiana'),
-(179, 'French Polynesia'),
-(180, 'French Southern Territories'),
-(181, 'Gabon'),
-(182, 'Gambia'),
-(183, 'Georgia'),
-(185, 'Germany'),
-(186, 'Ghana'),
-(187, 'Gibraltar'),
-(188, 'Greece'),
-(189, 'Greenland'),
-(191, 'Grenada'),
-(192, 'Guadeloupe'),
-(193, 'Guam'),
-(194, 'Guatemala'),
-(195, 'Guinea'),
-(196, 'Guinea-bissau'),
-(197, 'Guyana'),
-(198, 'Haiti'),
-(199, 'Heard Island and Mcdonald Islands'),
-(200, 'Honduras'),
-(201, 'Hong Kong'),
-(202, 'Hungary'),
-(203, 'Iceland'),
-(204, 'India'),
-(205, 'Indonesia'),
-(207, 'Iran'),
-(208, 'Iraq'),
-(210, 'Israel'),
-(211, 'Italy'),
-(212, 'Jamaica'),
-(213, 'Japan'),
-(214, 'Jordan'),
-(215, 'Kazakhstan'),
-(217, 'Kenya'),
-(218, 'Kiribati'),
-(219, 'Korea, North'),
-(220, 'Korea, South'),
-(221, 'Kosovo'),
-(222, 'Kuwait'),
-(223, 'Kyrgyzstan'),
-(224, 'Laos'),
-(225, 'Latvia'),
-(226, 'Lebanon'),
-(227, 'Lesotho'),
-(228, 'Liberia'),
-(229, 'Libyan Arab Jamahiriya'),
-(230, 'Liechtenstein'),
-(231, 'Lithuania'),
-(232, 'Luxembourg'),
-(233, 'Macau'),
-(234, 'Macedonia'),
-(235, 'Madagascar'),
-(236, 'Malawi'),
-(237, 'Malaysia'),
-(238, 'Maldives'),
-(239, 'Mali'),
-(240, 'Malta'),
-(241, 'Marshall Islands'),
-(242, 'Martinique'),
-(243, 'Mauritania'),
-(244, 'Mauritius'),
-(245, 'Mayotte'),
-(246, 'Mexico'),
-(247, 'Micronesia, Federated States of'),
-(248, 'Moldova, Republic of'),
-(249, 'Monaco'),
-(250, 'Mongolia'),
-(251, 'Montenegro'),
-(252, 'Montserrat'),
-(253, 'Morocco'),
-(254, 'Mozambique'),
-(255, 'Myanmar'),
-(256, 'Namibia'),
-(257, 'Nauru'),
-(258, 'Nepal'),
-(259, 'Netherlands'),
-(260, 'Netherlands Antilles'),
-(261, 'New Caledonia'),
-(262, 'New Zealand'),
-(263, 'Nicaragua'),
-(264, 'Niger'),
-(265, 'Nigeria'),
-(266, 'Niue'),
-(267, 'Norfolk Island'),
-(268, 'Northern Mariana Islands'),
-(269, 'Norway'),
-(270, 'Oman'),
-(271, 'Pakistan'),
-(272, 'Palau'),
-(273, 'Palestinian Territory'),
-(274, 'Panama'),
-(275, 'Papua New Guinea'),
-(276, 'Paraguay'),
-(277, 'Peru'),
-(278, 'Philippines'),
-(279, 'Pitcairn'),
-(280, 'Poland'),
-(281, 'Portugal'),
-(282, 'Puerto Rico'),
-(283, 'Qatar'),
-(284, 'Reunion'),
-(285, 'Romania'),
-(286, 'Russia'),
-(287, 'Russia'),
-(288, 'Rwanda'),
-(289, 'Saint Helena'),
-(290, 'Saint Kitts and Nevis'),
-(291, 'Saint Lucia'),
-(292, 'Saint Pierre and Miquelon'),
-(293, 'Saint Vincent and The Grenadines'),
-(294, 'Samoa'),
-(295, 'San Marino'),
-(296, 'Sao Tome and Principe'),
-(297, 'Saudi Arabia'),
-(298, 'Senegal'),
-(299, 'Serbia and Montenegro'),
-(300, 'Seychelles'),
-(301, 'Sierra Leone'),
-(302, 'Singapore'),
-(303, 'Slovakia'),
-(304, 'Slovenia'),
-(305, 'Solomon Islands'),
-(306, 'Somalia'),
-(307, 'South Africa'),
-(308, 'South Georgia/South Sandwich Islands'),
-(309, 'Spain'),
-(310, 'Sri Lanka'),
-(311, 'Sudan'),
-(312, 'Suriname'),
-(313, 'Svalbard and Jan Mayen'),
-(314, 'Swaziland'),
-(315, 'Sweden'),
-(316, 'Switzerland'),
-(317, 'Syria'),
-(318, 'Taiwan'),
-(319, 'Tajikistan'),
-(320, 'Tanzania, United Republic of'),
-(321, 'Thailand'),
-(322, 'Timor-leste'),
-(323, 'Togo'),
-(324, 'Tokelau'),
-(325, 'Tonga'),
-(326, 'Trinidad and Tobago'),
-(327, 'Tunisia'),
-(328, 'Turkey'),
-(330, 'Turkmenistan'),
-(331, 'Turks and Caicos Islands'),
-(332, 'Tuvalu'),
-(333, 'Uganda'),
-(334, 'Ukraine'),
-(335, 'United Arab Emirates'),
-(338, 'United States Minor Outlying Islands'),
-(339, 'Uruguay'),
-(340, 'Uzbekistan'),
-(341, 'Vanuatu'),
-(342, 'Vatican City'),
-(343, 'Venezuela'),
-(344, 'Vietnam'),
-(345, 'Virgin Islands, British'),
-(346, 'Virgin Islands, U.S.'),
-(347, 'Wallis and Futuna'),
-(348, 'Western Sahara'),
-(349, 'Yemen'),
-(351, 'Zambia'),
-(352, 'Zimbabwe'),
-(353, 'Other');
 
 DROP TABLE IF EXISTS `baseline_drop_off`;
 CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
@@ -1274,20 +1023,8 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '1.3.2.0', '2015-10-31', '2015-10-01 00:01:01', 1);
+(1, '2.0.0', '2016-01-31', '2016-01-31 00:01:01', 1);
 
-DROP TABLE IF EXISTS `baseline_themes`;
-CREATE TABLE IF NOT EXISTS `baseline_themes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `themeTitle` varchar(255) DEFAULT NULL,
-  `themeFileName` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
-INSERT INTO `baseline_themes` (`id`, `themeTitle`, `themeFileName`) VALUES
-(1, 'BCOE&amp;M Default', 'default'),
-(2, 'Bruxellensis', 'bruxellensis'),
-(3, 'Claussenii', 'claussenii');
 
 DROP TABLE IF EXISTS `baseline_users`;
 CREATE TABLE IF NOT EXISTS `baseline_users` (
@@ -1302,4 +1039,4 @@ CREATE TABLE IF NOT EXISTS `baseline_users` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2015-07-31 13:19:39');
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-01-01 00:00:01');

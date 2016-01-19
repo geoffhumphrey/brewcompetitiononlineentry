@@ -1599,7 +1599,7 @@ if ($setup_free_access == TRUE) {
 		
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
 		
-		
+		/*
 		// ------------------- 
 		// Themes Table 
 		// *** FUTURE VERSION - transition from DB table to simple array
@@ -1631,7 +1631,7 @@ if ($setup_free_access == TRUE) {
 		
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Themes</strong> data installed successfully.</li>";	
 		
-		
+		*/
 		// ------------------- 
 		// Users Table
 		// -------------------

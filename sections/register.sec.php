@@ -155,6 +155,7 @@ if ($section == "admin") {
 	if ($go == "judge") $header1_1 .= "a Judge/Steward"; 
 	else $header1_1 .= "a Participant"; 
 	}
+else $header1_1 .= "Your Account";
 $header1_1 .= "</p>";
 if (($go != "default") && ($section != "admin")) $page_info1 .= "<p>To register for the competition, create your online account by filling out the form below.</p>";
 if ($view == "quick") $page_info1 .= "<p>Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.</p>";
@@ -251,7 +252,7 @@ if ($go == "default") { ?>
 
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
@@ -266,7 +267,7 @@ if ($go == "default") { ?>
 	<?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Re-Enter Email Address</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="re-enter-email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
@@ -278,7 +279,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
@@ -292,7 +293,7 @@ if ($go == "default") { ?>
 	<?php if ($section != "admin") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
 				<div class="radio">
@@ -325,7 +326,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question Answer</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
@@ -338,7 +339,7 @@ if ($go == "default") { ?>
 	<?php } ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="first-name-addon1"><span class="fa fa-user"></span></span>
@@ -351,7 +352,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Name</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="last-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
@@ -367,7 +368,7 @@ if ($go == "default") { ?>
     
     <div class="form-group"><!-- Form Group Text Input -->
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP ID</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12">
             <!-- Input Here -->
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="">
         </div>
@@ -375,7 +376,7 @@ if ($go == "default") { ?>
     
     <div class="form-group"><!-- Form Group Radio STACKED -->
             <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Rank</label>
-            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
                     <div class="radio">
@@ -442,7 +443,7 @@ if ($go == "default") { ?>
 	<?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Street Address</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="street-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
@@ -455,7 +456,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">City</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="city-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
@@ -467,7 +468,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">State or Province</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
@@ -479,7 +480,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Zip/Postal Code</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
@@ -491,7 +492,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Country</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12 has-warning">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
 		<!-- Input Here -->
 		<select class="selectpicker" name="brewerCountry" id="brewerCountry">
     		<?php echo $country_select; ?>
@@ -500,7 +501,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-off Location</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12 has-warning">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
 			<!-- Input Here -->
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff">
 				<option value="0">I'm Shipping My Entries</option> 
@@ -512,7 +513,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Primary Phone #</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="phone1-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
@@ -524,7 +525,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Secondary Phone #</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="phone2-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
@@ -534,7 +535,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Club</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="club-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
@@ -544,7 +545,7 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">AHA Member #</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="aha-addon1"><span class="fa fa-beer"></span></span>
 				<!-- Input Here -->
@@ -557,7 +558,7 @@ if ($go == "default") { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<p>Are you willing and qualified to serve as a judge in this competition?</p>
 			<div class="input-group">
 				<!-- Input Here -->
@@ -575,7 +576,7 @@ if ($go == "default") { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Availability</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 		<?php do { ?>
 			<div class="well well-sm">
 			<p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
@@ -595,7 +596,7 @@ if ($go == "default") { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<p>Are you willing to serve as a steward in this competition?</p>
 			<div class="input-group">
 				<!-- Input Here -->
@@ -613,7 +614,7 @@ if ($go == "default") { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding Availability</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 		<?php do { ?>
 			<div class="well well-sm">
 			<p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
@@ -643,7 +644,7 @@ if ($go == "default") { ?>
    	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
 	<div class="form-group">
 		<label for="recaptcha" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
                 <!-- <div class="g-recaptcha" data-sitekey="6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W"></div> -->

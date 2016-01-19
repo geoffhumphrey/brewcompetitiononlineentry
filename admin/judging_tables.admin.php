@@ -116,9 +116,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 							<div class="panel-body">
 								<ul class="list-unstyled">
                                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a></li>
-									<?php if ($filter != "orphans") { ?>
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;filter=orphans">View Styles Not Assigned to Tables</a></li>
-                                    <?php } ?>
+									<li><a href="#" data-toggle="modal" data-target="#orphanModal">View Sub-Categories Not Assigned to Tables</a></li>
                                 </ul>
 							</div>
 						</div>
@@ -289,8 +287,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                Best of Show Settings Info
             </button>
         </div>
-        
-    </div>
+    
     
     <!-- Modal -->
         <div class="modal fade" id="compOrgModal" tabindex="-1" role="dialog" aria-labelledby="compOrgModalLabel">
@@ -340,9 +337,61 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                 </div>
             </div>
         </div><!-- ./modal -->
-    
-    
     <?php } ?>
+	
+<?php 
+	$orphan_modal_body = "";
+	$orphan_modal_body_2 = "";
+	if ($totalRows_tables > 0) {
+		
+		do { 
+			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default")) { 
+				$a[] = 0;
+				if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
+					$a[] = $row_styles['id'];
+					$orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";  
+				}
+			} 
+		} while ($row_styles = mysql_fetch_assoc($styles));
+		$b = array_sum($a);
+		if ($b == 0) $orphan_modal_body .= "<p>All style sub-categories with entries have been assigned to tables.</p>";
+		else $orphan_modal_body .= "<p>The following sub-categories with entries have not been assignd to tables:</p>";
+	
+	} // end if ($totalRows_tables > 0)
+	
+	else {
+		$orphan_modal_body .= "<p>No tables have been defined.";
+		if ($go == "judging_tables") $orphan_modal_body .= " <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a>";
+		$orphan_modal_body .= "</p>";
+	} // end else
+?>
+
+<!-- Orphan Styles Modal -->
+<div class="modal fade" id="orphanModal" tabindex="-1" role="dialog" aria-labelledby="orphanModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="orphanModalLabel">Style Sub-Categories with Entries Not Assigned to Tables</h4>
+            </div>
+            <div class="modal-body">
+                <?php
+				echo $orphan_modal_body;
+				if (!empty($orphan_modal_body_2)) echo "<ul>".$orphan_modal_body_2."</ul>"; 
+				?>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+    <div class="btn-group" role="group" aria-label="orphanModal">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#orphanModal">
+               Style Sub-Categories Not Assigned to Tables
+            </button>
+        </div>
+</div> 
     <?php } // end if (($action == "default") && ($filter == "default") && ($dbTable == "default")); ?>
 <?php } // end if ($action != "print"); ?>
 <?php 
@@ -430,6 +479,7 @@ if ($totalRows_tables > 0) { ?>
     <?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
     </tbody>
 </table>
+
 <?php } 
 else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
 } // end if ($action == "default") ?>
@@ -566,7 +616,6 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 		} );
 	</script>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go."&amp;id=".$row_tables_edit['id']; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<p><input type="submit" class="btn btn-primary" value="Edit Table"></p>
 
 <div class="bcoem-admin-element hidden-print">
 
@@ -640,8 +689,14 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 
 
 </div>
+<div class="bcoem-admin-element hidden-print">
+	<div class="form-group">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+			<input type="submit" class="btn btn-primary" value="Edit Table">
+		</div>
+	</div>
+</div>
 
-<p><input type="submit" class="btn btn-primary" value="Edit Table"></p>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
 <?php 
@@ -661,32 +716,6 @@ if ($already_scored) {
 </script>
 <?php } 
 } // end if ($action == "edit") ?>
-<?php if (($action == "default") && ($filter == "orphans")) { ?>
-<h3>Style Categories with Entries Not Assigned to Tables</h3>
-<?php 
-	if ($totalRows_tables > 0) {
-		
-		do { 
-			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default")) { 
-				$a[] = 0;
-				if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
-					$a[] = $row_styles['id'];
-					echo "<ul><li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li></ul>";  
-				}
-			} 
-		} while ($row_styles = mysql_fetch_assoc($styles));
-		$b = array_sum($a);
-		if ($b == 0) echo "<p>All style categories with entries have been assigned to tables.</p>";
-	
-	} // end if ($totalRows_tables > 0)
-	
-	else {
-		echo "<p>No tables have been defined.";
-		if ($go == "judging_tables") echo " <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a></p>";
-	} // end else
-	
-}// end if (($action == "default") && ($filter == "orphans"))
-?>
 <?php if (($action == "assign") && ($filter == "default")) { ?>
 <div class="form-horizontal">
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->

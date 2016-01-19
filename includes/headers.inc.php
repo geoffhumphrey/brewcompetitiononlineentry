@@ -606,12 +606,15 @@ switch($section) {
 	elseif ($msg == "25") $output = "<strong>All entry styles have been converted from BJCP 2008 to BJCP 2015.</strong>";
 	elseif ($msg == "26") $output = "<strong>Data has been deleted from the database.</strong>";
 	elseif ($msg == "28") $output = "<strong>The judge/steward has been added successfully.</strong> Remember to assign the user as a judge or steward before assigning to tables.";
+	elseif ($msg == "29") $output = "<strong>The image has been uploaded successfully.</strong> Check the list to verify.";
+	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an image file.</strong> Please try again.";
+	elseif ($msg == "755") $output = "<strong>Change permission of user_images folder to 755 has failed.</strong>  You will need to change the folder&rsquo;s permission manually.  Consult your FTP program or ISP&rsquo;s documentation for chmod (folder permissions).";
 	else $output = "";
 	break;
 }
 
 if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated using the method you specified.</strong>";
-if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class='alert alert-warning hidden-print'> FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE. Otherwise, your installation and server are vulerable to security breaches.</div><div class='closed'>Log in now to access the Admin Dashboard.</div>"; }
+if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
 ?>

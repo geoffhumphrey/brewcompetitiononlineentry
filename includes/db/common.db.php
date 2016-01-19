@@ -8,7 +8,7 @@ session_start();
 
 // --- Until release with data updates, keep this code --- //
 
-if ($current_version == "1.3.2.0") {
+if ($current_version == "2.0.0") {
 	
 	$query_wild = sprintf("SELECT brewStyle FROM %s WHERE brewStyle='Soured Fruit Beer'",$styles_db_table);
 	$wild = mysql_query($query_wild, $brewing) or die(mysql_error());
@@ -138,8 +138,6 @@ else {
 		$_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
 		$_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
 		$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
-		//$_SESSION['prefsGoogle'] = $row_prefs['prefsGoogle'];
-		//$_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
 		$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
 		$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
 		$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
@@ -157,14 +155,9 @@ else {
 		$_SESSION['prefsContact'] = $row_prefs['prefsContact'];
 		$_SESSION['prefsTimeZone'] = $row_prefs['prefsTimeZone'];
 		$_SESSION['prefsTimeFormat'] = $row_prefs['prefsTimeFormat'];
-		//$row_limits['prefsEntryLimit'] = $row_prefs['prefsEntryLimit'];
-		//$_SESSION['prefsUserEntryLimit'] = $row_prefs['prefsUserEntryLimit'];
-		//$_SESSION['prefsUserSubCatLimit'] = $row_prefs['prefsUserSubCatLimit'];
 		$_SESSION['prefsPayToPrint'] = $row_prefs['prefsPayToPrint'];
 		$_SESSION['prefsHideRecipe'] = $row_prefs['prefsHideRecipe'];
 		$_SESSION['prefsUseMods'] = $row_prefs['prefsUseMods'];
-		//$_SESSION['prefsUSCLEx'] = $row_prefs['prefsUSCLEx'];
-		//$_SESSION['prefsUSCLExLimit'] = $row_prefs['prefsUSCLExLimit'];
 		$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
 		$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
 		$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
@@ -288,13 +281,6 @@ else {
 		$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 		$row_prefs = mysql_fetch_assoc($prefs);
 		$totalRows_prefs = mysql_num_rows($prefs);
-		
-		/*
-		$query_themes = sprintf("SELECT * FROM %s",$prefix."themes");
-		$themes = mysql_query($query_themes, $brewing) or die(mysql_error());
-		$row_themes = mysql_fetch_assoc($themes);
-		$totalRows_themes = mysql_num_rows($themes);
-		*/
 	}
 	
 	// Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup

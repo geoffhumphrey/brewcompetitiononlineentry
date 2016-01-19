@@ -66,7 +66,7 @@ http://www.tinybutstrong.com/
   <tr>
     <td><h4 class="text-danger">If any items are missing, close this window and edit the entry.</h4></td>
     <td width="5%" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">View Bottle Labels</a></h3></td>
-    <td width="5%" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td width="5%" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
@@ -409,7 +409,7 @@ days.</p>
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->

@@ -206,14 +206,14 @@ do {
 	$alt_title .= "Bottle Labels ";
 	$alt_title .= "for ".$row_log['brewName'];
 	$print_forms_link = "";	
-	$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.php?";
+	$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
 	$print_forms_link .= "id=".$row_log['id'];
 	$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
 	$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
 	$print_forms_link .= "<span class=\"fa fa-print\"></a>&nbsp;&nbsp;";
 	
 	// Print Recipe
-	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-book\"><span></a>&nbsp;&nbsp;";
+	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-book\"><span></a>&nbsp;&nbsp;";
 	
 	if (($total_entries > $row_limits['prefsEntryLimit'])) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
 	

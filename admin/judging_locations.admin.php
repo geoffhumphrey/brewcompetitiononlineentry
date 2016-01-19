@@ -232,21 +232,24 @@ if ($section != "step5") {
 			if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
 			elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) $checked = "CHECKED";
 			elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS Judge') !== false)) $checked = "CHECKED";
+			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) $checked = "CHECKED";
 			else $checked = "";	
 			
 			if ($filter == "bos") { 
-			$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
-				if (!empty($bos_judge_eligible)) {
-					$places_earned = explode("|",$bos_judge_eligible);
-					$judge_places = "";
-					foreach ($places_earned as $places) {
-						$places_earned = explode("-",$places);
-						$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
+				if ($totalRows_brewer > 0) {
+					$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
+					if (!empty($bos_judge_eligible)) {
+						$places_earned = explode("|",$bos_judge_eligible);
+						$judge_places = "";
+						foreach ($places_earned as $places) {
+							$places_earned = explode("-",$places);
+							$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
+						}
+						$judge_places = rtrim($judge_places,", ");
 					}
-					$judge_places = rtrim($judge_places,", ");
 				}
 			}
+			
 			if (($filter == "judges") || ($filter == "stewards")) {
 				if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
 				if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];

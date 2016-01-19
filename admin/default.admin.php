@@ -10,7 +10,8 @@
     <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <div class="panel-group" id="accordion">           
+            <div class="panel-group" id="accordion">
+				<?php if ($_SESSION['userLevel'] == "0") { ?>
                 <!-- Preparing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -20,7 +21,6 @@
                     </div>
                     <div id="collapsePrep" class="panel-collapse collapse">
                         <div class="panel-body">
-                            
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Competition Info</strong>
@@ -123,6 +123,7 @@
                         </div>
                     </div>
                 </div><!-- ./ Preparing Panel -->
+				<?php } ?>
                 <!-- Entry and Data Gathering Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -914,7 +915,7 @@
                 </div>
             </div>
             <!-- ./ Data Exports Panel -->
-
+			<?php if ($_SESSION['userLevel'] == "0") { ?>
             <!-- Database Maintenance Panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -1015,7 +1016,7 @@
                 </div>
             </div>
             <!-- ./ Preferences Panel -->
-            
+            <?php } ?>
             <!-- Help Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">

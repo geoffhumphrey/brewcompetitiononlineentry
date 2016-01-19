@@ -142,23 +142,27 @@ if (($logged_in) && ($admin_user)) { ?>
 
 
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
-<div class="navmenu-brand">Admin Essentials Menu</div>
+<div class="navmenu-brand disabled">Admin Essentials Menu</div>
         <ul class="nav navmenu-nav">
-        	<li class="disabled"><a href="#"><em class="bcoem-admin-menu-disabled">Click Admin Dashboard for All Options</em></a></li>
+        	<li class="disabled"><a href="#"><em class="bcoem-admin-menu-disabled">This menu contains only essential functions. Click <strong>Admin Dashboard</strong> for all options.</em></a></li>
             <li><a href="<?php echo $base_url; ?>index.php?section=admin">Admin Dashboard</a></li>
+			<?php if ($_SESSION['userLevel'] == "0") { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Competition Preparation <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Edit Competition Info</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
+					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage Custom Categories</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage Drop-Off Locations</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage Judging Locations</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Manage Sponsors</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>
+					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">Upload Logo Images</a></li>
+                    
                 </ul>
             </li>
+			<?php } ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entries and Participants <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
@@ -194,7 +198,7 @@ if (($logged_in) && ($admin_user)) { ?>
                 </ul>
             </li>
             <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reporting <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default">Table Cards</a></li>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
@@ -206,6 +210,7 @@ if (($logged_in) && ($admin_user)) { ?>
                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
                 </ul>
             </li>
+			<?php if ($_SESSION['userLevel'] == "0") { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
@@ -213,6 +218,7 @@ if (($logged_in) && ($admin_user)) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
                 </ul>
             </li>
+			<?php } ?>
         </ul>
     </div>
 <?php } ?>

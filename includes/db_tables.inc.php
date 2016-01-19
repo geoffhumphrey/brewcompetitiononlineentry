@@ -29,7 +29,6 @@ if ($dbTable == "default") {
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types";
 	$system_db_table = $prefix."system";
-	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
 	}
 else {
@@ -57,7 +56,6 @@ else {
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types".$suffix;
 	$system_db_table = $prefix."system";
-	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users".$suffix;
 	}
 ?>

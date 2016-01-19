@@ -703,7 +703,7 @@ function bos_judge_eligible($uid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_eligible = sprintf("SELECT a.scorePlace,scoreTable FROM %s a, %s b WHERE a.scorePlace IS NOT NULL AND a.eid = b.id AND b.brewBrewerID = %s ORDER BY scoreTable ASC", $prefix."judging_scores", $prefix."brewing", $uid);
+	$query_eligible = sprintf("SELECT a.scorePlace,scoreTable FROM %s a, %s b WHERE a.scorePlace IS NOT NULL AND a.eid = b.id AND b.brewBrewerID = '%s' ORDER BY scoreTable ASC", $prefix."judging_scores", $prefix."brewing", $uid);
 	$eligible = mysql_query($query_eligible, $brewing) or die(mysql_error());
 	$row_eligible = mysql_fetch_assoc($eligible);
 	$totalRows_eligible = mysql_num_rows($eligible);

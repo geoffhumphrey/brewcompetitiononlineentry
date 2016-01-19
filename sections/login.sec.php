@@ -87,7 +87,7 @@ echo $primary_links;
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
-		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
@@ -98,7 +98,7 @@ echo $primary_links;
 	</div><!-- Form Group -->
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
-		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
@@ -121,7 +121,7 @@ echo $primary_links;
 <form class="form-horizontal" action="<?php echo build_public_url("login","verify","forgot","default",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="reset-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
@@ -144,7 +144,7 @@ echo $primary_links;
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Answer</label>
-		<div class="col-lg-6 col-md-9 col-sm-9 col-xs-12">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="id-verify-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
