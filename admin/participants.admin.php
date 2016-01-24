@@ -204,17 +204,18 @@ do {
 	if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
 	
 	if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
-	unset($brewer_assignment);
+	
 	if ($dbTable != "default") $archive = get_suffix($dbTable);
 	else $archive = "default"; 
+	
+	unset($brewer_assignment);
 	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
 	
 	if (!empty($brewer_assignment)) {
 		// Build assignment modal for participants
 		unset($assignment_modal_body);
-		if ((strpos($brewer_assignment,"Judge") !== false)  ||(strpos($brewer_assignment,"Steward") !== false) ) {
-			
-			
+		if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
+						
 			if (strpos($brewer_assignment,"Judge") !== false) {
 				if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
 				else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
@@ -326,7 +327,7 @@ do {
 	
 	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 		
-		$output_datatables_add_link = build_action_link("fa-plus-circle",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
+		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
 		$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"Edit the user record for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
 		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.");
 		else $output_datatables_delete_link = "<span class=\"fa fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
@@ -359,11 +360,6 @@ $output_datatables_body .= "</tr>";
 
 
 // Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
-//echo $subtitle;
-//echo $primary_page_info;
-//echo $goto_nav;
-//echo $secondary_nav;
-//echo $secondary_page_info;
 echo $output_assignment_modals;
 ?>
 

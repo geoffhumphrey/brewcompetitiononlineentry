@@ -1,4 +1,5 @@
 <?php
+
 function check_setup($tablename, $database) {
 	
 	require(CONFIG.'config.php');	
@@ -13,7 +14,25 @@ function check_setup($tablename, $database) {
 
 }
 
+function check_update($column_name, $table_name) {
+	
+	require(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	
+	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log_exists = mysql_num_rows($log);
+
+    if ($row_log_exists) return TRUE;
+	else return FALSE;
+
+}
+
+$update_required = FALSE;
 $setup_success = TRUE;
+
+// For 2.0.0.0 and update is needed
+if (!check_update("sponsorEnable", $prefix."sponsors")) $update_required = TRUE;
 
 // The following line will need to change with future conversions
 if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) { 
@@ -23,7 +42,7 @@ if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferenc
 	 
 }
 	
-if ((!NHC) && (!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
+if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
 	
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."update.php";
@@ -44,31 +63,27 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysql_query($query_version_check, $brewing) or die(mysql_error());
 	$row_version_check = mysql_fetch_assoc($version_check);
 		
-	//echo $row_version['version'];
-	
-	if ($row_version_check['version'] != $current_version) { 
+	if ($row_version_check['version'] != $current_version) {
 		
-		// Run update scripts
-		if ($db_update) {
+		// Run update scripts if required
+		if ($update_required) {
+			
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
-			//exit;
+
 		}
 		
-		// Change version number in DB ONLY if there is no need to run the update scripts
+		// Change version number in DB only if there is no need to run the update scripts
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system","2.0.0","2016-01-31");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-01-31");
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 			
 			$setup_relocate = "Location: ".$base_url;
-			
 			$setup_success = TRUE;
-			//echo $updateSQL."<br>";
-			//echo $database;
-			//exit;
+			
 		}
 		
 	}

@@ -41,7 +41,7 @@ Declare all variables empty at the top of the script. Add on later...
  
 if (NHC) {
 	
-		if ($totalRows_log_paid >= $row_limits['prefsEntryLimit']) echo "<div class=\"alert alert-danger\">The limit of paid entries has been reached. The payment system is no longer active.</div>";
+		if ($comp_entry_limit) echo "<div class=\"alert alert-danger\">The limit of paid entries has been reached. The payment system is no longer active.</div>";
 	
 	else {
 	
@@ -161,7 +161,7 @@ if (NHC) {
 			
 		} // end if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0))
 		
-	} // end else if ($totalRows_log_paid >= $row_limits['prefsEntryLimit'])
+	} // end else if ($comp_entry_limit)
 	
 } // end if (NHC)
 else {

@@ -135,7 +135,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "bos")  && ($
 }
 
 // Assigned judges at table query	
-elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges")  && ($dbTable == "default")) { 
+elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges") && ($dbTable == "default")) { 
 	$query_brewer = "SELECT * FROM $staff_db_table WHERE staff_judge='1'";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);

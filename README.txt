@@ -19,7 +19,10 @@ respective developers and online communities:
 - DropZone                  http://www.dropzonejs.com
 - Bootstrap Form Validator  http://1000hz.github.io/bootstrap-validator
 - Bootstrap-Select          http://silviomoreto.github.io/bootstrap-select
-- Font Awesome              http://fortawesome.github.io/Font-Awesome          
+- Font Awesome              http://fortawesome.github.io/Font-Awesome   
+- FPDF                      http://www.fpdf.org
+- PHPass                    http://www.openwall.com/phpass
+- Tiny But Strong           http://www.tinybutstrong.com
 
 This software is free, open source, and is covered under the General Public
 License (GPL) from the Open Source Initiative. Therefore, you are permitted to 

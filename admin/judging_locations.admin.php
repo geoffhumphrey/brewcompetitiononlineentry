@@ -53,6 +53,7 @@ include(DB.'judging_locations.db.php');
 // Set Vars
 $output_datatables_head = "";
 $output_datatables_body = "";
+$output_assignment_modals = "";
 $output_add_edit = "";
 $filter_readable = "";
 $primary_page_info = "";
@@ -224,92 +225,129 @@ if ($section != "step5") {
 		}
 		$output_datatables_head .= "</tr>";
 		
-		do {
-			
-			$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter);
-			$assignment_checked = str_replace(", ",",",$brewer_assignment);
-			//$assignment_checked = explode(",",$assignment_checked);
-			if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) $checked = "CHECKED";
-			elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) $checked = "CHECKED";
-			else $checked = "";	
-			
-			if ($filter == "bos") { 
-				if ($totalRows_brewer > 0) {
-					$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
-					if (!empty($bos_judge_eligible)) {
-						$places_earned = explode("|",$bos_judge_eligible);
-						$judge_places = "";
-						foreach ($places_earned as $places) {
-							$places_earned = explode("-",$places);
-							$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
+		if ($totalRows_brewer > 0) {
+		
+			do {
+				
+				$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter);
+				
+				if (!empty($brewer_assignment)) {
+					
+					// Build assignment modal for participants
+					unset($assignment_modal_body);
+					if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
+									
+						if (strpos($brewer_assignment,"Judge") !== false) {
+							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
+							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
 						}
-						$judge_places = rtrim($judge_places,", ");
+						if (strpos($brewer_assignment,"Steward") !== false) {
+							if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
+							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
+						}
+						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in the following categories: ".$judge_entries."</p>";
+						$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
+						$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+						$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
+						$output_assignment_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+						$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+						$output_assignment_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".$row_brewer['uid']."\">Assignment(s) for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."</h4>\n";
+						$output_assignment_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+						$output_assignment_modals .= "\t\t\t<div class=\"modal-body\">\n";
+						$output_assignment_modals .= "\t\t\t\t".$assignment_modal_body."\n";
+						$output_assignment_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+						$output_assignment_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+						$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+						$output_assignment_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+						$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
+						$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
+						$output_assignment_modals .= "</div><!-- ./modal -->\n";
 					}
 				}
-			}
-			
-			if (($filter == "judges") || ($filter == "stewards")) {
-				if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
-				if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
-				$a = explode(",",$exploder);
-				$output = "";
-				if ($exploder != "") { 
-					sort($a);
-					foreach ($a as $value) {
-						if ($value != "") {
-							$b = substr($value, 2);
-							$output .= judging_location_avail($b,$value);
+				
+				$assignment_checked = str_replace(", ",",",$brewer_assignment);
+				
+				if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
+				elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) $checked = "CHECKED";
+				elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) $checked = "CHECKED";
+				elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) $checked = "CHECKED";
+				else $checked = "";	
+				
+				if ($filter == "bos") { 
+						$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
+						if (!empty($bos_judge_eligible)) {
+							$places_earned = explode("|",$bos_judge_eligible);
+							$judge_places = "";
+							foreach ($places_earned as $places) {
+								$places_earned = explode("-",$places);
+								$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
+							}
+							$judge_places = rtrim($judge_places,", ");
+						}
+				}
+				
+				if (($filter == "judges") || ($filter == "stewards")) {
+					if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+					if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
+					$a = explode(",",$exploder);
+					$output = "";
+					if ($exploder != "") { 
+						sort($a);
+						foreach ($a as $value) {
+							if ($value != "") {
+								$b = substr($value, 2);
+								$output .= judging_location_avail($b,$value);
+								}
 							}
 						}
-					}
-				$output = rtrim($output,"<br>");
-			}
-			if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> None specified.";
-			else $output_location = $output;
-			
-			$output_datatables_body .= "<tr>";
-			$output_datatables_body .= "<td>";
-			$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
-			$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked; 
-			if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
-			if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
-			if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
-			$output_datatables_body .= " /></label></div>";
-			$output_datatables_body .= "</td>";
-			$output_datatables_body .= "<td>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
-			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$brewer_assignment."</td>";
-			
-			if ($filter == "bos") {
-				$output_datatables_body .= "<td>";
-				if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places; 
-				else $output_datatables_body .= "&nbsp;";
-				$output_datatables_body .= "</td>";
-			}
-			
-			if (($filter == "judges") || ($filter == "bos")) {
-				
-				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
-				$display_rank = bjcp_rank($bjcp_rank[0],1);
-			
-				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
-				$output_datatables_body .= "<td>".$display_rank;
-				if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
-				if (!empty($bjcp_rank[1])) {
-					$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+					$output = rtrim($output,"<br>");
 				}
-				$output_datatables_body .= "</td>";		
-			}
+				if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> None specified.";
+				else $output_location = $output;
+				
+				$output_datatables_body .= "<tr>";
+				$output_datatables_body .= "<td>";
+				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
+				$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked; 
+				if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
+				if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
+				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
+				$output_datatables_body .= " /></label></div>";
+				$output_datatables_body .= "</td>";
+				$output_datatables_body .= "<td>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
+				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$brewer_assignment."</td>";
+				
+				if ($filter == "bos") {
+					$output_datatables_body .= "<td>";
+					if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places; 
+					else $output_datatables_body .= "&nbsp;";
+					$output_datatables_body .= "</td>";
+				}
+				
+				if (($filter == "judges") || ($filter == "bos")) {
+					
+					$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+					$display_rank = bjcp_rank($bjcp_rank[0],1);
+				
+					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
+					$output_datatables_body .= "<td>".$display_rank;
+					if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+					if (!empty($bjcp_rank[1])) {
+						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
+					}
+					$output_datatables_body .= "</td>";		
+				}
+				
+				if (($filter == "judges") || ($filter == "stewards")) { 			
+					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
+					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".judge_entries($row_brewer['uid'],1)."</td>";
+				}
+				
+				$output_datatables_body .= "</tr>";
+				
+			} while ($row_brewer = mysql_fetch_assoc($brewer));
 			
-			if (($filter == "judges") || ($filter == "stewards")) { 			
-				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
-				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".judge_entries($row_brewer['uid'],1)."</td>";
-			}
-			
-			$output_datatables_body .= "</tr>";
-			
-		} while ($row_brewer = mysql_fetch_assoc($brewer));
+		} // end if ($totalRows_brewer > 0)
 	
 	} // end if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")))
 }
@@ -480,7 +518,9 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 </div><!-- ./bcoem-admin-element hidden-print -->
 <?php } // end if ($section != "step5") ?>
 
-<?php if (!empty($output_datatables_body)) { ?>
+<?php if (!empty($output_datatables_body)) { 
+echo $output_assignment_modals;
+?>
 <script type="text/javascript" language="javascript">
 //<![CDATA[
 	 $(document).ready(function() {
@@ -521,7 +561,12 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 <?php } ?>
 
 <?php } // end if (($action == "default") && (!empty($output_datatables_body)))
-
+else { 
+$output_none = "<p>No participants have been assigned to the ";
+if ($filter == "stewards") $output_none .= "steward pool.</p><p><a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards\" class=\"btn btn-primary\">Assign Stewards</a></p>";
+else $output_none .= "judge pool.</p><p><a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges\" class=\"btn btn-primary\">Assign Judges</a></p>";
+echo $output_none;
+}
 
 // -------------------------------- Add/Edit Form ---------------------------------------------
 

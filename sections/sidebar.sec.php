@@ -88,8 +88,6 @@ if ($section != "admin") {
 		else $page_info100 .= sprintf(" accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
-		
-		
 
 	}
 
@@ -229,9 +227,9 @@ if ($section != "admin") {
 	// --------------------------------------------------------------
 	// Display
 	// --------------------------------------------------------------
-	if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo'])))) echo $competition_logo;
+	if ((($_SESSION['contestLogo'] != "") && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) echo $competition_logo;
 	echo $page_info;
-
+	include(INCLUDES.'mods_sidebar_top.inc.php');
 	echo $header1_100;
 	echo $page_info100;
 	echo $header1_200;
@@ -240,7 +238,7 @@ if ($section != "admin") {
 	echo $page_info300;
 	echo $header1_400;
 	echo $page_info400;
-
+	include(INCLUDES.'mods_sidebar_bottom.inc.php');
 }
 
 

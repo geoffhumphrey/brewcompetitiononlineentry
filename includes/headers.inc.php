@@ -72,7 +72,7 @@ switch($section) {
 	if ($action == "forgot") $header_output = "Reset Password"; 
 	elseif ($action == "logout") $header_output = "Logged Out"; 
 	else $header_output = "Log In";
-	if ($msg == "0") $output = "<strong>You must log in to access the administration dashboard.</strong> "; 
+	if ($msg == "0") $output = "<strong>You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.</strong> "; 
 	elseif     ($msg == "1") { $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please make sure your email address and password are correct."; $output_extend = ""; }
 	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong>."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
 	elseif ($msg == "3") $output = "<strong>You have been logged out.</strong> Log in again?"; 
@@ -617,4 +617,5 @@ if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated using
 if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
+if ($msg == "99") $output = "<strong>Please log in to access your account.</strong>";
 ?>

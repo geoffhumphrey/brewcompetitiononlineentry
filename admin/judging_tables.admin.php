@@ -51,6 +51,8 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
             <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;tb=view" title="View Assignments by Table">Judge Assignments By Table</a></li>
             <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;tb=view" title="View Assignments by Name">Steward Assignments By Last Name</a></li>
             <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;tb=view" title="View Assignments by Table">Steward Assignments By Table</a></li>
+            <li class="small"><a href="#" data-toggle="modal" data-target="#availJudgeModal">Judges Not Assigned to a Table</a></li>
+            <li class="small"><a href="#" data-toggle="modal" data-target="#availStewardModal">Stewards Not Assigned to a Table</a></li>
         </ul>
     </div><!-- ./button group -->
 	<?php if ($action == "default") { ?>
@@ -79,6 +81,77 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
     <?php } ?>
 </div>
 <?php if (($action == "default") && ($dbTable == "default")) { ?>
+
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#sortableJ').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null				]
+		} );
+	} );
+</script>
+
+<!-- Available Judges Modal -->
+<!-- Modal -->
+<div class="modal fade" id="availJudgeModal" tabindex="-1" role="dialog" aria-labelledby="availJudgeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="availJudgeModalLabel">Judges Not Assigned to a Table</h4>
+            </div>
+            <div class="modal-body">
+                <?php echo not_assigned("J"); ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#sortableS').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null				]
+		} );
+	} );
+</script>
+
+<!-- Available Stewards Modal -->
+<!-- Modal -->
+<div class="modal fade" id="availStewardModal" tabindex="-1" role="dialog" aria-labelledby="availStewardModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="availStewardModalLabel">Stewards Not Assigned to a Table</span> </h4>
+            </div>
+            <div class="modal-body">
+                <?php echo not_assigned("S"); ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
 <div class="bcoem-admin-dashboard-accordion hidden-print">
 <div class="row">
 	<!-- Left Column -->
@@ -86,7 +159,6 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 		<!-- Start 2 Column Accordion -->
 		
 			<div class="row">
-			
 				<!-- Accordion Right Column -->
 				<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
 					<div class="panel-group" id="accordion1">
@@ -116,12 +188,12 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 							<div class="panel-body">
 								<ul class="list-unstyled">
                                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a></li>
-									<li><a href="#" data-toggle="modal" data-target="#orphanModal">View Sub-Categories Not Assigned to Tables</a></li>
+									<li><a href="#" data-toggle="modal" data-target="#orphanModal">Style Sub-Categories Not Assigned to Tables</a></li>
                                 </ul>
 							</div>
 						</div>
 					</div><!-- ./accordion -->
-					
+                    
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
@@ -275,7 +347,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 	<?php if (($action == "default") && ($filter == "default") && ($dbTable == "default")) { ?>
     <div class="bcoem-admin-element hidden-print">
         <div class="btn-group" role="group" aria-label="compOrgModal">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#compOrgModal">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#compOrgModal">
                Competition Organization Info
             </button>
         </div>
@@ -283,7 +355,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
         
         <?php if (((NHC) && ($prefix == "_final")) || (!NHC) && ($totalRows_style_type > 0)) { ?>
         <div class="btn-group" role="group" aria-label="BOSModal">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#BOSModal">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#BOSModal">
                Best of Show Settings Info
             </button>
         </div>
@@ -355,7 +427,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 		} while ($row_styles = mysql_fetch_assoc($styles));
 		$b = array_sum($a);
 		if ($b == 0) $orphan_modal_body .= "<p>All style sub-categories with entries have been assigned to tables.</p>";
-		else $orphan_modal_body .= "<p>The following sub-categories with entries have not been assignd to tables:</p>";
+		else $orphan_modal_body .= "<p>The following sub-categories with entries have not been assigned to tables:</p>";
 	
 	} // end if ($totalRows_tables > 0)
 	
@@ -365,7 +437,6 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 		$orphan_modal_body .= "</p>";
 	} // end else
 ?>
-
 <!-- Orphan Styles Modal -->
 <div class="modal fade" id="orphanModal" tabindex="-1" role="dialog" aria-labelledby="orphanModalLabel">
     <div class="modal-dialog" role="document">
@@ -387,11 +458,21 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
     </div>
 </div><!-- ./modal -->
     <div class="btn-group" role="group" aria-label="orphanModal">
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#orphanModal">
+            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#orphanModal">
                Style Sub-Categories Not Assigned to Tables
             </button>
         </div>
-</div> 
+	<div class="btn-group" role="group" aria-label="BOSModal">
+		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#availJudgeModal">
+		   Judges Not Assigned to Tables
+		</button>
+	</div>
+	<div class="btn-group" role="group" aria-label="BOSModal">
+		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#availStewardModal">
+		   Stewards Not Assigned to Tables
+		</button>
+	</div>
+</div>
     <?php } // end if (($action == "default") && ($filter == "default") && ($dbTable == "default")); ?>
 <?php } // end if ($action != "print"); ?>
 <?php 
@@ -443,13 +524,13 @@ if ($totalRows_tables > 0) { ?>
     </thead>
     <tbody>
     <?php do { 
-	$a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); 
-	$styles = display_array_content($a,1);
-	$received = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-	$scored =  get_table_info(1,"score_total",$row_tables['id'],$dbTable,"default");
-	if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
-	$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
-	$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+		$a = array(get_table_info(1,"list",$row_tables['id'],$dbTable,"default")); 
+		$styles = display_array_content($a,1);
+		$received = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+		$scored =  get_table_info(1,"score_total",$row_tables['id'],$dbTable,"default");
+		if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
+		$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
+		$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
 	?>
     <tr>
     	<td><?php echo $row_tables['tableNumber']; ?></td>

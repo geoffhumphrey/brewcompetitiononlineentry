@@ -88,8 +88,8 @@ if ($setup_free_access == TRUE) {
 		  `brewerJudgeDislikes` text,
 		  `brewerJudgeLocation` text,
 		  `brewerStewardLocation` text,
-		  `brewerJudgeAssignedLocation` text,
-		  `brewerStewardAssignedLocation` text,
+		  `brewerJudgeExp` varchar(25),
+		  `brewerJudgeNotes` text,
 		  `brewerAssignment` char(1) DEFAULT NULL,
 		  `brewerAssignmentStaff` char(1) DEFAULT NULL,
 		  `brewerAHA` int(11) DEFAULT NULL,
@@ -534,8 +534,8 @@ if ($setup_free_access == TRUE) {
 			`contestAwardsLocName` varchar(255) DEFAULT NULL,
 			`contestAwardsLocDate` varchar(255) DEFAULT NULL,
 			`contestAwardsLocTime` varchar(255) DEFAULT NULL,
-			`contestContactName` varchar(255) DEFAULT NULL,
-			`contestContactEmail` varchar(255) DEFAULT NULL,
+			`contestShippingOpen` varchar(255) DEFAULT NULL,
+			`contestShippingDeadline` varchar(255) DEFAULT NULL,
 			`contestEntryFee` int(11) DEFAULT NULL,
 			`contestEntryFee2` int(11) DEFAULT NULL,
 			`contestEntryFeeDiscount` char(1) DEFAULT NULL,
@@ -554,6 +554,7 @@ if ($setup_free_access == TRUE) {
 			`contestID` varchar(11) DEFAULT NULL,
 			`contestCircuit` text,
 			`contestVolunteers` text,
+			`contestCheckInPassword` varchar(255) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -1193,6 +1194,7 @@ if ($setup_free_access == TRUE) {
 			`sponsorText` text,
 			`sponsorLocation` text,
 			`sponsorLevel` tinyint(1) DEFAULT NULL,
+			`sponsorEnable` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -1229,7 +1231,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Staff</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Styles Table (v1.3.2.0 done 05.21.15)
+		// Styles Table
 		// -------------------
 		
 		$sql = "
@@ -1591,7 +1593,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.3.2.0', '2015-05-31', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.0.0.0', '2015-05-31', NOW( ),'0');";
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
@@ -1663,7 +1665,7 @@ if ($setup_free_access == TRUE) {
 			$hasher = new PasswordHash(8, false);
 			$hash = $hasher->HashPassword($gh_password);
 			// For hosted accounts on brewcompetition.com and brewcomp.com
-			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
+			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
 			(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$brewer_db_table,$gh_user_name);
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($sql);

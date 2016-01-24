@@ -38,7 +38,7 @@ $currency_symbol = $currency[0];
 $currency_code = $currency[1];
 
 $total_entries = $totalRows_entry_count;
-
+if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
 if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 if ((!empty($row_limits['prefsEntryLimit'])) && ($total_entries > $comp_entry_limit_near)) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
@@ -62,6 +62,8 @@ if (isset($_SESSION['loginUsername']))  {
 }
 
 else $logged_in = FALSE;
+
+
 
 // DataTables Default Values
 

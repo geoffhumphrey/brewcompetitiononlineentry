@@ -9,6 +9,16 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 include(DB.'mods.db.php');
 
+// Remove the following after 2.0.0 release (for those using committed code pre-release)
+if (!check_update("sponsorEnable", $prefix."sponsors")) {
+	include (UPDATE.'current_update.php');
+}
+
+$account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
+if ((!$logged_in) && (in_array($section,$account_pages))) {
+	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99")); exit;
+}
+	
 if ($section == "admin") {
 	
 	// Redirect if non-admins try to access admin functions
@@ -24,7 +34,6 @@ if ($section == "admin") {
 	
 	if (($go == "default") || ($go == "entries")) {
 		$totalRows_entry_count = total_paid_received("default","default");
-		$entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
 	}
 }
 
@@ -61,11 +70,12 @@ else $datatables_load = array("admin","list");
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
     
 	<!-- Load jQuery / http://jquery.com/ -->
-	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	
     <!-- Load Bootstrap / http://www.getbootsrap.com -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>

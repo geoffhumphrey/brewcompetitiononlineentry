@@ -8,7 +8,7 @@
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
 // Adding and editing allowed
-if ((($registration_open == 1) && ($entry_window_open == 1) && (($total_entries <= $row_limits['prefsEntryLimit'])) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
+if ((($registration_open == 1) && ($entry_window_open == 1) && ($comp_entry_limit) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
 	
 	// Decalre variables
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;

@@ -8,7 +8,7 @@
 	<p><input type="submit" class="btn btn-primary" value="Upload Logo Image"></p>
 </form>
 <?php } else { ?>
-<p class="lead">If below is not functioning properly, use the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html">single image upload function</a>.</p>
+<p class="lead">The <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html">single image upload function</a> is also available as an alternative to this multiple upload function.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />
@@ -28,7 +28,8 @@
 			"bProcessing" : true,
 			"aoColumns": [
 				null,
-				null
+				null,
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
@@ -61,6 +62,7 @@ $filelist .= "<thead>\n";
 $filelist .= "<tr>\n";
 $filelist .= "<th>File Name</th>\n";
 $filelist .= "<th>Date/Time Uploaded</th>\n";
+$filelist .= "<th>Actions</th>\n";
 $filelist .= "</thead>\n";
 $filelist .= "<tbody>\n";
 while ($file = readdir($handle)) {
@@ -68,6 +70,7 @@ while ($file = readdir($handle)) {
 		$filelist .= "<tr>\n";
 		$filelist .= "<td><a class=\"user_images\" rel=\"group1\" href=\"".$base_url."user_images/$file\" title=\"".$file."\" >".$file."</a></td>\n";
 		$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
+		$filelist .= "<td><a href=\"#\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-trash\"></span></a></td>\n";
 		$filelist .= "</tr>\n";
    }
 }

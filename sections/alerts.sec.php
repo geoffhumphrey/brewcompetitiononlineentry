@@ -1,3 +1,5 @@
+
+
 <?php if ($msg != "default") { ?>
     <!-- User action alerts -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
@@ -106,18 +108,19 @@
         </div>
    <?php } ?>
    
-   <?php if ($entries_unconfirmed > 0) { ?>
-   		<!-- Unconfirmed entries -->
-    	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-        	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<strong>Unconfirmed entries are highlighted and denoted with a <span class="fa fa-exlamation-circle text-danger"></span> in the <a class="alert-link" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">entries list</a>.</strong> Owners of these entries should be contacted. These entries are not included in fee calculations.
-        </div>
-   
-   <?php } ?>
+  
     
 <?php } // end if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin") && ($go == "default")) ?>
 
 <?php if (($logged_in) && ($section == "admin")) { ?>
+
+ <?php if ($entries_unconfirmed > 0) { ?>
+   		<!-- Unconfirmed entries -->
+    	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        	<strong><?php echo $entries_unconfirmed; ?> Unconfirmed entries are highlighted and denoted with a <span class="fa fa-exclamation-circle text-danger"></span> in the <a class="alert-link" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">entries list</a>.</strong> Owners of these entries should be contacted. These entries are not included in fee calculations.
+        </div>
+   <?php } ?>
 
 	<!-- Admin Alerts -->
 	<?php  if ((($section == "step7") || (($section == "admin") && ($go == "dropoff"))) && ($msg == "11")) { ?>
@@ -150,7 +153,7 @@
         </div>
         <?php } ?>
         
-        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && (($total_entries > $row_limits['prefsEntryLimit'])) && ($action == "add") && ($go != "admin")) { ?>
+        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but competition entry limit reached - only allow editing -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -158,7 +161,7 @@
         </div>
         <?php } ?>
         
-        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && (($total_entries <= $row_limits['prefsEntryLimit'])) && ($remaining_entries == 0) && ($action == "add") && ($go != "admin")) { ?>
+        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($remaining_entries == 0) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but personal entry limit reached - only allow editing -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -213,7 +216,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "1") && (!$ua) && (($total_entries <= $row_limits['prefsEntryLimit'])) && ($msg == "default")) { ?>
+    <?php if (($registration_open == "1") && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Account and entry registration open -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -229,7 +232,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "1") && (!$ua) && (($total_entries > $row_limits['prefsEntryLimit'])) && ($msg == "default")) { ?>
+    <?php if (($registration_open == "1") && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Entry limit reached, account and entry registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -112,6 +112,7 @@ if ($action != "print") { ?>
 <h1><?php echo $header; ?></h1>
 <?php } else { ?>
 <p class="lead"><?php echo $header; ?></p>
+
 <?php } ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <?php if ($action != "print") { ?>
@@ -389,7 +390,7 @@ if ($action != "print") { ?>
         <td class="hidden-xs"><?php echo $entry_received_display; ?></td>
         <td><?php echo $entry_box_num_display; ?></td>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
-        <td class="hidden-print"><?php echo $entry_actions; ?></td>
+        <td class="hidden-print" nowrap><?php echo $entry_actions; ?></td>
         <?php } ?>
     </tr>
     <?php } while($row_log = mysql_fetch_assoc($log)) ?>

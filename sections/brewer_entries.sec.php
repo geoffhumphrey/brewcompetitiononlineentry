@@ -215,7 +215,7 @@ do {
 	// Print Recipe
 	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-book\"><span></a>&nbsp;&nbsp;";
 	
-	if (($total_entries > $row_limits['prefsEntryLimit'])) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
+	if ($comp_entry_limit) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
 	
 	if ($entry_window_open == 1) {
 	$delete_alt_title = "Delete ".$row_log['brewName'];

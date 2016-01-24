@@ -42,8 +42,10 @@ function mod_info($info,$method) {
 	if ($method == 4) {
 		switch($info) {
 			case "0": $output = "N/A (Stand-alone)"; break;
-			case "1": $output = "Before core content"; break;
-			case "2": $output = "After core content"; break;
+			case "1": $output = "Before public core content"; break;
+			case "2": $output = "After public core content"; break;
+			case "3": $output = "Before public sidebar content"; break;
+			case "4": $output = "After public sidebar content"; break;
 		}
 	}
 	
@@ -78,7 +80,7 @@ function mod_info($info,$method) {
                 "sPaginationType" : "full_numbers",
                 "bLengthChange" : true,
                 "iDisplayLength" : <?php echo $limit; ?>,
-                "sDom": 'rt',
+                "sDom": 'rtp',
                 "bStateSave" : false,
                 "aaSorting": [[0,'asc']],
                 "aoColumns": [
@@ -254,7 +256,7 @@ if (($action == "add") || ($action == "edit")) { ?>
     	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_mods['mod_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>
 	</select>
-	<span id="helpBlock" class="help-block">Determines custom module's rank in the display order. The lower the number, the higher priority.</span>
+	<span id="helpBlock" class="help-block">Determines custom module&rsquo;s rank in the display order. The lower the number, the higher priority.</span>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -263,9 +265,11 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank">
-		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone - Not Displayed)</option>
-    	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Core Content</option>
-        <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Core Content</option>
+		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone)</option>
+    	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Public Core Content</option>
+        <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Public Core Content</option>
+        <option value="3" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "3")) echo " SELECTED"; ?>>Before Public Sidebar Content</option>
+        <option value="4" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "4")) echo " SELECTED"; ?>>After Public Sidebar Content</option>
 	</select>
 	<span id="helpBlock" class="help-block">If informational, where will the module's contents be displayed?</span>
 	</div>

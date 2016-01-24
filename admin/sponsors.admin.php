@@ -24,6 +24,7 @@
 </div>
 <?php } ?>
 <?php if ($action == "default") { ?>
+<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $sponsors_db_table; ?>">
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -41,6 +42,7 @@
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
 				]
 			} );
 		} );
@@ -53,6 +55,7 @@
   <th>Level</th>
   <th>Logo?</th>
   <th>Description/Text</th>
+  <th>Display</th>
   <th>Actions</th>
  </tr>
  </thead>
@@ -64,6 +67,7 @@
   <td><?php echo $row_sponsors['sponsorLevel']; ?></td>
   <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-check text-success"></span><?php } else { ?><span class="fa fa-times text-danger"></span><?php } ?></td>
   <td><?php echo $row_sponsors['sponsorText']; ?></td>
+  <td><input id="mod_enable" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" /></td>
   <td nowrap="nowrap">
   <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-pencil"></span></a> 
   <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
@@ -73,6 +77,12 @@
 <?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
+<div class="bcoem-admin-element hidden-print">
+	<input type="submit" name="Submit" id="updateCustomMods" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" />
+    <span id="helpBlock" class="help-block">Click "Update Sponsors" <em>before</em> paging through records.</span>
+</div>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+</form>
 <?php } } else { 
 if ($action == "default") { ?>
 <p>There are no sponsors in the database.</p>
@@ -150,10 +160,27 @@ if ($action == "default") { ?>
 		<span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
     </div>
 </div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="sponsorEnable" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display?</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="sponsorEnable" value="1" id="sponsorEnable_0"  <?php if (($action == "edit") && ($row_sponsors['sponsorEnable'] == 1)) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> /> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="sponsorEnable" value="0" id="sponsorEnable_1" <?php if (($action == "edit") && ($row_sponsors['sponsorEnable'] == 0)) echo "CHECKED"; ?>/> No
+            </label>
+        </div>
+		<span id="helpBlock" class="help-block">Do want to display this sponsor on the home page and sponsors page?</span>
+    </div>
+</div><!-- ./Form Group -->
+
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="updateConatact" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor" />
+			<input type="submit" name="Submit" id="updateSponsor" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Sponsor" />
 		</div>
 	</div>
 </div>

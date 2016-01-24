@@ -135,12 +135,8 @@ if ($logged_in)  {
 	
 }
 
-
 if (($logged_in) && ($admin_user)) { ?>
-
-
-
-
+<!-- Admin Push Menu -->
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
 <div class="navmenu-brand disabled">Admin Essentials Menu</div>
         <ul class="nav navmenu-nav">
@@ -221,6 +217,7 @@ if (($logged_in) && ($admin_user)) { ?>
 			<?php } ?>
         </ul>
     </div>
+<!-- ./ Admin Push Menu -->
 <?php } ?>
 	<!-- Fixed navbar -->
     <div class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
@@ -242,7 +239,7 @@ if (($logged_in) && ($admin_user)) { ?>
                 <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
-                <?php if ((!$logged_in) && ($registration_open == "1") && (($total_entries <= $row_limits['prefsEntryLimit']))) { ?>
+                <?php if ((!$logged_in) && ($registration_open == "1") && (!$comp_entry_limit)) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>">Register</a></li>
    				<?php } ?>
               </ul>
@@ -257,14 +254,14 @@ if (($logged_in) && ($admin_user)) { ?>
             <li class="dropdown">
                 <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="bottom"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                	<li class="dropdown-header">User: <?php echo $_SESSION['loginUsername']; ?></li>
+                	<li class="dropdown-header">Logged in as:<br><strong><?php echo $_SESSION['loginUsername']; ?></strong></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $link_list; ?>" tabindex="-1">My Account</a></li>
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1">Edit Account</a></li>
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1">Change Email</a></li>
                     <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1">Change Password</a></li> 
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1">Entries</a></li>
-                    <?php if (($entry_window_open == "1") && (($total_entries <= $row_limits['prefsEntryLimit']))) { ?>
+                    <?php if (($entry_window_open == "1") && (!$comp_entry_limit)) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>">Import an Entry Using BeerXML</a><?php } ?>
                     <?php } ?> 

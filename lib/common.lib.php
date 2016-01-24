@@ -9,8 +9,8 @@
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 1.3.2.0, change version in system table if not
-// There are NO database structure or data updates for version 1.3.2.0
+// Current version is 2.0.0.0, change version in system table if not
+// If are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
@@ -21,7 +21,7 @@ function version_check($version,$current_version) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	if ($version != $current_version) {
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.0.0","2016-01-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.0.0.0","2016-01-31","1");
 		mysql_select_db($database, $brewing);
 		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
 	}
@@ -3166,6 +3166,15 @@ function check_exension($file_ext) {
 		break;
 	}
 	
+}
+
+function open_limit($total_entries,$limit,$registration_open) {
+	// Check to see if the limit of entries has been reached
+	if ($limit != "") {
+		if (($total_entries >= $limit) && ($registration_open == "1")) return TRUE;
+		else return FALSE;
+	}
+	else return FALSE;
 }
 
 

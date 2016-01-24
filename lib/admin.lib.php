@@ -901,4 +901,329 @@ function special_best_info($sid) {
 	$totalRows_sbi = mysql_num_rows($sbi);
 	return $row_sbi['id']."^".$row_sbi['sbi_name'];
 }
+
+// --------------- Custom Functions --------------------- //
+ 
+ function table_round($tid,$round) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	// get the round where the flight is assigned to
+	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $prefix."judging_flights", $tid, $round);
+	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
+	$row_flight_round = mysql_fetch_assoc($flight_round);
+	if ($row_flight_round['count'] > 0) return TRUE; else return FALSE;
+	}
+
+function flight_round($tid,$flight,$round) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	// get the round where the flight is assigned to
+	$query_flight_round = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $tid, $flight);
+	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
+	$row_flight_round = mysql_fetch_assoc($flight_round);
+	if ($row_flight_round['flightRound'] == $round) return TRUE; else return FALSE;
+	}
+
+function already_assigned($bid,$tid,$flight,$round) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $prefix."judging_assignments", $bid, $tid, $flight, $round);
+	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+	$row_assignments = mysql_fetch_assoc($assignments);
+	if ($row_assignments['count'] == 1) return TRUE; 
+	else return FALSE;
+	}
+
+function at_table($bid,$tid) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s'", $prefix."judging_assignments", $bid);
+	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+	$row_assignments = mysql_fetch_assoc($assignments);
+	$a = array();
+	do {
+		$a[] .= $row_assignments['assignTable']; 
+	} while ($row_assignments = mysql_fetch_assoc($assignments));
+	if (in_array($tid,$a)) return TRUE;
+	else return FALSE;
+	//return implode(",",$a);
+}
+
+function unavailable($bid,$location,$round,$tid) { 
+	// returns true a person is unavailable (if they are already assigned to a table/flight in the same round at the same location)
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
+	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+	$row_assignments = mysql_fetch_assoc($assignments);
+	//$totalRows_assignments = mysql_num_rows($assignments);
+	
+	if ($row_assignments['count'] > 0) return TRUE;
+	else return FALSE;
+}
+
+function like_dislike($likes,$dislikes,$styles) { 
+	// if a judge in the returned list listed one or more of the substyles
+	// included in the table in their "likes" or "dislikes"
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	// get the table's associated styles from the "tables" table
+	$s = explode(",",$styles);
+	$r = "";	
+	// check for likes
+	if ($likes != "") {
+		$a = explode(",",$likes);
+			foreach ($a as $value) {
+				if (in_array($value,$s)) $b[] = 1; else $b[] = 0;
+			}
+	$c = array_sum($b);
+	} 
+	else $c = 0;
+	
+	// check for dislikes
+	if ($dislikes != "") {
+		$d = explode(",",$dislikes);
+			foreach ($d as $value) {
+			   if (in_array($value,$s)) $e[] = 1; else $e[] = 0;
+			}
+	$f = array_sum($e);
+	} 
+	
+	else $f = 0;
+	
+	if (($c > 0) && ($f == 0)) $r .= 'bg-success text-success|<span class="fa fa-thumbs-o-up"></span> <strong>Preferred Style(s).</strong> One or more styles are on the participant&rsquo;s &ldquo;likes&rdquo; list.'; // 1 or more likes matched, color table cell green
+	elseif (($c == 0) && ($f > 0)) $r .= 'bg-danger text-danger|<span class="fa fa-thumbs-o-down"></span> <strong>Non-Preferred Style(s).</strong> One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.'; // 1 or more dislikes matched, color table cell red
+	else $r .="default|<span class=\"fa fa-star-o\"></span> <strong>Available.</strong> Paricipant is available for this round.";
+	
+	return $r;
+}
+
+function entry_conflict($bid,$table_styles) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$b = explode(",",$table_styles);
+	
+	foreach ($b as $style) {
+		
+		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $style);
+		$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+		$row_entries = mysql_fetch_assoc($entries);
+		
+		if ($row_entries['count'] > 0) $c[] = 1; else $c[] = 0;			
+	}
+	$d = array_sum($c);
+	if ($d > 0) return TRUE;
+}
+
+function unassign($bid,$location,$round,$tid) {
+	//if (unavailable($bid,$location,$round,$tid)) {
+		require(CONFIG.'config.php');
+		mysql_select_db($database, $brewing);
+		$query_assignments = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
+		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+		$row_assignments = mysql_fetch_assoc($assignments);	
+		$r = $row_assignments['id'];
+	//}
+	if ($r > 0) $r = $r;
+	else $r = "0";
+	//$r = $query_assignments;
+	return $r;
+}
+
+function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued) {
+// Function almalgamates the above functions to output the correct form elements
+// $bid = id of row in the brewer's table
+// $tid = id of row in the judging_tables table
+// $filter = judges or stewards from encoded URL
+// $flight = flight number (query above)
+// $round = the round number from the for loop
+// $location = id of table's location from the judging_locations table
+
+// Define variables
+$unassign = unassign($bid,$location,$round,$tid);
+$unavailable = unavailable($bid,$location,$round,$tid);
+$random = random_generator(8,2);
+$r = "";
+if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; else $disabled = "";
+if ($filter == "stewards") $role = "S"; else $role = "J";
+
+// Build the form elements
+$r .= '<input type="hidden" name="random[]" value="'.$random.'" />';
+$r .= '<input type="hidden" name="bid'.$random.'" value="'.$bid.'" />';
+$r .= '<input type="hidden" name="assignRound'.$random.'" value="'.$round.'" />';
+$r .= '<input type="hidden" name="assignment'.$random.'" value="'.$role.'" />';
+$r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.'" />';
+
+if ($queued == "Y") { 
+	if (already_assigned($bid,$tid,"1",$round)) { $selected = "checked"; $default = ""; } else { $selected = ""; $default = "checked"; } 
+}
+
+if ($unassign > 0) {
+	// Check to see if the participant is already assigned to this round. 
+	// If so (function returns a value greater than 0), display the following:
+	$r .= '<div class="form-inline">';
+	$r .= '<div class="checkbox">';
+	$r .= '<label for="unassign'.$random.'">';
+	$r .= '<input type="checkbox" id="unassign'.$random.'" name="unassign'.$random.'" value="'.$unassign.'"/>';
+	$r .= ' Unassign and...</label>';
+	$r .= '</div>';
+	$r .= '</div>'; 
+	}
+	else {
+		$r .= '<input type="hidden" name="unassign'.$random.'" value="'.$unassign.'"/>';	
+	}
+
+if ($queued == "Y") { // For queued judging only
+	//if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; }
+	$r .= '<div class="form-inline">';
+	$r .= '<div class="form-group">';
+	$r .= '<div class="input-group">';
+    $r .= '<label class="radio-inline">';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table';
+    $r .= '</label>';
+    $r .= '<label class="radio-inline">';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Keep as Assigned';
+    $r .= '</label>';
+    $r .= '</div>';
+	$r .= '</div>';
+	}
+	else $r .= '<input type="hidden" name="assignTable'.$random.'" value="'.$tid.'" />';
+
+if ($queued == "N") { // Non-queued judging
+	// Build the flights DropDown
+	$r .= '<select class="selectpicker" name="assignFlight'.$random.'" '.$disabled.'>';
+	$r .= '<option value="0" />Do Not Assign</option>';
+		for($f=1; $f<$total_flights+1; $f++) {
+			if (flight_round($tid,$f,$round)) { 
+				if (already_assigned($bid,$tid,$f,$round)) { $output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"'; } else { $output = 'Assign'; $selected = ''; $style=''; }
+				$r .= '<option value="'.$f.'" '.$selected.$style.' />'.$output.' to Flight '.$f.'</option>';
+			}
+		} // end for loop
+	$r .= '</select>';
+	}
+return $r;
+}
+
+function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {
+	if (table_round($tid,$round)) {
+		$unavailable = unavailable($bid,$location,$round,$tid);
+		$entry_conflict = entry_conflict($bid,$table_styles);
+		$at_table = at_table($bid,$tid);
+		if ($unavailable) $r = "bg-purple text-purple|<span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Paricipant is assigned to another table in this round.";
+		if ($entry_conflict) $r = "bg-info text-info|<span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.";
+		if ((!$unavailable) && (!$entry_conflict)) $r = like_dislike($likes,$dislikes,$table_styles);
+	}
+	else $r = '';
+	return $r;
+}
+
+function judge_info($uid) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
+	$row_brewer_info = mysql_fetch_assoc($brewer_info);
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation'];
+	return $r;
+}
+
+function flight_entry_count($table_id,$flight) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightNumber='%s'", $prefix."judging_flights", $table_id, $flight);
+	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row_entry_count = mysql_fetch_assoc($entry_count);
+	return $row_entry_count['count'];
+}
+
+function not_assigned($method) {
+	require(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$return = "";
+	$assignment = "";
+	
+	if ($method == "J") { 
+		$query_brewer = sprintf("SELECT a.uid, b.uid FROM %s a, %s b WHERE b.staff_judge='1' AND a.uid=b.uid",$prefix."brewer",$prefix."staff");
+		$human_readable = "judge";
+	}
+	if ($method == "S") {
+		$query_brewer = sprintf("SELECT a.uid, b.uid FROM %s a, %s b WHERE b.staff_steward='1' AND a.uid=b.uid",$prefix."brewer",$prefix."staff");
+		$human_readable = "steward";
+	}
+	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+	$row_brewer = mysql_fetch_assoc($brewer);
+	$totalRows_brewer = mysql_num_rows($brewer);
+	
+	if ($totalRows_brewer > 0) {
+		
+		do { $user[] .= $row_brewer['uid'];  } while ($row_brewer = mysql_fetch_assoc($brewer));
+	
+		foreach($user as $bid) {
+			
+			if ($method == "J") {
+				$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignment='J'", $prefix."judging_assignments", $bid);
+				$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+				$row_assignments = mysql_fetch_assoc($assignments);
+				
+				// If no assignment, get info and build output
+				if ($row_assignments['count'] == 0) {
+					$info = judge_info($bid);
+					$assignment_info = explode("^",$info);
+					$judge_rank = $assignment_info[5];
+					$judge_rank_explode = explode(",",$assignment_info[5]);
+					$judge_rank_display = $judge_rank_explode[0];
+					if (empty($judge_rank)) $judge_rank_display = "Novice";
+					$assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
+				}
+				
+			}
+			
+			if ($method == "S") {
+				$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignment='S'", $prefix."judging_assignments", $bid);
+				$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
+				$row_assignments = mysql_fetch_assoc($assignments);
+				
+				// If no assignment, get info and build output
+				if ($row_assignments['count'] == 0) {
+					$info = judge_info($bid);
+					$assignment_info = explode("^",$info);
+					$judge_rank = $assignment_info[5];
+					$judge_rank_explode = explode(",",$assignment_info[5]);
+					$judge_rank_display = $judge_rank_explode[0];
+					if (empty($judge_rank)) $judge_rank_display = "Novice";
+					$assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
+				}
+			}
+	
+		}
+		
+		// Return the modal body text
+		$return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";
+		$return .= "<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$method."\">";
+		$return .= "<thead>";
+		$return .= "<tr>";
+		$return .= "<th>Name</th>";
+		$return .= "<th>Rank</th>";
+		$return .= "</tr>";
+		$return .= "</thead>";
+		$return .= "<tbody>";
+		$return .= $assignment;
+		$return .= "</tbody>";
+		$return .= "</table>";
+	
+	}
+	
+	// Return modal body text if no assignments
+	else $return = "<p>No participants have been added to the ".$human_readable." pool yet. Therefore, there no table assignments.</p>"; 
+	
+	return $return;
+	
+}
 ?>

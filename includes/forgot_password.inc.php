@@ -131,7 +131,7 @@ $hash = $hasher->HashPassword($password);
 }
 
 /*
-$headers4	 = $_SESSION['contestContactEmail'];
+$headers4	 = $_SESSION['contestShippingDeadline'];
 $headers	.= "Reply-to: $headers4\n";
 $headers 	.= "From: $headers4\n"; 
 $headers 	.= "Errors-to: $headers4\n"; 

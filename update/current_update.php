@@ -12,7 +12,7 @@
 // -----------------------------------------------------------
 
 $output .= "<h4>Version ".$current_version."...</h4>";
-
+$output .= "<ul>";
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 
 // -----------------------------------------------------------
@@ -33,11 +33,6 @@ include ('current/alter_tables.php');
 // down the script execution time
 // -----------------------------------------------------------
 
-// include ('current/alter_tables1.php'); // Not needed for 1.3.2.0
-// include ('current/alter_tables2.php'); // Not needed for 1.3.2.0
-// include ('current/alter_tables3.php'); // Not needed for 1.3.2.0
-// include ('current/alter_tables4.php'); // Not needed for 1.3.2.0
-// include ('current/alter_tables5.php'); // Not needed for 1.3.2.0
 include ('current/data_updates.php'); // Only needed for versions below 1.3.2.0
-	
+$output .= "</ul>";
 ?>

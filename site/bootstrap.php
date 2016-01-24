@@ -30,25 +30,14 @@ http://www.codediesel.com/security/integrating-googles-new-nocaptcha-recaptcha-i
 
 // Define the current version
 
-$current_version = "2.0.0";
-
-// --------------------------------------------------------
-
-
-// --------------------------------------------------------
-// DB UPDATE
-// --------------------------------------------------------
-// IF there is a DB update, change the following to TRUE
-// IF there is NO DB update, change the following to FALSE
-
-$db_update = FALSE;
+$current_version = "2.0.0.0";
 
 // --------------------------------------------------------
 
 // reCAPTCHA Public Key
 $publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
 
-// Define Base URL - may not need
+// Define Base URL
 if (NHC) $base_url = ""; 
 else $base_url = $base_url;
 

@@ -1,10 +1,11 @@
 <?php 
 
 // -----------------------------------------------------------
-// Version 1.3.1.0 and 1.3.2.0
+// Version 2.0.0.0
 // -----------------------------------------------------------
 
-$current_version = "1.3.2.0";
+$current_version = "2.0.0.0";
+$current_version_display = "2.0.0";
 require('paths.php');
 mysql_select_db($database, $brewing);
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
@@ -52,7 +53,7 @@ if (HOSTED) {
 			$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
 			$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
 			
-			$updateSQL1 = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeAssignedLocation`, `brewerStewardAssignedLocation`, `brewerAssignment`, `brewerAHA`) VALUES
+			$updateSQL1 = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAHA`) VALUES
 	(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80000', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '000000');", $brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
 			mysql_real_escape_string($updateSQL1);
 			$result = mysql_query($updateSQL1, $brewing);
@@ -117,7 +118,7 @@ if (file_exists($filename)) {
 		$version = $row_version['version'];
 	}
 	
-	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><strong>The BCOE&amp;M ".$current_version." Database Update Script must be run to update the database.</strong></div>";
+	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><strong>The BCOE&amp;M ".$current_version_display." Database Update Script must be run to update the database.</strong></div>";
 	
 	if (check_setup($prefix."preferences",$database)) {
 		
@@ -135,11 +136,11 @@ if (file_exists($filename)) {
 			if ($current_version != $version) {
 				
 				if ($action == "default") { 
-				$update_alerts .= "<div  class=\"alert alert-danger\"><span class=\"fa fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
-                //$update_alerts .= "<div class=\"alert alert-warning\"><strong>You should <u>BACK UP</u> your MySQL Database before performing this upgrade.</strong></div>"; 
-				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version.".</p>";
+				$update_alerts .= "<div  class=\"alert alert-danger\"><span class=\"fa fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
+                
+				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version_display.".</p>";
 				
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog\"></span> Begin The Update</a></div>";		
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog\"></span> Begin The Update</a></div>";		
 				}
 			
 				if ($action == "update") {
@@ -189,16 +190,27 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1200") && ($version < "1300")) {
+						if (($version >= "1200") && ($version < "1213")) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if ($version >= "1300")  {
-							// last verion to have a db update was 1.3.0.0
-							// if 1.3.0.0 later, update only with the 1.3.1.0 and 1.3.2.0 changes
+						if (($version >= "1213") && ($version < "1300")) {
+							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						if (($version >= "1300") && ($version < "1320")) {
+							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						// Last version to have a db update was 1.3.2.0
+						// If current version is 1.3.2.0, only perform the 2.0.0.0 update
+						if ($version >= "1320")   {
 							include (UPDATE.'current_update.php');
 						}
 				
@@ -212,8 +224,7 @@ if (file_exists($filename)) {
 					session_write_close();
 					session_regenerate_id(true);
 						
-					$update_alerts .= "<div class=\"alert alert-success\"><strong>Update to ".$current_version." Complete!</strong></div>";
-					
+					$update_alerts .= "<div class=\"alert alert-success\"><strong>Update to ".$current_version_display." Complete!</strong></div>";
 					
 					// -----------------------------------------------------------
 					//  Finish and Clean Up
@@ -221,9 +232,9 @@ if (file_exists($filename)) {
 					
 					$update_body .= "<p>To take advantage of this version's added features, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update the following:</p>";
 					$update_body .= "<ul>";
-					$update_body .= "<li>Your site preferences by going to: Admin &gt; Preparing &gt; Define &gt; Site Preferences.</li>";
-					$update_body .= "<li>Your site judging preferences by going to: Admin &gt; Preparing &gt; Define &gt; Competition Organization Preferences.</li>";
-					$update_body .= "<li>Your competition's specific information by going to: Admin &gt; Preparing &gt; Edit &gt; Competition Info.</li>";
+					$update_body .= "<li>Your site preferences.</li>";
+					$update_body .= "<li>Your site judging preferences.</li>";
+					$update_body .= "<li>Your competition&rsquo;s specific information.</li>";
 					$update_body .= "</ul>";
 					$update_body .= "<h3>Updates Performed Are Detailed Below</h3>";
 					$update_body .= $output;
@@ -282,21 +293,26 @@ else {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $row_contest_info['contestName']; ?>: Update to BCOE&amp;M <?php echo $current_version; ?></title>
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <title><?php echo $row_contest_info['contestName']; ?>: Update to BCOE&amp;M <?php echo $current_version_display; ?></title>
+        <!-- Load jQuery / http://jquery.com/ -->
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <!-- Load Bootstrap / http://www.getbootsrap.com -->
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <!--[if lt IE 9]>
-          	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         
-        <!-- Load BCOE&M Custom CSS -->
-        <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+        <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        
+        <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/css/default.min.css" />
         
         <!-- Load BCOE&M Custom JS -->
-    	<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/bcoem_custom.js"></script>
+        <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
 	</head>
 <body>
 	<!-- MAIN NAV -->
@@ -339,7 +355,7 @@ else {
     <div class="container-fluid">
     
     	<div class="page-header">
-        	<h1>BCOE&amp;M <?php echo $current_version; ?> Update</h1>
+        	<h1>BCOE&amp;M <?php echo $current_version_display; ?> Update</h1>
         </div>
         
         <?php echo $update_body; ?>
