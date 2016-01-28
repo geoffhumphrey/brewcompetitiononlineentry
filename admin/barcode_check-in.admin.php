@@ -34,7 +34,7 @@ $(function() {
 });
 </script>
 <?php if ($entry_list != "") { ?>
-<div class="alert alert-info"><?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
+<div class="alert alert-info"><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
 <?php } 
 if (!empty($flag_jnum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -47,7 +47,7 @@ foreach ($flag_jnum as $num) {
 	}
 }
 ?>
-<div class="alert alert-danger">The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
+<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
 <?php }  
 if (!empty($flag_enum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -60,7 +60,7 @@ foreach ($flag_enum as $num) {
 	}
 }
 ?>
-<div class="alert alert-danger">The following entries already have 6 digit judging numbers assigned to them - the original 6 digit judging number has been kept. <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
+<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> The following entries already have 6 digit judging numbers assigned to them - the original 6 digit judging number has been kept. <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
 <div class="bcoem-admin-element">

@@ -39,7 +39,7 @@ $nav_container = "navbar-default";
     
     <!-- ALERTS -->
     <div class="container bcoem-warning-container">
-    	<div class="alert alert-danger"><strong>Denied! You do not have permission for this request.</strong> Don't worry, we still want you around!</div>
+    	<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>Denied! You do not have permission for this request.</strong> Don't worry, we still want you around!</div>
     </div><!-- ./container --> 
     <!-- ./ALERTS -->
     

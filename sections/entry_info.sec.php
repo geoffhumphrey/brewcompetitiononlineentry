@@ -238,7 +238,9 @@ if (($row_contest_info['contestBottles'] != "") && ($entry_window_open < 2)) {
 
 // Shipping Locations
 if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
-	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Location and Address</h2>";
+	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Info</h2>";
+	$page_info10 .= sprintf("<p>Entry bottles accepted at the shipping location %s through %s.</p>",$shipping_open,$shipping_closed);
+	$page_info10 .= "<p>Ship entries to:</p>";
 	$page_info10 .= "<p>";
 	$page_info10 .= $_SESSION['contestShippingName'];
 	$page_info10 .= "<br>";
@@ -256,6 +258,8 @@ if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
 if (($totalRows_dropoff > 0) && ($entry_window_open < 2)) {
 	if ($totalRows_dropoff == 1) $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Location</h2>";
 	else $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Locations</h2>";
+	$page_info11 .= sprintf("<p>Entry bottles accepted at drop-off locations %s through %s.</p>",$dropoff_open,$dropoff_closed);
+	
 	do {
 		$page_info11 .= "<p>";
 		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Go to the ".$row_dropoff['dropLocationName']." website\"><strong>%s</strong></a> <span class=\"fa fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$row_dropoff['dropLocationName']);

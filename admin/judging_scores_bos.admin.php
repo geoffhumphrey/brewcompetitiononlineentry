@@ -99,12 +99,12 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
             <ul class="dropdown-menu">
                 <?php do { 
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/pullsheets.php?section=admin&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
+                    <li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
             <?php }
                 } while ($row_style_type = mysql_fetch_assoc($style_type));
                 ?>
-                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
-                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/bos_mat.php?filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
+                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
+                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
             </ul>
     	</div>
     
@@ -279,7 +279,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
     	<td><input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $bos_entry_info[11]; ?>" /></td>
         <td>
-        <select class="selectpicker nodupe" name="scorePlace<?php echo $score_id; ?>">
+        <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
           <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>

@@ -23,7 +23,7 @@ if (table_exists($prefix."system")) {
 
 if ($setup_free_access == FALSE) {
 	
-	$setup_alerts .= "<div class=\"alert alert-danger\"><strong>Setup Cannot Run.</strong> The variable called &#36;setup_free_access is set to FALSE.</div>";
+	$setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>Setup Cannot Run.</strong> The variable called &#36;setup_free_access is set to FALSE.</div>";
 	$setup_body .= "<p>The &#36;setup_free_access variable is in the config.php file, which is located in the &ldquo;site&rdquo; folder on your server.</p>
 	<p>For the install and setup scripts to run, <strong>the &#36;setup_free_access variable must be set to TRUE</strong>. Server access is required to change the config.php file.</p>
 	<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>

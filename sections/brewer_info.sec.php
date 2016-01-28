@@ -295,6 +295,15 @@ $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Club
 $table_body1 .=  "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$club."</div>";
 $table_body1 .= "</div>";
 
+if ($row_brewer['brewerJudgeNotes'] != "") { 
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Notes to Organizers</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+$table_body1 .= "<em>".$row_brewer['brewerJudgeNotes']."</em>";		
+$table_body1 .= "</div>";
+$table_body1 .= "</div>";
+}
+
 if ($entry_discount) {
 
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
@@ -326,14 +335,12 @@ if (!empty($assignment)) {
 if (in_array("Judge",$assignment_array)) { 
 	$table_body1 .= "<div class=\"row bcoem-account-info hidden-print\">";
     $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>&nbsp;</strong></div>";
-    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 5160\">A4</a></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>";
 	$table_body1 .= "</div>";
 } // end if (in_array("Judge",$assignment_array)) && ($action != "print"))
 
 
-if ($_SESSION['brewerJudge'] == "Y") { 
-
-	
+if ($_SESSION['brewerJudge'] == "Y") {
 	
 	$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 	$display_rank = bjcp_rank($bjcp_rank[0],2);
@@ -350,6 +357,12 @@ if ($_SESSION['brewerJudge'] == "Y") {
 	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
 	if ($_SESSION['brewerJudgeRank'] != "") $table_body1 .= str_replace("<br />",", ",$display_rank); else $table_body1 .= "N/A";
 	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Competitions Judged</strong></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+    $table_body1 .= $row_brewer['brewerJudgeExp'];		
+    $table_body1 .= "</div>";
 	$table_body1 .= "</div>";
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
 	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Mead Judge?</strong></div>";
@@ -396,7 +409,7 @@ if ($_SESSION['brewerJudge'] == "Y") {
 			else $table_body1 .= "";
 		}
 		if ((!empty($table_assign_judge)) && (!empty($assignment))) $table_body1 .= sprintf("<p><strong class=\"text-success\">You have already been assigned as a %s to a table</strong>.</p><p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">contact</a> the competition organizer or judge coordinator.</p>",$assignment,build_public_url("contact","default","default","default",$sef,$base_url));
-		elseif ((!empty($table_assign_steward)) && (!empty($assignment))) $table_body1 .= sprintf("You have already been assigned as a %s.",$assignment);
+		elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $table_body1 .= sprintf("You have already been assigned as a %s.",$assignment);
 		$table_body1 .= "</div>";
 		$table_body1 .= "</div>";
 		
@@ -421,7 +434,7 @@ if ($_SESSION['brewerJudge'] == "Y") {
 		} // end if ((!$judge_available_not_assigned) && (!empty($table_assign_judge))) 
 	
 	} // end if (!empty($judge_info))
-			
+	
 }  // end if ($_SESSION['brewerJudge'] == "Y") 
 
 
@@ -461,7 +474,7 @@ if ($_SESSION['brewerSteward'] == "Y") {
 			else $table_body1 .= "";
 		}
 		if ((!empty($table_assign_steward)) && (!empty($assignment))) $table_body1 .= sprintf("<p><strong class=\"text-success\">You have already been assigned as a %s to a table</strong>.</p><p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">contact</a> the competition organizer or judge coordinator.</p>",$assignment,build_public_url("contact","default","default","default",$sef,$base_url));
-		elseif ((!empty($table_assign_judge)) && (!empty($assignment))) $table_body1 .= sprintf("You have already been assigned as a %s.",$assignment);
+		elseif ((in_array("Judge",$assignment_array)) && (!empty($assignment))) $table_body1 .= sprintf("You have already been assigned as a %s.",$assignment);
 		$table_body1 .= "</div>";
 		$table_body1 .= "</div>";
 		

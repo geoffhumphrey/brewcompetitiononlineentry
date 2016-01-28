@@ -147,16 +147,17 @@ if ($go != "default") {
 }
 
 $warning1 .= "<p class=\"lead\">The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes. <small>A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.</small></p>";
-$warning2 .= "<div class=\"alert alert-warning\"><strong>Reminder:</strong> You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>";
-$header1_1 .= "<p class=\"lead\">";
-if ($view == "quick") $header1_1 .= "Quick ";
-$header1_1 .= "Register ";
+$warning2 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>Reminder:</strong> You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.</div>";
+
 if ($section == "admin") { 
+	$header1_1 .= "<p class=\"lead\">";
+	if ($view == "quick") $header1_1 .= "Quick ";
+	$header1_1 .= "Register ";
 	if ($go == "judge") $header1_1 .= "a Judge/Steward"; 
-	else $header1_1 .= "a Participant"; 
-	}
-else $header1_1 .= "Your Account";
-$header1_1 .= "</p>";
+	else $header1_1 .= "a Participant";
+	$header1_1 .= "</p>";
+}
+
 if (($go != "default") && ($section != "admin")) $page_info1 .= "<p>To register for the competition, create your online account by filling out the form below.</p>";
 if ($view == "quick") $page_info1 .= "<p>Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.</p>";
 if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && (!$comp_entry_limit)) {

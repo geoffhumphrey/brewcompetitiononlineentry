@@ -41,7 +41,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			styleTypeBOS=%s, 
 			styleTypeBOSMethod=%s
 			WHERE id=%s",
-							   GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
+							   GetSQLValueString($_POST['styleTypeName'], "text"),
 							   GetSQLValueString($_POST['styleTypeOwn'], "text"),
 							   GetSQLValueString($_POST['styleTypeBOS'], "text"),
 							   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
@@ -49,10 +49,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			//echo $updateSQL."<br>";
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			//$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			echo $updateSQL;
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-			header(sprintf("Location: %s", stripslashes($updateGoTo)));			
+			//header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 		}
 	} // end else NHC
 } else echo "<p>Not available.</p>";?>

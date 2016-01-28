@@ -1,25 +1,21 @@
 <?php 
-
 // -----------------------------------------------------------
-// Version 1.3.2.0
-// This version does not have a DB update.
-
-// If version is below 1.3.1.0, the following will run
-
-// Version 1.3.1.0 did have one DB update, albiet a pretty
-// major one. The Styles table will be altered and updated with
-// the BJCP 2015 styles.
+// Version 2.0.0.0
+// This version has a DB update.
+// If version is below 2.0.0.0, the following will run.
 // -----------------------------------------------------------
 
 $output .= "<h4>Version ".$current_version."...</h4>";
 $output .= "<ul>";
+
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 
 // -----------------------------------------------------------
 // Create Needed Tables
 // -----------------------------------------------------------
 
-// include ('current/create_tables.php'); // Not needed for 1.3.2.0
+// Not needed for 2.0.0.0
+// include ('current/create_tables.php'); 
 
 // -----------------------------------------------------------
 // Alter Existing Tables
@@ -29,10 +25,9 @@ include ('current/alter_tables.php');
 
 // -----------------------------------------------------------
 // Data Updates
-// Where there are lots of data updates, breaking them up cuts
-// down the script execution time
 // -----------------------------------------------------------
 
-include ('current/data_updates.php'); // Only needed for versions below 1.3.2.0
+include ('current/data_updates.php');
+
 $output .= "</ul>";
 ?>

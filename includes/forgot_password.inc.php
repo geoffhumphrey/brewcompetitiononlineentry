@@ -129,25 +129,5 @@ $hash = $hasher->HashPassword($password);
 	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
 	
 }
-
-/*
-$headers4	 = $_SESSION['contestShippingDeadline'];
-$headers	.= "Reply-to: $headers4\n";
-$headers 	.= "From: $headers4\n"; 
-$headers 	.= "Errors-to: $headers4\n"; 
-$headers 	= "Content-Type: text/html; charset=iso-8859-1\n".$headers;// for html mail
- 
-if (mail("$em","Password Reset","This is in response to your request for a password reset at from the ".$_SESSION['contestName']." entry site. \n \nYour user name: $row->userid \n Your new password: ".$key."\n\n
-\n\n Thank You \n \n The ".$_SESSION['contestName']." Staff","$headers")) 
-{
-header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=2"));
-}
-else
-{ 
-header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=3"));
-}
-*/
-
-//}
 }
 ?>

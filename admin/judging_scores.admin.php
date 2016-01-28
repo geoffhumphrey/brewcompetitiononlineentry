@@ -231,7 +231,7 @@ else echo "<p>No scores have been entered. If tables have been defined, use the 
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
 <?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { 
-if (NHC) echo "<div class='alert alert-danger'>A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";
+if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";
 ?>
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>&amp;id=<?php echo $id; ?>">
@@ -338,7 +338,7 @@ $(document).ready(function() {
         
     	<td><input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" /></td>
         <td>
-        <select class="selectpicker nodupe" name="scorePlace<?php echo $score_id; ?>">
+        <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">
           <option value=""></option>
           <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
           <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>

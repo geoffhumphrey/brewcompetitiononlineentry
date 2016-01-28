@@ -13,6 +13,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 	$contestJudgeOpen = strtotime($_POST['contestJudgeOpen']." ".$_POST['contestJudgeOpenTime']);
 	$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
 	$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['contestAwardsLocTime']);
+	$contestShippingOpen = strtotime($_POST['contestShippingOpen']);
+	$contestShippingDeadline = strtotime($_POST['contestShippingDeadline']);
+	$contestDropoffOpen = strtotime($_POST['contestDropoffOpen']);
+	$contestDropoffDeadline = strtotime($_POST['contestDropoffDeadline']);
 	$contestHostWebsite = check_http($_POST['contestHostWebsite']);
 	
 	//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 
@@ -49,17 +53,15 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		
 		contestJudgeDeadline,
 		contestRules,
-		contestAwardsLocation, 
-		contestShippingOpen, 
-		contestShippingDeadline, 
+		contestAwardsLocation,
 		
 		contestEntryFee,
 		contestBottles, 
 		contestShippingAddress, 
 		contestShippingName, 
 		contestAwards,
-		
-		contestWinnersComplete,
+		contestDropoffOpen,
+		contestDropoffDeadline,
 		contestEntryCap,
 		contestAwardsLocName,
 		contestAwardsLocTime,
@@ -74,6 +76,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestEntryFeePasswordNum,
 		contestCircuit,
 		contestVolunteers,
+		contestShippingOpen,
+		contestShippingDeadline,
 		id
 		) 
 		VALUES 
@@ -84,7 +88,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		%s, %s, %s, %s, %s, 
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s)",
+		%s, %s, %s, %s, %s)",
 							   GetSQLValueString($_POST['contestName'], "text"),
 							   GetSQLValueString($_POST['contestID'], "text"),
 							   GetSQLValueString($_POST['contestHost'], "text"),
@@ -98,14 +102,13 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($contestJudgeDeadline, "text"),
 							   GetSQLValueString($_POST['contestRules'], "text"),
 							   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
-							   GetSQLValueString($_POST['contestShippingOpen'], "text"),
-							   GetSQLValueString($_POST['contestShippingDeadline'], "text"),
 							   GetSQLValueString($_POST['contestEntryFee'], "text"),
 							   GetSQLValueString($_POST['contestBottles'], "text"),
 							   GetSQLValueString($_POST['contestShippingAddress'], "text"),
 							   GetSQLValueString($_POST['contestShippingName'], "text"),
 							   GetSQLValueString($_POST['contestAwards'], "text"),
-							   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
+							   GetSQLValueString($contestDropoffOpen, "text"),
+							   GetSQLValueString($contestDropoffDeadline, "text"),
 							   GetSQLValueString($_POST['contestEntryCap'], "text"),
 							   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
 							   GetSQLValueString($contestAwardsLocDate, "text"),
@@ -118,6 +121,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
 							   GetSQLValueString($_POST['contestCircuit'], "text"),
 							   GetSQLValueString($_POST['contestVolunteers'], "text"),
+							   GetSQLValueString($contestShippingOpen, "text"),
+							   GetSQLValueString($contestShippingDeadline, "text"),
 							   GetSQLValueString($id, "int"));
 		
 		  mysql_select_db($database, $brewing);
@@ -170,9 +175,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestJudgeOpen=%s,
 		contestJudgeDeadline=%s, 
 		contestRules=%s, 
-		contestAwardsLocation=%s, 
-		contestShippingOpen=%s, 
-		contestShippingDeadline=%s, 
+		contestAwardsLocation=%s,
 		
 		contestEntryFee=%s, 
 		contestBottles=%s, 
@@ -180,7 +183,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestShippingName=%s, 
 		
 		contestAwards=%s,
-		contestWinnersComplete=%s,
+		contestDropoffOpen=%s,
+		contestDropoffDeadline=%s,
 		contestEntryCap=%s,
 		contestAwardsLocName=%s,
 		
@@ -193,7 +197,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestEntryFeePassword=%s,
 		contestEntryFeePasswordNum=%s,
 		contestCircuit=%s,
-		contestVolunteers=%s
+		contestVolunteers=%s,
+		contestShippingOpen=%s,
+		contestShippingDeadline=%s
 		WHERE id=%s",
 							   GetSQLValueString($_POST['contestName'], "text"),
 							   GetSQLValueString($_POST['contestID'], "text"),
@@ -208,14 +214,13 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($contestJudgeDeadline, "text"),
 							   GetSQLValueString($_POST['contestRules'], "text"),
 							   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
-							   GetSQLValueString($_POST['contestShippingOpen'], "text"),
-							   GetSQLValueString($_POST['contestShippingDeadline'], "text"),
 							   GetSQLValueString($_POST['contestEntryFee'], "text"),
 							   GetSQLValueString($_POST['contestBottles'], "text"),
 							   GetSQLValueString($_POST['contestShippingAddress'], "text"),
 							   GetSQLValueString($_POST['contestShippingName'], "text"),
 							   GetSQLValueString($_POST['contestAwards'], "text"),
-							   GetSQLValueString($_POST['contestWinnersComplete'], "text"),
+							   GetSQLValueString($contestDropoffOpen, "text"),
+							   GetSQLValueString($contestDropoffDeadline, "text"),
 							   GetSQLValueString($_POST['contestEntryCap'], "text"),
 							   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
 							   GetSQLValueString($contestAwardsLocDate, "text"),
@@ -228,6 +233,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
 							   GetSQLValueString($_POST['contestCircuit'], "text"),
 							   GetSQLValueString($_POST['contestVolunteers'], "text"),
+							   GetSQLValueString($contestShippingOpen, "text"),
+							   GetSQLValueString($contestShippingDeadline, "text"),
 							   GetSQLValueString($id, "int"));
 		
 		//echo $updateSQL;

@@ -5,7 +5,7 @@ if ($setup_free_access == TRUE) {
 
 	if ($action == "default") { 
 	
-		$setup_alerts .= "<div class=\"alert alert-info\"><strong>To begin setup and install, the necessary database tables need to be instantiated.</strong> These tables hold all of your competition data.</div>";
+		$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be instantiated.</strong> These tables hold all of your competition data.</div>";
 		$output .= "<p>Click the &ldquo;Install DB Tables&rdquo; button below to install the database schema into the following database:</p>";
 		$output .= "<ul>";
 		$output .= "<li>".$database."</li>";
@@ -23,11 +23,11 @@ if ($setup_free_access == TRUE) {
 		
 	if ($action == "install-db") {
 		
-		$setup_alerts .= "<div class=\"alert alert-success\"><strong>All database tables and default data have been installed successfully.</strong></div>
-		<div class=\"alert alert-info\"><strong>The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
+		$setup_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"> <strong>All database tables and default data have been installed successfully.</strong></div>
+		<div class=\"alert alert-info\"><strong><span class=\"fa fa-info-circle\"></span> The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
 		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-chevron-right\"><span></a></div>";
 	
-		//$setup_alerts .= "<div class=\"alert alert-info\"><strong>Database tables install details are below.</strong></div>";
+		//$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Database tables install details are below.</strong></div>";
 		$output .= "<div class=\"panel panel-primary\">";
 		$output .= "<div class=\"panel-heading\"><strong>Table Installation Details</strong></div>";
 		$output .= "<div class=\"panel-body\">";
@@ -36,7 +36,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<ul class=\"list-group\">";
 		
 		// ------------------- 
-		// Archive Table (v1.3.0.0 done)
+		// Archive Table
 		// ------------------- 
 		
 		$sql = "
@@ -60,7 +60,7 @@ if ($setup_free_access == TRUE) {
 		
 		
 		// ------------------- 
-		// Brewer Table (v1.3.0.0 done)
+		// Brewer Table
 		// -------------------
 		
 		$sql = "
@@ -111,7 +111,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Participants</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Brewing Table (v1.3.0.0 done)
+		// Brewing Table
 		// -------------------
 		
 		$sql = "
@@ -513,7 +513,7 @@ if ($setup_free_access == TRUE) {
 		
 		
 		// ------------------- 
-		// Competition Info Table (v1.3.0.0 done)
+		// Competition Info Table
 		// -------------------
 		
 		$sql = "
@@ -529,6 +529,8 @@ if ($setup_free_access == TRUE) {
 			`contestEntryDeadline` varchar(255) DEFAULT NULL,
 			`contestJudgeOpen` varchar(255) DEFAULT NULL,
 			`contestJudgeDeadline` varchar(255) DEFAULT NULL,
+			`contestDropoffOpen` varchar(255) DEFAULT NULL,
+			`contestDropoffDeadline` varchar(255) DEFAULT NULL,
 			`contestRules` text,
 			`contestAwardsLocation` text,
 			`contestAwardsLocName` varchar(255) DEFAULT NULL,
@@ -540,14 +542,12 @@ if ($setup_free_access == TRUE) {
 			`contestEntryFee2` int(11) DEFAULT NULL,
 			`contestEntryFeeDiscount` char(1) DEFAULT NULL,
 			`contestEntryFeeDiscountNum` char(4) DEFAULT NULL,
-			`contestCategories` text,
 			`contestBottles` text,
 			`contestShippingAddress` text,
 			`contestShippingName` varchar(255) DEFAULT NULL,
 			`contestAwards` text,
 			`contestLogo` varchar(255) DEFAULT NULL,
 			`contestBOSAward` text,
-			`contestWinnersComplete` text,
 			`contestEntryCap` int(8) DEFAULT NULL,
 			`contestEntryFeePassword` varchar(255) DEFAULT NULL,
 			`contestEntryFeePasswordNum` int(11) DEFAULT NULL,
@@ -566,279 +566,6 @@ if ($setup_free_access == TRUE) {
 		 //echo "<p>".$sql."</p>";
 		
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
-		// Countries Table (v1.3.0.0 done)
-		// -------------------
-		
-		/*
-		$sql = "
-		CREATE TABLE IF NOT EXISTS `$countries_db_table` (
-		  `id` int(11) NOT NULL DEFAULT '0',
-		  `name` varchar(255) NULL DEFAULT NULL,
-		  PRIMARY KEY (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-		";
-		
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing);
-		
-		$sql = "
-		INSERT INTO `$countries_db_table` (`id`, `name`) VALUES
-		(1, 'United States'),
-		(2, 'Australia'),
-		(3, 'Canada'),
-		(4, 'Ireland'),
-		(5, 'United Kingdom'),
-		(101, 'Afghanistan'),
-		(102, 'Albania'),
-		(103, 'Algeria'),
-		(104, 'American Samoa'),
-		(105, 'Andorra'),
-		(106, 'Angola'),
-		(107, 'Anguilla'),
-		(108, 'Antarctica'),
-		(109, 'Antigua and Barbuda'),
-		(110, 'Argentina'),
-		(111, 'Armenia'),
-		(113, 'Aruba'),
-		(115, 'Austria'),
-		(116, 'Azerbaijan'),
-		(118, 'Bahamas'),
-		(119, 'Bahrain'),
-		(120, 'Bangladesh'),
-		(121, 'Barbados'),
-		(122, 'Belarus'),
-		(123, 'Belgium'),
-		(124, 'Belize'),
-		(125, 'Benin'),
-		(126, 'Bermuda'),
-		(127, 'Bhutan'),
-		(128, 'Bolivia'),
-		(129, 'Bosnia and Herzegovina'),
-		(130, 'Botswana'),
-		(131, 'Bouvet Island'),
-		(132, 'Brazil'),
-		(133, 'British Indian Ocean Territory'),
-		(134, 'Brunei Darussalam'),
-		(135, 'Bulgaria'),
-		(136, 'Burkina Faso'),
-		(137, 'Burundi'),
-		(138, 'Cambodia'),
-		(139, 'Cameroon'),
-		(141, 'Cape Verde'),
-		(142, 'Cayman Islands'),
-		(143, 'Central African Republic'),
-		(144, 'Chad'),
-		(145, 'Chile'),
-		(146, 'China'),
-		(147, 'Christmas Island'),
-		(148, 'Cocos (Keeling) Islands'),
-		(149, 'Colombia'),
-		(150, 'Comoros'),
-		(151, 'Congo'),
-		(152, 'Congo, The Democratic Republic of The'),
-		(153, 'Cook Islands'),
-		(154, 'Costa Rica'),
-		(155, 'Cote D''ivoire'),
-		(156, 'Croatia'),
-		(157, 'Cuba'),
-		(158, 'Cyprus'),
-		(160, 'Czech Republic'),
-		(161, 'Denmark'),
-		(162, 'Djibouti'),
-		(163, 'Dominica'),
-		(164, 'Dominican Republic'),
-		(165, 'Easter Island'),
-		(166, 'Ecuador'),
-		(167, 'Egypt'),
-		(168, 'El Salvador'),
-		(169, 'Equatorial Guinea'),
-		(170, 'Eritrea'),
-		(171, 'Estonia'),
-		(172, 'Ethiopia'),
-		(173, 'Falkland Islands (Malvinas)'),
-		(174, 'Faroe Islands'),
-		(175, 'Fiji'),
-		(176, 'Finland'),
-		(177, 'France'),
-		(178, 'French Guiana'),
-		(179, 'French Polynesia'),
-		(180, 'French Southern Territories'),
-		(181, 'Gabon'),
-		(182, 'Gambia'),
-		(183, 'Georgia'),
-		(185, 'Germany'),
-		(186, 'Ghana'),
-		(187, 'Gibraltar'),
-		(188, 'Greece'),
-		(189, 'Greenland'),
-		(191, 'Grenada'),
-		(192, 'Guadeloupe'),
-		(193, 'Guam'),
-		(194, 'Guatemala'),
-		(195, 'Guinea'),
-		(196, 'Guinea-bissau'),
-		(197, 'Guyana'),
-		(198, 'Haiti'),
-		(199, 'Heard Island and Mcdonald Islands'),
-		(200, 'Honduras'),
-		(201, 'Hong Kong'),
-		(202, 'Hungary'),
-		(203, 'Iceland'),
-		(204, 'India'),
-		(205, 'Indonesia'),
-		(207, 'Iran'),
-		(208, 'Iraq'),
-		(210, 'Israel'),
-		(211, 'Italy'),
-		(212, 'Jamaica'),
-		(213, 'Japan'),
-		(214, 'Jordan'),
-		(215, 'Kazakhstan'),
-		(217, 'Kenya'),
-		(218, 'Kiribati'),
-		(219, 'Korea, North'),
-		(220, 'Korea, South'),
-		(221, 'Kosovo'),
-		(222, 'Kuwait'),
-		(223, 'Kyrgyzstan'),
-		(224, 'Laos'),
-		(225, 'Latvia'),
-		(226, 'Lebanon'),
-		(227, 'Lesotho'),
-		(228, 'Liberia'),
-		(229, 'Libyan Arab Jamahiriya'),
-		(230, 'Liechtenstein'),
-		(231, 'Lithuania'),
-		(232, 'Luxembourg'),
-		(233, 'Macau'),
-		(234, 'Macedonia'),
-		(235, 'Madagascar'),
-		(236, 'Malawi'),
-		(237, 'Malaysia'),
-		(238, 'Maldives'),
-		(239, 'Mali'),
-		(240, 'Malta'),
-		(241, 'Marshall Islands'),
-		(242, 'Martinique'),
-		(243, 'Mauritania'),
-		(244, 'Mauritius'),
-		(245, 'Mayotte'),
-		(246, 'Mexico'),
-		(247, 'Micronesia, Federated States of'),
-		(248, 'Moldova, Republic of'),
-		(249, 'Monaco'),
-		(250, 'Mongolia'),
-		(251, 'Montenegro'),
-		(252, 'Montserrat'),
-		(253, 'Morocco'),
-		(254, 'Mozambique'),
-		(255, 'Myanmar'),
-		(256, 'Namibia'),
-		(257, 'Nauru'),
-		(258, 'Nepal'),
-		(259, 'Netherlands'),
-		(260, 'Netherlands Antilles'),
-		(261, 'New Caledonia'),
-		(262, 'New Zealand'),
-		(263, 'Nicaragua'),
-		(264, 'Niger'),
-		(265, 'Nigeria'),
-		(266, 'Niue'),
-		(267, 'Norfolk Island'),
-		(268, 'Northern Mariana Islands'),
-		(269, 'Norway'),
-		(270, 'Oman'),
-		(271, 'Pakistan'),
-		(272, 'Palau'),
-		(273, 'Palestinian Territory'),
-		(274, 'Panama'),
-		(275, 'Papua New Guinea'),
-		(276, 'Paraguay'),
-		(277, 'Peru'),
-		(278, 'Philippines'),
-		(279, 'Pitcairn'),
-		(280, 'Poland'),
-		(281, 'Portugal'),
-		(282, 'Puerto Rico'),
-		(283, 'Qatar'),
-		(284, 'Reunion'),
-		(285, 'Romania'),
-		(286, 'Russia'),
-		(287, 'Russia'),
-		(288, 'Rwanda'),
-		(289, 'Saint Helena'),
-		(290, 'Saint Kitts and Nevis'),
-		(291, 'Saint Lucia'),
-		(292, 'Saint Pierre and Miquelon'),
-		(293, 'Saint Vincent and The Grenadines'),
-		(294, 'Samoa'),
-		(295, 'San Marino'),
-		(296, 'Sao Tome and Principe'),
-		(297, 'Saudi Arabia'),
-		(298, 'Senegal'),
-		(299, 'Serbia and Montenegro'),
-		(300, 'Seychelles'),
-		(301, 'Sierra Leone'),
-		(302, 'Singapore'),
-		(303, 'Slovakia'),
-		(304, 'Slovenia'),
-		(305, 'Solomon Islands'),
-		(306, 'Somalia'),
-		(307, 'South Africa'),
-		(308, 'South Georgia/South Sandwich Islands'),
-		(309, 'Spain'),
-		(310, 'Sri Lanka'),
-		(311, 'Sudan'),
-		(312, 'Suriname'),
-		(313, 'Svalbard and Jan Mayen'),
-		(314, 'Swaziland'),
-		(315, 'Sweden'),
-		(316, 'Switzerland'),
-		(317, 'Syria'),
-		(318, 'Taiwan'),
-		(319, 'Tajikistan'),
-		(320, 'Tanzania, United Republic of'),
-		(321, 'Thailand'),
-		(322, 'Timor-leste'),
-		(323, 'Togo'),
-		(324, 'Tokelau'),
-		(325, 'Tonga'),
-		(326, 'Trinidad and Tobago'),
-		(327, 'Tunisia'),
-		(328, 'Turkey'),
-		(330, 'Turkmenistan'),
-		(331, 'Turks and Caicos Islands'),
-		(332, 'Tuvalu'),
-		(333, 'Uganda'),
-		(334, 'Ukraine'),
-		(335, 'United Arab Emirates'),
-		(338, 'United States Minor Outlying Islands'),
-		(339, 'Uruguay'),
-		(340, 'Uzbekistan'),
-		(341, 'Vanuatu'),
-		(342, 'Vatican City'),
-		(343, 'Venezuela'),
-		(344, 'Vietnam'),
-		(345, 'Virgin Islands, British'),
-		(346, 'Virgin Islands, U.S.'),
-		(347, 'Wallis and Futuna'),
-		(348, 'Western Sahara'),
-		(349, 'Yemen'),
-		(351, 'Zambia'),
-		(352, 'Zimbabwe'),
-		(353, 'Other');
-		";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing);
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Countries</strong> table was installed successfully.</li>";
-		*/
 		
 		// ------------------- 
 		// Drop Off Table
@@ -890,7 +617,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Assignments</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Judging Flights Table (v1.3.0.0 done)
+		// Judging Flights Table
 		// -------------------
 		
 		$sql = "
@@ -913,7 +640,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Flights</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Judging Locations Table (v1.3.0.0 done)
+		// Judging Locations Table
 		// -------------------
 		
 		$sql = "
@@ -1022,7 +749,7 @@ if ($setup_free_access == TRUE) {
 		
 		
 		// ------------------- 
-		// Judging Tables BOS Table (v1.3.0.0 done)
+		// Judging Tables BOS Table
 		// -------------------
 		
 		$sql = "
@@ -1070,7 +797,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysql_query($sql, $brewing);
 		
 		// ------------------- 
-		// Preferences Table (v1.3.0.0 done)
+		// Preferences Table
 		// -------------------
 		
 		$sql = "
@@ -1134,7 +861,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Special Best Data Table (v1.3.0.0 done)
+		// Special Best Data Table
 		// -------------------
 		
 		$sql = "
@@ -1158,7 +885,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Data</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Special Best Info Table (v1.3.0.0 done)
+		// Special Best Info Table
 		// -------------------
 		
 		$sql = "
@@ -1182,7 +909,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Info</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Sponsors Table (v1.3.0.0 done)
+		// Sponsors Table
 		// -------------------
 		
 		$sql = "
@@ -1207,7 +934,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Sponsors</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Staff Table (v1.3.0.0 done)
+		// Staff Table
 		// -------------------
 		
 		$sql = "
@@ -1539,6 +1266,57 @@ if ($setup_free_access == TRUE) {
 		//echo $sql;
 		//exit;
 		
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Variable. This category encompasses a wide range of Belgian ales produced by truly artisanal brewers more concerned with creating unique products than in increasing sales. Entry Instructions: The brewer must specify either the beer being cloned, the new style being produced or the special ingredients or processes used. Commercial Examples: Orval; De Dolle&rsquo;s Arabier, Oerbier, Boskeun and Stille Nacht; La Chouffe, McChouffe, Chouffe Bok and N&rsquo;ice Chouffe; Ellezelloise Hercule Stout and Quintine Amber; Unibroue Ephemere, Maudite, Don de Dieu, etc.; Minty; Zatte Bie; Caracole Amber, Saxo and Nostradamus; Silenrieu Sara and Joseph; Fant&ocirc;me Black Ghost and Speciale No&euml;l; Dupont Moinette, Moinette Brune, and Avec Les Bons Voeux de la Brasserie Dupont; St. Fullien No&euml;l; Gouden Carolus No&euml;l; Affligem N&ouml;el; Guldenburg and Pere No&euml;l; De Ranke XX Bitter and Guldenberg; Poperings Hommelbier; Bush (Scaldis); Moinette Brune; Grottenbier; La Trappe Quadrupel; Weyerbacher QUAD; Bi&egrave;re de Miel; Verboden Vrucht; New Belgium 1554 Black Ale; Cantillon Iris; Russian River Temptation; Lost Abbey Cuvee de Tomme and Devotion, Lindemans Kriek and Framboise, and many more.","59");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Complex, fruity, pleasantly sour/acidic, balanced, pale, wheat-based ale fermented by a variety of Belgian microbiota. A lambic with fruit, not just a fruit beer. Entry Instructions: Entrant must specify the type of fruit(s) used in the making of the lambic. Commercial Examples: Boon Framboise Marriage Parfait, Boon Kriek Mariage Parfait, Boon Oude Kriek, Cantillon Fou&rsquo; Foune (apricot), Cantillon Kriek, Cantillon Lou Pepe Kriek, Cantillon Lou Pepe Framboise, Cantillon Rose de Gambrinus, Cantillon St. Lamvinus (merlot grape), Cantillon Vigneronne (Muscat grape), De Cam Oude Kriek, Drie Fonteinen Kriek, Girardin Kriek, Hanssens Oude Kriek, Oud Beersel Kriek, Mort Subite Kriek.","65");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of fruit and beer. The key attributes of the underlying style will be different with the addition of fruit; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination. Entry Instructions: Entrant must specify the underlying beer style as well as the type of fruit(s) used. Classic styles do not have to be cited. Commercial Examples: New Glarus Belgian Red and Raspberry Tart, Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Founders R&uuml;b&aelig;us, Ebulum Elderberry Black Ale, Stiegl Radler, Weyerbacher Raspberry Imperial Stout, Abita Purple Haze, Melbourne Apricot Beer and Strawberry Beer, Saxer Lemon Lager, Magic Hat #9, Grozet Gooseberry and Wheat Ale,  Pyramid Apricot Ale, Dogfish Head Fort.","74");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of spices, herbs and/or vegetables and beer. The key attributes of the underlying style will be different with the addition of spices, herbs and/or vegetables; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination. Entry Instructions: Entrant must specify the underlying beer style as well as the type of spices, herbs, or vegetables used. Classic styles do not have to be cited. Commercial Examples: Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Fraoch Heather Ale, Southampton Pumpkin Ale, Rogue Hazelnut Nectar, Hitachino Nest Real Ginger Ale, Breckenridge Vanilla Porter, Left Hand JuJu Ginger Beer, Dogfish Head Punkin Ale, Dogfish Head Midas Touch, Redhook Double Black Stout, Buffalo Bill&rsquo;s Pumpkin Ale,  BluCreek Herbal Ale, Christian Moerlein Honey Almond,  Rogue Chocolate Stout, Birrificio Baladin Nora, Cave Creek Chili Beer.","75");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of ingredients, processes and beer. The key attributes of the underlying style (if declared) will be atypical due to the addition of special ingredients or techniques; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and harmony of the resulting combination. The overall uniqueness of the process, ingredients used, and creativity should be considered. The overall rating of the beer depends heavily on the inherently subjective assessment of distinctiveness and drinkability. Entry Instructions: The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn't fit into an established style. Commercial Examples: Bell&rsquo;s Rye Stout, Bell&rsquo;s Eccentric Ale, Samuel Adams Triple Bock and Utopias, Hair of the Dog Adam, Great Alba Scots Pine, Tommyknocker Maple Nut Brown Ale, Great Divide Bee Sting Honey Ale, Stoudt&rsquo;s Honey Double Mai Bock, Rogue Dad&rsquo;s Little Helper, Rogue Honey Cream Ale, Dogfish Head India Brown Ale, Zum Uerige Sticke and Doppel Sticke Altbier, Yards Brewing Company General Washington Tavern Porter, Rauchenfels Steinbier, Odells 90 Shilling Ale, Bear Republic Red Rocket Ale, Stone Arrogant Bastard.","80");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product. Entry Instructions: Entrants MUST specify the varieties of fruit used. Commercial Examples: White Winter Blueberry, Raspberry and Strawberry Melomels, Redstone Black Raspberry and Sunshine Nectars, Bees Brothers Raspberry Mead, Intermiel Honey Wine and Raspberries, Honey Wine and Blueberries, and Honey Wine and Blackcurrants, Long Island Meadery Blueberry Mead, Mountain Meadows Cranberry and Cherry Meads.","86");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Often, a blend of spices may give a character greater than the sum of its parts. The better examples of this style use spices/herbs subtly and when more than one are used, they are carefully selected so that they blend harmoniously. See standard description for entrance requirements. Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used. Entry Instructions: Entrants MUST specify the types of spices used. Commercial Examples: Bonair Chili Mead, Redstone Juniper Mountain Honey Wine, Redstone Vanilla Beans and Cinnamon Sticks Mountain Honey Wine, Long Island Meadery Vanilla Mead, iQhilika Africa Birds Eye Chili Mead, Mountain Meadows Spice Nectar.","87");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","See standard description for entrance requirements. Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entry Instructions: Entrants MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, a historical mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared. Commercial Examples: Jadwiga, Hanssens/Lurgashall Mead the Gueuze, Rabbit&rsquo;s Foot Private Reserve Pear Mead, White Winter Cherry Bracket, Saba Tej, Mountain Meadows Trickster&rsquo;s Treat Agave Mead, Intermiel Ros&eacute;e.","89");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Adjuncts may include white and brown sugars, molasses, small amounts of honey, and raisins. Adjuncts are intended to raise OG well above that which would be achieved by apples alone. This style is sometimes barrel-aged, in which case there will be oak character as with a barrel-aged wine. If the barrel was formerly used to age spirits, some flavor notes from the spirit (e.g., whisky or rum) may also be present, but must be subtle. Entry Instructions: Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (still, petillant, or sparkling). Entrants MUST specify sweetness (dry, medium, or sweet).","95");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
+		$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Like a dry wine with complex flavors. The apple character must marry with the added fruit so that neither dominates the other. Entry Instructions: Entrants MUST specify what fruit(s) and/or fruit juice(s) were added. Commercial Examples: [US] West County Blueberry-Apple Wine (MA), AEppelTreow Red Poll Cran-Apple Draft Cider (WI), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry Hard Cider (MI).","96");
+		mysql_select_db($database, $brewing);
+		mysql_real_escape_string($updateSQL);
+		$result = mysql_query($updateSQL, $brewing);
+		
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
 		
 		// ------------------- 
@@ -1601,39 +1379,6 @@ if ($setup_free_access == TRUE) {
 		
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
 		
-		/*
-		// ------------------- 
-		// Themes Table 
-		// *** FUTURE VERSION - transition from DB table to simple array
-		// -------------------
-		
-		$sql = "
-		CREATE TABLE IF NOT EXISTS `$themes_db_table` (
-			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`themeTitle` varchar(255) DEFAULT NULL,
-			`themeFileName` varchar(255) DEFAULT NULL,
-			PRIMARY KEY (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
-		";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing);
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Themes</strong> table was installed successfully.</li>";
-		
-		$sql = "
-		INSERT INTO `$themes_db_table` (`id`, `themeTitle`, `themeFileName`) VALUES
-		(1, 'BCOE&amp;M Default', 'default'),
-		(2, 'Bruxellensis', 'bruxellensis'),
-		(3, 'Claussenii', 'claussenii');
-		";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($sql);
-		$result = mysql_query($sql, $brewing);
-		 //echo "<p>".$sql."</p>";
-		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Themes</strong> data installed successfully.</li>";	
-		
-		*/
 		// ------------------- 
 		// Users Table
 		// -------------------

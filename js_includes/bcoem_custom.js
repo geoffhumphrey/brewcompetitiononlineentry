@@ -280,6 +280,7 @@ function stateck() {
 
 // ------------------------------ Bootstrap Date/Time Picker ---------------------------------
 // Configuration info at http://eonasdan.github.io/bootstrap-datetimepicker/
+// JavaScript Document
 $(function () {
 	$('#contestEntryOpen').datetimepicker({
 		format: 'YYYY-MM-DD'
@@ -327,6 +328,30 @@ $(function () {
 	
 	$('#contestJudgeDeadlineTime').datetimepicker({
 		format: 'LT'
+	});
+	
+	$('#contestShippingOpen').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	
+	$('#contestShippingDeadline').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	
+	$('#contestDropoffOpen').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	
+	$('#contestDropoffDeadline').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	
+	$('#contestAwardsLocDate').datetimepicker({
+			format: 'YYYY-MM-DD'
+	});
+	
+	$('#contestAwardsLocTime').datetimepicker({
+			format: 'LT'
 	});
 	
 	$('#judgingDate1').datetimepicker({

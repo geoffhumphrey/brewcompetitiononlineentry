@@ -20,7 +20,7 @@ BCOE&M uses Font Awesome icons throughout the core code. To use Font Awesome ico
 
 To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/components/#glyphicons for a list and how to integrate
 -->
-
+<div class="container"> 
 <h2>Explore Further</h2>
 <p>This is an example of a custom module placed at the bottom of the page with <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3</a> markup. In this case, a simple button group with split dropup menu.</p>
 <div class="btn-group dropup" role="group" aria-label="...">
@@ -38,4 +38,5 @@ To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/co
             <li><a href="http://www.beerxml.com/" target="_blank">Beer XML Standard</a></li>
         </ul>
     </div>
+</div>
 </div>

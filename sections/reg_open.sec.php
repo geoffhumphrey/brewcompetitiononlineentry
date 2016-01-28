@@ -66,7 +66,7 @@ $page_info8 = "";
 $header1_1 .= "<h2>Judge and Steward Registration is <span class='text-success'>Open</span></h2>"; 
 if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) { 
 	$page_info1 .= "<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='".build_public_url("register","judge","default",$sef,$base_url)."'>please register</a>.</p>";
-	$page_info1 .= "<p>If you <em>have</em> registered, <a href='".build_public_url("login","default","default","default",$sef,$base_url)."'>log in</a> and then choose <em>Edit Account</em> to indicate that you are willing to judge or  steward.</p>";
+	$page_info1 .= sprintf("<p>If you <em>have</em> registered, <a href=\"%s\">log in</a> and then choose <em>Edit Account</em> from the My Account menu indicated by the <span class=\"fa fa-user\"></span> icon on the top menu.</p>",build_public_url("login","default","default","default",$sef,$base_url));
 }
 
 elseif (($registration_open == "1") && (isset($_SESSION['loginUsername']))) { 

@@ -95,4 +95,21 @@ if ($totalRows_archive_current > 0) {
 } // end if ($totalRows_archive_current > 0)
 
 $output .=  "<li>All archive brewer tables updated successfully.</li>";
+
+// Remove countries table
+$updateSQL6 = "DROP TABLE IF EXISTS `".$prefix."countries`";
+mysql_select_db($database, $brewing);
+mysql_real_escape_string($updateSQL6);
+$result6 = mysql_query($updateSQL6, $brewing);
+
+$output .=  "<li>Countries table removed from the database.</li>";
+
+// Remove themes table
+$updateSQL6 = "DROP TABLE IF EXISTS `".$prefix."themes`";
+mysql_select_db($database, $brewing);
+mysql_real_escape_string($updateSQL6);
+$result6 = mysql_query($updateSQL6, $brewing);
+
+$output .=  "<li>Themes table removed from the database.</li>";
+
 ?>

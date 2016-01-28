@@ -31,12 +31,12 @@ if ((($registration_open == 1) && ($entry_window_open == 1) && ($comp_entry_limi
 				$c = display_array_content($value,'');
 				$d = ltrim($c,"0");
 				$d = str_replace("-","",$c);
-				$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$c."'>".$d."</a>";
+				$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$c."&amp;tb=true'>".$d."</a>";
 			}
 			else {
 				$e = ltrim($value,"0");
 				$e = str_replace("-","",$value);
-				$a .= "<a id='modal_window_link' href='".$base_url."output/styles.php?view=".$value."'>".$e."</a>"; 
+				$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>"; 
 			}
 			if ($method == "1") $a .= "";
 			if ($method == "2") $a .= "&nbsp;&nbsp;";
@@ -370,18 +370,20 @@ $(document).ready(function()
 				<?php }
 				} while ($row_styles = mysql_fetch_assoc($styles)); ?>
         </select>
-        <p class="bcoem-form-info small">&spades; = Specific Type, Special Ingredients and/or Classic Style Required<br />&diams; = Strength Required<br />&clubs; = Carbonation Level Required<br />&hearts; = Sweetness Level Required</p></div>
+        <span id="helpBlock" class="help-block">&spades; = Specific Type, Special Ingredients, Classic Style, Strength (for Beer), or Color May Be Required<br />&diams; = Strength Required (Mead/Cider)<br />&clubs; = Carbonation Level Required (Mead/Cider)<br />&hearts; = Sweetness Level Required (Mead/Cider)</p></span>
+        </div>
     </div><!-- ./Form Group -->
     <!-- Enter Special Ingredients -->
 	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Specific Type, Special Ingredients and/or Classic Style</label>
+        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Specific Type, Special Ingredients, Classic Style, Strength, and/or Color</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">        	
             	 <input class="form-control" name="brewInfo" id="brewInfo" type="text" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>>
             
-            <div class="bcoem-form-info small">
-                <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "Use the Brewer's Specifics field below to add information <strong>NOT essential to judging your entry</strong>."; ?>Characters remaining: <span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
-                <p><strong class="text-danger">Required</strong> for categories: <?php echo $specials; ?>.</p>
-                <p>Judges <strong>will not know</strong> the name of your entry. If your specific type, special ingredient(s), or classic style is part of your entry's name, be sure each is specified above.</p>
+            <span id="helpBlock" class="help-block">
+            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong> Click the appropriate number below for detailed information.</p>
+                <p><strong class="text-danger">Required for categories:</strong> <?php echo $specials; ?>.</p>
+                <p><strong class="text-danger">Use the Brewer&rsquo;s Specifics field below to add information NOT essential to judging your entry.</strong></p>
+                <p>Judges <strong>will not know</strong> the name of your entry. If your specific type, special ingredient(s), classic style, strength (for beer), or color is part of your entry&rsquo;s name, be sure each is specified above.</p>
                 <p>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
                     <ul>
                         <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
@@ -389,7 +391,9 @@ $(document).ready(function()
                         <li>Cider example: <em>golden russet apples, clove, cinnamon</em> or <em>strawberry and rhubarb</em>, etc.</li>
                     </ul>
                 </p>
-            </div>
+                <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
+                
+            </span>
         </div>
     </div><!-- ./Form Group -->
     
@@ -399,10 +403,11 @@ $(document).ready(function()
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <input class="form-control" name="brewComments" id="brewComments" type="text" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>">
-            <div class="bcoem-form-info small">
+            <span id="helpBlock" class="help-block">
+            	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
+                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong></p>
                 <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
-                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <em>Provide only <strong class="text-danger">if you wish the judges to fully consider what you specify</strong> when evaluating and scoring your entry.</em></p>
-            </div>
+            </span>
         </div>
     </div><!-- ./Form Group -->
 
@@ -423,9 +428,9 @@ $(document).ready(function()
                         <input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED";  ?>/> Sparkling
                     </label>
                 </div>
-                <div class="bcoem-form-info small">
+                <span id="helpBlock" class="help-block">
                 	<p><strong class="text-danger">Required</strong> for mead and cider entries.</p>
-                </div>
+                </span>
             </div>
         </div><!-- ./Form Group -->
     	<div class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>"><!-- Form Group Radio INLINE -->
@@ -449,9 +454,9 @@ $(document).ready(function()
                         <input type="radio" name="brewMead2" value="Sweet" id="brewMead2_4"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> Sweet
                     </label>
                 </div>
-                <div class="bcoem-form-info small">
+                <span id="helpBlock" class="help-block">
                 	<p><strong class="text-danger">Required</strong> for mead and cider entries.</p>
-                </div>
+                </span>
             </div>
         </div><!-- ./Form Group -->
     </div>
@@ -471,9 +476,9 @@ $(document).ready(function()
                         <input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> /> Sack (strong)
                     </label>
                 </div>
-                <div class="bcoem-form-info small">
+                <span id="helpBlock" class="help-block">
                 	<p><strong class="text-danger">Required</strong> for mead entries.</p>
-                </div>
+                </span>
             </div>
         </div><!-- ./Form Group -->
     </div>

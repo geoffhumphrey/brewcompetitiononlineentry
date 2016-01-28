@@ -105,21 +105,17 @@ $currency_code = $currency[1];
     <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <!-- Input Here -->
-    
     <select class="selectpicker" data-width="auto"  name="contestLogo" id="contestLogo">
-       <?php 
-		   $directory = (USER_IMAGES);
-			echo $directory;
-			echo directory_contents_dropdown($directory,$row_contest_info['contestLogo']); 
-       ?>
+       <?php $directory = (USER_IMAGES); echo directory_contents_dropdown($directory,$row_contest_info['contestLogo']); ?>
     </select>
-    
-    <span id="helpBlock" class="help-block">Choose the file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</span>
+    <span id="helpBlock" class="help-block">Choose the image file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</span>
     <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Image</a>
     </div>
 </div><!-- ./Form Group -->
 <?php } ?>
+
 <h3>Entry Window</h3>
+
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -165,6 +161,65 @@ $currency_code = $currency[1];
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" placeholder="<?php echo $current_time; ?>" required>
     	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
+        <span id="helpBlock" class="help-block">This window dictates when users can add entries into the system.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<h3>Drop-Off Window</h3>
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="contestDropoffOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        	<input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        	<input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">
+    <span id="helpBlock" class="help-block">This window applies for all <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">drop-off locations</a>.</span>
+    
+    </div>
+</div><!-- ./Form Group -->
+
+<h3>Shipping Location</h3>
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<!-- Input Here -->
+        	<input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestShippingAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<!-- Input Here -->
+        	<input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
+    </div>
+</div><!-- ./Form Group -->
+
+<h3>Shipping Window</h3>
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="contestShippingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        	<input class="form-control" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">   	
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="contestShippingDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>" >
+     <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span> 
     </div>
 </div><!-- ./Form Group -->
 
@@ -248,7 +303,7 @@ $currency_code = $currency[1];
         <!-- Input Here -->
         <div class="input-group has-warning">
         	<input class="form-control" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -260,7 +315,7 @@ $currency_code = $currency[1];
     	<div class="input-group has-warning">
         <!-- Input Here -->
         <input class="form-control" id="contestJudgeDeadlineTime" name="contestJudgeDeadlineTime" type="text" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" placeholder="<?php echo $current_time; ?>">
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time"); ?>" placeholder="<?php echo $current_time; ?>" required>
     	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -408,26 +463,7 @@ $currency_code = $currency[1];
     </div>
 </div><!-- ./Form Group -->
 
-<h3>Shipping Location</h3>
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	<!-- Input Here -->
-        	<input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
-    </div>
-</div><!-- ./Form Group -->
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="contestShippingAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	<!-- Input Here -->
-        	<input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
-    </div>
-</div><!-- ./Form Group -->
-
 <h3>Awards Ceremony</h3>
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestAwardsLocDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -436,13 +472,7 @@ $currency_code = $currency[1];
         <span id="helpBlock" class="help-block">Provide even if the date of judging is the same.</span>
     </div>
 </div><!-- ./Form Group -->
-<script type="text/javascript">
-	$(function () {
-		$('#contestAwardsLocDate').datetimepicker({
-			format: 'YYYY-MM-DD'
-		});
-	});
-</script>
+
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestAwardsLocTime" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Start Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -451,13 +481,7 @@ $currency_code = $currency[1];
         <span id="helpBlock" class="help-block">Provide even if the date of judging is the same.</span>
     </div>
 </div><!-- ./Form Group -->
-<script type="text/javascript">
-	$(function () {
-		$('#contestAwardsLocTime').datetimepicker({
-			format: 'LT'
-		});
-	});
-</script>
+
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestAwardsLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -513,19 +537,7 @@ $currency_code = $currency[1];
      </div>
 </div><!-- ./Form Group -->
 
-<?php if ($section != "step4") { ?>
-<h3>Winners List</h3>
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestWinnersComplete" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Complete Winners List</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <textarea id="contestWinnersComplete" class="form-control" name="contestWinnersComplete" rows="15" aria-describedby="helpBlock">
-        <?php if ($section != "step4") echo $row_contest_info['contestWinnersComplete']; ?>
-        </textarea>
-        <span id="helpBlock" class="help-block">Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in HTML format and pasted here. To paste raw HTML code, click the Source Code button indicated by <>. If you paste using the editor above, most HTML tags will be stripped out and the original formatting will be lost.</span>
-     </div>
-</div><!-- ./Form Group -->
-<?php } ?>
+
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">

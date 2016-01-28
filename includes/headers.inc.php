@@ -19,13 +19,13 @@ switch($section) {
 	$header_output = $_SESSION['contestName'];
 	if ($msg == "success") { 
 		$output = "Setup was successful.";
-		$output_extend = "<div class='alert alert-info hidden-print'>You are now logged in and ready to further customize your competition's site.</p>"; 
+		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> You are now logged in and ready to further customize your competition's site.</p>"; 
 	}
 	
 	if ($msg == "chmod") { 
 		$output = "<strong>Setup was successful.</strong> However, your config.php permissions file could not be changed.";
-		$output_extend = "<div class='alert alert-warning hidden-print'>It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
-		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='alert alert-warning hidden-print'>Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
+		$output_extend = "<div class='alert alert-warning hidden-print'><span class=\"fa fa-exclamation-triangle\"> It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
+		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='alert alert-warning hidden-print'><span class=\"fa fa-exclamation-triangle\"> Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
 	}
 	
 	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
@@ -46,7 +46,7 @@ switch($section) {
 	break;
 	
 	case "register":
-	$header_output = $_SESSION['contestName'];
+	$header_output = $_SESSION['contestName']." - Register";
 	if     ($msg == "1") $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please try again.";
 	elseif ($msg == "2") { $output = "<strong>Sorry, the user name you entered is already in use.</strong>"; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "<strong>The user name provided is not a valid email address.</strong> Please enter a valid email address.";
@@ -57,7 +57,7 @@ switch($section) {
 	break;
 
 	case "pay":
-	$header_output = "Pay Entry Fees";
+	$header_output = $_SESSION['contestName']." - Pay Entry Fees";
 	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
 	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
 	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
@@ -69,9 +69,9 @@ switch($section) {
 	break;
 	
 	case "login":
-	if ($action == "forgot") $header_output = "Reset Password"; 
-	elseif ($action == "logout") $header_output = "Logged Out"; 
-	else $header_output = "Log In";
+	if ($action == "forgot") $header_output = $_SESSION['contestName']." - Reset Password"; 
+	elseif ($action == "logout") $header_output = $_SESSION['contestName']." - Logged Out"; 
+	else $header_output = $_SESSION['contestName']." - Log In";
 	if ($msg == "0") $output = "<strong>You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.</strong> "; 
 	elseif     ($msg == "1") { $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please make sure your email address and password are correct."; $output_extend = ""; }
 	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong>."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
@@ -118,11 +118,11 @@ switch($section) {
 	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
 	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
 	else $output = "";
-	$header_output = "Past Winners";
+	$header_output = $_SESSION['contestName']." - Past Winners";
 	break;
 	
 	case "contact":
-	$header_output = "Contact";
+	$header_output = $_SESSION['contestName']." - Contact";
 	if ($msg == "1") {
 	
 	if (NHC) {
@@ -436,7 +436,7 @@ switch($section) {
 	include(DB.'styles.db.php');
 	$header_output = "Import an Entry Using BeerXML";
 	if ($msg == "default") { 
-	if ($totalRows_styles < 98) $output_extend = "<div class='alert alert-info hidden-print'><strong>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles.</strong> To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
+	if ($totalRows_styles < 98) $output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> <strong>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles.</strong> To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
 	}
 	if ($msg == "1") $output = "<strong>Your entry has been recorded.</strong>";
 	if ($msg == "2") $output = "<strong>Your entry has been confirmed.</strong>";
@@ -574,7 +574,7 @@ switch($section) {
 	elseif ($msg == "7") { 
 		if (HOSTED) $output = "<strong>The specified competition data has been cleared.</strong>"; 
 		else $output = "<strong>Archives created successfully.</strong> Click the archive name to view. ";
-		$output_extend = "<div class='alert alert-info hidden-print'><strong>Remember to update your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</strong></div>";
+		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> <strong>Remember to update your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</strong></div>";
 	
 	}
 	elseif ($msg == "8") $output = "<strong>Archive \"".$filter."\" deleted.</strong>"; 
@@ -614,7 +614,7 @@ switch($section) {
 }
 
 if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated using the method you specified.</strong>";
-if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
+if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
 if ($msg == "99") $output = "<strong>Please log in to access your account.</strong>";

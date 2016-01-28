@@ -334,11 +334,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                 </div>
             <?php } // end if (($totalRows_judging > 1) && ($dbTable == "default")); ?>
           	</div>
-     	</div>
-        
-        
-        
-        
+     	</div>        
     </div><!-- ./right sidebar -->
 </div><!-- ./row -->
 </div><!-- ./bcoem-admin-dashboard-accordion -->
@@ -351,17 +347,13 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                Competition Organization Info
             </button>
         </div>
-        
-        
         <?php if (((NHC) && ($prefix == "_final")) || (!NHC) && ($totalRows_style_type > 0)) { ?>
         <div class="btn-group" role="group" aria-label="BOSModal">
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#BOSModal">
                Best of Show Settings Info
             </button>
         </div>
-    
-    
-    <!-- Modal -->
+		<!-- Modal -->
         <div class="modal fade" id="compOrgModal" tabindex="-1" role="dialog" aria-labelledby="compOrgModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -386,7 +378,6 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                 </div>
             </div>
         </div><!-- ./modal -->
-
 		<!-- Modal -->
         <div class="modal fade" id="BOSModal" tabindex="-1" role="dialog" aria-labelledby="BOSModalLabel">
             <div class="modal-dialog" role="document">
@@ -410,8 +401,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
             </div>
         </div><!-- ./modal -->
     <?php } ?>
-	
-<?php 
+	<?php 
 	$orphan_modal_body = "";
 	$orphan_modal_body_2 = "";
 	if ($totalRows_tables > 0) {
@@ -458,17 +448,17 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
     </div>
 </div><!-- ./modal -->
     <div class="btn-group" role="group" aria-label="orphanModal">
-            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#orphanModal">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orphanModal">
                Style Sub-Categories Not Assigned to Tables
             </button>
         </div>
-	<div class="btn-group" role="group" aria-label="BOSModal">
-		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#availJudgeModal">
+	<div class="btn-group" role="group" aria-label="availJudgeModal">
+		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availJudgeModal">
 		   Judges Not Assigned to Tables
 		</button>
 	</div>
-	<div class="btn-group" role="group" aria-label="BOSModal">
-		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#availStewardModal">
+	<div class="btn-group" role="group" aria-label="availStewardModal">
+		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availStewardModal">
 		   Stewards Not Assigned to Tables
 		</button>
 	</div>
@@ -507,15 +497,15 @@ if ($totalRows_tables > 0) { ?>
 <table class="table table-responsive table-bordered table-striped" id="sortable"> 
 	<thead>
     <tr>
-    	<th>#</th>
+    	<th class="hidden-xs hidden-sm">No.</th>
         <th>Name</th>
         <th class="hidden-xs hidden-sm">Style(s)</th>
-        <th><em>Rec'd</em> Entries</th>
+        <th class="hidden-xs hidden-sm"><em>Rec'd</em> Entries</th>
         <th class="hidden-xs hidden-sm"><em>Scored</em> Entries</th>
         <th>Judges</th>
-        <th>Stewards</th>
+        <th>Stew<span class="hidden-xs">ards</span></th>
         <?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>
-        <th>Location</th>
+        <th class="hidden-xs hidden-sm">Location</th>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
         <th class="hidden-print">Actions</th>
@@ -533,15 +523,15 @@ if ($totalRows_tables > 0) { ?>
 		$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
 	?>
     <tr>
-    	<td><?php echo $row_tables['tableNumber']; ?></td>
+    	<td class="hidden-xs hidden-sm"><?php echo $row_tables['tableNumber']; ?></td>
         <td><?php echo $row_tables['tableName']; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $styles; ?></td>
-        <td><?php echo $received; ?></td>
+        <td class="hidden-xs hidden-sm"><?php echo $received; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $scored; ?></td>
         <td><?php echo $assigned_judges; ?></td>
         <td><?php echo $assigned_stewards; ?></td>
 		<?php if (($totalRows_judging > 1) && ($dbTable == "default")) { ?>
-        <td><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default") ?></td>
+        <td class="hidden-xs hidden-sm"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default") ?></td>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
         <td class="hidden-print">
@@ -564,11 +554,6 @@ if ($totalRows_tables > 0) { ?>
 <?php } 
 else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
 } // end if ($action == "default") ?>
-
-
-
-
-
 <?php if ($action == "add") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

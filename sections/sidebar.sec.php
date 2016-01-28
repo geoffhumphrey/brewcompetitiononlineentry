@@ -72,6 +72,17 @@ if ($section != "admin") {
 		elseif ($entry_window_open == 1) $entry_panel_display = "panel-success";
 		elseif ($entry_window_open == 2) $entry_panel_display = "panel-danger";
 		else $entry_panel_display = "panel-default";
+		
+		if ($dropoff_window_open == 0) $dropoff_panel_display = "panel-default";
+		elseif ($dropoff_window_open == 1) $dropoff_panel_display = "panel-success";
+		elseif ($dropoff_window_open == 2) $dropoff_panel_display = "panel-danger";
+		else $dropoff_panel_display = "panel-default";
+		
+		if ($shipping_window_open == 0) $shipping_panel_display = "panel-default";
+		elseif ($shipping_window_open == 1) $shipping_panel_display = "panel-success";
+		elseif ($shipping_window_open == 2) $shipping_panel_display = "panel-danger";
+		else $shipping_panel_display = "panel-default";
+		
 
 	if (!$logged_in) {	
 		// Online Registration Dates
@@ -189,18 +200,32 @@ if ($section != "admin") {
 	}
 		
 	// Drop-off Dates and Location
-	$header1_300 .= "<div class=\"panel ".$entry_panel_display."\">";
+	$header1_300 .= "<div class=\"panel ".$dropoff_panel_display."\">";
 	$header1_300 .= "<div class=\"panel-heading\">";
-	$header1_300 .= "<h4 class=\"panel-title\">Entry Drop-Off/Shipping is";
-	if ($entry_window_open == 1) $header1_300 .= " Open";
+	$header1_300 .= "<h4 class=\"panel-title\">Entry Drop-Off is";
+	if ($dropoff_window_open == 1) $header1_300 .= " Open";
 	else $header1_300 .= " Closed";
 	$header1_300 .= "</h4>";
 	$header1_300 .= "</div>";
 	$page_info300 .= "<div class=\"panel-body\">";
-	$page_info300 .= sprintf("Entries accepted at <a href=\"%s#drop\">drop-off and shipping locations</a> %s through %s.",build_public_url("entry","default","default","default",$sef,$base_url),$entry_open_sidebar,$entry_closed_sidebar);
+	$page_info300 .= sprintf("Entry bottles accepted at <a href=\"%s#drop\">drop-off locations</a> %s through %s.",build_public_url("entry","default","default","default",$sef,$base_url),$dropoff_open_sidebar,$dropoff_closed_sidebar);
 	$page_info300 .= "</p>";
 	$page_info300 .= "</div>";
 	$page_info300 .= "</div>";
+	
+	// Drop-off Dates and Location
+	$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
+	$header1_500 .= "<div class=\"panel-heading\">";
+	$header1_500 .= "<h4 class=\"panel-title\">Entry Shipping is";
+	if ($shipping_window_open == 1) $header1_500 .= " Open";
+	else $header1_500 .= " Closed";
+	$header1_500 .= "</h4>";
+	$header1_500 .= "</div>";
+	$page_info500 .= "<div class=\"panel-body\">";
+	$page_info500 .= sprintf("Entry bottles accepted at the <a href=\"%s#shipping\">shipping location</a> %s through %s.",build_public_url("entry","default","default","default",$sef,$base_url),$shipping_open_sidebar,$shipping_closed_sidebar);
+	$page_info500 .= "</p>";
+	$page_info500 .= "</div>";
+	$page_info500 .= "</div>";
 
 	// Judging Location(s)
 	include(DB.'judging_locations.db.php'); 
@@ -236,6 +261,8 @@ if ($section != "admin") {
 	echo $page_info200;
 	echo $header1_300;
 	echo $page_info300;
+	echo $header1_500;
+	echo $page_info500;
 	echo $header1_400;
 	echo $page_info400;
 	include(INCLUDES.'mods_sidebar_bottom.inc.php');

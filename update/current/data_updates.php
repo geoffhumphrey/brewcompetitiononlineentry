@@ -19,7 +19,11 @@ $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 $updateSQL = sprintf("UPDATE %s SET contestShippingDeadline = contestEntryDeadline",$contest_info_db_table);
 mysql_select_db($database, $brewing);
 mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());		
+$result = mysql_query($updateSQL, $brewing) or die(mysql_error());	
+
+
+
+// ---------------------- Style Updates ---------------------------	
 
 // Change incorrect name and info for BJCP2015 style 28C
 $query_wild = sprintf("SELECT brewStyle FROM %s WHERE brewStyle='Soured Fruit Beer'",$styles_db_table);
@@ -54,7 +58,54 @@ if ($row_saison['brewStyleReqSpec'] == 0) {
 	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 }
 
-
-
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Variable. This category encompasses a wide range of Belgian ales produced by truly artisanal brewers more concerned with creating unique products than in increasing sales. Entry Instructions: The brewer must specify either the beer being cloned, the new style being produced or the special ingredients or processes used. Commercial Examples: Orval; De Dolle&rsquo;s Arabier, Oerbier, Boskeun and Stille Nacht; La Chouffe, McChouffe, Chouffe Bok and N&rsquo;ice Chouffe; Ellezelloise Hercule Stout and Quintine Amber; Unibroue Ephemere, Maudite, Don de Dieu, etc.; Minty; Zatte Bie; Caracole Amber, Saxo and Nostradamus; Silenrieu Sara and Joseph; Fant&ocirc;me Black Ghost and Speciale No&euml;l; Dupont Moinette, Moinette Brune, and Avec Les Bons Voeux de la Brasserie Dupont; St. Fullien No&euml;l; Gouden Carolus No&euml;l; Affligem N&ouml;el; Guldenburg and Pere No&euml;l; De Ranke XX Bitter and Guldenberg; Poperings Hommelbier; Bush (Scaldis); Moinette Brune; Grottenbier; La Trappe Quadrupel; Weyerbacher QUAD; Bi&egrave;re de Miel; Verboden Vrucht; New Belgium 1554 Black Ale; Cantillon Iris; Russian River Temptation; Lost Abbey Cuvee de Tomme and Devotion, Lindemans Kriek and Framboise, and many more.","59");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Complex, fruity, pleasantly sour/acidic, balanced, pale, wheat-based ale fermented by a variety of Belgian microbiota. A lambic with fruit, not just a fruit beer. Entry Instructions: Entrant must specify the type of fruit(s) used in the making of the lambic. Commercial Examples: Boon Framboise Marriage Parfait, Boon Kriek Mariage Parfait, Boon Oude Kriek, Cantillon Fou&rsquo; Foune (apricot), Cantillon Kriek, Cantillon Lou Pepe Kriek, Cantillon Lou Pepe Framboise, Cantillon Rose de Gambrinus, Cantillon St. Lamvinus (merlot grape), Cantillon Vigneronne (Muscat grape), De Cam Oude Kriek, Drie Fonteinen Kriek, Girardin Kriek, Hanssens Oude Kriek, Oud Beersel Kriek, Mort Subite Kriek.","65");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of fruit and beer. The key attributes of the underlying style will be different with the addition of fruit; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination. Entry Instructions: Entrant must specify the underlying beer style as well as the type of fruit(s) used. Classic styles do not have to be cited. Commercial Examples: New Glarus Belgian Red and Raspberry Tart, Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Founders R&uuml;b&aelig;us, Ebulum Elderberry Black Ale, Stiegl Radler, Weyerbacher Raspberry Imperial Stout, Abita Purple Haze, Melbourne Apricot Beer and Strawberry Beer, Saxer Lemon Lager, Magic Hat #9, Grozet Gooseberry and Wheat Ale,  Pyramid Apricot Ale, Dogfish Head Fort.","74");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of spices, herbs and/or vegetables and beer. The key attributes of the underlying style will be different with the addition of spices, herbs and/or vegetables; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination. Entry Instructions: Entrant must specify the underlying beer style as well as the type of spices, herbs, or vegetables used. Classic styles do not have to be cited. Commercial Examples: Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Fraoch Heather Ale, Southampton Pumpkin Ale, Rogue Hazelnut Nectar, Hitachino Nest Real Ginger Ale, Breckenridge Vanilla Porter, Left Hand JuJu Ginger Beer, Dogfish Head Punkin Ale, Dogfish Head Midas Touch, Redhook Double Black Stout, Buffalo Bill&rsquo;s Pumpkin Ale,  BluCreek Herbal Ale, Christian Moerlein Honey Almond,  Rogue Chocolate Stout, Birrificio Baladin Nora, Cave Creek Chili Beer.","75");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","A harmonious marriage of ingredients, processes and beer. The key attributes of the underlying style (if declared) will be atypical due to the addition of special ingredients or techniques; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and harmony of the resulting combination. The overall uniqueness of the process, ingredients used, and creativity should be considered. The overall rating of the beer depends heavily on the inherently subjective assessment of distinctiveness and drinkability. Entry Instructions: The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn't fit into an established style. Commercial Examples: Bell&rsquo;s Rye Stout, Bell&rsquo;s Eccentric Ale, Samuel Adams Triple Bock and Utopias, Hair of the Dog Adam, Great Alba Scots Pine, Tommyknocker Maple Nut Brown Ale, Great Divide Bee Sting Honey Ale, Stoudt&rsquo;s Honey Double Mai Bock, Rogue Dad&rsquo;s Little Helper, Rogue Honey Cream Ale, Dogfish Head India Brown Ale, Zum Uerige Sticke and Doppel Sticke Altbier, Yards Brewing Company General Washington Tavern Porter, Rauchenfels Steinbier, Odells 90 Shilling Ale, Bear Republic Red Rocket Ale, Stone Arrogant Bastard.","80");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product. Entry Instructions: Entrants MUST specify the varieties of fruit used. Commercial Examples: White Winter Blueberry, Raspberry and Strawberry Melomels, Redstone Black Raspberry and Sunshine Nectars, Bees Brothers Raspberry Mead, Intermiel Honey Wine and Raspberries, Honey Wine and Blueberries, and Honey Wine and Blackcurrants, Long Island Meadery Blueberry Mead, Mountain Meadows Cranberry and Cherry Meads.","86");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Often, a blend of spices may give a character greater than the sum of its parts. The better examples of this style use spices/herbs subtly and when more than one are used, they are carefully selected so that they blend harmoniously. See standard description for entrance requirements. Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used. Entry Instructions: Entrants MUST specify the types of spices used. Commercial Examples: Bonair Chili Mead, Redstone Juniper Mountain Honey Wine, Redstone Vanilla Beans and Cinnamon Sticks Mountain Honey Wine, Long Island Meadery Vanilla Mead, iQhilika Africa Birds Eye Chili Mead, Mountain Meadows Spice Nectar.","87");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","See standard description for entrance requirements. Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entry Instructions: Entrants MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, a historical mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared. Commercial Examples: Jadwiga, Hanssens/Lurgashall Mead the Gueuze, Rabbit&rsquo;s Foot Private Reserve Pear Mead, White Winter Cherry Bracket, Saba Tej, Mountain Meadows Trickster&rsquo;s Treat Agave Mead, Intermiel Ros&eacute;e.","89");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Adjuncts may include white and brown sugars, molasses, small amounts of honey, and raisins. Adjuncts are intended to raise OG well above that which would be achieved by apples alone. This style is sometimes barrel-aged, in which case there will be oak character as with a barrel-aged wine. If the barrel was formerly used to age spirits, some flavor notes from the spirit (e.g., whisky or rum) may also be present, but must be subtle. Entry Instructions: Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (still, petillant, or sparkling). Entrants MUST specify sweetness (dry, medium, or sweet).","95");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+	$updateSQL = sprintf("UPDATE ".$styles_db_table." SET brewStyleInfo = '%s' WHERE id = '%s'","Like a dry wine with complex flavors. The apple character must marry with the added fruit so that neither dominates the other. Entry Instructions: Entrants MUST specify what fruit(s) and/or fruit juice(s) were added. Commercial Examples: [US] West County Blueberry-Apple Wine (MA), AEppelTreow Red Poll Cran-Apple Draft Cider (WI), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry Hard Cider (MI).","96");
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
 
 ?>

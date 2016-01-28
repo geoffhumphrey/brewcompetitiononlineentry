@@ -73,7 +73,7 @@ $firefox_warning = "";
 // Build Headers
 $header1_1 .= "<a name=\"entries\"></a><h2>Entries</h2>";
  
-$firefox_warning .= "<div class=\"alert alert-warning\"><strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+$firefox_warning .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
 
 // Show Scores?
 if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
@@ -92,13 +92,13 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
+			$warnings .= "<span class=\"fa fa-exclamation-triangle\"> <strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}
 		
 	if (entries_no_special($_SESSION['user_id'])) {
-		$warnings .= "<div class=\"alert alert-warning\"><strong>You have entries that require you to define special ingredients.</strong> For each highlighted entry below with a <span class=\"fa fa-exlamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to add your special ingredients. Entries without special ingredients in categories that require them may be deleted by the system without warning.</div>";
+		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>You have entries that require you to define special ingredients.</strong> For each highlighted entry below with a <span class=\"fa fa-exlamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to add your special ingredients. Entries without special ingredients in categories that require them may be deleted by the system without warning.</div>";
 	}
 }
 

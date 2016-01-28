@@ -63,7 +63,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$user_check = explode("^",$user_check);
 	
 	if (($user_check[0] == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='alert alert-danger'>There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
+		$message2 .= sprintf("<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
 	}
 	
 }

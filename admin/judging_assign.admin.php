@@ -65,6 +65,7 @@ $output_datatables_head .= "<th>Name</th>";
 if ($filter == "judges") { 
 	$output_datatables_head .= "<th>BJCP Rank</th>";
 	$output_datatables_head .= "<th class=\"hidden-xs hidden-sm hidden-md\">BJCP #</th>";
+	$output_datatables_head .= "<th>Comps Judged</th>";
 }
 for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 	if  (table_round($row_tables_edit['id'],$i)) { 
@@ -97,7 +98,7 @@ do {
 			}
 			
 			$unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);
-			//if (at_table($row_brewer['uid'],$row_tables_edit['id'])) $output_datatables_body .= "<div class=\"alert alert-warning\"><strong>Assigned.</strong> Participant is assigned to this table.</div>"; 
+			//if (at_table($row_brewer['uid'],$row_tables_edit['id'])) $output_datatables_body .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>Assigned.</strong> Participant is assigned to this table.</div>"; 
 			//else $output_datatables_body .= judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
 			$flights_display .= $assign_flag;
 			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued);
@@ -130,13 +131,12 @@ do {
 		$output_datatables_body .= "</td>";
 		
 		if ($filter == "judges") { 
-			$output_datatables_body .= "<td>";
-			$output_datatables_body .= $display_rank;
-			$output_datatables_body .= "</td>";
+			$output_datatables_body .= "<td>".$display_rank."</td>";
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 			if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]); 
 			else $output_datatables_body .= "N/A";
 			$output_datatables_body .= "</td>";
+			$output_datatables_body .= "<td>".$judge_info[9]."</td>";
 			
 		}
 		
@@ -147,7 +147,9 @@ do {
 		if (empty($modal_rank)) $modal_rank = "Novice";
 		if ((!$at_table) && (!$unavailable)) $output_available_modal_body .= "<tr><td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td><td class=\"small\">".$modal_rank."</td></tr>";
 		
-		$output_datatables_body .= "<td>".$flights_display."</td>";
+		$output_datatables_body .= "<td>".$flights_display;
+		if (!empty($judge_info[10])) $output_datatables_body .= "<br><strong>Judge&rsquo;s Notes to Organizers:</strong> <em>".$judge_info[10]."</em>";
+		$output_datatables_body .= "</td>";
 		$output_datatables_body .= "</tr>";
 		
 	}
@@ -214,6 +216,7 @@ do {
 			"aoColumns": [
 				null,
 				null,
+				null,
 				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {  
 			    if  (table_round($row_tables_edit['id'],$i)) { 
 				?>, null<?php } } ?>
@@ -242,7 +245,7 @@ do {
 			"aoColumns": [
 				null,
 				null,
-				null
+				null,
 				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
 				null,
 				null

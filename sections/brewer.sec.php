@@ -193,6 +193,17 @@ if ($go != "admin") echo $info_msg;
     </div><!-- ./Form Group -->
     
     <?php if (($go != "entrant") && ($section != "step2")) { ?>
+    
+    
+        
+        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+            <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes To Organizer</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <!-- Input Here -->
+                <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
+                <span class="help-block">Provide any information that you believe the competition organizer should know (e.g., allergies, special dietary restrictions, shirt size, etc.).</span>
+            </div>
+        </div><!-- ./Form Group -->
     <!-- Judging and Stewarding Preferences or Assignments -->
     
 		<?php if ($table_assignment) { ?>
@@ -206,6 +217,9 @@ if ($go != "admin") echo $info_msg;
         <input name="brewerJudgeDislikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeDislikes']; ?>" />
         <input name="brewerSteward" type="hidden" value="<?php echo $row_brewer['brewerSteward']; ?>" />
         <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
+        
+        
+        
         <?php } // end if ($table_assignment) 
 		else { ?>
         <!-- Judging preferences -->
@@ -367,11 +381,24 @@ if ($go != "admin") echo $info_msg;
                 <span class="help-block">Only the first two checked will appear on your Judge Scoresheet Labels</span>
             </div>
         </div><!-- ./Form Group -->
-        <?php 
-		$pref_endRow = 0;
-		$pref_columns = 3;  // number of columns
-		$pref_hloopRow1 = 0; // first row flag
-		?>
+        
+        
+        
+        <div class="form-group"><!-- Form Group REQUIRED Select -->
+            <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competitions Judged</label>
+            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+            <select class="selectpicker" name="brewerJudgeExp" id="brewerJudgeExp" required>
+                <option value="0"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "0")) echo " SELECTED"; ?>>0</option>
+                <option value="1-5"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "1-5")) echo " SELECTED"; ?>>1-5</option>
+                <option value="6-10"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "6-10")) echo " SELECTED"; ?>>6-10</option>
+                <option value="10+"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "10+")) echo " SELECTED"; ?>>10+</option>
+            </select>
+            <span class="help-block">How many competitions have you previously served as a <strong>judge</strong>?</span>
+            </div>
+            
+        </div><!-- ./Form Group -->
+        
         <div class="form-group"><!-- Form Group Checkbox  -->
             <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
             

@@ -55,12 +55,12 @@ $page_info_vol_3 = "";
 
 $header_vol_1_1 .= "<h2>Judges and Stewards</h2>";
 if (($judge_window_open > 0) && (!$logged_in)) { 
-	$page_info_vol_1 .= sprintf("<p>If you <em>have</em> registered, <a href='%s'>log in</a> and then choose <em>Edit Account</em> to indicate that you are willing to judge or  steward.</p>",build_public_url("login","default","default","default",$sef,$base_url));
-	if ($registration_open < 2) $page_info_vol_1 .= sprintf("<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='%s'>please register</a>.</p>",build_public_url("register","judge","default","default",$sef,$base_url));
+	$page_info_vol_1 .= sprintf("<p>If you <em>have</em> registered, <a href=\"%s\">log in</a> and then choose <em>Edit Account</em> from the My Account menu indicated by the <span class=\"fa fa-user\"></span> icon on the top menu.</p>",build_public_url("login","default","default","default",$sef,$base_url));
+	if ($registration_open < 2) $page_info_vol_1 .= sprintf("<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href=\"%s\">please register</a>.</p>",build_public_url("register","judge","default","default",$sef,$base_url));
 }
 
 elseif (($judge_window_open > 0) && ($logged_in)) {
-	$page_info_vol_1 .= sprintf("<p>Since you have already registered, <a href='%s'>access your account</a> to see if you have volunteered to be a judge or steward.</p>",build_public_url("list","default","default","default",$sef,$base_url));
+	$page_info_vol_1 .= sprintf("<p>Since you have already registered, <a href=\"%s\">access your account</a> to see if you have volunteered to be a judge or steward.</p>",build_public_url("list","default","default","default",$sef,$base_url));
 }
 
 else {
@@ -69,7 +69,7 @@ else {
 
 if ($registration_open < 2) {
 $header_vol_1_2 .= "<h2>Staff</h2>";
-$page_info_vol_2 .= sprintf("<p>If you would like to volunteer to be a competition staff member, <a href='%s'>contact</a> the appropriate competition official.", build_public_url("contact","default","default","default",$sef,$base_url));
+$page_info_vol_2 .= sprintf("<p>If you would like to volunteer to be a competition staff member, <a href=\"%s\">contact</a> the appropriate competition official.", build_public_url("contact","default","default","default",$sef,$base_url));
 }
 
 if (!empty($row_contest_info['contestVolunteers'])) {

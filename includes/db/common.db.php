@@ -217,7 +217,7 @@ else {
 	$limits = mysql_query($query_limits, $brewing) or die(mysql_error());
 	$row_limits = mysql_fetch_assoc($limits);
 	
-	$query_contest_dates = sprintf("SELECT contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline FROM %s WHERE id=1", $prefix."contest_info");
+	$query_contest_dates = sprintf("SELECT contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline,contestShippingOpen,contestShippingDeadline,contestDropoffOpen,contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
 	$contest_dates = mysql_query($query_contest_dates, $brewing) or die(mysql_error());
 	$row_contest_dates = mysql_fetch_assoc($contest_dates);
 	

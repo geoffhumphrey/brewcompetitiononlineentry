@@ -1088,7 +1088,7 @@ if ($queued == "Y") { // For queued judging only
     $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table';
     $r .= '</label>';
     $r .= '<label class="radio-inline">';
-    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Keep as Assigned';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Keep as Is';
     $r .= '</label>';
     $r .= '</div>';
 	$r .= '</div>';
@@ -1126,10 +1126,10 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 function judge_info($uid) {
 	require(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation'];
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation']."^".$row_brewer_info['brewerJudgeExp']."^".$row_brewer_info['brewerJudgeNotes'];
 	return $r;
 }
 

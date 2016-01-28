@@ -14,8 +14,8 @@ if(isSet($_POST['user_name'])) {
 	}
 	else {
 		$sql_check = mysql_query("SELECT user_name FROM ".$users_db_table." WHERE user_name='".$user_name."'");
-		if (mysql_num_rows($sql_check)) echo "<span class=\"text-danger\"><span class=\"fa fa-exlamation-circle\"></span> The email address you entered is already in use. Please choose another.</span>";
-		else echo "<span class=\"text-success\"><span class=\"fa fa-check\"></span> The email address you entered is not in use.</span>";
+		if (mysql_num_rows($sql_check)) echo "<span class=\"text-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> The email address you entered is already in use. Please choose another.</span>";
+		else echo "<span class=\"text-success\"><span class=\"glyphicon glyphicon-ok\"></span> The email address you entered is not in use.</span>";
 	} // end else NHC
 }
 ?>

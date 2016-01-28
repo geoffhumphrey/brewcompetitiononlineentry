@@ -40,8 +40,8 @@ $nav_container = "navbar-default";
     
     <!-- ALERTS -->
     <div class="container bcoem-warning-container">
-    	<div class="alert alert-danger"><strong>Sorry, the page you were looking for was not found.</strong> Don't worry, we still want you around!</div>
-        <div class="alert alert-info"><strong>If you are a top-level admin and are seeing this error page, your server may not be able to accommodate search engine safe (SEF) URLs.</strong> If you are a top-level administrator of the site, <a class="alert-link" href="<?php echo $base_url."index.php?section=login"; ?>">log in</a> now and adjust your site preferences.</div>
+    	<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>Sorry, the page you were looking for was not found.</strong> Don't worry, we still want you around!</div>
+        <div class="alert alert-info"><span class="fa fa-info-circle"></span> <strong>If you are a top-level admin and are seeing this error page, your server may not be able to accommodate search engine safe (SEF) URLs.</strong> If you are a top-level administrator of the site, <a class="alert-link" href="<?php echo $base_url."index.php?section=login"; ?>">log in</a> now and adjust your site preferences.</div>
     </div><!-- ./container --> 
     <!-- ./ALERTS -->
     

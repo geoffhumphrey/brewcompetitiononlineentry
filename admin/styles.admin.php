@@ -192,7 +192,7 @@ $(document).ready(function(){
 	<label for="brewStyleType" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Type</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 has-warning">
 	<!-- Input Here -->
-	<select class="selectpicker" name="brewStyleType" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();">
+	<select class="selectpicker" data-width="auto"  name="brewStyleType" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();">
         <?php do { ?>
         <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
     	<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
@@ -375,7 +375,7 @@ $(document).ready(function(){
  <tr>
    <td class="dataLabel">Choose a judging location:</td>
    <td class="data">
-   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
+   <select class="selectpicker" data-width="auto"  name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>

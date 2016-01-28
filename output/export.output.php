@@ -20,11 +20,6 @@ require(LIB.'output.lib.php');
 require(INCLUDES.'scrubber.inc.php');
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-	
-	//echo $section."<br>";
-	//echo $go."<br>";
-	//echo $view."<br>";
-	//echo $action."<br>";
 
 /* -------------- ENTRY Exports -------------- */
 
@@ -80,7 +75,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			} 
 		}
 		
-		
 		else {
 			//first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
 			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Sub Category','Entry Number','Judging Number','Brew Name','Special Ingredients','Sweetness','Carb','Strength');
@@ -130,7 +124,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		}
 		
 	} // END if ($section == "entries")
-
 
 /* -------------- EMAIL Exports -------------- */
 
@@ -202,7 +195,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		exit;
 		
 	} // END if ($section == "emails")
-
 
 /* -------------- PARTICIPANTS Exports -------------- */
 

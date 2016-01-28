@@ -41,7 +41,7 @@ Declare all variables empty at the top of the script. Add on later...
  
 if (NHC) {
 	
-		if ($comp_entry_limit) echo "<div class=\"alert alert-danger\">The limit of paid entries has been reached. The payment system is no longer active.</div>";
+		if ($comp_entry_limit) echo "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> The limit of paid entries has been reached. The payment system is no longer active.</div>";
 	
 	else {
 	
@@ -133,11 +133,11 @@ if (NHC) {
 		$unconfirmed = array_sum(entries_unconfirmed($_SESSION['user_id']));
 		//echo $unconfirmed;
 		
-		if (($_SESSION['prefsPayToPrint'] == "Y") && (($totalRows_log - $totalRows_log_confirmed) > 0)) echo "<div class=\"alert alert-warning\">You cannot pay for your entries because one or more of your entries is unconfirmed.</div><p>Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</p>"; 
+		if (($_SESSION['prefsPayToPrint'] == "Y") && (($totalRows_log - $totalRows_log_confirmed) > 0)) echo "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> You cannot pay for your entries because one or more of your entries is unconfirmed.</div><p>Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</p>"; 
 	
 		else {
 			if ($total_entry_fees > 0) { 
-				if (($totalRows_log - $totalRows_log_confirmed) > 0) echo "<div class=\"alert alert-warning\"><strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
+				if (($totalRows_log - $totalRows_log_confirmed) > 0) echo "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
 			}
 			
 			//if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) echo "<p class=\"lead\"><span class=\"fa fa-thumbs-o-up\"></span> Your fees have been paid. Thank you!</p>";
@@ -260,7 +260,7 @@ else {
 			$header2_4 .= "<h3>PayPal <span class=\"fa fa-cc-paypal\"></span> <span class=\"fa fa-cc-visa\"></span> <span class=\"fa fa-cc-mastercard\"></span> <span class=\"fa fa-cc-discover\"></span> <span class=\"fa fa-cc-amex\"></span></h3>";
 			$page_info4 .= "<p>Click the &ldquo;Pay with PayPal&rdquo; button below to pay online.";
 			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
-			//$page_info4 .= "<div class=\"alert alert-warning\"><strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
+			//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
 			$page_info4 .= "<form role=\"form\" id=\"formfield\"  name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" name=\"form1\">";
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">";
@@ -340,7 +340,7 @@ else {
 	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= "<span class=\"fa fa-thumbs-o-up\"></span> Your fees have been paid. Thank you!</p>";
 	if ($total_entry_fees == 0) $page_info6 .= "<p>You have not logged any entries yet.</p>";
 	
-	if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= "<div class=\"alert alert-danger\"><strong>You cannot pay for your entries because one or more of your entries is unconfirmed.</strong> Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</div>"; 
+	if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>You cannot pay for your entries because one or more of your entries is unconfirmed.</strong> Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</div>"; 
 	
 		
 	// --------------------------------------------------------------
@@ -351,7 +351,7 @@ else {
 	
 	if ($total_entry_fees > 0) { 
 		
-		if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= "<div class=\"alert alert-warning\"><strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a class=\"alert-link\" href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
+		if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a class=\"alert-link\" href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
 		
 		echo $warning1;
 		echo $warning2;

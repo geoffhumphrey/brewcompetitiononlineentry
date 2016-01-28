@@ -283,7 +283,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					  brewerJudgeLocation,
 					  brewerStewardLocation,
 					  brewerAHA,
-					  brewerDropOff
+					  brewerDropOff,
+					  brewerJudgeExp,
+					  brewerJudgeNotes
 					) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 								   GetSQLValueString($_POST['uid'], "int"),
 								   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
@@ -305,7 +307,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 								   GetSQLValueString($location_pref1, "text"),
 								   GetSQLValueString($location_pref2, "text"),
 								   GetSQLValueString($_POST['brewerAHA'], "int"),
-								   GetSQLValueString($_POST['brewerDropOff'], "int")
+								   GetSQLValueString($_POST['brewerDropOff'], "int"),
+								   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
+								   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
 					);
 					
 					// only if added by an admin.
@@ -355,7 +359,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					  brewerJudgeRank,
 					  brewerJudgeLocation,
 					  brewerStewardLocation,
-					  brewerDropOff
+					  brewerDropOff,
+					  brewerJudgeExp,
+					  brewerJudgeNotes
 					) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 								   GetSQLValueString($_POST['uid'], "int"),
 								   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
@@ -376,7 +382,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 								   GetSQLValueString($rank, "text"),
 								   GetSQLValueString($location_pref1, "text"),
 								   GetSQLValueString($location_pref2, "text"),
-								   GetSQLValueString($_POST['brewerDropOff'], "int")
+								   GetSQLValueString($_POST['brewerDropOff'], "int"),
+								   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
+								   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
 								   );
 				}
 		
@@ -498,7 +506,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				brewerJudgeDislikes=%s, 
 				brewerJudgeLocation=%s, 
 				brewerStewardLocation=%s,
-				brewerDropOff=%s",
+				brewerDropOff=%s,
+				brewerJudgeExp=%s,
+				brewerJudgeNotes=%s",
 								   GetSQLValueString($_POST['uid'], "int"),
 								   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 								   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -520,9 +530,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 								   GetSQLValueString($dislikes, "text"),
 								   GetSQLValueString($location_pref1, "text"),
 								   GetSQLValueString($location_pref2, "text"),
-								   GetSQLValueString($_POST['brewerDropOff'], "int")
-								   //GetSQLValueString($_POST['brewerAssignment'], "text"),
-								   //GetSQLValueString($_POST['brewerAssignmentStaff'], "text"),
+								   GetSQLValueString($_POST['brewerDropOff'], "int"),
+								   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
+								   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
 								   );
 			// Numbers 999999994 through 999999999 are reserved for NHC applications.
 			if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
