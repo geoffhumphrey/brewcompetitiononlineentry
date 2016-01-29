@@ -14,9 +14,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 	$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
 	$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['contestAwardsLocTime']);
 	$contestShippingOpen = strtotime($_POST['contestShippingOpen']);
-	$contestShippingDeadline = strtotime($_POST['contestShippingDeadline']);
+	$contestShippingDeadline = (strtotime($_POST['contestShippingDeadline']) + 86399); // add 86399 seconds to make sure the closing time is 11:59 PM on the day requested
 	$contestDropoffOpen = strtotime($_POST['contestDropoffOpen']);
-	$contestDropoffDeadline = strtotime($_POST['contestDropoffDeadline']);
+	$contestDropoffDeadline = (strtotime($_POST['contestDropoffDeadline']) + 86399); // add 86399 seconds to make sure the closing time is 11:59 PM on the day requested
 	$contestHostWebsite = check_http($_POST['contestHostWebsite']);
 	
 	//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 

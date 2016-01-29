@@ -45,6 +45,8 @@ if (isset($_SESSION['loginUsername'])) {
     <div class="container-fluid">
             
     	<?php
+		
+			
 		if ($_SESSION['userLevel'] <= 1) {
 			if ($section == "assignments") 	include (OUTPUT.'assignments.output.php');
 			if ($section == "bos-mat") 		include (OUTPUT.'bos_mat.output.php');
@@ -56,6 +58,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($section == "sorting") 		include (OUTPUT.'sorting.output.php');
 			if ($section == "staff") 		include (OUTPUT.'staff_points.output.php');
 			if ($section == "table-cards") 	include (OUTPUT.'table_cards.output.php');
+			if ($section == "notes") 		include (OUTPUT.'judge_notes.output.php');
 		}
 		
 		if ($section == "styles") 			include (OUTPUT.'styles.output.php'); 

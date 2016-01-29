@@ -172,6 +172,7 @@ $currency_code = $currency[1];
         <!-- Input Here -->
         	<input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">
+    <span id="helpBlock" class="help-block">Opens at 12:00:00 AM on the date you choose.</span>
     </div>
 </div><!-- ./Form Group -->
 
@@ -181,8 +182,8 @@ $currency_code = $currency[1];
         <!-- Input Here -->
         	<input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">
+    <span id="helpBlock" class="help-block">Closes at 11:59:59 PM on the date you choose.</span>
     <span id="helpBlock" class="help-block">This window applies for all <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">drop-off locations</a>.</span>
-    
     </div>
 </div><!-- ./Form Group -->
 
@@ -210,6 +211,7 @@ $currency_code = $currency[1];
         <!-- Input Here -->
         	<input class="form-control" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>">   	
+    <span id="helpBlock" class="help-block">Opens at 12:00:00 AM on the date you choose.</span>
     </div>
 </div><!-- ./Form Group -->
 
@@ -219,6 +221,7 @@ $currency_code = $currency[1];
         <!-- Input Here -->
         <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date"); ?>" placeholder="<?php echo $current_date; ?>" >
+     <span id="helpBlock" class="help-block">Closes at 11:59:59 PM on the date you choose.</span>
      <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span> 
     </div>
 </div><!-- ./Form Group -->

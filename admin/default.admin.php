@@ -566,6 +566,15 @@
 								<h5>Before Judging<hr></h5>
 							</div>
 						</div><!-- ./row -->
+                        <div class="row">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<strong>Notes</strong>
+							</div>
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<ul class="list-inline">
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizers">Judges&rsquo; Notes to Organizers</a></li></ul>
+							</div>
+						</div><!-- ./row -->
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Drop-Off</strong>

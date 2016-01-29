@@ -200,7 +200,7 @@
 
 
 <?php if (!$logged_in) { ?>
-    <?php if (($registration_open == "0") && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($msg == "default")) { ?>
+    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($msg == "default")) { ?>
         <!-- Account and entry registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -208,7 +208,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "0") && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "0") && ($msg == "default")) { ?>
+    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "0") && ($msg == "default")) { ?>
         <!-- Judge/steward registration not open yet -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -216,7 +216,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "1") && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Account and entry registration open -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -224,7 +224,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "1") && (!$ua) && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
         <!-- Entry limit nearly reached -->
         <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -232,7 +232,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "1") && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Entry limit reached, account and entry registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -240,7 +240,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == "2") && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Account and entry registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -248,7 +248,23 @@
         </div>
     <?php } 	?>
     
-    <?php if ((($registration_open == "0") || ($registration_open == "2")) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1") && ($msg == "default")) { ?>
+     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+        <!-- Drop-off window closed -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>Entry Drop-Off is Closed.</strong> Entry bottles are no longer accepted at drop-off locations.
+        </div>
+    <?php } 	?>
+    
+    <?php if (($shipping_window_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+        <!-- Drop-off window closed -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>Entry Shipping is Closed.</strong> Entry bottles are no longer accepted at the shipping location.
+        </div>
+    <?php } 	?>
+    
+    <?php if ((($registration_open == 0) || ($registration_open == "2")) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1") && ($msg == "default")) { ?>
         <!-- Account and entry registration closed, but Judge/steward registration open -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
