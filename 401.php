@@ -2,6 +2,7 @@
 require('paths.php');
 require(CONFIG.'bootstrap.php');
 $section = "401";
+$go = "error_page";
 
 $container_main = "container";
 $nav_container = "navbar-default";
@@ -19,6 +20,8 @@ $nav_container = "navbar-default";
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+    <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!--[if lt IE 9]>

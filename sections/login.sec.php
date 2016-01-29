@@ -57,8 +57,9 @@ if ((($action == "default") || ($action == "login") || ($action == "logout")) &&
 if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE; else $forget_form_display = FALSE;
 if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
 	$verify_form_display = TRUE;
-	$username = $_POST['loginUsername'];
-	$username_check = $_POST['loginUsername'];
+	if ($username == "default") $username_check = $_POST['loginUsername'];
+	else $username_check = $username;
+	
 	$user_check = user_check($username_check);
 	$user_check = explode("^",$user_check);
 	
@@ -140,7 +141,13 @@ echo $primary_links;
 <?php if ($verify_form_display) {
 	if ((empty($message2)) || (empty($msg))) { ?>	
 	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $user_check[1]; ?></em></small></p>
-	<?php if ($_SESSION['prefsContact'] == "Y") { ?><p class='lead'><small>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" onClick="return confirm('An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.');">Get it via email</a>.</small></p><?php } ?>
+	<?php if ($_SESSION['prefsContact'] == "Y") { ?>
+	<?php if ($msg =="5") { ?>
+	<p class='lead'><small>If you didn't receive the email, <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.">click here to resend it to <?php echo $username_check; ?></a>.</small></p>
+	<?php } else { ?>
+	<p class='lead'><small>Can't remember the answer to your ID verification question? <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.">Get it emailed to <?php echo $username_check; ?></a>.</small></p>
+	<?php } ?>
+	<?php } ?>
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Answer</label>
@@ -158,6 +165,7 @@ echo $primary_links;
 			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-key" aria-hidden="true"></span></button>
 		</div>
 	</div><!-- Form Group -->
+<input type="hidden" name="loginUsername" value="<?php echo $username; ?>">
 </form>
     <?php }
 	}

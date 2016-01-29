@@ -135,7 +135,7 @@ if ($logged_in)  {
 	
 }
 
-if (($logged_in) && ($admin_user)) { ?>
+if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
 <div class="navmenu-brand disabled">Admin Essentials Menu</div>
@@ -271,7 +271,7 @@ if (($logged_in) && ($admin_user)) { ?>
                 </ul>
             </li>
             <?php if ($admin_user) { ?>
-            <li id="admin-arrow"><a href="#" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> Admin</a></li>
+            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> Admin</a></li>
             <?php } ?>
             <?php } else { ?>
             

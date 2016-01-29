@@ -79,7 +79,7 @@
         <!--
     	<div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-exclamation-triangle"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly, RIGHT CLICK on the link and choose &ldquo;Open Link in New Tab.&rdquo; Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.?
+        	<span class="fa fa-exclamation-triangle"></span> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly, RIGHT CLICK on the link and choose &ldquo;Open Link in New Tab.&rdquo; Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.?
         </div>
         -->
     <?php //} ?>
@@ -88,7 +88,7 @@
     	<!-- BJCP 2008 convert to 2015 -->
     	<div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-info-circle"> <strong>Your current style set is BJCP 2008.</strong> Do you want to <a class="alert-link" href="<?php echo $base_url; ?>includes/process.inc.php?action=convert_bjcp" data-confirm="Are you sure? This action will convert all entries in the database to conform to the BJCP 2015 style guidelines. Categories will be 1:1 where possible, however some specialty styles may need to be updated by the entrant.">convert all entries to BJCP 2015</a>? To retain functionality, the conversion must be performed <em>before</em> defining tables.
+        	<span class="fa fa-info-circle"></span> <strong>Your current style set is BJCP 2008.</strong> Do you want to <a class="alert-link" href="<?php echo $base_url; ?>includes/process.inc.php?action=convert_bjcp" data-confirm="Are you sure? This action will convert all entries in the database to conform to the BJCP 2015 style guidelines. Categories will be 1:1 where possible, however some specialty styles may need to be updated by the entrant.">convert all entries to BJCP 2015</a>? To retain functionality, the conversion must be performed <em>before</em> defining tables.
         </div>
     <?php } ?>
     
@@ -96,7 +96,7 @@
     	<!-- Recordset paging MOST LIKELY DEPRECATED -->
     	<div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-info-circle"> <strong>The DataTables recordset paging limit of <?php echo $_SESSION['prefsRecordLimit']; ?> has been surpassed.</strong> Filtering and sorting capabilites are only available for this set of <?php echo $_SESSION['prefsRecordLimit']; ?> entries. To adjust this setting, <a href="index.php?section=admin&amp;go=preferences" class="alert-link">change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries (<?php echo $totalRows_entry_count; ?>).
+        	<span class="fa fa-info-circle"></span> <strong>The DataTables recordset paging limit of <?php echo $_SESSION['prefsRecordLimit']; ?> has been surpassed.</strong> Filtering and sorting capabilites are only available for this set of <?php echo $_SESSION['prefsRecordLimit']; ?> entries. To adjust this setting, <a href="index.php?section=admin&amp;go=preferences" class="alert-link">change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of entries (<?php echo $totalRows_entry_count; ?>).
         </div>
    <?php } ?>
    
@@ -173,7 +173,7 @@
         <!-- Registration open, but entry window not -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"> <strong>Adding entries is not available.</strong> You will be able to add entries on or after <?php echo $entry_open; ?>.
+          <span class="fa fa-check-circle"></span> <strong>Adding entries is not available.</strong> You will be able to add entries on or after <?php echo $entry_open; ?>.
         </div>
         <?php } ?>
         
@@ -181,7 +181,7 @@
         <!-- Special for NHC - close adding or editing during the entry window as well -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
+          <span class="fa fa-check-circle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
         </div>
         <?php } ?>
         
@@ -189,7 +189,7 @@
         <!-- Special for NHC - close adding or editing during the entry window as well -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
+          <span class="fa fa-check-circle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
         </div>
         <?php } ?>
 
@@ -204,7 +204,7 @@
         <!-- Account and entry registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"> <strong>Entry Registration Will Open <?php echo $reg_open; ?>.</strong> Please check back later to add your entries to the system.
+          <span class="fa fa-check-circle"></span> <strong>Entry Registration Will Open <?php echo $reg_open; ?>.</strong> Please check back later to add your entries to the system.
         </div>
     <?php } ?>
     
@@ -220,7 +220,7 @@
         <!-- Account and entry registration open -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"> <strong>Entry Registration is Open!</strong> A total of <?php echo $total_entries; ?> entries have been added to the system as of <?php echo $current_time; ?>. Registration will close <?php echo $entry_closed; ?>.
+          <span class="fa fa-check-circle"></span> <strong>Entry Registration is Open!</strong> A total of <?php echo $total_entries; ?> entries have been added to the system as of <?php echo $current_time; ?>. Registration will close <?php echo $entry_closed; ?>.
         </div>
     <?php } ?>
     
@@ -228,7 +228,7 @@
         <!-- Entry limit nearly reached -->
         <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-info-circle"> <strong>Entry Limit Nearly Reached!</strong> <?php echo $total_entries; ?> of <?php echo $row_limits['prefsEntryLimit']; ?> maximum entries have been added into the system as of <?php echo $current_time; ?>.
+          <span class="fa fa-info-circle"></span> <strong>Entry Limit Nearly Reached!</strong> <?php echo $total_entries; ?> of <?php echo $row_limits['prefsEntryLimit']; ?> maximum entries have been added into the system as of <?php echo $current_time; ?>.
         </div>
     <?php } ?>
     
@@ -252,7 +252,7 @@
         <!-- Account and entry registration closed, but Judge/steward registration open -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-info-circle"> <strong>Judge/Steward Registration is Still Open.</strong> Judges and stewards <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">register here</a>. Judge and steward registration will close <?php echo $judge_closed; ?>.
+          <span class="fa fa-info-circle"></span> <strong>Judge/Steward Registration is Still Open.</strong> Judges and stewards <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">register here</a>. Judge and steward registration will close <?php echo $judge_closed; ?>.
         </div>
 	<?php } ?>
     

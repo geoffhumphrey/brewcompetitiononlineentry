@@ -526,7 +526,7 @@ if ($row_participant_count['count'] > 0) { ?>
 			} );
 		} );
 </script>
-<table class="table table-responsive table-bordered dataTable" id="sortable">
+<table class="table table-responsive table-bordered table-striped dataTable" id="sortable">
 <thead>
 <?php echo $output_datatables_head; ?>
 </thead>

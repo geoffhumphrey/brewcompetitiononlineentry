@@ -23,7 +23,7 @@ if ($setup_free_access == TRUE) {
 		
 	if ($action == "install-db") {
 		
-		$setup_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"> <strong>All database tables and default data have been installed successfully.</strong></div>
+		$setup_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"></span> <strong>All database tables and default data have been installed successfully.</strong></div>
 		<div class=\"alert alert-info\"><strong><span class=\"fa fa-info-circle\"></span> The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
 		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-chevron-right\"><span></a></div>";
 	

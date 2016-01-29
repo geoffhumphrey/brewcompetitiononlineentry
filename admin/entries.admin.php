@@ -261,7 +261,7 @@ if ($action != "print") { ?>
 <?php } // end if ($action != "print")?>
 
 <?php if ($totalRows_log > 0) { ?>
-<table class="table table-responsive table-bordered" id="sortable">
+<table class="table table-responsive table-bordered table-striped" id="sortable">
 <thead>
     <tr>
         <th nowrap>Entry</th>

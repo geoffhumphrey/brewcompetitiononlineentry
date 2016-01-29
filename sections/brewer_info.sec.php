@@ -335,7 +335,7 @@ if (!empty($assignment)) {
 if (in_array("Judge",$assignment_array)) { 
 	$table_body1 .= "<div class=\"row bcoem-account-info hidden-print\">";
     $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>&nbsp;</strong></div>";
-    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>";
 	$table_body1 .= "</div>";
 } // end if (in_array("Judge",$assignment_array)) && ($action != "print"))
 

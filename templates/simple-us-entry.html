@@ -19,46 +19,11 @@
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    
-	<style type="text/css">
-    <!--
-    body 					{ background-color: #ffffff; color: #000000; font-family: Arial; font-size: 10pt; word-spacing: 0.008em; line-height:normal; }
-    table					{ border-collapse: collapse; width: 100%; }
-    table td				{ padding: 2px; }
-    table th				{ padding: 2px; text-align: left; font-weight: bold; border-bottom: 1px solid #000000; }
-    .headerTitle 			{ font-size: 22px; font-weight: bold; margin: 0; padding: 0; }
-    .headerTitleSm 			{ font-size: 12px; font-weight: bold; margin: 0; padding: 0 0 4px 0; }
-    .headerTitleSm h1		{ font-size: 14px; font-weight: bold; font-style: italic; margin: 0; padding: 0 0 4px 0; }
-    .bottle, .medium 		{ font-size: .9em; } 
-    .small 					{ font-size: .7em; margin: 0; } 
-    #printContainer 		{ width: 100%; }
-    .bdr1_thick	 			{ border: 5px solid #000000; }
-    .bdr1B_thick	 		{ border-bottom: 5px solid #000000; }
-    .bdr1B_thick_dotted 	{ border-bottom: 3px dotted #000000; }
-    .bdr1B 					{ border-bottom: 1px solid #000000; }
-    .bdr1L 					{ border-left: 1px solid #000000; }
-    .bdr1R 					{ border-right: 1px solid #000000; }
-    .bdr1T 					{ border-top: 1px solid #000000; }
-    .bdr1R_dashed			{ border-right: 1px dashed #000000; }
-    .bdr1B_dashed			{ border-bottom: 1px dashed #000000; }
-    .headerItalic 		    { font-size: 8px; font-style: italic; }
-    table.small	td			{ padding: 1px 2px 1px 3px; }
-    table.bottleLabel		{ border-collapse: collapse; width: 700px; }
-    table.bottleLabel-inner	{ margin: 15px; width: 325px }
-    table.bottleLabel-inner	td { padding: 5px; text-align: left; }
-    .error 					{ color: #FF0000; font-size: 1em; font-weight: bold; margin: 0 0 1em 0; padding: .5em .5em .5em 1.5em; background-position: center left; background-repeat: no-repeat; }
-    -->
-    </style>
+    <link rel="stylesheet" href="../css/templates.css">
 </head>
 <body>
-<!--
-This is not intended as a complete example. For some more complex usage, see the BJCP
-form.
-More information about Tiny But Strong templating system at
-http://www.tinybutstrong.com/
--->
 <div id="printContainer">
-<a name="labels_top" id="labelsOtop"></a>
+<a name="labels_top" id="labels_top"></a>
 <!-- div for non-print header -->
 <div>
 [onshow;block=div;when [var.action]!='print']

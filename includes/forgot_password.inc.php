@@ -68,26 +68,15 @@ if (($action == "email") && ($id != "default")) {
 
 else {
 $username = $_POST['loginUsername'];
-
-	if (NHC) {
-		// Place NHC SQL calls below
-		
-		
-	}
-	// end if (NHC)
 	
-	else {
+$query_forgot = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$users_db_table,$_POST['loginUsername']);
+$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+$row_forgot = mysql_fetch_assoc($forgot);
+$totalRows_forgot = mysql_num_rows($forgot);
 	
-		$query_forgot = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-		$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-		$row_forgot = mysql_fetch_assoc($forgot);
-		$totalRows_forgot = mysql_num_rows($forgot);
-	
-	}
-
-
-
-if ($totalRows_forgot == 0) { header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); }
+if ($totalRows_forgot == 0) { 
+	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); 
+}
 if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { //if answer is correct
 
 /*

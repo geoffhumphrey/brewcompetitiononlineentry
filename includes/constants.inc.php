@@ -4,7 +4,7 @@
 // The second item is the display name for use in Site Preferences
 // The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
 
-$theme_name = array("default|BCOE&amp;M Default","bruxellensis|Bruxellensis", "claussenii|Claussenii","lambicus|Lambicus");
+$theme_name = array("default|BCOE&amp;M Default", "bruxellensis|Bruxellensis", "claussenii|Claussenii");
 
 // -------------------------- Countries List ---------------------------------------------------
 // Array of countries to utilize when users sign up and for competition info
