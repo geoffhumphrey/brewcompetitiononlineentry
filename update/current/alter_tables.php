@@ -9,13 +9,14 @@
 // Alter Table: Sponsors
 // Adding sponsor enable flag for show/hide sponsor display
 // -----------------------------------------------------------
+if (!check_update("sponsorEnable", $prefix."sponsors")) {
+	$updateSQL0 = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL0);
+	$result0 = mysql_query($updateSQL0, $brewing); 
 
-$updateSQL0 = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL0);
-$result0 = mysql_query($updateSQL0, $brewing); 
-
-$output .=  "<li>Sponsors table altered successfully.</li>";
+	$output .=  "<li>Sponsors table altered successfully.</li>";
+}
 
 // -----------------------------------------------------------
 // Alter Table: Contest Info
@@ -23,20 +24,45 @@ $output .=  "<li>Sponsors table altered successfully.</li>";
 // Add checkin password for future QR code functionality/portal
 // -----------------------------------------------------------
 
-$updateSQL1 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactName` `contestShippingOpen` VARCHAR(255) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL1);
-$result1 = mysql_query($updateSQL1, $brewing); 
+; 
 
-$updateSQL2 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactEmail` `contestShippingDeadline` VARCHAR(255) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL2);
-$result2 = mysql_query($updateSQL2, $brewing); 
+if (!check_update("contestShippingOpen", $prefix."contest_info")) {
+	$updateSQL1 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactName` `contestShippingOpen` VARCHAR(255) NULL DEFAULT NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL1);
+	$result1 = mysql_query($updateSQL1, $brewing); 
+	
+}
+if (!check_update("contestShippingDeadline", $prefix."contest_info")) {
+	$updateSQL2 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactEmail` `contestShippingDeadline` VARCHAR(255) NULL DEFAULT NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL2);
+	$result2 = mysql_query($updateSQL2, $brewing);
+	
+}
 
-$updateSQL3 = "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL3);
-$result3 = mysql_query($updateSQL3, $brewing); 
+if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
+	$updateSQL3 = "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL3);
+	$result3 = mysql_query($updateSQL3, $brewing); 
+	
+}
+
+if (!check_update("contestDropoffOpen", $prefix."contest_info")) {
+	$updateSQL4 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestCategories` `contestDropoffOpen` VARCHAR(255) NULL DEFAULT NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL4);
+	$result4 = mysql_query($updateSQL4, $brewing); 
+	
+}
+
+if (!check_update("contestDropoffDeadline", $prefix."contest_info")) {
+	$updateSQL5 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestWinnersComplete` `contestDropoffDeadline` VARCHAR(255) NULL DEFAULT NULL;";
+	mysql_select_db($database, $brewing);
+	mysql_real_escape_string($updateSQL5);
+	$result5 = mysql_query($updateSQL5, $brewing);
+}
 
 $output .=  "<li>Competition info table altered successfully.</li>";
 

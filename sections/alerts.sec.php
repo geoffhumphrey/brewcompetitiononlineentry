@@ -114,11 +114,11 @@
 
 <?php if (($logged_in) && ($section == "admin")) { ?>
 
- <?php if ($entries_unconfirmed > 0) { ?>
+ <?php if (($entries_unconfirmed > 0) && ($go == "entries")) { ?>
    		<!-- Unconfirmed entries -->
     	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-exclamation-circle"></span> <strong><?php echo $entries_unconfirmed; ?> Unconfirmed entries are highlighted and denoted with a <span class="fa fa-exclamation-circle-circle text-danger"></span> in the <a class="alert-link" href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries">entries list</a>.</strong> Owners of these entries should be contacted. These entries are not included in fee calculations.
+        	<span class="fa fa-exclamation-circle"></span> <strong>Unconfirmed entries are highlighted and denoted with a <span class="fa fa-exclamation-triangle text-danger"></span> below.</strong> Owners of these entries should be contacted. These entries are not included in fee calculations.
         </div>
    <?php } ?>
 

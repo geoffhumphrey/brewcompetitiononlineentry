@@ -1298,6 +1298,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 
 .navmenu-nav.dropdown-menu { 
 	position:relative;
+	font-size: .9em;
 }
 
 /**  Footer **/

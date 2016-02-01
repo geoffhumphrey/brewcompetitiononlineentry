@@ -126,7 +126,7 @@ echo $primary_links;
 			<div class="input-group">
 				<span class="input-group-addon" id="reset-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="loginUsername" type="text" value="<?php if ($username != "default") echo $username; ?>" autofocus>
+				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" autofocus>
 			</div>
 		</div>
 	</div><!-- Form Group -->

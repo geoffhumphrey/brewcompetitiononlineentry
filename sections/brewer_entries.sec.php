@@ -92,7 +92,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<span class=\"fa fa-exclamation-triangle\"> <strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
+			$warnings .= "<span class=\"fa fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}

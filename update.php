@@ -224,7 +224,7 @@ if (file_exists($filename)) {
 					session_write_close();
 					session_regenerate_id(true);
 						
-					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"> <strong>Update to ".$current_version_display." Complete!</strong></div>";
+					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
 					
 					// -----------------------------------------------------------
 					//  Finish and Clean Up

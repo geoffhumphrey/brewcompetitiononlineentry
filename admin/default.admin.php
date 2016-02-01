@@ -206,9 +206,7 @@
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
-                                        <?php if ($_SESSION['prefsEntryForm'] == "N") { ?>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Via Barcode Scanner</a></li>
-                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -992,7 +990,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?> and Customization<?php } ?><span class="fa fa-cog pull-right"></span></a>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?><span class="fa fa-cog pull-right"></span></a>
                     </h4>
                 </div>
                 <div id="collapsePrefs" class="panel-collapse collapse">

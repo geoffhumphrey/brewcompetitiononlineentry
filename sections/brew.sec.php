@@ -380,7 +380,7 @@ $(document).ready(function()
             	 <input class="form-control" name="brewInfo" id="brewInfo" type="text" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>>
             
             <span id="helpBlock" class="help-block">
-            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong> Click the appropriate number below for detailed information.</p>
+            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong> Click the appropriate number below for entry requirements.</p>
                 <p><strong class="text-danger">Required for categories:</strong> <?php echo $specials; ?>.</p>
                 <p><strong class="text-danger">Use the Brewer&rsquo;s Specifics field below to add information NOT essential to judging your entry.</strong></p>
                 <p>Judges <strong>will not know</strong> the name of your entry. If your specific type, special ingredient(s), classic style, strength (for beer), or color is part of your entry&rsquo;s name, be sure each is specified above.</p>
@@ -405,7 +405,7 @@ $(document).ready(function()
             <input class="form-control" name="brewComments" id="brewComments" type="text" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>">
             <span id="helpBlock" class="help-block">
             	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
-                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong></p>
+                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong> What you specify here will be on the printed pullsheets competition personnel use to retrieve entries for judging.</p>
                 <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
             </span>
         </div>

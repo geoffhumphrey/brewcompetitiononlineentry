@@ -70,7 +70,7 @@ while ($file = readdir($handle)) {
 		$filelist .= "<tr>\n";
 		$filelist .= "<td><a class=\"user_images\" rel=\"group1\" href=\"".$base_url."user_images/$file\" title=\"".$file."\" >".$file."</a></td>\n";
 		$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
-		$filelist .= "<td><a href=\"#\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-trash\"></span></a></td>\n";
+		$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=image&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-trash\"></span></a></td>\n";
 		$filelist .= "</tr>\n";
    }
 }
