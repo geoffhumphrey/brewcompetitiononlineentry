@@ -19,6 +19,15 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	
 	else {
 		
+		if ($go == "image") {
+			$upload_dir = (USER_IMAGES);
+			unlink($upload_dir.$filter);
+			
+			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
+			else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
+			header(sprintf("Location: %s", $deleteGoTo));
+		}
+		
 		if ($go == "judging_scores") {
 			
 			mysql_select_db($database, $brewing);

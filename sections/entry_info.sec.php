@@ -113,9 +113,11 @@ else $page_info2 .= sprintf("<p class=\"lead\">Welcome %s! <small>View your acco
 
 // Entry Window
 $header1_3 .= "<a name=\"entry_window\"></a><h2>Entry Registration</h2>";
-if ($entry_window_open == 0) $page_info3 .= sprintf("<p>You will be able to add your entries to the system beginning <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p><p>Entries will be accepted at our shipping and drop-off locations during this timeframe as well.</p>",$entry_open, $entry_closed);
-elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>You can add your entries to the system today through <strong class=\"text-success\">%s</strong>.</p><p>Entries will be accepted at our shipping and drop-off locations until <strong class=\"text-success\">%s</strong>.</p>", $entry_closed,$entry_closed);
+if ($entry_window_open == 0) $page_info3 .= sprintf("<p>You will be able to add your entries to the system beginning <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$entry_open, $entry_closed);
+elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>You can add your entries to the system today through <strong class=\"text-success\">%s</strong>.</p>",$entry_closed);
 else $page_info3 .= "<p>Entry registration is <strong class=\"text-danger\">closed</strong>.</p>";
+
+
 
 if ($entry_window_open < 2) {
 	
@@ -239,7 +241,7 @@ if (($row_contest_info['contestBottles'] != "") && ($entry_window_open < 2)) {
 // Shipping Locations
 if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
 	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Info</h2>";
-	$page_info10 .= sprintf("<p>Entry bottles accepted at the shipping location %s through %s.</p>",$shipping_open,$shipping_closed);
+	$page_info10 .= sprintf("<p>Entry bottles accepted at our shipping location from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$shipping_open,$shipping_closed);
 	$page_info10 .= "<p>Ship entries to:</p>";
 	$page_info10 .= "<p>";
 	$page_info10 .= $_SESSION['contestShippingName'];
@@ -258,7 +260,7 @@ if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
 if (($totalRows_dropoff > 0) && ($entry_window_open < 2)) {
 	if ($totalRows_dropoff == 1) $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Location</h2>";
 	else $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Locations</h2>";
-	$page_info11 .= sprintf("<p>Entry bottles accepted at drop-off locations %s through %s.</p>",$dropoff_open,$dropoff_closed);
+	$page_info11 .= sprintf("<p>Entry bottles accepted at our drop-off locations from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$dropoff_open,$dropoff_closed);
 	
 	do {
 		$page_info11 .= "<p>";
@@ -339,11 +341,11 @@ echo $page_info6;
 echo $header1_9;
 echo $page_info9;
 
-// Display Drop Off Locations
+// Display Drop Off Locations and Acceptance Dates
 echo $header1_11;
 echo $page_info11;
 
-// Display Shipping Locations
+// Display Shipping Location and Acceptance Dates
 echo $header1_10;
 echo $page_info10;
 

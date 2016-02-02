@@ -31,24 +31,22 @@ function check_update($column_name, $table_name) {
 $update_required = FALSE;
 $setup_success = TRUE;
 
-// For 2.0.0.0 and update is needed
-if (!check_update("sponsorEnable", $prefix."sponsors")) $update_required = TRUE;
-
 // The following line will need to change with future conversions
 if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) { 
-
+/*  */
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
 	 
 }
-	
+
+// For older versions (pre-1.3.0.0)
 if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
 	
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."update.php";
 	
 }
-	
+
 elseif (MAINT) { 
 
 	$setup_success = FALSE;
@@ -62,6 +60,15 @@ if (check_setup($prefix."system",$database)) {
 	$query_version_check = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
 	$version_check = mysql_query($query_version_check, $brewing) or die(mysql_error());
 	$row_version_check = mysql_fetch_assoc($version_check);
+	
+	// For 2.0.0.0 and update is needed
+	if (!check_update("sponsorEnable", $prefix."sponsors")) {
+		
+		$update_required = TRUE;
+		$setup_success = FALSE;
+		$setup_relocate = "Location: ".$base_url."update.php";
+		
+	}
 		
 	if ($row_version_check['version'] != $current_version) {
 		
@@ -70,7 +77,7 @@ if (check_setup($prefix."system",$database)) {
 			
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
-
+			
 		}
 		
 		// Change version number in DB only if there is no need to run the update scripts

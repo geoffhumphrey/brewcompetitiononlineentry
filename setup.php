@@ -115,12 +115,6 @@ else {
                     </button>
 					<a class="navbar-brand" href="http://www.brewcompetition.com">BCOE&M</a>
             	</div>
-            	<div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
-                    
-                    <ul class="nav navbar-nav navbar-right">
-                         <li role="presentation" class="text-muted"><a href="http://help.brewcompetition.com">Help</a></li>    
-                    </ul>
-              	</div><!--/.nav-collapse -->
           	</div>
         </nav>
     </div><!-- container -->   
@@ -140,7 +134,6 @@ else {
 			<?php echo $setup_body; ?>
 			<?php 
 			if ($setup_free_access == TRUE) {
-		
 				
 				if (table_exists($prefix."system")) {
 					
@@ -172,7 +165,7 @@ else {
 					</div>
 					<div class="panel-body">
 						<div class="bcoem-sidebar-panel <?php echo $sidebar_status_0; ?>">
-							<strong>Install Data</strong>
+							<strong>Install DB Tables and Data</strong>
 							<span class="<?php echo $sidebar_status_icon_0; ?> pull-right"></span>
 						</div>
 						<div class="bcoem-sidebar-panel <?php echo $sidebar_status_1; ?>">

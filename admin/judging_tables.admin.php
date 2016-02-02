@@ -23,20 +23,20 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 <div class="bcoem-admin-element hidden-print">
 	<?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group" role="group" aria-label="archives">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
 	<?php } ?>
     <?php if ($dbTable == "default") { ?>
 	<?php if (($action != "default") || ($filter != "default")) { ?>
     <!-- Postion 1: View All Button -->
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group" role="group" aria-label="allTables">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
     </div><!-- ./button group -->
     <?php } ?>
     <?php if ($action == "default") { ?>
     <!-- Postion 2: Add Button -->
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group" role="group" aria-label="addTable">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Table</a>
     </div><!-- ./button group -->
     <?php } ?>
@@ -484,12 +484,8 @@ if ($totalRows_tables > 0) { ?>
 				null,
 				null,
 				null,
-				null<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>,
-				null
-				<?php } ?>
-				<?php if (($action != "print") && ($dbTable == "default"))  { ?>,
-				{ "asSorting": [  ] }
-				<?php } ?>
+				null<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>,null<?php } ?>
+				<?php if (($action != "print") && ($dbTable == "default"))  { ?>,{ "asSorting": [  ] }<?php } ?>
 				]
 			} );
 		} );

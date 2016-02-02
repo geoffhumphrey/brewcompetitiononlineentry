@@ -485,7 +485,7 @@ if ($go == "default") { ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerZip" id="brewerZip" type="number" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerZip']; ?>" required>
+				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerZip']; ?>" required>
 				<span class="input-group-addon" id="zip-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>

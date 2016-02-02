@@ -24,6 +24,20 @@ $row_prefs = mysql_fetch_assoc($prefs);
 
 date_default_timezone_set('America/Denver');
 
+function check_update($column_name, $table_name) {
+	
+	require(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	
+	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
+	$log = mysql_query($query_log, $brewing) or die(mysql_error());
+	$row_log_exists = mysql_num_rows($log);
+
+    if ($row_log_exists) return TRUE;
+	else return FALSE;
+
+}
+
 if (HOSTED) {
 	
 	if ($action == "default") {

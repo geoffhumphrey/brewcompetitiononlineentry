@@ -7,8 +7,10 @@
  */
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
+
+
 // Adding and editing allowed
-if ((($registration_open == 1) && ($entry_window_open == 1) && ($comp_entry_limit) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
+if ((($registration_open == 1) && ($entry_window_open == 1) && (!$comp_entry_limit) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
 	
 	// Decalre variables
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
@@ -1092,4 +1094,5 @@ if ($action == "edit") {
 <input type="hidden" name="brewConfirmed" value="1">
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
-<?php }  // end adding and editing allowed (line 52 or so) ?>
+<?php }  // end adding and editing allowed (line 52 or so)
+else echo "<p class=\"lead\">Adding entries has been disabled.</p>"; ?>

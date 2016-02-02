@@ -213,6 +213,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 </ul>
             </li>
 			<?php } ?>
+			<li><a href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue</a></li>
         </ul>
     </div>
 <!-- ./ Admin Push Menu -->

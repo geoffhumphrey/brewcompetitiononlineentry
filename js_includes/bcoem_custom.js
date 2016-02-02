@@ -354,11 +354,11 @@ $(function () {
 			format: 'LT'
 	});
 	
-	$('#judgingDate1').datetimepicker({
+	$('#judgingDate').datetimepicker({
 		format: 'YYYY-MM-DD'
 	});
 	
-	$('#judgingTime1').datetimepicker({
+	$('#judgingTime').datetimepicker({
 		format: 'LT'
 	});
 	

@@ -561,7 +561,7 @@ echo $output_assignment_modals;
 <?php } ?>
 
 <?php } // end if (($action == "default") && (!empty($output_datatables_body)))
-else { 
+elseif (($section != "step5") && ($action == "assign") && ($filter != "default") && (empty($output_datatables_body))) { 
 $output_none = "<p>No participants have been assigned to the ";
 if ($filter == "stewards") $output_none .= "steward pool.</p><p><a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards\" class=\"btn btn-primary\">Assign Stewards</a></p>";
 else $output_none .= "judge pool.</p><p><a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges\" class=\"btn btn-primary\">Assign Judges</a></p>";
@@ -589,30 +589,40 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDate1" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php echo $current_date; ?>" required>
+			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php echo $current_date; ?>" required>
 			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>
 	</div>
 </div><!-- ./Form Group -->
+<script type="text/javascript">
+	$('#judgingDate').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+</script>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="judgingTime" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingTime1" name="judgingTime" type="text" size="10" maxlength="255" value="<?php echo $judging_time; ?>" placeholder="<?php echo $current_time; ?>" required>
+			<input class="form-control" id="judgingTime" name="judgingTime" type="text" size="10" maxlength="255" value="<?php echo $judging_time; ?>" placeholder="<?php echo $current_time; ?>" required>
 			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>
 	</div>
 </div><!-- ./Form Group -->
+<script type="text/javascript">
+	$('#judgingTime').datetimepicker({
+		format: 'LT'
+	});
+</script>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="judgingLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
-			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>
         <span id="helpBlock" class="help-block">Provide the street address, city, and zip/postal code.</span>
@@ -624,7 +634,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingRounds" name="judgingRounds" type="number" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; ?>" placeholder="" required>
-        	<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block with-errors"></span>
 		<span id="helpBlock" class="help-block">Provide the number of judging rounds anticipated for this location (<strong>not</strong> including Best of Show).</span>

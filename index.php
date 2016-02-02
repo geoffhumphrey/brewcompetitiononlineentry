@@ -226,12 +226,12 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 				if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
 				if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
 				if ($section == "register")		include (SECTIONS.'register.sec.php');
-				if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
 				if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
 				if ($section == "login")			include (SECTIONS.'login.sec.php');
 				
 				if ($logged_in) {
 					if ($section == "list") 		include (SECTIONS.'list.sec.php');
+					if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
 					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 					if ($section == "user") 		include (SECTIONS.'user.sec.php');
 					if ($section == "beerxml") 		include (SECTIONS.'beerxml.sec.php');

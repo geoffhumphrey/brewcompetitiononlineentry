@@ -233,7 +233,7 @@ switch($section) {
 	break;
 	
 	case "step0":
-	$header_output = "Set Up: Install Data";
+	$header_output = "Set Up: Install DB Tables and Data";
 	$sidebar_status_0 = "text-danger";
 	$sidebar_status_1 = "text-muted";
 	$sidebar_status_2 = "text-muted";
@@ -615,7 +615,7 @@ switch($section) {
 }
 
 if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated using the method you specified.</strong>";
-if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
+if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"></span> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
 if ($msg == "99") $output = "<strong>Please log in to access your account.</strong>";
