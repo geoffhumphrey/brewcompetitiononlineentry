@@ -147,7 +147,7 @@ Set the base URL of your installation. In most cases the default will be OK.
 
 IF you are installing on a server where you do not have a domain name set up,
 you'll need to replace the $base_url below with something formatted like this:
-$base_url = "http://ipaddressorhostingdomain/~accountname/subdirectoryname/";
+$base_url = "http://hostingdomain/~accountname/subdirectoryname/";
 
 Example:
 $base_url = "http://123.45.678.9/~accountname/bcoem/";
@@ -158,7 +158,7 @@ $base_url = "http://www.yourhost.com/~accountname/bcoem/";
 
 */
 
-$base_url = "http://localhost".$sub_directory."/";
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 
 /*
 ******************************************************************************
