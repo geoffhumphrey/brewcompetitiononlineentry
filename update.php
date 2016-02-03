@@ -174,6 +174,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -184,6 +185,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -193,6 +195,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -201,17 +204,26 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1200") && ($version < "1213")) {
+						if (($version >= "1200") && ($version < "1203")) {
 							include (UPDATE.'1.2.0.3_update.php');
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1213") && ($version < "1300")) {
+						if (($version >= "1203") && ($version < "1210")) {
+							include (UPDATE.'1.2.1.0_update.php');
+							include (UPDATE.'1.3.0.0_update.php');
+							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						if (($version >= "1203") && ($version < "1300")) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
