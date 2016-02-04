@@ -6,7 +6,7 @@ Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 SourceForge: http://sourceforge.net/projects/brewcompetition
 
-Release 2.0.0, January 31, 2016
+Release 2.0.0, February 7, 2016
 
 Developed utilizing the following extensions and functions, with gratitude to their
 respective developers and online communities:
@@ -91,6 +91,7 @@ Complete conversion of the user interface code to leverage the popular Bootstrap
 framework as well as other HTML 5 functions. This version is very mobile friendly!
 
 Details on the official GitHub repository.
+Also check http://www.brewcompetition.com/whats-new.
 
 ***********************************************************************************
 Fallback DB Install

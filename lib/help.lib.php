@@ -250,15 +250,15 @@ function bcoem_help($section,$go,$action,$filter) {
 		$bcoem_help_body .= "<p>This is a comprehensive snapshot of your personal information and entries.</p>";
 		$bcoem_help_body .= "<p>Here, you can view your personal information including name, address, phone number(s), clubs, AHA member number, BJCP ID, BJCP judge rank, judging preferences, and stewarding preferences.</p>";
 		$bcoem_help_body .= "<ul>";
-		$bcoem_help_body .= "<li>Click the &ldquo;Edit My Account&rdquo; button to update your personal information.</li>";
+		$bcoem_help_body .= "<li>Click the &ldquo;Edit Account&rdquo; button to update your personal information.</li>";
 		$bcoem_help_body .= "<li>Click the &ldquo;Change Email&rdquo; button to update your email address. <strong>Note:</strong> your email address is also your user name.</li>";
 		$bcoem_help_body .= "<li>Click the &ldquo;Change Password&rdquo; button to update your account password.</li>";
 		$bcoem_help_body .= "</ul>";
 		$bcoem_help_body .= "<p>At the bottom of the page is your list of entries.</p>";
 		$bcoem_help_body .= "<ul>";
-		$bcoem_help_body .= "<li>Click the printer icon to print the necessary documentation for each entry (bottle labels, etc.).</li>";
-		$bcoem_help_body .= "<li>Click the pencil icon to edit the entry.</li>";
-		$bcoem_help_body .= "<li>Click the trash can icon to delete the entry.</li>";
+		$bcoem_help_body .= "<li>Click the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
+		$bcoem_help_body .= "<li>Click the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
+		$bcoem_help_body .= "<li>Click the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
 		$bcoem_help_body .= "</ul>";
 		$content = TRUE;
 	}
@@ -359,8 +359,12 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_body .= "<li>View all paid or unpaid entries by clicking the &ldquo;View...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Add an entry for any participant by selecting their name in the the &ldquo;Add an Entry For...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Print the list of entries sorted in various ways using the &ldquo;Print Current View...&rdquo; drop-down menu.</li>";
-			$bcoem_help_body .= "<li>Perform global entry-related actions by selecting a function in the &ldquo;Admin Actions...&rdquo; drop-down menu.</li>";$bcoem_help_body .= "<li>Designate entries as paid and/or received by checking the corresponding box for each entry.</li>";
-			$bcoem_help_body .= "<li>Print entry forms for any entry.</li>";
+			$bcoem_help_body .= "<li>Perform global entry-related actions by selecting a function in the &ldquo;Admin Actions...&rdquo; drop-down menu.</li>";
+			$bcoem_help_body .= "<li>Designate entries as paid and/or received by checking the corresponding box for each entry.</li>";
+			$bcoem_help_body .= "<li>Edit the entry by clicking the pencil icon <span class=\"fa fa-pencil\"></span>.</li>";
+			$bcoem_help_body .= "<li>Delete the entry by clicking the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
+			$bcoem_help_body .= "<li>Print entry forms for any entry by clicking the printer icon <span class=\"fa fa-print\"></span>.</li>";
+			$bcoem_help_body .= "<li>Email the participant who added the entry by clicking the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;	
 		}
@@ -377,6 +381,17 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_body .= "<li>Administrators of the BCOE&amp;M installation.</li>";
 			$bcoem_help_body .= "<li>The competition organizer.</li>";
 			$bcoem_help_body .= "<li>Entrants, judges, stewards, or staff.</li>";
+			$bcoem_help_body .= "</ul>";
+			$bcoem_help_body .= "<p>Admins can:</p>";
+			$bcoem_help_body .= "<ul>";
+			$bcoem_help_body .= "<li>Add and entry to the participant&rsquo;s account by clicking the beer stein icon <span class=\"fa fa-beer\"></span>.</li>";
+			$bcoem_help_body .= "<li>Delete the particiapnt&rsquo;s account by clicking the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
+			$bcoem_help_body .= "<li>Change the participant&rsquo;s user level by clicking the lock icon <span class=\"fa fa-lock\"></span>.</li>";
+			$bcoem_help_body .= "<li>Email the participant by clicking the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
+			$bcoem_help_body .= "<li>See the participant&rsquo;s phone number by hovering over the telephone icon <span class=\"fa fa-phone\"></span>.</li>";
+			$bcoem_help_body .= "<li>Change the participant&rsquo;s email address by clicking the user icon <span class=\"fa fa-user\"></span>.</li>";
+			$bcoem_help_body .= "<li>Download the participant&rsquo;s judge scoresheet labels by clicking the one of the page icons <span class=\"fa fa-file\"></span> (Avery 5160 - Letter) or <span class=\"fa fa-file-text\"></span> (Avery 3422 - A4).</li>";
+			$bcoem_help_body .= "<li>Print entry forms for any entry by clicking the printer icon <span class=\"fa fa-print\"></span>.</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;	
 		}
