@@ -10,7 +10,7 @@
 @page  
 { 
     size: auto;   /* auto is the initial value */ 
-	margin: -7mm 7mm 7mm 7mm;  
+	margin: 1.25cm .75cm 1.25cm .75cm; 
 }
 
 @media print {
@@ -27,20 +27,12 @@ html {
 }
 		
 body {
-  	/* 
-	font-family: "Droid Sans", sans-serif;
-	font-weight: 300;
-	font-size: 14px;
-	 */
 	min-height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	/* 
-	font-family: "Open Sans", sans-serif;
-	font-weight: 700;
-	 */
 	margin: 0;
+	page-break-after: avoid;
 }
 
 h1 {
@@ -59,6 +51,10 @@ h2, h2, h3, h4, h5, h6 {
 
 .table {
 	font-size: 12px;	
+}
+
+.table tr {
+	page-break-after: avoid;
 }
 
 /** --------------------------------------------------- **/
