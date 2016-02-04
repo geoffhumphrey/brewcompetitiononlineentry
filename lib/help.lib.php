@@ -391,7 +391,6 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_body .= "<li>See the participant&rsquo;s phone number by hovering over the telephone icon <span class=\"fa fa-phone\"></span>.</li>";
 			$bcoem_help_body .= "<li>Change the participant&rsquo;s email address by clicking the user icon <span class=\"fa fa-user\"></span>.</li>";
 			$bcoem_help_body .= "<li>Download the participant&rsquo;s judge scoresheet labels by clicking the one of the page icons <span class=\"fa fa-file\"></span> (Avery 5160 - Letter) or <span class=\"fa fa-file-text\"></span> (Avery 3422 - A4).</li>";
-			$bcoem_help_body .= "<li>Print entry forms for any entry by clicking the printer icon <span class=\"fa fa-print\"></span>.</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;	
 		}
