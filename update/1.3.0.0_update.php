@@ -609,12 +609,36 @@ if (!NHC) {
 
 
 // -----------------------------------------------------------
+// Data Updates: Users Table
+//   Convert passwords with PasswordHash.
+// -----------------------------------------------------------
+
+
+$query_user_passwords = sprintf("SELECT id,password FROM %s",$users_db_table);
+$user_passwords = mysql_query($query_user_passwords, $brewing);
+$row_user_passwords = mysql_fetch_assoc($user_passwords);
+$totalRows_user_passwords = mysql_num_rows($user_passwords);
+require(CLASSES.'phpass/PasswordHash.php');
+
+do {
+	
+	$password = $row_user_passwords['password'];
+	$hasher = new PasswordHash(8, false);
+	$hash = $hasher->HashPassword($password);
+	
+	$updateSQL = sprintf("UPDATE %s SET password = '%s' WHERE id = '%s'", $users_db_table, $hash, $row_user_passwords['id']);
+	mysql_select_db($database, $brewing); 
+	mysql_real_escape_string($updateSQL);
+	$result = mysql_query($updateSQL, $brewing);
+	
+} while ($row_user_passwords = mysql_fetch_assoc($user_passwords));
+
+
+// -----------------------------------------------------------
 // Data Updates: Brewing Table
 //   Convert brewPaid, brewWinner, and brewReceived to
 //   boolean values.
 // -----------------------------------------------------------
-
-
 
 if ($totalRows_log > 0) {
 

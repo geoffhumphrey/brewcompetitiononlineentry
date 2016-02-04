@@ -57,7 +57,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($_SESSION['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($_SESSION['prefsDisplayWinners'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($_SESSION['prefsDisplayWinners'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
@@ -98,7 +98,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($_SESSION['prefsContact'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($_SESSION['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($_SESSION['prefsContact'] == "N") echo "CHECKED"; ?>/> No
@@ -157,7 +157,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -197,7 +197,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
@@ -272,7 +272,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No
@@ -459,7 +459,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -497,7 +497,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($_SESSION['prefsDateFormat'] == "1") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
+                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($_SESSION['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsDateFormat" value="2" id="prefsDateFormat_1" <?php if ($_SESSION['prefsDateFormat'] == "2") echo "CHECKED"; ?> /> DD/MM/YYYY
@@ -515,7 +515,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($_SESSION['prefsTimeFormat'] == "0") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
+                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($_SESSION['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsTimeFormat" value="1" id="prefsTimeFormat_1" <?php if ($_SESSION['prefsTimeFormat'] == "1") echo "CHECKED"; ?> /> 24 Hour
@@ -578,7 +578,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($_SESSION['prefsTemp'] == "Fahrenheit") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
+                <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($_SESSION['prefsTemp'] == "Fahrenheit") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsTemp" value="Celsius" id="prefsTemp_1" <?php if ($_SESSION['prefsTemp'] == "Celsius") echo "CHECKED"; ?> /> Celsius
@@ -593,7 +593,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($_SESSION['prefsWeight1'] == "ounces") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
+                <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($_SESSION['prefsWeight1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsWeight1" value="grams" id="prefsWeight1_1" <?php if ($_SESSION['prefsWeight1'] == "grams") echo "CHECKED"; ?> /> Grams (gr)
@@ -608,7 +608,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($_SESSION['prefsWeight2'] == "pounds") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
+                <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($_SESSION['prefsWeight2'] == "pounds") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsWeight2" value="kilograms" id="prefsWeight2_1" <?php if ($_SESSION['prefsWeight2'] == "kilograms") echo "CHECKED";  ?> /> Kilograms (kg)
@@ -623,7 +623,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
+                <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> /> Millilitres (ml)
@@ -638,7 +638,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
+                <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> /> Litres (lt)
@@ -706,7 +706,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($_SESSION['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -748,7 +748,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($_SESSION['prefsCash'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($_SESSION['prefsCash'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($_SESSION['prefsCash'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
     </div>
@@ -763,7 +763,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($_SESSION['prefsCheck'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($_SESSION['prefsCheck'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($_SESSION['prefsCheck'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
     </div>
@@ -787,7 +787,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($_SESSION['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($_SESSION['prefsPaypal'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($_SESSION['prefsPaypal'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
     </div>
@@ -836,7 +836,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($_SESSION['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -874,7 +874,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($_SESSION['prefsSponsors'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($_SESSION['prefsSponsors'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if ($_SESSION['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No
@@ -889,7 +889,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($_SESSION['prefsSponsorLogos'] == "Y") echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($_SESSION['prefsSponsorLogos'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
                 <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($_SESSION['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No

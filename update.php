@@ -1,9 +1,7 @@
 <?php 
-
 // -----------------------------------------------------------
 // Version 2.0.0.0
 // -----------------------------------------------------------
-
 $current_version = "2.0.0.0";
 $current_version_display = "2.0.0";
 require('paths.php');
@@ -11,19 +9,14 @@ mysql_select_db($database, $brewing);
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
-
 $section = "update";
-
 $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
 $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
 $row_contest_info = mysql_fetch_assoc($contest_info); 
-
 $query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
-
 date_default_timezone_set('America/Denver');
-
 function check_update($column_name, $table_name) {
 	
 	require(CONFIG.'config.php');	
@@ -32,12 +25,9 @@ function check_update($column_name, $table_name) {
 	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
 	$row_log_exists = mysql_num_rows($log);
-
     if ($row_log_exists) return TRUE;
 	else return FALSE;
-
 }
-
 if (HOSTED) {
 	
 	if ($action == "default") {
@@ -86,20 +76,16 @@ if (HOSTED) {
 	}
 	
 }
-
 $sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
 $filename = $_SERVER['DOCUMENT_ROOT'].$sub_folder."/includes/version.inc.php";
-
 $update_alerts = "";
 $update_body = "";
-
 /* ---- DEBUG ----
 //echo $updateSQL."<br>";
 //echo $updateSQL1."<br>";
 //echo $updateSQL2."<br>";
 //echo $filename;
 */
-
 if (file_exists($filename)) {
 	
 	//require(DB.'archive.db.php'); 
@@ -217,13 +203,14 @@ if (file_exists($filename)) {
 						}
 						
 						if (($version >= "1203") && ($version < "1210")) {
+							
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						if (($version >= "1203") && ($version < "1300")) {
+						if (($version >= "1210") && ($version < "1300")) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'current_update.php');
@@ -303,14 +290,12 @@ if (file_exists($filename)) {
 	}
 } // end if version.inc.php file exists
 else { 
-
     $update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>The update script cannot run.</strong> The version.inc.php file does not exist in the /includes/ directory of your BCOE&amp;M installation.</div>";
 	$update_body .= "<p>Currently your installation's base URL is <strong><?php echo $base_url; ?></strong>. If this is incorrect, you will need to <strong>edit the &#36base_url variable in the config.php file</strong>, located in your installation's /sites/ directory.</p>";
 	$update_body .= "<p><strong>Make sure the version.inc.php file from your <em>previous</em> installation is in your current installation's /includes/ directory.</strong> The update script utilizes this file to determine which database tables to update and install.</p>";
 	$update_body .= "<p>If you do not have the version.inc.php file from your previous version, create a new document locally, name it <em>version.inc.php</em> and copy/paste the following single line of code into the new document. <strong> Don't forget to change the version number!</strong></p>";
 	$update_body .= "<blockquote><pre>&#60;&#63;php &#36;version = \"1.2.0.4\"; &#63;&#62;</pre></blockquote>";
 	$update_body .= "<p>Save the file, upload to your installation's /includes/ directory, and run this script again.</p>";
-
 }
 ?>
 <!DOCTYPE html>
