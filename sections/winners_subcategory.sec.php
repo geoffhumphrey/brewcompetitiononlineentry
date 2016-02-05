@@ -28,7 +28,7 @@ All Public pages have certain variables in common that build the page:
 	$table_bodyX = table body info
 	$messageX = various messages to display
 	
-	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
+	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
 	$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
 	
 Declare all variables empty at the top of the script. Add on later...
@@ -77,12 +77,12 @@ foreach (array_unique($a) as $style) {
 		
 		// Build table headers
 		$table_head1 .= "<tr>";
-		$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
-		$table_head1 .= "<th width=\"25%\">Brewer(s)</th>";
-		$table_head1 .= "<th width=\"25%\">Entry Name</th>";
+		$table_head1 .= "<th nowrap>Place</th>";
+		$table_head1 .= "<th>Brewer(s)</th>";
+		$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
 		$table_head1 .= "<th width=\"25%\">Style</th>";
-		$table_head1 .= "<th>Club</th>";
-		if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
+		$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
+		if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
 		$table_head1 .= "</tr>";
 		
 		// Build table body
@@ -97,41 +97,36 @@ foreach (array_unique($a) as $style) {
 			$table_body1 .= "<tr>";
 			
 			if ($action == "print") { 
-				$table_body1 .= "<td class='data' style='bdr1B'>";
+				$table_body1 .= "<td>";
 				$table_body1 .= display_place($row_scores['scorePlace'],1);
 				$table_body1 .= "</td>";
 			}
 			
 			else {
-				$table_body1 .= "<td class='data'>";
+				$table_body1 .= "<td>";
 				$table_body1 .= display_place($row_scores['scorePlace'],2);
 				$table_body1 .= "</td>";
 			}
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-			else $table_body1 .= "<td class='data'>";
+			$table_body1 .= "<td>";
 			$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
 			if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-			else $table_body1 .= "<td class='data'>";
+			$table_body1 .= "<td>";
 			$table_body1 .= $row_scores['brewName'];
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-			else $table_body1 .= "<td class='data'>";
+			$table_body1 .= "<td>";
 			$table_body1 .= $style.": ".$style_long;
 			$table_body1 .= "</td>";
 			
-			if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-			else $table_body1 .= "<td class='data'>";
+			$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 			$table_body1 .= $row_scores['brewerClubs'];
 			$table_body1 .= "</td>";
 			
 			if ($filter == "scores") { 
-				if ($action == "print") $table_body1 .= "<td class='data' style='bdr1B'>";
-				else $table_body1 .= "<td class='data'>";
+				$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 				$table_body1 .= $row_scores['scoreEntry'];
 				$table_body1 .= "</td>";
 			}
@@ -164,14 +159,16 @@ $random1 .= random_generator(7,2);
 		} );
 	} );
 </script>
-<table class="dataTable" id="sortable<?php echo $random1; ?>">
-<thead>
-	<?php echo $table_head1; ?>
-</thead>
-<tbody>
-	<?php echo $table_body1; ?>
-</tbody>
-</table>
+<div class="bcoem-winner-table">
+    <table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
+    <thead>
+        <?php echo $table_head1; ?>
+    </thead>
+    <tbody>
+        <?php echo $table_body1; ?>
+    </tbody>
+    </table>
+</div>
 <?php 	} 
 	} 
 } 

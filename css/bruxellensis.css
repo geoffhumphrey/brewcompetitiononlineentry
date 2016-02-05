@@ -1397,6 +1397,11 @@ footer .navbar {
 }
 
 /** Sponsors **/
+
+.bcoem-sponsor-container {
+	padding: 15px;
+}
+
 .bcoem-sponsor-name h5 {
 	font-size: 1.15em;
 	padding: 0;
@@ -1427,6 +1432,12 @@ footer .navbar {
 .bcoem-form-accordion h4 {
 	padding: 0;
 	margin: 0;
+}
+
+/* Winner Display */
+
+.bcoem-winner-table {
+	margin-bottom: 45px;	
 }
 
 /** Admin **/

@@ -67,16 +67,16 @@ if ($entry_count > 0) {
 			
 			// Build page headers
 			$header1_1 .= "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3>";
-			$header1_2 .= "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p>";
+			$header1_2 .= "<div class=\"bcoem-winner-table\"><h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p></div>";
 			
 			// Build table headers
 			$table_head1 .= "<tr>";
 			$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
-			$table_head1 .= "<th width=\"25%\">Brewer(s)</th>";
-			$table_head1 .= "<th width=\"25%\">Entry Name</th>";
-			$table_head1 .= "<th width=\"25%\">Style</th>";
-			$table_head1 .= "<th>Club</th>";
-			if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
+			$table_head1 .= "<th>Brewer(s)</th>";
+			$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
+			$table_head1 .= "<th>Style</th>";
+			$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
+			if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
 			$table_head1 .= "</tr>";
 			
 			// Build table body
@@ -99,30 +99,25 @@ if ($entry_count > 0) {
 					$table_body1 .= "</td>";
 				}
 				
-				if ($action == "print") $table_body1 .= "<td>";
-				else $table_body1 .= "<td>";
+				$table_body1 .= "<td>";
 				$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
 				if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 				$table_body1 .= "</td>";
 				
-				if ($action == "print") $table_body1 .= "<td>";
-				else $table_body1 .= "<td>";
+				$table_body1 .= "<td>";
 				$table_body1 .= $row_scores['brewName'];
 				$table_body1 .= "</td>";
 				
-				if ($action == "print") $table_body1 .= "<td>";
-				else $table_body1 .= "<td>";
+				$table_body1 .= "<td>";
 				$table_body1 .= $style.": ".$row_scores['brewStyle'];
 				$table_body1 .= "</td>";
 				
-				if ($action == "print") $table_body1 .= "<td>";
-				else $table_body1 .= "<td>";
+				$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 				$table_body1 .= $row_scores['brewerClubs'];
 				$table_body1 .= "</td>";
 				
 				if ($filter == "scores") { 
-					if ($action == "print") $table_body1 .= "<td>";
-					else $table_body1 .= "<td>";
+					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 					$table_body1 .= $row_scores['scoreEntry'];
 					$table_body1 .= "</td>";
 				}
@@ -162,15 +157,17 @@ $random1 .= random_generator(7,2);
 		} );
 	} );
 </script>
-<?php echo $header1_1; ?>
-<table class="table table-responsive table-striped table-bordered table-responsive" id="sortable<?php echo $random1; ?>">
-<thead>
-	<?php echo $table_head1; ?>
-</thead>
-<tbody>
-	<?php echo $table_body1; ?>
-</tbody>
-</table>
+<div class="bcoem-winner-table">
+	<?php echo $header1_1; ?>
+    <table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
+    <thead>
+        <?php echo $table_head1; ?>
+    </thead>
+    <tbody>
+        <?php echo $table_body1; ?>
+    </tbody>
+    </table>
+</div>
 <?php 
 		} else echo $header1_2;
 	} // end if ($entry_count > 0);
