@@ -4,6 +4,19 @@ $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
 if ($prefix != "") $prefix_session = md5(rtrim($prefix,"_"));
 else $prefix_session = md5("BCOEM12345");
+
+/*
+// For 2.1.0, must be defined before session_start();
+// -------------- Set unique session name by using the server document root ----------------
+// Use server document root (since all pages are served by index.php) and remove slashes
+$session_name = str_replace("/","",$_SERVER['DOCUMENT_ROOT']);
+// Obfuscate with md5
+$session_name = md5($session_name);
+
+// Set the session name
+session_name($session_name);
+*/
+
 session_start();
 
 if (NHC) {
@@ -276,25 +289,4 @@ else {
 	}
 
 } // end else
-
-
-/*
----- DEPRECATED for now ----
-// Go about setting a unique name for the session. Using the competition name since it's unique to every competition.
-$query_session_name = sprintf("SELECT contestName FROM %s WHERE id=1", $prefix."contest_info");
-$session_name = mysql_query($query_session_name, $brewing) or die(mysql_error());
-$row_session_name = mysql_fetch_assoc($session_name);
-
-// Remove spaces and obfuscate with md5
-$session_name = str_replace(" ", "", $row_session_name['contestName']);
-$session_name_check = md5($session_name);
-$session_name = md5($session_name);
-
-// Set the session name
-session_name();
-
-session_name($session_name);
-//$session_name = session_name($session_name);
-*/
-
 ?>

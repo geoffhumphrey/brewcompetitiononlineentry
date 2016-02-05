@@ -254,7 +254,7 @@ if ($section != "admin") {
 	// --------------------------------------------------------------
 	if ((($_SESSION['contestLogo'] != "") && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) echo $competition_logo;
 	echo $page_info;
-	include(INCLUDES.'mods_sidebar_top.inc.php');
+	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_top.inc.php');
 	echo $header1_100;
 	echo $page_info100;
 	echo $header1_200;
@@ -265,7 +265,7 @@ if ($section != "admin") {
 	echo $page_info500;
 	echo $header1_400;
 	echo $page_info400;
-	include(INCLUDES.'mods_sidebar_bottom.inc.php');
+	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_bottom.inc.php');
 }
 
 
