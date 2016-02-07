@@ -50,7 +50,7 @@ $currency_code = $currency[1];
 $total_entries = $totalRows_entry_count;
 if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
 if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
-if ((!empty($row_limits['prefsEntryLimit'])) && ($total_entries > $comp_entry_limit_near)) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
+if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
 $current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date");
 $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time");

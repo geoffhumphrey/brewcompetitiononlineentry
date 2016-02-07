@@ -69,7 +69,7 @@ $currency_code = $currency[1];
     <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP ID</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="contestID" name="contestID" type="text" value="" placeholder="">
+        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestID']; ?>" placeholder="">
     </div>
 </div><!-- ./Form Group -->
 

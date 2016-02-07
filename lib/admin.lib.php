@@ -11,18 +11,8 @@ function directory_contents_dropdown($directory,$file_name_selected) {
 	$filelist[] = "";
 	
 	while ($file = readdir($handle)) {
-		
-		$filetype_ok = FALSE;
-		
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-    	$mime_type = finfo_file($finfo, $directory.$file);
-		switch ($mime_type) {
-			case "image/jpeg": $filetype_ok = TRUE; break;
-			case "image/png":  $filetype_ok = TRUE; break;
-			case "image/gif":  $filetype_ok = TRUE; break;
-		}
-		
-	   if ((!is_dir($file)) && (!is_link($file)) && ($filetype_ok)) {
+	   
+	   if ((!is_dir($file)) && (!is_link($file))) {
 			$filelist[] .= $file;
 	   }
 	   

@@ -28,7 +28,8 @@
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Edit</a></li>
-                                    </ul>
+										<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
+									</ul>
                                 </div>
                             </div><!-- ./row -->
                         

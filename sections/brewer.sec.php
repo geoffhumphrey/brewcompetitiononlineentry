@@ -17,15 +17,14 @@ if ($section != "step2") {
 include(DB.'brewer.db.php');
 include (DB.'dropoff.db.php');
 
-if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
+
+$phone1 = $row_brewer['brewerPhone1'];
+$phone2 = $row_brewer['brewerPhone2'];
 
 if ($us_phone) { 
-    $phone1 = format_phone_us($_SESSION['brewerPhone1']);
-    $phone2 = format_phone_us($_SESSION['brewerPhone2']); 
-}
-else { 
-    $phone1 = $_SESSION['brewerPhone1'];
-    $phone2 = $_SESSION['brewerPhone2']; 
+    $phone1 = format_phone_us($phone1);
+    $phone2 = format_phone_us($phone2); 
 }
 
 // Get table assignments and build flags
@@ -49,14 +48,9 @@ else {
    // if ($table_assignment) $form_action .= "&amp;view=assigned";
 	if ($action == "edit") $form_action .= "&amp;id=".$row_brewer['id'];
 }
-
-// Define phone number configuration
-if (($section != "step2") && ($row_brewer['brewerCountry'] == "United States")) $us_phone = TRUE; else $us_phone = FALSE;
-
-
 if ($go != "admin") echo $info_msg;
 ?>
-
+<!-- Checking if correct page -->
 <form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
@@ -139,7 +133,7 @@ if ($go != "admin") echo $info_msg;
         </select>
         </div>
     </div><!-- ./Form Group -->
-
+	<!-- Is phone number wrong? -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerPhone1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Phone 1</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
