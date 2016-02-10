@@ -8,9 +8,33 @@
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
 
+$add_entry_disable = FALSE;
+$edit_entry_disable = FALSE;
 
-// Adding and editing allowed
-if ((($registration_open == 1) && ($entry_window_open == 1) && (!$comp_entry_limit) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
+// Adding an entry not allowed conditionals for non-admins
+if ($action == "add") {
+	
+	// Registration and entry windows open; comp entry limit reached
+	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
+	
+	// Registration closed and entry window open; comp entry limit reached
+	elseif (($registration_open == 0) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
+	
+}
+
+// Registration and entry not open
+if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLevel'] == 2)) { 
+	$add_entry_disable = TRUE;
+	$edit_entry_disable = TRUE; 
+}
+
+// Registration and entry windows closed
+if (($registration_open == 2) && ($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) { 
+	$add_entry_disable = TRUE;
+	$edit_entry_disable = TRUE; 
+}
+
+if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)) || ($_SESSION['userLevel'] <= 1)) {
 	
 	// Decalre variables
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
@@ -1095,4 +1119,9 @@ if ($action == "edit") {
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
 <?php }  // end adding and editing allowed (line 52 or so)
-else echo "<p class=\"lead\">Adding entries has been disabled.</p>"; ?>
+else {
+	
+if (($add_entry_disable) && ($edit_entry_disable))  echo "<p class=\"lead\">Adding and edting of entries is not available.</p>"; 
+if (($add_entry_disable) && (!$edit_entry_disable))  echo "<p class=\"lead\">Adding entries is not available.</p>";
+	 
+} ?>
