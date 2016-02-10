@@ -49,11 +49,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			//echo $updateSQL."<br>";
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
-			//$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-			echo $updateSQL;
+			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			//echo $updateSQL;
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-			//header(sprintf("Location: %s", stripslashes($updateGoTo)));			
+			header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 		}
 	} // end else NHC
 } else echo "<p>Not available.</p>";?>
