@@ -140,134 +140,6 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 	
 ?>
-<!-- Load Show/Hide Configuration -->
-<script type="text/javascript">//<![CDATA[
-$(document).ready(function() {
-	<?php if ($action == "add") { ?>
-		$("#special").hide("fast");
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
-	<?php } // end if ($action == "add") ?>
-	<?php if ($action == "edit") { ?>			   
-		<?php if (!in_array($view,$all_special_ing_styles)) { ?>
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_beer)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$cider)) { ?>
-			$("#special").hide("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_mead)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").show("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_cider)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").hide("fast");
-		<?php } // end if ($action == "edit") ?>
-	<?php } ?>
-	$("#type").change(function() {
-		<?php if ($action == "add") { ?>
-	 	$("#special").hide("fast");
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
-		<?php } ?>
-		if ( 
-			$("#type").val() == "99999-A"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		}
-		<?php foreach ($cider as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead-cider").show("fast");
-			
-		}
-		<?php } ?>
-		
-		<?php foreach ($mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-			
-		}
-		<?php } ?>
-		
-		<?php foreach ($special_mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#special").show("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		
-		<?php foreach ($strength_mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		
-		
-		
-		<?php foreach ($special_cider as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0");?>"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		
-		<?php foreach ($special_beer as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-			$("#special").show("fast");
-		}
-		<?php } ?>
-		
-		else{
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-			
-		}	
-	}
-	);
-}
-);
-</script>
-
 <!-- Load JS Character Counter -->
 <script type="text/javascript">
 // Based upon http://www.9lessons.info/2010/04/live-character-count-meter-with-jquery.html
@@ -1118,6 +990,183 @@ if ($action == "edit") {
 <input type="hidden" name="brewConfirmed" value="1">
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
+<!-- Load Show/Hide Configuration -->
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+	<?php if ($action == "add") { ?>
+		$("#special").hide("fast");
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+	<?php } // end if ($action == "add") ?>
+	<?php if ($action == "edit") { ?>			   
+		<?php if (!in_array($view,$all_special_ing_styles)) { ?>
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+		<?php } ?>
+		<?php if (in_array($view,$special_beer)) { ?>
+			$("#special").show("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+		<?php } ?>
+		<?php if (in_array($view,$cider)) { ?>
+			$("#special").hide("fast");
+			$("#mead-cider").show("fast");
+			$("#mead").hide("fast");
+		<?php } ?>
+		<?php if (in_array($view,$special_mead)) { ?>
+			$("#special").show("fast");
+			$("#mead-cider").show("fast");
+			$("#mead").show("fast");
+		<?php } ?>
+		<?php if (in_array($view,$special_cider)) { ?>
+			$("#special").show("fast");
+			$("#mead-cider").show("fast");
+			$("#mead").hide("fast");
+		<?php } // end if ($action == "edit") ?>
+	<?php } ?>
+	$("#type").change(function() {
+		<?php if ($action == "add") { ?>
+	 	$("#special").hide("fast");
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+		<?php } ?>
+		if ( 
+			$("#type").val() == "99999-A"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+		}
+		<?php foreach ($cider as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead-cider").show("fast");
+			
+		}
+		<?php } ?>
+		
+		<?php foreach ($mead as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").show("fast");
+			$("#mead-cider").show("fast");
+			
+		}
+		<?php } ?>
+		
+		<?php foreach ($special_mead as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#special").show("fast");
+			$("#mead").show("fast");
+			$("#mead-cider").show("fast");
+		}
+		<?php } ?>
+		
+		<?php foreach ($strength_mead as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").show("fast");
+			$("#mead-cider").show("fast");
+		}
+		<?php } ?>
+		<?php foreach ($special_cider as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0");?>"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+			$("#special").show("fast");
+			$("#mead-cider").show("fast");
+		}
+		<?php } ?>
+		
+		<?php foreach ($special_beer as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+			$("#special").show("fast");
+		}
+		<?php } ?>
+		
+		else{
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+			
+		}
+	}
+	);
+}
+);
+
+<?php if ($action == "edit") { ?>
+
+	
+	
+	<?php if (in_array($view,$cider)) { ?>
+	$(document).ready(function() {
+		$("#special").hide("fast");
+		$("#mead").hide("fast");
+		$("#mead-cider").show("fast");
+	});
+	<?php } ?>
+	
+	<?php if (in_array($view,$mead)) { ?>
+	$(document).ready(function() {
+		$("#special").hide("fast");
+		$("#mead-cider").show("fast");
+		$("#mead").show("fast");
+	});
+	<?php } ?>
+	
+	<?php if (in_array($view,$special_mead)) { ?>
+	$(document).ready(function() {
+		$("#special").show("fast");
+		$("#mead").show("fast");
+		$("#mead-cider").show("fast");
+	});
+	<?php } ?>
+	
+	<?php if (in_array($view,$strength_mead)) { ?>
+	$(document).ready(function() {
+		$("#mead").show("fast");
+		$("#mead-cider").show("fast");
+	});
+	<?php } ?>
+	
+	<?php if (in_array($view,$special_beer)) { ?>
+	$(document).ready(function() {
+		$("#special").show("fast");
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+	});
+	<?php } ?>
+	<?php if (in_array($view,$special_cider)) { ?>
+	$(document).ready(function() {
+		$("#special").show("fast");
+		$("#mead-cider").show("fast");
+		$("#mead").hide("fast");
+	});
+	<?php } ?>
+
+	
+<?php } ?>
+</script>
 <?php }  // end adding and editing allowed (line 52 or so)
 else {
 	
