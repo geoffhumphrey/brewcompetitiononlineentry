@@ -18,7 +18,7 @@ if ($action == "add") {
 	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
 	
 	// Registration closed and entry window open; comp entry limit reached
-	elseif (($registration_open == 0) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
+	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
 	
 }
 

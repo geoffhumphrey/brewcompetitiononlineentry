@@ -269,8 +269,24 @@ do {
 	}
 	
 	$output_datatables_body .= "<td class=\"".$output_hide_print."\">";
-	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_body .= judge_steward_availability($locations,1); else $output_datatables_body .= $row_brewer['brewerClubs'];
-	//else $output_datatables_body .= "&nbsp;";
+	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) {
+		if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+		if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
+		$a = explode(",",$exploder);
+		$output = "";
+		if ($exploder != "") { 
+			sort($a);
+			foreach ($a as $value) {
+				if ($value != "") {
+					$b = substr($value, 2);
+					$output .= judging_location_avail($b,$value);
+					}
+				}
+			}
+		$output = rtrim($output,"<br>");
+		$output_datatables_body .= $output; 
+	}	
+	else $output_datatables_body .= $row_brewer['brewerClubs'];
 	$output_datatables_body .= "</td>";
 	
 	if ($filter == "default") {
