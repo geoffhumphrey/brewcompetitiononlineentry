@@ -129,7 +129,7 @@ if ($entry_count > 0) {
 
 
 $random1 = "";	
-$random1 .= random_generator(7,2);
+$random1 .= random_generator(12,1);
 
 
 // --------------------------------------------------------------

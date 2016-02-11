@@ -130,7 +130,7 @@ foreach (array_unique($a) as $style) {
 		 
 		
 $random1 = "";	
-$random1 .= random_generator(7,2);
+$random1 .= random_generator(12,1);
 		 
 // --------------------------------------------------------------
 // Display
