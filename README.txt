@@ -6,7 +6,7 @@ Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 SourceForge: http://sourceforge.net/projects/brewcompetition
 
-Release 2.0.0, February 7, 2016
+Release 2.0.1, February 15, 2016
 
 Developed utilizing the following extensions and functions, with gratitude to their
 respective developers and online communities:
@@ -87,11 +87,8 @@ BCOE&M is free and open-source.
 ***********************************************************************************
 Changes in This Version
 ***********************************************************************************
-Complete conversion of the user interface code to leverage the popular Bootstrap 3
-framework as well as other HTML 5 functions. This version is very mobile friendly!
-
-Details on the official GitHub repository.
-Also check http://www.brewcompetition.com/whats-new.
+Details on the official GitHub repository (see link above).
+Also check http://www.brewcompetition.com/change-log.
 
 ***********************************************************************************
 Fallback DB Install

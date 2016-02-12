@@ -61,7 +61,11 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysql_query($query_version_check, $brewing) or die(mysql_error());
 	$row_version_check = mysql_fetch_assoc($version_check);
 	
-	// For 2.0.0.0 and update is needed
+	// For 2.0.1.0 and update is NOT needed, commenting out the next few lines
+	
+	/*
+	// For updating to 2.0.0, check if "sponsorEnable" column is in the sponsors table
+	// If so, run the update
 	if (!check_update("sponsorEnable", $prefix."sponsors")) {
 		
 		$update_required = TRUE;
@@ -69,6 +73,7 @@ if (check_setup($prefix."system",$database)) {
 		$setup_relocate = "Location: ".$base_url."update.php";
 		
 	}
+	*/
 		
 	if ($row_version_check['version'] != $current_version) {
 		
@@ -83,7 +88,7 @@ if (check_setup($prefix."system",$database)) {
 		// Change version number in DB only if there is no need to run the update scripts
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-01-31");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-02-15");
 			mysql_select_db($database, $brewing);
 			mysql_real_escape_string($updateSQL);
 			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());

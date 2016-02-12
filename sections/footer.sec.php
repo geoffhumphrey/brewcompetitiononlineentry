@@ -5,7 +5,7 @@
  * 
  */
 $footer = "";
-$current_version = "2.0.0";
+$current_version = "2.0.1";
 if(!empty($_SESSION['contestName'])) $footer .= $_SESSION['contestName']." &ndash; ";
 $footer .= "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ";
 if (HOSTED) $footer .= $current_version." Hosted Edition";

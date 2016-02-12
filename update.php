@@ -2,8 +2,8 @@
 // -----------------------------------------------------------
 // Version 2.0.0.0
 // -----------------------------------------------------------
-$current_version = "2.0.0.0";
-$current_version_display = "2.0.0";
+$current_version = "2.0.1.0";
+$current_version_display = "2.0.1";
 require('paths.php');
 mysql_select_db($database, $brewing);
 require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
@@ -223,7 +223,7 @@ if (file_exists($filename)) {
 						
 						// Last version to have a db update was 1.3.2.0
 						// If current version is 1.3.2.0, only perform the 2.0.0.0 update
-						if ($version >= "1320")   {
+						if (($version >= "1320") && ($version < "2000"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

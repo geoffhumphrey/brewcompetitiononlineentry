@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 01.19.2016 for Version 2.0.0
+-- UPDATED 01.19.2016 for Version 2.0.X
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -1023,7 +1023,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.0.0', '2016-01-31', '2016-01-31 00:01:01', 1);
+(1, '2.0.1.0', '2016-02-15', '2016-01-31 00:01:01', 1);
 
 
 DROP TABLE IF EXISTS `baseline_users`;

@@ -9,7 +9,7 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 include(DB.'mods.db.php');
 
-// Remove the following after 2.0.0 release (for those using committed code pre-release)
+// Remove the following after 2.0.X release (for those using committed code pre-release)
 if (!check_update("sponsorEnable", $prefix."sponsors")) {
 	include (UPDATE.'current_update.php');
 }

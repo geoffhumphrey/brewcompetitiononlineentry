@@ -30,7 +30,7 @@ http://www.codediesel.com/security/integrating-googles-new-nocaptcha-recaptcha-i
 
 // Define the current version
 
-$current_version = "2.0.0.0";
+$current_version = "2.0.1.0";
 
 // --------------------------------------------------------
 

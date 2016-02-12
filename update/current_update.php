@@ -1,8 +1,7 @@
 <?php 
 // -----------------------------------------------------------
-// Version 2.0.0.0
-// This version has a DB update.
-// If version is below 2.0.0.0, the following will run.
+// If version is below 2.0.0, the following will run.
+// 2.0.0 was the last version with table/data updates.
 // -----------------------------------------------------------
 
 $output .= "<h4>Version ".$current_version."...</h4>";
@@ -14,7 +13,7 @@ $output .= "<ul>";
 // Create Needed Tables
 // -----------------------------------------------------------
 
-// Not needed for 2.0.0.0
+// Not needed for 2.0.0
 // include ('current/create_tables.php'); 
 
 // -----------------------------------------------------------
