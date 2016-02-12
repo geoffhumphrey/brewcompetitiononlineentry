@@ -47,7 +47,7 @@ else {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Update to BCOE&amp;M <?php echo $current_version; ?></title>
+        <title>Setup BCOE&amp;M <?php echo $current_version; ?></title>
         
 		<!-- Load jQuery / http://jquery.com/ -->
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>

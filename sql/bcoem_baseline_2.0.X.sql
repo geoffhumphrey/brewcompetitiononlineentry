@@ -720,6 +720,7 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
   `sponsorText` text,
   `sponsorLocation` text,
   `sponsorLevel` tinyint(1) DEFAULT NULL,
+  `sponsorEnable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
