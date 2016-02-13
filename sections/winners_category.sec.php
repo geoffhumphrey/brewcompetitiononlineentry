@@ -72,7 +72,7 @@ foreach (array_unique($a) as $style) {
 		
 		// Build table headers
 		$table_head1 .= "<tr>";
-		$table_head1 .= "<thnowrap>Place</th>";
+		$table_head1 .= "<th nowrap>Place</th>";
 		$table_head1 .= "<th>Brewer(s)</th>";
 		$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
 		$table_head1 .= "<th>Style</th>";
