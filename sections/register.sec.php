@@ -187,7 +187,7 @@ if ($go == "default") { ?>
 		<label for="judge_steward" class="col-lg-5 col-md-6 col-sm-6 col-xs-12 control-label">Are You Registering as a Judge or Steward?</label>
 		<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12">
 			<div class="input-group">
-				<select class="selectpicker" name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)">
+				<select class="selectpicker" name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)" data-width="auto">
 					<option value=""></option>
 					<option value="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Yes</option>
 					<option value="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>">No</option>
@@ -495,7 +495,7 @@ if ($go == "default") { ?>
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Country</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
 		<!-- Input Here -->
-		<select class="selectpicker" name="brewerCountry" id="brewerCountry">
+		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto">
     		<?php echo $country_select; ?>
     	</select>
 		</div>
@@ -504,7 +504,7 @@ if ($go == "default") { ?>
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-off Location</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
 			<!-- Input Here -->
-			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff">
+			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="auto">
 				<option value="0">I'm Shipping My Entries</option> 
 				<option disabled="disabled">-------------</option>
 				<?php echo $dropoff_select; ?>
@@ -583,7 +583,7 @@ if ($go == "default") { ?>
 			<p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
-				<select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation">
+				<select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
                     <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
                     <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
                 </select>
@@ -621,7 +621,7 @@ if ($go == "default") { ?>
 			<p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
-				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation">
+				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
 					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
 					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
 				</select>

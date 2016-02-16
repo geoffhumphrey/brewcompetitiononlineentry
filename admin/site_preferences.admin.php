@@ -137,7 +137,7 @@ $(document).ready(function(){
 	<label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
 	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsTheme" id="prefsTheme">
+	<select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
 		<?php foreach ($theme_name as $theme) { 
 			$themes = explode("|",$theme);
 		?>
@@ -228,7 +228,7 @@ $(document).ready(function(){
 	<label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Form</label>
 	<div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm">
+	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="10" data-width="auto">
 		<option value="B" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
         <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official - Bottle Label Only</option>
         <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />BJCP Official With Barcode</option>
@@ -310,7 +310,7 @@ $(document).ready(function(){
 	<label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Special Ingredients</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit">
+	<select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit" data-size="10" data-width="auto">
 		<?php for ($i=25; $i <= 255; $i+=5) { ?>
     	<option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "50")) echo "SELECTED"; elseif ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
@@ -356,7 +356,7 @@ $(document).ready(function(){
 	<label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsUserEntryLimit" id="prefsUserEntryLimit">
+	<select class="selectpicker" name="prefsUserEntryLimit" id="prefsUserEntryLimit" data-size="10" data-width="auto">
 		<option value="" rel="none" <?php ($row_limits['prefsUserEntryLimit'] == ""); echo "SELECTED"; ?>></option>
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserEntryLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
@@ -370,7 +370,7 @@ $(document).ready(function(){
 	<label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Sub-Style</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit">
+	<select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit" data-size="10" data-width="auto">
 		<option value="" <?php ($row_limits['prefsUserSubCatLimit'] == ""); echo "SELECTED"; ?>></option>
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserSubCatLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
@@ -404,7 +404,7 @@ $(document).ready(function(){
 		<label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit For <em>Excepted</em> Sub-Styles</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-		<select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit">
+		<select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
 			<option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
 			<?php for ($i=1; $i <= 100; $i++) { ?>
 			<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
@@ -528,7 +528,7 @@ $(document).ready(function(){
 	<label for="prefsTimeZone" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Zone</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-		<select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone">
+		<select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone" data-live-search="true" data-size="10" data-width="auto">
 			<option value="-12.000" <?php if ($_SESSION['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein</option>
 			<option value="-11.000" <?php if ($_SESSION['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
 			<option value="-10.000" <?php if ($_SESSION['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
@@ -652,7 +652,7 @@ $(document).ready(function(){
 	<label for="prefsCurrency" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Currency</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-		<select class="selectpicker" name="prefsCurrency" id="prefsCurrency">
+		<select class="selectpicker" name="prefsCurrency" id="prefsCurrency" data-live-search="true" data-size="10" data-width="auto">
 			<?php 
 				$currency = currency_info($_SESSION['prefsCurrency'],2);
 				$currency_dropdown = "";

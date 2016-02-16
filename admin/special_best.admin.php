@@ -144,7 +144,7 @@
 	<label for="sbi_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rank</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" data-width="auto"  name="sbi_rank" id="sbi_rank">
+	<select class="selectpicker" data-width="auto"  name="sbi_rank" id="sbi_rank" data-size="10" data-width="auto">
 		<?php for($i=1; $i<=20; $i++) { ?>
 		<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>

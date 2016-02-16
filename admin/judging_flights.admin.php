@@ -34,7 +34,7 @@ if ($totalRows_tables > 0) {
 		<label for="table_choice" class="col-sm-2 control-label">Choose a Table</label>
 		<div class="col-sm-4">
 		<!-- Input Here -->
-		<select class="selectpicker" name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)">
+		<select class="selectpicker" name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)" data-width="auto">
 			<option value=""></option>
 				<?php do { 
 				
@@ -244,7 +244,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 			<label for="table_choice" class="col-sm-2 control-label">Assign <?php if ($_SESSION['jPrefsQueued'] == "N") echo "Flight $i"; else echo "Table"; ?> to:</label>
 			<div class="col-sm-3">
 			<!-- Input Here -->
-			<select class="selectpicker" name="flightRound<?php echo $random ?>" id="flightRound<?php echo $random ?>">
+			<select class="selectpicker" name="flightRound<?php echo $random ?>" id="flightRound<?php echo $random ?>" data-width="auto">
 				<option value="" disabled selected>Choose Below...</option>
 				<?php for($r=1; $r<$row_table_location['judgingRounds']+1; $r++) { ?>
 				<option value="<?php echo $r; ?>" <?php if ($flight_round_number == $r) echo "selected"; ?>>Round <?php echo $r; ?></option>

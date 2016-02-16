@@ -205,7 +205,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                             	<div class="row">
                                 	<div class="col col-lg-8 col-md-12 col-sm-12 col-xs-12">
                                      <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)">
+                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
                                         <option value="" selected disabled>For Table...</option>
                                          <?php do { 
 													$flight_count = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
@@ -273,7 +273,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                                 </ul>
                             	<div class="row">
                                 	<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)">
+                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
                                         <option value="" selected disabled>For Table...</option>
                                             <?php do { $score_count = table_count_total($row_tables_edit_2['id']); ?>
                                             <option value="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($score_count  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "#".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></option>
@@ -588,7 +588,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <label for="tableNumber" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="tableNumber" id="tableNumber">
+        <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<50+1; $i++) { ?>
     		<option value="<?php echo $i; ?>" <?php if (in_array($i,$a)) echo "DISABLED"; if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
@@ -600,7 +600,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <label for="tableLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="tableLocation" id="tableLocation">
+        <select class="selectpicker" name="tableLocation" id="tableLocation" data-size="10" data-width="auto">
             <?php do { ?>
           	<option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
           	<?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
@@ -695,7 +695,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <label for="tableNumber" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="tableNumber" id="tableNumber">
+        <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<150+1; $i++) { ?>
     		<option value="<?php echo $i; ?>" <?php if ($row_tables_edit['tableNumber'] == $i) echo "selected"; elseif (in_array($i,$a)) echo "disabled"; ?>><?php echo $i; ?></option>
         	<?php } ?>
@@ -707,7 +707,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <label for="tableLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="tableLocation" id="tableLocation">
+        <select class="selectpicker" name="tableLocation" id="tableLocation" data-size="10" data-width="auto">
             <?php do { ?>
           		<option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
           <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
@@ -784,7 +784,7 @@ if ($already_scored) {
         <label for="assign_judges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Assign Judges To</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)">
+        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)" data-live-search="true" data-size="10" data-width="auto">
             <option value="" disabled selected>Choose Below...</option>
             <?php do { ?>
             <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
@@ -797,7 +797,7 @@ if ($already_scored) {
         <label for="assign_judges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Assign Stewards To</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)">
+        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)" data-live-search="true" data-size="10" data-width="auto">
             <option value="" disabled selected>Choose Below...</option>
             <?php do { ?>
             <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&amp;id=<?php echo $row_tables_edit['id']; ?>"><?php echo "Table ".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
