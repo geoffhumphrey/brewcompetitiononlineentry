@@ -114,7 +114,7 @@ if ($action == "default") { ?>
 	<label for="sponsorLevel" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Level</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="sponsorLevel" id="sponsorLevel">
+	<select class="selectpicker" name="sponsorLevel" id="sponsorLevel" data-width="auto">
     	<option value="1" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "1")) echo " SELECTED"; ?>>1</option>
         <option value="2" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "2")) echo " SELECTED"; ?>>2</option>
         <option value="3" <?php if (($action == "edit") && ($row_sponsors['sponsorLevel'] == "3")) echo " SELECTED"; ?>>3</option>
@@ -143,7 +143,7 @@ if ($action == "default") { ?>
 	$empty = is_dir_empty($directory); 
 	
 	if (!$empty) { ?>
-    <select class="selectpicker" name="sponsorImage" id="sponsorImage">
+    <select class="selectpicker" name="sponsorImage" id="sponsorImage" data-live-search="true" data-size="10" data-width="auto">
        <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
     </select>
     <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>

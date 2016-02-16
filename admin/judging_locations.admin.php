@@ -480,7 +480,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	<?php if ($filter == "staff") { ?>
     <div class="btn-group" role="group" aria-label="...">
         <div class="btn-group" role="group">
-            <select class="selectpicker" name="Organizer">
+            <select class="selectpicker" name="Organizer" data-live-search="true" data-size="10" data-width="auto">
             <option value="" selected disabled>Designate the Competition Organizer</option>
             <?php echo $form_organizer_select; ?>
             </select>
@@ -660,7 +660,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
  <tr>
    <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3","default","default","default"); ?> To:</td>
    <td class="data">
-   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)">
+   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)" data-width="auto">
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>

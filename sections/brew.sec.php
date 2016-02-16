@@ -232,7 +232,7 @@ $(document).ready(function()
         <label for="brewStyle" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set; ?> Style</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewStyle" id="type">
+        <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="10" data-width="auto">
             <?php
 				do {
 					// Build style drop-down

@@ -182,7 +182,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_type" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Type</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_type" id="mod_type">
+	<select class="selectpicker" name="mod_type" id="mod_type" data-width="auto">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational (Basic HTML)</option>
         <option value="1" <?php if (($action == "edit") && ($row_mods['mod_type'] == "1")) echo " SELECTED"; ?>>Report</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_type'] == "2")) echo " SELECTED"; ?>>Export</option>
@@ -195,7 +195,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_permission" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Permission</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_permission" id="mod_permission">
+	<select class="selectpicker" name="mod_permission" id="mod_permission" data-width="auto">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "0")) echo " SELECTED"; ?>>Top Level Admins</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "1")) echo " SELECTED"; ?>>Admins</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "2")) echo " SELECTED"; ?>>All Users</option>
@@ -208,7 +208,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_extend_function" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Extends Core Function</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_extend_function" id="mod_extend_function">
+	<select class="selectpicker" name="mod_extend_function" id="mod_extend_function" data-width="auto">
 		<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>All</option>
 		<option rel="none" value="1" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "1")) echo " SELECTED"; ?>>Home Page</option>
 		<option rel="none" value="2" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "2")) echo " SELECTED"; ?>>Rules</option>
@@ -230,7 +230,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_extend_function_admin" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Extends Admin Function</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_extend_function_admin" id="mod_extend_function_admin">
+	<select class="selectpicker" name="mod_extend_function_admin" id="mod_extend_function_admin" data-size="10" data-width="auto">
 		<option value=""></option>
 		<option value="default" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "default")) echo " SELECTED"; ?>>Administration Dashboard</option>
         <option value="archives" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "archives")) echo " SELECTED"; ?>>Archives</option>
@@ -251,7 +251,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rank</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_rank" id="mod_rank">
+	<select class="selectpicker" name="mod_rank" id="mod_rank" data-size="10" data-width="auto">
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_mods['mod_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>
@@ -264,7 +264,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<label for="mod_display_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Order</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank">
+	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank" data-width="auto">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone)</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Public Core Content</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Public Core Content</option>
