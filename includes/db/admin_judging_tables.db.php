@@ -1,38 +1,36 @@
 <?php
-if (NHC) {
-	// Place NHC SQL calls below
+
+$query_table_number = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber";
+$table_number = mysql_query($query_table_number, $brewing) or die(mysql_error());
+$row_table_number = mysql_fetch_assoc($table_number);
+$totalRows_table_number = mysql_num_rows($table_number);
+
+if ($action == "add") {
 	
+	$with_received_entries =  explode(",",received_entries());
+			
+	$query_table_number_last = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber DESC LIMIT 1";
+	$table_number_last = mysql_query($query_table_number_last, $brewing) or die(mysql_error());
+	$row_table_number_last = mysql_fetch_assoc($table_number_last);	
 	
-}
-// end if (NHC)
-else {
-	
-	$query_table_number = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber";
-	$table_number = mysql_query($query_table_number, $brewing) or die(mysql_error());
-	$row_table_number = mysql_fetch_assoc($table_number);
-	$totalRows_table_number = mysql_num_rows($table_number);
-	
-	if ($action == "add") {
-		
-		$with_received_entries =  explode(",",received_entries());
-				
-		$query_table_number_last = "SELECT tableNumber FROM $judging_tables_db_table ORDER BY tableNumber DESC LIMIT 1";
-		$table_number_last = mysql_query($query_table_number_last, $brewing) or die(mysql_error());
-		$row_table_number_last = mysql_fetch_assoc($table_number_last);	
-		
-		$query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-		$row = mysql_fetch_array($result);
-		
-	}
-	
-	
-		
-		$query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		if ($action == "default") $query_entry_count .= " WHERE brewReceived='1'";
-		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
-		$row_entry_count = mysql_fetch_array($result);
-		
+	$query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
+	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+	$row = mysql_fetch_array($result);
 	
 }
+
+$query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
+if ($action == "default") $query_entry_count .= " WHERE brewReceived='1'";
+$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
+$row_entry_count = mysql_fetch_array($result);
+		
+// Check and see if scores have been entered for this table already
+$query_table_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'",$judging_scores_db_table,$id);
+$table_scores = mysql_query($query_table_scores, $brewing) or die(mysql_error());
+$row_table_scores = mysql_fetch_assoc($table_scores);
+if ($row_table_scores['count'] > 0) $already_scored = TRUE; else $already_scored = FALSE;
+
+$query_flights = sprintf("SELECT id FROM %s", $judging_flights_db_table);
+$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
+$totalRows_flights = mysql_num_rows($flights);
 ?>

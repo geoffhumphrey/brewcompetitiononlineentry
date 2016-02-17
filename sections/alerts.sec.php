@@ -13,12 +13,7 @@
 
 	if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0) && ($go == "default")) {
 		
-		include(DB.'admin_judging_tables.db.php');
-		
-		$query_flights = sprintf("SELECT id FROM %s", $judging_flights_db_table);
-		$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
-		$totalRows_flights = mysql_num_rows($flights);
-		
+		include(DB.'admin_judging_tables.db.php');		
 		$bjcp_2008 = TRUE;
 		
 	} // end if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0))

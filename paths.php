@@ -6,6 +6,7 @@
  *              specific, site-wide variables.
  * 
  */
+ 
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
@@ -36,8 +37,8 @@ define('TESTING', FALSE); 		// Top-level constant for testing functionality. Set
 
 // --------------------------------------------------------
 //Error reporting
-error_reporting(0);	// comment out to debug
-//error_reporting(E_ALL); // uncomment to debug 
+//error_reporting(0);	// comment out to debug
+error_reporting(E_ALL); // uncomment to debug 
 
 require(CONFIG.'config.php');
 ?>

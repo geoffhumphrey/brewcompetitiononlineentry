@@ -1,12 +1,6 @@
 <?php 
 include(DB.'styles.db.php'); 
 include(DB.'admin_judging_tables.db.php');
-// Check and see if scores have been entered for this table already
-$query_table_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'",$judging_scores_db_table,$id);
-$table_scores = mysql_query($query_table_scores, $brewing) or die(mysql_error());
-$row_table_scores = mysql_fetch_assoc($table_scores);
-if ($row_table_scores['count'] > 0) $already_scored = TRUE; else $already_scored = FALSE;
-// If so, activate the JS popup warnings if unchecking styles
 
 if ($action == "edit") $title = ": Edit a Table"; 
 elseif ($action == "add") $title = ": Add a Table"; 

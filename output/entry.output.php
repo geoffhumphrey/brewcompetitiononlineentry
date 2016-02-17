@@ -3,7 +3,7 @@ session_start();
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
-include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
+include(CLASSES.'tiny_but_strong/tbs_class.php');
 include(DB.'output_entry.db.php');
 
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");

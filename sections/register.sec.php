@@ -122,7 +122,7 @@ require_once(INCLUDES.'recaptchalib.inc.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 if ($go != "default") {
-	
+	$country_select = "";
 	foreach ($countries as $country) { 
 		$country_select .= "<option value='".$country."' ";
 		if (($msg > 0) && ($_COOKIE['brewerCountry'] == $country)) $country_select .= "SELECTED";
@@ -142,7 +142,7 @@ if ($go != "default") {
 			if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>";
-   		} while ($row_dropoff = mysql_fetch_assoc($dropoff));
+   		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 	} 
 }
 
@@ -584,12 +584,12 @@ if ($go == "default") { ?>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
 				<select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>No</option>
+                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>Yes</option>
                 </select>
 			</div>
 			</div>
-		<?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
+		<?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // end if ($view == "default") ?>
@@ -622,12 +622,12 @@ if ($go == "default") { ?>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
 				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>No</option>
+					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>Yes</option>
 				</select>
 			</div>
 			</div>
-		<?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
+		<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<?php } ?>

@@ -1,4 +1,20 @@
 <?php
+
+/*
+$connection = new mysqli($hostname, $username, $password, $database);
+
+mysqli_select_db($connection,$database);
+
+// Query Structure
+$query_XXX = "";
+$result_XXX = mysqli_query($connection,$query_XXX) or die (mysqli_error($connection));
+$row_XXX = mysqli_fetch_assoc($result_XXX);
+
+$row_XXX = mysqli_fetch_array($entries, MYSQLI_BOTH);
+
+mysqli_real_escape_string($connection,$query_XXX);
+*/
+
 $totalRows_entry_count = total_paid_received($go,0);
 
 if (NHC) {
@@ -6,14 +22,14 @@ if (NHC) {
 	
 	$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
 	if ($prefix != "final_") $query_package_count .= " AND a.scoreEntry >=25";
-	$package_count = mysql_query($query_package_count, $brewing) or die(mysql_error());
-	$row_package_count = mysql_fetch_assoc($package_count);
-	$totalRows_package_count = mysql_num_rows($package_count);
+	$package_count = mysqli_query($connection,$query_package_count) or die (mysqli_error($connection));
+	$row_package_count = mysqli_fetch_assoc($package_count);
+	$totalRows_package_count = mysqli_num_rows($package_count);
 	//echo $totalRows_package_count;
 	
 	$query_admin_adv = sprintf("SELECT COUNT(*) AS 'count' FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewWinner='6'", $_SESSION['user_id']);
-	$admin_adv = mysql_query($query_admin_adv, $brewing) or die(mysql_error());
-	$row_admin_adv = mysql_fetch_assoc($admin_adv);
+	$admin_adv = mysqli_query($connection,$query_admin_adv) or die (mysqli_error($connection));
+	$row_admin_adv = mysqli_fetch_assoc($admin_adv);
 }
 // end if (NHC)
 
@@ -128,17 +144,17 @@ else {
 	echo $dbTable."<br>";
 	*/
 	
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-	$totalRows_log = mysql_num_rows($log); 
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log = mysqli_fetch_assoc($log);
+	$totalRows_log = mysqli_num_rows($log); 
 		
-	$log_paid = mysql_query($query_log_paid, $brewing) or die(mysql_error());
-	$row_log_paid = mysql_fetch_assoc($log_paid);
-	$totalRows_log_paid = mysql_num_rows($log_paid);
+	$log_paid = mysqli_query($connection,$query_log_paid) or die (mysqli_error($connection));
+	$row_log_paid = mysqli_fetch_assoc($log_paid);
+	$totalRows_log_paid = mysqli_num_rows($log_paid);
 	
-	$log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error());
-	$row_log_confirmed = mysql_fetch_assoc($log_confirmed);
-	$totalRows_log_confirmed = mysql_num_rows($log_confirmed);
+	$log_confirmed = mysqli_query($connection,$query_log_confirmed) or die (mysqli_error($connection));
+	$row_log_confirmed = mysqli_fetch_assoc($log_confirmed);
+	$totalRows_log_confirmed = mysqli_num_rows($log_confirmed);
 	
 
 }

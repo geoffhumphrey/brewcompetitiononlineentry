@@ -51,14 +51,10 @@ if (NHC) $base_url = "../";
     </thead>
     <tbody>
     <?php do { 
+
+		include(DB.'output_post_judge.db.php');
 	
 		// Query scores table for each entry. If no score and not placing, or if score is not entered at all, put on the list
-		
-		$query_post_inventory_entry = sprintf("SELECT id,scoreEntry,scorePlace FROM %s WHERE eid='%s'",$prefix."judging_scores",$row_post_inventory['id']);
-		$post_inventory_entry = mysql_query($query_post_inventory_entry, $brewing) or die(mysql_error());
-		$row_post_inventory_entry = mysql_fetch_assoc($post_inventory_entry);
-		$totalRows_post_inventory_entry = mysql_num_rows($post_inventory_entry);
-		
 		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
 		
 	?>

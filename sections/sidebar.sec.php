@@ -51,6 +51,8 @@ if ($section != "admin") {
 	$page_info300 = "";
 	$header1_400 = ""; 
 	$page_info400 = "";
+	$header1_500 = ""; 
+	$page_info500 = "";
 	$header1_5 = ""; 
 	$page_info5 = "";
 	$header1_6 = ""; 
@@ -60,7 +62,7 @@ if ($section != "admin") {
 	$header1_8 = ""; 
 	$page_info8 = "";
 
-	if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
+	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
 
 		// Conditional display of panel colors based upon open/closed dates
 		if ($registration_open == 0) $reg_panel_display = "panel-default";
@@ -243,7 +245,7 @@ if ($section != "admin") {
 			else $page_info400 .= $row_judging['judgingLocName'];
 			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			$page_info400 .= "</p>";
-		} while ($row_judging = mysql_fetch_assoc($judging));
+		} while ($row_judging = mysqli_fetch_assoc($judging));
 		
 	}
 	$page_info400 .= "</div>";

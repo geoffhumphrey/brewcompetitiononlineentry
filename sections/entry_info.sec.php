@@ -191,7 +191,7 @@ else {
 		else $page_info7 .= $row_judging['judgingLocName'];
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 		$page_info7 .= "</p>";
-	} while ($row_judging = mysql_fetch_assoc($judging));
+	} while ($row_judging = mysqli_fetch_assoc($judging));
 }
 
 
@@ -219,7 +219,7 @@ do {
 	$styles_endRow++;
 	if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
 		
-} while ($row_styles = mysql_fetch_assoc($styles));
+} while ($row_styles = mysqli_fetch_assoc($styles));
 
 if ($styles_endRow != 0) {
 		while ($styles_endRow < $styles_columns) {
@@ -273,7 +273,7 @@ if (($totalRows_dropoff > 0) && ($entry_window_open < 2)) {
 		$page_info11 .= "<br />";
 		if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
 		$page_info11 .= "</p>";
-	 } while ($row_dropoff = mysql_fetch_assoc($dropoff));
+	 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 }
 
 // Best of Show

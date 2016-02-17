@@ -26,14 +26,14 @@ else {
 	elseif (($section == "admin") && ($action == "default") && ($go == "mods")) $query_mods .= " ORDER BY mod_name ASC";
 	elseif (($section == "admin") && ($action == "edit") && ($go == "mods")) 	$query_mods .= sprintf(" WHERE id='%s'",$id);
 	
-	$mods = mysql_query($query_mods, $brewing) or die(mysql_error());
-	$row_mods = mysql_fetch_assoc($mods);
-	$totalRows_mods = mysql_num_rows($mods);
+	$mods = mysqli_query($connection,$query_mods) or die (mysqli_error($connection));
+	$row_mods = mysqli_fetch_assoc($mods);
+	$totalRows_mods = mysqli_num_rows($mods);
 	
 	//echo "<p>".$query_mods."</p>";
 	
 	if ($go != "mods") {
-		do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysql_fetch_assoc($mods));
+		do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysqli_fetch_assoc($mods));
 	}
 	
 	//print_r($mods_display);
@@ -41,11 +41,11 @@ else {
 	function mod_display($id,$section,$go,$user_level,$page_location) {
 		
 		require(CONFIG.'config.php');	
-		mysql_select_db($database, $brewing);
+		mysqli_select_db($connection,$database);
 		
 		$query_mod_display = sprintf("SELECT * FROM %s WHERE mod_enable='1' AND id='%s'",$prefix."mods",$id);
-		$mod_display = mysql_query($query_mod_display, $brewing) or die(mysql_error());
-		$row_mod_display = mysql_fetch_assoc($mod_display);
+		$mod_display = mysqli_query($connection,$query_mod_display) or die (mysqli_error($connection));
+		$row_mod_display = mysqli_fetch_assoc($mod_display);
 		
 		$output = "";
 		
@@ -59,6 +59,7 @@ else {
 			case "pay": 		$display_section = 7; break;
 			case "list": 		$display_section = 8; break;
 			case "admin": 		$display_section = 9; break;
+			default: $display_section = 0; break;
 		}
 		
 		if (($section != "admin") && (($display_section == $row_mod_display['mod_extend_function']) || ($row_mod_display['mod_extend_function'] == 0))) {

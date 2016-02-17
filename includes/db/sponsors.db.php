@@ -1,16 +1,9 @@
 <?php
-if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-}
-// end if (NHC)
-else {
-	
-	if ($action == "edit") $query_sponsors = "SELECT * FROM $sponsors_db_table WHERE id='$id'"; 
-	else $query_sponsors = "SELECT * FROM $sponsors_db_table ORDER BY sponsorLevel,sponsorName";
-	$sponsors = mysql_query($query_sponsors, $brewing) or die(mysql_error());
-	$row_sponsors = mysql_fetch_assoc($sponsors);
-	$totalRows_sponsors = mysql_num_rows($sponsors);
-}
+
+if ($action == "edit") $query_sponsors = "SELECT * FROM $sponsors_db_table WHERE id='$id'"; 
+else $query_sponsors = "SELECT * FROM $sponsors_db_table ORDER BY sponsorLevel,sponsorName";
+$sponsors = mysqli_query($connection,$query_sponsors) or die (mysqli_error($connection));
+$row_sponsors = mysqli_fetch_assoc($sponsors);
+$totalRows_sponsors = mysqli_num_rows($sponsors);
+
 ?>

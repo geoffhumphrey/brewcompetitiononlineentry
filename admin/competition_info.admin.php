@@ -3,13 +3,9 @@
 <?php } ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1">
 <?php if ($section == "step4") { 
-$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
-
-$currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
-$currency_symbol = $currency[0];
-$currency_code = $currency[1];
+	$currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
+	$currency_symbol = $currency[0];
+	$currency_code = $currency[1];
 ?>
 <h3>Competition Coordinator</h3>
 
@@ -50,7 +46,7 @@ $currency_code = $currency[1];
     </div>
 </div><!-- ./Form Group -->
 <input type="hidden" name="contactPosition" value="Competition Coordinator" />
-<?php } ?>
+<?php } // end if ($section == "step4")  ?>
 
 <h3>General</h3>
 
@@ -539,7 +535,6 @@ $currency_code = $currency[1];
         <span id="helpBlock" class="help-block">Indicate whether your competition is a qualifier for any national or regional competitions.</span>
      </div>
 </div><!-- ./Form Group -->
-
 
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">

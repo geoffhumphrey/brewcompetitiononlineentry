@@ -2,134 +2,33 @@
 // -----------------------------------------------------------
 // Version 2.0.0.0
 // -----------------------------------------------------------
-$current_version = "2.0.1.0";
-$current_version_display = "2.0.1";
 require('paths.php');
-mysql_select_db($database, $brewing);
-require(INCLUDES.'authentication_nav.inc.php');  session_start(); 
+require(INCLUDES.'authentication_nav.inc.php');  
+session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
+require(LIB.'update.lib.php');
+require(DB.'update.db.php');
+
+// Define vars
+$current_version = "2.0.1.0";
+$current_version_display = "2.0.1";
 $section = "update";
-$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
-$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-$row_contest_info = mysql_fetch_assoc($contest_info); 
-$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
 date_default_timezone_set('America/Denver');
-function check_update($column_name, $table_name) {
-	
-	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
-	
-	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log_exists = mysql_num_rows($log);
-    if ($row_log_exists) return TRUE;
-	else return FALSE;
-}
-if (HOSTED) {
-	
-	if ($action == "default") {
-		
-		require(LIB.'common.lib.php');
-		
-		$gh_user_name = "geoff@zkdigital.com";	
-		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
-		$random1 = random_generator(7,2);
-		$random2 = random_generator(7,2);
-		require(CLASSES.'phpass/PasswordHash.php');
-		$hasher = new PasswordHash(8, false);
-		$hash = $hasher->HashPassword($gh_password);
-		
-		$query_gh_admin_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-		$gh_admin_user = mysql_query($query_gh_admin_user, $brewing);
-		$row_gh_admin_user = mysql_fetch_assoc($gh_admin_user);
-		$totalRows_gh_admin_user = mysql_num_rows($gh_admin_user);
-		
-		if ($totalRows_gh_admin_user == 0) {
-			
-			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$users_db_table,$gh_user_name,$hash,$random1,$random2);
-			mysql_real_escape_string($updateSQL);
-			$result = mysql_query($updateSQL, $brewing);
-					
-			$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-			$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
-			$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
-			
-			$updateSQL1 = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAHA`) VALUES
-	(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80000', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '000000');", $brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
-			mysql_real_escape_string($updateSQL1);
-			$result = mysql_query($updateSQL1, $brewing);
-			
-			
-		}
-		
-		if ($totalRows_gh_admin_user == 1) {
-			
-			$updateSQL2 = sprintf("UPDATE %s SET password='%s', userQuestion='%s', userQuestionAnswer='%s', userLevel='%s' WHERE id='%s'", $prefix."users",$hash,$random1,$random2,$row_gh_admin_user['id'],"0");
-			mysql_real_escape_string($updateSQL2);
-			$result = mysql_query($updateSQL2, $brewing); 
-			
-		}
-	
-	}
-	
-}
 $sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
 $filename = $_SERVER['DOCUMENT_ROOT'].$sub_folder."/includes/version.inc.php";
 $update_alerts = "";
 $update_body = "";
-/* ---- DEBUG ----
-//echo $updateSQL."<br>";
-//echo $updateSQL1."<br>";
-//echo $updateSQL2."<br>";
-//echo $filename;
-*/
+$output = "";
+
 if (file_exists($filename)) {
-	
-	//require(DB.'archive.db.php'); 
-	
-	function check_setup($tablename, $database) {
-		require(CONFIG.'config.php');
-		
-		$query_log = sprintf("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'",$database, $tablename);
-		$log = mysql_query($query_log, $brewing) or die(mysql_error());
-		$row_log = mysql_fetch_assoc($log);
-	
-		if ($row_log['count'] == 0) return FALSE;
-		else return TRUE;
-	
-	}
-	
-	$query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-	$totalRows_log = mysql_num_rows($log); 
 	
 	// check to see if the "system" db table is present, if not, use the legacy hard-coded version
 	if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php');
 	
-	// if "system" db table is present, get installed version from it
-	if (check_setup($prefix."system",$database)) { 
-		$query_version = sprintf("SELECT version FROM %s",$system_db_table);
-		$version = mysql_query($query_version, $brewing) or die(mysql_error());
-		$row_version = mysql_fetch_assoc($version);	
-		$version = $row_version['version'];
-	}
-	
 	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>The BCOE&amp;M ".$current_version_display." Database Update Script must be run to update the database.</strong></div>";
 	
 	if (check_setup($prefix."preferences",$database)) {
-		
-		if (isset($_SESSION['loginUsername'])) {
-			
-			$query_user_level = sprintf("SELECT userLevel FROM %s WHERE user_name='%s'",$users_db_table,$_SESSION['loginUsername']);
-			$user_level = mysql_query($query_user_level, $brewing) or die(mysql_error());
-			$row_user_level = mysql_fetch_assoc($user_level);
-			$totalRows_user_level = mysql_num_rows($user_level);
-			
-		}
 		
 		if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] <= 1)) {
 			
@@ -144,9 +43,8 @@ if (file_exists($filename)) {
 				}
 			
 				if ($action == "update") {
-								
-				$output = "";
-					// Perform updates to the db based upon the current version
+				
+						// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
 						if ($version < "113") {
 							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
@@ -269,7 +167,7 @@ if (file_exists($filename)) {
 			}
 		} // end check of user level
 		
-		// if user is not logged in or a admin...
+		// if user is not logged in or an admin...
 		else {
 			$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>Only top level administrators are able to access and perform updates.</strong>";
 			if ($row_user_level['userLevel'] > 0)  $update_alerts .= " You do not have administrative access to this site.";

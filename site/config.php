@@ -4,7 +4,7 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: July 27, 2015
+ * Last Modified: February 17, 2016
  */
 
 /*
@@ -42,7 +42,7 @@ $database = "";
 This line strings the information together and connects to MySQL.  
 If MySQL is not found or the username/password combo is not correct an error will be returned.
 */
-$connection = mysql_connect($hostname, $username, $password) or trigger_error(mysql_error());
+$connection = new mysqli($hostname, $username, $password, $database);
 
 /* 
 Do not change the following line.

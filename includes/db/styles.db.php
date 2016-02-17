@@ -2,8 +2,8 @@
 
 if ($section == "step7") {
 	$query_prefs_styleset = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'",$prefix."preferences");
-	$prefs_styleset = mysql_query($query_prefs_styleset, $brewing) or die(mysql_error());
-	$row_prefs_styleset = mysql_fetch_assoc($prefs_styleset);
+	$prefs_styleset = mysqli_query($connection,$query_prefs_styleset) or die (mysqli_error($connection));
+	$row_prefs_styleset = mysqli_fetch_assoc($prefs_styleset);
 	$styleSet = $row_prefs_styleset['prefsStyleSet'];
 }
 
@@ -28,18 +28,18 @@ elseif ($section == "styles") {
 }
 
 else $query_styles .= "";
-$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-$row_styles = mysql_fetch_assoc($styles);
-$totalRows_styles = mysql_num_rows($styles);
+$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+$row_styles = mysqli_fetch_assoc($styles);
+$totalRows_styles = mysqli_num_rows($styles);
 
 if ($section != "list") {
 	$query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$_SESSION['prefsStyleSet']);
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum";
-	$styles2 = mysql_query($query_styles2, $brewing) or die(mysql_error());
-	$row_styles2 = mysql_fetch_assoc($styles2);
-	$totalRows_styles2 = mysql_num_rows($styles2);
+	$styles2 = mysqli_query($connection,$query_styles2) or die (mysqli_error($connection));
+	$row_styles2 = mysqli_fetch_assoc($styles2);
+	$totalRows_styles2 = mysqli_num_rows($styles2);
 }
 
 // echo $query_styles;

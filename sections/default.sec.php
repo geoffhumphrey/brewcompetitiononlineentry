@@ -46,9 +46,12 @@ include(DB.'contacts.db.php');
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $primary_page_info = "";
 $page_info = "";
+$page_info10 = "";
 $page_info20 = "";
+$page_info30 = "";
 $header1_10 = "";
 $header1_20 = "";
+$header1_30 = "";
 
 $message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No drop-off locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>Add a drop-off location</a>?</div>";
 $message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
@@ -106,7 +109,7 @@ else {
 			$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition']; 
 			if ($action == "print") $page_info10 .= " (".$row_contact['contactEmail'].")";
 			$page_info10 .= "</li>";
-		} while ($row_contact = mysql_fetch_assoc($contact));
+		} while ($row_contact = mysqli_fetch_assoc($contact));
 		$page_info10 .= "</ul>";
 	}
 	
