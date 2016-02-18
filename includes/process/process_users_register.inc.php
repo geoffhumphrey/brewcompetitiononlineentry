@@ -23,9 +23,9 @@ if (NHC) {
 		$email = $_POST['user_name'];
 	
 		$query_user_exists = "SELECT * FROM nhcentrant WHERE email = '$email'";
-		$user_exists = mysql_query($query_user_exists, $brewing) or die(mysql_error());
-		$row_user_exists = mysql_fetch_assoc($user_exists);
-		$totalRows_user_exists = mysql_num_rows($user_exists);
+		$user_exists = mysqli_query($connection,$query_user_exists) or die (mysqli_error($connection));
+		$row_user_exists = mysqli_fetch_assoc($user_exists);
+		$totalRows_user_exists = mysqli_num_rows($user_exists);
 		
 		// Email in the nhcentrants table. They have already been warned about its existance. Redirect.
 		if ($totalRows_user_exists > 0) {
@@ -38,8 +38,8 @@ if (NHC) {
 		$aha = $_POST['brewerAHA']; 
 		if ($aha != "") {
 			$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcentrant WHERE AHANumber = '$aha'";
-			$aha_exists = mysql_query($query_aha_exists, $brewing) or die(mysql_error());
-			$row_aha_exists = mysql_fetch_assoc($aha_exists);
+			$aha_exists = mysqli_query($connection,$query_aha_exists) or die (mysqli_error($connection));
+			$row_aha_exists = mysqli_fetch_assoc($aha_exists);
 			
 			if ($row_aha_exists['count'] > 0) $aha_exists = TRUE; else $aha_exists = FALSE;
 		}
@@ -76,7 +76,7 @@ if (NHC) {
 		// If AHA is blank or doesn't exist, perform other checks and redirect if needed.
 		if (!$aha_exists) {  }
 		*/
-		mysql_free_result($user_exists);
+		
 	}
 	
 	// ...and proceed normally with registration at the Region level.
@@ -145,11 +145,10 @@ $username = strtolower($_POST['user_name']);
 if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	
 	// Sanity check from AJAX widget
-	mysql_select_db($database, $brewing);
 	$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
-	$row_userCheck = mysql_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysql_num_rows($userCheck);
+	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
+	$row_userCheck = mysqli_fetch_assoc($userCheck);
+	$totalRows_userCheck = mysqli_num_rows($userCheck);
 
 	if ($totalRows_userCheck > 0) {
 		
@@ -173,6 +172,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
 	  }
 	else  {
+		
 	// Add the user's creds to the "users" table
 		$password = md5($_POST['password']);
 		require(CLASSES.'phpass/PasswordHash.php');
@@ -186,14 +186,15 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 					   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
 					   "NOW( )"					   
 					   );
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($insertSQL);
-		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		
+		mysqli_real_escape_string($connection,$insertSQL);
+		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+
 		//echo $insertSQL."<br />";
 	// Get the id from the "users" table to insert as the uid in the "brewer" table
 		$query_user= "SELECT id FROM $users_db_table WHERE user_name = '$username'";
-		$user = mysql_query($query_user, $brewing) or die(mysql_error());
-		$row_user = mysql_fetch_assoc($user);
+		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+		$row_user = mysqli_fetch_assoc($user);
 		
    if ($_POST['brewerJudge'] == "Y") {
 		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
@@ -322,22 +323,23 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 							   GetSQLValueString($username, "text"),
 							   GetSQLValueString($_POST['brewerAHA'], "text"),
 							   GetSQLValueString($prefix, "text"));
-			mysql_real_escape_string($updateSQL);
-			$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		}
 		
 		
-		//echo $insertSQL;
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($insertSQL);
-		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$insertSQL);
+		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+
 		
 		
 		// Stop Gap for random staff assignments
 		
-		$updateSQL1 = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
-		mysql_real_escape_string($updateSQL1);
-		$result1 = mysql_query($updateSQL1, $brewing) or die(mysql_error());
+		$updateSQL = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result1 = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 	
 	if ($filter == "default") {
@@ -348,8 +350,8 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-			$row_brewer = mysql_fetch_assoc($brewer);
+			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+			$row_brewer = mysqli_fetch_assoc($brewer);
 			header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&id=".$row_brewer['id']."#judge"));
 		}
 		else header(sprintf("Location: %s", $base_url."index.php?section=list&msg=1"));
@@ -360,8 +362,8 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-			$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-			$row_brewer = mysql_fetch_assoc($brewer);
+			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+			$row_brewer = mysqli_fetch_assoc($brewer);
 			if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
 			else $insertGoTo = $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge";
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));

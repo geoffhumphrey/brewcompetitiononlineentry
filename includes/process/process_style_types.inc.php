@@ -4,56 +4,52 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "style_types" table
  */
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
-	if (NHC) {
-		// Place NHC SQL calls below
+	
+	if ($action == "add") {
 		
+		$insertSQL = sprintf("INSERT INTO $style_types_db_table (
+		styleTypeName, 
+		styleTypeOwn, 
+		styleTypeBOS, 
+		styleTypeBOSMethod
+		) 
+		VALUES 
+		(%s, %s, %s, %s)",
+						   GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
+						   GetSQLValueString($_POST['styleTypeOwn'], "text"),
+						   GetSQLValueString($_POST['styleTypeBOS'], "text"),
+						   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"));
+		
+		mysqli_real_escape_string($connection,$insertSQL);
+		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		
+		$pattern = array('\'', '"');
+		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
+		header(sprintf("Location: %s", stripslashes($insertGoTo)));				   
 		
 	}
 	
-	else {
-		if ($action == "add") {
-			$insertSQL = sprintf("INSERT INTO $style_types_db_table (
-			styleTypeName, 
-			styleTypeOwn, 
-			styleTypeBOS, 
-			styleTypeBOSMethod
-			) 
-			VALUES 
-			(%s, %s, %s, %s)",
-							   GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
-							   GetSQLValueString($_POST['styleTypeOwn'], "text"),
-							   GetSQLValueString($_POST['styleTypeBOS'], "text"),
-							   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"));
-			//echo $insertSQL;				   
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($insertSQL);
-			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-			$pattern = array('\'', '"');
-			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
-			header(sprintf("Location: %s", stripslashes($insertGoTo)));				   
-			
-		}
+	if ($action == "edit") {
 		
-		if ($action == "edit") {
-			$updateSQL = sprintf("UPDATE $style_types_db_table SET
-			styleTypeName=%s, 
-			styleTypeOwn=%s, 
-			styleTypeBOS=%s, 
-			styleTypeBOSMethod=%s
-			WHERE id=%s",
-							   GetSQLValueString($_POST['styleTypeName'], "text"),
-							   GetSQLValueString($_POST['styleTypeOwn'], "text"),
-							   GetSQLValueString($_POST['styleTypeBOS'], "text"),
-							   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
-							   GetSQLValueString($id, "int"));
-			//echo $updateSQL."<br>";
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-			//echo $updateSQL;
-			$pattern = array('\'', '"');
-			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-			header(sprintf("Location: %s", stripslashes($updateGoTo)));			
-		}
-	} // end else NHC
+		$updateSQL = sprintf("UPDATE $style_types_db_table SET
+		styleTypeName=%s, 
+		styleTypeOwn=%s, 
+		styleTypeBOS=%s, 
+		styleTypeBOSMethod=%s
+		WHERE id=%s",
+						   GetSQLValueString($_POST['styleTypeName'], "text"),
+						   GetSQLValueString($_POST['styleTypeOwn'], "text"),
+						   GetSQLValueString($_POST['styleTypeBOS'], "text"),
+						   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
+						   GetSQLValueString($id, "int"));
+		
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$pattern = array('\'', '"');
+		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
+		header(sprintf("Location: %s", stripslashes($updateGoTo)));	
+				
+	}
+		
 } else echo "<p>Not available.</p>";?>

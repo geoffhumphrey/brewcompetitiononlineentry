@@ -15,24 +15,17 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 // --------------------------- Adding a user (Admin only) -------------------------- //
 
 
-if (NHC) {
-// Place NHC SQL calls below
-		
-		
-}
-
-else {
-
 	if (($action == "add") && ($section == "admin")) {
+	
 	// Check to see if email address is already in the system. If so, redirect.
 	$username = strtolower($_POST['user_name']);
 	
 	if ((strstr($username,'@')) && (strstr($username,'.'))) {
-	mysql_select_db($database, $brewing);
+	
 	$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
-	$row_userCheck = mysql_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysql_num_rows($userCheck);
+	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
+	$row_userCheck = mysqli_fetch_assoc($userCheck);
+	$totalRows_userCheck = mysqli_num_rows($userCheck);
 	
 	if ($totalRows_userCheck > 0) {
 	
@@ -53,17 +46,16 @@ else {
 						   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
 						   "NOW( )"					   
 						   );
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($insertSQL);
-		$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+		
+		mysqli_real_escape_string($connection,$insertSQL);
+		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 		
 		if ($section != "admin") {
 	
-		mysql_select_db($database, $brewing);
 		$query_login = "SELECT password FROM $users_db_table WHERE user_name = '$username' AND password = '$password'";
-		$login = mysql_query($query_login, $brewing) or die(mysql_error());
-		$row_login = mysql_fetch_assoc($login);
-		$totalRows_login = mysql_num_rows($login);
+		$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+		$row_login = mysqli_fetch_assoc($login);
+		$totalRows_login = mysqli_num_rows($login);
 	
 		session_start();
 			// Authenticate the user
@@ -108,17 +100,15 @@ else {
 	$usernameOld = strtolower($_POST['user_name_old']);
 	if ((strstr($username,'@')) && (strstr($username,'.'))) {
 	
-	mysql_select_db($database, $brewing);
 	$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
-	$brewerCheck = mysql_query($query_brewerCheck, $brewing) or die(mysql_error());
-	$row_brewerCheck = mysql_fetch_assoc($brewerCheck);
-	$totalRows_brewerCheck = mysql_num_rows($brewerCheck);
+	$brewerCheck = mysqli_query($connection,$query_brewerCheck) or die (mysqli_error($connection));
+	$row_brewerCheck = mysqli_fetch_assoc($brewerCheck);
+	$totalRows_brewerCheck = mysqli_num_rows($brewerCheck);
 	
-	mysql_select_db($database, $brewing);
 	$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-	$userCheck = mysql_query($query_userCheck, $brewing) or die(mysql_error());
-	$row_userCheck = mysql_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysql_num_rows($userCheck);
+	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
+	$row_userCheck = mysqli_fetch_assoc($userCheck);
+	$totalRows_userCheck = mysqli_num_rows($userCheck);
 	
 		// --------------------------- If Changing a Participant's User Level ------------------------------- //
 		if ($go == "make_admin") {
@@ -126,9 +116,10 @@ else {
 							   GetSQLValueString($_POST['userLevel'], "text"),
 							   GetSQLValueString($_POST['user_name'], "text"));
 							   
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL);
-			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));  
@@ -140,20 +131,20 @@ else {
 		  header("Location: ".$base_url."index.php?section=user&action=username&id=".$id."&msg=1");
 		  }
 		  else  {  
-			mysql_select_db($database, $brewing);
+			
 			$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s WHERE id=%s", 
 							   GetSQLValueString(strtolower($_POST['user_name']), "text"),
 							   GetSQLValueString($id, "text")); 
-			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-			//echo $updateSQL."<br>";
+			
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
 							   GetSQLValueString(strtolower($_POST['user_name']), "text"),
 							   GetSQLValueString($id, "text")); 
-			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-			//echo $update2SQL."<br>";
+			
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 			if ($filter == "admin") {
 				$pattern = array('\'', '"');
@@ -163,9 +154,9 @@ else {
 		
 			else {	
 			$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-			$login = mysql_query($query_login, $brewing) or die(mysql_error());
-			$row_login = mysql_fetch_assoc($login);
-			$totalRows_login = mysql_num_rows($login);
+			$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+			$row_login = mysqli_fetch_assoc($login);
+			$totalRows_login = mysqli_num_rows($login);
 			//echo $query_login;
 			session_start();
 				// Authenticate the user
@@ -208,13 +199,9 @@ else {
 		$password_old = md5($_POST['passwordOld']);
 		$password_new = md5($_POST['password']);
 		
-		
-		
-		
-		mysql_select_db($database, $brewing);
 		$query_userPass = sprintf("SELECT password FROM $users_db_table WHERE id = '%s'",$id);
-		$userPass = mysql_query($query_userPass, $brewing) or die(mysql_error());
-		$row_userPass = mysql_fetch_assoc($userPass);
+		$userPass = mysqli_query($connection,$query_userPass) or die (mysqli_error($connection));
+		$row_userPass = mysqli_fetch_assoc($userPass);
 		
 		$check = $hasher->CheckPassword($password_old, $row_userPass['password']);
 		$hash_new = $hasher->HashPassword($password_new);
@@ -225,14 +212,13 @@ else {
 			$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
 						   GetSQLValueString($hash_new, "text"),
 						   GetSQLValueString($id, "text")); 
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			header(sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4"));
 		}
 	 }
 		
-	} // end if ($action == "edit")
-	
-} // end else NHC
+} // end if ($action == "edit")
+
 ?>

@@ -125,11 +125,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($contestShippingDeadline, "text"),
 							   GetSQLValueString($id, "int"));
 		
-		  mysql_select_db($database, $brewing);
-		  mysql_real_escape_string($insertSQL);
-		  $result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
-		  //echo $insertSQL."<br>";
-		  $insertSQL = sprintf("INSERT INTO $contacts_db_table (
+		  	mysqli_real_escape_string($connection,$insertSQL);
+			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		  	//echo $insertSQL."<br>";
+			
+		  	$insertSQL = sprintf("INSERT INTO $contacts_db_table (
 			contactFirstName, 
 			contactLastName, 
 			contactPosition, 
@@ -142,9 +142,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($_POST['contactPosition'], "text"),
 							   GetSQLValueString($_POST['contactEmail'], "text"));
 							   
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($insertSQL);
-			$result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			mysqli_real_escape_string($connection,$insertSQL);
+			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			
 			$insertGoTo = "../setup.php?section=step5";
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
@@ -238,10 +238,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($id, "int"));
 		
 		//echo $updateSQL;
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
