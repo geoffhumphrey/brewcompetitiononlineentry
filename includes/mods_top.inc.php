@@ -1,6 +1,7 @@
 <?php 
 if (isset($_SESSION['loginUsername'])) $user_level_mods = $_SESSION['userLevel']; 
 else $user_level_mods = "2";
+
 if ($totalRows_mods > 0) {
 	if ($go != "mods") {
 		foreach ($mods_display as $mod_id) {
@@ -9,5 +10,4 @@ if ($totalRows_mods > 0) {
 		} 
 	}
 }
-
 ?>

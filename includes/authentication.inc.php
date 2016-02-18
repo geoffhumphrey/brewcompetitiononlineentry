@@ -11,34 +11,17 @@ function authenticateUser($connection, strtolower($username), $password) {
 
   	// Formulate the SQL find the user
   	$password = md5($password);
+	mysqli_select_db($connection,$database);
   	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";
-	mysql_real_escape_string($query);
-  	$result = mysql_query($query, $connection);
+	mysqli_real_escape_string($connection,$query);
+  	$result = mysqli_query($connection,$query) or die (mysqli_error($connection));
 
-/*
-   if(!$result || (mysql_numrows($result) < 1)){
-     return false; //Indicates username failure
-   }      
-   
-   // Retrieve password from result
-   $dbarray = mysql_fetch_array($result);
-   
-   // Validate that password is correct
-   if($password == $dbarray['password']){
-      return true; //Success! Username and password confirmed
-   }
-   else{
-      return false; //Indicates password failure
-   }
-*/
-			
 			
 // Execute the query
-  if (!$result = @ mysql_query ($query, $connection))
-    showerror();
+  if (!$result = @ mysqli_query ($connection,$query)) showerror();
 
   // Is the returned result exactly one row? If so, then we have found the user
-  if (mysql_num_rows($result) != 1)
+  if (mysqli_num_rows($result) != 1)
      return false;
   else
     return true;

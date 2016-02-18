@@ -34,7 +34,7 @@ function directory_contents_dropdown($directory,$file_name_selected) {
 
 function table_count_total($input) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_scores_1 = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $input);
 	$scores_1 = mysql_query($query_scores_1, $brewing) or die(mysql_error());
@@ -45,7 +45,7 @@ function table_count_total($input) {
 
 function bos_place($eid) { 
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_bos_place = sprintf("SELECT scorePlace,scoreEntry FROM %s WHERE eid='$eid'", $prefix."judging_scores_bos");
 	$bos_place = mysql_query($query_bos_place, $brewing) or die(mysql_error());
@@ -74,7 +74,7 @@ function bos_method($value) {
 function bos_entry_info($eid,$table_id,$filter) {
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	if ($table_id == "default") $table_id = 1; else $table_id = $table_id;
 	
@@ -127,7 +127,7 @@ function bos_entry_info($eid,$table_id,$filter) {
 
 function style_type_info($type) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."style_types",$type);
 	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
@@ -141,7 +141,7 @@ function style_type_info($type) {
 function score_style_data($value) {
 		
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
@@ -161,7 +161,7 @@ function score_style_data($value) {
 function score_entry_data($value) {
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_scores = sprintf("SELECT id,eid,bid,scoreEntry,scorePlace,scoreMiniBOS FROM %s WHERE eid='%s'", $prefix."judging_scores", $value);
 	$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
@@ -208,7 +208,7 @@ function text_number($n) {
 
 function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	if ($method == "flight_choose") {
 		$query_flights = sprintf("SELECT flightTable FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $filter);
@@ -243,7 +243,7 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
@@ -285,7 +285,7 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 
 function flight_count($table_id,$method) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $table_id);
 	$flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 	$row_flights = mysql_fetch_assoc($flights);
@@ -332,7 +332,7 @@ function orphan_styles() {
 
 function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
@@ -357,7 +357,7 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 
 function score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_sbi = "SELECT id,sbi_name FROM $special_best_info_db_table ORDER BY sbi_name ASC";
 	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
 	$row_sbi = mysql_fetch_assoc($sbi);
@@ -385,7 +385,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 
 function participant_choose($brewer_db_table) {
 	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
 	$brewers = mysql_query($query_brewers, $brewing) or die(mysql_error());
@@ -597,7 +597,7 @@ function total_discount() {
 
 function flight_entry_info($entry_id) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$entry_id);
 	$flight_number = mysql_query($query_flight_number, $brewing) or die(mysql_error());
 	$row_flight_number = mysql_fetch_assoc($flight_number);
@@ -610,7 +610,7 @@ function flight_entry_info($entry_id) {
 function flight_entries_style($style_name,$action,$table_id,$flight_count) {
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE brewStyle='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $prefix."brewing", $style_name);
 	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
@@ -671,7 +671,7 @@ function flight_entries_style($style_name,$action,$table_id,$flight_count) {
 function flight_round_number($flight_table,$flight_number) {
 	
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_round_no = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $prefix."judging_flights", $flight_table, $flight_number);
 	$round_no = mysql_query($query_round_no, $brewing) or die(mysql_error());
@@ -691,7 +691,7 @@ function flight_round_number($flight_table,$flight_number) {
 // Define Custom Functions
 function bos_judge_eligible($uid) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_eligible = sprintf("SELECT a.scorePlace,scoreTable FROM %s a, %s b WHERE a.scorePlace IS NOT NULL AND a.eid = b.id AND b.brewBrewerID = '%s' ORDER BY scoreTable ASC", $prefix."judging_scores", $prefix."brewing", $uid);
 	$eligible = mysql_query($query_eligible, $brewing) or die(mysql_error());
@@ -716,7 +716,7 @@ function bos_judge_eligible($uid) {
 
 function judging_location_avail($loc_id,$judge_avail) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation FROM %s WHERE id='%s'", $prefix."judging_locations", $loc_id);
 	$judging_loc3 = mysql_query($query_judging_loc3, $brewing) or die(mysql_error());
@@ -729,7 +729,7 @@ function judging_location_avail($loc_id,$judge_avail) {
 function table_score_data($eid,$score_table,$suffix) {
 		
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	if ($suffix != "default") $suffix = "_".$suffix; else $suffix = "";
 	
@@ -775,7 +775,7 @@ function table_score_data($eid,$score_table,$suffix) {
 function received_entries() {
 	include(CONFIG.'config.php');
 	//include(INCLUDES.'db_tables.inc.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$style_array = array();
 	
 	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles",$_SESSION['prefsStyleSet']);
@@ -800,7 +800,7 @@ function received_entries() {
 function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 	include(CONFIG.'config.php');
 	//include(INCLUDES.'db_tables.inc.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
@@ -819,7 +819,7 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 
 function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
@@ -838,7 +838,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 
 function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	if ($dbTable != "default") $dbTable = $dbTable; else $dbTable = $prefix."users";
 	
 	$result1 = mysql_query(sprintf("SHOW COLUMNS FROM %s LIKE 'userCreated'",$dbTable));
@@ -863,7 +863,7 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 
 function user_info($uid) {
 	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_user1 = sprintf("SELECT id,userLevel FROM %s WHERE id = '%s'", $prefix."users", $uid);
 	$user1 = mysql_query($query_user1, $brewing) or die(mysql_error());
 	$row_user1 = mysql_fetch_assoc($user1);
@@ -875,7 +875,7 @@ function user_info($uid) {
 
 function sbd_count($id) {
 	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_sbd = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE sid='%s'",$prefix."special_best_data",$id);
 	$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
 	$row_sbd = mysql_fetch_assoc($sbd);	
@@ -884,7 +884,7 @@ function sbd_count($id) {
 
 function special_best_info($sid) {
 	include(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_sbi = sprintf("SELECT id,sbi_name FROM %s WHERE id='%s'",$prefix."special_best_info",$sid); 
 	$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
 	$row_sbi = mysql_fetch_assoc($sbi);
@@ -896,7 +896,7 @@ function special_best_info($sid) {
  
  function table_round($tid,$round) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	// get the round where the flight is assigned to
 	$query_flight_round = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightRound='%s' LIMIT 1", $prefix."judging_flights", $tid, $round);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
@@ -906,7 +906,7 @@ function special_best_info($sid) {
 
 function flight_round($tid,$flight,$round) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	// get the round where the flight is assigned to
 	$query_flight_round = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $tid, $flight);
 	$flight_round = mysql_query($query_flight_round, $brewing) or die(mysql_error());
@@ -916,7 +916,7 @@ function flight_round($tid,$flight,$round) {
 
 function already_assigned($bid,$tid,$flight,$round) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignFlight='%s' AND assignRound='%s')", $prefix."judging_assignments", $bid, $tid, $flight, $round);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
@@ -926,7 +926,7 @@ function already_assigned($bid,$tid,$flight,$round) {
 
 function at_table($bid,$tid) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s'", $prefix."judging_assignments", $bid);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
@@ -942,7 +942,7 @@ function at_table($bid,$tid) {
 function unavailable($bid,$location,$round,$tid) { 
 	// returns true a person is unavailable (if they are already assigned to a table/flight in the same round at the same location)
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
 	$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 	$row_assignments = mysql_fetch_assoc($assignments);
@@ -956,7 +956,7 @@ function like_dislike($likes,$dislikes,$styles) {
 	// if a judge in the returned list listed one or more of the substyles
 	// included in the table in their "likes" or "dislikes"
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	// get the table's associated styles from the "tables" table
 	$s = explode(",",$styles);
@@ -991,7 +991,7 @@ function like_dislike($likes,$dislikes,$styles) {
 
 function entry_conflict($bid,$table_styles) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$b = explode(",",$table_styles);
 	
@@ -1014,7 +1014,7 @@ function entry_conflict($bid,$table_styles) {
 function unassign($bid,$location,$round,$tid) {
 	//if (unavailable($bid,$location,$round,$tid)) {
 		require(CONFIG.'config.php');
-		mysql_select_db($database, $brewing);
+		mysqli_select_db($connection,$database);
 		$query_assignments = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
 		$assignments = mysql_query($query_assignments, $brewing) or die(mysql_error());
 		$row_assignments = mysql_fetch_assoc($assignments);	
@@ -1115,7 +1115,7 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 
 function judge_info($uid) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
@@ -1125,7 +1125,7 @@ function judge_info($uid) {
 
 function flight_entry_count($table_id,$flight) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightNumber='%s'", $prefix."judging_flights", $table_id, $flight);
 	$entry_count = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row_entry_count = mysql_fetch_assoc($entry_count);
@@ -1134,7 +1134,7 @@ function flight_entry_count($table_id,$flight) {
 
 function not_assigned($method) {
 	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$return = "";
 	$assignment = "";

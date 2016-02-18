@@ -133,11 +133,10 @@ switch($section) {
 	// end if (NHC)
 	
 	else {
-	
-		mysql_select_db($database, $brewing);
+
 		$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
-		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-		$row_contact = mysql_fetch_assoc($contact);
+		$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
+		$row_contact = mysqli_fetch_assoc($contact);
 		
 	}
 	

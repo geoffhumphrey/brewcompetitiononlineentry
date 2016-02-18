@@ -68,9 +68,9 @@ if ($go == "entries") {
 	}
 
 	// Execute query
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-	$totalRows_log = mysql_num_rows($log);
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log = mysqli_fetch_assoc($log);
+	$totalRows_log = mysqli_num_rows($log);
 	
 }
 
@@ -110,9 +110,9 @@ if ($go == "participants") {
 	}
 	
 	// Execute the query
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_assoc($brewer);
-	$totalRows_brewer = mysql_num_rows($brewer);
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
+	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 
 // ---------------------------------------------------------

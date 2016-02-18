@@ -1,14 +1,5 @@
 <?php
-if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-}
-// end if (NHC)
-
-else {
-	$query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewer");
-	$result_participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
-	$row_participant_count = mysql_fetch_assoc($result_participant_count);
-}
+$query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewer");
+$result_participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
+$row_participant_count = mysqli_fetch_assoc($result_participant_count);
 ?>

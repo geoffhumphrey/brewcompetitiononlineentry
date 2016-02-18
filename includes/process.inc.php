@@ -200,21 +200,18 @@ elseif ($action == "generate_judging_numbers") {
 
 elseif ($action == "check_discount") {
 	
-		mysql_select_db($database, $brewing);
+		mysqli_select_db($connection,$database);
 		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
-		$contest_info1 = mysql_query($query_contest_info1, $brewing) or die(mysql_error());
-		$row_contest_info1 = mysql_fetch_assoc($contest_info1);
-		
-		//echo $_POST['brewerDiscount']."<br>".$row_contest_info1['contestEntryFeePassword']."<br>";
+		$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
+		$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
 		
 		if ($_POST['brewerDiscount'] == $row_contest_info1['contestEntryFeePassword']) {
 			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", 
 						   GetSQLValueString("Y", "text"),
 						   GetSQLValueString($id, "text"));	
 			
-			//echo $updateSQL;
-			mysql_select_db($database, $brewing);
-			$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
 		}
 		
@@ -229,8 +226,8 @@ elseif ($action == "convert_bjcp") {
 	unset($_SESSION['prefs'.$prefix_session]);
 	
 	$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
-	mysql_select_db($database, $brewing);
-	$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error()); 
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 	$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=25";
 	header(sprintf("Location: %s", $updateGoTo));	

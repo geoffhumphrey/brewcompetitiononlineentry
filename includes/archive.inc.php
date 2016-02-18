@@ -9,7 +9,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 require('../paths.php');
 session_start();
-
+mysqli_select_db($connection,$database);
 //echo $_SESSION['userLevel'];
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
@@ -25,21 +25,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
-	mysql_select_db($database, $brewing);
-	
-	if (NHC) {
-	// Place NHC SQL calls below
 	
 	
-	}
 	
-	else {
-	
-		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
-		$suffix_check = mysql_query($query_suffix_check, $brewing) or die(mysql_error());
-		$row_suffix_check = mysql_fetch_assoc($suffix_check);
-		
-	} // end if (NHC)
+	$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
+	$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
+	$row_suffix_check = mysqli_fetch_assoc($suffix_check);
 	
 	
 	if ($row_suffix_check['count'] > 0) { 
@@ -59,10 +50,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		
 			if ($_POST['keepParticipants'] != "Y") {
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
-			mysql_select_db($database, $brewing);
 			$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
-			$user = mysql_query($query_user, $brewing) or die(mysql_error());
-			$row_user = mysql_fetch_assoc($user);
+			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+			$row_user = mysqli_fetch_assoc($user);
 			
 				  $user_name = strtr($row_user['user_name'], $html_string);
 				  $password = $row_user['password'];
@@ -72,8 +62,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				  $userCreated = $row_user['userCreated'];
 			  
 			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
-			$name = mysql_query($query_name, $brewing) or die(mysql_error());
-			$row_name = mysql_fetch_assoc($name);
+			$name = mysqli_query($connection,$query_n) or die (mysqli_error($connection));
+			$row_name = mysqli_fetch_assoc($name);
 			
 				  $brewerFirstName = strtr($row_name['brewerFirstName'],$html_string);
 				  $brewerLastName = strtr($row_name['brewerLastName'],$html_string);
@@ -137,62 +127,52 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				
 				if ($_POST['keepParticipants'] == "Y") {
 					$updateSQL = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$keep_participants = TRUE;
 				}
 				
 				if ($_POST['keepSpecialBest'] == "Y") {
 					$updateSQL = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "INSERT INTO ".$special_best_info_db_table."_".$suffix." SELECT * FROM ".$special_best_info_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "RENAME TABLE ".$special_best_data_db_table." TO ".$special_best_data_db_table."_".$suffix.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 										
 					$keep_participants = TRUE;
 				}
 			
 				if ($_POST['keepStyleTypes'] == "Y") {
 					$updateSQL = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$keep_participants = TRUE;
 				}
@@ -202,22 +182,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			
 				if (HOSTED) {
 					$updateSQL = "TRUNCATE ".$table.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				}
 				
 				else {
 					
 					$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 					$updateSQL = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
-					mysql_real_escape_string($updateSQL);
-					//echo "<p>".$updateSQL."</p>";
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 				}
 		
@@ -227,9 +204,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				foreach ($truncate_tables_array as $table) { 
 					
 					$updateSQL = "TRUNCATE ".$table.";";
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-					//echo "<p>".$updateSQL."</p>";
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 				}
 			}
@@ -237,22 +213,20 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			if (($_POST['keepStyleTypes'] != "Y") || (HOSTED)) {
 				$insertSQL = "
 				INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'Y', 3), (3, 'Mead', 'bcoe', 'Y', 3)";
-				mysql_real_escape_string($insertSQL);
-				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+				mysqli_real_escape_string($connection,$insertSQL);
+				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			}
 			
 			if (($_POST['keepParticipants'] != "Y") || (HOSTED))  {
 				
 				// Insert current user's info into new "users" and "brewer" table
 				$insertSQL = "INSERT INTO $users_db_table (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) VALUES ('1', '$user_name', '$password', '0', '$userQuestion', '$userQuestionAnswer', NOW());";
-				mysql_real_escape_string($insertSQL);
-				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
-				//echo "<p>".$insertSQL."</p>";
+				mysqli_real_escape_string($connection,$insertSQL);
+				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 				
 				$insertSQL = "INSERT INTO $brewer_db_table (id, uid, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerNickname, brewerSteward, 	brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeLocation, brewerStewardLocation, brewerJudgeExp, brewerJudgeNotes, brewerAssignment, brewerAHA, brewerDiscount, brewerJudgeBOS, brewerDropOff) VALUES (NULL, '1', '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity',  '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerNickname', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes', NULL, NULL, NULL, NULL, NULL, '$brewerAHA', NULL, NULL, NULL);";
-				mysql_real_escape_string($insertSQL);
-				$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
-				//echo "<p>".$insertSQL."</p>";
+				mysqli_real_escape_string($connection,$insertSQL);
+				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 				
 			}
 					
@@ -268,35 +242,33 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				$hash = $hasher->HashPassword($gh_password);
 				
 				$query_delete_brewer = sprintf("SELECT id FROM %s WHERE user_name='%s'", $users_db_table, $gh_user_name);
-				$delete_brewer = mysql_query($query_delete_brewer, $brewing) or die(mysql_error()); 
-				$row_delete_brewer = mysql_fetch_assoc($delete_brewer);
+				$delete_brewer = mysqli_query($connection,$query_delete_brewer) or die (mysqli_error($connection));
+				$row_delete_brewer = mysqli_fetch_assoc($delete_brewer);
 				
 				$delete_user = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_delete_brewer['id']);
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($delete_user);
-				$result = mysql_query($delete_user, $brewing) or die(mysql_error());
+				mysqli_real_escape_string($connection,$delete_user);
+				$result = mysqli_query($connection,$delete_user) or die (mysqli_error($connection));
 				
 				$delete_brewer = sprintf("DELETE FROM %s WHERE uid='%s'", $brewer_db_table, $row_delete_brewer['id']);
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($delete_brewer);
-				$result = mysql_query($delete_brewer, $brewing) or die(mysql_error());
+				mysqli_real_escape_string($connection,$delete_brewer);
+				$result = mysqli_query($connection,$delete_brewer) or die (mysqli_error($connection));
 				
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
 				$hash = $hasher->HashPassword($gh_password);
 				
 				$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$gh_user_name,$users_db_table,$hash,$random1,$random2);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				
 				$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$users_db_table,$gh_user_name);
-				$gh_admin_user1 = mysql_query($query_gh_admin_user1, $brewing);
-				$row_gh_admin_user1 = mysql_fetch_assoc($gh_admin_user1);
+				$gh_admin_user1 = mysqli_query($connection,$query_gh_admin_user1) or die (mysqli_error($connection));
+				$row_gh_admin_user1 = mysqli_fetch_assoc($gh_admin_user1);
 				
 				$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAHA`) VALUES
 		(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					
 			}
 			
@@ -305,9 +277,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				if (!HOSTED) {
 					// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 					$insertSQL = sprintf("INSERT INTO $archive_db_table (archiveSuffix) VALUES (%s);", "'".$suffix."'");
-					//echo "<p>".$insertSQL."</p>";
-					mysql_real_escape_string($insertSQL);
-					$result = mysql_query($insertSQL, $brewing) or die(mysql_error());
+					mysqli_real_escape_string($connection,$insertSQL);
+					$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 				}
 
 			}
@@ -322,8 +293,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			// If no participants were kept except admin users, log the user in and redirect 
 			else {
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
-			$login = mysql_query($query_login, $brewing) or die(mysql_error());
-			$row_login = mysql_fetch_assoc($login);
+			$login =mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+			$row_login = mysqli_fetch_assoc($login);
 			
 				// Authenticate the user
 				if ($row_login['count'] == 1) {
@@ -345,8 +316,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['loginUsername'] = $user_name;
 					
 					$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
-					$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-					$row_contest_info = mysql_fetch_assoc($contest_info); 
+					$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+					$row_contest_info = mysqli_fetch_assoc($contest_info); 
 				
 					// Comp Name
 					$_SESSION['contestName'] = $row_contest_info['contestName'];
@@ -375,9 +346,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
 			
 					$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
-					$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-					$row_prefs = mysql_fetch_assoc($prefs);
-					$totalRows_prefs = mysql_num_rows($prefs);
+					$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+					$row_prefs = mysqli_fetch_assoc($prefs);
 				
 					$_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
 					$_SESSION['prefsWeight1'] = $row_prefs['prefsWeight1'];
@@ -416,8 +386,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
 				
 					$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
-					$judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());
-					$row_judging_prefs = mysql_fetch_assoc($judging_prefs);	
+					$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
+					$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);	
 					
 					$_SESSION['jPrefsQueued'] = $row_judging_prefs['jPrefsQueued'];
 					$_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
@@ -426,17 +396,16 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					
 					// Get counts for common, mostly static items
 					$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
-					$result_sponsor_count = mysql_query($query_sponsor_count, $brewing) or die(mysql_error());
-					$row_sponsor_count = mysql_fetch_assoc($result_sponsor_count);
-					$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
+					$result_sponsor_count = mysqli_query($connection,$query_sponsor_count) or die (mysqli_error($connection));
+					$row_sponsor_count = mysqli_fetch_assoc($result_sponsor_count);
 					
+					$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
 					$_SESSION['prefs'.$prefix_session] = "1";
 					$_SESSION['prefix'] = $prefix;
 					
 					$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
-					$user = mysql_query($query_user, $brewing) or die(mysql_error());
-					$row_user = mysql_fetch_assoc($user);
-					$totalRows_user = mysql_num_rows($user);
+					$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+					$row_user = mysqli_fetch_assoc($user);
 					
 					$_SESSION['user_id'] = $row_user['id'];
 					$_SESSION['userCreated'] = $row_user['userCreated'];
@@ -444,8 +413,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$_SESSION['userLevel'] = $row_user['userLevel'];
 				
 					$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
-					$name = mysql_query($query_name, $brewing) or die(mysql_error());
-					$row_name = mysql_fetch_assoc($name);
+					$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
+					$row_name = mysqli_fetch_assoc($name);
+					
 					$_SESSION['brewerID']  = $row_name['id'];
 					$_SESSION['brewerFirstName'] = $row_name['brewerFirstName'];
 					$_SESSION['brewerLastName'] = $row_name['brewerLastName'];

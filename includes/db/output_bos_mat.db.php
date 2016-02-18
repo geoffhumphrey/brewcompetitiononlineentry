@@ -5,12 +5,10 @@ $query_scores = sprintf("SELECT b.id, a.scorePlace, b.brewJudgingNumber, b.brewC
 if ($style_type_info[1] == "1") $query_scores .= "  AND scorePlace='1'";
 if ($style_type_info[1] == "2") $query_scores .= "  AND (scorePlace='1' OR scorePlace='2')";
 if ($style_type_info[1] == "3") $query_scores .= "  AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";
-if (NHC) $query_scores .= "  AND brewCategory <=23";
 $query_scores .= " ORDER BY b.brewCategorySort ASC, b.brewSubCategory ASC";
-$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-$row_scores = mysql_fetch_assoc($scores);
-$totalRows_scores = mysql_num_rows($scores);
-
+$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
+$row_scores = mysqli_fetch_assoc($scores);
+$totalRows_scores = mysqli_num_rows($scores);
 
 /*
 // Mead Styles

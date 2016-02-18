@@ -1,11 +1,11 @@
 <?php
 $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
-$substyle_count = mysql_query($query_substyle_count, $brewing) or die(mysql_error());
-$row_substyle_count = mysql_fetch_assoc($substyle_count); 
+$substyle_count = mysqli_query($connection,$query_substyle_count) or die (mysqli_error($connection));
+$row_substyle_count = mysqli_fetch_assoc($substyle_count); 
 
 $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$substyle[0],$substyle[1]);
-$substyle_count_logged = mysql_query($query_substyle_count_logged, $brewing) or die(mysql_error());
-$row_substyle_count_logged = mysql_fetch_assoc($substyle_count_logged);
+$substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
+$row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
 
 $substyle_cat_num = ltrim($substyle[0],"0");
 
@@ -33,8 +33,8 @@ if (in_array($substyle_cat_num,$cider_array)) {
 if ($substyle_cat_num > $category_end) {
 	
 	$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$substyle_cat_num);
-	$style_type = mysql_query($query_style_type, $brewing) or die(mysql_error());
-	$row_style_type = mysql_fetch_assoc($style_type);
+	$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+	$row_style_type = mysqli_fetch_assoc($style_type);
 	
 	$count_beer = FALSE;
 	$count_mead = FALSE;

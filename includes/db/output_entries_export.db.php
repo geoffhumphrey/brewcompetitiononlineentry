@@ -1,8 +1,8 @@
 <?php
 if ($bid != "") {
 	$query_judging = "SELECT judgingLocName FROM $judging_locations_db_table WHERE id='$bid'";
-	$judging = mysql_query($query_judging, $brewing) or die(mysql_error());
-	$row_judging = mysql_fetch_assoc($judging);
+	$judging = mysqli_query($connection,$query_judging) or die (mysqli_error($connection));
+	$row_judging = mysqli_fetch_assoc($judging);
 }
 // Note: the order of the columns is set to the specifications set by HCCP for import
 if ($filter != "winners") {
@@ -20,8 +20,7 @@ if ($filter != "winners") {
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
 if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
 if ($filter == "winners") $query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
-//echo $query_sql."<br />";
-$sql = mysql_query($query_sql, $brewing) or die(mysql_error());
-$row_sql = mysql_fetch_assoc($sql);
-$num_fields = mysql_num_fields($sql);
+$sql = mysqli_query($connection,$query_sql) or die (mysqli_error($connection));
+$row_sql = mysqli_fetch_assoc($sql);
+$num_fields = mysqli_num_fields($sql);
 ?>
