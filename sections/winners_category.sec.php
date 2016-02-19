@@ -126,7 +126,7 @@ foreach (array_unique($a) as $style) {
 			
 			$table_body1 .= "</tr>";
 			
-		 } while ($row_scores = mysql_fetch_assoc($scores)); 
+		 } while ($row_scores = mysqli_fetch_assoc($scores)); 
 		 
 		
 $random1 = "";	

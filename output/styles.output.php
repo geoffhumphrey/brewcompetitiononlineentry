@@ -101,5 +101,5 @@ else {
 <p><a href="#top">Top of Page</a></p>
 <?php }
 	} 
- } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+ } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
 <?php } else echo "<p>Styles in this category are not accepted in this competition.</p>"; ?>

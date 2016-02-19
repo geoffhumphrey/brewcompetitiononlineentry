@@ -247,7 +247,7 @@ do {
 	
 	$entry_output .= "</tr>";	
 	
-} while ($row_log = mysql_fetch_assoc($log));
+} while ($row_log = mysqli_fetch_assoc($log));
 
 // --------------------------------------------------------------
 // Display

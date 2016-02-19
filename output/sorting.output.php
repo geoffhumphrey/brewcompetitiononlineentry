@@ -2,7 +2,7 @@
 $section = "sorting";
 include(DB.'styles.db.php');
 
-do { $s[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysql_fetch_assoc($styles));
+do { $s[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
 sort($s);
  
 foreach (array_unique($s) as $style) { 
@@ -77,7 +77,7 @@ if ($totalRows_entries > 0) {
         <td><p class="box"></p></td>
     </tr>
 
-   <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
+   <?php } while ($row_entries = mysqli_fetch_assoc($entries)); ?>
     </tbody>
     </table>
 <div style="page-break-after:always;"></div>
@@ -119,7 +119,7 @@ if ($totalRows_entries > 0) {
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>
+    <?php } while ($row_entries = mysqli_fetch_assoc($entries)); ?>
     </tbody>
     </table>
 	<div style="page-break-after:always;"></div>  

@@ -77,7 +77,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignFlight']; ?></td>
 		<?php } ?>
     </tr>
-    <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
+    <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
     <?php } else { echo "<p class=\"lead\">No "; if ($filter == "S") echo "steward "; else echo "judge "; echo "assignments have been made.</p>"; } ?>   
@@ -123,7 +123,7 @@ if ($totalRows_brewer > 0) { ?>
         <?php } ?>
         <td>&nbsp;</td>
     </tr>
-    <?php } while ($row_brewer = mysql_fetch_assoc($brewer));	?>
+    <?php } while ($row_brewer = mysqli_fetch_assoc($brewer));	?>
     </tbody>
     </table>
     <div style="page-break-after:always;"></div>

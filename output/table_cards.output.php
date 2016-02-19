@@ -58,7 +58,7 @@ if ($id == "default") { ?>
             	<td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>
         </tr>
-                <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
+                <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
     <?php } ?>
@@ -71,7 +71,7 @@ if ($id == "default") { ?>
     </table>
 </div>
 <div style="page-break-after:always;"></div>
-<?php } while ($row_tables = mysql_fetch_assoc($tables)); 
+<?php } while ($row_tables = mysqli_fetch_assoc($tables)); 
 } 
 if ($id != "default") { 
 	include(DB.'output_table_cards.db.php');
@@ -117,7 +117,7 @@ if ($id != "default") {
             	<td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
             	<td><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
         </tr>
-                <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
+                <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
     <?php } ?>

@@ -3,7 +3,7 @@ include(DB.'brewer.db.php');
 include(LIB.'output.lib.php');
 ?>
 <div class="page-header">
-	<h1><?php echo $_SESSION['contestName']; ?> Judge/Steward Notes to Organizers</h1>
+	<h1><?php echo $_SESSION['contestName']; ?> Judge Notes to Organizers</h1>
 </div>
 <?php if ($totalRows_brewer > 0) { ?>
 <p class="lead">The following are the notes to organizers entered by judges.</p>

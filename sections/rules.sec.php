@@ -1,11 +1,11 @@
 <?php 
 /**
- * Module:      judge_closed.sec.php 
- * Description: This module houses the information that will be displayded
- *              once judging dates have passed. 
+ * Module:      rules.sec.php 
+ * Description: This module displays the public-facing competition rules
+ *              specified in the contest_info database table. 
  * 
  */
- 
+
 /* ---------------- PUBLIC Pages Rebuild Info ---------------------
 
 Beginning with the 1.3.0 release, an effort was begun to separate the programming
@@ -43,12 +43,12 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-$header_jc_1 = "";
-$page_info_jc_1 = "";
+$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print Rules'>Print This Page</a></p>";
+$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
+$page_info = $row_contest_rules['contestRules'];
 
-$header_jc_1 .= sprintf("<p class='lead'>Thanks to all who participated in the %s.</p>",$_SESSION['contestName']);
-$page_info_jc_1 .= sprintf("<p class='lead'><small>There were <strong class='text-success'>%s</strong> entries judged and <strong class='text-success'>%s</strong> registered participants, judges, and stewards.</small></p>",get_entry_count('received'),get_participant_count('default'));
+if (($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) echo $competition_logo; 
+if ($action != "print") echo $print_page_link; 
+echo $page_info; 
 
-echo $header_jc_1;
-echo $page_info_jc_1;
 ?>

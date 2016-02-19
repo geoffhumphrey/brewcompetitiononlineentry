@@ -3,7 +3,7 @@ session_start();
 require('../paths.php'); 
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
-mysql_select_db($database, $brewing);
+mysqli_select_db($connection,$database);
 include(DB.'output_labels.db.php');
 include(LIB.'output.lib.php');
 include(DB.'styles.db.php');
@@ -26,7 +26,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$mead[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'];
 		}
 		
-	} while ($row_styles = mysql_fetch_assoc($styles));
+	} while ($row_styles = mysqli_fetch_assoc($styles));
 	
 	
 	
@@ -62,7 +62,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
 				
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 		
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -80,7 +80,7 @@ if (isset($_SESSION['loginUsername'])) {
 				do { 
 					$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
 					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
-				}  while ($row_styles2 = mysql_fetch_assoc($styles2));
+				}  while ($row_styles2 = mysqli_fetch_assoc($styles2));
 			}
 			*/
 			
@@ -126,7 +126,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				}
 				
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -163,7 +163,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				//echo $text;
 				
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 
 			//$pdf->Output();
 			ob_end_clean();
@@ -204,7 +204,7 @@ if (isset($_SESSION['loginUsername'])) {
 					}
 					
 				}
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -243,7 +243,7 @@ if (isset($_SESSION['loginUsername'])) {
 					}
 					
 				}
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -271,7 +271,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 			
 			//$pdf->Output();
 			ob_end_clean();
@@ -305,7 +305,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 		
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -322,7 +322,7 @@ if (isset($_SESSION['loginUsername'])) {
 				do { 
 					$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
 					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
-				}  while ($row_styles2 = mysql_fetch_assoc($styles2));
+				}  while ($row_styles2 = mysqli_fetch_assoc($styles2));
 			}
 			*/
 			//print_r($special_ingredients); exit;
@@ -370,7 +370,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				}
 				
-			} while ($row_log = mysql_fetch_assoc($log));
+			} while ($row_log = mysqli_fetch_assoc($log));
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -402,7 +402,7 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
-			} while ($row_brewer = mysql_fetch_assoc($brewer));
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 			
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -460,7 +460,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
-			} while ($row_brewer = mysql_fetch_assoc($brewer));
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 			
 			ob_end_clean();
 			$pdf->Output($filename,'D');
@@ -476,7 +476,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($filter == "with_entries") { 
 				$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels";
 				
-				do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysql_fetch_assoc($with_entries));
+				do { $with_entries_array[] = $row_with_entries['brewBrewerID']; } while ($row_with_entries = mysqli_fetch_assoc($with_entries));
 				
 			}
 			
@@ -524,7 +524,7 @@ if (isset($_SESSION['loginUsername'])) {
 						);
 						$pdf->Add_Label($text);
 					}
-			} while ($row_brewer = mysql_fetch_assoc($brewer));
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 		
 		//$pdf->Output();
 		ob_end_clean();

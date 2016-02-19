@@ -74,7 +74,7 @@ else {
 		else $page_info2 .= $row_judging['judgingLocName'];
 		if ($row_judging['judgingDate'] != "") $page_info2 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 		$page_info2 .= "</p>";
-	} while ($row_judging = mysql_fetch_assoc($judging));
+	} while ($row_judging = mysqli_fetch_assoc($judging));
 }
 
 echo $header1_1;

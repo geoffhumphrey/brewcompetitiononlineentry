@@ -49,7 +49,7 @@ require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
 	do { 
-		$a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+		$a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 		sort($a);
 		
 		foreach ($a as $type) {
@@ -112,7 +112,7 @@ require(DB.'winners.db.php');
 					
 					$table_body1 .= "</tr>";
 					
-				} while ($row_bos = mysql_fetch_assoc($bos));
+				} while ($row_bos = mysqli_fetch_assoc($bos));
 			
 	$random = "";	 
 	$random = random_generator(7,2);
@@ -223,7 +223,7 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</tr>";
 					
 					
-				} while ($row_sbd = mysql_fetch_assoc($sbd));
+				} while ($row_sbd = mysqli_fetch_assoc($sbd));
 				
 				$random1 = "";
 				$random1 .= random_generator(7,2);
@@ -266,7 +266,7 @@ echo $header2_1;
 </tbody>
 </table>
 <?php }
-	} while ($row_sbi = mysql_fetch_assoc($sbi));
+	} while ($row_sbi = mysqli_fetch_assoc($sbi));
 } 
 ?>
 

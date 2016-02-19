@@ -14,7 +14,7 @@ $special_mead = array("24A","24B","24C","25A","25B","25C","26A","26B","26C");
 $special_cider = array("27B","27C","27E","28A","28B","28C","28D");
 
 if ($view == "default") {
-	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 	sort($a);
 }
 
@@ -59,7 +59,7 @@ foreach ($a as $type) {
 				}
 			}
 			
-		} while ($row_scores = mysql_fetch_assoc($scores));
+		} while ($row_scores = mysqli_fetch_assoc($scores));
 		
 		if ($endRow != 0) {
 			while ($endRow < $columns) {

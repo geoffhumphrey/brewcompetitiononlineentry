@@ -95,7 +95,7 @@ Declare all variables empty at the top of the script. Add on later...
 					$entries .= sprintf("%04s",$row_log_confirmed['id']).", ";
 					$return_entries .= $row_log_confirmed['id']."-";
 				}
-			} while ($row_log_confirmed = mysql_fetch_assoc($log_confirmed)); 
+			} while ($row_log_confirmed = mysqli_fetch_assoc($log_confirmed)); 
 		$primary_page_info .= "</ol>";
 	}
 	

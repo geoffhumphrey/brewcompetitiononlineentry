@@ -40,7 +40,7 @@ if ($go == "default") {  ?>
     </thead>
     <tbody>
     <?php 
-	do { $dropoff_id[] = $row_dropoff['id']; } while ($row_dropoff = mysql_fetch_assoc($dropoff));
+	do { $dropoff_id[] = $row_dropoff['id']; } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 	
 	foreach ($dropoff_id as $id) { 
 		
@@ -122,7 +122,7 @@ if ($go == "default") {  ?>
     <div style="page-break-after:always;"></div>
     <?php
 		} // end if ($location_count > 0)
-	} while ($row_dropoff = mysql_fetch_assoc($dropoff)) ?>   
+	} while ($row_dropoff = mysqli_fetch_assoc($dropoff)) ?>   
     <!-- END content -->
 <?php } ?>
 

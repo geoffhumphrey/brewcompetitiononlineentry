@@ -124,7 +124,7 @@ if ($entry_count > 0) {
 				
 				$table_body1 .= "</tr>";
 				
-			 } while ($row_scores = mysql_fetch_assoc($scores));
+			 } while ($row_scores = mysqli_fetch_assoc($scores));
 
 
 
@@ -171,7 +171,7 @@ $random1 .= random_generator(12,1);
 <?php 
 		} else echo $header1_2;
 	} // end if ($entry_count > 0);
-} while ($row_tables = mysql_fetch_assoc($tables));
+} while ($row_tables = mysqli_fetch_assoc($tables));
 
 ?>
 

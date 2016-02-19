@@ -70,6 +70,6 @@ if (NHC) $base_url = "../";
         </tr>
     <?php 
 		}
-	} while ($row_post_inventory = mysql_fetch_assoc($post_inventory)); ?>
+	} while ($row_post_inventory = mysqli_fetch_assoc($post_inventory)); ?>
     </tbody>
     </table>

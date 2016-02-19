@@ -233,10 +233,10 @@ if ($go == "default") { ?>
     <?php if ($totalRows_judging > 1) { ?>
     <?php do { ?>
     <input type="hidden" name="brewerJudgeLocation[]" value="<?php echo "Y-".$row_judging3['id']; ?>">
-	<?php } while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
+	<?php } while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
     <?php do { ?>
     <input type="hidden" name="brewerStewardLocation[]" value="<?php echo "Y-".$row_stewarding['id']; ?>">
-    <?php } while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
+    <?php } while ($row_stewarding = mysqli_fetch_assoc($stewarding)); ?>
     <?php } // end if ($totalRows_judging > 1) ?>
 <?php } ?>
 <?php if ($section != "admin") { ?>

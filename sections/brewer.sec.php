@@ -5,8 +5,6 @@
  *              information - references the "brewer" database table.
  * 
  */
- 
-mysql_select_db($database, $brewing);
 
 if ($section != "step2") {
 	include(DB.'judging_locations.db.php');
@@ -162,7 +160,7 @@ if ($go != "admin") echo $info_msg;
         <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="auto">
         <?php do { ?>
             <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-        <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+        <?php } while ($row_dropoff = mysqli_fetch_assoc($dropoff)); ?>
             <option disabled="disabled">-------------</option>
     		<option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>>I'm Shipping My Entries</option>
         </select>
@@ -244,7 +242,7 @@ if ($go != "admin") echo $info_msg;
                 <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
             </select>
             
-            <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?> 
+            <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?> 
             </div>
         </div><!-- ./Form Group -->
         <?php }
@@ -406,7 +404,7 @@ if ($go != "admin") echo $info_msg;
                     	</label>
                     </div>
                 
-                <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+                <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
                	<!-- </div> -->
             </div>
         </div><!-- ./Form Group -->
@@ -422,7 +420,7 @@ if ($go != "admin") echo $info_msg;
                         	<input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
                     	</label>
                     </div>
-                <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>
+                <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
                	<!-- </div> -->
             </div>
         </div><!-- ./Form Group -->
@@ -454,7 +452,7 @@ if ($go != "admin") echo $info_msg;
                 <option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
             </select>
             
-            <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?> 
+            <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?> 
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>

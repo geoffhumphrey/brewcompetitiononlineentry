@@ -55,7 +55,7 @@ do {
 			<td><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
 			<td><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']); ?></td>
 		</tr>
-	<?php } while ($row_log = mysql_fetch_assoc($log)); ?>
+	<?php } while ($row_log = mysqli_fetch_assoc($log)); ?>
     </tbody>
     </table>
     <?php if ($totalRows_organizer > 0) { ?>
@@ -64,4 +64,4 @@ do {
     <?php } ?>
     <div style="page-break-after:always;"></div>
     <?php } // END entries section ?>
-    <?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
+    <?php } while ($row_brewer = mysqli_fetch_assoc($brewer)); ?>

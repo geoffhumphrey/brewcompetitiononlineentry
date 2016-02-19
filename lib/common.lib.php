@@ -14,19 +14,6 @@ include (LIB.'date_time.lib.php');
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
-/*
-
-mysqli_select_db($connection,$database);
-
-// Query Structure
-$query_XXX = "";
-$result_XXX = mysqli_query($connection,$query_XXX) or die (mysqli_error($connection));
-$row_XXX = mysqli_fetch_assoc($result_XXX);
-
-mysqli_real_escape_string($connection,$query_XXX);
-
-*/
-
 include(INCLUDES.'version.inc.php');
 
 function version_check($version,$current_version) {

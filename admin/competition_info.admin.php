@@ -328,13 +328,13 @@
         <textarea id="contestRules" class="form-control" name="contestRules" rows="15" aria-describedby="helpBlock">
 		<?php if ($section != "step4") echo $row_contest_info['contestRules']; else { ?>
         <p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>
-		<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>
-		<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>
+		<p>All mailed entries must be <strong>received</strong> at the mailing location by the shipping deadline - please allow for shipping time.</p>
+		<p>All entries will be picked up from drop-off locations the day of the drop-off deadline.</p>
 		<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>
 		<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>
 		<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>
 		<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>
-		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once. For example, participants may enter a Belgian Pale (16B) and Belgian Saison (16C), but may not enter two Saisons, even if they are different brews.</p>
+		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>
 		<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>
 		<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>
 		<p>Bottles will not be returned to entrants.</p>

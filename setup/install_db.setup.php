@@ -52,7 +52,6 @@ if ($setup_free_access == TRUE) {
 		
 		mysql_select_db($database, $brewing);
 		mysql_real_escape_string($sql);
-		mysql_real_escape_string($sql);
 		$result = mysql_query($sql, $brewing);
 		 //echo "<p>".$sql."</p>";
 		

@@ -85,7 +85,7 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	// get information from database
 	include(DB.'styles_special.db.php');
 	
-	do { $special_cider[] = $row_spec_cider['brewStyleGroup']."-".$row_spec_cider['brewStyleNum']; } while ($row_spec_cider = mysql_fetch_assoc($spec_cider));
+	do { $special_cider[] = $row_spec_cider['brewStyleGroup']."-".$row_spec_cider['brewStyleNum']; } while ($row_spec_cider = mysqli_fetch_assoc($spec_cider));
 		
 	$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider);
 
@@ -234,7 +234,7 @@ $(document).ready(function()
 				if (!empty($row_styles['brewStyleGroup'])) { ?>
 				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
 				<?php }
-				} while ($row_styles = mysql_fetch_assoc($styles)); ?>
+				} while ($row_styles = mysqli_fetch_assoc($styles)); ?>
         </select>
         <span id="helpBlock" class="help-block">&spades; = Specific Type, Special Ingredients, Classic Style, Strength (for Beer), or Color May Be Required<br />&diams; = Strength Required (Mead/Cider)<br />&clubs; = Carbonation Level Required (Mead/Cider)<br />&hearts; = Sweetness Level Required (Mead/Cider)</p></span>
         </div>
