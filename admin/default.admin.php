@@ -621,7 +621,7 @@
 										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></small>
 										<?php }
 										} 
-										while ($row_judging = mysql_fetch_assoc($judging)); 
+										while ($row_judging = mysqli_fetch_assoc($judging)); 
 										?>
 									</ul>
 								</div>
@@ -636,7 +636,7 @@
 										 ?>
 										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
 										<?php }
-										} while ($row_judging1 = mysql_fetch_assoc($judging1)); 
+										} while ($row_judging1 = mysqli_fetch_assoc($judging1)); 
 										?>
 									</ul>
 								</div>	
@@ -669,7 +669,7 @@
 											<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
 										<?php 
 											}
-										} while ($row_judging2 = mysql_fetch_assoc($judging2));   
+										} while ($row_judging2 = mysqli_fetch_assoc($judging2));   
 										?>
 										
 									</ul>
@@ -744,7 +744,7 @@
 										?>
 										<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li>
 										<?php } 
-										} while ($row_style_type = mysql_fetch_assoc($style_type)); 
+										} while ($row_style_type = mysqli_fetch_assoc($style_type)); 
 									?>
 								</ul>
 							</div>

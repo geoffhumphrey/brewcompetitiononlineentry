@@ -153,7 +153,7 @@ do {
 		$output_datatables_body .= "</tr>";
 		
 	}
-} while ($row_brewer = mysql_fetch_assoc($brewer)); 
+} while ($row_brewer = mysqli_fetch_assoc($brewer)); 
 ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="row">
@@ -163,7 +163,7 @@ do {
         <option value="" disabled selected>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table...</option>
             <?php do { ?>
 				<option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
-    		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+    		<?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
         </select>
     
     <div class="btn-group" role="group" aria-label="availModal">
@@ -312,9 +312,6 @@ do {
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$row_tables_edit['id']); if ($msg != "default") echo "&id=".$row_tables_edit['id']; ?>">
 </form>
 <?php
-//mysql_free_result($styles);
-mysql_free_result($tables);
-mysql_free_result($tables_edit);
 } // end if ($row_rounds['flightRound'] != "")
 else { 
 	if ($_SESSION['jPrefsQueued'] == "N") "<p>Flights from this table have not been assigned to rounds yet. <a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds\">Assign flights to rounds?</a></p>"; 

@@ -106,7 +106,7 @@ function checkUncheckAll(theElement) {
   </td>
 	<?php } ?>
  </tr>
-<?php  } while($row_styles = mysql_fetch_assoc($styles)) ?>
+<?php  } while($row_styles = mysqli_fetch_assoc($styles)) ?>
  </tbody>
  </table>
  <div class="bcoem-admin-element hidden-print">
@@ -195,7 +195,7 @@ $(document).ready(function(){
 	<select class="selectpicker" name="brewStyleType" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();" data-size="10" data-width="auto">
         <?php do { ?>
         <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
-    	<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+    	<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 	</select>
 	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a>
 	</div>
@@ -379,7 +379,7 @@ $(document).ready(function(){
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
   </select>
   </td>
 </tr>

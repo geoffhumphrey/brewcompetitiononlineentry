@@ -91,7 +91,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
                         $table_count_total = table_count_total($row_tables_edit_2['id']);
                     ?>
                     <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
-                    <?php  } while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
+                    <?php  } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
             </ul>
 		</div>
 	<?php } ?>
@@ -107,7 +107,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
 				<li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
 		<?php }
-			} while ($row_style_type = mysql_fetch_assoc($style_type));
+			} while ($row_style_type = mysqli_fetch_assoc($style_type));
 			?>
         </ul>
     </div>
@@ -223,7 +223,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     </tr>
     <?php 
 		//}
-	} while ($row_scores = mysql_fetch_assoc($scores)); ?>
+	} while ($row_scores = mysqli_fetch_assoc($scores)); ?>
 </tbody>
 </table>
 <?php } // end if ($totalRows_scores > 0) 
@@ -351,7 +351,7 @@ $(document).ready(function() {
         </td>
 	</tr>
     <?php }
-		} while ($row_entries = mysql_fetch_assoc($entries));
+		} while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?> 
 </tbody>
 </table>

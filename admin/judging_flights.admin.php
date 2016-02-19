@@ -45,7 +45,7 @@ if ($totalRows_tables > 0) {
 				?>
 				<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
 				<?php 
-				} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+				} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
 		</select>
 		</div>
 	</div><!-- ./Form Group -->
@@ -190,7 +190,7 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
 	</tr>
     <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
     <?php } 
-	while ($row_entries = mysql_fetch_assoc($entries));
+	while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     <tfoot>
@@ -218,7 +218,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <p><input type="submit" class="btn btn-primary" value="Assign"></p>
 <?php 
-		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
+		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
 		
 		foreach (array_unique($a) as $flight_table) {
 			

@@ -208,7 +208,7 @@ $table_header7 = "Actions";
 	?>
     <td><a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?" data-confirm="Are you sure you want to delete the archive called <?php echo $row_archive['archiveSuffix']; ?>? This cannot be undone."><span class="fa fa-trash-o"></span></a></td>
   </tr>
-  <?php } while ($row_archive = mysql_fetch_assoc($archive)); ?>
+  <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
 </tbody>
 </table>
 <?php } // end else ?>

@@ -393,7 +393,7 @@ if ($action != "print") { ?>
         <td class="hidden-print" nowrap><?php echo $entry_actions; ?></td>
         <?php } ?>
     </tr>
-    <?php } while($row_log = mysql_fetch_assoc($log)) ?>
+    <?php } while($row_log = mysqli_fetch_assoc($log)) ?>
     </tbody>
 </table>
 

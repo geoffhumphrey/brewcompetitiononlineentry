@@ -1,7 +1,7 @@
 <?php 
 // -----------------------------------------------------------
 // Create Tables
-// Version 1.3.1.0 and 1.3.2.0
+// Version XXXXX
 // -----------------------------------------------------------
 
 // -----------------------------------------------------------
@@ -21,9 +21,9 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `$staff_db_table` (
 		  `staff_staff` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing); 
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		$output .= "<li>Staff table created.</li>";
 		

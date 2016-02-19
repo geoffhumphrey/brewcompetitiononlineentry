@@ -47,9 +47,8 @@ else {
 			$a = explode('-', $view);
 			foreach (array_unique($a) as $value) {
 				$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
-				//echo $updateSQL;
-				mysql_select_db($database, $brewing);
-				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			}
 		}
 
@@ -58,8 +57,8 @@ else {
 		$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table  WHERE brewBrewerID = '%s' AND brewConfirmed='1' ORDER BY id ASC", $_SESSION['user_id']);
 		
 		$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
-		$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-		$row_contest_info = mysql_fetch_assoc($contest_info);
+		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+		$row_contest_info = mysqli_fetch_assoc($contest_info);
 		}
 		
 	elseif (($section == "brew") && ($action == "add")) {  
@@ -81,8 +80,8 @@ else {
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 		
 		$query_total_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		$total_count = mysql_query($query_total_count, $brewing) or die(mysql_error());
-		$row_total_count = mysql_fetch_assoc($total_count);
+		$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+		$row_total_count = mysqli_fetch_assoc($total_count);
 		}
 		
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "paid")) { 
@@ -92,8 +91,8 @@ else {
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'";
 			
 		$query_total_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		$total_count = mysql_query($query_total_count, $brewing) or die(mysql_error());
-		$row_total_count = mysql_fetch_assoc($total_count);
+		$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+		$row_total_count = mysqli_fetch_assoc($total_count);
 		}
 		
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "unpaid")) { 

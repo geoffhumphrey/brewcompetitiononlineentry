@@ -83,7 +83,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
                     <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places for <?php echo $row_style_types_2['styleTypeName']; ?></a>
                 <?php 
                     }
-                } while ($row_style_types_2 = mysql_fetch_assoc($style_types_2));
+                } while ($row_style_types_2 = mysqli_fetch_assoc($style_types_2));
                 ?>
                 </ul>
             </div>
@@ -101,7 +101,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
                     <li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
             <?php }
-                } while ($row_style_type = mysql_fetch_assoc($style_type));
+                } while ($row_style_type = mysqli_fetch_assoc($style_type));
                 ?>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
@@ -113,7 +113,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
 </div>
 <?php 
 if (($action == "default") && ($totalRows_style_type > 0)) {
-do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 sort($a);
 
 foreach ($a as $type) {
@@ -202,9 +202,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $bos_entry_info[11]; ?></td>
         <td><?php echo $bos_entry_info[10] ?></td>
     </tr>
-    <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
-	mysql_free_result($bos);
-	?>
+    <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
 <?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>"; 
@@ -288,7 +286,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         </td>
 	</tr>
     <?php 
-	} while ($row_enter_bos = mysql_fetch_assoc($enter_bos)); 
+	} while ($row_enter_bos = mysqli_fetch_assoc($enter_bos)); 
 	?>	
 </tbody>
 </table>

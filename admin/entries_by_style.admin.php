@@ -15,7 +15,7 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
 include(DB.'styles.db.php');
 do { $accepted_categories[] = $row_styles['brewStyleGroup']; } 
-while ($row_styles = mysql_fetch_assoc($styles));
+while ($row_styles = mysqli_fetch_assoc($styles));
 $total_cat = array_unique($accepted_categories);
 //print_r($total_cat);
 $html = "";

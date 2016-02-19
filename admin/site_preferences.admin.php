@@ -396,7 +396,7 @@ $(document).ready(function(){
 					</label>
 				</div>
 				<?php } ?>
-				<?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+				<?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->

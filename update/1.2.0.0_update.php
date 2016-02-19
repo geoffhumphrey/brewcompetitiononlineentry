@@ -4,13 +4,16 @@ $output .= "<h4>Version 1.2.0.0...</h4>";
 $output .= "<ul>";
 
 $updateSQL = "RENAME TABLE `".$prefix."judging` TO `".$prefix."judging_locations`;";
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_preferences` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,  `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA', `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight', `jPrefsMaxBOS` INT(11) NULL DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',`jPrefsRounds` INT(11) NULL DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location') ENGINE=MyISAM ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."judging_preferences` (`id` , `jPrefsQueued` , `jPrefsFlightEntries` , `jPrefsMaxBOS`, `jPrefsRounds`) VALUES ('1' , 'N', '12', '7', '3');";
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Judging preferences added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_tables` (
@@ -22,13 +25,16 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_tables` (
   `tableJudges` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table',
   `tableStewards` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table'
 ) ENGINE=MyISAM ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_flights` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY , `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables', `flightNumber` int(11) DEFAULT NULL, `flightEntryID` TEXT NULL DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table', `flightRound` int(11) DEFAULT NULL) ENGINE=MyISAM ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,`eid` INT(11) NULL COMMENT 'entry id from brewing table',`bid` INT(11) NULL COMMENT 'brewer id from brewer table',`scoreTable` INT(11) NULL COMMENT 'id of table from judging_tables table',`scoreEntry` INT(11) NULL COMMENT 'numerical score assigned by judges',`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles') ENGINE = MYISAM;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores_bos` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -38,7 +44,8 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores_bos` (
 	`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',
 	`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles'
 	) ENGINE = MYISAM;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_assignments` (
 	`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -50,7 +57,8 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_assignments` (
 	`assignLocation` INT ( 11 ) NULL
 	) ENGINE = MYISAM ;
 "; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Judging-related tables added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."style_types` (
@@ -60,11 +68,13 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."style_types` (
 	`styleTypeBOS` CHAR( 1 ) NULL,
 	`styleTypeBOSMethod` INT( 11 ) NULL
 	) ENGINE = MYISAM ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."style_types` (`id` ,`styleTypeName`,`styleTypeOwn`,`styleTypeBOS`,`styleTypeBOSMethod`)
 VALUES ('1', 'Beer', 'bcoe', 'Y', '1'), ('2', 'Cider', 'bcoe', 'Y', '1'), ('3', 'Mead', 'boce', 'Y', '1');"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Style Types table added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."themes` (
@@ -72,16 +82,21 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."themes` (
 	`themeTitle` VARCHAR( 255 ) NULL ,
 	`themeFileName` VARCHAR( 255 ) NULL ,
 	PRIMARY KEY ( `id` )
-	) ENGINE = MYISAM ;"; $result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+	) ENGINE = MYISAM ;"; 
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'BCOE&amp;M Default', 'default');";
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Bruxellensis', 'bruxellensis');";
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."themes` (`id`, `themeTitle`, `themeFileName`) VALUES (NULL, 'Claussenii', 'claussenii'); ";
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Themes table added successfully.</li>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."countries` (
@@ -89,7 +104,8 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."countries` (
 	`name` VARCHAR( 255 ) NULL ,
 	PRIMARY KEY ( `id` )
 	) ENGINE = MYISAM ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO `".$prefix."countries` (`id`, `name`) VALUES
 	(1, 'United States'),
@@ -337,90 +353,115 @@ $updateSQL = "INSERT INTO `".$prefix."countries` (`id`, `name`) VALUES
 	(352, 'Zimbabwe'),
 	(353, 'Other');
 "; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Countries table and data added successfully.</li>";
 
 $updateSQL = "ALTER TABLE `".$prefix."brewing` ADD `brewScore` INT( 8 ) NULL ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."judging_locations` ADD `judgingRounds` INT( 11 ) NULL DEFAULT '1' COMMENT 'number of rounds at location';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` CHANGE `contestEntryFee` `contestEntryFee` INT( 11 ) NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` CHANGE `contestEntryFee2` `contestEntryFee2` INT( 11 ) NULL DEFAULT NULL ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` ADD `contestEntryFeePassword` VARCHAR( 255 ) NULL ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` ADD `contestEntryFeePasswordNum` INT( 11 ) NULL ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."contest_info` ADD `contestID` VARCHAR( 11 ) NULL ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsCompOrg` CHAR( 1 ) NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsTheme` VARCHAR( 255 ) NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsDateFormat` CHAR( 1 ) NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsContact` CHAR( 1 ) NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "UPDATE `".$prefix."preferences` SET `prefsCompOrg` = 'Y' WHERE `id` ='1';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "UPDATE `".$prefix."preferences` SET `prefsTheme` = 'default' WHERE `id` ='1';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "UPDATE `".$prefix."preferences` SET `prefsContact` = 'Y' WHERE `id` ='1';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` ADD `brewerDiscount` CHAR( 1 ) NULL COMMENT 'Y or N if this participant receives a discount';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` DROP `brewerJudgeLocation2` ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` DROP `brewerStewardLocation2` ;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` ADD `brewerJudgeBOS` CHAR ( 1 ) NULL COMMENT 'Y if judged in BOS round';"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` CHANGE `brewerJudgeLocation` `brewerJudgeLocation` TEXT NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` CHANGE `brewerStewardLocation` `brewerStewardLocation` TEXT NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeAssignedLocation` TEXT NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewer` CHANGE `brewerStewardAssignedLocation` `brewerStewardAssignedLocation` TEXT NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."styles` CHANGE  `brewStyleGroup`  `brewStyleGroup` VARCHAR( 3 ) NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."styles` CHANGE  `brewStyleNum`  `brewStyleNum` VARCHAR( 3 ) NULL DEFAULT NULL;"; 
-$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>All table data updated successfully.</li>";
 
 // Need to add "archive" tables for all judging organization tables
 $query_archive_1200 = "SELECT archiveSuffix FROM $archive_db_table";
-$archive_1200 = mysql_query($query_archive_1200, $brewing) or die(mysql_error());
-$row_archive_1200 = mysql_fetch_assoc($archive_1200);
-$totalRows_archive_1200 = mysql_num_rows($archive_1200);
+$archive_1200 = mysqli_query($connection,$query_archive_1200) or die (mysqli_error($connection));
+$row_archive_1200 = mysqli_fetch_assoc($archive_1200);
+$totalRows_archive_1200 = mysqli_num_rows($archive_1200);
 
 if ($totalRows_archive_1200 > 0) {
-	do { $a_1200[] = $row_archive_1200['archiveSuffix']; } while ($row_archive_1200 = mysql_fetch_assoc($archive_1200));
+	do { $a_1200[] = $row_archive_1200['archiveSuffix']; } while ($row_archive_1200 = mysqli_fetch_assoc($archive_1200));
 	
 	foreach ($a_1200 as $suffix) {
 		
@@ -438,13 +479,16 @@ if ($totalRows_archive_1200 > 0) {
 		  `tableJudges` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table',
 		  `tableStewards` VARCHAR(255) NULL COMMENT 'Array of ids from brewer table'
 		) ENGINE=MyISAM ;"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_flights".$suffix."` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY , `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables', `flightNumber` int(11) DEFAULT NULL, `flightEntryID` TEXT NULL DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table', `flightRound` int(11) DEFAULT NULL) ENGINE=MyISAM ;"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores".$suffix."` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,`eid` INT(11) NULL COMMENT 'entry id from brewing table',`bid` INT(11) NULL COMMENT 'brewer id from brewer table',`scoreTable` INT(11) NULL COMMENT 'id of table from judging_tables table',`scoreEntry` INT(11) NULL COMMENT 'numerical score assigned by judges',`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles') ENGINE = MYISAM;"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_scores_bos".$suffix."` (
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -454,7 +498,8 @@ if ($totalRows_archive_1200 > 0) {
 			`scorePlace` FLOAT(11) NULL COMMENT 'place of entry as assigned by judges',
 			`scoreType` CHAR(1) NULL COMMENT 'type of entry used for custom styles'
 			) ENGINE = MYISAM;"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."judging_assignments".$suffix."` (
 			`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -466,7 +511,8 @@ if ($totalRows_archive_1200 > 0) {
 			`assignLocation` INT ( 11 ) NULL
 			) ENGINE = MYISAM ;
 		"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."style_types".$suffix."` (
 			`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -475,11 +521,13 @@ if ($totalRows_archive_1200 > 0) {
 			`styleTypeBOS` CHAR( 1 ) NULL,
 			`styleTypeBOSMethod` INT( 11 ) NULL
 			) ENGINE = MYISAM ;"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = "INSERT INTO `".$prefix."style_types".$suffix."` (`id` ,`styleTypeName`,`styleTypeOwn`,`styleTypeBOS`,`styleTypeBOSMethod`)
 		VALUES ('1', 'Beer', 'bcoe', 'Y', '1'), ('2', 'Cider', 'bcoe', 'Y', '1'), ('3', 'Mead', 'boce', 'Y', '1');"; 
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				
 	}
 	$output .= "<li>Judging-related tables added successfully (archives).</li>";

@@ -89,7 +89,7 @@
 	  
       </td>
      </tr>
-    <?php } while($row_sbi = mysql_fetch_assoc($sbi)) ?>
+    <?php } while($row_sbi = mysqli_fetch_assoc($sbi)) ?>
      </tbody>
     </table>
 <?php } if (($totalRows_sbi == 0) && ($action == "default")) echo "<p>No custom categories were found in the database.</p>"; ?>

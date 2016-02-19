@@ -161,7 +161,7 @@ if ($section != "step5") {
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 			
-		} while($row_judging_locs = mysql_fetch_assoc($judging_locs));
+		} while($row_judging_locs = mysqli_fetch_assoc($judging_locs));
 		
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
 } // end if ($section != "step5")
@@ -184,7 +184,7 @@ if ($section != "step5") {
 				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
 				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " (Selected Competition Organizer)";
 				$form_organizer_select .= "</option>";
-			} while ($row_brewers = mysql_fetch_assoc($brewers));
+			} while ($row_brewers = mysqli_fetch_assoc($brewers));
 			
 		}
 		
@@ -345,7 +345,7 @@ if ($section != "step5") {
 				
 				$output_datatables_body .= "</tr>";
 				
-			} while ($row_brewer = mysql_fetch_assoc($brewer));
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 			
 		} // end if ($totalRows_brewer > 0)
 	
@@ -664,7 +664,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
    </select>
   </td>
 </tr>

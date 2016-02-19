@@ -249,7 +249,7 @@ class InputBeerXML {
         $values .= ")";
         $sqlQuery .= $fields . $values;        
 		
-        $Result1 = mysqli_query($connection,$sqlQuery) or die (mysqli_error($connection));
+        $result = mysqli_query($connection,$sqlQuery) or die (mysqli_error($connection));
 		$this->insertedRecipes[mysqli_insert_id()] = $recipe->name;
 		//header(sprintf("Location: %s", $base_url."index.php?section=list"));
         }

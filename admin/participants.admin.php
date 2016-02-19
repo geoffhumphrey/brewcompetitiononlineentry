@@ -370,7 +370,7 @@ do {
 	
 $output_datatables_body .= "</tr>";
 	
-} while ($row_brewer = mysql_fetch_assoc($brewer));
+} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
 // ----------------------------------------- Presentation ------------------------------------------
 

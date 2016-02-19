@@ -661,7 +661,7 @@ function bjcp_convert() {
 		}
 		
 		mysqli_select_db($connection,$database);
-		$result1 = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
 				
 		/* --- DEBUG ---
 		echo "<p>".$updateSQL."<br>";

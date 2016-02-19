@@ -88,7 +88,7 @@ if (check_setup($prefix."system",$database)) {
 			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-02-15");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
-			$result1 = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 			$setup_relocate = "Location: ".$base_url;
 			$setup_success = TRUE;

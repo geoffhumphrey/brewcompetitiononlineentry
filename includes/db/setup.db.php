@@ -5,7 +5,7 @@ if (table_exists($prefix."system")) {
 	
 	$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
-	$row_system = mysql_fetch_assoc($system);
+	$row_system = mysqli_fetch_assoc($system);
 	if ($row_system['setup'] == 1) header (sprintf("Location: %s",$base_url."index.php"));
 	
 }

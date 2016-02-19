@@ -772,8 +772,8 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 	mysqli_select_db($connection,$database);
 	if ($dbTable != "default") $dbTable = $dbTable; else $dbTable = $prefix."users";
 	$query1 = sprintf("SHOW COLUMNS FROM %s LIKE 'userCreated'",$dbTable);
-	$result1 = mysqli_query($connection,$query1) or die (mysqli_error($connection));
-	$exists = (mysqli_num_rows($result1))?TRUE:FALSE;
+	$result = mysqli_query($connection,$query1) or die (mysqli_error($connection));
+	$exists = (mysqli_num_rows($result))?TRUE:FALSE;
 	
 	if ($exists) {
 	

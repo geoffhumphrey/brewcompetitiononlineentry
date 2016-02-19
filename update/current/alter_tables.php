@@ -10,10 +10,10 @@
 // Adding sponsor enable flag for show/hide sponsor display
 // -----------------------------------------------------------
 if (!check_update("sponsorEnable", $prefix."sponsors")) {
-	$updateSQL0 = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL0);
-	$result0 = mysql_query($updateSQL0, $brewing); 
+	$updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	$output .=  "<li>Sponsors table altered successfully.</li>";
 }
@@ -27,41 +27,41 @@ if (!check_update("sponsorEnable", $prefix."sponsors")) {
 ; 
 
 if (!check_update("contestShippingOpen", $prefix."contest_info")) {
-	$updateSQL1 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactName` `contestShippingOpen` VARCHAR(255) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL1);
-	$result1 = mysql_query($updateSQL1, $brewing); 
+	$updateSQL = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactName` `contestShippingOpen` VARCHAR(255) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 }
 if (!check_update("contestShippingDeadline", $prefix."contest_info")) {
-	$updateSQL2 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactEmail` `contestShippingDeadline` VARCHAR(255) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL2);
-	$result2 = mysql_query($updateSQL2, $brewing);
+	$updateSQL = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactEmail` `contestShippingDeadline` VARCHAR(255) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 }
 
 if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
-	$updateSQL3 = "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL3);
-	$result3 = mysql_query($updateSQL3, $brewing); 
+	$updateSQL= "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 }
 
 if (!check_update("contestDropoffOpen", $prefix."contest_info")) {
-	$updateSQL4 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestCategories` `contestDropoffOpen` VARCHAR(255) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL4);
-	$result4 = mysql_query($updateSQL4, $brewing); 
+	$updateSQL = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestCategories` `contestDropoffOpen` VARCHAR(255) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 }
 
 if (!check_update("contestDropoffDeadline", $prefix."contest_info")) {
-	$updateSQL5 = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestWinnersComplete` `contestDropoffDeadline` VARCHAR(255) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL5);
-	$result5 = mysql_query($updateSQL5, $brewing);
+	$updateSQL = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestWinnersComplete` `contestDropoffDeadline` VARCHAR(255) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 $output .=  "<li>Competition info table altered successfully.</li>";
@@ -73,15 +73,15 @@ $output .=  "<li>Competition info table altered successfully.</li>";
 // Add judge notes to organizers
 // -----------------------------------------------------------
 
-$updateSQL4 = "ALTER TABLE  `".$prefix."brewer` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL4);
-$result4 = mysql_query($updateSQL4, $brewing); 
+$updateSQL = "ALTER TABLE  `".$prefix."brewer` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-$updateSQL5 = "ALTER TABLE  `".$prefix."brewer` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL5);
-$result5 = mysql_query($updateSQL5, $brewing); 
+$updateSQL = "ALTER TABLE  `".$prefix."brewer` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 
 // -----------------------------------------------------------
@@ -89,13 +89,13 @@ $result5 = mysql_query($updateSQL5, $brewing);
 // -----------------------------------------------------------
 
 $query_archive_current = sprintf("SELECT archiveSuffix FROM %s",$archive_db_table);
-$archive_current = mysql_query($query_archive_current, $brewing);
-$row_archive_current = mysql_fetch_assoc($archive_current);
-$totalRows_archive_current = mysql_num_rows($archive_current);
+$archive_current = mysqli_query($connection,$query_archive_current) or die (mysqli_error($connection));
+$row_archive_current = mysqli_fetch_assoc($archive_current);
+$totalRows_archive_current = mysqli_num_rows($archive_current);
 
 if ($totalRows_archive_current > 0) {
 	
-	do { $a_current[] = $row_archive_current['archiveSuffix']; } while ($row_archive_current = mysql_fetch_assoc($archive_current));
+	do { $a_current[] = $row_archive_current['archiveSuffix']; } while ($row_archive_current = mysqli_fetch_assoc($archive_current));
 	
 	foreach ($a_current as $suffix_current) {
 		
@@ -104,15 +104,15 @@ if ($totalRows_archive_current > 0) {
 		// Update brewer table with changed values
 		if (check_setup($prefix."brewer".$suffix_current,$database)) {
 			
-			$updateSQL4 = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL4);
-			$result4 = mysql_query($updateSQL4, $brewing); 
+			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
 			
-			$updateSQL5 = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL5);
-			$result5 = mysql_query($updateSQL5, $brewing);
+			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 		} // end if (check_setup($prefix."brewer".$suffix_current,$database))
 		
@@ -123,18 +123,18 @@ if ($totalRows_archive_current > 0) {
 $output .=  "<li>All archive brewer tables updated successfully.</li>";
 
 // Remove countries table
-$updateSQL6 = "DROP TABLE IF EXISTS `".$prefix."countries`";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL6);
-$result6 = mysql_query($updateSQL6, $brewing);
+$updateSQL = "DROP TABLE IF EXISTS `".$prefix."countries`";
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Countries table removed from the database.</li>";
 
 // Remove themes table
-$updateSQL6 = "DROP TABLE IF EXISTS `".$prefix."themes`";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL6);
-$result6 = mysql_query($updateSQL6, $brewing);
+$updateSQL = "DROP TABLE IF EXISTS `".$prefix."themes`";
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Themes table removed from the database.</li>";
 

@@ -74,7 +74,7 @@
   <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-link\"></span></a> "; ?> 
   </td>
  </tr>
-<?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
+<?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">

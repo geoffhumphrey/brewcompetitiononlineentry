@@ -70,7 +70,7 @@
   		<?php } ?>
         </td>
     </tr>
-    <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+    <?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 </tbody>
 </table>
 <?php } // END if ($action == "default")?>

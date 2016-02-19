@@ -339,7 +339,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		
 		$updateSQL = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result1 = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 	
 	if ($filter == "default") {

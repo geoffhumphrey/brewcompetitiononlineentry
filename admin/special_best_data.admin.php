@@ -102,7 +102,7 @@
       </td>
      </tr>
     <?php
-	} while($row_sbd = mysql_fetch_assoc($sbd));  ?>
+	} while($row_sbd = mysqli_fetch_assoc($sbd));  ?>
      </tbody>
     </table>
     <?php } 
@@ -193,7 +193,7 @@ if ($action == "add") {
 			<p class="form-control-static"><?php  echo $info2[0]." ".$info2[1]; ?></p>
 		</div>
 	</div><!-- ./Form Group -->
-  	<?php } while($row_sbd = mysql_fetch_assoc($sbd)); 
+  	<?php } while($row_sbd = mysqli_fetch_assoc($sbd)); 
 	
 	if ($totalRows_sbd < $row_sbi['sbi_places']) {
 	

@@ -391,7 +391,7 @@ public function DataFetch() {
 
 	switch ($this->Type) {
 	case 6: // MySQL
-		$this->CurrRec = mysql_fetch_assoc($this->RecSet);
+		$this->CurrRec = mysqli_fetch_assoc($this->RecSet);
 		break;
 	case 1: // Num
 		if (($this->NumVal>=$this->NumMin) and ($this->NumVal<=$this->NumMax)) {

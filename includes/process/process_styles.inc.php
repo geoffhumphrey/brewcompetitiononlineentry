@@ -49,7 +49,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			 }
 		}
 			 
-	if($result1){ 
+	if($result){ 
 		if ($section == "setup") header("location:../setup.php?section=step8"); 
 		else {
 			$pattern = array('\'', '"');
