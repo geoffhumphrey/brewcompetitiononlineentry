@@ -33,8 +33,9 @@ $(function() {
  
 });
 </script>
+<p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
 <?php if ($entry_list != "") { ?>
-<div class="alert alert-info"><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
+<div class="well"><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
 <?php } 
 if (!empty($flag_jnum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -47,7 +48,7 @@ foreach ($flag_jnum as $num) {
 	}
 }
 ?>
-<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
+<div class="well"><span class="fa fa-info-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
 <?php }  
 if (!empty($flag_enum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -60,9 +61,8 @@ foreach ($flag_enum as $num) {
 	}
 }
 ?>
-<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> The following entries already have 6 digit judging numbers assigned to them - the original 6 digit judging number has been kept. <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
+<div class="well"><span class="fa fa-info-circle"></span> These entries already have 6 digit judging numbers assigned to them - the current 6 digit judging number has been kept for each of the following: <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
 <?php } ?>
-<p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
 <div class="bcoem-admin-element">
     <p>Use the form below to check in entries and assign their judging number in the system using a barcode reader/scanner.</p>
 <div class="btn-group" role="group" aria-label="barcodeInfo">
@@ -98,13 +98,14 @@ foreach ($flag_enum as $num) {
 </div><!-- ./modal -->
 </div>
 
-<form method="post" action="index.php?section=admin&amp;go=checkin&amp;action=add" id="form1" onsubmit = "return(p)">
+<form method="post" action="index.php?section=admin&amp;go=checkin&amp;action=add" id="form1">
 
 <div class="form-inline">
 	<?php for ($i=1; $i <= $fields; $i++) { 
 	
 	?>
     <div class="bcoem-admin-element hidden-print">
+    <input type="hidden" name="id[]" value="<?php echo $i; ?>">
 	<div class="form-group">
     	<label for="">Entry Number</label>
     	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" /><?php if ($i == "1") { ?><script>document.getElementById('eid1').focus()</script><?php } ?>
@@ -126,6 +127,3 @@ foreach ($flag_enum as $num) {
 </div>
 <p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
- 
- 
- 
