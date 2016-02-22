@@ -8,10 +8,9 @@ ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
-mysqli_select_db($connection,$database);
-
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
+mysqli_select_db($connection,$database);
 
 if (NHC) $base_url = "../";
 else $base_url = $base_url;

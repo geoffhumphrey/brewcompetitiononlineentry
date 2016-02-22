@@ -539,18 +539,22 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
 			$updateSQL .= sprintf(", brewerAHA=%s",GetSQLValueString($_POST['brewerAHA'], "text"));
 		}
-		
 		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));
+		
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		//echo $updateSQL."<br>";
 		  
-		if ($_POST['brewerAssignment'] == "J") $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='judge' WHERE id='".$id."'"; 
-		elseif ($_POST['brewerAssignment'] == "S") $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 
+		if ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "J")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='judge' WHERE id='".$id."'"; 
+		elseif ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "S")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 
 		else $updateSQL = "UPDATE $brewer_db_table SET brewerNickname=NULL WHERE id='".$id."'"; 
 		
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		//echo $updateSQL."<br>";
+		//exit;
 		
 		if ($go == "register") $updateGoTo = $base_url."index.php?section=brew&msg=2";	
 		elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=7";
@@ -561,12 +565,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		
-		/*
-		echo $updateSQL."<br>";
-		echo $updateSQL."<br>";
-		echo $updateGoTo;
-		exit;
-		*/
+		
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}
 	

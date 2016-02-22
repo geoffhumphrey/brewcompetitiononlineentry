@@ -35,10 +35,13 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		$brewInfo = $_POST['brewInfo'];
 		$brewInfo = strtr($_POST['brewInfo'],$html_remove);
 		
+		$brewMead1 = "";
+		$brewMead2 = "";
+		$brewMead3 = "";
 		
-		$brewMead1 = $_POST['brewMead1']; 
-		$brewMead2 = $_POST['brewMead2']; 
-		$brewMead3 = $_POST['brewMead3']; 
+		if (isset($_POST['brewMead1'])) $brewMead1 .= $_POST['brewMead1']; 
+		if (isset($_POST['brewMead2'])) $brewMead2 .= $_POST['brewMead2']; 
+		if (isset($_POST['brewMead3'])) $brewMead3 .= $_POST['brewMead3']; 
 	
 	
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
@@ -567,7 +570,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$updateSQL .= "brewBrewerID=".GetSQLValueString($brewBrewerID,"text").", "; 
 			$updateSQL .= "brewBrewerFirstName=". GetSQLValueString($brewBrewerFirstName,"text").", "; 
 			$updateSQL .= "brewBrewerLastName=".GetSQLValueString($brewBrewerLastName,"text").", "; 
-			$updateSQL .= "brewJudgingLocation=".GetSQLValueString($row_style_name['brewStyleJudgingLoc'],"text").", ";  
+			//$updateSQL .= "brewJudgingLocation=".GetSQLValueString($row_style_name['brewStyleJudgingLoc'],"text").", ";  
 			$updateSQL .= "brewCoBrewer=".GetSQLValueString(ucwords($_POST['brewCoBrewer']),"text").", ";	
 			$updateSQL .= "brewUpdated="."NOW( ), ";
 			$updateSQL .= "brewJudgingNumber=".GetSQLValueString($_POST['brewJudgingNumber'],"text").", ";
@@ -687,8 +690,10 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	if ($action == "update") {
 		
 		foreach($_POST['id'] as $id) { 
-		if ($_POST["brewPaid".$id] == "1") $brewPaid = "1"; else $brewPaid = "0";
-		if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
+		if ((isset($_POST["brewPaid".$id])) && ($_POST["brewPaid".$id] == "1")) $brewPaid = "1"; 
+		if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
+		if ((isset($_POST["brewPaid".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
+		if (!isset($_POST["brewPaid".$id]))  $brewReceived = "0";
 		
 		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) {
 			$updateSQL = "UPDATE $brewing_db_table SET 

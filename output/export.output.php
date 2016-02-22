@@ -43,9 +43,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 		if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 			$headers = array(); 
-			//for ($i = 0; $i < $num_fields; $i++) {     
-				//   $headers[] = mysql_field_name($sql,$i);
-				// }
+			for ($i = 0; $i < $num_fields; $i++) {     
+				$headers[] = mysql_field_name($sql,$i);
+			 }
 				$headers[] .= "Table";
 				$headers[] .= "Flight";
 				$headers[] .= "Round";
