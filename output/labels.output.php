@@ -1,12 +1,14 @@
 <?php
 session_start(); 
-require('../paths.php'); 
+require('../paths.php');
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
 mysqli_select_db($connection,$database);
 include(DB.'output_labels.db.php');
 include(LIB.'output.lib.php');
 include(DB.'styles.db.php');
+
+$filename = "";
 
 if (isset($_SESSION['loginUsername'])) {
 	

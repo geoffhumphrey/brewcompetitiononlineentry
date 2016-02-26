@@ -207,7 +207,7 @@
         <!-- Judge/steward registration not open yet -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Judge/Steward Registration Will Open <?php echo $judge_open; ?>.</strong> Please check back later to register as a judge or steward.
+          <span class="fa fa-info-circle"></span> <strong>Judge/Steward Registration Will Open <?php echo $judge_open; ?>.</strong> Please check back later to register as a judge or steward.
         </div>
     <?php } ?>
     

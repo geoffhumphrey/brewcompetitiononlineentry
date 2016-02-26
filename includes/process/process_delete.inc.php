@@ -5,7 +5,6 @@
  *              new users, organization, etc.
  */
  
-require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 
 if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 

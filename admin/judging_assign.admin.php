@@ -76,6 +76,12 @@ for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 $output_datatables_head .= "</tr>";
 
 do {
+	$table_location = "Y-".$row_tables_edit['tableLocation'];
+	$judge_info = judge_info($row_brewer['uid']);
+	$judge_info = explode("^",$judge_info);
+	$bjcp_rank = explode(",",$judge_info[5]);
+	$display_rank = bjcp_rank($bjcp_rank[0],1);	
+	
 	$assign_row_color = "";
 	$assign_flag = "";
 	
@@ -107,11 +113,6 @@ do {
 		}
 	}
 	
-	$table_location = "Y-".$row_tables_edit['tableLocation'];
-	$judge_info = judge_info($row_brewer['uid']);
-	$judge_info = explode("^",$judge_info);
-	$bjcp_rank = explode(",",$judge_info[5]);
-	$display_rank = bjcp_rank($bjcp_rank[0],1);	
 	
 	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
 	 

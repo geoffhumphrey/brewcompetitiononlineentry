@@ -564,7 +564,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 			} );
 		} );
 	</script>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?>" name="form1" id="form1">
 <div class="bcoem-admin-element hidden-print">
 
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -584,7 +584,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <!-- Input Here -->
         <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<50+1; $i++) { ?>
-    		<option value="<?php echo $i; ?>" <?php if (in_array($i,$a)) echo "DISABLED"; if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    		<option value="<?php echo $i; ?>" <?php if ((isset($a)) && (in_array($i,$a))) echo "DISABLED";  if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
         </select>
         </div>

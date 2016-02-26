@@ -130,7 +130,7 @@ function purge_entries($type, $interval) {
 		
 		do { 
 				
-			$deleteSQL sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
+			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
 			mysqli_real_escape_string($connection,$deleteSQL);
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 			

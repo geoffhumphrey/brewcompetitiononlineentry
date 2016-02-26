@@ -165,7 +165,7 @@ echo $primary_links;
 			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-key" aria-hidden="true"></span></button>
 		</div>
 	</div><!-- Form Group -->
-<input type="hidden" name="loginUsername" value="<?php echo $username; ?>">
+<input type="hidden" name="loginUsername" value="<?php echo $username_check; ?>">
 </form>
     <?php }
 	}

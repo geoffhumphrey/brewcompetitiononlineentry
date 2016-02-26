@@ -44,7 +44,7 @@ if (NHC) $base_url = "../";
             <th>Entry Name</th>
             <th width="25%">Category</th>
             <th width="40%">Special Ingredients / Classic Style</th>
-            <?php if ($section == "scores") { ?> 
+            <?php if ($go == "scores") { ?> 
             <th width="5%" nowrap>Score</th>
             <?php } ?>
         </tr>
@@ -64,8 +64,8 @@ if (NHC) $base_url = "../";
             <td><?php echo $row_post_inventory['brewName']; ?></td> 
             <td><?php echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?></td>
             <td><?php echo $row_post_inventory['brewInfo']; ?></td> 
-            <?php if ($section == "scores") { ?> 
-            <td><?php echo $row_post_inventory['scoreEntry']; ?></td>
+            <?php if ($go == "scores") { ?> 
+            <td><?php if (isset($row_post_inventory['scoreEntry'])) echo $row_post_inventory['scoreEntry']; ?></td>
             <?php } ?>
         </tr>
     <?php 

@@ -11,6 +11,7 @@ include(DB.'entries.db.php');
 $add_entry_disable = FALSE;
 $edit_entry_disable = FALSE;
 
+
 // Adding an entry not allowed conditionals for non-admins
 if ($action == "add") {
 	
@@ -74,10 +75,11 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	}
 	
 	function admin_relocate($user_level,$go,$referrer) {
+		$list = FALSE;
 		if (strstr($referrer,"list")) $list = TRUE;
 		if (strstr($referrer,"entries")) $list = FALSE;
-		if (($user_level <= 1) && ($go == "entries") && ($list == FALSE)) $output = "admin";
-		elseif (($user_level <= 1) && ($go == "entries") && ($list == TRUE)) $output = "list";
+		if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
+		elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
 		else $output = "list";
 		return $output;
 	}
@@ -92,6 +94,11 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
 	$specials = rtrim($specials,", "); 
 	
+	$highlight_sweetness = "";
+	$highlight_special = "";
+	$highlight_carb = "";
+	$highlight_strength = "";
+	
 	if (($action == "edit") && ($msg != "default")) {
 		$view = ltrim($msg,"1-"); 
 		$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
@@ -99,11 +106,13 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 		$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
 		$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
 	}
+	
 	elseif ($action == "edit") { 
 		$view = $view;
-		
-		if (in_array($view,$all_special_ing_styles)) $special_required = TRUE; else $special_required = FALSE;
+		if (in_array($view,$all_special_ing_styles)) $special_required = TRUE; 
+		else $special_required = FALSE;
 	}
+	
 	// Disable fields trigger
 	if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 	
@@ -1140,5 +1149,6 @@ else {
 	
 if (($add_entry_disable) && ($edit_entry_disable))  echo "<p class=\"lead\">Adding and edting of entries is not available.</p>"; 
 if (($add_entry_disable) && (!$edit_entry_disable))  echo "<p class=\"lead\">Adding entries is not available.</p>";
-	 
-} ?>
+}
+
+?>

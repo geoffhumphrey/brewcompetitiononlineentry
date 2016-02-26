@@ -40,7 +40,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		
 			if ($filter == "judges") {
 				
-				if ($_POST['staff_judge'.$uid] == "1") {
+				if ((isset($_POST['staff_judge'.$uid])) && ($_POST['staff_judge'.$uid] == "1")) {
 					if ($row_staff['count'] == 0) $updateSQL = sprintf("INSERT INTO %s (uid,staff_judge) VALUES (%s,1)",$prefix."staff",$uid);
 					else $updateSQL = sprintf("UPDATE %s SET staff_judge=1 WHERE uid=%s",$prefix."staff",$uid);
 					mysqli_real_escape_string($connection,$updateSQL);
@@ -48,7 +48,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					//echo $updateSQL."<br>";
 				}
 				
-				if ($_POST['staff_judge'.$uid] == "") {
+				if (!isset($_POST['staff_judge'.$uid])) {
 				
 					if ($row_staff['count'] == 0) $updateSQL == "";
 					else { 
@@ -81,7 +81,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			
 			if ($filter == "stewards") {
 				
-				if ($_POST['staff_steward'.$uid] == "1") {
+				if ((isset($_POST['staff_steward'.$uid])) && ($_POST['staff_steward'.$uid] == "1")) {
 					if ($row_staff['count'] == 0) $updateSQL = sprintf("INSERT INTO %s (uid,staff_steward) VALUES (%s,1)",$prefix."staff",$uid);
 					else $updateSQL = sprintf("UPDATE %s SET staff_steward=1 WHERE uid=%s",$prefix."staff",$uid);
 					mysqli_real_escape_string($connection,$updateSQL);
@@ -89,7 +89,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					//echo $updateSQL."<br>";
 				}
 				
-				if ($_POST['staff_steward'.$uid] == "") {
+				if (!isset($_POST['staff_steward'.$uid])) {
 					
 					if ($row_staff['count'] == 0) $updateSQL == "";
 					else {  
@@ -118,7 +118,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			
 			if ($filter == "staff") {
 				
-				if ($_POST['staff_staff'.$uid] == "1") {
+				if ((isset($_POST['staff_staff'.$uid])) && ($_POST['staff_staff'.$uid] == "1")) {
 					if ($row_staff['count'] == 0) $updateSQL = sprintf("INSERT INTO %s (uid,staff_staff) VALUES (%s,1)",$prefix."staff",$uid);
 					else $updateSQL = sprintf("UPDATE %s SET staff_staff=1 WHERE uid=%s",$prefix."staff",$uid);
 					mysqli_real_escape_string($connection,$updateSQL);
@@ -126,7 +126,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					//echo $updateSQL."<br>";
 				}
 				
-				if ($_POST['staff_staff'.$uid] == "") {
+				if (!isset($_POST['staff_staff'.$uid])) {
 					if ($row_staff['count'] == 0) $updateSQL == "";
 					else { 
 						$updateSQL = sprintf("UPDATE %s SET staff_staff=0 WHERE uid=%s",$prefix."staff",$uid);
@@ -140,7 +140,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			
 			if ($filter == "bos") {
 				
-				if ($_POST['staff_judge_bos'.$uid] == "1") {
+				if ((isset($_POST['staff_judge_bos'.$uid])) && ($_POST['staff_judge_bos'.$uid] == "1")) {
 					if ($row_staff['count'] == 0) $updateSQL = sprintf("INSERT INTO %s (uid,staff_judge_bos) VALUES (%s,1)",$prefix."staff",$uid);
 					else $updateSQL = sprintf("UPDATE %s SET staff_judge_bos=1 WHERE uid=%s",$prefix."staff",$uid);
 					mysqli_real_escape_string($connection,$updateSQL);
@@ -148,7 +148,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 					//echo $updateSQL."<br>";
 				}
 				
-				if ($_POST['staff_judge_bos'.$uid] == "") {
+				if (!isset($_POST['staff_judge_bos'.$uid])) {
 					if ($row_staff['count'] == 0) $updateSQL == "";
 					else { 
 						$updateSQL = sprintf("UPDATE %s SET staff_judge_bos=0 WHERE uid=%s",$prefix."staff",$uid);
@@ -465,19 +465,19 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		}
 		else $location_pref2 = "";
 	
-		if ($_POST['brewerJudgeLikes'] != "") {
+		if (isset($_POST['brewerJudgeLikes'])) {
 			if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
 			else $likes = $_POST['brewerJudgeLikes']; 
 			}
 		else $likes = "";
 	
-		if ($_POST['brewerJudgeDislikes'] != "") { 
+		if (isset($_POST['brewerJudgeDislikes'])) { 
 			if (is_array($_POST['brewerJudgeDislikes'])) $dislikes = implode(",",$_POST['brewerJudgeDislikes']);
 			else $dislikes = $_POST['brewerJudgeDislikes']; 
 			}
 		else $dislikes = "";
 	
-		if ($_POST['brewerJudgeRank'] != "") {
+		if (isset($_POST['brewerJudgeRank'])) {
 			if (is_array($_POST['brewerJudgeRank'])) $rank = implode(",",$_POST['brewerJudgeRank']);
 			else $rank = $_POST['brewerJudgeRank'];
 		}

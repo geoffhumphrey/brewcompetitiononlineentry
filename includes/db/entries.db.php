@@ -1,20 +1,5 @@
 <?php
 
-/*
-$connection = new mysqli($hostname, $username, $password, $database);
-
-mysqli_select_db($connection,$database);
-
-// Query Structure
-$query_XXX = "";
-$result_XXX = mysqli_query($connection,$query_XXX) or die (mysqli_error($connection));
-$row_XXX = mysqli_fetch_assoc($result_XXX);
-
-$row_XXX = mysqli_fetch_array($entries, MYSQLI_BOTH);
-
-mysqli_real_escape_string($connection,$query_XXX);
-*/
-
 $totalRows_entry_count = total_paid_received($go,0);
 
 if (NHC) {

@@ -9,17 +9,13 @@
  * - XML output is fully compliant with the BJCP Database Interface Specifications 
  *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  
- There is no mysql_field_name equavalent in mysqli
+ There is no mysql_field_name equivalent in mysqli
  Research a new way...
  
  */
 
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
-//require(INCLUDES.'url_variables.inc.php');
-//require(LIB.'common.lib.php');
-//require(INCLUDES.'db_tables.inc.php');
-//require(DB.'common.db.php');
 require(LIB.'output.lib.php');
 require(INCLUDES.'scrubber.inc.php');
 
@@ -41,10 +37,17 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 		include(DB.'output_entries_export.db.php');
 		
+		function mysqli_field_name($result, $field_offset)	{
+			$properties = mysqli_fetch_field_direct($result, $field_offset);
+			return is_object($properties) ? $properties->name : null;
+		}
+		
 		if (($go == "csv") && ($action == "all") && ($filter == "all")) { 
 			$headers = array(); 
-			for ($i = 0; $i < $num_fields; $i++) {     
-				$headers[] = mysql_field_name($sql,$i);
+			
+			for ($i = 0; $i < $num_fields; $i++) {				
+				//$headers[] = mysql_field_name($sql,$i);
+				$headers[] = mysqli_fetch_field_direct($sql, $i)->name;
 			 }
 				$headers[] .= "Table";
 				$headers[] .= "Flight";
@@ -159,13 +162,15 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		else  									$filename = $contest."_All_Participant_Email_Addresses_".$date.$loc.$extension;
 		
 		// Set the header row of the CSV for each type of download		
-		if (($filter == "judges") || ($filter == "avail_judges")) 			$a [] = array('First Name','Last Name','Email','Rank','BJCP ID','Availability','Likes','Dislikes','Entries In...');
-		elseif (($filter == "stewards") || ($filter == "avail_stewards")) 	$a [] = array('First Name','Last Name','Email','Availability','Entries In...');
-		elseif ($filter == "staff") 										$a [] = array('First Name','Last Name','Email','Entries In...');
-		else 																$a [] = array('First Name','Last Name','Email','Address','City','State/Province','Zip','Country','Phone','Club','Entries In...');
+		if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array('First Name','Last Name','Email','Rank','BJCP ID','Availability','Likes','Dislikes','Entries In...');
+		elseif (($filter == "stewards") || ($filter == "avail_stewards")) $a [] = array('First Name','Last Name','Email','Availability','Entries In...');
+		elseif ($filter == "staff") $a [] = array('First Name','Last Name','Email','Entries In...');
+		else $a [] = array('First Name','Last Name','Email','Address','City','State/Province','Zip','Country','Phone','Club','Entries In...');
 		
 		do {
-			
+			$brewerAddress = "";
+			$brewerCity = "";
+			$phone = "";
 			$brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
 			$brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
 			if ($filter == "default") {

@@ -6,6 +6,8 @@
  */
  
 $fields = 15;
+$entry_list = "";
+
 if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form

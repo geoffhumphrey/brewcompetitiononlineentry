@@ -692,8 +692,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		foreach($_POST['id'] as $id) { 
 		if ((isset($_POST["brewPaid".$id])) && ($_POST["brewPaid".$id] == "1")) $brewPaid = "1"; 
 		if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
-		if ((isset($_POST["brewPaid".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
-		if (!isset($_POST["brewPaid".$id]))  $brewReceived = "0";
+		if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
+		if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
 		
 		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) {
 			$updateSQL = "UPDATE $brewing_db_table SET 

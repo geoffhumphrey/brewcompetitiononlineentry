@@ -11,8 +11,6 @@ require(LIB.'update.lib.php');
 require(DB.'update.db.php');
 
 // Define vars
-$current_version = "2.0.1.0";
-$current_version_display = "2.0.1";
 $section = "update";
 date_default_timezone_set('America/Denver');
 $sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
@@ -119,9 +117,15 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						// Last version to have a db update was 1.3.2.0
-						// If current version is 1.3.2.0, only perform the 2.0.0.0 update
+						
 						if (($version >= "1320") && ($version < "2000"))  {
+							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						// Last version to have a db update was 2.0.0.0
+						// If current version is 2.0.0.0 or later, only perform the 2.1.0.0 update
+						if (($version >= "2000") && ($version < "2100"))  {
 							include (UPDATE.'current_update.php');
 						}
 				
@@ -170,7 +174,7 @@ if (file_exists($filename)) {
 		// if user is not logged in or an admin...
 		else {
 			$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>Only top level administrators are able to access and perform updates.</strong>";
-			if ($row_user_level['userLevel'] > 0)  $update_alerts .= " You do not have administrative access to this site.";
+			if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] > 0))  $update_alerts .= " You do not have administrative access to this site.";
 			$update_alerts .= "</div>";
 			if (!isset($_SESSION['loginUsername'])) {
 				$update_body .= "<p class=\"lead\">If you are an administrator of this site, log in and try again.</p>";

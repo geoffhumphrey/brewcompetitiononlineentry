@@ -90,7 +90,7 @@ function checkUncheckAll(theElement) {
   <td width="1%" nowrap><input name="brewStyleJudgingLoc<?php echo $row_styles['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if ($row_styles['brewStyleJudgingLoc'] == $bid) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td><?php echo $row_styles['brewStyle']; ?></td>
-  <td><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; if (preg_match("/^[[:digit:]]+$/",$style[0])) echo sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
+  <td><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
   <td><?php if (style_type($row_styles['brewStyleType'],"1","") <= "3") $style_own = "bcoe"; else $style_own = "custom"; echo style_type($row_styles['brewStyleType'],"2",$style_own); ?></td>
   <td><?php if ($row_styles['brewStyleReqSpec'] == 1)  echo "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Special ingredients required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleStrength'] == 1) echo "<span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Strength required for ".$row_styles['brewStyle']."\"></span> "; ?>

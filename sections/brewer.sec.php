@@ -366,16 +366,13 @@ if ($go != "admin") echo $info_msg;
                     </div>
                     <div class="checkbox">
                         <label>
-                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>>Judge with Sensory Training
+                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>> Judge with Sensory Training
                         </label>
                     </div>
                  </div>
                 <span class="help-block">Only the first two checked will appear on your Judge Scoresheet Labels</span>
             </div>
         </div><!-- ./Form Group -->
-        
-        
-        
         <div class="form-group"><!-- Form Group REQUIRED Select -->
             <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competitions Judged</label>
             <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -390,40 +387,58 @@ if ($go != "admin") echo $info_msg;
             </div>
             
         </div><!-- ./Form Group -->
-        
-        <div class="form-group"><!-- Form Group Checkbox  -->
-            <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
-            
-            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-            <p><strong class="text-danger">For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it – there's no need to check all that your available to judge.</p>
-            	<!-- <div class="row"> -->
-                <?php do { ?>
-                	<div class="checkbox">
-                        <label>
-                        	<input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
-                    	</label>
-                    </div>
+        <div class="form-group">
+        <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref">Specify Preferred Styles to Judge</button>
+        			<span class="help-block">Click the button to expand the preferred styles to judge list.</span>
+                </div>
                 
-                <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
-               	<!-- </div> -->
-            </div>
-        </div><!-- ./Form Group -->
-        <div class="form-group"><!-- Form Group Checkbox  -->
-            <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Non Preferred Styles</label>
-            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-            	<p><strong class="text-danger">There is no need to mark those styles for which you have entries</strong>; the system will not allow you to be assigned to any table where you have entries.</p>
-                <!-- <div class="row"> -->
-                <?php do { ?>
-                <!-- Input Here -->
-                    <div class="checkbox">
-                        <label>
-                        	<input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
-                    	</label>
-                    </div>
-                <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
-               	<!-- </div> -->
-            </div>
-        </div><!-- ./Form Group -->
+        </div><!-- ./Form Group --> 
+        <div class="collapse" id="collapsePref">
+          	<div class="form-group"><!-- Form Group Checkbox  -->
+                <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <p><strong class="text-danger">For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it – there's no need to check all that your available to judge.</p>
+                    
+                    <?php do { ?>
+                        <div class="checkbox">
+                            <label>
+                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
+                            </label>
+                        </div>
+                    
+                    <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+                    
+                </div>
+            </div><!-- ./Form Group --> 
+        </div>
+        <div class="form-group">
+        <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseNonPref" aria-expanded="false" aria-controls="collapseNonPref">Specify Non-Preferred Styles to Judge</button>
+                    <span class="help-block">Click the button to expand the non-preferred styles to judge list.</span>
+                </div>
+                
+        </div><!-- ./Form Group --> 
+ 		<div class="collapse" id="collapseNonPref">
+          	<div class="form-group"><!-- Form Group Checkbox  -->
+                <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Non Preferred Styles</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                    <p><strong class="text-danger">There is no need to mark those styles for which you have entries</strong>; the system will not allow you to be assigned to any table where you have entries.</p>
+                    <!-- <div class="row"> -->
+                    <?php do { ?>
+                    <!-- Input Here -->
+                        <div class="checkbox">
+                            <label>
+                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
+                            </label>
+                        </div>
+                    <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
+                    <!-- </div> -->
+                </div>
+            </div><!-- ./Form Group -->
+        </div>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
@@ -498,7 +513,7 @@ else {
 <div class="form-group">
     <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
         <!-- Input Here -->
-        <button name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?></span> </button>
+        <button name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?></span> </button>
     </div>
 </div><!-- Form Group -->
 </form>

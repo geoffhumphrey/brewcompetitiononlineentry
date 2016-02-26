@@ -21,16 +21,31 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$row_entry = mysqli_fetch_assoc($entry);
 					$totalRows_entry = mysqli_num_rows($entry);
 					
+					if ($totalRows_entry == 0) {
+						// if did not find 5 digit number, try a 6 digit (barcode standard)
+						$cleaned = sprintf('%06d',$cleaned);
+						$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
+						$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
+						$row_entry = mysqli_fetch_assoc($entry);
+						$totalRows_entry = mysqli_num_rows($entry);
+					}
+					
 					//echo $query_entry."<br>";
 					
 					if ($totalRows_entry == 1) {
+						
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						else $sbd_place = "";
+						
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						else $sbd_comments = "";
 					
 						$insertSQL = sprintf("INSERT INTO $special_best_data_db_table (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
 										   GetSQLValueString($_POST['sid'.$id], "int"),
 										   GetSQLValueString($row_entry['brewBrewerID'], "int"),
 										   GetSQLValueString($row_entry['id'], "int"),
-										   GetSQLValueString($_POST['sbd_place'.$id], "int"),
-										   GetSQLValueString($_POST['sbd_comments'.$id], "text")
+										   GetSQLValueString($sbd_place, "int"),
+										   GetSQLValueString($sbd_comments, "text")
 										   );
 					
 						mysqli_real_escape_string($connection,$insertSQL);
@@ -75,17 +90,33 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$row_entry = mysqli_fetch_assoc($entry);
 				$totalRows_entry = mysqli_num_rows($entry);
 				
+				if ($totalRows_entry == 0) {
+					// if did not find 5 digit number, try a 6 digit (barcode standard)
+					$cleaned = sprintf('%06d',$cleaned);
+					$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
+					$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
+					$row_entry = mysqli_fetch_assoc($entry);
+					$totalRows_entry = mysqli_num_rows($entry);
+				}
+				
 				//echo $query_entry."<br>";
 					
 				if ($_POST['entry_exists'.$id] == "Y") {
 					
 					if ($totalRows_entry == 1) {
+						
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						else $sbd_place = "";
+						
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						else $sbd_comments = "";
+						
 						$updateSQL = sprintf("UPDATE $special_best_data_db_table SET sid=%s, bid=%s, eid=%s, sbd_place=%s, sbd_comments=%s WHERE id=%s",
 											GetSQLValueString($_POST['sid'.$id], "int"),
 											GetSQLValueString($row_entry['brewBrewerID'], "int"),
 											GetSQLValueString($row_entry['id'], "int"),
-											GetSQLValueString($_POST['sbd_place'.$id], "int"),
-											GetSQLValueString($_POST['sbd_comments'.$id], "text"),
+											GetSQLValueString($sbd_place, "int"),
+											GetSQLValueString($sbd_comments, "text"),
 											GetSQLValueString($id, "int"));
 					
 						mysqli_real_escape_string($connection,$updateSQL);
@@ -102,13 +133,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				if (($_POST['entry_exists'.$id] == "N") && ($_POST['sbd_judging_no'.$id] != "")) {
 					
 					if ($totalRows_entry == 1) {
+						
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						else $sbd_place = "";
+						
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						else $sbd_comments = "";
 					
 						$insertSQL = sprintf("INSERT INTO $special_best_data_db_table (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
 										   GetSQLValueString($_POST['sid'.$id], "int"),
 										   GetSQLValueString($row_entry['brewBrewerID'], "int"),
 										   GetSQLValueString($row_entry['id'], "int"),
-										   GetSQLValueString($_POST['sbd_place'.$id], "int"),
-										   GetSQLValueString($_POST['sbd_comments'.$id], "text")
+										   GetSQLValueString($sbd_place, "int"),
+										   GetSQLValueString($sbd_comments, "text")
 										   );
 					
 						mysqli_real_escape_string($connection,$insertSQL);

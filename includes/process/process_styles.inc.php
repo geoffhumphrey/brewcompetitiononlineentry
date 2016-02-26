@@ -6,6 +6,9 @@
  
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 	
+	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink'];
+	else $brew_style_link = "";
+	
 	if ($action == "update") {
 	foreach($_POST['id'] as $id)	{ 
 	
@@ -72,6 +75,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	// Get the difference between the category end and the last number
 	// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
 	$style_add_one = $row_style_name['brewStyleGroup'] + 1;
+	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink']; else $brew_style_link = "";
 	
 	  $insertSQL = sprintf("INSERT INTO $styles_db_table (
 	  brewStyleNum, 
@@ -122,7 +126,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
 						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
-						   GetSQLValueString($_POST['brewStyleLink'], "text"),
+						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($style_add_one, "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
 						   GetSQLValueString($_POST['brewStyleOwn'], "text"),
@@ -189,7 +193,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
 						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
-						   GetSQLValueString($_POST['brewStyleLink'], "text"),
+						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
 						   GetSQLValueString($_POST['brewStyleOwn'], "text"),

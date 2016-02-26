@@ -45,7 +45,6 @@ Declare all variables empty at the top of the script. Add on later...
 
  
 include(DB.'dropoff.db.php');
-
 include(DB.'judging_locations.db.php');
 include(DB.'styles.db.php');
 include(DB.'entry_info.db.php');

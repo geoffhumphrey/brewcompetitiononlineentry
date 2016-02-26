@@ -6,6 +6,8 @@
  *
  */
 
+// Define the current version
+include (INCLUDES.'current_version.inc.php'); 
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
@@ -13,6 +15,7 @@ include (LIB.'date_time.lib.php');
 // If are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
+
 
 include(INCLUDES.'version.inc.php');
 
@@ -2282,7 +2285,8 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 	$totalRows_staff_check = mysqli_num_rows($staff_check);
 	
 	if ($row_staff_check['staff_judge'] == "1") $assignment = "judges";
-	if ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
+	elseif ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
+	else $assignment = "";
 	
 	if ($totalRows_staff_check > 0) {
 	$r[] = "";

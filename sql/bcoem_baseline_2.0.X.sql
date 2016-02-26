@@ -573,7 +573,7 @@ INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `j
 DROP TABLE IF EXISTS `baseline_judging_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
+  `jPrefsQueued` tinyint(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
   `jPrefsRounds` int(11) DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
@@ -581,7 +581,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `baseline_judging_preferences` (`id`, `jPrefsQueued`, `jPrefsFlightEntries`, `jPrefsMaxBOS`, `jPrefsRounds`) VALUES
-(1, 'Y', 12, 3, 2);
+(1, 1, 12, 3, 2);
 
 DROP TABLE IF EXISTS `baseline_judging_scores`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
@@ -643,32 +643,32 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsWeight2` varchar(20) DEFAULT NULL,
   `prefsLiquid1` varchar(20) DEFAULT NULL,
   `prefsLiquid2` varchar(20) DEFAULT NULL,
-  `prefsPaypal` char(1) DEFAULT NULL,
+  `prefsPaypal` tinyint(1) DEFAULT NULL,
   `prefsPaypalAccount` varchar(255) DEFAULT NULL,
   `prefsCurrency` varchar(20) DEFAULT NULL,
-  `prefsCash` char(1) DEFAULT NULL,
-  `prefsCheck` char(1) DEFAULT NULL,
+  `prefsCash` tinyint(1) DEFAULT NULL,
+  `prefsCheck` tinyint(1) DEFAULT NULL,
   `prefsCheckPayee` varchar(255) DEFAULT NULL,
-  `prefsTransFee` char(1) DEFAULT NULL,
-  `prefsGoogle` char(1) DEFAULT NULL,
+  `prefsTransFee` tinyint(1) DEFAULT NULL,
+  `prefsGoogle` tinyint(1) DEFAULT NULL,
   `prefsGoogleAccount` varchar(255) DEFAULT NULL COMMENT 'Google Merchant ID',
-  `prefsSponsors` char(1) DEFAULT NULL,
-  `prefsSponsorLogos` char(1) DEFAULT NULL,
+  `prefsSponsors` tinyint(1) DEFAULT NULL,
+  `prefsSponsorLogos` tinyint(1) DEFAULT NULL,
   `prefsSponsorLogoSize` varchar(255) DEFAULT NULL,
   `prefsCompLogoSize` varchar(255) DEFAULT NULL,
-  `prefsDisplayWinners` char(1) DEFAULT NULL,
+  `prefsDisplayWinners` tinyint(1) DEFAULT NULL,
   `prefsWinnerDelay` int(11) DEFAULT NULL COMMENT 'Hours after last judging date beginning time to delay displaying winners',
   `prefsWinnerMethod` int(11) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
-  `prefsDisplaySpecial` char(1) DEFAULT NULL,
-  `prefsBOSMead` char(1) DEFAULT 'N',
-  `prefsBOSCider` char(1) DEFAULT 'N',
+  `prefsDisplaySpecial` tinyint(1) DEFAULT NULL,
+  `prefsBOSMead` tinyint(1) DEFAULT '0',
+  `prefsBOSCider` tinyint(1) DEFAULT '0',
   `prefsEntryForm` char(1) DEFAULT NULL,
   `prefsRecordLimit` int(11) DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
   `prefsRecordPaging` int(11) DEFAULT '30' COMMENT 'User defined per page record limit',
-  `prefsCompOrg` char(1) DEFAULT NULL,
+  `prefsCompOrg` tinyint(1) DEFAULT NULL,
   `prefsTheme` varchar(255) DEFAULT NULL,
-  `prefsDateFormat` char(1) DEFAULT NULL,
-  `prefsContact` char(1) DEFAULT NULL,
+  `prefsDateFormat` tinyint(1) DEFAULT NULL,
+  `prefsContact` tinyint(1) DEFAULT NULL,
   `prefsTimeZone` decimal(10,3) DEFAULT NULL,
   `prefsEntryLimit` int(11) DEFAULT NULL,
   `prefsTimeFormat` tinyint(1) DEFAULT NULL,
@@ -676,10 +676,10 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsUserSubCatLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
   `prefsUSCLEx` varchar(255) DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
   `prefsUSCLExLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted',
-  `prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
-  `prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?',
-  `prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
-  `prefsSEF` char(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
+  `prefsPayToPrint` tinyint(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
+  `prefsHideRecipe` tinyint(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?',
+  `prefsUseMods` tinyint(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
+  `prefsSEF` tinyint(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
   `prefsSpecialCharLimit` int(3) DEFAULT NULL,
   `prefsStyleSet` varchar(20) DEFAULT NULL,
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
@@ -687,7 +687,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0);
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 1, 'user.baseline@brewcompetition.com', '$', 0, 0, NULL, 1, 0, NULL, 1, 1, '250', '300', 0, 8, 0, NULL, 0, 0, 'B', 9999, 150, NULL, 'default', '1', 1, '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 150, 'BJCP2015', 0);
 
 DROP TABLE IF EXISTS `baseline_special_best_data`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (

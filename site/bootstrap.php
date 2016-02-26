@@ -25,14 +25,6 @@ http://www.codediesel.com/security/integrating-googles-new-nocaptcha-recaptcha-i
 */
 
 // --------------------------------------------------------
-// VERSION
-// --------------------------------------------------------
-
-// Define the current version
-
-$current_version = "2.0.1.0";
-
-// --------------------------------------------------------
 
 // reCAPTCHA Public Key
 $publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
@@ -53,16 +45,17 @@ if ($setup_success) {
 	
 	// Global Library, Includes and DB Calls
 	require(INCLUDES.'url_variables.inc.php');
-	require(LIB.'common.lib.php');
 	require(INCLUDES.'authentication_nav.inc.php'); 
 	require(INCLUDES.'db_tables.inc.php');
+	require(LIB.'common.lib.php');
+	require(LIB.'help.lib.php');
 	require(DB.'common.db.php');
 	require(DB.'brewer.db.php');
 	require(DB.'entries.db.php');
 	require(INCLUDES.'headers.inc.php');
 	require(INCLUDES.'constants.inc.php');
 	require(INCLUDES.'scrubber.inc.php');
-	require(LIB.'help.lib.php');
+	
 	
 	// Redirect if section not the array	
 	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes");
@@ -77,7 +70,7 @@ if ($setup_success) {
 	// ---------------------------- Data Integrity Checks 	---------------------------- 
 	
 	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
-	if ($_SESSION['prefsAutoPurge'] == 1) {
+	if ((isset($_SESSION['dataCheck'.$prefix_session])) && ((isset($_SESSION['prefsAutoPurge'])) && ($_SESSION['prefsAutoPurge'] == 1))) {
 		if ((!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
 	}
 	

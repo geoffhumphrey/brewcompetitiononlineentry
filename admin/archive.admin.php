@@ -11,24 +11,24 @@ $table_header7 = "Actions";
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; ?> Archives</p>
 <?php if (HOSTED) { ?>
-<p>Due to server storage limitations, archiving of hosted BCOE&amp;M accounts is not available. To utilize the software for a new competition or simply to clear the database of data, use the links below.</p>
+<p>Due to server storage limitations, archiving of hosted BCOE&amp;M account data is not available. To utilize the software for a new competition or simply to clear the database of data, use the buttons below.</p>
 <p>Custom category, custom style type, drop-off location, judging location, and sponsor data <strong class="text-success">will not be purged</strong>. Admins will need to update these for future competition instances.</p>
 <h3>Option 1</h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/archive.inc.php" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear All Participant, Entry, Judging, and Scoring Data</a>
+        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear All Participant, Entry, Judging, and Scoring Data</a>
     </div><!-- ./button group -->
     <span id="helpBlock" class="help-block">This option clears all participant, entry, judging, and scoring data. Provides a clean slate.</span>
 </div>
 <h3>Option 2</h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/archive.inc.php?filter=participant" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear Entry, Judging, and Scoring Data Only</a>
+        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive&amp;filter=participant" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear Entry, Judging, and Scoring Data Only</a>
     </div><!-- ./button group -->
     <span id="helpBlock" class="help-block">This option clears all entry, judging, and scoring data, but retains the participant data. Useful if you want don't want to have participants create new account profiles.</span>
 </div>
 <?php } else { ?>
-<form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/archive.inc.php" method="post" name="form1">
+<form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
 <input type="hidden" name="action" value="add_form" /> 
 <p>To archive the current entry, table, scoring, and result data, provide a name of the archive.</p>
 <!-- Form Group REQUIRED Text Input -->

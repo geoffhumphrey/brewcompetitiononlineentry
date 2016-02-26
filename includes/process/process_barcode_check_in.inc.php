@@ -40,7 +40,7 @@ foreach ($_POST['id'] as $id) {
 				$entries_updated[] = number_pad($_POST['eid'.$id],4);
 			}
 			
-			if ($_POST['brewPaid'.$id] == 1) $brewPaid = 1; else $brewPaid = $row_enum['brewPaid'];
+			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1; else $brewPaid = $row_enum['brewPaid'];
 			
 			$updateSQL = sprintf("UPDATE %s SET brewReceived='1', brewJudgingNumber='%s', brewBoxNum='%s', brewPaid='%s' WHERE id='%s';",$brewing_db_table,$judging_number, $_POST['box'.$id],$brewPaid,$eid);
 			mysqli_real_escape_string($connection,$updateSQL);

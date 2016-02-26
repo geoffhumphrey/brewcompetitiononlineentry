@@ -21,7 +21,7 @@ if ($action == "add") {
 
 $query_entry_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
 if ($action == "default") $query_entry_count .= " WHERE brewReceived='1'";
-$result = mysqli_query($connection,$query_entry_countn) or die (mysqli_error($connection));
+$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
 $row_entry_count = mysqli_fetch_array($result);
 		
 // Check and see if scores have been entered for this table already

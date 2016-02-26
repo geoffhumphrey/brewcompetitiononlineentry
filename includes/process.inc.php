@@ -11,14 +11,15 @@ ini_set('display_errors', '1');
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 mysqli_select_db($connection,$database);
-
+require(DB.'common.db.php');
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
 date_default_timezone_set("America/Denver");
 
-if ($section != "setup")  { 
-	require(DB.'common.db.php');
+if ($section != "setup")  {
+	
+	
 	require(LIB.'date_time.lib.php');
 	
 	// Set timezone globals for the site
@@ -29,7 +30,6 @@ if ($section != "setup")  {
 	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
 	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
-	
 	
 }
 
@@ -154,18 +154,22 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 		$errorGoTo = "";
 	}
 	
-	if (strpos($_POST['relocate'],"?") === false) {
-		$insertGoTo .= $_POST['relocate']."?msg=1"; 
-		$updateGoTo .= $_POST['relocate']."?msg=2";
-		$errorGoTo .= $_POST['relocate']."?msg=3";
-		$massUpdateGoTo .= $_POST['relocate']."?msg=9";
-	}
-	
-	else { 
-		$insertGoTo .= $_POST['relocate']."&msg=1";
-		$updateGoTo .= $_POST['relocate']."&msg=2";
-		$errorGoTo .= $_POST['relocate']."&msg=3";
-		$massUpdateGoTo .= $_POST['relocate']."&msg=9";
+	if (isset($_POST['relocate'])) {
+		
+		if (strpos($_POST['relocate'],"?") === false) {
+			$insertGoTo .= $_POST['relocate']."?msg=1"; 
+			$updateGoTo .= $_POST['relocate']."?msg=2";
+			$errorGoTo .= $_POST['relocate']."?msg=3";
+			$massUpdateGoTo .= $_POST['relocate']."?msg=9";
+		}
+		
+		else { 
+			$insertGoTo .= $_POST['relocate']."&msg=1";
+			$updateGoTo .= $_POST['relocate']."&msg=2";
+			$errorGoTo .= $_POST['relocate']."&msg=3";
+			$massUpdateGoTo .= $_POST['relocate']."&msg=9";
+		}
+		
 	}
 	
 	if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
@@ -231,6 +235,13 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 			
 		$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=25";
 		header(sprintf("Location: %s", $updateGoTo));	
+	}
+	
+	elseif ($action == "archive") {
+		
+		if (HOSTED) include_once (PROCESS.'process_archive_hosted.inc.php');
+		else include_once (PROCESS.'process_archive.inc.php');
+		
 	}
 	
 	else {

@@ -122,6 +122,7 @@ $table_head2 = "";
 $table_body2 = "";
 $table_head3 = "";
 $table_body3 = "";
+$brewer_assignment = "";
 
 // Page specific variables
 $user_edit_links = "";
@@ -186,7 +187,6 @@ if (!empty($_SESSION['brewerAHA'])) {
 // Build Judge Info Display
 
 	$judge_info = "";
-	echo $a;
 	$a = explode(",",$_SESSION['brewerJudgeLocation']);
 	arsort($a);
 	foreach ($a as $value) {

@@ -13,7 +13,7 @@
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="jPrefsQueued" value="Y" id="jPrefsQueued_0" rel="none"  <?php if ($_SESSION['jPrefsQueued'] == "Y") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="jPrefsQueued" value="Y" id="jPrefsQueued_0" rel="none"  <?php if ($_SESSION['jPrefsQueued'] == "Y") echo "CHECKED"; elseif ($section == "step8") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
                 <input type="radio" name="jPrefsQueued" value="N" id="jPrefsQueued_1" rel="queued_no" <?php if ($_SESSION['jPrefsQueued'] == "N") echo "CHECKED"; ?>/> No

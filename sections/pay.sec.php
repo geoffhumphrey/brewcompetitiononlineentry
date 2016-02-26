@@ -65,6 +65,7 @@ Declare all variables empty at the top of the script. Add on later...
 	$page_info6 = "";
 	$header1_7 = "";
 	$page_info7 = "";
+	$return_entries = "";
 	
 	// Build top of page info: total entry fees, list of unpaid entries, etc.
 	

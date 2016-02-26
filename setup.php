@@ -10,8 +10,7 @@ require(INCLUDES.'constants.inc.php');
 date_default_timezone_set('America/Denver');
 $setup_alerts = "";
 $setup_body = "";
-$current_version = "2.0.1.0";
-$current_version_display = "2.0.1";
+
 
 if ($setup_free_access == FALSE) {
 	

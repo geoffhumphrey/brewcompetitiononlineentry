@@ -81,6 +81,7 @@ if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
 
 
 // Build Subtitle
+$subtitle = "";
 if ($section != "step5") {
 	if ($action == "add") $subtitle .= ": Add a Judging Location"; 
 	elseif ($action == "edit") $subtitle .= ": Edit a Judging Location"; 
@@ -175,6 +176,7 @@ if ($section != "step5") {
 	
 		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
 		$form_organizer_select = "";
+		$form_submit_button_help = "";
 		
 		if ($filter == "staff") {
 			
@@ -331,7 +333,7 @@ if ($section != "step5") {
 				
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
 					$output_datatables_body .= "<td>".$display_rank;
-					if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+					if ((isset($row_brewer['brewerJudgeMead'])) && ($row_brewer['brewerJudgeMead'] == "Y")) $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
 					if (!empty($bjcp_rank[1])) {
 						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
 					}

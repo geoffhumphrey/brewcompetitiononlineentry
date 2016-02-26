@@ -1,5 +1,7 @@
 <?php 
 // Set up variables
+
+include(DB.'styles.db.php');
 $header1_1 = "";
 $header1_2 = "";
 $sidebar_extension = "";
@@ -300,7 +302,7 @@ if ($action != "print") { ?>
 	$entry_unconfirmed_row = "";
 	
 	if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
-	elseif ((check_special_ingredients($entry_style)) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
+	elseif ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion'])) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 	
 	$entry_judging_num_hidden = "<span class=\"hidden visible-print-inline\">".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>";
 	if ($_SESSION['prefsEntryForm'] == "N") $entry_judging_num_display .= sprintf("%06s",$row_log['brewJudgingNumber']);

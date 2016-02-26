@@ -1,14 +1,13 @@
 <?php
-/*
-$bcoem_help_title .= "";
-$bcoem_help_body .= "<p></p>";
-$content = TRUE;
-*/
+
 $bcoem_dashboard_help_array = array("comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am");
 
 function bcoem_dashboard_help($content) {
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
 	$bcoem_dashboard_help_title = "";
 	$bcoem_dashboard_help_body = "";
+	$return = "";
 		
 	switch($content) {
 		case "comp-prep":
@@ -236,7 +235,8 @@ function bcoem_dashboard_help($content) {
 }
 
 function bcoem_help($section,$go,$action,$filter) {
-	
+	require(CONFIG.'config.php');
+	require(INCLUDES.'url_variables.inc.php');
 	// Define default variables
 	$return = "";
 	$content = FALSE;

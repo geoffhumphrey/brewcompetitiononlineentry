@@ -28,12 +28,12 @@ $version = $row_version1['version'];
 
 if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_set_'.$prefix_session] != $prefix_session)) || (empty($_SESSION['session_set_'.$prefix_session]))) {
 
-session_unset();
-session_destroy();
-session_write_close();
-session_regenerate_id(true);
-session_start();
-$_SESSION['session_set_'.$prefix_session] = $prefix_session;
+	session_unset();
+	session_destroy();
+	session_write_close();
+	session_regenerate_id(true);
+	session_start();
+	$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 
 }
 

@@ -40,5 +40,6 @@ define('TESTING', FALSE); 		// Top-level constant for testing functionality. Set
 //error_reporting(0);	// comment out to debug
 error_reporting(E_ALL); // uncomment to debug 
 
-require(CONFIG.'config.php');
+require (CONFIG.'config.php');
+require (INCLUDES.'current_version.inc.php'); 
 ?>

@@ -184,7 +184,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Extracts
 	$brewing_info['extracts']=array();
 	for ($i=1; $i <= 10; $i++) {
-	  if ($brewing_info['brewExtract'.$i] != "") {
+	  if (isset($brewing_info['brewExtract'.$i])) {
 		$brewing_info['extracts'][$i]['name']=strtr($brewing_info['brewExtract'.$i],$html_remove);;
 	
 		// Metric/US conversion
@@ -206,7 +206,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Adjuncts
 	$brewing_info['adjuncts']=array();
 	for ($i=1; $i <= 20; $i++) {
-	  if ($brewing_info['brewAddition'.$i] != "") {
+	  if (isset($brewing_info['brewAddition'.$i])) {
 		$brewing_info['adjuncts'][$i]['name']=strtr($brewing_info['brewAddition'.$i],$html_remove);;
 	
 		// Metric/US conversion
@@ -247,7 +247,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Hops
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 20; $i++) {
-	  if ($brewing_info['brewHops'.$i] != "") {
+	  if (isset($brewing_info['brewHops'.$i])) {
 		$brewing_info['hops'][$i]['name'] = strtr($brewing_info['brewHops'.$i],$html_remove);
 		$brewing_info['hops'][$i]['alphaAcid'] = $brewing_info['brewHops'.$i.'IBU'];
 		$brewing_info['hops'][$i]['minutes'] = $brewing_info['brewHops'.$i.'Time'];
@@ -273,7 +273,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Mashing
 	$brewing_info['mashSteps']=array();
 	for ($i=1; $i <= 10; $i++) {
-	  if ($brewing_info['brewMashStep'.$i.'Temp'] != 0) {
+	  if (isset($brewing_info['brewMashStep'.$i.'Temp'])) {
 		$brewing_info['mashSteps'][$i]['name']=strtr($brewing_info['brewMashStep'.$i.'Name'],$html_remove);
 		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
 		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];

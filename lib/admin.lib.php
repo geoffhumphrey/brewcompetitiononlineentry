@@ -210,6 +210,8 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
+	$table_choose = "";
+	
 	if ($method == "flight_choose") {
 		$query_flights = sprintf("SELECT flightTable FROM %s WHERE flightTable='%s'", $prefix."judging_flights", $filter);
 		$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
@@ -333,11 +335,14 @@ function orphan_styles() {
 function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db_table) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+		
 	$query_tables = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 	$row_tables = mysqli_fetch_assoc($tables);
 	$totalRows_tables = mysqli_num_rows($tables); 
 	//echo $query_tables;
+	
+	$r = "";
 	
 	if ($totalRows_tables > 0) {
 	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
@@ -362,6 +367,8 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	$sbi = mysqli_query($connection,$query_sbi) or die (mysqli_error($connection));
 	$row_sbi = mysqli_fetch_assoc($sbi);
 	$totalRows_sbi = mysqli_num_rows($sbi); 
+	
+	$r = "";
 	
 	if ($totalRows_sbi > 0) {
 	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
@@ -1057,7 +1064,7 @@ function flight_entry_count($table_id,$flight) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightTable='%s' AND flightNumber='%s'", $prefix."judging_flights", $table_id, $flight);
-	$entry_count = mysqli_query($connection,$query_count) or die (mysqli_error($connection));
+	$entry_count = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
 	$row_entry_count = mysqli_fetch_assoc($entry_count);
 	return $row_entry_count['count'];
 }
@@ -1082,6 +1089,8 @@ function not_assigned($method) {
 	$totalRows_brewer = mysqli_num_rows($brewer);
 	
 	if ($totalRows_brewer > 0) {
+		
+		$user[] = "";
 		
 		do { $user[] .= $row_brewer['uid'];  } while ($row_brewer = mysqli_fetch_assoc($brewer));
 	

@@ -106,7 +106,7 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if (($registration_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['user_level'] == 2))) {
+if (($registration_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
 	
 	$page_info1 .= "<p class=\"lead\">Account registration has closed. <span class=\"small\">Thank you for your interest.</p>";
 	echo $page_info1;

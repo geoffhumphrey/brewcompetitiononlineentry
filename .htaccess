@@ -12,6 +12,7 @@ RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L]
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3&id=$4 [L]
+
 # Custom error pages
 ErrorDocument 404     /404.php
 ErrorDocument 401     /401.php 

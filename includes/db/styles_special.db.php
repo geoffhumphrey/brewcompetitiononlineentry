@@ -1,7 +1,7 @@
 <?php
 
 $query_spec_beer = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleGroup <='%s' OR brewStyleType ='1') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet'],$beer_end);
-$spec_beer = mysqli_query($connection,$query_spec_beers) or die (mysqli_error($connection));
+$spec_beer = mysqli_query($connection,$query_spec_beer) or die (mysqli_error($connection));
 $row_spec_beer = mysqli_fetch_assoc($spec_beer);
 do { $special_beer[] = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum']; } while ($row_spec_beer = mysqli_fetch_assoc($spec_beer));
 //print_r($special_beer); echo "<br>";
@@ -12,11 +12,11 @@ $row_carb_mead = mysqli_fetch_assoc($carb_mead);
 do { $mead[] = $row_carb_mead['brewStyleGroup']."-".$row_carb_mead['brewStyleNum']; } while ($row_carb_mead = mysqli_fetch_assoc($carb_mead));
 //print_r($mead); echo "<br>";
 
-$query_strength_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='0' AND brewStyleStrength='1'", $_SESSION['prefsStyleSet']);
-$strength_mead = mysqli_query($connection,$query_strength_mead) or die (mysqli_error($connection));
-$row_strength_mead = mysqli_fetch_assoc($strength_mead);
-do { $strength_mead[] = $row_strength_mead['brewStyleGroup']."-".$row_strength_mead['brewStyleNum']; } while ($row_strength_mead = mysqli_fetch_assoc($strength_mead));
-//print_r($mead); echo "<br>";
+$query_str_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='0' AND brewStyleStrength='1'", $_SESSION['prefsStyleSet']);
+$str_mead = mysqli_query($connection,$query_str_mead) or die (mysqli_error($connection));
+$row_str_mead = mysqli_fetch_assoc($str_mead);
+do { $strength_mead[] = $row_str_mead['brewStyleGroup']."-".$row_str_mead['brewStyleNum']; } while ($row_str_mead = mysqli_fetch_assoc($str_mead));
+//print_r($strength_mead); echo "<br>";
 
 $query_spec_mead = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType='Mead' OR brewStyleType ='3') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet']);
 $spec_mead = mysqli_query($connection,$query_spec_mead) or die (mysqli_error($connection));
