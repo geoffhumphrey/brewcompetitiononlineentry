@@ -7,7 +7,7 @@
 
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
 	
-	if ($_POST['prefsUSCLEx'] != "") $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
+	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 	else  $prefsUSCLEx = "";
 
  
@@ -63,7 +63,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		
 		prefsStyleSet,
 		prefsAutoPurge,
-		
+		prefsEntryLimitPaid,
+		prefsEmailRegConfirm,
 		id
 		
 		) VALUES (
@@ -75,7 +76,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s)",
+		%s, %s, %s, %s, %s)",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
 							   GetSQLValueString($_POST['prefsWeight1'], "text"),
 							   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -125,6 +126,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
 							   GetSQLValueString($_POST['prefsStyleSet'], "text"),
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
+							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
+							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -158,19 +161,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsCheck=%s, 
 		
 		prefsCheckPayee=%s, 
-		prefsGoogle=%s, 
-		prefsGoogleAccount=%s,  
 		prefsTransFee=%s, 
 		prefsSponsors=%s, 
-		
-		prefsSponsorLogos=%s, 
-		prefsSponsorLogoSize=%s, 
-		prefsCompLogoSize=%s, 
-		prefsDisplayWinners=%s, 
+		prefsDisplayWinners=%s,
 		prefsWinnerDelay=%s,
 		
 		prefsWinnerMethod=%s,
-		prefsDisplaySpecial=%s, 
 		prefsEntryForm=%s,
 		prefsRecordLimit=%s,
 		prefsRecordPaging=%s,
@@ -194,7 +190,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsSpecialCharLimit=%s,
 		
 		prefsStyleSet=%s,
-		prefsAutoPurge=%s
+		prefsAutoPurge=%s,
+		prefsEntryLimitPaid=%s,
+		prefsEmailRegConfirm=%s
 		
 		WHERE id=%s",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -210,19 +208,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsCheck'], "text"),
 							   
 							   GetSQLValueString($_POST['prefsCheckPayee'], "text"),
-							   GetSQLValueString($_POST['prefsGoogle'], "text"),
-							   GetSQLValueString($_POST['prefsGoogleAccount'], "text"),
 							   GetSQLValueString($_POST['prefsTransFee'], "text"),
 							   GetSQLValueString($_POST['prefsSponsors'], "text"),
-							   
-							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
-							   GetSQLValueString($_POST['prefsSponsorLogoSize'], "int"),
-							   GetSQLValueString($_POST['prefsCompLogoSize'], "int"),
 							   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 							   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
 							   
 							   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
-							   GetSQLValueString($_POST['prefsDisplaySpecial'], "text"),
 							   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 							   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 							   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
@@ -247,6 +238,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   
 							   GetSQLValueString($_POST['prefsStyleSet'], "text"),
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
+							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
+							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   
 							   GetSQLValueString($id, "int"));
 							   

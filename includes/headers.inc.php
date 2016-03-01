@@ -608,6 +608,7 @@ switch($section) {
 	elseif ($msg == "29") $output = "<strong>The image has been uploaded successfully.</strong> Check the list to verify.";
 	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an image file.</strong> Please try again.";
 	elseif ($msg == "31") $output = "<strong>The file has been deleted.</strong>";
+	elseif ($msg == "32") $output = "<strong>The test email has been generated. Be sure to check your spam folder.</strong>";
 	elseif ($msg == "755") $output = "<strong>Change permission of user_images folder to 755 has failed.</strong>  You will need to change the folder&rsquo;s permission manually.  Consult your FTP program or ISP&rsquo;s documentation for chmod (folder permissions).";
 	else $output = "";
 	break;

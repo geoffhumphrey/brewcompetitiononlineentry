@@ -5,6 +5,9 @@
 // Version 2.0.0.0
 // -----------------------------------------------------------
 
+$output .= "<h4>Versions 2.0.0 and 2.0.1...</h4>";
+$output .= "<ul>";
+
 // -----------------------------------------------------------
 // Alter Table: Sponsors
 // Adding sponsor enable flag for show/hide sponsor display
@@ -14,6 +17,8 @@ if (!check_update("sponsorEnable", $prefix."sponsors")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
+	$output .=  "<li>Sponsors table altered successfully.</li>";
 }
 
 // -----------------------------------------------------------
@@ -21,11 +26,6 @@ if (!check_update("sponsorEnable", $prefix."sponsors")) {
 // Adding shipping open and close dates
 // Add checkin password for future QR code functionality/portal
 // -----------------------------------------------------------
-
-$output .= "<h4>Versions 2.0.0 and 2.0.1...</h4>";
-$output .= "<ul>";
-
-$output .=  "<li>Sponsors table altered successfully.</li>";
 
 if (!check_update("contestShippingOpen", $prefix."contest_info")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."contest_info` CHANGE `contestContactName` `contestShippingOpen` VARCHAR(255) NULL DEFAULT NULL;";

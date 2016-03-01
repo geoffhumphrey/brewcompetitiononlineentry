@@ -244,6 +244,12 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 		
 	}
 	
+	elseif ($action == "email") {
+		
+		include_once (PROCESS.'process_email.inc.php');
+		
+	}
+	
 	else {
 	
 		// --------------------------- Entries -------------------------------- //

@@ -23,12 +23,18 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 	jPrefsQueued=%s,
 	jPrefsFlightEntries=%s,
 	jPrefsMaxBOS=%s,
-	jPrefsRounds=%s
+	jPrefsRounds=%s,
+	jPrefsBottleNum=%s,
+	jPrefsCapStewards=%s,
+	jPrefsCapJudges=%s
 	WHERE id=%s",
 					   GetSQLValueString($_POST['jPrefsQueued'], "text"),
 					   GetSQLValueString($flight_ent, "int"),
 					   GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
 					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
+					   GetSQLValueString($_POST['jPrefsBottleNum'], "int"),
+					   GetSQLValueString($_POST['jPrefsCapStewards'], "int"),
+					   GetSQLValueString($_POST['jPrefsCapJudges'], "int"),
 					   GetSQLValueString($id, "int"));
 					   
 	mysqli_real_escape_string($connection,$updateSQL);

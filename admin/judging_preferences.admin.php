@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1" onSubmit="return CheckRequiredFields()">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step8") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Set Competition Organization Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
@@ -30,6 +30,7 @@
 		</span>
     </div>
 </div><!-- ./Form Group -->
+
 <!-- Modal -->
 <div class="modal fade" id="queuedModal" tabindex="-1" role="dialog" aria-labelledby="queuedModalLabel">
     <div class="modal-dialog" role="document">
@@ -49,13 +50,42 @@
     </div>
 </div><!-- ./modal -->
 
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="text" value="<?php if ($section == "step8") echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
+            
+        <span id="helpBlock" class="help-block"><p>Most competitions require between two and four bottles.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="text" value="<?php echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
+            
+        <span id="helpBlock" class="help-block"><p>Limit to the number of judges that may sign up. Leave blank for no limit.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="jPrefsCapStewards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Steward Limit</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+            <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="text" value="<?php echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
+            
+        <span id="helpBlock" class="help-block"><p>Limit to the number of stewards that may sign up. Leave blank for no limit.</span>
+    </div>
+</div><!-- ./Form Group -->
 
 <div id="queued_no">
 	<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 		<label for="jPrefsFlightEntries" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Entries per Flight</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<!-- Input Here -->
-				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="text" value="<?php echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="">
+				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="text" value="<?php echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
 		</div>
 	</div><!-- ./Form Group -->
 </div>
@@ -63,7 +93,7 @@
 	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Location</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php echo $_SESSION['jPrefsRounds']; ?>" placeholder="">
+			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->

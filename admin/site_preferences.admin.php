@@ -43,9 +43,6 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
-<input type="hidden" name="prefsGoogle" value="N" />
-<input type="hidden" name="prefsGoogleAccount" value="" />
-<input type="hidden" name="prefsCompLogoSize" value="" />
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
@@ -111,11 +108,16 @@ $(document).ready(function(){
 				   Contact Form Info
 				</button>
 			</div>
+            <div class="btn-group" role="group">
+                <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
+			</div>
 		</div>
-		
+		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>	
 		</span>
     </div>
 </div><!-- ./Form Group -->
+
+
 <!-- Modal -->
 <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -125,7 +127,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
             </div>
             <div class="modal-body">
-                <p>Enable or disable your installation's contact form. This may be necessary if your site's server does not support PHP's <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option.</p>
+                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -133,6 +135,58 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+
+
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Send Registration Confirmation Emails</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($_SESSION['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($_SESSION['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> No
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+        <div class="btn-group" role="group" aria-label="contactFormModal">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">
+				   Registration Confirmation Emails Info
+				</button>
+			</div>
+            <div class="btn-group" role="group">
+                <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
+			</div>
+		</div>
+		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>	
+		</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<!-- Modal -->
+<div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="regEmailFormModalLabel">Registration Confirmation Emails Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want a system-generated confirmation email sent to all users upon registering and/or changing their account information?  This may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
+
+
+
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
 	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
@@ -215,10 +269,13 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsStyleSet" value="BJCP2008" id="prefsUseMods_0"  <?php if ($_SESSION['prefsStyleSet'] == "BJCP2008") echo "CHECKED"; ?> /> BJCP 2008
+                <input type="radio" name="prefsStyleSet" value="BJCP2008" id="prefsStyleSet_0"  <?php if ($_SESSION['prefsStyleSet'] == "BJCP2008") echo "CHECKED"; ?> /> BJCP 2008
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsStyleSet" value="BJCP2015" id="prefsUseMods_1" <?php if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) echo "CHECKED"; ?>/> BJCP 2015
+                <input type="radio" name="prefsStyleSet" value="BJCP2015" id="prefsStyleSet_1" <?php if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) echo "CHECKED"; ?>/> BJCP 2015
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsStyleSet" value="BA" id="prefsStyleSet_2" <?php if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BA")) echo "CHECKED"; ?>/> Brewer&rsquo;s Association (Current Year)
             </label>
         </div>
     </div>
@@ -230,9 +287,10 @@ $(document).ready(function(){
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="10" data-width="auto">
 		<option value="B" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
-        <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official - Bottle Label Only</option>
-        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />BJCP Official With Barcode</option>
-        <option value="C" <?php if ($_SESSION['prefsEntryForm'] == "C") echo " SELECTED"; ?> />BJCP Official With Barcode - Bottle Label Only</option>
+        <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official - Bottle Labels Only</option>
+        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />BJCP Official With Barcode/QR Code</option>
+        <option value="C" <?php if ($_SESSION['prefsEntryForm'] == "C") echo " SELECTED"; ?> />BJCP Official With Barcode/QR Code - Bottle Labels Only</option>
+        <option value="C" <?php if ($_SESSION['prefsEntryForm'] == "C") echo " SELECTED"; ?> />Anonymous Bottle Labels with Barcode/QR Code</option>
         <option value="M" <?php if ($_SESSION['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
         <option value="U" <?php if ($_SESSION['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
 	</select>
@@ -255,10 +313,14 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>The <em>BJCP Official</em> option displays U.S. weights and measures.</p>
-                <p>The <em>BJCP Official With Barcode</em> option displays the official BJCP recipe form with four bottle labels that feature a scannable barcode.</p>
-                <p>The <em>BJCP Official With Barcode - Bottle Label Only</em> option displays four bottle labels that feature a scannable barcode.</p>
-                <p>Both barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>.</p>
+                <p>The <em>BJCP Official With Barcode/QR Code</em> option displays the official BJCP recipe form with bottle labels that feature a scannable barcode and QR code.</p>
+                <p>The <em>BJCP Official With Barcode/QR Code - Bottle Label Only</em> option displays bottle labels that feature a scannable barcode and QR code.</p>
+                <p>The <em>Anonymous Bottle Labels with Barcode/QR Code</em> provides bottle labels with only an entry number, barcode label, and QR code. Intended to be taped to bottles, saving the labor and waste of removing rubberbanded labels.</p>
+                <small>
+                <p>The QR code options are intended to be used with the mobile device check-in function (requires a QR code reading app).</p>
+                <p>The barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>.</p>
                 <p>BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a> to generate all barcodes</strong>. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
+                </small>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -310,7 +372,7 @@ $(document).ready(function(){
 	<label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Special Ingredients</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit" data-size="10" data-width="auto">
+	<select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit" data-size="10">
 		<?php for ($i=25; $i <= 255; $i+=5) { ?>
     	<option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "50")) echo "SELECTED"; elseif ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
@@ -344,11 +406,20 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit</label>
+    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit (Paid/Unpaid)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
         	<input class="form-control" id="prefsEntryLimit" name="prefsEntryLimit" type="text" value="<?php echo $row_limits['prefsEntryLimit']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Limit of entries you will accept in the competition. Leave blank if no limit.</span>
+        <span id="helpBlock" class="help-block">Limit of <strong class="text-danger">total</strong> entries you will accept in the competition. Leave blank if no limit.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit (Paid)</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<!-- Input Here -->
+        	<input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block">Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</span>
     </div>
 </div><!-- ./Form Group -->
 
@@ -356,7 +427,7 @@ $(document).ready(function(){
 	<label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsUserEntryLimit" id="prefsUserEntryLimit" data-size="10" data-width="auto">
+	<select class="selectpicker" name="prefsUserEntryLimit" id="prefsUserEntryLimit" data-size="10">
 		<option value="" rel="none" <?php ($row_limits['prefsUserEntryLimit'] == ""); echo "SELECTED"; ?>></option>
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserEntryLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
@@ -370,7 +441,7 @@ $(document).ready(function(){
 	<label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Sub-Style</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit" data-size="10" data-width="auto">
+	<select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit" data-size="10">
 		<option value="" <?php ($row_limits['prefsUserSubCatLimit'] == ""); echo "SELECTED"; ?>></option>
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserSubCatLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>

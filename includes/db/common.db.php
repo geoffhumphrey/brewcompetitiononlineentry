@@ -73,7 +73,6 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	// Entry Fees
 	$_SESSION['contestEntryFee'] = $row_contest_info['contestEntryFee'];
 	$_SESSION['contestEntryFee2'] = $row_contest_info['contestEntryFee2'];
-	//$_SESSION['contestEntryFeePassword'] = $row_contest_info['contestEntryFeePassword'];
 	$_SESSION['contestEntryFeePasswordNum'] = $row_contest_info['contestEntryFeePasswordNum'];
 	$_SESSION['contestEntryCap'] = $row_contest_info['contestEntryCap'];
 	$_SESSION['contestEntryFeeDiscount'] = $row_contest_info['contestEntryFeeDiscount'];
@@ -126,6 +125,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
 	$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
 	$_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
+	$_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
+	$_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
 
 	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
@@ -135,6 +136,9 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
 	$_SESSION['jPrefsMaxBOS'] = $row_judging_prefs['jPrefsMaxBOS'];
 	$_SESSION['jPrefsRounds'] = $row_judging_prefs['jPrefsRounds'];
+	$_SESSION['jPrefsBottleNum'] = $row_judging_prefs['jPrefsBottleNum'];
+	$_SESSION['jPrefsCapStewards'] = $row_judging_prefs['jPrefsCapStewards'];
+	$_SESSION['jPrefsCapJudges'] = $row_judging_prefs['jPrefsCapJudges'];
 	
 	// Get counts for common, mostly static items
 	$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
@@ -169,6 +173,7 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
 	$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 	$row_name = mysqli_fetch_assoc($name);
+	
 	$_SESSION['brewerID']  = $row_name['id'];
 	$_SESSION['brewerFirstName'] = $row_name['brewerFirstName'];
 	$_SESSION['brewerLastName'] = $row_name['brewerLastName'];
@@ -217,7 +222,7 @@ session_write_close();
 
 // Some limits and dates may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecialCharLimit,prefsUserSubCatLimit,prefsUSCLEx,prefsUSCLExLimit FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecialCharLimit,prefsUserSubCatLimit,prefsUSCLEx,prefsUSCLExLimit,prefsEntryLimitPaid FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
 
@@ -264,9 +269,9 @@ if ($section == "default") {
 }
 
 	
-	$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
-	$contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
-	$row_contest_rules = mysqli_fetch_assoc($contest_rules);	
+$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
+$contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
+$row_contest_rules = mysqli_fetch_assoc($contest_rules);	
 		
 
 if ($section == "volunteers") {
@@ -275,5 +280,32 @@ if ($section == "volunteers") {
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
 
+}
+
+// If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable
+
+if ($_SESSION['prefsStyleSet'] == "BA") {
+	
+	if (!isset($_SESSION['styles'])) {
+		
+		include (INCLUDES.'brewerydb/brewerydb.inc.php');
+		include (INCLUDES.'brewerydb/exception.inc.php');
+		
+		$apikey = "9b986a69d8803dfcaedd2bbdabbf9169";
+		$bdb = new Pintlabs_Service_Brewerydb($apikey);
+		$bdb->setFormat('php');
+		$params = array();
+		
+		try {
+				$results = $bdb->request('styles', $params, 'GET'); // where $params is a keyed array of parameters to send with the API call.
+			} 
+			
+		catch (Exception $e) { 
+				$results = array('error' => $e->getMessage()); 
+			}
+			
+		$_SESSION['styles'] = $results;
+	}
+	
 }
 ?>
