@@ -30,7 +30,7 @@ $table_header7 = "Actions";
 <?php } else { ?>
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
 <input type="hidden" name="action" value="add_form" /> 
-<p>To archive the current entry, table, scoring, and result data, provide a name of the archive.</p>
+<p>To archive data currently stored in the database, provide a name of the archive.</p>
 <!-- Form Group REQUIRED Text Input -->
 <div class="form-group">
 	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
@@ -44,6 +44,7 @@ $table_header7 = "Actions";
         <span id="helpBlock" class="help-block">Alpha numeric characters only - all others will be omitted.</span>
 	</div>
 </div><!-- ./Form Group -->
+<p>Then, choose what data you would like to retain.</p>
 <div class="form-group"><!-- Form Group Checkbox STACKED -->
     <label for="retain" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Data to Retain</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">

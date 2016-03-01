@@ -49,6 +49,7 @@ $page_info = "";
 $page_info10 = "";
 $page_info20 = "";
 $page_info30 = "";
+$header1_1 = "";
 $header1_10 = "";
 $header1_20 = "";
 $header1_30 = "";

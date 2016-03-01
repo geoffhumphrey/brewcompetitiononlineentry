@@ -114,7 +114,6 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
 	$_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
 	$_SESSION['prefsRecordPaging'] = $row_prefs['prefsRecordPaging'];
-	$_SESSION['prefsCompOrg'] = $row_prefs['prefsCompOrg'];
 	$_SESSION['prefsTheme'] = $row_prefs['prefsTheme'];
 	$_SESSION['prefsDateFormat'] = $row_prefs['prefsDateFormat'];
 	$_SESSION['prefsContact'] = $row_prefs['prefsContact'];

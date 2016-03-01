@@ -11,7 +11,7 @@ include (INCLUDES.'current_version.inc.php');
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.0.1.0, change version in system table if not
+// Current version is 2.1.0.0, change version in system table if not
 // If are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -25,7 +25,7 @@ function version_check($version,$current_version) {
 	mysqli_select_db($connection,$database);
 	if ($version != $current_version) {
 		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.0.1.0","2016-02-15","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.1.0.0","2016-3-01","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -3085,7 +3085,7 @@ function styles_active($method) {
 	if ($method == 1) { // Style Types
 	
 		$query_style_types_active = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE styleTypeBOS='Y'", $prefix."style_types");
-		$style_types_active = mysqli_query($connection,$query_style_types) or die (mysqli_error($connection));
+		$style_types_active = mysqli_query($connection,$query_style_types_active) or die (mysqli_error($connection));
 		$row_style_types_active = mysqli_fetch_assoc($style_types_active);
 		
 		return $row_style_types_active['count'];

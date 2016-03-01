@@ -57,6 +57,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -68,6 +69,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -78,6 +80,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -87,6 +90,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -95,6 +99,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -103,17 +108,20 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.2.1.0_update.php');
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						if (($version >= "1210") && ($version < "1300")) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						if (($version >= "1300") && ($version < "1320")) {
 							include (UPDATE.'1.3.2.0_update.php');
+							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -145,12 +153,13 @@ if (file_exists($filename)) {
 					//  Finish and Clean Up
 					// -----------------------------------------------------------
 					
-					$update_body .= "<p>To take advantage of this version's added features, you'll need to <a href='".$base_url."index.php?section=login'>log in again</a> and update the following:</p>";
+					$update_body .= "<p>To take advantage of this version's added features, you'll need to log in again and update the following:</p>";
 					$update_body .= "<ul>";
 					$update_body .= "<li>Your site preferences.</li>";
 					$update_body .= "<li>Your site judging preferences.</li>";
 					$update_body .= "<li>Your competition&rsquo;s specific information.</li>";
 					$update_body .= "</ul>";
+					$update_body .= "<a class=\"btn btn-primary btn-lg\" role=\"button\" href='".$base_url."index.php?section=login'>Log In</a>";
 					$update_body .= "<h3>Updates Performed Are Detailed Below</h3>";
 					$update_body .= $output;
 					
@@ -207,12 +216,14 @@ else {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $row_contest_info['contestName']; ?>: Update to BCOE&amp;M <?php echo $current_version_display; ?></title>
+        
         <!-- Load jQuery / http://jquery.com/ -->
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         
         <!-- Load Bootstrap / http://www.getbootsrap.com -->
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -225,7 +236,7 @@ else {
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/css/default.min.css" />
         
         <!-- Load BCOE&M Custom JS -->
-        <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    	<script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
 	</head>
 <body>
 	<!-- MAIN NAV -->

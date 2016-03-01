@@ -9,11 +9,6 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 include(DB.'mods.db.php');
 
-// Remove the following after 2.0.X release (for those using committed code pre-release)
-if (!check_update("sponsorEnable", $prefix."sponsors")) {
-	include (UPDATE.'current_update.php');
-}
-
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
 	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99")); exit;

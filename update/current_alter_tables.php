@@ -1,22 +1,11 @@
 <?php
-
-
-
 // -----------------------------------------------------------
 // Alter Tables
 // Version 2.1.0.0
 // -----------------------------------------------------------
 
-
-// Custom function...
-function convert_yes_no($input) {
-	if ($input == "Y") $return = "1";
-	elseif ($input == "N") $return = "0";
-	else $return = "0";
-	return $return;
-}
-
 /*
+
 // -----------------------------------------------------------
 // Alter Table: XXX
 // XXX
@@ -37,6 +26,15 @@ if (!check_update("sponsorEnable", $prefix."sponsors")) {
 // Alter Table: preferences
 // Change selected preferences rows to boolean.
 // -----------------------------------------------------------
+
+// Custom function...
+function convert_yes_no($input) {
+	if ($input == "Y") $return = "1";
+	elseif ($input == "N") $return = "0";
+	else $return = "0";
+	return $return;
+}
+
 
 // First, change the values currently in the table to 1 for Y and 0 for N
 
@@ -130,8 +128,36 @@ $output .=  "<li>Judging preferences table updated to boolean values.</li>";
 */
 
 // -----------------------------------------------------------
-// Alter Table: Obsolete Rows
-// Purge obsolete rows from tables
+// Alter Table: Preferences
 // -----------------------------------------------------------
+
+$updateSQL = sprintf("
+ALTER TABLE `%s` 
+ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL,  
+ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;
+",
+$prefix."preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$output .=  "<li>Preferences table updated.</li>";
+
+// -----------------------------------------------------------
+// Alter Table: Judging Preferences
+// -----------------------------------------------------------
+
+$updateSQL = sprintf("
+ALTER TABLE `%s` 
+ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL,  
+ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL,  
+ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;
+",
+$prefix."judging_preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$output .=  "<li>Judging preferences table updated.</li>";
 
 ?>
