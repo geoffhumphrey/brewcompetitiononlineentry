@@ -17,7 +17,10 @@ $session_name = md5($session_name);
 session_name($session_name);
 */
 
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 mysqli_select_db($connection,$database);
 
