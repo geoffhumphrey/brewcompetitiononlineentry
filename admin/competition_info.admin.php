@@ -110,6 +110,15 @@
 </div><!-- ./Form Group -->
 <?php } ?>
 
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="text" value="" placeholder="">
+        <span id="helpBlock" class="help-block">Due to the nature of password encryption, the QR Code Log On Password MUST be re-entered <strong>EVERY</strong> time Competition Info is updated.</span>
+    </div>
+</div><!-- ./Form Group -->
+
 <h3>Entry Window</h3>
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->

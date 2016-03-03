@@ -43,8 +43,25 @@ require(LIB.'preflight.lib.php');
 // If all setup or update has taken place, run normally
 if ($setup_success) {
 	
+	
+	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes","qr");
+	
 	// Global Library, Includes and DB Calls
 	require(INCLUDES.'url_variables.inc.php');
+	
+	// Redirect if section not the array	
+	if (!in_array($section,$section_array)) { 
+		header(sprintf("Location: %s",$base_url."404.php"));
+		exit;
+		}
+	
+	// Redirect to QR Code Check-In page if necessary	
+	if ($section == "qr") {
+		header(sprintf("Location: %s", $base_url."qr.php"));	
+		exit;
+	}
+	
+	// Continue loading required scripts
 	require(INCLUDES.'authentication_nav.inc.php'); 
 	require(INCLUDES.'db_tables.inc.php');
 	require(LIB.'common.lib.php');
@@ -57,12 +74,8 @@ if ($setup_success) {
 	require(INCLUDES.'scrubber.inc.php');
 	
 	
-	// Redirect if section not the array	
-	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes");
-	if (!in_array($section,$section_array)) { 
-		header(sprintf("Location: %s",$base_url."404.php"));
-		exit;
-		}
+	
+	
 	
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";

@@ -37,6 +37,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
 		if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 		
+		if (isset($_POST['contestCheckInPassword'])) {
+			require(CLASSES.'phpass/PasswordHash.php');
+			$hasher = new PasswordHash(8, false);
+			$password = md5($_POST['contestCheckInPassword']);
+			$hash = $hasher->HashPassword($password);
+		}
 		
 		$insertSQL = sprintf("INSERT INTO $contest_info_db_table (
 		contestName,
@@ -78,6 +84,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestVolunteers,
 		contestShippingOpen,
 		contestShippingDeadline,
+		contestCheckInPassword,
 		id
 		) 
 		VALUES 
@@ -88,7 +95,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		%s, %s, %s, %s, %s, 
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s)",
+		%s, %s, %s, %s, %s,
+		%s)",
 							   GetSQLValueString($_POST['contestName'], "text"),
 							   GetSQLValueString($_POST['contestID'], "text"),
 							   GetSQLValueString($_POST['contestHost'], "text"),
@@ -123,6 +131,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($_POST['contestVolunteers'], "text"),
 							   GetSQLValueString($contestShippingOpen, "text"),
 							   GetSQLValueString($contestShippingDeadline, "text"),
+							   GetSQLValueString($hash, "text"),
 							   GetSQLValueString($id, "int"));
 		
 		  	mysqli_real_escape_string($connection,$insertSQL);
@@ -162,6 +171,15 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N"; 
 		if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y"; 
 		
+		if (isset($_POST['contestCheckInPassword'])) {
+			require(CLASSES.'phpass/PasswordHash.php');
+			$hasher = new PasswordHash(8, false);
+			$password = md5($_POST['contestCheckInPassword']);
+			$hash = $hasher->HashPassword($password);
+		}
+		
+		else $hash = "";
+		
 		$updateSQL = sprintf("UPDATE $contest_info_db_table SET 
 		contestName=%s,
 		contestID=%s,
@@ -199,7 +217,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		contestCircuit=%s,
 		contestVolunteers=%s,
 		contestShippingOpen=%s,
-		contestShippingDeadline=%s
+		contestShippingDeadline=%s,
+		contestCheckInPassword=%s
 		WHERE id=%s",
 							   GetSQLValueString($_POST['contestName'], "text"),
 							   GetSQLValueString($_POST['contestID'], "text"),
@@ -235,6 +254,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 							   GetSQLValueString($_POST['contestVolunteers'], "text"),
 							   GetSQLValueString($contestShippingOpen, "text"),
 							   GetSQLValueString($contestShippingDeadline, "text"),
+							   GetSQLValueString($hash, "text"),
 							   GetSQLValueString($id, "int"));
 		
 		//echo $updateSQL;
