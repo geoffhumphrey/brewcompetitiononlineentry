@@ -156,8 +156,10 @@ if ($totalRows_log > 0) $primary_page_info .= "<p class=\"lead hidden-print\"><s
 	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-key\"></span> Change Password</a>";
 	$user_edit_links .= "</div><!-- ./button group --> ";
 	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
-	if (($entry_window_open == "1") && (!$comp_entry_limit)) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
-	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> Add an Entry Using BeerXML</a>";
+		if ($add_entry_link_show) { 
+		$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
+		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> Add an Entry Using BeerXML</a>";
+	}
 	$user_edit_links .= "</div><!-- ./button group -->";
 	
 // Build User Info
@@ -223,7 +225,6 @@ $steward_info = "";
 				
 				$judging_location_info = judging_location_info($b);
 				$judging_location_info = explode("^",$judging_location_info);
-				
 				
 					if ($judging_location_info[0] > 0) {
 						$steward_info .= "<tr>\n";
@@ -513,8 +514,6 @@ echo "<div class=\"bcoem-account-info\">";
 echo $user_edit_links; 
 echo "</div>";
 echo $header1_1;
-
-
 
 ?>
 <!-- Display User Info -->

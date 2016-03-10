@@ -1,12 +1,33 @@
 <?php 
 $section = "participant_summary";
 include(DB.'brewer.db.php');
+include(DB.'winners.db.php');
 $total_entries_judged = get_entry_count('received');
 if (NHC) $base_url = "../";
 include(LIB.'output.lib.php');
 
+// Get custom winning category info
+do { $sbi_categories[] = $row_sbi['id']."|".$row_sbi['sbi_name']; } while ($row_sbi = mysqli_fetch_assoc($sbi));
+
+foreach ($sbi_categories as $special_best_cat) {
+	
+	$explodies = explode ("|", $special_best_cat);
+		
+	$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$explodies[0]);
+	$sbd = mysqli_query($connection,$query_sbd) or die (mysqli_error($connection));
+	$row_sbd = mysqli_fetch_assoc($sbd);
+	$totalRows_sbd = mysqli_num_rows($sbd);
+		
+	do { $special_best_cat_winners[] = $explodies[1]."|".$row_sbd['eid']."|".$row_sbd['sbd_place']; } while ($row_sbd = mysqli_fetch_assoc($sbd));
+	
+}
+
 do {
+	
 	include(DB.'output_participant_summary.db.php');
+	
+	
+	
 	if ($totalRows_log > 0) { ?>
 		<div class="page-header">
             <h1><?php echo $_SESSION['contestName']; ?> Summary for <?php echo $row_brewer['brewerFirstName']. " ".$row_brewer['brewerLastName']; ?></h1>

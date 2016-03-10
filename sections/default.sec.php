@@ -166,7 +166,7 @@ else {
 	echo $page_info;
 	
 	
-	if (($registration_open == "2") || ($comp_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
+	if (($registration_open == "2") || ($comp_entry_limit) || ($comp_paid_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
 	else include('reg_open.sec.php');
 	
 	// Display Competition Official(s)

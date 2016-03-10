@@ -1266,6 +1266,18 @@ function total_paid_received($go,$id) {
 	return $row['count'];
 }
 
+function total_paid() {
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	
+	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
+	$query_entry_count .= " WHERE brewPaid='1'";
+	if ($id == 0)  $query_entry_count .= "";
+	$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
+	$row = mysqli_fetch_array($result);
+	return $row['count'];
+}
+
 function total_nopay_received($go,$id) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);

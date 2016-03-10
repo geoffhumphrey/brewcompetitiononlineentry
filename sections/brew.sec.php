@@ -16,10 +16,17 @@ $edit_entry_disable = FALSE;
 if ($action == "add") {
 	
 	// Registration and entry windows open; comp entry limit reached
-	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
+	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) { 
+		if ($comp_entry_limit) $add_entry_disable = TRUE;
+		if ($comp_paid_entry_limit)  $add_entry_disable = TRUE;
+	}
 	
 	// Registration closed and entry window open; comp entry limit reached
-	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2) && ($comp_entry_limit)) $add_entry_disable = TRUE;
+	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
+		if ($comp_entry_limit) $add_entry_disable = TRUE;
+		if ($comp_paid_entry_limit) $add_entry_disable = TRUE;
+	}
+	
 	
 }
 
@@ -154,6 +161,7 @@ $(document).ready(function()
 }
 );
 </script>
+<?php // if ($comp_paid_entry_limit) echo "Paid entry limit reached"; else echo "Paid entry limit NOT reached"; ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">

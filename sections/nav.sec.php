@@ -9,6 +9,14 @@
 if ($section >= 400) $sef = "false"; 
 else $sef = $sef;
 
+$add_entry_link_show = FALSE;
+
+if ($entry_window_open = 1) {
+	$add_entry_link_show = TRUE;
+	if ($comp_entry_limit) $add_entry_link_show = FALSE;
+	if ($comp_paid_entry_limit) $add_entry_link_show = FALSE;
+}
+
 $active_class = " class=\"active\"";
 
 if ($section == "asdfasdfasdfasdfasd") {
@@ -238,7 +246,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
-                <?php if ((!$logged_in) && ($registration_open == "1") && (!$comp_entry_limit)) { ?>
+                <?php if ((!$logged_in) && ($registration_open == "1")) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>">Register</a></li>
    				<?php } ?>
               </ul>
@@ -260,7 +268,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1">Change Email</a></li>
                     <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1">Change Password</a></li> 
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1">Entries</a></li>
-                    <?php if (($entry_window_open == "1") && (!$comp_entry_limit)) { ?>
+                    <?php if ($add_entry_link_show) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>">Import an Entry Using BeerXML</a><?php } ?>
                     <?php } ?> 

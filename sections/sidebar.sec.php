@@ -75,6 +75,8 @@ if ($section != "admin") {
 		elseif ($entry_window_open == 2) $entry_panel_display = "panel-danger";
 		else $entry_panel_display = "panel-default";
 		
+		if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_panel_display = "panel-danger";
+		
 		if ($dropoff_window_open == 0) $dropoff_panel_display = "panel-default";
 		elseif ($dropoff_window_open == 1) $dropoff_panel_display = "panel-success";
 		elseif ($dropoff_window_open == 2) $dropoff_panel_display = "panel-danger";
@@ -99,6 +101,7 @@ if ($section != "admin") {
 		$page_info100 .= "Account registrations";
 		if (($registration_open == 2) && ($judge_window_open == 1)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges and stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar); 
 		else $page_info100 .= sprintf(" accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
+		
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
 
@@ -108,12 +111,14 @@ if ($section != "admin") {
 	$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";
 	$header1_200 .= "<div class=\"panel-heading\">";
 	$header1_200 .= "<h4 class=\"panel-title\">Entry Registration is";
-	if ($entry_window_open == 1) $header1_200 .= " Open";
+	if (($entry_window_open == 1) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) $header1_200 .= " Open";
 	else $header1_200 .= " Closed";
 	$header1_200 .= "</h4>";
 	$header1_200 .= "</div>";
 	$page_info200 .= "<div class=\"panel-body\">";
-	$page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
+	if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
+	if (($comp_entry_limit) || ($comp_paid_entry_limit)) $page_info200 .= "<span class=\"text-danger\">The competition entry limit has been reached.</span>";
+	$page_info200 .= "";
 	$page_info200 .= "</div>";
 	$page_info200 .= "</div>";
 	

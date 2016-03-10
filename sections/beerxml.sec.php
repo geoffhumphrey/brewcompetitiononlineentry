@@ -79,7 +79,7 @@ if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLe
 
 // Open but entry limit reached
 // No importing
-elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit)) {
+elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit)) {
 	$message2 .= "<div class='error'>Importing Entries Not Available</div>";
 	$message2 .= "<p>The competition entry limit has been reached.</p>";
 }
