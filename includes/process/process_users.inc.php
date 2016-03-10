@@ -14,7 +14,6 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 
 // --------------------------- Adding a user (Admin only) -------------------------- //
 
-
 	if (($action == "add") && ($section == "admin")) {
 	
 	// Check to see if email address is already in the system. If so, redirect.
@@ -189,7 +188,7 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		header(sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=4&id=".$id));
 	 }
 	
-	// --------------------------- If Changing a Paricipant's Password ------------------------------- //
+	// --------------------------- If a participant is changing their password ------------------------------- //
 	if ($go == "password") {
 	
 		// Check if old password is correct; if not redirect
@@ -217,6 +216,24 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			header(sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4"));
 		}
+	 }
+	 
+	 // --------------------------- If an admin is changing their password ------------------------------- //
+	if ($go == "change_user_password") {
+	
+		require(CLASSES.'phpass/PasswordHash.php');
+		$hasher = new PasswordHash(8, false);
+	
+		$password_new = md5($_POST['password2']);
+		$hash_new = $hasher->HashPassword($password_new);
+	
+		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
+						   GetSQLValueString($hash_new, "text"),
+						   GetSQLValueString($id, "text")); 
+			
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		header(sprintf("Location: %s", $base_url."index.php?section=admin&go=participants&msg=33"));
 	 }
 		
 } // end if ($action == "edit")

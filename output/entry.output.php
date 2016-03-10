@@ -19,9 +19,10 @@ if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_
   	echo "</body>";
   	exit();
 }
+
 if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe")) {
 	echo "<html><head><title>Error</title></head><body>";
-  	echo "<p>You must pay for your entry to print its entry form and bottle labels.</p>";
+  	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
   	echo "</body>";
   	exit();
 }
@@ -105,6 +106,10 @@ switch ($brewing_info['brewMead3']) {
     $brewing_info['meadType']='';
     break;
 }
+
+// Paid or not
+if ($brewing_info['brewPaid'] == 1) $brewing_paid = "*** PAID ***";
+else $brewing_paid = "";
 
 // Style name
 if ($brewing_info['brewCategory'] < $category_end) { 
@@ -348,13 +353,12 @@ if ($go == "recipe") {
 	$TBS->LoadTemplate(TEMPLATES.'recipe.html');
 }
 
-//if ((($go == "default") && ($_SESSION['prefsEntryForm'] != "N")) || ($go == "recipe")) { 
-	$TBS->MergeBlock('grains',$brewing_info['grains']);
-	$TBS->MergeBlock('extracts',$brewing_info['extracts']);
-	$TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
-	$TBS->MergeBlock('hops',$brewing_info['hops']);
-	$TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
-//}
+if (isset($brewing_info['grains'])) $TBS->MergeBlock('grains',$brewing_info['grains']);
+if (isset($brewing_info['extracts'])) $TBS->MergeBlock('extracts',$brewing_info['extracts']);
+if (isset($brewing_info['adjuncts'])) $TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
+if (isset($brewing_info['hops'])) $TBS->MergeBlock('hops',$brewing_info['hops']);
+if (isset($brewing_info['mashSteps'])) $TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
+
 $TBS->NoErr;
 $TBS->Show();
 ?>

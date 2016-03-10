@@ -232,13 +232,13 @@ if ($styles_endRow != 0) {
 $page_info8 .= "</table>";
 
 // Bottle Acceptance
-if (($row_contest_info['contestBottles'] != "") && ($entry_window_open < 2)) {
-	$header1_9 .= "<a name=\"bottle\"></a><h2>Bottle Acceptance Rules</h2>";
+if (($row_contest_info['contestBottles'] != "") && (($shipping_window_open < 2) || ($dropoff_window_open < 2))) {
+	$header1_9 .= "<a name=\"bottle\"></a><h2>Entry Acceptance Rules</h2>";
 	$page_info9 .= $row_contest_info['contestBottles'];
 }
 
 // Shipping Locations
-if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
+if (($_SESSION['contestShippingAddress'] != "") && ($shipping_window_open < 2)) {
 	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Info</h2>";
 	$page_info10 .= sprintf("<p>Entry bottles accepted at our shipping location from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$shipping_open,$shipping_closed);
 	$page_info10 .= "<p>Ship entries to:</p>";
@@ -256,7 +256,7 @@ if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
 }
 
 // Drop Off
-if (($totalRows_dropoff > 0) && ($entry_window_open < 2)) {
+if (($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) {
 	if ($totalRows_dropoff == 1) $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Location</h2>";
 	else $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Locations</h2>";
 	$page_info11 .= sprintf("<p>Entry bottles accepted at our drop-off locations from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$dropoff_open,$dropoff_closed);
@@ -336,7 +336,7 @@ echo $page_info16;
 echo $header1_6;
 echo $page_info6;
 
-// Display Bottle Acceptance Rules
+// Display Entry Acceptance Rules
 echo $header1_9;
 echo $page_info9;
 

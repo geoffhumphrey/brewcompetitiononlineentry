@@ -340,7 +340,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$output .= "</ul>\n";
 		 
 		if ($_SESSION['contestBottles'] != "") {
-			$output .= "<h3>Bottle Acceptance Rules</h3>\n";
+			$output .= "<h3>Entry Acceptance Rules</h3>\n";
 			$output .= $_SESSION['contestBottles']."\n";
 		}
 		

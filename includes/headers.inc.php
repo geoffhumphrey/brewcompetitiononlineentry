@@ -562,6 +562,10 @@ switch($section) {
 			case "upload":
 			$header_output .= ": Upload Logo Images";
 			break;
+			
+			case "change_user_password":
+			$header_output .= ": Change User Password";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
@@ -609,6 +613,7 @@ switch($section) {
 	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an image file.</strong> Please try again.";
 	elseif ($msg == "31") $output = "<strong>The file has been deleted.</strong>";
 	elseif ($msg == "32") $output = "<strong>The test email has been generated. Be sure to check your spam folder.</strong>";
+	elseif ($msg == "33") $output = "<strong>The user&rsquo;s password has been changed.</strong> Be sure to let them know what their new password is!";
 	elseif ($msg == "755") $output = "<strong>Change permission of user_images folder to 755 has failed.</strong>  You will need to change the folder&rsquo;s permission manually.  Consult your FTP program or ISP&rsquo;s documentation for chmod (folder permissions).";
 	else $output = "";
 	break;

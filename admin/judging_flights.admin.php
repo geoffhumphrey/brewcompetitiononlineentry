@@ -216,7 +216,6 @@ if (($action == "assign") && ($filter == "rounds")) {
 	if ($totalRows_tables > 0) { 
 ?>
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
-<p><input type="submit" class="btn btn-primary" value="Assign"></p>
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
 		
@@ -255,7 +254,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 		<?php }
 	} else echo "<p>No flights have been defined.</p>";
   } ?>
-<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary"  value="Assign"></p>
+<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary" value="Assign"></p>
 
 <!-- Form submit confirmation modal -->
 <!-- Refer to bcoem_custom.js for configuration -->

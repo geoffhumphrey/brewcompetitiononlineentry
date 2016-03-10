@@ -190,17 +190,18 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 			if ($action == "register")				include (SECTIONS.'register.sec.php');
 			
 				if ($_SESSION['userLevel'] == "0") {
-					if ($go == "styles") 	    	include (ADMIN.'styles.admin.php');
-					if ($go == "archive") 	    	include (ADMIN.'archive.admin.php');
-					if ($go == "make_admin") 		include (ADMIN.'make_admin.admin.php');
-					if ($go == "contest_info") 		include (ADMIN.'competition_info.admin.php');
-					if ($go == "preferences") 		include (ADMIN.'site_preferences.admin.php');
-					if ($go == "sponsors") 	   		include (ADMIN.'sponsors.admin.php');
-					if ($go == "style_types")    	include (ADMIN.'style_types.admin.php');
-					if ($go == "special_best") 	    include (ADMIN.'special_best.admin.php');
-					if ($go == "special_best_data") 	include (ADMIN.'special_best_data.admin.php');
-					if ($go == "mods") 	    		include (ADMIN.'mods.admin.php');
-					if ($go == "upload")				include (ADMIN.'upload.admin.php');
+					if ($go == "styles") 	    		include (ADMIN.'styles.admin.php');
+					if ($go == "archive") 	    		include (ADMIN.'archive.admin.php');
+					if ($go == "make_admin") 			include (ADMIN.'make_admin.admin.php');
+					if ($go == "contest_info") 			include (ADMIN.'competition_info.admin.php');
+					if ($go == "preferences") 			include (ADMIN.'site_preferences.admin.php');
+					if ($go == "sponsors") 	   			include (ADMIN.'sponsors.admin.php');
+					if ($go == "style_types")    		include (ADMIN.'style_types.admin.php');
+					if ($go == "special_best") 	    	include (ADMIN.'special_best.admin.php');
+					if ($go == "special_best_data") 		include (ADMIN.'special_best_data.admin.php');
+					if ($go == "mods") 	    			include (ADMIN.'mods.admin.php');
+					if ($go == "upload")					include (ADMIN.'upload.admin.php');
+					if ($go == "change_user_password") 	include (ADMIN.'change_user_password.admin.php');
 				}
 			
 			} ?>

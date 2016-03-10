@@ -71,6 +71,7 @@ $output_no_records = "";
 $output_add_edit = FALSE;
 $output_hide_print = "";
 $output_assignment_modals = "";
+$output_user_question_modals = "";
 
 if ($action != "print") {
 	$output_hide_print .= "hidden-md hidden-sm hidden-xs";	
@@ -244,9 +245,45 @@ do {
 		}
 	}
 	
-	//$judge_array = str_replace(", ",",",$brewer_assignment);
-	//$judge_array = explode(",",$judge_array);
-	//if (in_array("Judge",$judge_array)) $brewer_judge = TRUE; else $brewer_judge = FALSE;
+	// Build secret user question modals
+	unset($user_question_modal_body);
+	
+	$user_question_modal_body = "";
+	
+	$query_question = sprintf("SELECT userQuestion,userQuestionAnswer FROM %s WHERE id = '%s'", $users_db_table, $row_brewer['uid']); 
+	$question = mysqli_query($connection,$query_question) or die (mysqli_error($connection));
+	$row_question = mysqli_fetch_assoc($question);
+	
+	$user_question_modal_body .= "<p>";
+	$user_question_modal_body .= "<strong>Question:</strong><br>";
+	if (isset($row_question['userQuestion'])) $user_question_modal_body .= "<em>".$row_question['userQuestion']."</em>";
+	else $user_question_modal_body .= "<em>No question is present.</em>";
+	$user_question_modal_body .= "</p>";
+	
+	$user_question_modal_body .= "<p>";
+	$user_question_modal_body .= "<strong>Answer:</strong><br>";
+	if (isset($row_question['userQuestionAnswer'])) $user_question_modal_body .= "<em>".$row_question['userQuestionAnswer']."</em>";
+	else $user_question_modal_body .= "<em>No answer is present.</em>";
+	$user_question_modal_body .= "</p>";
+	
+	$output_user_question_modals .= "<div class=\"modal fade\" id=\"user-question-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-question-modal-label-".$row_brewer['uid']."\">\n";
+	$output_user_question_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+	$output_user_question_modals .= "\t\t<div class=\"modal-content\">\n";
+	$output_user_question_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+	$output_user_question_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+	$output_user_question_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"user-question-modal-label-".$row_brewer['uid']."\">Secret Question and Answer for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."</h4>\n";
+	$output_user_question_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+	$output_user_question_modals .= "\t\t\t<div class=\"modal-body\">\n";
+	$output_user_question_modals .= "\t\t\t\t".$user_question_modal_body."\n";
+	$output_user_question_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+	$output_user_question_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+	$output_user_question_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+	$output_user_question_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+	$output_user_question_modals .= "\t\t</div><!-- ./modal-content -->\n";
+	$output_user_question_modals .= "\t</div><!-- ./modal-dialog -->\n";
+	$output_user_question_modals .= "</div><!-- ./modal -->\n";
+	
+	
 	$output_datatables_body .= "<tr>";
 	$output_datatables_body .= "<td><a name='".$row_brewer['uid']."'></a>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
 	if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <span class=\"fa fa-lock text-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." is a Top-Level Admin User\"></span>";
@@ -364,7 +401,12 @@ do {
 			$output_datatables_phone_link = "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-phone\"></span></a>";	
 		}
 		
-		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_view_link;
+		$output_datatables_user_question_link = "<a href=\"#\" data-tooltip=\"true\" data-toggle=\"modal\" data-target=\"#user-question-modal-".$row_brewer['uid']."\" data-placement=\"top\" title=\"Click to see ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s secret question and answer\"><span class=\"fa fa-question-circle\"></span></a>";
+		
+		$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Password");
+		
+		
+		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_user_question_link." ".$output_datatables_change_pwd." ".$output_datatables_view_link;
 		$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 	}
 	
@@ -377,6 +419,7 @@ $output_datatables_body .= "</tr>";
 
 // Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
 echo $output_assignment_modals;
+echo $output_user_question_modals;
 ?>
 
 <?php if ($action == "print") { ?>

@@ -354,7 +354,7 @@
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestBottles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Bottle Acceptance Rules</label>
+    <label for="contestBottles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Acceptance Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <textarea id="contestBottles" class="form-control" name="contestBottles" rows="15" aria-describedby="helpBlock">

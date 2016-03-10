@@ -422,9 +422,45 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
         	<input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</span>
+            <span id="helpBlock" class="help-block">
+		<div class="btn-group" role="group" aria-label="charLimitModal">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryLimitPaidModal">
+				   Paid Entry Limit Info
+				</button>
+			</div>
+		</div>
+        <p>Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</p>
+        </span>
     </div>
 </div><!-- ./Form Group -->
+
+<!-- Modal -->
+<div class="modal fade" id="entryLimitPaidModal" tabindex="-1" role="dialog" aria-labelledby="entryLimitPaidModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="entryLimitPaidLabel">Paid Entry Limit Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>This option should be used with caution as it depends upon one or more factors for successful implementation:</p>
+                <ol>
+                	<li>Whether or not the competition is accepting payments via PayPal.
+                    	<ol type="a">
+                        	<li>Automatic &ldquo;mark as paid&rdquo; functionality is <em>entirely</em> dependent upon the user to click the &ldquo;return to...&rdquo; link on PayPal&rsquo;s payment confirmation screen.</li>
+                        	<li>As payments come in via PayPal, an Admin of the site should have access to the email address associated with the PayPal account to monitor and confirm payments.</li>
+                        </ol>
+                    <li>Whether or not the competition organization facilitates multiple pickups from drop-off sites <em>before</em> the drop-off deadline date (so that Admins can mark entries as paid before sorting day).</li>
+                    <li>Whether or not the competition is employing multiple sorting dates to check-in entries and mark them as paid.</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>

@@ -269,12 +269,12 @@ if ($action != "print") { ?>
         <th nowrap>Entry</th>
         <th nowrap>Judging <?php if ($action != "print") { ?><a href="#" role="button" data-toggle="tooltip" data-container="body" title="<?php echo "Judging numbers are automatically assigned by the system."; if ($_SESSION['prefsEntryForm'] == "N") echo " You can override each judging number when scanning in barcodes or by entering it in the field provided."; ?>"><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="hidden-xs hidden-sm hidden-md">Name</th>
-        <th>Category</th>
+        <th class="hidden-xs">Category</th>
         <th class="hidden-xs">Brewer</th>
         <th class="hidden-xs hidden-sm hidden-md hidden-print">Club</th>
         <th class="hidden-xs hidden-sm hidden-md hidden-print">Updated</th>
-        <th class="hidden-xs" width="3%">Paid?</th>
-        <th class="hidden-xs" width="3%">Rec'd?</th>
+        <th width="3%">Paid?</th>
+        <th width="3%">Rec'd?</th>
         <th>Loc/Box</th>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
         <th class="dataHeading bdr1B hidden-print">Actions</th>
@@ -384,12 +384,12 @@ if ($action != "print") { ?>
         <td><?php echo sprintf("%04s",$row_log['id']); ?></td>
         <td><?php if (($_SESSION['prefsEntryForm'] == "N") && ($action != "print") && ($dbTable == "default")) { ?><input class="form-control input-sm hidden-print" id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo $entry_judging_num_display; ?>" /><?php echo $entry_judging_num_hidden; } else echo $entry_judging_num_display; ?></td>
         <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
-        <td><?php echo $entry_style_display; ?></td>
+        <td class="hidden-xs"><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>
         <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $brewer_info[8] ; ?></td>
         <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $entry_updated_display; ?></td>
-        <td class="hidden-xs"><?php echo $entry_paid_display; ?></td>
-        <td class="hidden-xs"><?php echo $entry_received_display; ?></td>
+        <td><?php echo $entry_paid_display; ?></td>
+        <td><?php echo $entry_received_display; ?></td>
         <td><?php echo $entry_box_num_display; ?></td>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
         <td class="hidden-print" nowrap><?php echo $entry_actions; ?></td>

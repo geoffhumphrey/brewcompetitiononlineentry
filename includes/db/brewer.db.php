@@ -167,8 +167,8 @@ elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewa
 	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 
-// Make a participant an admin query
-elseif ((($section == "admin") && ($go == "make_admin")) || (($section == "user") && ($filter == "admin") && ($action == "username"))){
+// Make a participant an admin or change password query
+elseif ((($section == "admin") && ($go == "make_admin")) || (($section == "admin") && ($go == "change_user_password")) || (($section == "user") && ($filter == "admin") && ($action == "username"))){
 	$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid='%s'",$id);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);

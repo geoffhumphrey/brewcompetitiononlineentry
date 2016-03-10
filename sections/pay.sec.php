@@ -135,7 +135,7 @@ Declare all variables empty at the top of the script. Add on later...
 			$page_info4 .= "<p>Click the &ldquo;Pay with PayPal&rdquo; button below to pay online.";
 			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
 			//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
-			$page_info4 .= "<form role=\"form\" id=\"formfield\"  name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" name=\"form1\">";
+			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">";
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">",$_SESSION['prefsPaypalAccount']);
@@ -150,7 +150,7 @@ Declare all variables empty at the top of the script. Add on later...
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">",rtrim($return, '-'));
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">",$base_url."index.php?section=pay&msg=11");
 			$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">";
-			$page_info4 .= "<button type=\"button\" type=\"submit\" name=\"Submit\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"><span> Pay with PayPal</button>";
+			$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"><span> Pay with PayPal</button>";
 			$page_info4 .= "</form>";
 			$page_info4 .= "<!-- Form submit confirmation modal -->";
 			$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";
@@ -165,7 +165,7 @@ Declare all variables empty at the top of the script. Add on later...
 			$page_info4 .= "</div>";
 			$page_info4 .= "<div class=\"modal-footer\">";
 			$page_info4 .= "<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Cancel</button>";
-			$page_info4 .= "<a href=\"#\" id=\"submit\" class=\"btn btn-success success\">I Understand</a>";
+			$page_info4 .= "<a href=\"#\" id=\"submit\" class=\"btn btn-success\">I Understand</a>";
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
