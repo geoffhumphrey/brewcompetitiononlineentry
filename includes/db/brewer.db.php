@@ -52,6 +52,37 @@ elseif ((($section == "admin") && ($go == "participants") && ($filter == "defaul
 	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 
+elseif ((($section == "admin") && ($go == "participants") && ($filter == "with_entries")  && ($dbTable == "default"))) {
+	$query_brewer = sprintf("SELECT b.uid, b.brewerEmail AS 'Email', cb . *
+FROM (
+
+SELECT brewBrewerLastName, brewBrewerFirstName, 
+brewBrewerID, GROUP_CONCAT( id
+ORDER BY id ) AS 'Entries'
+FROM %s
+GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID
+)cb, %s b
+WHERE cb.brewBrewerID = b.id", $prefix."brewing", $prefix."brewer");
+
+/*
+$query_brewer = sprintf("SELECT b.brewerEmail AS 'Email', cb . *
+FROM (
+
+SELECT brewBrewerLastName AS 'Last Name', brewBrewerFirstName AS 'First Name', 
+brewBrewerID, GROUP_CONCAT( id
+ORDER BY id ) AS 'Entries'
+FROM %s
+GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID
+)cb, %s b
+WHERE cb.brewBrewerID = b.id
+ORDER BY 'Last Name', 'First Name'", $prefix."brewing", $prefix."brewer");
+*/
+	
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
+	$totalRows_brewer = mysqli_num_rows($brewer);
+}
+
 // Viewing available judges query (not assigned)
 elseif (($section == "admin") && ($go == "participants") && ($filter == "judges") && ($dbTable == "default")) {
 	$query_brewer = "SELECT * FROM $brewer_db_table";
@@ -79,7 +110,7 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "steward
 	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 
-// Viewing all participants query from archive query
+// Viewing all participants from archive query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) {
 	$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
 	//if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
@@ -158,7 +189,7 @@ elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "staff
 	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 	
-// Assigned staff query 
+// Assigned atewards query 
 elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewards")  && ($dbTable == "default")) {
 	//$query_brewer = "SELECT * FROM $brewer_db_table WHERE brewerAssignment='S' ORDER BY brewerLastName";
 	$query_brewer = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM $brewer_db_table a, $staff_db_table b WHERE b.staff_steward='1' AND a.uid=b.uid";
