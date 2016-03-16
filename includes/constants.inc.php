@@ -58,6 +58,10 @@ if (open_limit($total_paid,$row_limits['prefsEntryLimitPaid'],$registration_open
 if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
+$remaining_entries = 0;
+if ((($section == "brew") || ($section == "beerxml")|| ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+else $remaining_entries = 1;
+
 $current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
 $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 

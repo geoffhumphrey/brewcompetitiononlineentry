@@ -1272,7 +1272,6 @@ function total_paid() {
 	
 	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
 	$query_entry_count .= " WHERE brewPaid='1'";
-	if ($id == 0)  $query_entry_count .= "";
 	$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
 	$row = mysqli_fetch_array($result);
 	return $row['count'];

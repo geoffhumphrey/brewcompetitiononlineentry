@@ -46,13 +46,13 @@ else {
 		$row_contest_info = mysqli_fetch_assoc($contest_info);
 		}
 		
-	elseif (($section == "brew") && ($action == "add")) {  
+	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "add")) {  
 		$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s'", $_SESSION['user_id']); 
 		$query_log_paid = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1'", $_SESSION['user_id']); 
 		$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'", $_SESSION['user_id']);
 		}
 	
-	elseif (($section == "brew") && ($action == "edit")) {  
+	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "edit")) {  
 		$query_log = "SELECT * FROM $brewing_db_table WHERE id = '$id'"; 
 		$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";

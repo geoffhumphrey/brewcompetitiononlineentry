@@ -563,6 +563,10 @@ switch($section) {
 			$header_output .= ": Upload Logo Images";
 			break;
 			
+			case "upload_scoresheets":
+			$header_output .= ": Upload Scoresheets and Other Documents";
+			break;
+			
 			case "change_user_password":
 			$header_output .= ": Change User Password";
 			break;
@@ -609,8 +613,8 @@ switch($section) {
 	elseif ($msg == "25") $output = "<strong>All entry styles have been converted from BJCP 2008 to BJCP 2015.</strong>";
 	elseif ($msg == "26") $output = "<strong>Data has been deleted from the database.</strong>";
 	elseif ($msg == "28") $output = "<strong>The judge/steward has been added successfully.</strong> Remember to assign the user as a judge or steward before assigning to tables.";
-	elseif ($msg == "29") $output = "<strong>The image has been uploaded successfully.</strong> Check the list to verify.";
-	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an image file.</strong> Please try again.";
+	elseif ($msg == "29") $output = "<strong>The file has been uploaded successfully.</strong> Check the list to verify.";
+	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an accepted file type.</strong> Please try again.";
 	elseif ($msg == "31") $output = "<strong>The file has been deleted.</strong>";
 	elseif ($msg == "32") $output = "<strong>The test email has been generated. Be sure to check your spam folder.</strong>";
 	elseif ($msg == "33") $output = "<strong>The user&rsquo;s password has been changed.</strong> Be sure to let them know what their new password is!";

@@ -26,6 +26,14 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			header(sprintf("Location: %s", $deleteGoTo));
 		}
 		
+		if ($go == "doc") {
+			$upload_dir = (USER_DOCS);
+			unlink($upload_dir.$filter);
+			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
+			else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
+			header(sprintf("Location: %s", $deleteGoTo));
+		}
+		
 		if ($go == "judging_scores") {
 			
 			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores",$id);

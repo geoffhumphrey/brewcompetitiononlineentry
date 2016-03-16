@@ -131,11 +131,7 @@
 
 <?php if ($logged_in) { ?>
 
-	<?php if ($section == "brew") { 
-	$entry_window_open = 1;
-	$registration_open = 1;
-	$remaining_entries = 1;
-	?>
+	<?php if ($section == "brew") { ?>
 
 		<?php if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {  
 			if ($entry_window_open == "0") $alert_message_closed = "Entry registration has not opened yet.";

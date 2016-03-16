@@ -24,6 +24,7 @@ define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
 define('UPDATE',ROOT.'update'.DIRECTORY_SEPARATOR);
 define('OUTPUT',ROOT.'output'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
+define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
 
 // --------------------------------------------------------
 // GLOBAL DEFINITIONS

@@ -278,9 +278,7 @@ do {
 		
 	}
 	
-	else {
-		
-		
+	else {		
 		
 		$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 		$table_assign_judge = rtrim($table_assign_judge,",&nbsp;");

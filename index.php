@@ -104,11 +104,11 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 	<?php } ?>
 	
-	<?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
+	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
-		<?php if (($section == "admin") && ($go == "upload")) { ?>
+		<?php if (($section == "admin") && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
         <!-- Load DropZone / http://www.dropzonejs.com -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
@@ -188,6 +188,7 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 			if ($go == "count_by_style")				include (ADMIN.'entries_by_style.admin.php');
 			if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
 			if ($action == "register")				include (SECTIONS.'register.sec.php');
+			if ($go == "upload_scoresheets")			include (ADMIN.'upload_scoresheets.admin.php');
 			
 				if ($_SESSION['userLevel'] == "0") {
 					if ($go == "styles") 	    		include (ADMIN.'styles.admin.php');
