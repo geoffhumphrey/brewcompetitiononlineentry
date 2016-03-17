@@ -132,7 +132,7 @@ if ($filter == "bos") {
 
 // Judging Locations & Dates List
 if ($section != "step5") {
-	if (($totalRows_judging_locs > 0) && ($action == "default")) {
+	if (($action == "default") && ($totalRows_judging_locs > 0)) {
 		$output_datatables_aaSorting = "[1,'asc']";
 		$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
 		$output_datatables_head .= "<tr>";

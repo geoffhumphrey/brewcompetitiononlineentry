@@ -1,5 +1,12 @@
 <?php if ($action == "html") { ?>
 <p class="lead">If you want to upload mutiple files at once, use the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">enhanced file upload function</a>.</p>
+<p class="lead">For entrants to be able to view their scoresheets, each PDF should:
+	<ol>
+    	<li>Contain all judge scoresheets and other documentation (cover sheet, etc.) in a single file.</li>
+        <li>Be named with the judging number only (e.g., 123456.pdf).</li>
+        <li>Have a .pdf or .PDF extension.</li>
+    </ol>
+</p>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose PDF File</span><input type="file" name="file" /></span>
@@ -9,6 +16,13 @@
 </form>
 <?php } else { ?>
 <p class="lead">The <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html">single file upload function</a> is also available as an alternative to this multiple upload function.</p>
+<p class="lead">For entrants to be able to view their scoresheets, each PDF should:
+	<ol>
+    	<li>Contain all judge scoresheets and other documentation (cover sheet, etc.) in a single file.</li>
+        <li>Be named with the judging number only (e.g., 123456.pdf).</li>
+        <li>Have a .pdf or .PDF extension.</li>
+    </ol>
+</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />
@@ -70,7 +84,7 @@ if (!is_dir_empty($upload_dir)) {
 	while ($file = readdir($handle)) {
 	   if(!is_dir($file) && !is_link($file)) {
 			$filelist .= "<tr>\n";
-			$filelist .= "<td><a class=\"user_images\" href=\"".$base_url."user_docs/$file\" target=\"_blank\" title=\"".$file."\" >".$file."</a></td>\n";
+			$filelist .= "<td><a id=\"modal_window_link\" class=\"user_images\" href=\"".$base_url."user_docs/$file\" title=\"".$file."\" >".$file."</a></td>\n";
 			$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$file." from the server.\"><span class=\"fa fa-trash\"></span></a></td>\n";
 			$filelist .= "</tr>\n";

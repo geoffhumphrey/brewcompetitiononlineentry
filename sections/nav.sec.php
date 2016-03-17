@@ -11,7 +11,7 @@ else $sef = $sef;
 
 $add_entry_link_show = FALSE;
 
-if ($entry_window_open = 1) {
+if ($entry_window_open == 1) {
 	$add_entry_link_show = TRUE;
 	if ($comp_entry_limit) $add_entry_link_show = FALSE;
 	if ($comp_paid_entry_limit) $add_entry_link_show = FALSE;
@@ -195,6 +195,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scoring <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
+                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">Upload Scoresheets</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
                 </ul>

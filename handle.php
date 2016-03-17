@@ -68,7 +68,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0")) {
 			}
 			
 			if ($action == "html_docs") {
-				$updateGoTo = "index.php?section=admin&go=upload&action=html_docs&msg=29";
+				$updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html&msg=29";
 				header(sprintf("Location: %s", $updateGoTo));
 				exit;
 			}
@@ -85,7 +85,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0")) {
 		}
 		
 		if ($action == "html_docs") {
-			$updateGoTo = "index.php?section=admin&go=upload&action=html_docs&msg=3";
+			$updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html_docs&msg=3";
 			header(sprintf("Location: %s", $updateGoTo));
 			exit;
 		}

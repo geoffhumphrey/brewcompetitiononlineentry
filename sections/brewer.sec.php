@@ -49,7 +49,7 @@ else {
 if ($go != "admin") echo $info_msg;
 ?>
 <!-- Checking if correct page -->
-<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -84,8 +84,7 @@ if ($go != "admin") echo $info_msg;
             </div>
         </div>
     </div><!-- ./Form Group -->
-
-
+	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerCity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">City</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -119,7 +118,6 @@ if ($go != "admin") echo $info_msg;
         </div>
     </div><!-- ./Form Group -->
 
-
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
         <label for="brewerCountry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Country</label>
         <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12 has-warning">
@@ -131,7 +129,7 @@ if ($go != "admin") echo $info_msg;
         </select>
         </div>
     </div><!-- ./Form Group -->
-	<!-- Is phone number wrong? -->
+	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerPhone1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Phone 1</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -151,7 +149,6 @@ if ($go != "admin") echo $info_msg;
        		<input class="form-control" id="brewerPhone2" name="brewerPhone2" type="text" value="<?php if ($action == "edit") echo $phone2; ?>" placeholder="">
         </div>
     </div><!-- ./Form Group -->
-    
     
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
         <label for="brewerDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop Off Location</label>
@@ -185,8 +182,6 @@ if ($go != "admin") echo $info_msg;
     </div><!-- ./Form Group -->
     
     <?php if (($go != "entrant") && ($section != "step2")) { ?>
-    
-    
         
         <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
             <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes To Organizer</label>
@@ -208,10 +203,7 @@ if ($go != "admin") echo $info_msg;
         <input name="brewerJudgeLikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeLikes']; ?>" />
         <input name="brewerJudgeDislikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeDislikes']; ?>" />
         <input name="brewerSteward" type="hidden" value="<?php echo $row_brewer['brewerSteward']; ?>" />
-        <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
-        
-        
-        
+        <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />        
         <?php } // end if ($table_assignment) 
 		else { ?>
         <!-- Judging preferences -->
@@ -419,7 +411,6 @@ if ($go != "admin") echo $info_msg;
         			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseNonPref" aria-expanded="false" aria-controls="collapseNonPref">Specify Non-Preferred Styles to Judge</button>
                     <span class="help-block">Click the button to expand the non-preferred styles to judge list.</span>
                 </div>
-                
         </div><!-- ./Form Group --> 
  		<div class="collapse" id="collapseNonPref">
           	<div class="form-group"><!-- Form Group Checkbox  -->

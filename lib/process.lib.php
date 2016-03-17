@@ -1,5 +1,17 @@
 <?php
 
+// function to generate random number
+function random_judging_num_generator(){
+	srand ((double) microtime() * 10000000);
+
+	$random_generator = "";// Initialize the string to store random numbers
+	for ($i=1;$i<6+1;$i++) { // Loop the number of times of required digits
+		$random_generator .=rand(1,9); // one number is added
+	} // end of for loop 
+
+	return $random_generator;
+} // end of function
+
 function check_http($input) {
 	if ($input != "") {
 			if (strstr($input,"http://")) return $input;
@@ -7,31 +19,47 @@ function check_http($input) {
 			if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;		   
 		}
 }
+
+function check_judging_num($input) {
+	
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	
+	$query_brewing_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewJudgingNumber='%s'", $prefix."brewing", $input);
+	$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die (mysqli_error($connection));
+	$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
+	
+	if ($row_brewing_styles['count'] == 0) return TRUE;
+	else return FALSE;
+	
+}
  
 function generate_judging_num($style_cat_num) {
 	
 	// Generate the Judging Number each entry 
+	
+	// For 2.1.0 converting from style-based judging numbers to completely random judging numbers (if not using barcode checking numbers)
+	// Standardizing to six digit numbers	
+	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
-	$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die (mysqli_error($connection));
-	$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
-	$totalRows_brewing_styles = mysqli_num_rows($brewing_styles);
-		
-	// Need to convert mead and cider categories for BJCP2015 to numerals (all contain alphas, which break the script)
-	switch ($style_cat_num) {
-		case "C1": $style_cat_num = "38"; break;
-		case "C2": $style_cat_num = "39"; break;
-		case "M1": $style_cat_num = "40"; break;
-		case "M2": $style_cat_num = "41"; break;
-		case "M3": $style_cat_num = "42"; break;
-		case "M4": $style_cat_num = "43"; break;
-		default: $style_cat_num = $style_cat_num;
-	}
 	
-	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
-	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return sprintf("%05s",$output);
+	$unique_num_found = FALSE;
+	
+	// Check to see if that number has already been assigned to an entry
+	
+	while (!$unique_num_found) {
+		
+		$random = "";
+		$random = random_judging_num_generator();
+	
+		if (check_judging_num($random)) $unique_num_found = TRUE;
+		
+		else $unique_num_found = FALSE;
+	
+	} 
+	
+	return $random;
 	
 }
 
@@ -58,16 +86,6 @@ function strip_newline($input) {
 	return $output;
 }
 
-function table_exists($table_name) {
-	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
-	// taken from http://snippets.dzone.com/posts/show/3369
-	$query_exists = "SHOW TABLES LIKE '".$table_name."'";
-	$exists = mysqli_query($connection,$query_exists) or die (mysqli_error($connection));
-	$totalRows_exists = mysqli_num_rows($exists);
-	if ($totalRows_exists > 0) return TRUE;
-	else return FALSE;
-}
 
 function clean_up_url($referer) {
 	
@@ -100,7 +118,7 @@ function clean_up_url($referer) {
 	return $reconstruct;
 	
 }
-
+/*
 function purge_entries($type, $interval) {
 	
 	require(CONFIG.'config.php');	
@@ -137,6 +155,7 @@ function purge_entries($type, $interval) {
 		} while ($row_check = mysqli_fetch_assoc($check));
 	}
 }
+*/
 
 function generate_judging_numbers($brewing_db_table) {
 	
@@ -148,7 +167,7 @@ function generate_judging_numbers($brewing_db_table) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-	$query_judging_numbers = sprintf("SELECT id,brewCategory,brewName FROM %s", $brewing_db_table);
+	$query_judging_numbers = sprintf("SELECT id FROM %s", $brewing_db_table);
 	$judging_numbers = mysqli_query($connection,$query_judging_numbers) or die (mysqli_error($connection));
 	$row_judging_numbers = mysqli_fetch_assoc($judging_numbers);
 	
@@ -165,7 +184,7 @@ function generate_judging_numbers($brewing_db_table) {
 
 	} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
 }
-
+/*
 function check_special_ingredients($style,$styleSet) {
 	
 	include(CONFIG.'config.php');
@@ -183,6 +202,7 @@ function check_special_ingredients($style,$styleSet) {
 	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
 	else return FALSE;
 }
+*/
 	  
 function check_carb_sweetness($style,$styleSet) {
 	

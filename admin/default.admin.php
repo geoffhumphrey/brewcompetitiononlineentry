@@ -196,7 +196,7 @@
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " This will over-write all judging numbeers, including those that have been assigned via the barcode scanning function."; ?>" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Judging Numbers</a></li>
+                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " This will over-write all judging numbers, including those that have been assigned via the barcode scanning function."; ?>" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=id&amp;dir=ASC">Judging Numbers</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -368,7 +368,7 @@
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu9">
 													<?php for($i=1; $i<=6; $i++) { ?>
-													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275W"><?php echo $i; ?></a></li>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
@@ -379,7 +379,7 @@
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu10">
 													<?php for($i=1; $i<=6; $i++) { ?>
-													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275W"><?php echo $i; ?></a></li>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
@@ -490,6 +490,20 @@
                     </div>
                     <div id="collapseScoring" class="panel-collapse collapse">
                         <div class="panel-body">
+                        	
+                            <div class="row">
+                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Scoresheets and Docs</strong>
+                                </div>
+                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Multiple</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Individually</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            
+                            
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Scores</strong>

@@ -6,6 +6,7 @@
  *
  */
 
+
 // Define the current version
 include (INCLUDES.'current_version.inc.php'); 
 include (LIB.'date_time.lib.php');
@@ -18,6 +19,7 @@ include (LIB.'date_time.lib.php');
 
 
 include(INCLUDES.'version.inc.php');
+
 
 function version_check($version,$current_version) {
 	
@@ -398,27 +400,29 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 // ---------------------------- Date -----------------------------------------
 // All date functions moved to date_time.inc.php
 
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
-{
+function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
   $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
-
+  require (INCLUDES.'scrubber.inc.php');
   switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
+  
+	case "text":
+	  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+	  break;     
+	case "long":
+	case "int":
+	  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+	  break;
+	case "double":
+	  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
+	  break;
+	case "date":
+	  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+	  break;
+	case "defined":
+	  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+	  break;
+	case "scrubbed":
+	  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
   }
   return $theValue;
 }
@@ -2907,10 +2911,10 @@ function open_or_closed($now,$date1,$date2) {
 		if ($now < $date1) $output = "0";
 		
 		// First date has passed, but second has not
-		elseif (($now >= $date1) && ($now <= $date2)) $output = "1";
+		if (($now >= $date1) && ($now <= $date2)) $output = "1";
 		
 		// Both dates have passed
-		else $output = "2";
+		if ($now >= $date2) $output = "2";
 		
 		return $output;
 }

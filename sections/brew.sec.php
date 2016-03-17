@@ -10,7 +10,7 @@ include(DB.'entries.db.php');
 
 $add_entry_disable = FALSE;
 $edit_entry_disable = FALSE;
-
+$special_required = FALSE;
 
 // Adding an entry not allowed conditionals for non-admins
 if ($action == "add") {
@@ -556,7 +556,7 @@ $(document).ready(function()
                         <label for="brewAddition<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Miscellaneous <?php echo $i; ?> Weight</label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Weight" name="brewAddition<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewAddition'.$i.'Weight']; ?>" placeholder="<?php echo $_SESSION['prefsWeight2']; ?>" ?>
+                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Weight" name="brewAddition<?php echo $i; ?>Weight" value="<?php if (($action == "edit") && (isset($row_log['brewAddition'.$i.'Weight']))) echo $row_log['brewAddition'.$i.'Weight']; ?>" placeholder="<?php echo $_SESSION['prefsWeight2']; ?>" ?>
                         </div>
                     </div><!-- ./Form Group -->
                     <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
@@ -595,7 +595,7 @@ $(document).ready(function()
                         <label for="brewHops<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Hop <?php echo $i; ?></label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>" name="brewHops<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i]; ?>" placeholder="Hop name" ?>
+                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>" name="brewHops<?php echo $i; ?>" value="<?php if (($action == "edit") && (isset($row_log['brewHops'.$i]))) echo $row_log['brewHops'.$i]; ?>" placeholder="Hop name" ?>
                         </div>
                     </div><!-- ./Form Group -->
                 	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->

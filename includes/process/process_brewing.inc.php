@@ -251,7 +251,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$insertSQL .= "
 			brewBrewerFirstName, 
 			brewBrewerLastName, 
-			brewJudgingLocation, 
 			brewCoBrewer,
 			
 			brewJudgingNumber,
@@ -345,7 +344,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			$insertSQL .= GetSQLValueString($brewBrewerFirstName,"text").", "; 
 			$insertSQL .= GetSQLValueString($brewBrewerLastName,"text").", "; 
-			$insertSQL .= GetSQLValueString($row_style_name['brewStyleJudgingLoc'],"text").", "; 
 			$insertSQL .= GetSQLValueString(ucwords($_POST['brewCoBrewer']),"text").", ";
 			
 			$insertSQL .= GetSQLValueString($brewJudgingNumber,"text").", ";
@@ -569,8 +567,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$updateSQL .= "brewComments=". GetSQLValueString(strip_newline($_POST['brewComments']),"text").", "; 
 			$updateSQL .= "brewBrewerID=".GetSQLValueString($brewBrewerID,"text").", "; 
 			$updateSQL .= "brewBrewerFirstName=". GetSQLValueString($brewBrewerFirstName,"text").", "; 
-			$updateSQL .= "brewBrewerLastName=".GetSQLValueString($brewBrewerLastName,"text").", "; 
-			//$updateSQL .= "brewJudgingLocation=".GetSQLValueString($row_style_name['brewStyleJudgingLoc'],"text").", ";  
+			$updateSQL .= "brewBrewerLastName=".GetSQLValueString($brewBrewerLastName,"text").", ";  
 			$updateSQL .= "brewCoBrewer=".GetSQLValueString(ucwords($_POST['brewCoBrewer']),"text").", ";	
 			$updateSQL .= "brewUpdated="."NOW( ), ";
 			$updateSQL .= "brewJudgingNumber=".GetSQLValueString($_POST['brewJudgingNumber'],"text").", ";

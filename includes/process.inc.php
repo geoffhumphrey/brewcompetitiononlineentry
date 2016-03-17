@@ -19,8 +19,7 @@ date_default_timezone_set("America/Denver");
 
 if ($section != "setup")  {
 	
-	
-	require(LIB.'date_time.lib.php');
+	require(LIB.'common.lib.php');
 	
 	// Set timezone globals for the site
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
@@ -35,7 +34,6 @@ if ($section != "setup")  {
 
 if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) { 
 
-	require(INCLUDES.'scrubber.inc.php');
 	require(LIB.'process.lib.php');
 	
 	$archive_db_table = $prefix."archive";
@@ -82,6 +80,7 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	// --------------------------- // -------------------------------- //
 	
 	if ($action != "purge") {
+		/*
 		function relocate($referer,$page,$msg,$id) { 
 			include(CONFIG."config.php");
 		
@@ -113,33 +112,8 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 			return $output;
 		}
 	
-		function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
-		{
-		  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
-		  require (INCLUDES.'scrubber.inc.php');
-		  switch ($theType) {
-		  
-			case "text":
-			  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-			  break;     
-			case "long":
-			case "int":
-			  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-			  break;
-			case "double":
-			  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
-			  break;
-			case "date":
-			  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-			  break;
-			case "defined":
-			  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-			  break;
-			case "scrubbed":
-			  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
-		  }
-		  return $theValue;
-		}
+		
+		*/
 	}
 	
 	if (NHC) {

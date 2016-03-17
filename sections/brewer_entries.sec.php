@@ -126,6 +126,22 @@ do {
 	$entry_output .= sprintf("%04s",$row_log['id']);
 	$entry_output .= "</td>";
 	
+	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+	
+	if ($show_scores) {
+	// See if scanned scoresheet file exists, if so, provide link.
+		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+		if (file_exists($filename)) $scoresheet = TRUE;
+		else $scoresheet = FALSE;
+		
+		$entry_output .= "<td>";
+		if ($scoresheet) $entry_output .= "<a href = \"".$base_url."user_docs/".$row_log['brewJudgingNumber'].".pdf\" target=\"_blank\" data-toggle=\"tooltip\" title=\"View/download judges' scoresheets for ".$row_log['brewName'].".\">";
+		$entry_output .= $row_log['brewJudgingNumber']; 
+		if ($scoresheet) $entry_output .= "</a>";
+		$entry_output .= "</td>";
+	
+	}
+	
 	$entry_output .= "<td>";
 	$entry_output .= $row_log['brewName']; 
 	if ($row_log['brewCoBrewer'] != "") $entry_output .= "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>";
@@ -139,7 +155,7 @@ do {
 	$entry_output .= "</td>";
 	
 	
-	
+	if (!$show_scores) {
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
 	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exclamation-circle\"></span>";
@@ -151,11 +167,13 @@ do {
 	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
 	$entry_output .= "</td>";
 	
+	
+	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewUpdated'] != "") $entry_output .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
 	$entry_output .= "</td>";
 	
-	
+	}
 	// Display if Closed, Judging Dates have passed, winner display is enabled, and the winner display delay time period has passed
 	if ($show_scores) {
 		
@@ -280,11 +298,16 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 			"aaSorting": [[0,'asc']],
 			"aoColumns": [
 				null,
+				<?php if ($show_scores) { ?>
+				null,
+				<?php } ?>
+				null,
+				null,
+				<?php if (!$show_scores) { ?>
 				null,
 				null,
 				null,
-				null,
-				null,
+				<?php } ?>
 				<?php if ($show_scores) { ?>
 				null,
 				{ "asSorting": [  ] },
@@ -301,12 +324,17 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
-  	<th>#</th>
+  	<th><?php if ($show_scores) echo "Entry" ?>#</th>
+    <?php if ($show_scores) { ?>
+    <th>Judging#</th>
+    <?php } ?>
   	<th>Name</th>
   	<th>Style</th>
+    <?php if (!$show_scores) { ?>
   	<th class="hidden-xs hidden-sm">Confirmed</th> 
   	<th class="hidden-xs hidden-sm">Paid</th> 
     <th class="hidden-xs hidden-sm">Updated</th>
+    <?php } ?>
   	<?php if ($show_scores) { ?>
   	<th>Score</th>
     <th class="hidden-xs hidden-sm" nowrap>Mini-BOS</th>

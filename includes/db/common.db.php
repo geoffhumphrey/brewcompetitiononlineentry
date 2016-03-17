@@ -270,12 +270,10 @@ if ($section == "default") {
 	$row_check = mysqli_fetch_assoc($check);
 
 }
-
 	
 $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
 $contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
 $row_contest_rules = mysqli_fetch_assoc($contest_rules);	
-		
 
 if ($section == "volunteers") {
 

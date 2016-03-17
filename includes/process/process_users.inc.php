@@ -224,7 +224,7 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		require(CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
 	
-		$password_new = md5($_POST['password2']);
+		$password_new = md5($_POST['password']);
 		$hash_new = $hasher->HashPassword($password_new);
 	
 		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 

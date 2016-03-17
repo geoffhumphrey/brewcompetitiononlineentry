@@ -329,14 +329,10 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 
 		}
 		
-		
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 
-		
-		
 		// Stop Gap for random staff assignments
-		
 		$updateSQL = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -347,6 +343,52 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		session_start();
 		$_SESSION['loginUsername'] = $username;
 		
+		// If email registration info option is yes, email registrant their info...
+		if ($_SESSION['prefsEmailRegConfirm'] == 1) {
+			
+			// Build vars
+			$first_name = ucwords(strtolower($_POST['brewerFirstName']));
+			$last_name = ucwords(strtolower($_POST['brewerLastName']));
+			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$to_recipient = $first_name." ".$last_name;
+			$to_email = $username;
+			$subject = $_SESSION['contestName'].": Registration Confirmation";
+			
+			$message = "<html>" . "\r\n";
+			$message .= "<body>" . "\r\n";
+			if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$_SERVER['SERVER_NAME']."/user_images/".$_SESSION['contestLogo']."'></p>";
+			$message .= "<p>".$first_name.",</p>";
+			$message .= "<p>Thank you for registering an account on the ".$_SESSION['contestName']." competition website. The following is confirmation of the information you provided:</p>";
+			$message .= "<table cellpadding='5' border='0'>";
+			$message .= "<tr><td><strong>Name:</strong></td><td>".$first_name." ".$last_name."</td></tr>";
+			$message .= "<tr><td><strong>Address:</strong></td><td>".$_POST['brewerAddress']."<br>".$_POST['brewerCity'].", "$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
+			$message .= "<tr><td><strong>Phone 1:</strong></td><td>".$_POST['brewerPhone1']."</td></tr>";
+			if (isset($_POST['brewerPhone2'])) 	$message .= "<tr><td><strong>Phone 2:</strong></td><td>".$_POST['brewerPhone2']."</td></tr>";
+			if (isset($_POST['brewerClubs'])) 	$message .= "<tr><td><strong>Club:</strong></td><td>".$_POST['brewerClubs']."</td></tr>";
+			if (isset($_POST['brewerAHA'])) 	$message .= "<tr><td><strong>AHA Number:</strong></td><td>".$_POST['brewerAHA']."</td></tr>";
+			if (isset($_POST['brewerJudge'])) 	$message .= "<tr><td><strong>Judge:</strong></td><td>".$_POST['brewerJudge']."</td></tr>";
+			if (isset($_POST['brewerJudgeID'])) $message .= "<tr><td><strong>BJCP ID:</strong></td><td>".$_POST['brewerJudgeID']."</td></tr>";
+			if (isset($_POST['brewerJudgeRank'])) $message .= "<tr><td><strong>Rank:</strong></td><td>".$_POST['brewerJudgeRank']."</td></tr>";
+			if (isset($_POST['brewerJudgeMead'])) $message .= "<tr><td><strong>Mead Endorsement:</strong></td><td>".$_POST['brewerJudgeMead']."</td></tr>";			
+			$message .= "</table>";
+			$message .= "<p>Best of luck in the competition!</p>";
+			$message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
+			$message .= "</body>" . "\r\n";
+			$message .= "</html>";
+			
+			$headers  = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+			$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
+			$headers .= "From: Competition Server <noreply@".$url. ">\r\n";
+			
+			$emails = $to_email;
+			mail($emails, $subject, $message, $headers);
+			
+			//echo $headers."<br>";
+			//echo $subject."<br>";
+			//echo $message;
+		}
+		
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
@@ -354,7 +396,9 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&id=".$row_brewer['id']."#judge"));
 		}
-		else header(sprintf("Location: %s", $base_url."index.php?section=list&msg=1"));
+		else {
+			header(sprintf("Location: %s", $base_url."index.php?section=list&msg=1"));
+		}
 	  } // end if ($filter == "default")
 	
 	if ($filter == "admin") {

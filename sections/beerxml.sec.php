@@ -127,7 +127,7 @@ else {
 			$DELETABLE  = false;
 			$url_this =  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 			
-			if(!$_REQUEST['inserted'] == "true") $_SESSION['recipes'] = "";
+			// if(!$_REQUEST['inserted'] == "true") $_SESSION['recipes'] = "";
 			
 			if ($_FILES['userfile']) {
 				
@@ -155,7 +155,7 @@ else {
 						else $message .= ucwords(readable_number(count($insertedRecipes))) . " entry added.";
 					} 
 					
-					$_SESSION['recipes'] = $recipes;
+					//$_SESSION['recipes'] = $recipes;
 					$message .= " ".$_FILES['userfile']['name']." has been uploaded and the brew has been added to your list of entries.";
 				}
 				

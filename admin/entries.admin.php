@@ -34,6 +34,8 @@ else {
 	$sidebar_unpaid_entries .= ($totalRows_log_confirmed - $totalRows_log_paid);
 }
 
+$prefs_barcode_labels = array("N","C","2","0","3","4");
+
 if ($action != "print") { ?>
 	<?php 
     if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']))	{ 
@@ -374,15 +376,12 @@ if ($action != "print") { ?>
 		$entry_actions .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-print hidden-xs hidden-sm\"></a> ";
 		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-envelope\"></span></a>";
 	}
+	
 	?> 
-        
-        
-        
-        
     <tr class="<?php echo $entry_unconfirmed_row; ?>">
         <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
         <td><?php echo sprintf("%04s",$row_log['id']); ?></td>
-        <td><?php if (($_SESSION['prefsEntryForm'] == "N") && ($action != "print") && ($dbTable == "default")) { ?><input class="form-control input-sm hidden-print" id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo $entry_judging_num_display; ?>" /><?php echo $entry_judging_num_hidden; } else echo $entry_judging_num_display; ?></td>
+        <td><?php if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels)) && ($action != "print") && ($dbTable == "default")) { ?><input class="form-control input-sm hidden-print" id="brewJudgingNumber" name="brewJudgingNumber<?php echo $row_log['id']; ?>" type="text" size="6" maxlength="6" value="<?php echo $entry_judging_num_display; ?>" /><?php echo $entry_judging_num_hidden; } else echo $entry_judging_num_display; ?></td>
         <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
         <td class="hidden-xs"><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>
@@ -398,7 +397,6 @@ if ($action != "print") { ?>
     <?php } while($row_log = mysqli_fetch_assoc($log)) ?>
     </tbody>
 </table>
-
 <?php if ($action != "print") {  
 	if (($dbTable == "default") && ($totalRows_entry_count >= $_SESSION['prefsRecordLimit']))	{
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_entry_count;
