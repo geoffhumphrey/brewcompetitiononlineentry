@@ -220,7 +220,7 @@ if ($go == "default") { ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
 <?php if ($view == "quick") { ?>
     <input type="hidden" name="password" value="bcoem">
-    <input type="hidden" name="userQuestion" value="Randomly generated. Use the email function to recover your password.">
+    <input type="hidden" name="userQuestion" value="Randomly generated.">
     <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(7,2); ?>">
     <input type="hidden" name="brewerAddress" value="1234 Main Street">
     <input type="hidden" name="brewerCity" value="Anytown">

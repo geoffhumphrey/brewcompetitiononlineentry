@@ -192,7 +192,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 
 		//echo $insertSQL."<br />";
 	// Get the id from the "users" table to insert as the uid in the "brewer" table
-		$query_user= "SELECT id FROM $users_db_table WHERE user_name = '$username'";
+		$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
 		
@@ -337,12 +337,6 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
-	
-	if ($filter == "default") {
-	    // Log in the user and redirect
-		session_start();
-		$_SESSION['loginUsername'] = $username;
-		
 		// If email registration info option is yes, email registrant their info...
 		if ($_SESSION['prefsEmailRegConfirm'] == 1) {
 			
@@ -356,22 +350,25 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			
 			$message = "<html>" . "\r\n";
 			$message .= "<body>" . "\r\n";
-			if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$_SERVER['SERVER_NAME']."/user_images/".$_SESSION['contestLogo']."'></p>";
+			if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$base_url."/user_images/".$_SESSION['contestLogo']."' height='150'></p>";
 			$message .= "<p>".$first_name.",</p>";
-			$message .= "<p>Thank you for registering an account on the ".$_SESSION['contestName']." competition website. The following is confirmation of the information you provided:</p>";
+			if ($filter == "admin") $message .= "<p>An administrator has registerd you for an account on the ".$_SESSION['contestName']."  website. The following is confirmation of the information input:</p>";
+			else $message .= "<p>Thank you for registering an account on the ".$_SESSION['contestName']."  website. The following is confirmation of the information you provided:</p>";
 			$message .= "<table cellpadding='5' border='0'>";
-			$message .= "<tr><td><strong>Name:</strong></td><td>".$first_name." ".$last_name."</td></tr>";
-			$message .= "<tr><td><strong>Address:</strong></td><td>".$_POST['brewerAddress']."<br>".$_POST['brewerCity'].", "$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
-			$message .= "<tr><td><strong>Phone 1:</strong></td><td>".$_POST['brewerPhone1']."</td></tr>";
-			if (isset($_POST['brewerPhone2'])) 	$message .= "<tr><td><strong>Phone 2:</strong></td><td>".$_POST['brewerPhone2']."</td></tr>";
-			if (isset($_POST['brewerClubs'])) 	$message .= "<tr><td><strong>Club:</strong></td><td>".$_POST['brewerClubs']."</td></tr>";
-			if (isset($_POST['brewerAHA'])) 	$message .= "<tr><td><strong>AHA Number:</strong></td><td>".$_POST['brewerAHA']."</td></tr>";
-			if (isset($_POST['brewerJudge'])) 	$message .= "<tr><td><strong>Judge:</strong></td><td>".$_POST['brewerJudge']."</td></tr>";
-			if (isset($_POST['brewerJudgeID'])) $message .= "<tr><td><strong>BJCP ID:</strong></td><td>".$_POST['brewerJudgeID']."</td></tr>";
-			if (isset($_POST['brewerJudgeRank'])) $message .= "<tr><td><strong>Rank:</strong></td><td>".$_POST['brewerJudgeRank']."</td></tr>";
-			if (isset($_POST['brewerJudgeMead'])) $message .= "<tr><td><strong>Mead Endorsement:</strong></td><td>".$_POST['brewerJudgeMead']."</td></tr>";			
+			$message .= "<tr><td valign='top'><strong>Name:</strong></td><td valign='top'>".$first_name." ".$last_name."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Username (Email):</strong></td><td valign='top'>".$username."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Password:</strong></td><td valign='top'>".$_POST['password']."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Security Question:</strong></td><td valign='top'>".$_POST['userQuestion']."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Security Question Answer:</strong></td><td valign='top'>".$_POST['userQuestionAnswer']."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Address:</strong></td><td valign='top'>".$_POST['brewerAddress']."<br>".$_POST['brewerCity'].", ".$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Phone 1:</strong></td><td valign='top'>".$_POST['brewerPhone1']."</td></tr>";
+			if (isset($_POST['brewerPhone2'])) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$_POST['brewerPhone2']."</td></tr>";
+			if (isset($_POST['brewerClubs'])) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$_POST['brewerClubs']."</td></tr>";
+			if (isset($_POST['brewerAHA'])) 			$message .= "<tr><td valign='top'><strong>AHA Number:</strong></td><td valign='top'>".$_POST['brewerAHA']."</td></tr>";
+			if (isset($_POST['brewerJudge'])) 		$message .= "<tr><td valign='top'><strong>Available to Judge?</strong></td><td valign='top'>".$_POST['brewerJudge']."</td></tr>";
+			if (isset($_POST['brewerSteward'])) 		$message .= "<tr><td valign='top'><strong>Available to Steward?</strong></td><td valign='top'>".$_POST['brewerSteward']."</td></tr>";
 			$message .= "</table>";
-			$message .= "<p>Best of luck in the competition!</p>";
+			$message .= "<p>If any of the above information is incorrect, <a href='".$base_url."index.php?section=login'>log in to your account</a> and make the necessary changes. Best of luck in the competition!</p>";
 			$message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
@@ -379,15 +376,28 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 			$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-			$headers .= "From: Competition Server <noreply@".$url. ">\r\n";
+			if (strpos($url, 'brewcomp.com') !== false) $headers .= "From: ".$_SESSION['contestName']." Server <noreply@brewcomp.com>\r\n";
+			elseif (strpos($url, 'brewcompetition.com') !== false) $headers .= "From: ".$_SESSION['contestName']." Server <noreply@brewcompetition.com>\r\n";
+			else $headers .= "From: ".$_SESSION['contestName']." Server <noreply@".$url. ">\r\n";
 			
 			$emails = $to_email;
 			mail($emails, $subject, $message, $headers);
 			
-			//echo $headers."<br>";
-			//echo $subject."<br>";
-			//echo $message;
+			/*
+			echo $url;
+			echo $headers."<br>";
+			echo $subject."<br>";
+			echo $message;
+			exit;
+			*/
+			
 		}
+		
+	
+	if ($filter == "default") {
+	    // Log in the user and redirect
+		session_start();
+		$_SESSION['loginUsername'] = $username;
 		
 		// Redirect to Judge Info section if willing to judge
 		if ($_POST['brewerJudge'] == "Y") {
