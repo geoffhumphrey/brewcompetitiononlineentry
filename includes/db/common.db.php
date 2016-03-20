@@ -256,11 +256,17 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 }
 
 // Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup
-if ((($section == "admin") && ($go == "judging_preferences")) || ($go == "step8")) {
-	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
-	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
-	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);	
-}
+$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
+$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
+
+$query_judge_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
+$judge_count = mysqli_query($connection,$query_judge_count) or die (mysqli_error($connection));
+$row_judge_count = mysqli_fetch_assoc($judge_count);
+
+$query_steward_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'", $prefix."brewer");
+$steward_count = mysqli_query($connection,$query_steward_count) or die (mysqli_error($connection));
+$row_steward_count = mysqli_fetch_assoc($steward_count);
 
 
 if ($section == "default") {

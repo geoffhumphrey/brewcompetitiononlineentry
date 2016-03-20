@@ -255,12 +255,34 @@
         </div>
     <?php } 	?>
     
-    <?php if ((($registration_open == 0) || ($registration_open == "2")) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1") && ($msg == "default")) { ?>
+    <?php if ((($registration_open == 0) || ($registration_open == "2")) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1") && ($msg == "default")) { 
+	
+	if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward";
+	elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge";
+	else $j_s_text = "Judge or Steward";
+	
+	?>
         <!-- Account and entry registration closed, but Judge/steward registration open -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-info-circle"></span> <strong>Judge/Steward Registration is Still Open.</strong> Judges and stewards <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">register here</a>. Judge and steward registration will close <?php echo $judge_closed; ?>.
+          <span class="fa fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Registration is Still Open.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
         </div>
 	<?php } ?>
+	
+	<?php if (($judge_limit) && ($section == "register")) { ?>
+        <!-- Limit of judges reached -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered judges has been reached.</strong> No further judge registrations will be accepted. <?php if (!$steward_limit) { ?> Registering as a steward is still available.<?php } ?>
+        </div>
+    <?php } ?>
+	
+	<?php if (($steward_limit) && ($section == "register")) { ?>
+        <!-- Limit of stewards reached -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered stewards has been reached.</strong> No further steward registrations will be accepted. <?php if (!$judge_limit) { ?> Registering as a judge is still available.<?php } ?>
+        </div>
+    <?php } ?>
     
 <?php } // end if (!$logged_in) ?>

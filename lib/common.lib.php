@@ -3139,10 +3139,10 @@ function check_exension($file_ext) {
 	
 }
 
-function open_limit($total_entries,$limit,$registration_open) {
+function open_limit($total,$limit,$registration_open) {
 	// Check to see if the limit of entries has been reached
 	if ($limit != "") {
-		if (($total_entries >= $limit) && ($registration_open == "1")) return TRUE;
+		if (($total >= $limit) && ($registration_open == "1")) return TRUE;
 		else return FALSE;
 	}
 	else return FALSE;

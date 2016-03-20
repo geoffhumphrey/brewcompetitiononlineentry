@@ -81,6 +81,7 @@ if ($section == "contact") $link_contacts = "#";
 else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url);
 
 if ($section == "register") $link_register = "#"; 
+elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url);elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 else $link_register = build_public_url("register","default","default","default",$sef,$base_url);
 
 if ($section == "login") $link_login = "#"; 
@@ -247,7 +248,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
-                <?php if ((!$logged_in) && ($registration_open == "1")) { ?>
+                <?php if ((!$logged_in) && (($registration_open == "1") || ($judge_window_open == "1"))) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>">Register</a></li>
    				<?php } ?>
               </ul>
