@@ -117,11 +117,11 @@ if ($logged_in)  {
 	*/
 	
 	// Build Change My Email Address link
-	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['brewerID'],$sef,$base_url);
+	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url);
 	//$edit_user_email_link = $base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID'];
 	
 	// Build Change My Email Address link
-	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['brewerID'],$sef,$base_url);
+	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url);
 	//$edit_user_password_link = $base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID'];
 	
 	// Build Add Entry Link
