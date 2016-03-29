@@ -106,7 +106,7 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if (($registration_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
+if (($registration_open == 2) && ($judge_window_open == "2") && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
 	
 	$page_info1 .= "<p class=\"lead\">Account registration has closed. <span class=\"small\">Thank you for your interest.</p>";
 	echo $page_info1;
@@ -181,7 +181,8 @@ if (($section != "admin") && ($action != "print")) echo $warning1;
 if (NHC) echo $warning2;
 echo $header1_1;
 echo $page_info1;
-if ($go == "default") { ?>
+
+if ($go == "default") {  ?>
 <form class="form-horizontal" name="judgeChoice" id="judgeChoice">
 	<div class="form-group">
 		<label for="judge_steward" class="col-lg-5 col-md-6 col-sm-6 col-xs-12 control-label">Are You Registering as a Judge or Steward?</label>
@@ -555,7 +556,9 @@ if ($go == "default") { ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } ?>
+	
 	<?php if ($go != "entrant") { ?>
+	<?php if (!$judge_limit) { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging</label>
@@ -594,6 +597,8 @@ if ($go == "default") { ?>
 	</div><!-- ./Form Group -->
     <?php } // end if ($view == "default") ?>
 	<?php } // end if ($totalRows_judging > 1) ?>
+	<?php } // end if (!$judge_limit) ?>
+	<?php if (!$steward_limit) { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
@@ -631,15 +636,12 @@ if ($go == "default") { ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<?php } ?>
-	
-	
 	<?php } // end if ($totalRows_judging > 1) 
-	else { ?>
+		else { ?>
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
     <?php } ?>
-    
-	
+    <?php } // end if (!$steward_limit) ?>
 <?php } // end if ($go != "entrant") ?>	
 	<?php if ($section != "admin") { ?>
    	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->

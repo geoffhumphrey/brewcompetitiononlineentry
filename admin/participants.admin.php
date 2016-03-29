@@ -50,18 +50,6 @@ All Admin pages have certain variables in common that build the page:
 
 include(DB.'admin_participants.db.php');
 
-$query_with_entries = sprintf("SELECT b.brewerEmail AS 'Email', cb . *
-FROM (
-
-SELECT brewBrewerLastName AS 'Last Name', brewBrewerFirstName AS 'First Name', 
-brewBrewerID, GROUP_CONCAT( id
-ORDER BY id ) AS 'Entries'
-FROM %s
-GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID
-)cb, %s b
-WHERE cb.brewBrewerID = b.id
-ORDER BY 'Last Name', 'First Name'", $prefix."brewing", $prefix."brewer");
-
 // Set Vars
 $subtitle = "";
 $primary_page_info = "";
@@ -85,7 +73,10 @@ $output_hide_print = "";
 $output_assignment_modals = "";
 $output_user_question_modals = "";
 
-if ($action != "print") {
+if ($action == "print") {
+	$output_hide_print .= "hidden-print";
+}
+else {
 	$output_hide_print .= "hidden-md hidden-sm hidden-xs";	
 	if (($dbTable == "default") && ($row_participant_count['count'] > $_SESSION['prefsRecordLimit']))	{ 
 			echo "<div class='info'>The DataTables recordset paging limit of ".$_SESSION['prefsRecordLimit']." has been surpassed. Filtering and sorting capabilites are only available for this set of ".$_SESSION['prefsRecordPaging']." participants.<br />To adjust this setting, <a href='index.php?section=admin&amp;go=preferences'>change your installation's DataTables Record Threshold</a> (under the &ldquo;Performance&rdquo; heading in preferences) to a number <em>greater</em> than the total number of participants (".$row_participant_count['count'].").</div>";
@@ -175,7 +166,7 @@ if ($filter == "with_entries") {
 	$output_datatables_head .= "<tr>";
 	$output_datatables_head .= "<th>Name</th>";
 	$output_datatables_head .= "<th>Entries</th>";
-	$output_datatables_head .= "<th>Actions</th>";
+	if ($action != "print") $output_datatables_head .= "<th>Actions</th>";
 	$output_datatables_head .= "</tr>";
 	
 	}
@@ -240,7 +231,7 @@ do {
 		$output_datatables_view_link = "<a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." - Letter (Avery 5160)\"><span class=\"fa fa-file\"></span></a> <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." - A4 (Avery 3422)\"><span class=\"fa fa-file-text\"></span></a>";
 	}
 	else $output_datatables_view_link = "";
-	$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['id'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
+	$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","Change ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address");
 	$output_datatables_email_link .= "<a href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-envelope\"></span></a>";
 	
 	if ($us_phone) {
@@ -273,7 +264,7 @@ do {
 		$brewer_entries = implode(",",$entries);
 		
 		$output_datatables_body .= "<td>".str_replace(",",", ",$brewer_entries)."</td>";
-		$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
+		if ($action != "print") $output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 		$output_datatables_body .= "</tr>";		
 		
 	}
@@ -560,8 +551,13 @@ echo $output_user_question_modals;
 		<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
+        	<?php if ($filter == "default") { ?>
 			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=brewer_name">By Last Name</a></li>
 			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=club">By Club</a><li>
+            <?php } ?>
+            <?php if ($filter == "with_entries") { ?>
+            <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;filter=with_entries">By Entrant Last Name</a><li>
+            <?php } ?>
             <?php if ($filter == "judges") { ?>
 			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
             <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>

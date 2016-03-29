@@ -99,7 +99,9 @@ if ($section != "admin") {
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
 		$page_info100 .= "Account registrations";
-		if (($registration_open == 2) && ($judge_window_open == 1)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges and stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar); 
+		if (($registration_open == 2) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges or stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($registration_open == 2) && ($judge_window_open == 1) && (!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
 		else $page_info100 .= sprintf(" accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
 		
 		$page_info100 .= "</div>";
