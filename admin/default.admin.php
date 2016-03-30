@@ -719,7 +719,7 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
-									<li><a href="#" target="_blank" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
+									<li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
 									<!-- <li><a href="#" target="_blank" data-toggle="tooltip" data-placement="top" title="Avery XXXX">A4</a></li> -->
 								</ul>
 							</div>
