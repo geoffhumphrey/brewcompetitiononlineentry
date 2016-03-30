@@ -58,9 +58,6 @@ $message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-
 $message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
 
 
-
-
-
 if ((judging_date_return() == 0) && ($registration_open == "2")) {
 	
 	include ('judge_closed.sec.php'); 
@@ -142,6 +139,8 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 	
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
 		
+		include(DB.'score_count.db.php');
+		
 		if (judging_winner_display($delay)) {
 			
 			if (((NHC) && ($prefix == "final_")) || (!NHC)) { 
@@ -156,7 +155,7 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 		}
 		
 		else {
-			echo $page_info;
+			if (isset($page_info)) echo $page_info;
 		}
 	} 
 }

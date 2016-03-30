@@ -135,9 +135,7 @@ do {
 		else $scoresheet = FALSE;
 		
 		$entry_output .= "<td>";
-		if ($scoresheet) $entry_output .= "<a href = \"".$base_url."user_docs/".$row_log['brewJudgingNumber'].".pdf\" target=\"_blank\" data-toggle=\"tooltip\" title=\"View/download judges' scoresheets for ".$row_log['brewName'].".\">";
 		$entry_output .= $row_log['brewJudgingNumber']; 
-		if ($scoresheet) $entry_output .= "</a>";
 		$entry_output .= "</td>";
 	
 	}
@@ -240,17 +238,21 @@ do {
 	$delete_warning = "Delete ".$row_log['brewName']."? This cannont be undone.";
 	$delete_link = "<a data-toggle=\"tooltip\" title=\"".$delete_alt_title."\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-confirm=\"Are you sure you want to delete the entry called ".$row_log['brewName']."? This cannot be undone.\"><span class=\"fa fa-trash-o\"></a>";
 	//$delete_link = build_action_link("bin_closed",$base_url,$section,$go,"delete",$filter,$row_log['id'],$brewing_db_table,"Delete ".$row_log['brewName']."? This cannot be undone. ".$warning_append,1,"Delete");
+	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
-
+	if ($scoresheet) { 
+		$entry_output .= "<a href = \"".$base_url."user_docs/".$row_log['brewJudgingNumber'].".pdf\" target=\"_blank\" data-toggle=\"tooltip\" title=\"View/download judges' scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
+	}
+	
 	if ((judging_date_return() > 0) && ($action != "print")) {
 		
-		$entry_output .= "<td nowrap class=\"hidden-print\">";
+		
 		if (($registration_open == 1) || ($entry_window_open == 1)) $entry_output .= $edit_link;
 		if (pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) $entry_output .= $print_forms_link;
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-		$entry_output .= "</td>";
+		
 		
 	}
 	
@@ -258,11 +260,11 @@ do {
 	// Necessary to gather recipe data for first place winners in the final round
 	if ((judging_date_return() == 0) && ($action != "print")) {
 		
-		$entry_output .= "<td nowrap class=\"hidden-print\">";
+		
 		if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) $entry_output .= $edit_link;
-		$entry_output .= "</td>";
+		
 	}
-	
+	$entry_output .= "</td>";
 	$entry_output .= "</tr>";	
 	
 } while ($row_log = mysqli_fetch_assoc($log));

@@ -45,132 +45,136 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-$a = styles_active(0);
-foreach (array_unique($a) as $style) {
-	
-	include(DB.'winners_category.db.php');
-	
-	// Display all winners 
-	if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
-	if ($row_score_count['count'] > "0")   {
+
+if ($row_scored_entries['count'] > 0) {
+
+	$a = styles_active(0);
+	foreach (array_unique($a) as $style) {
 		
-		$primary_page_info = "";
-		$header1_1 = "";
-		$page_info1 = "";
-		$header1_2 = "";
-		$page_info2 = "";
+		include(DB.'winners_category.db.php');
 		
-		$table_head1 = "";
-		$table_body1 = "";
-		
-		
-		// Build headers		
-		$header1_1 .= "<h3>";
-		$header1_1 .= "Category ".ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")";
-		$header1_1 .= "</h3>";
-		
-		
-		// Build table headers
-		$table_head1 .= "<tr>";
-		$table_head1 .= "<th nowrap>Place</th>";
-		$table_head1 .= "<th>Brewer(s)</th>";
-		$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
-		$table_head1 .= "<th>Style</th>";
-		$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-		if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
-		$table_head1 .= "</tr>";
-		
-		// Build table body
-		
-		include(DB.'scores.db.php');
+		// Display all winners 
+		if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
+		if ($row_score_count['count'] > "0")   {
 			
-		do { 
-			$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+			$primary_page_info = "";
+			$header1_1 = "";
+			$page_info1 = "";
+			$header1_2 = "";
+			$page_info2 = "";
 			
-			$table_body1 .= "<tr>";
+			$table_head1 = "";
+			$table_body1 = "";
 			
-			if ($action == "print") { 
+			
+			// Build headers		
+			$header1_1 .= "<h3>";
+			$header1_1 .= "Category ".ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")";
+			$header1_1 .= "</h3>";
+			
+			
+			// Build table headers
+			$table_head1 .= "<tr>";
+			$table_head1 .= "<th nowrap>Place</th>";
+			$table_head1 .= "<th>Brewer(s)</th>";
+			$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
+			$table_head1 .= "<th>Style</th>";
+			$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
+			if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
+			$table_head1 .= "</tr>";
+			
+			// Build table body
+			
+			include(DB.'scores.db.php');
+				
+			do { 
+				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+				
+				$table_body1 .= "<tr>";
+				
+				if ($action == "print") { 
+					$table_body1 .= "<td>";
+					$table_body1 .= display_place($row_scores['scorePlace'],1);
+					$table_body1 .= "</td>";
+				}
+				
+				else {
+					$table_body1 .= "<td>";
+					$table_body1 .= display_place($row_scores['scorePlace'],2);
+					$table_body1 .= "</td>";
+				}
+				
 				$table_body1 .= "<td>";
-				$table_body1 .= display_place($row_scores['scorePlace'],1);
+				$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+				if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 				$table_body1 .= "</td>";
-			}
-			
-			else {
+				
 				$table_body1 .= "<td>";
-				$table_body1 .= display_place($row_scores['scorePlace'],2);
+				$table_body1 .= $row_scores['brewName'];
 				$table_body1 .= "</td>";
-			}
-			
-			$table_body1 .= "<td>";
-			$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-			if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
-			$table_body1 .= "</td>";
-			
-			$table_body1 .= "<td>";
-			$table_body1 .= $row_scores['brewName'];
-			$table_body1 .= "</td>";
-			
-			$table_body1 .= "<td>";
-			$table_body1 .= $style.": ".$row_scores['brewStyle'];
-			$table_body1 .= "</td>";
-			
-			$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-			$table_body1 .= $row_scores['brewerClubs'];
-			$table_body1 .= "</td>";
-			
-			if ($filter == "scores") { 
+				
+				$table_body1 .= "<td>";
+				$table_body1 .= $style.": ".$row_scores['brewStyle'];
+				$table_body1 .= "</td>";
+				
 				$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-				$table_body1 .= $row_scores['scoreEntry'];
+				$table_body1 .= $row_scores['brewerClubs'];
 				$table_body1 .= "</td>";
-			}
+				
+				if ($filter == "scores") { 
+					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+					$table_body1 .= $row_scores['scoreEntry'];
+					$table_body1 .= "</td>";
+				}
+				
+				$table_body1 .= "</tr>";
+				
+			 } while ($row_scores = mysqli_fetch_assoc($scores)); 
+			 
 			
-			$table_body1 .= "</tr>";
-			
-		 } while ($row_scores = mysqli_fetch_assoc($scores)); 
-		 
-		
-$random1 = "";	
-$random1 .= random_generator(12,1);
-		 
-// --------------------------------------------------------------
-// Display
-// --------------------------------------------------------------
-		 
-echo $header1_1; 
-?>
- <script type="text/javascript" language="javascript">
- $(document).ready(function() {
-	$('#sortable<?php echo $random1; ?>').dataTable( {
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
-		"bProcessing" : false,
-		"aoColumns": [
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
-			{ "asSorting": [  ] }
-			<?php } ?>
-			]
+	$random1 = "";	
+	$random1 .= random_generator(12,1);
+			 
+	// --------------------------------------------------------------
+	// Display
+	// --------------------------------------------------------------
+			 
+	echo $header1_1; 
+	?>
+	 <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $random1; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
+				{ "asSorting": [  ] }
+				<?php } ?>
+				]
+			} );
 		} );
-	} );
-</script> 
-<div class="bcoem-winner-table">
-    <table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
-    <thead>
-        <?php echo $table_head1; ?>
-    </thead>
-    <tbody>
-        <?php echo $table_body1; ?>
-    </tbody>
-    </table>
-</div>
+	</script> 
+	<div class="bcoem-winner-table">
+		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
+		<thead>
+			<?php echo $table_head1; ?>
+		</thead>
+		<tbody>
+			<?php echo $table_body1; ?>
+		</tbody>
+		</table>
+	</div>
 <?php 	} // end if > 0
 	} // end foreach
+} // end if score count > 0
 ?>
 
 <!-- Public Page Rebuild completed 08.26.15 --> 

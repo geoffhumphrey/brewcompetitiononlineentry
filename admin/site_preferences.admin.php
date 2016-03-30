@@ -76,13 +76,13 @@ $(document).ready(function(){
 		<div class="input-group">
 			<!-- Input Here -->
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" id="prefsWinnerMethod_0" <?php if (($section == "step3") || ($_SESSION['prefsWinnerMethod'] == "0")) echo "CHECKED"; ?>> By Table
+				<input type="radio" name="prefsWinnerMethod" value="0" id="prefsWinnerMethod_0" <?php if (($section == "step3") || ($_SESSION['prefsWinnerMethod'] == "0")) echo "CHECKED"; ?>> By Table
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" id="prefsWinnerMethod_1" <?php if ($_SESSION['prefsWinnerMethod'] == "1") echo "CHECKED"; ?>> By Style
+				<input type="radio" name="prefsWinnerMethod" value="1" id="prefsWinnerMethod_1" <?php if ($_SESSION['prefsWinnerMethod'] == "1") echo "CHECKED"; ?>> By Style
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" id="prefsWinnerMethod_2" <?php if ($_SESSION['prefsWinnerMethod'] == "2") echo "CHECKED"; ?>> By Sub-Style
+				<input type="radio" name="prefsWinnerMethod" value="2" id="prefsWinnerMethod_2" <?php if ($_SESSION['prefsWinnerMethod'] == "2") echo "CHECKED"; ?>> By Sub-Style
 			</label>
 		</div>
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>

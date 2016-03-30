@@ -10,6 +10,7 @@ ini_set('display_errors', '1');
 
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
+include(INCLUDES.'scrubber.inc.php');
 mysqli_select_db($connection,$database);
 require(DB.'common.db.php');
 if (NHC) $base_url = "../";
