@@ -142,7 +142,7 @@ else {
 // Check to see if email address is already in the system. If so, redirect.
 $username = strtolower($_POST['user_name']);
 
-if ((strstr($username,'@')) && (strstr($username,'.'))) {
+if (strstr($username,'@'))  {
 	
 	// Sanity check from AJAX widget
 	$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";

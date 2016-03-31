@@ -19,7 +19,7 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 	// Check to see if email address is already in the system. If so, redirect.
 	$username = strtolower($_POST['user_name']);
 	
-	if ((strstr($username,'@')) && (strstr($username,'.'))) {
+	if (strstr($username,'@')) {
 	
 	$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
 	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
@@ -97,7 +97,7 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 	// Check to see if email address is already in the system. If so, redirect.
 	$username = strtolower($_POST['user_name']);
 	$usernameOld = strtolower($_POST['user_name_old']);
-	if ((strstr($username,'@')) && (strstr($username,'.'))) {
+	if (strstr($username,'@'))  {
 	
 	$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
 	$brewerCheck = mysqli_query($connection,$query_brewerCheck) or die (mysqli_error($connection));
