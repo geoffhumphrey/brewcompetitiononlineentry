@@ -1,5 +1,5 @@
 <?php 
-$output .= "<h4>Version 1.1.5...</h4>";
+$output .= "<h4>Version 1.1.5.0..</h4>";
 $output .= "<ul>";
 
 $updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;"; 
@@ -28,4 +28,16 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 
 $output .= "<li>Updates to preferences table completed.</li>";
 $output .= "</ul>";
+
+// Update user levels of top admins to 0
+$query_user_level = sprintf("SELECT id,userLevel FROM %s WHERE userLevel='1'",$users_db_table);
+$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
+$row_user_level = mysqli_fetch_assoc($user_level);
+
+do {
+	$updateSQL = sprintf("UPDATE `%s` SET userLevel='0' WHERE id='%s';", $prefix."users",$row_user_level['id']); 
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+} while ($row_user_level = mysqli_fetch_assoc($user_level)); 
+
 ?>

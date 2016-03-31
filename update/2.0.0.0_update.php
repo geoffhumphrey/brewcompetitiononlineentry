@@ -67,7 +67,6 @@ if (!check_update("contestDropoffDeadline", $prefix."contest_info")) {
 
 $output .=  "<li>Competition info table altered successfully.</li>";
 
-
 // -----------------------------------------------------------
 // Alter Table: Brewer
 // Adding judge experience
@@ -84,6 +83,7 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+$output .=  "<li>Brewer table updated successfully.</li>";
 
 // -----------------------------------------------------------
 // Alter Tables: Archived tables
@@ -108,12 +108,13 @@ if ($totalRows_archive_current > 0) {
 			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+			$result = mysqli_query($connection,$updateSQL); 
 			
 			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$result = mysqli_query($connection,$updateSQL);
+			
 			
 		} // end if (check_setup($prefix."brewer".$suffix_current,$database))
 		
@@ -123,6 +124,7 @@ if ($totalRows_archive_current > 0) {
 
 $output .=  "<li>All archive brewer tables updated successfully.</li>";
 
+
 // Remove countries table
 $updateSQL = "DROP TABLE IF EXISTS `".$prefix."countries`";
 mysqli_select_db($connection,$database);
@@ -131,6 +133,7 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 
 $output .=  "<li>Countries table removed from the database.</li>";
 
+
 // Remove themes table
 $updateSQL = "DROP TABLE IF EXISTS `".$prefix."themes`";
 mysqli_select_db($connection,$database);
@@ -138,6 +141,7 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Themes table removed from the database.</li>";
+
 
 // -----------------------------------------------------------
 // Version 2.0.0.0
@@ -171,6 +175,7 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Sponsor data updated.</li>";
+
 
 
 // ---------------------- Style Updates ---------------------------	

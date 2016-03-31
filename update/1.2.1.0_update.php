@@ -423,5 +423,7 @@ if ($totalRows_archive > 0) {
 	}
 	
 }
+
+$output .= "<li>All archived tables updated successfully.</li>";
 $output .= "</ul>";
 ?>
