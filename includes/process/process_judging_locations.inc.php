@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
-	$judgingDate = strtotime($_POST['judgingDate']." ".$_POST['judgingTime']);
+	$judgingDate = strtotime($_POST['judgingDate']);
 	
 	if ($action == "add") {
 		$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",

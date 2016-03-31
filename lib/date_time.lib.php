@@ -114,6 +114,9 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		case "date-time-no-gmt":
 			$return = $date." at ".$time;
 		break;
+		case "date-time-system":
+			$return = $date." ".$time;
+		break;
 		case "date-no-gmt":
 			$return = $date;
 		break;		

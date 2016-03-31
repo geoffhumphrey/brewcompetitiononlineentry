@@ -7,7 +7,9 @@
  * 
  */
 
-if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+if (strpos($section, 'step') === FALSE) {
+	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+}
 
 $header_output = "";
 $output = "";

@@ -374,8 +374,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	
 	$judging_date = "";
 	$judging_time = "";
-	if ($action == "edit") $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date");
-	if ($action == "edit") $judging_time .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time");
+	if ($action == "edit") $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
 		
 } // end if ((($action == "add") || ($action == "edit")) || ($section == "step5")) 
 
@@ -599,23 +598,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 </div><!-- ./Form Group -->
 <script type="text/javascript">
 	$('#judgingDate').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-</script>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingTime" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<input class="form-control" id="judgingTime" name="judgingTime" type="text" size="10" maxlength="255" value="<?php echo $judging_time; ?>" placeholder="<?php echo $current_time; ?>" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
-		</div>
-        <span class="help-block with-errors"></span>
-	</div>
-</div><!-- ./Form Group -->
-<script type="text/javascript">
-	$('#judgingTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 </script>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->

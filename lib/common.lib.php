@@ -397,9 +397,6 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 	
 }
 
-// ---------------------------- Date -----------------------------------------
-// All date functions moved to date_time.inc.php
-
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
   $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
   require (INCLUDES.'scrubber.inc.php');

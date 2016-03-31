@@ -127,7 +127,7 @@ else {
 				
 				if (table_exists($prefix."system")) {
 					
-					if ($row_system['setup'] == 0) {
+					if (($row_system['setup'] == 0) && ($section != "step0")) {
 						if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
 						if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
 						if ($section == "step3") 	include(SETUP.'site_preferences.setup.php');

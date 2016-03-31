@@ -92,13 +92,13 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<span class=\"fa fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each highlighed entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
+			$warnings .= "<span class=\"fa fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each  entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}
 		
 	if (entries_no_special($_SESSION['user_id'])) {
-		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>You have entries that require you to define special ingredients.</strong> For each highlighted entry below with a <span class=\"fa fa-exlamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to add your special ingredients. Entries without special ingredients in categories that require them may be deleted by the system without warning.</div>";
+		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"></span> <strong>You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.</strong> For each entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.</div>";
 	}
 }
 
@@ -156,7 +156,7 @@ do {
 	if (!$show_scores) {
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
-	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exclamation-circle\"></span>";
+	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
 	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
 	$entry_output .= "</td>";
 	

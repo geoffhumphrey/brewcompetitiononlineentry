@@ -6,17 +6,18 @@
  */
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup")) { 
 	// Constants
-	$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']." ".$_POST['contestRegistrationOpenTime']);
-	$contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']." ".$_POST['contestRegistrationDeadlineTime']);
-	$contestEntryOpen = strtotime($_POST['contestEntryOpen']." ".$_POST['contestEntryOpenTime']);
-	$contestEntryDeadline = strtotime($_POST['contestEntryDeadline']." ".$_POST['contestEntryDeadlineTime']);
-	$contestJudgeOpen = strtotime($_POST['contestJudgeOpen']." ".$_POST['contestJudgeOpenTime']);
-	$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']." ".$_POST['contestJudgeDeadlineTime']);
-	$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']." ".$_POST['contestAwardsLocTime']);
+	
+	$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']);
+	$contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']);
+	$contestEntryOpen = strtotime($_POST['contestEntryOpen']);
+	$contestEntryDeadline = strtotime($_POST['contestEntryDeadline']);
+	$contestJudgeOpen = strtotime($_POST['contestJudgeOpen']);
+	$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']);
+	$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']);
 	$contestShippingOpen = strtotime($_POST['contestShippingOpen']);
-	$contestShippingDeadline = (strtotime($_POST['contestShippingDeadline']) + 86399); // add 86399 seconds to make sure the closing time is 11:59 PM on the day requested
+	$contestShippingDeadline = strtotime($_POST['contestShippingDeadline']);
 	$contestDropoffOpen = strtotime($_POST['contestDropoffOpen']);
-	$contestDropoffDeadline = (strtotime($_POST['contestDropoffDeadline']) + 86399); // add 86399 seconds to make sure the closing time is 11:59 PM on the day requested
+	$contestDropoffDeadline = strtotime($_POST['contestDropoffDeadline']);
 	$contestHostWebsite = check_http($_POST['contestHostWebsite']);
 	
 	//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>"; 

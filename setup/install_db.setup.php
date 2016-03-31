@@ -666,6 +666,9 @@ if ($setup_free_access == TRUE) {
 		  `jPrefsFlightEntries` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
 		  `jPrefsMaxBOS` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
 		  `jPrefsRounds` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
+		  `jPrefsCapJudges` int(3) DEFAULT NULL,
+		  `jPrefsCapStewards` int(3) DEFAULT NULL,
+		  `jPrefsBottleNum` int(3) DEFAULT NULL,
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 		";
@@ -833,6 +836,8 @@ if ($setup_free_access == TRUE) {
 			`prefsSpecialCharLimit` int(3) DEFAULT NULL COMMENT 'Character limit for special ingredients field',
 			`prefsStyleSet` varchar(20) DEFAULT NULL,
 			`prefsAutoPurge` tinyint(1) DEFAULT NULL,
+			`prefsEntryLimitPaid` int(4) DEFAULT NULL,
+			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";

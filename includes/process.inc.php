@@ -1,4 +1,4 @@
-<?php 
+GetSQLValueString(<?php 
 /*
  * Module:      process.inc.php
  * Description: This module does all the heavy lifting for any DB updates; new entries,
@@ -13,14 +13,13 @@ require(INCLUDES.'url_variables.inc.php');
 include(INCLUDES.'scrubber.inc.php');
 mysqli_select_db($connection,$database);
 require(DB.'common.db.php');
+include(LIB.'common.lib.php');
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
 date_default_timezone_set("America/Denver");
 
 if ($section != "setup")  {
-	
-	require(LIB.'common.lib.php');
 	
 	// Set timezone globals for the site
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
@@ -64,7 +63,6 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	
 	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
 		require(DB.'common.db.php');
-		require(LIB.'date_time.lib.php');
 		
 		// Set timezone globals for the site
 		$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);

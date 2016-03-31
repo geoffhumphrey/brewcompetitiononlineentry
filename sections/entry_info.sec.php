@@ -262,6 +262,7 @@ if (($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) {
 	$page_info11 .= sprintf("<p>Entry bottles accepted at our drop-off locations from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$dropoff_open,$dropoff_closed);
 	
 	do {
+		
 		$page_info11 .= "<p>";
 		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Go to the ".$row_dropoff['dropLocationName']." website\"><strong>%s</strong></a> <span class=\"fa fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$row_dropoff['dropLocationName']);
 		else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);

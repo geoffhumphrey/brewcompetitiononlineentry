@@ -404,7 +404,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
-			header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&id=".$row_brewer['id']."#judge"));
+			header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&psort=judge&id=".$row_brewer['id']));
 		}
 		else {
 			header(sprintf("Location: %s", $base_url."index.php?section=list&msg=1"));
@@ -419,7 +419,7 @@ if ((strstr($username,'@')) && (strstr($username,'.'))) {
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
-			else $insertGoTo = $base_url."index.php?section=brewer&go=admin&filter=".$row_brewer['id']."&action=edit&go=judge&id=".$row_brewer['id']."#judge";
+			else $insertGoTo = $base_url."index.php?section=breweraction=edit&go=admin&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
 		else { 
