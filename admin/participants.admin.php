@@ -336,11 +336,10 @@ do {
 	}
 	
 	
-	$output_datatables_body .= "<td class=\"".$output_hide_print."\">".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
-	
+	$output_datatables_body .= "<td class=\"".$output_hide_print."\" data-sort='".date_created_timestamp($row_brewer['uid'],$dbTable)."'>".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
 	if (($action != "print") && ($dbTable == "default")) { 
 	
-	
+//	var_dump($row_brewer);exit;
 	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 		
 		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","Add an entry for ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']);
