@@ -30,6 +30,19 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	}
 	
 	if (($action == "add") || ($action == "edit")) {
+		
+		include(DB.'styles_special.db.php');
+		
+		$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider,$special_custom);
+		$all_carb_styles = array_merge($mead,$cider,$carbonation_custom);
+		$all_strength_styles = array_merge($strength_custom,$strength_mead);
+		
+		print_r($all_carb_styles);
+		print_r($all_special_ing_styles);
+		print_r($all_strength_styles);
+		
+		exit;
+		
 		$brewName = strtr($_POST['brewName'],$html_remove);
 		$brewName = strtr($brewName,$html_string);
 		$brewInfo = $_POST['brewInfo'];
@@ -39,10 +52,9 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		$brewMead2 = "";
 		$brewMead3 = "";
 		
-		if (isset($_POST['brewMead1'])) $brewMead1 .= $_POST['brewMead1']; 
-		if (isset($_POST['brewMead2'])) $brewMead2 .= $_POST['brewMead2']; 
-		if (isset($_POST['brewMead3'])) $brewMead3 .= $_POST['brewMead3']; 
-	
+		if ((isset($_POST['brewMead1'])) && (in_array($_POST['brewStyle'],$all_carb_styles))) $brewMead1 .= $_POST['brewMead1']; 
+		if ((isset($_POST['brewMead2'])) && (in_array($_POST['brewStyle'],$all_carb_styles))) $brewMead2 .= $_POST['brewMead2']; 
+		if ((isset($_POST['brewMead3'])) && (in_array($_POST['brewStyle'],$all_strength_styles))) $brewMead3 .= $_POST['brewMead3']; 	
 	
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
 		if ($_SESSION['prefsHideRecipe'] == "N") {

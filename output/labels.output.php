@@ -117,9 +117,9 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
-						if ($row_log['brewMead1'] != "") $text .= sprintf("%s",$row_log['brewMead1']);
-						if ($row_log['brewMead2'] != "") $text .= sprintf(" / %s",$row_log['brewMead2']);
-						if ($row_log['brewMead3'] != "") $text .= sprintf(" / %s",$row_log['brewMead3']); 
+						if (!empty($row_entries['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+						if (!empty($row_entries['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+						if (!empty($row_entries['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
 						
 					}
 					$text = iconv('UTF-8', 'windows-1252', $text);
@@ -361,9 +361,9 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
-						if ($row_log['brewMead1'] != "") $text .= sprintf("%s",$row_log['brewMead1']);
-						if ($row_log['brewMead2'] != "") $text .= sprintf(" / %s",$row_log['brewMead2']);
-						if ($row_log['brewMead3'] != "") $text .= sprintf(" / %s",$row_log['brewMead3']); 
+						if (!empty($row_entries['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+						if (!empty($row_entries['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+						if (!empty($row_entries['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
 						
 					}
 					$text = iconv('UTF-8', 'windows-1252', $text);

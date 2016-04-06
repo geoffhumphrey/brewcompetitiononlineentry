@@ -1,6 +1,7 @@
 <?php
-function authenticateUser($connection, strtolower($username), $password) {
+function authenticateUser($connection, $username, $password) {
 	
+	$username = strtolower($username);
 	include('../paths.php');
     require(CONFIG.'config.php');
     require(INCLUDES.'url_variables.inc.php');

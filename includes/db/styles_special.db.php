@@ -28,10 +28,26 @@ $query_carb_cider = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_
 $carb_cider = mysqli_query($connection,$query_carb_cider) or die (mysqli_error($connection));
 $row_carb_cider = mysqli_fetch_assoc($carb_cider);
 do { $cider[] = $row_carb_cider['brewStyleGroup']."-".$row_carb_cider['brewStyleNum']; } while ($row_carb_cider = mysqli_fetch_assoc($carb_cider));
-//print_r($cider); echo "<br>";
 	
 $query_spec_cider = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType='Cider' OR brewStyleType ='2') AND brewStyleReqSpec='1'", $_SESSION['prefsStyleSet']);
 $spec_cider = mysqli_query($connection,$query_spec_cider) or die (mysqli_error($connection));
 $row_spec_cider = mysqli_fetch_assoc($spec_cider);
+do { $special_cider[] = $row_spec_cider['brewStyleGroup']."-".$row_spec_cider['brewStyleNum']; } while ($row_spec_cider = mysqli_fetch_assoc($spec_cider));
+
+// Custom Styles
+$query_spec_custom = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' AND brewStyleType >= 4 AND brewStyleReqSpec='1'", $styles_db_table);
+$spec_custom = mysqli_query($connection,$query_spec_custom) or die (mysqli_error($connection));
+$row_spec_custom = mysqli_fetch_assoc($spec_custom);
+do { $special_custom[] = $row_spec_custom['brewStyleGroup']."-".$row_spec_custom['brewStyleNum']; } while ($row_spec_custom = mysqli_fetch_assoc($spec_custom));
+
+$query_carb_custom = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' AND brewStyleCarb='1'", $styles_db_table);
+$carb_custom = mysqli_query($connection,$query_carb_custom) or die (mysqli_error($connection));
+$row_carb_custom = mysqli_fetch_assoc($carb_custom);
+do { $carbonation_custom[] = $row_carb_custom['brewStyleGroup']."-".$row_carb_custom['brewStyleNum']; } while ($row_carb_custom = mysqli_fetch_assoc($carb_custom));
+
+$query_str_custom = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' AND brewStyleStrength='1'", $styles_db_table);
+$str_custom = mysqli_query($connection,$query_str_custom) or die (mysqli_error($connection));
+$row_str_custom = mysqli_fetch_assoc($str_custom);
+do { $strength_custom[] = $row_str_custom['brewStyleGroup']."-".$row_str_custom['brewStyleNum']; } while ($row_str_custom = mysqli_fetch_assoc($str_custom));
 
 ?>

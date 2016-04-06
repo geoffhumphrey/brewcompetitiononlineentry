@@ -131,6 +131,16 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 	
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    
+    <!-- Opengraph Implementation -->
+    <?php if (!empty($_SESSION['contestName'])) { ?>
+        <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
+    <?php } ?>
+    <?php if (!empty($_SESSION['contestLogo'])) { ?>
+        <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']?>" />
+    <?php } ?>
+    <meta property="og:url" content="<?php echo "http" . (($_SERVER['HTTPS'] == "on") ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
+  
 </head>
 <body>
 	

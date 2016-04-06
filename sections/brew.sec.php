@@ -94,9 +94,9 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	// get information from database
 	include(DB.'styles_special.db.php');
 	
-	do { $special_cider[] = $row_spec_cider['brewStyleGroup']."-".$row_spec_cider['brewStyleNum']; } while ($row_spec_cider = mysqli_fetch_assoc($spec_cider));
+	
 		
-	$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider);
+	$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider,$special_custom);
 
 	$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
 	$specials = rtrim($specials,", "); 
@@ -1008,20 +1008,27 @@ $(document).ready(function() {
 			$("#special").show("fast");
 			$("#mead-cider").show("fast");
 			$("#mead").hide("fast");
-		<?php } // end if ($action == "edit") ?>
-	<?php } ?>
+		<?php }  ?>
+		<?php if (in_array($view,$special_custom)) { ?>
+			$("#special").show("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+		<?php }  ?>
+	<?php } // end if ($action == "edit") ?>
 	$("#type").change(function() {
 		<?php if ($action == "add") { ?>
 	 	$("#special").hide("fast");
 		$("#mead-cider").hide("fast");
 		$("#mead").hide("fast");
 		<?php } ?>
+		
 		if ( 
 			$("#type").val() == "99999-A"){
 			$("#special").hide("fast");
 			$("#mead-cider").hide("fast");
 			$("#mead").hide("fast");
 		}
+		
 		<?php foreach ($cider as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
@@ -1088,6 +1095,16 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
+		<?php foreach ($special_custom as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#mead-cider").hide("fast");
+			$("#mead").hide("fast");
+			$("#special").show("fast");
+		}
+		<?php } ?>
+		
 		else{
 			$("#special").hide("fast");
 			$("#mead-cider").hide("fast");
@@ -1100,8 +1117,6 @@ $(document).ready(function() {
 );
 
 <?php if ($action == "edit") { ?>
-
-	
 	
 	<?php if (in_array($view,$cider)) { ?>
 	$(document).ready(function() {

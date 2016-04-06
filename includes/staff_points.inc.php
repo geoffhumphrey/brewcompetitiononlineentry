@@ -125,16 +125,15 @@ $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'",$staff_db_table);
 $assignments =  mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
-//echo $staff_points."<br>";
-//echo $row_assignments['count']."<br>";
+
 $staff_ind_points = $staff_points/$row_assignments['count'];
-//echo $staff_ind_points;
+
 if ($row_assignments['count'] >= 2) $staff_points =  number_format(round_to_half($staff_ind_points), 1);
 elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_points,1);
 else $staff_points = 0;
 
 // Organizer
-$query_organizer = "SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
 $organizer =  mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
 $row_organizer = mysqli_fetch_assoc($organizer);
 $totalRows_organizer = mysqli_num_rows($organizer);
