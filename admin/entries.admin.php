@@ -385,7 +385,7 @@ if ($action != "print") { ?>
         <td><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>
         <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $brewer_info[8] ; ?></td>
-        <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $entry_updated_display; ?></td>
+        <td class="hidden-xs hidden-sm hidden-md hidden-print" data-sort='<?php echo strtotime($row_log['brewUpdated'])?>'><?php echo $entry_updated_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_paid_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_received_display; ?></td>
         <td><?php echo $entry_box_num_display; ?></td>

@@ -861,6 +861,30 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 	return $result;
 }
 
+function date_created_timestamp($uid,$dbTable) {
+	include(CONFIG.'config.php');	
+	mysql_select_db($database, $brewing);
+	if ($dbTable != "default") $dbTable = $dbTable; else $dbTable = $prefix."users";
+	
+        $result = '';
+	$result1 = mysql_query(sprintf("SHOW COLUMNS FROM %s LIKE 'userCreated'",$dbTable));
+	$exists = (mysql_num_rows($result1))?TRUE:FALSE;
+	
+	if ($exists) {
+	
+		$query_user = sprintf("SELECT unix_timestamp(userCreated) AS userCreated FROM %s WHERE id = '%s'",$dbTable,$uid);
+		$user = mysql_query($query_user, $brewing) or die(mysql_error());
+		$row_user = mysql_fetch_assoc($user);
+		$totalRows_user = mysql_num_rows($user);
+		
+		if ($totalRows_user == 1) {
+			$result = $row_user['userCreated'];
+		}
+		
+	}
+	return $result;
+}
+
 function user_info($uid) {
 	include(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);

@@ -336,10 +336,8 @@ do {
 	}
 	
 	
-	$output_datatables_body .= "<td class=\"".$output_hide_print."\">".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
-	
+	$output_datatables_body .= "<td class=\"".$output_hide_print."\" data-sort='".date_created_timestamp($row_brewer['uid'],$dbTable)."'>".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
 	if (($action != "print") && ($dbTable == "default")) { 
-	
 	
 	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 		
