@@ -134,7 +134,7 @@ elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_poi
 else $staff_points = 0;
 
 // Organizer
-$query_organizer = "SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
 $organizer = mysql_query($query_organizer, $brewing) or die(mysql_error());
 $row_organizer = mysql_fetch_assoc($organizer);
 $totalRows_organizer = mysql_num_rows($organizer);
