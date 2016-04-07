@@ -368,7 +368,7 @@
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu9">
 													<?php for($i=1; $i<=6; $i++) { ?>
-													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275W"><?php echo $i; ?></a></li>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
@@ -379,7 +379,7 @@
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu10">
 													<?php for($i=1; $i<=6; $i++) { ?>
-													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275W"><?php echo $i; ?></a></li>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
