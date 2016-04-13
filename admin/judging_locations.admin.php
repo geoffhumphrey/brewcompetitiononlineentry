@@ -147,9 +147,9 @@ if ($section != "step5") {
 		
 		do {
 			
-			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
+			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"default",0,"Edit ".$row_judging_locs['judgingLocName']);
 			
-			$output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
+			$output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? All judge/steward account location preferences for this location will be removed. This cannot be undone.",0,"Delete ".$row_judging_locs['judgingLocName']);
 			
 			$output_datatables_actions = $output_datatables_edit_link." ".$output_datatables_delete_link;
 			
@@ -304,7 +304,7 @@ if ($section != "step5") {
 						}
 					$output = rtrim($output,"<br>");
 				}
-				if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> None specified.";
+				if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 				else $output_location = $output;
 				
 				$output_datatables_body .= "<tr>";

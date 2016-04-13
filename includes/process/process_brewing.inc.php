@@ -37,11 +37,12 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		$all_carb_styles = array_merge($mead,$cider,$carbonation_custom);
 		$all_strength_styles = array_merge($strength_custom,$strength_mead);
 		
+		/*
 		print_r($all_carb_styles);
 		print_r($all_special_ing_styles);
 		print_r($all_strength_styles);
-		
 		exit;
+		*/
 		
 		$brewName = strtr($_POST['brewName'],$html_remove);
 		$brewName = strtr($brewName,$html_string);

@@ -155,7 +155,7 @@ if ($totalRows_log > 0) $primary_page_info .= "<p class=\"lead hidden-print\"><s
 	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-key\"></span> Change Password</a>";
 	$user_edit_links .= "</div><!-- ./button group --> ";
 	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
-		if ($add_entry_link_show) { 
+	if ($add_entry_link_show) { 
 		$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
 		if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> Add an Entry Using BeerXML</a>";
 	}
@@ -288,7 +288,9 @@ $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\"><a href=\"ht
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Drop Off Location</strong></div>";
-$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".dropoff_location($_SESSION['brewerDropOff'])."</div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".dropoff_location($_SESSION['brewerDropOff']);
+if ($_SESSION['brewerDropOff'] == 0) $table_body1 .= "<br><a id=\"modal_window_link\" data-toggle=\"tooltip\" title=\"Print shipping labels to attach to your box(es) of bottles\" href =\"".$base_url."output/print.output.php?section=shipping-label\">Print Shipping Labels</a>"; 
+$table_body1 .= "</div>";
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Club</strong></div>";

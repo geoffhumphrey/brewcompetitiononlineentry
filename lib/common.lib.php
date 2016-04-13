@@ -55,7 +55,7 @@ function designations($judge_array,$display) {
 	return $return;	
 }
 
-function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$link_text="default") {
+function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$tooltip_text="default") {
 
 	$return = "";
 	//$return .= "<a>";
@@ -66,7 +66,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	}
 
 	if ($icon == "fa-trash-o") {
-		$return .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\" data-confirm=\"".$alt_title."\">";
+		$return .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\" data-confirm=\"".$alt_title."\">";
 	}
 
 	else {
@@ -75,7 +75,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 			$return .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
-			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\">";	
+			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";	
 		} 
 		
 		else {
@@ -84,12 +84,12 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 			if ($action != "default") $return .= "&amp;action=".$action;
 			if ($filter != "default") $return .= "&amp;filter=".$filter;
 			if ($id != "default") $return .= "&amp;id=".$id;
-			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\">";	
+			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";	
 		}
 	}
 	
 	if (($method == 1) || ($method == 2)) {
-		$return .= $link_text;
+		$return .= $tooltip_text;
 	}
 	
 	else {

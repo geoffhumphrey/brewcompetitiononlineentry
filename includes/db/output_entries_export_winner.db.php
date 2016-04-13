@@ -18,7 +18,9 @@ if ($_SESSION['prefsWinnerMethod'] == 0) {
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			
-			$a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],$row_entries['brewStyle'],$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),$row_brewer['brewerEmail'],$row_brewer['brewerAddress'],$row_brewer['brewerCity'],$row_brewer['brewerState'],$row_brewer['brewerZip'],$row_brewer['brewerCountry'],$row_brewer['brewerPhone1'],strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
+			if ($row_brewer['brewerCountry'] == "United States") $phone = format_phone_us($row_brewer['brewerPhone1']); else $phone = $row_brewer['brewerPhone1'];
+			
+			$a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],$row_entries['brewStyle'],$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),$row_brewer['brewerEmail'],$row_brewer['brewerAddress'],$row_brewer['brewerCity'],$row_brewer['brewerState'],$row_brewer['brewerZip'],$row_brewer['brewerCountry'],$phone,strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
 			
 		} while ($row_scores = mysqli_fetch_assoc($scores)); 
 	}
@@ -53,13 +55,15 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 			$row_scores = mysqli_fetch_assoc($scores);
 			$totalRows_scores = mysqli_num_rows($scores);
+			
+			if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
 					
 			do { 
 				$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$judging_tables_db_table,$row_scores['scoreTable']);
 				$table_name = mysqli_query($connection,$query_table_name) or die (mysqli_error($connection));
 				$row_table_name = mysqli_fetch_assoc($table_name);
 			
-				$a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],$row_scores['brewStyle'],$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+				$a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],$row_scores['brewStyle'],$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$phone,strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
 			} while ($row_scores = mysqli_fetch_assoc($scores));
 		}
 	}	
@@ -92,6 +96,8 @@ if ($_SESSION['prefsWinnerMethod'] == 2) {
 			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 			$row_scores = mysqli_fetch_assoc($scores);
 			$totalRows_scores = mysqli_num_rows($scores);
+			
+			if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
 					
 			do { 
 			$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];

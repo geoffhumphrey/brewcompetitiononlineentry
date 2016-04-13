@@ -62,6 +62,7 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 		
 		if ($section == "styles") 			include (OUTPUT.'styles.output.php'); 
+		if ($section == "shipping-label")	include (OUTPUT.'shipping_label.output.php'); 
 		
 		if ($section == "admin") {
 			include(LIB.'admin.lib.php');

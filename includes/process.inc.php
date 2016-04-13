@@ -1,4 +1,4 @@
-GetSQLValueString(<?php 
+<?php 
 /*
  * Module:      process.inc.php
  * Description: This module does all the heavy lifting for any DB updates; new entries,

@@ -916,7 +916,7 @@
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv&amp;filter=winners">Winners</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

@@ -82,7 +82,8 @@ if ($section == "contact") $link_contacts = "#";
 else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url);
 
 if ($section == "register") $link_register = "#"; 
-elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url);elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
+elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url); 
+elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 else $link_register = build_public_url("register","default","default","default",$sef,$base_url);
 
 if ($section == "login") $link_login = "#"; 
@@ -284,9 +285,6 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> Admin</a></li>
             <?php } ?>
             <?php } else { ?>
-            
-            
-            
             <li<?php if ($section == "login") echo $active_class; ?>><a href="<?php echo $link_login; ?>" role="button">Log In</a></li>
             <?php } ?>
             </ul>

@@ -65,19 +65,26 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 				$c = display_array_content($value,'');
 				$d = ltrim($c,"0");
 				$d = str_replace("-","",$c);
-				$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$c."&amp;tb=true'>".$d."</a>";
+				$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$d."\">".$d."</a>";
+				
 			}
 			else {
-				$e = ltrim($value,"0");
-				$e = str_replace("-","",$value);
-				$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>"; 
+				
+				$value = explode("|",$value);
+				
+				$e = str_replace("-","",$value[0]);
+				$e = ltrim($e,"0");
+				$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$value[0]."\" data-tooltip=\"true\" title=\"Click for specifics about style ".$e.": ".$value[1]."\">".$e."</a>";
+				//$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>"; 
 			}
 			if ($method == "1") $a .= "";
 			if ($method == "2") $a .= "&nbsp;&nbsp;";
 			if ($method == "3") $a .= ", ";
 		}
 		$b = rtrim($a, "&nbsp;&nbsp;");
+		$b = rtrim($a, ", ;");
 		$b = rtrim($b, "  ");
+		
 		return $b;
 	}
 	
@@ -93,11 +100,8 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	
 	// get information from database
 	include(DB.'styles_special.db.php');
-	
-	
-		
-	$all_special_ing_styles = array_merge($special_beer,$special_mead,$special_cider,$special_custom);
-
+	$all_special_ing_styles = array_merge($special_beer_modal,$carb_str_sweet_special_modal,$spec_sweet_carb_only_modal,$spec_carb_only_modal);
+	$all_special_ing_styles = array_unique($all_special_ing_styles);
 	$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
 	$specials = rtrim($specials,", "); 
 	
@@ -161,7 +165,9 @@ $(document).ready(function()
 }
 );
 </script>
-<?php // if ($comp_paid_entry_limit) echo "Paid entry limit reached"; else echo "Paid entry limit NOT reached"; ?>
+<?php
+echo $modals;
+// if ($comp_paid_entry_limit) echo "Paid entry limit reached"; else echo "Paid entry limit NOT reached"; ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
@@ -199,6 +205,8 @@ $(document).ready(function()
                 <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
+            <div class="help-block">Judges will not know the name of your entry.</div>
+            
         </div>
     </div><!-- ./Form Group -->
     <!-- Choose Style -->
@@ -215,7 +223,7 @@ $(document).ready(function()
 	?>
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
         <label for="brewStyle" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set; ?> Style</label>
-        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="10" data-width="auto">
             <?php
@@ -253,9 +261,78 @@ $(document).ready(function()
 				<?php }
 				} while ($row_styles = mysqli_fetch_assoc($styles)); ?>
         </select>
-        <span id="helpBlock" class="help-block">&spades; = Specific Type, Special Ingredients, Classic Style, Strength (for Beer), or Color May Be Required<br />&diams; = Strength Required (Mead/Cider)<br />&clubs; = Carbonation Level Required (Mead/Cider)<br />&hearts; = Sweetness Level Required (Mead/Cider)</p></span>
+        <span id="helpBlock" class="help-block">&spades; = Specific Type, Special Ingredients, Classic Style, Strength (for Beer), or Color May Be Required for the following styles: <?php echo $specials; ?><br />&diams; = Strength Required (Mead)<br />&clubs; = Carbonation Level Required (Mead/Cider)<br />&hearts; = Sweetness Level Required (Mead/Cider)</p></span>
         </div>
     </div><!-- ./Form Group -->
+    
+    <!-- Entry Requirements -->
+	<div id="specialInfo" class="form-group">
+    	<label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Requirements for <span id="specialInfoName">Style Name</span></label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<div id="specialInfoText" class="form-control-static">Entry info goes here.</div>
+        </div>
+    </div>
+    
+    
+    <div id="strengthSaison" class="form-group">
+    	<label for="strengthSaison" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Strength</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="strengthSaison" id="strengthSaison1" value="Table"> Table
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="strengthSaison" id="strengthSaison2" value="Standard" <?php if ($action == "add") echo "checked"; ?>> Standard
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="strengthSaison" id="strengthSaison" value="Super"> Super
+            </label>
+        </div>
+        </div>
+    </div>
+    
+    <div id="strengthIPA" class="form-group">
+    	<label for="strengthIPA" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Strength</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="strengthIPA" id="strengthIPA1" value="Session"> Session
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="strengthIPA" id="strengthIPA2" value="Standard" <?php if ($action == "add") echo "checked"; ?>> Standard
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="strengthIPA" id="strengthIPA3" value="Double"> Double
+            </label>
+        </div>
+    </div>
+    
+    <div id="BDGColor" class="form-group">
+    	<label for="BDGColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Color</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="BDGColor" id="BDGColor1" value="Blonde"> Blonde
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="BDGColor" id="BDGColor2" value="Amber" <?php if ($action == "add") echo "checked"; ?>> Amber
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="BDGColor" id="BDGColor3" value="Brown"> Brown
+            </label>
+        </div>
+    </div>
+    
+    <div id="darkLightColor" class="form-group">
+    	<label for="darkLightColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Color</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="darkLightColor" id="darkLightColor1" value="Pale"> Pale
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="darkLightColor" id="darkLightColor2" value="Amber/Dark" <?php if ($action == "add") echo "checked"; ?>> Amber/Dark
+            </label>
+        </div>
+    </div>
+    
     <!-- Enter Special Ingredients -->
 	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
         <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Specific Type, Special Ingredients, Classic Style, Strength, and/or Color</label>
@@ -263,39 +340,40 @@ $(document).ready(function()
             	 <input class="form-control" name="brewInfo" id="brewInfo" type="text" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>>
             
             <span id="helpBlock" class="help-block">
-            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong> Click the appropriate number below for entry requirements.</p>
-                <p><strong class="text-danger">Required for categories:</strong> <?php echo $specials; ?>.</p>
-                <p><strong class="text-danger">Use the Brewer&rsquo;s Specifics field below to add information NOT essential to judging your entry.</strong></p>
-                <p>Judges <strong>will not know</strong> the name of your entry. If your specific type, special ingredient(s), classic style, strength (for beer), or color is part of your entry&rsquo;s name, be sure each is specified above.</p>
-                <p>Enter the base style (if appropriate) and specialty nature of your beer/mead/cider in the following format: <em>base style, special nature</em>.
-                    <ul>
-                        <li>Beer example: <em>robust porter, clover honey, sour cherries</em> or <em>wheat ale, anaheim/jalape&ntilde;o chiles</em>, etc.</li>
-                        <li>Mead example: <em>wildflower honey, blueberries</em> or <em>traditional tej with gesho</em>, etc.</li>
-                        <li>Cider example: <em>golden russet apples, clove, cinnamon</em> or <em>strawberry and rhubarb</em>, etc.</li>
-                    </ul>
-                </p>
+            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong>
+                
                 <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
                 
             </span>
         </div>
     </div><!-- ./Form Group -->
     
-    <!-- Enter Brewer's Specifics -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-        <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Brewer&rsquo;s Specifics</label>
-        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        	<!-- Input Here -->
-            <input class="form-control" name="brewComments" id="brewComments" type="text" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>">
-            <span id="helpBlock" class="help-block">
-            	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
-                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong> What you specify here will be on the printed pullsheets competition personnel use to retrieve entries for judging.</p>
-                <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
-            </span>
-        </div>
-    </div><!-- ./Form Group -->
-
-	<!-- Select Mead/Cider Sweetness and Carbonation -->
-    <div id="mead-cider">
+    <!-- Select Strength -->
+    <div id="strength">	
+    	<div class="form-group"><!-- Form Group Radio INLINE -->
+            <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($highlight_strength) echo "text-danger"; ?>">Strength</label>
+            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                        <input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> Hydromel (light)
+                    </label>
+                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                        <input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED";  ?> /> Standard
+                    </label>
+                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                        <input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> /> Sack (strong)
+                    </label>
+                </div>
+                <span id="helpBlock" class="help-block">
+                	<p><strong class="text-danger">Required</strong> for mead entries.</p>
+                </span>
+            </div>
+        </div><!-- ./Form Group -->
+    </div>
+    
+	<!-- Select Carbonation -->
+    <div id="carbonation">
         <div class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>"><!-- Form Group Radio INLINE -->
             <label for="brewMead1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Carbonation</label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -316,6 +394,9 @@ $(document).ready(function()
                 </span>
             </div>
         </div><!-- ./Form Group -->
+     </div>
+     <!-- Select Sweetness -->
+     <div id="sweetness">
     	<div class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>"><!-- Form Group Radio INLINE -->
             <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Sweetness</label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -343,30 +424,22 @@ $(document).ready(function()
             </div>
         </div><!-- ./Form Group -->
     </div>
-    <div id="mead">	
-    	<div class="form-group"><!-- Form Group Radio INLINE -->
-            <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($highlight_strength) echo "text-danger"; ?>">Strength</label>
-            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                <div class="input-group">
-                    <!-- Input Here -->
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
-                        <input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> Hydromel (light)
-                    </label>
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
-                        <input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED";  ?> /> Standard
-                    </label>
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
-                        <input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> /> Sack (strong)
-                    </label>
-                </div>
-                <span id="helpBlock" class="help-block">
-                	<p><strong class="text-danger">Required</strong> for mead entries.</p>
-                </span>
-            </div>
-        </div><!-- ./Form Group -->
-    </div>
+    
 
 
+    <!-- Enter Brewer's Specifics -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Brewer&rsquo;s Specifics</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" name="brewComments" id="brewComments" type="text" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>">
+            <span id="helpBlock" class="help-block">
+            	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
+                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong> What you specify here will be on the printed pullsheets competition personnel use to retrieve entries for judging.</p>
+                <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
+            </span>
+        </div>
+    </div><!-- ./Form Group -->
 <?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>
 <div class="bcoem-form-accordion">
     <div class="panel-group" id="accordion">
@@ -978,137 +1051,198 @@ if ($action == "edit") {
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
-	<?php if ($action == "add") { ?>
+	 <?php if ($action == "add") { ?>
 		$("#special").hide("fast");
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
+		$("#carbonation").hide("fast");
+		$("#sweetness").hide("fast");
+		$("#strength").hide("fast");
+		$("#specialInfo").hide("fast");
+		$("#strengthIPA").hide("fast");
+		$("#strengthSaison").hide("fast");
+		$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
 	<?php } // end if ($action == "add") ?>
-	<?php if ($action == "edit") { ?>			   
-		<?php if (!in_array($view,$all_special_ing_styles)) { ?>
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_beer)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$cider)) { ?>
-			$("#special").hide("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").hide("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_mead)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").show("fast");
-		<?php } ?>
-		<?php if (in_array($view,$special_cider)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-			$("#mead").hide("fast");
-		<?php }  ?>
-		<?php if (in_array($view,$special_custom)) { ?>
-			$("#special").show("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		<?php }  ?>
-	<?php } // end if ($action == "edit") ?>
+	
 	$("#type").change(function() {
+		
 		<?php if ($action == "add") { ?>
 	 	$("#special").hide("fast");
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
+		$("#carbonation").hide("fast");
+		$("#sweetness").hide("fast");
+		$("#strength").hide("fast");
+		$("#specialInfo").hide("fast");
+		$("#strengthIPA").hide("fast");
+		$("#strengthSaison").hide("fast");
+		$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
 		<?php } ?>
 		
 		if ( 
-			$("#type").val() == "99999-A"){
+			$("#type").val() == "24-C"){
 			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#specialInfo").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+			$("#BDGColor").show("fast");
 		}
-		
-		<?php foreach ($cider as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead-cider").show("fast");
-			
-		}
-		<?php } ?>
-		
-		<?php foreach ($mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-			
-		}
-		<?php } ?>
-		
-		<?php foreach ($special_mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#special").show("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		
-		<?php foreach ($strength_mead as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		<?php foreach ($special_cider as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0");?>"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-			$("#special").show("fast");
-			$("#mead-cider").show("fast");
-		}
-		<?php } ?>
-		
+				
+		// Special Beer
 		<?php foreach ($special_beer as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-			$("#special").show("fast");
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").hide("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").show("fast");
+			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { 
+				if (($value == "09-A") || ($value == "07-C")){
+			?>
+				$("#darkLightColor").show("fast");
+				
+			<?php } elseif ($value == "21-B") { ?>
+				$("#strengthIPA").show("fast");
+				$("#special").show("fast");
+			
+			<?php } elseif ($value == "25-B") { ?>
+				$("#darkLightColor").show("fast");
+				$("#strengthSaison").show("fast");
+				$("#special").show("fast");
+			<?php }	else { ?>
+				
+				$("#special").show("fast");
+			<?php }	 ?>
+			
+			<?php }	else { ?>
+				$("#special").show("fast");
+			<?php } ?>
+			
 		}
 		<?php } ?>
 		
-		<?php foreach ($special_custom as $value) { ?>
+		// Styles requiring special ing, strength, sweetness, and carb
+		<?php foreach ($carb_str_sweet_special as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
 			$("#special").show("fast");
+			$("#carbonation").show("fast");
+			$("#sweetness").show("fast");
+			$("#strength").show("fast");
+			$("#specialInfo").show("fast");
 		}
 		<?php } ?>
 		
-		else{
+		// Styles requiring strength and carb only
+		<?php foreach ($carb_str_only as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			$("#special").hide("fast");
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
+			$("#carbonation").show("fast");
+			$("#strength").show("fast");
+		}
+		<?php } ?>
+		
+		<?php foreach ($sweet_carb_only as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
+			$("#carbonation").show("fast");
+			$("#sweetness").show("fast");
+		}
+		<?php } ?>
+	
+		// Styles requiring strength, carbonation, and sweetness (no special)
+		<?php foreach ($sweet_carb_str_only as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
+			$("#carbonation").show("fast");
+			$("#sweetness").show("fast");
+			$("#strength").show("fast");	
+		}
+		<?php } ?>
+		
+		// Styles requiring special ingredients, carbonation, and sweetness
+		<?php foreach ($spec_sweet_carb_only as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
+			$("#carbonation").show("fast");
+			$("#sweetness").show("fast");
+			$("#special").show("fast");	
+		}
+		<?php } ?>
+		
+		// Styles requiring special ingredients and carbonation
+		<?php foreach ($spec_carb_only as $value) { ?>
+		else if ( 
+			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
+			$("#carbonation").show("fast");
+			$("#special").show("fast");	
+		}
+		<?php } ?>
+				
+		else {
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+		$("#BDGColor").hide("fast");
 			
 		}
 	}
@@ -1116,56 +1250,7 @@ $(document).ready(function() {
 }
 );
 
-<?php if ($action == "edit") { ?>
-	
-	<?php if (in_array($view,$cider)) { ?>
-	$(document).ready(function() {
-		$("#special").hide("fast");
-		$("#mead").hide("fast");
-		$("#mead-cider").show("fast");
-	});
-	<?php } ?>
-	
-	<?php if (in_array($view,$mead)) { ?>
-	$(document).ready(function() {
-		$("#special").hide("fast");
-		$("#mead-cider").show("fast");
-		$("#mead").show("fast");
-	});
-	<?php } ?>
-	
-	<?php if (in_array($view,$special_mead)) { ?>
-	$(document).ready(function() {
-		$("#special").show("fast");
-		$("#mead").show("fast");
-		$("#mead-cider").show("fast");
-	});
-	<?php } ?>
-	
-	<?php if (in_array($view,$strength_mead)) { ?>
-	$(document).ready(function() {
-		$("#mead").show("fast");
-		$("#mead-cider").show("fast");
-	});
-	<?php } ?>
-	
-	<?php if (in_array($view,$special_beer)) { ?>
-	$(document).ready(function() {
-		$("#special").show("fast");
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
-	});
-	<?php } ?>
-	<?php if (in_array($view,$special_cider)) { ?>
-	$(document).ready(function() {
-		$("#special").show("fast");
-		$("#mead-cider").show("fast");
-		$("#mead").hide("fast");
-	});
-	<?php } ?>
 
-	
-<?php } ?>
 </script>
 <?php }  // end adding and editing allowed (line 52 or so)
 else {

@@ -172,7 +172,7 @@ if ($section != "admin") {
 		}
 		
 		
-		if ($row_limits['prefsUserEntryLimit'] != "") {
+		if (empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) {
 			
 			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 			if ($remaining_entries > 0) {

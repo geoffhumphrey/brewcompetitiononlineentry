@@ -231,14 +231,16 @@ if ($styles_endRow != 0) {
 
 $page_info8 .= "</table>";
 
+// Show bottle acceptance, shipping location, and dropoff locations if open
+
 // Bottle Acceptance
-if (($row_contest_info['contestBottles'] != "") && (($shipping_window_open < 2) || ($dropoff_window_open < 2))) {
+if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
 	$header1_9 .= "<a name=\"bottle\"></a><h2>Entry Acceptance Rules</h2>";
 	$page_info9 .= $row_contest_info['contestBottles'];
 }
 
 // Shipping Locations
-if (($_SESSION['contestShippingAddress'] != "") && ($shipping_window_open < 2)) {
+if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) {
 	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Info</h2>";
 	$page_info10 .= sprintf("<p>Entry bottles accepted at our shipping location from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$shipping_open,$shipping_closed);
 	$page_info10 .= "<p>Ship entries to:</p>";
@@ -277,18 +279,18 @@ if (($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) {
 }
 
 // Best of Show
-if ($row_contest_info['contestBOSAward'] != "") {
+if (isset($row_contest_info['contestBOSAward'])) {
 	$header1_12 .= "<a name=\"bos\"></a><h2>Best of Show</h2>";
 	$page_info12 .= $row_contest_info['contestBOSAward'];;
 }
 
 // Awards and Awards Ceremony Location
-if ($row_contest_info['contestAwards'] != "") {
+if (isset($row_contest_info['contestAwards'])) {
 	$header1_13 .= "<a name=\"awards\"></a><h2>Awards</h2>";
 	$page_info13 .= $row_contest_info['contestAwards'];;
 }
 
-if ($_SESSION['contestAwardsLocName'] != "") {
+if (isset($_SESSION['contestAwardsLocName'])) {
 	$header1_14 .= "<a name=\"ceremony\"></a><h2>Award Ceremony</h2>";
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
@@ -299,7 +301,7 @@ if ($_SESSION['contestAwardsLocName'] != "") {
 }
 
 // Circuit Qualification
-if ($row_contest_info['contestCircuit'] != "") {
+if (isset($row_contest_info['contestCircuit'])) {
 	$header1_15 .= "<a name=\"circuit\"></a><h2>Circuit Qualification</h2>";
 	$page_info15 .= $row_contest_info['contestCircuit'];
 }
