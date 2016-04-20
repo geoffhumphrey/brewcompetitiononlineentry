@@ -111,6 +111,7 @@ if (isset($_SESSION['loginUsername'])) {
 				else $style_name = truncate($row_log['brewStyle'],22);
 				
 				$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
+				$special = str_replace("^","; ",$special);
 				$special = strtr($special,$html_remove);
 						
 				if (in_array($style,$special_ingredients)) {

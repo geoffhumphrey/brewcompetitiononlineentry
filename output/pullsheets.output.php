@@ -2,6 +2,7 @@
 require(DB.'admin_common.db.php');
 include(LIB.'output.lib.php');
 include(DB.'output_pullsheets.db.php');
+include(INCLUDES.'scrubber.inc.php');
 
 
 if (($go == "judging_tables") && ($totalRows_tables == 0)) { 
@@ -98,7 +99,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -209,7 +210,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -318,7 +319,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>";
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -411,7 +412,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 

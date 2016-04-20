@@ -45,7 +45,7 @@ foreach ($a as $type) {
 				$output .= '<p class="lead">'.$style.': '.$row_scores['brewStyle'].'</p>';
 				if ($filter == "entry") $output .= '<p>#'.$row_scores['id'].'</p>';
 				else $output .= '<p>#'.readable_judging_number($row_scores['brewCategorySort'],$row_scores['brewJudgingNumber']).'</p>';
-				$output .= '<p><small><em>'.$row_scores['brewInfo'].'</em></small></p>';
+				$output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfo']).'</em></small></p>';
 				$output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
 				if ($type == 2) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</p>';
 				if ($type == 3) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</p>';
