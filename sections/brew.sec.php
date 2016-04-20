@@ -102,6 +102,8 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	include(DB.'styles_special.db.php');
 	$all_special_ing_styles = array_merge($special_beer_modal,$carb_str_sweet_special_modal,$spec_sweet_carb_only_modal,$spec_carb_only_modal);
 	$all_special_ing_styles = array_unique($all_special_ing_styles);
+	$all_special_ing_styles_info = array_merge($special_beer_info,$carb_str_sweet_special_info,$spec_sweet_carb_only_info,$spec_carb_only_info);
+	
 	$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
 	$specials = rtrim($specials,", "); 
 	
@@ -122,6 +124,71 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 		$view = $view;
 		if (in_array($view,$all_special_ing_styles)) $special_required = TRUE; 
 		else $special_required = FALSE;
+	}
+	
+	if ($action == "edit") {
+		
+		$darkLightPale = "";
+		$darkLightAmber = "";
+		$saisonTable = "";
+		$saisonStandard = "";
+		$saisonSuper = "";
+		$IPASession = "";
+		$IPAStandard  = "";
+		$IPADouble = "";
+		$lambicSweetLow = "";
+		$lambicSweetMed = "";
+		$lambicSweetHigh = "";
+		$lambicCarbLow = "";
+		$lambicCarbMed = "";
+		$lambicCarbHigh = "";
+		$BDGBlonde = "";
+		$BDGAmber = "";
+		$BDGBrown = "";
+		
+		if ($view == "21-B") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			$brewInfo = $exploder[0];
+		 	if ($exploder[1] == "Session Strength") $IPASession = "CHECKED";
+			if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED";
+			if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED";
+		}
+		
+		elseif ($view == "23-F") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			$brewInfo = $exploder[0];
+			if ($exploder[1] == "Low/None Sweetness") $lambicSweetLow = "CHECKED";
+			if ($exploder[1] == "Medium Sweetness") $lambicSweetMed = "CHECKED";
+			if ($exploder[1] == "High Sweetness") $lambicSweetHigh = "CHECKED";
+			if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED";
+			if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED";
+			if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED";
+			
+		}
+		
+		elseif ($view == "25-B") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED";
+			if ($exploder[0] == "Standard Strength") $saisonStandard = "CHECKED";
+			if ($exploder[0] == "Super Strength") $saisonSuper = "CHECKED";
+			if ($exploder[1] == "Pale Color") $darkLightPale = "CHECKED";
+			if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED";
+			$brewInfo = "";
+		}
+		
+		elseif ($view == "24-C") {
+			if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; 
+			if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; 
+			if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; 
+			$brewInfo = "";
+		}
+		
+		else {
+			if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; 
+			if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED";
+			$brewInfo = "";
+		}
+		
 	}
 	
 	// Disable fields trigger
@@ -165,10 +232,15 @@ $(document).ready(function()
 }
 );
 </script>
-<?php
-echo $modals;
-// if ($comp_paid_entry_limit) echo "Paid entry limit reached"; else echo "Paid entry limit NOT reached"; ?>
+
+<?php echo $modals; ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<?php 
+if ($total_to_pay == 0) $brewPaid = "1";
+else $brewPaid = $row_log['brewPaid'];
+?>
+<input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>">
+
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
@@ -261,33 +333,77 @@ echo $modals;
 				<?php }
 				} while ($row_styles = mysqli_fetch_assoc($styles)); ?>
         </select>
-        <span id="helpBlock" class="help-block">&spades; = Specific Type, Special Ingredients, Classic Style, Strength (for Beer), or Color May Be Required for the following styles: <?php echo $specials; ?><br />&diams; = Strength Required (Mead)<br />&clubs; = Carbonation Level Required (Mead/Cider)<br />&hearts; = Sweetness Level Required (Mead/Cider)</p></span>
+        <span id="helpBlock" class="help-block">&spades; = Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required.<br />&diams; = Strength Required<br />&clubs; = Carbonation Level Required<br />&hearts; = Sweetness Level Required</p></span>
         </div>
     </div><!-- ./Form Group -->
-    
+        
     <!-- Entry Requirements -->
 	<div id="specialInfo" class="form-group">
     	<label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Requirements for <span id="specialInfoName">Style Name</span></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        <p><strong class="text-primary">This style requires that you provide specific information for entry. Instructions are below.</strong>
         	<div id="specialInfoText" class="form-control-static">Entry info goes here.</div>
         </div>
     </div>
+    
+    <!-- Enter Special Ingredients -->
+	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Specific Type, Special Ingredients, Classic Style, Strength, and/or Color</label>
+        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">  
+        		<textarea class="form-control" rows="8" name="brewInfo" id="brewInfo" data-error="This style requires more information. Please provide above." maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $brewInfo; ?></textarea>      	
+            	 
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block"><p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations if space is limited. Characters remaining: <span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p></div>
+        </div>
+    </div><!-- ./Form Group -->
+    
+    <div id="carbLambic" class="form-group">
+    	<label for="carbLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Carbonation</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="carbLambic" id="carbLambic1" value="Low Carbonation" <?php if ($action == "edit") echo $lambicCarbLow; ?>> Low
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="carbLambic" id="carbLambic2" value="Medium Carbonation" <?php if ($action == "edit") echo $lambicCarbMed; ?>> Medium
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="carbLambic" id="carbLambic3" value="High Carbonation" <?php if ($action == "edit") echo $lambicCarbHigh; ?>> High
+            </label>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
+    <div id="sweetnessLambic" class="form-group">
+    	<label for="sweetnessLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Sweetness</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<label class="radio-inline">
+              	<input type="radio" name="sweetnessLambic" id="sweetnessLambic1" value="Low/None Sweetness" <?php if ($action == "edit") echo $lambicSweetLow; ?>> Low/None
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="sweetnessLambic" id="sweetnessLambic2" value="Medium Sweetness" <?php if ($action == "edit") echo $lambicSweetMed; ?>> Medium
+            </label>
+            <label class="radio-inline">
+              	<input type="radio" name="sweetnessLambic" id="sweetnessLambic3" value="High Sweetness" <?php if ($action == "edit") echo $lambicSweetHigh; ?>> High
+            </label>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
     
     
     <div id="strengthSaison" class="form-group">
     	<label for="strengthSaison" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Strength</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
-              	<input type="radio" name="strengthSaison" id="strengthSaison1" value="Table"> Table
+              	<input type="radio" name="strengthSaison" id="strengthSaison1" value="Table Strength" <?php echo $saisonTable; ?>> Table
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="strengthSaison" id="strengthSaison2" value="Standard" <?php if ($action == "add") echo "checked"; ?>> Standard
+              	<input type="radio" name="strengthSaison" id="strengthSaison2" value="Standard Strength" <?php echo $saisonStandard; ?>> Standard
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="strengthSaison" id="strengthSaison" value="Super"> Super
+              	<input type="radio" name="strengthSaison" id="strengthSaison3" value="Super Strength" <?php echo $saisonSuper; ?>> Super
             </label>
-        </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div>
     
@@ -295,14 +411,15 @@ echo $modals;
     	<label for="strengthIPA" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Strength</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
-              	<input type="radio" name="strengthIPA" id="strengthIPA1" value="Session"> Session
+              	<input type="radio" name="strengthIPA" id="strengthIPA1" value="Session Strength" <?php if ($action == "edit") echo $IPASession; ?>> Session
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="strengthIPA" id="strengthIPA2" value="Standard" <?php if ($action == "add") echo "checked"; ?>> Standard
+              	<input type="radio" name="strengthIPA" id="strengthIPA2" value="Standard Strength" <?php if ($action == "edit") echo $IPAStandard; ?>> Standard
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="strengthIPA" id="strengthIPA3" value="Double"> Double
+              	<input type="radio" name="strengthIPA" id="strengthIPA3" value="Double Strength" <?php if ($action == "edit") echo $IPADouble; ?>> Double
             </label>
+            <div class="help-block with-errors"></div>
         </div>
     </div>
     
@@ -310,14 +427,15 @@ echo $modals;
     	<label for="BDGColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Color</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
-              	<input type="radio" name="BDGColor" id="BDGColor1" value="Blonde"> Blonde
+              	<input type="radio" name="BDGColor" id="BDGColor1" value="Blonde Color" <?php if ($action == "edit") echo $BDGBlonde; ?>> Blonde
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="BDGColor" id="BDGColor2" value="Amber" <?php if ($action == "add") echo "checked"; ?>> Amber
+              	<input type="radio" name="BDGColor" id="BDGColor2" value="Amber Color" <?php if ($action == "edit") echo $BDGAmber; ?>> Amber
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="BDGColor" id="BDGColor3" value="Brown"> Brown
+              	<input type="radio" name="BDGColor" id="BDGColor3" value="Brown Color" <?php if ($action == "edit") echo $BDGBrown; ?>> Brown
             </label>
+            <div class="help-block with-errors"></div>
         </div>
     </div>
     
@@ -325,28 +443,15 @@ echo $modals;
     	<label for="darkLightColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Color</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
-              	<input type="radio" name="darkLightColor" id="darkLightColor1" value="Pale"> Pale
+              	<input type="radio" name="darkLightColor" id="darkLightColor1" value="Pale Color" <?php echo $darkLightPale; ?>> Pale
             </label>
             <label class="radio-inline">
-              	<input type="radio" name="darkLightColor" id="darkLightColor2" value="Amber/Dark" <?php if ($action == "add") echo "checked"; ?>> Amber/Dark
+              	<input type="radio" name="darkLightColor" id="darkLightColor2" value="Amber/Dark Color" <?php echo $darkLightAmber; ?>> Amber/Dark
             </label>
+            <div class="help-block with-errors"></div>
         </div>
     </div>
     
-    <!-- Enter Special Ingredients -->
-	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Specific Type, Special Ingredients, Classic Style, Strength, and/or Color</label>
-        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">        	
-            	 <input class="form-control" name="brewInfo" id="brewInfo" type="text" value="<?php if ($action == "edit") echo $row_log['brewInfo'];?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>>
-            
-            <span id="helpBlock" class="help-block">
-            	<p><strong class="text-primary">This sub-category requires that you specify a specific type, any special ingredients, a classic style, strength (for beer entries), or color.</strong>
-                
-                <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
-                
-            </span>
-        </div>
-    </div><!-- ./Form Group -->
     
     <!-- Select Strength -->
     <div id="strength">	
@@ -355,43 +460,39 @@ echo $modals;
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> Hydromel (light)
                     </label>
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED";  ?> /> Standard
                     </label>
-                    <label class="radio-inline <?php if ($highlight_strength) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead3" value="Sack" id="brewMead3_2"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> /> Sack (strong)
                     </label>
                 </div>
-                <span id="helpBlock" class="help-block">
-                	<p><strong class="text-danger">Required</strong> for mead entries.</p>
-                </span>
+                <div class="help-block with-errors"></div>
             </div>
         </div><!-- ./Form Group -->
     </div>
     
 	<!-- Select Carbonation -->
     <div id="carbonation">
-        <div class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>"><!-- Form Group Radio INLINE -->
+        <div id="selectCarbonation" class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewMead1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Carbonation</label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
-                    <label class="radio-inline <?php if (($highlight_carb) || ($highlight_sweetness)) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead1" value="Still" id="brewMead1_0" <?php if (($action == "edit") && ($row_log['brewMead1'] == "Still")) echo "CHECKED";  ?>/> Still
                     </label>
-                    <label class="radio-inline <?php if (($highlight_carb) || ($highlight_sweetness)) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead1" value="Petillant" id="brewMead1_1"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Petillant")) echo "CHECKED";  ?>/> Petillant
                     </label>
-                    <label class="radio-inline <?php if (($highlight_carb) || ($highlight_sweetness)) echo "text-danger"; ?>">
+                    <label class="radio-inline">
                         <input type="radio" name="brewMead1" value="Sparkling" id="brewMead1_2"  <?php if (($action == "edit") && ($row_log['brewMead1'] == "Sparkling")) echo "CHECKED";  ?>/> Sparkling
                     </label>
                 </div>
-                <span id="helpBlock" class="help-block">
-                	<p><strong class="text-danger">Required</strong> for mead and cider entries.</p>
-                </span>
+                <div class="help-block with-errors"></div>
             </div>
         </div><!-- ./Form Group -->
      </div>
@@ -418,9 +519,7 @@ echo $modals;
                         <input type="radio" name="brewMead2" value="Sweet" id="brewMead2_4"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> Sweet
                     </label>
                 </div>
-                <span id="helpBlock" class="help-block">
-                	<p><strong class="text-danger">Required</strong> for mead and cider entries.</p>
-                </span>
+                <div class="help-block with-errors"></div>
             </div>
         </div><!-- ./Form Group -->
     </div>
@@ -432,10 +531,10 @@ echo $modals;
         <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Brewer&rsquo;s Specifics</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" name="brewComments" id="brewComments" type="text" value="<?php if ($action == "edit") echo $row_log['brewComments']; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>">
+            <textarea rows="6" class="form-control" name="brewComments" id="brewComments" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea>
             <span id="helpBlock" class="help-block">
-            	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
-                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong> What you specify here will be on the printed pullsheets competition personnel use to retrieve entries for judging.</p>
+            	<!-- <p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>-->
+                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <p><strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong></p>
                 <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
             </span>
         </div>
@@ -1048,211 +1147,11 @@ if ($action == "edit") {
 <input type="hidden" name="brewConfirmed" value="1">
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>
-<!-- Load Show/Hide Configuration -->
-<script type="text/javascript">//<![CDATA[
-$(document).ready(function() {
-	 <?php if ($action == "add") { ?>
-		$("#special").hide("fast");
-		$("#carbonation").hide("fast");
-		$("#sweetness").hide("fast");
-		$("#strength").hide("fast");
-		$("#specialInfo").hide("fast");
-		$("#strengthIPA").hide("fast");
-		$("#strengthSaison").hide("fast");
-		$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-	<?php } // end if ($action == "add") ?>
-	
-	$("#type").change(function() {
-		
-		<?php if ($action == "add") { ?>
-	 	$("#special").hide("fast");
-		$("#carbonation").hide("fast");
-		$("#sweetness").hide("fast");
-		$("#strength").hide("fast");
-		$("#specialInfo").hide("fast");
-		$("#strengthIPA").hide("fast");
-		$("#strengthSaison").hide("fast");
-		$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-		<?php } ?>
-		
-		if ( 
-			$("#type").val() == "24-C"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#specialInfo").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-			$("#BDGColor").show("fast");
-		}
-				
-		// Special Beer
-		<?php foreach ($special_beer as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-				$("#special").hide("fast");
-				$("#carbonation").hide("fast");
-				$("#sweetness").hide("fast");
-				$("#strength").hide("fast");
-				$("#strengthIPA").hide("fast");
-				$("#strengthSaison").hide("fast");
-				$("#darkLightColor").hide("fast");
-				$("#BDGColor").hide("fast");
-				$("#specialInfo").show("fast");
-			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { 
-				if (($value == "09-A") || ($value == "07-C")){
-			?>
-				$("#darkLightColor").show("fast");
-				
-			<?php } elseif ($value == "21-B") { ?>
-				$("#strengthIPA").show("fast");
-				$("#special").show("fast");
-			
-			<?php } elseif ($value == "25-B") { ?>
-				$("#darkLightColor").show("fast");
-				$("#strengthSaison").show("fast");
-				$("#special").show("fast");
-			<?php }	else { ?>
-				
-				$("#special").show("fast");
-			<?php }	 ?>
-			
-			<?php }	else { ?>
-				$("#special").show("fast");
-			<?php } ?>
-			
-		}
-		<?php } ?>
-		
-		// Styles requiring special ing, strength, sweetness, and carb
-		<?php foreach ($carb_str_sweet_special as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#special").show("fast");
-			$("#carbonation").show("fast");
-			$("#sweetness").show("fast");
-			$("#strength").show("fast");
-			$("#specialInfo").show("fast");
-		}
-		<?php } ?>
-		
-		// Styles requiring strength and carb only
-		<?php foreach ($carb_str_only as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#carbonation").show("fast");
-			$("#strength").show("fast");
-		}
-		<?php } ?>
-		
-		<?php foreach ($sweet_carb_only as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#carbonation").show("fast");
-			$("#sweetness").show("fast");
-		}
-		<?php } ?>
-	
-		// Styles requiring strength, carbonation, and sweetness (no special)
-		<?php foreach ($sweet_carb_str_only as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#carbonation").show("fast");
-			$("#sweetness").show("fast");
-			$("#strength").show("fast");	
-		}
-		<?php } ?>
-		
-		// Styles requiring special ingredients, carbonation, and sweetness
-		<?php foreach ($spec_sweet_carb_only as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#carbonation").show("fast");
-			$("#sweetness").show("fast");
-			$("#special").show("fast");	
-		}
-		<?php } ?>
-		
-		// Styles requiring special ingredients and carbonation
-		<?php foreach ($spec_carb_only as $value) { ?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			$("#carbonation").show("fast");
-			$("#special").show("fast");	
-		}
-		<?php } ?>
-				
-		else {
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-		$("#BDGColor").hide("fast");
-			
-		}
-	}
-	);
-}
-);
 
-
-</script>
-<?php }  // end adding and editing allowed (line 52 or so)
+<?php
+// Load Show/Hide
+include(INCLUDES.'entry_form_js.inc.php');
+}  // end adding and editing allowed (line 52 or so)
 else {
 	
 if (($add_entry_disable) && ($edit_entry_disable))  echo "<p class=\"lead\">Adding and edting of entries is not available.</p>"; 

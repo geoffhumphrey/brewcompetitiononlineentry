@@ -103,14 +103,16 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	  brewStyleReqSpec,
 	  brewStyleStrength,
 	  brewStyleCarb,
-	  brewStyleSweet
+	  brewStyleSweet,
+	  brewStyleEntry,
+	  brewStyleComEx
 	  ) 
 	  VALUES (
 	  %s, %s, %s, %s, %s, 
 	  %s, %s, %s, %s, %s, 
 	  %s, %s, %s, %s, %s, 
 	  %s, %s, %s, %s, %s,
-	  %s, %s, %s
+	  %s, %s, %s, %s, %s
 	  )",
 						   GetSQLValueString("A", "text"),
 						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
@@ -134,7 +136,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
 						   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-						   GetSQLValueString($_POST['brewStyleSweet'], "text")
+						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+						   GetSQLValueString($_POST['brewStyleEntry'], "text"),
+						   GetSQLValueString($_POST['brewStyleComEx'], "text")
 						   );
 	
 	
@@ -176,7 +180,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		  brewStyleReqSpec=%s,
 		  brewStyleStrength=%s,
 		  brewStyleCarb=%s,
-		  brewStyleSweet=%s
+		  brewStyleSweet=%s,
+		  brewStyleEntry=%s,
+		  brewStyleComEx=%s
 		  
 		  WHERE id=%s",
 						   GetSQLValueString($_POST['brewStyleNum'], "text"),
@@ -201,6 +207,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+						   GetSQLValueString($_POST['brewStyleEntry'], "text"),
+						   GetSQLValueString($_POST['brewStyleComEx'], "text"),
 						   GetSQLValueString($id, "int"));
 	
 	  	mysqli_real_escape_string($connection,$updateSQL);

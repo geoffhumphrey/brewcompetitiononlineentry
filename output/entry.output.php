@@ -33,6 +33,11 @@ $brewing_id = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
 $style_entry = $brewing_info['brewCategory']."-".$brewing_info['brewSubCategory'];
+
+
+
+
+$brewing_info['brewInfo'] = str_replace("^",", ",$brewing_info['brewInfo']);
 $brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove); 
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewer_info['brewerLastName'] = strtr($brewer_info['brewerLastName'],$html_remove);

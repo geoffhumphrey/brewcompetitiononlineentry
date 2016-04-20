@@ -267,6 +267,22 @@ $(document).ready(function(){
 </div>
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Instructions</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<input class="form-control" name="brewStyleEntry" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?>" placeholder="">
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
+	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<textarea class="form-control" name="brewStyleInfo" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
+	 </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="brewStyleOG" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">OG Minimum</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
@@ -346,13 +362,7 @@ $(document).ready(function(){
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<!-- Input Here -->
-		<textarea class="form-control" name="brewStyleInfo" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
-	 </div>
-</div><!-- ./Form Group -->
+
 
 <input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo $row_styles['brewStyle'];?>">
 <input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup'];?>">

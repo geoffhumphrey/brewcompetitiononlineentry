@@ -1,7 +1,7 @@
 <?php
 require('includes/url_variables.inc.php');
 session_start();
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0")) {
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") && ($section == "default")) {
 	
 	// Redirect if script accessed directly
 	if (empty($_FILES['file'])) {

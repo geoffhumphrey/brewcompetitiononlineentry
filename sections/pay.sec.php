@@ -80,7 +80,7 @@ Declare all variables empty at the top of the script. Add on later...
 	}
 	$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-exclamation-triangle text-danger\"></span>  Your total entry fees are <strong class=\"text-success\">%s</strong>. You need to pay <strong class=\"text-danger\">%s</strong>.</small></p>",$currency_symbol.number_format($total_entry_fees,2),$currency_symbol.number_format($total_to_pay,2));
 	
-	if ($total_not_paid == 0) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-thumbs-o-up text-danger\"></span> %s</p>","Your fees have been paid. Thank you!</small></p>");
+	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-thumbs-o-up text-danger\"></span> %s</p>","Your fees have been paid. Thank you!</small></p>");
 	
 	
 	else {
@@ -150,7 +150,7 @@ Declare all variables empty at the top of the script. Add on later...
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">",rtrim($return, '-'));
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">",$base_url."index.php?section=pay&msg=11");
 			$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">";
-			$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"><span> Pay with PayPal</button>";
+			$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> Pay with PayPal</button>";
 			$page_info4 .= "</form>";
 			$page_info4 .= "<!-- Form submit confirmation modal -->";
 			$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";

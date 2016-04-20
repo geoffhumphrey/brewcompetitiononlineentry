@@ -149,10 +149,11 @@ if ($section != "admin") {
 			else $page_info100 .= "<span class=\"pull-right\"><a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You have unconfirmed entries - action is needed to confirm\">".($totalRows_log - $totalRows_log_confirmed)."</a></span>";
 			$page_info100 .= "</div>";
 		}
-		
-		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
-		$page_info100 .= "<strong class=\"text-danger\">Unpaid Confirmed Entries</strong><span class=\"pull-right\">".$total_not_paid."</span>";
-		$page_info100 .= "</div>";
+		if ($total_to_pay > 0) {
+			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+			$page_info100 .= "<strong class=\"text-danger\">Unpaid Confirmed Entries</strong><span class=\"pull-right\">".$total_not_paid."</span>";
+			$page_info100 .= "</div>";
+		}
 		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 		$page_info100 .= "<strong class=\"text-danger\">Total Entry Fees";
 		if (($totalRows_log - $totalRows_log_confirmed) > 0) $page_info100 .= "*";
@@ -172,7 +173,7 @@ if ($section != "admin") {
 		}
 		
 		
-		if (empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) {
+		if (!empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) {
 			
 			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 			if ($remaining_entries > 0) {
