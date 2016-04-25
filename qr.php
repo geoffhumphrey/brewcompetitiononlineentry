@@ -75,7 +75,7 @@ if ($action == "password-check") {
 			
 			$_SESSION['qrPasswordOK'] = "1";
 			
-			
+			/*
 			// If id was passed in URL, check in that entry
 			if ($id != "default") {
 				
@@ -84,7 +84,7 @@ if ($action == "password-check") {
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				
 			}
-			
+			*/
 			
 			
 		}
@@ -106,28 +106,51 @@ if ($action == "password-check") {
 	}
 }
 
-if (($action == "default") && ($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']))) {
+if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']))) {
 	
 	$checkin_redirect = $base_url."qr.php?action=default&go=success";
 	
 	// Check to see if the entry is in the DB
-	$query_entry = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE id='%s'",$prefix."brewing",$id);
+	$query_entry = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewSubCategory FROM %s WHERE id='%s'",$prefix."brewing",$id);
 	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 	$row_entry = mysqli_fetch_assoc($entry);
+	$totalRows_entry = mysqli_num_rows($entry);
+	
+	
 	
 	$entry_found = FALSE;
-	if ($row_entry['count'] > 0) $entry_found = TRUE;
+	if ($totalRows_entry > 0) $entry_found = TRUE;
 	
 	// If so, mark the entry as "received" and redirect (message 3)
 	if ($entry_found) {
 		
-		$updateSQL = sprintf("UPDATE %s SET brewReceived='1' WHERE id='%s';",$brewing_db_table,$id);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
-		$checkin_redirect .= "&id=".$id."&msg=3";
-		header(sprintf("Location: %s", $checkin_redirect));
-		exit;
+		if ($action == "update") {
+			
+			$judgingNumber = sprintf("%06s",$_POST['brewJudgingNumber']);
+			
+			// Check to see if judging number has already been assigned
+			$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);
+			$judging_number = mysqli_query($connection,$query_judging_number) or die (mysqli_error($connection));
+			$row_judging_number = mysqli_fetch_assoc($judging_number);
+			$totalRows_judging_number = mysqli_num_rows($judging_number);
+			
+			// If so, redirect with message
+			if ($totalRows_judging_number > 0) {
+				$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."-".$judgingNumber."&msg=5";
+				header(sprintf("Location: %s", $redirect));
+				exit;	
+			}
+			
+			// If not, update DB			
+			$updateSQL = sprintf("UPDATE %s SET brewReceived='1',brewJudgingNumber='%s' WHERE id='%s';",$brewing_db_table,$judgingNumber,$id);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=3";
+			header(sprintf("Location: %s", $checkin_redirect));
+			exit;
+		}
 		
 		
 	}
@@ -135,7 +158,7 @@ if (($action == "default") && ($go == "default") && ($id != "default") && (isset
 	// If not, redirect to alert the user (message 4)
 	else {
 		
-		$checkin_redirect .= "&id=".$id."&msg=4";
+		$checkin_redirect .= "&view=".$id."&msg=4";
 		header(sprintf("Location: %s", $checkin_redirect));
 		exit;
 
@@ -153,19 +176,23 @@ if ($msg == "1") {
 }
 
 if ($msg == "2") {
-	$message .= "<span class=\"fa fa-check-circle\"></span> <strong>Password accepted.";
-	if ($id != "default") $message .= " Entry number ".sprintf("%04d",$id)." is checked in!";
-	$message .= "</strong>";
+	$message .= "<span class=\"fa fa-check-circle\"></span> <strong>Password accepted.</strong>";
 	$alert_type = "alert-success";
 }
 
 if ($msg == "3") {
-	$message .= "<span class=\"fa fa-check-circle\"></span> <strong>Entry number ".sprintf("%04d",$id)." is checked in!</strong>";
+	$view = explode("-",$view);
+	$message .= "<p><span class=\"fa fa-check-circle\"></span> <strong>Entry number ".sprintf("%04d",$view[0])." is checked in with <span class=\"text-danger\">".$view[1]."</span> as its judging number.</strong></p><p>If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number</strong>.<p>";
 	$alert_type = "alert-success";
 }
 
 if ($msg == "4") {
-	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>Entry number ".sprintf("%04d",$id)." was not found in the database.</strong> Set the bottle(s) aside and alert the competition organizer.";
+	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>Entry number ".sprintf("%04d",$view)." was not found in the database.</strong> Set the bottle(s) aside and alert the competition organizer.";
+}
+
+if ($msg == "5") {
+	$view = explode("-",$view);
+	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>The judging number you entered - ".sprintf("%06d",$view[1])." - is already assigned to entry number ".sprintf("%04d",$view[0]).".</strong> Please try again.";
 }
 
 ?>
@@ -200,7 +227,7 @@ if ($msg == "4") {
   z-index: 2;
 }
 
-.container-signin input[type="password"] {
+.container-signin input[type="password"],.container-signin input[type="tel"] {
   margin-bottom: 10px;
 }
 
@@ -251,17 +278,20 @@ if ($msg == "4") {
     <?php } ?>
     
     <div class="page-header clearfix">
-        <h1><?php echo $header_output; ?>: QR Code Check-In</h1>
+        <h1><?php echo $header_output; ?>: QR Code Entry Check-In</h1>
     </div> 
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
     
         <div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
     
     <!-- Password Form if Not Signed In -->
-	<form name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
         <p class="lead container-signin-heading">To check in entries via QR code, please provide the correct password.</p>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" autofocus required>
+        <div class="form-group">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" autofocus required>
+            <div class="help-block with-errors"></div>
+        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
    	</form>
 	
@@ -269,7 +299,22 @@ if ($msg == "4") {
     
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>
     <p class="lead text-success"><strong>You are signed in.</strong></p>
-    <p class="lead"><span class="fa fa-spinner fa-spin"></span> Waiting for the next QR input...</p>  
+    
+	<?php if (($id == "default") && ($action == "default")) { ?>
+    <p class="lead"><span class="fa fa-spinner fa-spin"></span> Scan a QR Code...</p>
+    <?php } if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
+    <p class="lead text-primary"><strong>Assign a judging number to entry <span class="text-danger"><?php echo sprintf("%04d",$id); ?></span>.</strong></p>
+    <p>Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).</p>
+    <form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+    	<div class="form-group">
+            <label for="inputJudgingNumber" class="sr-only">Judging Number</label>
+            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="Six numbers with leading zeros - e.g., 000021" autofocus required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Check In-Entry</button>
+   	</form>	    
+    <?php } ?>
+    
     <?php } ?>
     </div><!-- /container-signin -->
     

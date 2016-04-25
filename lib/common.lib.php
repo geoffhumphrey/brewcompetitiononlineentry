@@ -1539,18 +1539,90 @@ function style_convert($number,$type,$base_url="") {
 		break;
 		
 		case "4":
+		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
+		$replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
 		$a = explode(",",$number);
+		$styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
 		require(CONFIG.'config.php');
 	    mysqli_select_db($connection,$database);
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
-			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$value); 
+			$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value); 
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-			$style_convert[] = "<a id=\"modal_window_link\" href=\"".$base_url."output/print.output.php?section=styles&amp;view=".$row_style['brewStyleGroup']."-".$row_style['brewStyleNum']."&amp;tb=true\" data-toggle=\"tooltip\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
+			
+			if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
+	
+			$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
+			
+			if (!empty($row_style['brewStyleComEx'])) $info .= str_replace($replacement1,$replacement2,"<p>Commercial Examples: ".$row_style['brewStyleComEx']."</p>");
+			if (!empty($row_style['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$row_style['brewStyleEntry']."</p>");
+			
+			if (empty($row_style['brewStyleOG'])) $styleOG = "Varies";
+			else $styleOG = number_format((float)$row_style['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleOGMax'], 3, '.', '');
+		
+			if (empty($row_style['brewStyleFG'])) $styleFG = "Varies";
+			else $styleFG = number_format((float)$row_style['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleFGMax'], 3, '.', '');
+			
+			if (empty($row_style['brewStyleABV'])) $styleABV = "Varies";
+			else $styleABV = $row_style['brewStyleABV']." &ndash; ".$row_style['brewStyleABVMax'];
+			
+			if (empty($row_style['brewStyleIBU']))  $styleIBU = "Varies";
+			elseif ($row_style['brewStyleIBU'] == "N/A") $styleIBU =  "N/A"; 
+			elseif (!empty($row_style['brewStyleIBU'])) $styleIBU = ltrim($row_style['brewStyleIBU'], "0")." &ndash; ".ltrim($row_style['brewStyleIBUMax'], "0")." IBU";
+			else $styleIBU = "&nbsp;";
+			
+			if (empty($row_style['brewStyleSRM'])) $styleColor = "Varies";
+			elseif ($row_style['brewStyleSRM'] == "N/A") $styleColor = "N/A";
+			elseif (!empty($row_style['brewStyleSRM'])) { 
+						$SRMmin = ltrim ($row_style['brewStyleSRM'], "0"); 
+						$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0"); 
+						if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
+						if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
+							$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+					} 
+			else $styleColor = "&nbsp;";
+			
+			$info .= "
+			<table class=\"table table-bordered table-striped\">
+			<tr>
+				<th class=\"dataLabel data bdr1B\">OG Range</th>
+				<th class=\"dataLabel data bdr1B\">FG Range</th>
+				<th class=\"dataLabel data bdr1B\">ABV Range</th>
+				<th class=\"dataLabel data bdr1B\">Bitterness Range</th>
+				<th class=\"dataLabel data bdr1B\">Color Range</th>
+			</tr>
+			<tr>
+				<td nowrap>".$styleOG."</td>
+				<td nowrap>".$styleFG."</td>
+				<td nowrap>".$styleABV."</td>
+				<td nowrap>".$styleIBU."</td>
+				<td>".$styleColor."</td>
+			</tr>
+			</table>";
+			
+			
+			$style_convert[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
+			$style_modal[] = "
+				<!-- Modal -->
+				<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
+				  <div class=\"modal-dialog modal-lg\" role=\"document\">
+					<div class=\"modal-content\">
+					  <div class=\"modal-header\">
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+						<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
+					  </div>
+					  <div class=\"modal-body\">".$info."</div>
+					  <div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				";
 		}
-		$style_convert = rtrim(implode(", ",$style_convert),", ");
+		$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
 		break;
 		
 		case "5":

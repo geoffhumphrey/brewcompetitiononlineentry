@@ -34,7 +34,7 @@ else {
 	$sidebar_unpaid_entries .= ($totalRows_log_confirmed - $totalRows_log_paid);
 }
 
-$prefs_barcode_labels = array("N","C","2","0","3","4");
+
 
 if ($action != "print") { ?>
 	<?php 

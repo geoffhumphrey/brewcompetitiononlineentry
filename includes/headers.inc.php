@@ -48,7 +48,9 @@ switch($section) {
 	break;
 	
 	case "register":
-	$header_output = $_SESSION['contestName']." - Register";
+	$header_output = $_SESSION['contestName'];
+	if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $header_output .= " - Judge/Steward Registration";
+	else $header_output .= " - Register";
 	if     ($msg == "1") $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please try again.";
 	elseif ($msg == "2") { $output = "<strong>Sorry, the user name you entered is already in use.</strong>"; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "<strong>The user name provided is not a valid email address.</strong> Please enter a valid email address.";
@@ -76,7 +78,7 @@ switch($section) {
 	else $header_output = $_SESSION['contestName']." - Log In";
 	if ($msg == "0") $output = "<strong>You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.</strong> "; 
 	elseif     ($msg == "1") { $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please make sure your email address and password are correct."; $output_extend = ""; }
-	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong>."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
+	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong> - you can now log in using your current username and the new password.</p>"; $output_extend = ""; }
 	elseif ($msg == "3") $output = "<strong>You have been logged out.</strong> Log in again?"; 
 	elseif ($msg == "4") $output = "<strong>Your verification question does not match what is in the database.</strong> Please try again."; 
 	elseif ($msg == "5") $output = "<strong>Your ID verification information has been sent to the email address associated with your account.</strong>"; 

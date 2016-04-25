@@ -709,7 +709,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
 		if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
 		
-		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) {
+		if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels))) {
 			$updateSQL = "UPDATE $brewing_db_table SET 
 			brewPaid='".$brewPaid."',
 			brewReceived='".$brewReceived."',

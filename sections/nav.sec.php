@@ -92,6 +92,13 @@ else $link_login = build_public_url("login","default","default","default",$sef,$
 if ($section == "logout") $link_logout = "#"; 
 else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url);
 
+$qr_enable = FALSE;
+$link_qr = "";
+if (!empty($row_contest_dates['contestCheckInPassword'])) {
+	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2)) $qr_enable = TRUE;
+	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url);
+}
+
 // Session specific
 
 if ($logged_in)  {
@@ -184,8 +191,9 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sorting <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Via Barcode Scanner</a></li>
-                </ul>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entry Check-in Via Barcode Scanner</a></li>
+                    <li><a href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
+                </ul> 
             </li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Organizing <span class="caret"></span></a>
@@ -250,9 +258,12 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
-                <?php if ((!$logged_in) && (($registration_open == "1") || ($judge_window_open == "1"))) { ?>
-                <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>">Register</a></li>
-   				<?php } ?>
+                <?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
+                <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo "Judge/Steward Registration"; else echo "Register"; ?></a></li>
+                <?php } ?>
+                <?php if ($qr_enable) { ?>
+                <li><a href="<?php echo $link_qr; ?>">QR Code Entry Check-In</a></li>
+                <?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>

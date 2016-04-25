@@ -109,18 +109,26 @@
     </div>
 </div><!-- ./Form Group -->
 <?php } ?>
-
+<?php if ($section == "step4") { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="text" value="" placeholder="">
-        <span id="helpBlock" class="help-block">Due to the nature of password encryption, the QR Code Log On Password MUST be re-entered <strong>EVERY</strong> time Competition Info is updated.</span>
     </div>
-</div><!-- ./Form Group -->
+</div><!-- ./Form Group --->
+<?php } else { ?>
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <a  href="#" class="btn btn-info" data-toggle="modal" data-target="#QRModal">Add, Update, or Change QR Code Log On Password</a>
+        <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
+    </div>
+</div><!-- ./Form Group --->
+<?php } ?>
 
 <h3>Entry Window</h3>
-
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -467,3 +475,29 @@
 </div>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 </form>
+<!-- Update QR Password Modal -->
+<div class="modal fade" id="QRModal" tabindex="-1" role="dialog" aria-labelledby="QRModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="QRModalLabel">Add, Update, or Change QR Code Log On Password</h4>
+      </div>
+      <div class="modal-body">
+        <form data-toggle="validator" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;go=qr&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form2">
+        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+            <label for="contestCheckInPassword">QR Code Log On Password</label>
+            <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="password" value="" placeholder="" data-error="Please provide a password for QR Code entry check-in" required>
+            <div class="help-block with-errors"></div>
+        </div><!-- ./Form Group -->
+        <input name="submit" type="submit" class="btn btn-primary" value="Update Password">
+        <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=contest_info"; ?>">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

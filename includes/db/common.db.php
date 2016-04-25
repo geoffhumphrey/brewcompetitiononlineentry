@@ -229,7 +229,7 @@ $query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecial
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
 
-$query_contest_dates = sprintf("SELECT contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline,contestShippingOpen,contestShippingDeadline,contestDropoffOpen,contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
+$query_contest_dates = sprintf("SELECT contestCheckInPassword,contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline,contestShippingOpen,contestShippingDeadline,contestDropoffOpen,contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
 $contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
 $row_contest_dates = mysqli_fetch_assoc($contest_dates);
 
@@ -315,4 +315,6 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 	}
 	
 }
+
+$prefs_barcode_labels = array("N","C","2","0","3","4");
 ?>

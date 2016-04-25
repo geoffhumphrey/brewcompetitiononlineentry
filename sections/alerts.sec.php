@@ -134,8 +134,8 @@
 	<?php if ($section == "brew") { ?>
 
 		<?php if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {  
-			if ($entry_window_open == "0") $alert_message_closed = "Entry registration has not opened yet.";
-			if ($entry_window_open == "2") $alert_message_closed = "Entry registration has closed.";
+			if ($entry_window_open == 0) $alert_message_closed = "Entry registration has not opened yet.";
+			if ($entry_window_open == 2) $alert_message_closed = "Entry registration has closed.";
 		?>
         <!-- Entry add/edit registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
@@ -144,7 +144,7 @@
         </div>
         <?php } ?>
         
-        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && (($comp_entry_limit) || ($comp_paid_entry_limit)) && ($action == "add") && ($go != "admin")) { ?>
+        <?php if (($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && (($comp_entry_limit) || ($comp_paid_entry_limit)) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but competition entry limit reached - only allow editing -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -152,7 +152,7 @@
         </div>
         <?php } ?>
         
-        <?php if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit) && ($remaining_entries == 0) && ($action == "add") && ($go != "admin")) { ?>
+        <?php if (($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit) && ($remaining_entries == 0) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but personal entry limit reached - only allow editing -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -185,25 +185,30 @@
         <?php } ?>
 
 	<?php } // end if ($section == "brew") ?>
-	
-
 <?php } // end if ($logged_in) ?>
-
-
 <?php if (!$logged_in) { ?>
-    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($msg == "default")) { ?>
-        <!-- Account and entry registration not open yet -->
+	
+     <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default") && ($msg == "default")) { ?>
+        <!-- Account registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-check-circle"></span> <strong>Entry Registration Will Open <?php echo $reg_open; ?>.</strong> Please check back later to add your entries to the system.
+          <span class="fa fa-check-circle"></span> <strong>Account Registration Will Open <?php echo $reg_open; ?>.</strong> Please return then to register your account.
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "0") && ($msg == "default")) { ?>
+    <?php if (($entry_window_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default")  && ($msg == "default")) { ?>
+        <!-- Entry registration not open yet -->
+        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-check-circle"></span> <strong>Entry Registration Will Open <?php echo $entry_open; ?>.</strong> Please return then to add your entries to the system.
+        </div>
+    <?php } ?>
+    
+    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default")  && ($judge_window_open == "0") && ($msg == "default")) { ?>
         <!-- Judge/steward registration not open yet -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-info-circle"></span> <strong>Judge/Steward Registration Will Open <?php echo $judge_open; ?>.</strong> Please check back later to register as a judge or steward.
+          <span class="fa fa-info-circle"></span> <strong>Judge/Steward Registration Will Open <?php echo $judge_open; ?>.</strong> Please return then to register as a judge or steward.
         </div>
     <?php } ?>
     
@@ -231,15 +236,23 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
-        <!-- Account and entry registration closed -->
+    <?php if (($registration_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+        <!-- Account registration closed -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>Account Registration is Closed.</strong> If you already registered an account, <a class="alert-link" href="<?php echo build_public_url("login","default","default","default",$sef,$base_url); ?>">log in here</a>.
+        </div>
+    <?php } 	?>
+    
+    <?php if (($entry_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+        <!-- Entry registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-exclamation-circle"></span> <strong>Entry Registration is Closed.</strong> A total of <?php echo $total_entries; ?> entries were added into the system.
         </div>
     <?php } 	?>
     
-     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Drop-off window closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -247,7 +260,7 @@
         </div>
     <?php } 	?>
     
-    <?php if (($shipping_window_open == 2) && (!$ua) && ($section != "admin") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <?php if (($shipping_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Drop-off window closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -255,34 +268,32 @@
         </div>
     <?php } 	?>
     
-    <?php if ((($registration_open == 0) || ($registration_open == "2")) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section != "register") && ($judge_window_open == "1") && ($msg == "default")) { 
+    <?php if ((($registration_open == 0) || ($registration_open == 2)) && (!$ua) && ($section == "default") && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) { 
 	
 	if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward";
 	elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge";
 	else $j_s_text = "Judge or Steward";
 	
 	?>
-        <!-- Account and entry registration closed, but Judge/steward registration open -->
-        <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Registration is Still Open.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
-        </div>
-	<?php } ?>
-	
-	<?php if (($judge_limit) && ($section == "register")) { ?>
-        <!-- Limit of judges reached -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered judges has been reached.</strong> No further judge registrations will be accepted. <?php if (!$steward_limit) { ?> Registering as a steward is still available.<?php } ?>
-        </div>
+    <!-- Account and entry registration closed, but Judge/steward registration open -->
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Account Registration is Open.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
+    </div>
     <?php } ?>
-	
-	<?php if (($steward_limit) && ($section == "register")) { ?>
-        <!-- Limit of stewards reached -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered stewards has been reached.</strong> No further steward registrations will be accepted. <?php if (!$judge_limit) { ?> Registering as a judge is still available.<?php } ?>
-        </div>
-    <?php } ?>
+		<?php if (($judge_limit) && ($section == "register")) { ?>
+            <!-- Limit of judges reached -->
+            <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered judges has been reached.</strong> No further judge registrations will be accepted. <?php if (!$steward_limit) { ?> Registering as a steward is still available.<?php } ?>
+            </div>
+        <?php } ?>
+        <?php if (($steward_limit) && ($section == "register")) { ?>
+            <!-- Limit of stewards reached -->
+            <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered stewards has been reached.</strong> No further steward registrations will be accepted. <?php if (!$judge_limit) { ?> Registering as a judge is still available.<?php } ?>
+            </div>
+        <?php } ?>
     
 <?php } // end if (!$logged_in) ?>

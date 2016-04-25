@@ -247,6 +247,24 @@ else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION[
 if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 
+	if ($_SESSION['brewerJudgeLikes'] != "") {
+		$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
+		$exploder = explode("|",$judgeLikes);
+		$judgeLikesDisplay = $exploder[0];
+		$judgeLikesModals = $exploder[1];
+		
+	} 
+	else $judgeLikesDisplay = "N/A";
+	
+	if ($_SESSION['brewerJudgeDislikes'] != "") {
+		$judgeDislikes = style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url);
+		$exploder = explode("|",$judgeDislikes);
+		$judgeDislikesDisplay = $exploder[0];
+		$judgeDislikesModals = $exploder[1];
+		
+	} 
+	else $judgeDislikesDisplay = "N/A";
+
 // Build User Info table body
 
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
@@ -375,14 +393,14 @@ if ($_SESSION['brewerJudge'] == "Y") {
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
 	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Preferred</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-    if ($_SESSION['brewerJudgeLikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeLikes'],4,$base_url); else $table_body1 .= "N/A";	
+	$table_body1 .= $judgeLikesDisplay;
     $table_body1 .= "</div>";
 	$table_body1 .= "</div>";
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
 	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Non-Preferred</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-    if ($_SESSION['brewerJudgeDislikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url); else $table_body1 .= "N/A";		
-    $table_body1 .= "</div>";
+    $table_body1 .= $judgeDislikesDisplay;
+	$table_body1 .= "</div>";
 	$table_body1 .= "</div>";
 
 	if (!empty($judge_info)) {
@@ -509,6 +527,18 @@ if ($_SESSION['brewerSteward'] == "Y") {
 // --------------------------------------------------------------
 
 // Display primary page info and subhead
+$judgeLikesModals = explode("^",$judgeLikesModals);
+$judgeDislikesModals = explode("^",$judgeDislikesModals);
+
+foreach ($judgeLikesModals as $judgeLikesModalDisplay) {
+	echo $judgeLikesModalDisplay;
+}
+
+
+foreach ($judgeDislikesModals as $judgeDislikesModalDisplay) {
+	echo $judgeDislikesModalDisplay;
+}
+
 echo $primary_page_info;
 // Display User Edit Links
 echo "<div class=\"bcoem-account-info\">";

@@ -73,7 +73,7 @@ Declare all variables empty at the top of the script. Add on later...
 	$primary_page_info .= "<p class=\"lead\"><small>";
 	$primary_page_info .= sprintf("<span class=\"fa fa-money text-success\"></span> Fees are <strong class=\"text-success\">%s</strong> per entry.",$currency_symbol.number_format($_SESSION['contestEntryFee'],2));
 	if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
-	if ($_SESSION['contestEntryCap'] != "") $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2));
+	if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2));
 	$primary_page_info .= "</small></p>";
 	if ($row_brewer['brewerDiscount'] == "Y") {
 		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-star-o text-primary\"></span> Your fees have been discounted to <strong class=\"text-success\">%s</strong> per entry.</small></p>",$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2));

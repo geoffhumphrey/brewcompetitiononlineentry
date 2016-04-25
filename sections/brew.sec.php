@@ -192,7 +192,7 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	}
 	
 	// Disable fields trigger
-	if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
+	if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 	
 ?>
 <!-- Load JS Character Counter -->
@@ -299,9 +299,8 @@ else $brewPaid = $row_log['brewPaid'];
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="10" data-width="auto">
             <?php
+				// Build style drop-down
 				do {
-					// Build style drop-down
-					
 					// Option value variable
 					$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
 					
@@ -316,19 +315,21 @@ else $brewPaid = $row_log['brewPaid'];
 					   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED"; 
 					   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit; 
 					} 
-					if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit; 
+					if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields) && ($_SESSION['userLevel'] == 2)) $selected_disabled = $subcat_limit; 
 					elseif ($disable_fields) $selected_disabled = "DISABLED";
 					
 					// Build selection variable
-					
 					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 					else $selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
-					if ($selected_disabled == "DISABLED") $selection .= " [disabled - subcategory entry limit reached]";
 					if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
 					if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 					if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
 					if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-				if (!empty($row_styles['brewStyleGroup'])) { ?>
+					if ($selected_disabled == "DISABLED") $selection .= " [disabled - style entry limit reached]";
+					
+				if (!empty($row_styles['brewStyleGroup'])) {
+				// Display
+				 ?>
 				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
 				<?php }
 				} while ($row_styles = mysqli_fetch_assoc($styles)); ?>

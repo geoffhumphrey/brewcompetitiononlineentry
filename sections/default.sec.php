@@ -58,7 +58,7 @@ $message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-
 $message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
 
 
-if ((judging_date_return() == 0) && ($registration_open == "2")) {
+if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 	
 	include ('judge_closed.sec.php'); 
 	include (DB.'winners.db.php');
@@ -135,7 +135,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 echo $primary_page_info;
 //echo $totalRowsSponsors;
 
-if ((judging_date_return() == 0) && ($registration_open == "2")) { 
+if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) { 
 	
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
 		
@@ -165,7 +165,7 @@ else {
 	echo $page_info;
 	
 	
-	if (($registration_open == "2") || ($comp_entry_limit) || ($comp_paid_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
+	if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
 	else include('reg_open.sec.php');
 	
 	// Display Competition Official(s)

@@ -61,17 +61,18 @@ $header1_8 = "";
 $page_info8 = "";
 
 
-if (($registration_open == "1") && (!isset($_SESSION['loginUsername']))) { 
+if (($registration_open == 1) && (!isset($_SESSION['loginUsername']))) { 
 	$header1_1 .= "<h2>Judge and Steward Registration is <span class='text-success'>Open</span></h2>"; 
 	$page_info1 .= "<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='".build_public_url("register","judge","default","default",$sef,$base_url)."'>please register</a>.</p>";
 	$page_info1 .= sprintf("<p>If you <em>have</em> registered, <a href=\"%s\">log in</a> and then choose <em>Edit Account</em> from the My Account menu indicated by the <span class=\"fa fa-user\"></span> icon on the top menu.</p>",build_public_url("login","default","default","default",$sef,$base_url));
 }
 
-elseif (($registration_open == "1") && (isset($_SESSION['loginUsername']))) { 
+if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) { 
 	$page_info1 .= "<p>Since you have already registered, you can <a href='".build_public_url("list","default","default","default",$sef,$base_url)."'>check your account info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>";
 	$page_info1 .= "";
 }
-else $page_info1 .= sprintf("<p>If you are willing to judge or steward, please return to register on or after %s.</p>",$judge_open);
+
+if ($registration_open != 1) $page_info1 .= sprintf("<p>If you are willing to judge or steward, please return to register on or after %s.</p>",$judge_open);
 
 
 if ($entry_window_open == 1) {
@@ -92,6 +93,7 @@ $page_info3 .= $row_contest_rules['contestRules'];
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
+
 
 echo $header1_2;
 echo $page_info2;
