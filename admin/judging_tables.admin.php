@@ -691,7 +691,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <!-- Input Here -->
         <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<150+1; $i++) { ?>
-    		<option value="<?php echo $i; ?>" <?php if ($row_tables_edit['tableNumber'] == $i) echo "selected"; elseif (in_array($i,$a)) echo "disabled"; ?>><?php echo $i; ?></option>
+    		<option value="<?php echo $i; ?>" <?php if ($row_tables_edit['tableNumber'] == $i) echo "selected"; elseif ((isset($a)) && (in_array($i,$a))) echo "DISABLED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
         </select>
         </div>

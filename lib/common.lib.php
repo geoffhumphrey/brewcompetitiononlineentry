@@ -2825,35 +2825,35 @@ function dropoff_location($input) {
 }
 
 
-function judge_steward_availability($input,$method) {
+function judge_steward_availability($input,$method,$prefix) {
 	if (($input == "Y-") || ($input == "")) {
 		if ($method == "1") $return = "No availability defined.";
 		else $return = "";
 	}
 	else {
 		$a = explode(",",$input);
-		arsort($a);
-		foreach ($a as $value) {
-		if ($value != "") {
+		//$a = explode(",",$row_sql['brewerJudgeLocation']);
 			$return = "";
-			$b = substr($value, 2);
-			$c = substr($value, 0, 1);
-				if ($c == "Y") {
+			foreach ($a as $value) {
+				$b = explode("-",$value);
+								
+				if ($b[0] == "Y") {
 				require(CONFIG.'config.php');
-				$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $b);
+				mysqli_select_db($connection,$database);
+				$query_location = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
 				$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
 				$row_location = mysqli_fetch_assoc($location);
-				if (!empty($row_location['judgingLocName'])) {
-					$return .= $row_location['judgingLocName']." ";
-					//$return .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-					if ($method == "1") $return .= "<br>";
-					elseif ($method == "2") $return .= " | ";
-					else $return .= " ";
-					}
+					if (!empty($row_location['judgingLocName'])) {
+						$return .= $row_location['judgingLocName']." ";
+						if ($method == "1") $return .= "<br>";
+						elseif ($method == "2") $return .= " | ";
+						else $return .= " ";
+					 }
 					else $return .= "";
 				}
+				
 			}
-		}
+		
 	}
 	if ($method == "1")	return rtrim($return,"<br>");
 	elseif ($method == "2") return rtrim($return," | ");

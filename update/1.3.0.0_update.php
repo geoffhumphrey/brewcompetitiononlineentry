@@ -534,7 +534,7 @@ if (!NHC) {
 // -----------------------------------------------------------
 
 
-$query_user_passwords = sprintf("SELECT id,password FROM %s",$users_db_table);
+$query_user_passwords = sprintf("SELECT * FROM %s",$users_db_table);
 $user_passwords = mysqli_query($connection,$query_user_passwords) or die (mysqli_error($connection));
 $row_user_passwords = mysqli_fetch_assoc($user_passwords);
 $totalRows_user_passwords = mysqli_num_rows($user_passwords);
@@ -549,6 +549,13 @@ do {
 	$updateSQL = sprintf("UPDATE %s SET password = '%s' WHERE id = '%s'", $users_db_table, $hash, $row_user_passwords['id']);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
+	// Top Level Admin introduced in 1.3.0.0, need to change all admins to top-level
+	if ($row_user_passwords['userLevel'] == 1) {
+		$updateSQL = sprintf("UPDATE %s SET userLevel = '0' WHERE id = '%s'", $users_db_table, $row_user_passwords['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	}
 	
 } while ($row_user_passwords = mysqli_fetch_assoc($user_passwords));
 

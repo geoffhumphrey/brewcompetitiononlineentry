@@ -1,14 +1,14 @@
-<?php include (DB.'styles.db.php'); ?>
+<?php if ($go == "preferences") { 
+include (DB.'styles.db.php'); ?>
 <script type='text/javascript'>//<![CDATA[ 
 $(document).ready(function(){
 	
-	
-	<?php if ($row_limits['prefsUserSubCatLimit'] == "") { ?>
+	// hide divs on load
 	$("#subStyleExeptions").hide("fast");
+	
 	$("#prefsUserSubCatLimit").change(function() {
-		$("#subStyleExeptions").hide("fast");
 		
-        if ( 
+		if ( 
 			$("#prefsUserSubCatLimit").val() == ""){
 			$("#subStyleExeptions").hide("fast");
 		}
@@ -25,15 +25,11 @@ $(document).ready(function(){
 			
 		}
 		
-		
-	}
-	<?php } else { ?>
-	$("#subStyleExeptions").show("fast");
-	<?php } ?>
-	);
-});//]]>  
-
+	}); // end $("#prefsUserSubCatLimit").change(function()
+	
+}); // end $(document).ready(function(){
 </script>
+<?php } ?>
 <?php if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Set Website Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
@@ -477,6 +473,7 @@ $(document).ready(function(){
 	</div>
 </div><!-- ./Form Group -->
 
+<?php if ($go == "preferences") { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Sub-Style</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -490,8 +487,6 @@ $(document).ready(function(){
 	<span id="helpBlock" class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</span>
 	</div>
 </div><!-- ./Form Group -->
-
-<?php if ($go == "preferences") { ?>
 <!-- Insert Collapsable -->
 <div id="subStyleExeptions">
 	<div class="form-group"><!-- Form Group Checkbox Stacked -->
@@ -499,11 +494,22 @@ $(document).ready(function(){
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
-				<?php do { ?>
+				<?php do { 
+					$checked = "";
+					if ($go == "preferences") {
+						$a = explode(",", $row_limits['prefsUSCLEx']); 
+						$b = $row_styles['id']; 
+						foreach ($a as $value) { 
+							if ($value == $b) $checked = "CHECKED"; 
+						} 
+					}
+				
+				?>
 				<?php if ($row_styles['id'] != "") { ?>
 				<div class="checkbox">
 					<label>
-						<input name="prefsUSCLEx[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_limits['prefsUSCLEx']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
+						<input name="prefsUSCLEx[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php echo $checked; ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; 
+						 ?>
 					</label>
 				</div>
 				<?php } ?>
@@ -551,7 +557,6 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 <?php } ?>
-
 <h3>Performance and Data Clean-Up</h3>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>

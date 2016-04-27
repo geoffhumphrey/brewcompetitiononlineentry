@@ -180,17 +180,15 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
 			}
 			
-			$judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2);
-			$steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2);
+			$judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
+			$steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2,$prefix);
 			
-		
 			if (($filter == "judges") || ($filter == "avail_judges")) 			$a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],str_replace(",",", ",$row_sql['brewerJudgeRank']),strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),$judge_avail,style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'),judge_entries($row_sql['uid'],0));
 			elseif (($filter == "stewards") || ($filter == "avail_stewards")) 	$a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$steward_avail,judge_entries($row_sql['uid'],0));
 			elseif ($filter == "staff") 										$a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],judge_entries($row_sql['uid'],0));
 			else 																$a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0));
 			
 		} while ($row_sql = mysqli_fetch_assoc($sql));  
-		
 		
 		header('Content-type: application/x-msdownload');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -202,7 +200,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			fputcsv($fp,$fields,$separator);
 		}
 		fclose($fp);
-		exit;
+		
 		
 	} // END if ($section == "emails")
 
