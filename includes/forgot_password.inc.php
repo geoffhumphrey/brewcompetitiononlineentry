@@ -1,20 +1,14 @@
 <?php
 ob_start();
 include('../paths.php');
-// Based upon a script from www.plus2net.com 
 require(CONFIG.'config.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(LIB.'common.lib.php'); 
 require(DB.'common.db.php');
-
 require(CLASSES.'phpass/PasswordHash.php');
 $hasher = new PasswordHash(8, false);
-
-if (NHC) $base_url = "../";
-else $base_url = $base_url;
 mysql_select_db($database, $brewing);
-
 
 if (($action == "email") && ($id != "default")) {
 		
@@ -67,56 +61,35 @@ if (($action == "email") && ($id != "default")) {
 }
 
 else {
-$username = $_POST['loginUsername'];
-	
-$query_forgot = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$users_db_table,$_POST['loginUsername']);
-$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-$row_forgot = mysql_fetch_assoc($forgot);
-$totalRows_forgot = mysql_num_rows($forgot);
-	
-if ($totalRows_forgot == 0) { 
-	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); 
-}
-if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { //if answer is correct
-
-/*
-echo $username."<br>";
-echo $query_forgot."<br>";
-echo $row_forgot['user_name']."<br>";
-echo $totalRows_forgot."<br>";
-
-$em = $row->username;// email is stored to a variable
-
-// Send the email with key
-*/
-
-$key = random_generator(10,1);
-
-$password = md5($key);
-$hash = $hasher->HashPassword($password);
-	
-	if (NHC) {
-	// Place NHC SQL calls below
-	
-	
+	$username = $_POST['loginUsername'];
+		
+	$query_forgot = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$users_db_table,$username);
+	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
+	$row_forgot = mysql_fetch_assoc($forgot);
+	$totalRows_forgot = mysql_num_rows($forgot);
+			
+	if ($totalRows_forgot == 0) { 
+		header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); 
 	}
-	// end if (NHC)
 	
-	else {
+	if (strtolower($_POST['userQuestionAnswer']) == strtolower($row_forgot['userQuestionAnswer'])) { //if answer is correct
 	
+		$key = random_generator(10,1);
+	
+		$password = md5($key);
+		$hash = $hasher->HashPassword($password);
+			
 		mysql_select_db($database, $brewing);
 		$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
 		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
-	
-	}
-	
-  	$updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
-  	header(sprintf("Location: %s", $updateGoTo)); 
+		
+	  	$updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
+	  	header(sprintf("Location: %s", $updateGoTo)); 
 
-} else {
+	} else {
 	
-	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
+		header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
 	
-}
+    	}
 }
 ?>
