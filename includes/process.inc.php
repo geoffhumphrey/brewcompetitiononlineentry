@@ -14,6 +14,7 @@ include(INCLUDES.'scrubber.inc.php');
 mysqli_select_db($connection,$database);
 require(DB.'common.db.php');
 include(LIB.'common.lib.php');
+
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 

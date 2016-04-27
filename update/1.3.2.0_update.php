@@ -423,13 +423,13 @@ if ($totalRows_custom_styles > 0) {
 		// Update any defined judging tables with new id
 		
 		$query_custom_style_id = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1", $prefix."styles");
-		$custom_style_id = mysqli_query($connection,$query_style_id) or die (mysqli_error($connection));
+		$custom_style_id = mysqli_query($connection,$query_custom_style_id) or die (mysqli_error($connection));
 		$row_custom_style_id = mysqli_fetch_assoc($custom_style_id);
 		//echo $query_custom_style_id."<br>";
 		//echo $row_custom_style_id['id']."<br>";
 		
 		$query_custom_style_table = sprintf("SELECT id,tableStyles FROM %s", $prefix."judging_tables");
-		$custom_style_table = mysqli_query($connection,$query_style_table) or die (mysqli_error($connection));
+		$custom_style_table = mysqli_query($connection,$query_custom_style_table) or die (mysqli_error($connection));
 		$row_custom_style_table = mysqli_fetch_assoc($custom_style_table);
 		//echo $query_custom_style_table."<br>";
 		

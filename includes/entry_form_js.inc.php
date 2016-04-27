@@ -535,7 +535,9 @@ $(document).ready(function() {
 		<?php } ?>
 		
 		// Custom styles
-		<?php foreach ($custom_entry_information as $key => $value) { 
+		<?php 
+		if (isset($custom_entry_information)) {
+		foreach ($custom_entry_information as $key => $value) { 
 		$explodies = explode("|",$custom_entry["$key"]);
 		//print_r($explodies);
 		?>
@@ -603,7 +605,9 @@ $(document).ready(function() {
 			<?php } ?>
 			
 		}
-		<?php } ?>
+		<?php }
+		}
+		?>
 				
 		else {
 			$("#special").hide("fast");

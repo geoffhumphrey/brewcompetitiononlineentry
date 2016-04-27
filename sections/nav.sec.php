@@ -262,7 +262,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo "Judge/Steward Registration"; else echo "Register"; ?></a></li>
                 <?php } ?>
                 <?php if ($qr_enable) { ?>
-                <li><a href="<?php echo $link_qr; ?>">QR Code Entry Check-In</a></li>
+                <li><a href="<?php echo $link_qr; ?>" target="_blank">QR Code Entry Check-In</a></li>
                 <?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">

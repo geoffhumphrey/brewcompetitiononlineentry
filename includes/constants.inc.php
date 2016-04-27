@@ -115,5 +115,10 @@ $color = "#eeeeee";
 $color1 = "#e0e0e0";
 $color2 = "#eeeeee";
 
+// Disable stuff on participants, entries, tables, and other screens when looking at archived data
+$archive_display = FALSE;
+if ($dbTable != "default") $archive_display = TRUE;
+
+$totalRows_mods = "";
 
 ?>

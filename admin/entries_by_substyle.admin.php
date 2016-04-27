@@ -105,7 +105,7 @@ if ($cider_total_logged > 0) {
 	$html_count .= "</tr>";
 }
 
-if ($other_count_logged > 0) {
+if ($other_total_logged > 0) {
 		
 	if ($action == "print") $html_count.= "<tr>"; 
 	else $html_count .= "<tr>";

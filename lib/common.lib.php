@@ -2162,25 +2162,30 @@ function brewer_info($uid,$filter="default") {
 	mysqli_select_db($connection,$database);
 	if ($filter == "default") $brewer_db_table = $prefix."brewer";
 	else $brewer_db_table = $prefix."brewer_".$filter;
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,uid,brewerClubs,brewerDiscount,brewerAddress,brewerCity,brewerState,brewerZip,brewerCountry FROM %s WHERE uid='%s'", $brewer_db_table, $uid);
+	$query_brewer_info = sprintf("SELECT * FROM %s WHERE uid='%s'", $brewer_db_table, $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
-	$r = 
-	$row_brewer_info['brewerFirstName']."^". 		// 0
-	$row_brewer_info['brewerLastName']."^". 			// 1
-	$row_brewer_info['brewerPhone1']."^". 			// 2
-	$row_brewer_info['brewerJudgeRank']."^".			// 3
-	$row_brewer_info['brewerJudgeID']."^".			// 4
-	$row_brewer_info['brewerJudgeBOS']."^".			// 5
-	$row_brewer_info['brewerEmail']."^".				// 6
-	$row_brewer_info['uid']."^".						// 7
-	$row_brewer_info['brewerClubs']."^".				// 8
-	$row_brewer_info['brewerDiscount']."^".			// 9
-	$row_brewer_info['brewerAddress']."^".			// 10
-	$row_brewer_info['brewerCity']."^".				// 11
-	$row_brewer_info['brewerState']."^".				// 12
-	$row_brewer_info['brewerZip']."^".				// 13
-	$row_brewer_info['brewerCountry'];				// 14
+	$r = "";
+	$r .= $row_brewer_info['brewerFirstName']."^"; 		// 0
+	$r .= $row_brewer_info['brewerLastName']."^"; 		// 1
+	$r .= $row_brewer_info['brewerPhone1']."^"; 		// 2
+	if (isset($row_brewer_info['brewerJudgeRank'])) $r .= $row_brewer_info['brewerJudgeRank']."^";
+	else $r .= "1^";									// 3
+	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^";
+	else $r .= "1^";									// 4
+	if (isset($row_brewer_info['brewerJudgeBOS'])) $r .= $row_brewer_info['brewerJudgeBOS']."^";
+	else $r .= "1^";									// 5
+	$r .= $row_brewer_info['brewerEmail']."^";			// 6
+	$r .= $row_brewer_info['uid']."^";					// 7
+	if (isset($row_brewer_info['brewerClubs'])) $r .= $row_brewer_info['brewerClubs']."^";
+	else $r .= "1^";									// 8
+	if (isset($row_brewer_info['brewerDiscount'])) $r .= $row_brewer_info['brewerDiscount']."^";
+	else $r .= "1^";									// 9
+	$r .= $row_brewer_info['brewerAddress']."^";		// 10
+	$r .= $row_brewer_info['brewerCity']."^";			// 11
+	$r .= $row_brewer_info['brewerState']."^";			// 12
+	$r .= $row_brewer_info['brewerZip']."^";			// 13
+	$r .= $row_brewer_info['brewerCountry'];			// 14
 	return $r;
 }
 
@@ -2363,42 +2368,49 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 	
 	if ($archive != "default") $staff_db_table = $prefix."staff_".$archive;
 	else $staff_db_table = $prefix."staff";
-	$query_staff_check = sprintf("SELECT * FROM %s WHERE uid='%s'", $staff_db_table, $uid);
-	$staff_check = mysqli_query($connection,$query_staff_check) or die (mysqli_error($connection));
-	$row_staff_check = mysqli_fetch_assoc($staff_check);
-	$totalRows_staff_check = mysqli_num_rows($staff_check);
 	
-	if ($row_staff_check['staff_judge'] == "1") $assignment = "judges";
-	elseif ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
-	else $assignment = "";
+	$totalRows_staff_check = 0;
+	$assignment = "";
+	
+	if (table_exists($staff_db_table)) {
+		$query_staff_check = sprintf("SELECT * FROM %s WHERE uid='%s'", $staff_db_table, $uid);
+		$staff_check = mysqli_query($connection,$query_staff_check) or die (mysqli_error($connection));
+		$row_staff_check = mysqli_fetch_assoc($staff_check);
+		$totalRows_staff_check = mysqli_num_rows($staff_check);
+		
+		if ($row_staff_check['staff_judge'] == "1") $assignment = "judges";
+		elseif ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
+		else $assignment = "";
+	
+	}
 	
 	if ($totalRows_staff_check > 0) {
-	$r[] = "";
-		switch($method) {
-			case "1": // 
-				if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
-				if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
-				if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
-					if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Judge</a>";
-					if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Steward</a>";
-				}
-				else {
-					if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
-					if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward";
-				}
-				if ($row_staff_check['staff_staff'] == "1") $r[] .= "Staff";
-			break;
-			case "staff_judge": // for $filter URL variable
-				if ($row_staff_check['staff_judge'] == "1") $r = "CHECKED";  
-				elseif ($a == "stewards") $r = "S"; 
-				elseif ($a == "staff") $r = "X";
-				elseif ($a == "bos") $r = "Y";
-				else $r = "";
-			break;
-		}
-	if (!empty($r)) $r = implode(", ",$r);
-	$r = rtrim($r,", ");
-	$r = ltrim($r,", ");
+		$r[] = "";
+			switch($method) {
+				case "1": // 
+					if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
+					if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
+					if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
+						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Judge</a>";
+						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Steward</a>";
+					}
+					else {
+						if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
+						if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward";
+					}
+					if ($row_staff_check['staff_staff'] == "1") $r[] .= "Staff";
+				break;
+				case "staff_judge": // for $filter URL variable
+					if ($row_staff_check['staff_judge'] == "1") $r = "CHECKED";  
+					elseif ($a == "stewards") $r = "S"; 
+					elseif ($a == "staff") $r = "X";
+					elseif ($a == "bos") $r = "Y";
+					else $r = "";
+				break;
+			}
+		if (!empty($r)) $r = implode(", ",$r);
+		$r = rtrim($r,", ");
+		$r = ltrim($r,", ");
 	}
 	else $r = "";
 	

@@ -106,7 +106,7 @@ if (isset($_SESSION['loginUsername'])) {
 				for($i=0; $i<$sort; $i++) {
 				$entry_no = sprintf("%04s",$row_log['id']);
 				
-				$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
+				$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 				if ($style == "21A") $style_name = "S.H.V.";
 				else $style_name = truncate($row_log['brewStyle'],22);
 				
@@ -118,9 +118,9 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
-						if (!empty($row_entries['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
-						if (!empty($row_entries['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
-						if (!empty($row_entries['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
+						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+						if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+						if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
 						
 					}
 					$text = iconv('UTF-8', 'windows-1252', $text);
@@ -350,9 +350,7 @@ if (isset($_SESSION['loginUsername'])) {
 				else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
 				
 				
-				$style = $row_log['brewCategory'].$row_log['brewSubCategory'];
-				//if ($style == "21A") $style_name = "S.H.V.";
-				//else 
+				$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 				$style_name = truncate($row_log['brewStyle'],22);
 				
 				$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
@@ -362,9 +360,9 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
-						if (!empty($row_entries['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
-						if (!empty($row_entries['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
-						if (!empty($row_entries['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
+						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+						if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+						if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
 						
 					}
 					$text = iconv('UTF-8', 'windows-1252', $text);

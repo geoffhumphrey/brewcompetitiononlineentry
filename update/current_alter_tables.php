@@ -164,7 +164,7 @@ $output .=  "<li>Judging preferences table updated.</li>";
 // Alter Table: Brewing
 // Use for aligning uploaded scoresheet pdfs with judging numbers
 // -----------------------------------------------------------
-
+/*
 $updateSQL = sprintf("
 ALTER TABLE `%s` CHANGE `brewBOSPlace` `brewScoresheetNum` VARCHAR(255) NULL DEFAULT NULL",
 $prefix."brewing");
@@ -173,6 +173,6 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Brewing table updated.</li>";
-
+*/
 
 ?>

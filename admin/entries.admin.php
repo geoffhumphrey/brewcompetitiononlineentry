@@ -304,13 +304,16 @@ if ($action != "print") { ?>
 	$entry_actions = "";
 	$entry_unconfirmed_row = "";
 	$entry_judging_num = "";
+	$entry_judging_num_hidden = "";
 	
 	if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
 	elseif ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion'])) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 	
-	$entry_judging_num_hidden = "<span class=\"hidden visible-print-inline\">".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>";
-	if ($_SESSION['prefsEntryForm'] == "N") $entry_judging_num .= sprintf("%06s",$row_log['brewJudgingNumber']);
-  	else $entry_judging_num .= readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+	if (isset($row_log['brewJudgingNumber'])) {
+		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>";
+		if ($_SESSION['prefsEntryForm'] == "N") $entry_judging_num .= sprintf("%06s",$row_log['brewJudgingNumber']);
+  		else $entry_judging_num .= readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+	}
 	
 	if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels)) && ($action != "print") && ($dbTable == "default")) { 
 		$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
@@ -382,7 +385,18 @@ if ($action != "print") { ?>
 		$entry_actions .= "</a> ";
 		$entry_actions .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-trash-o\"></a> ";
 		$entry_actions .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-print hidden-xs hidden-sm\"></a> ";
-		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-envelope\"></span></a>";
+		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-envelope\"></span></a> ";
+		
+		
+		if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
+			$brewInfo = "";
+			if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", "; ", $row_log['brewInfo']);
+			if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
+			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
+			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
+			$entry_actions .= "<a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"left\" data-trigger=\"focus\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
+		}
+		
 	}
 	
 	?> 

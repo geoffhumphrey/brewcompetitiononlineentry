@@ -206,7 +206,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php echo $judging_number;  ?></td>
         <td><?php echo $table_score_data[11]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $table_score_data[10]; ?></td>
-        <td class="hidden-xs hidden-sm"><?php echo $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; ?></td>
+        <td class="hidden-xs hidden-sm"><?php if ($filter == "default") echo $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; else echo $table_score_data[12].": ".$table_score_data[1]; ?></td>
         
         <?php if ($dbTable != "default") { ?>
         <td><?php echo $table_score_data[5].", ".$table_score_data[4]; ?></td>

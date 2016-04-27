@@ -8,9 +8,29 @@
 include(DB.'styles.db.php'); 
 include(DB.'entries.db.php');
 
+// Define vars
 $add_entry_disable = FALSE;
 $edit_entry_disable = FALSE;
 $special_required = FALSE;
+$selected_disabled = "";
+$darkLightPale = "";
+$darkLightAmber = "";
+$saisonTable = "";
+$saisonStandard = "";
+$saisonSuper = "";
+$IPASession = "";
+$IPAStandard  = "";
+$IPADouble = "";
+$lambicSweetLow = "";
+$lambicSweetMed = "";
+$lambicSweetHigh = "";
+$lambicCarbLow = "";
+$lambicCarbMed = "";
+$lambicCarbHigh = "";
+$BDGBlonde = "";
+$BDGAmber = "";
+$BDGBrown = "";
+$brewInfo = "";
 
 // Adding an entry not allowed conditionals for non-admins
 if ($action == "add") {
@@ -127,24 +147,6 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	}
 	
 	if ($action == "edit") {
-		
-		$darkLightPale = "";
-		$darkLightAmber = "";
-		$saisonTable = "";
-		$saisonStandard = "";
-		$saisonSuper = "";
-		$IPASession = "";
-		$IPAStandard  = "";
-		$IPADouble = "";
-		$lambicSweetLow = "";
-		$lambicSweetMed = "";
-		$lambicSweetHigh = "";
-		$lambicCarbLow = "";
-		$lambicCarbMed = "";
-		$lambicCarbHigh = "";
-		$BDGBlonde = "";
-		$BDGAmber = "";
-		$BDGBrown = "";
 		
 		if ($view == "21-B") {
 			$exploder = explode("^",$row_log['brewInfo']);
@@ -909,7 +911,7 @@ else $brewPaid = $row_log['brewPaid'];
                         <label for="brewWaterNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Type/Amount</label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <!-- Input Here -->
-                            <textarea class="form-control" name="brewWaterNotes" id="brewWaterNotes" rows="6" class="mceNoEditor"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
+                            <textarea class="form-control" name="brewWaterNotes" id="brewWaterNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
                          </div>
                     </div><!-- ./Form Group -->
                 </div>
@@ -1116,7 +1118,7 @@ else $brewPaid = $row_log['brewPaid'];
                     <label for="brewCarbonationNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Carbonation Type/Amount</label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
-                        <textarea class="form-control" name="brewCarbonationNotes" id="brewCarbonationNotes" rows="6" class="mceNoEditor"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
+                        <textarea class="form-control" name="brewCarbonationNotes" id="brewCarbonationNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
                      </div>
                 </div><!-- ./Form Group -->
                 </div>

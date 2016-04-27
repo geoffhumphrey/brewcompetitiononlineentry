@@ -189,7 +189,9 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $judging_number; ?></td>
         <td><?php echo $bos_entry_info[9] ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>
-        <td><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
+        <td>
+		<?php if ($filter == "default") echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; else echo $style.": ".$bos_entry_info[0]; ?>
+        </td>
         <?php if ($dbTable == "default") { ?>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scorePlace']; ?></td>
