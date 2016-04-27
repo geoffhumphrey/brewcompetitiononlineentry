@@ -2785,7 +2785,7 @@ function judge_steward_availability($input,$method,$prefix) {
 								
 				if ($b[0] == "Y") {
 				require(CONFIG.'config.php');
-				mysql_select_db($connection,$database);
+				mysql_select_db($database, $brewing);
 				$query_location = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
 				$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
 				$row_location = mysqli_fetch_assoc($location);
