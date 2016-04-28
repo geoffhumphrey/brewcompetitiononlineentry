@@ -74,7 +74,7 @@ else {
 	}
 
 	//if answer is correct
-	if ($_POST['userQuestionAnswer'] == $row_forgot['userQuestionAnswer']) { 
+	if (strtolower($_POST['userQuestionAnswer']) == strtolower($row_forgot['userQuestionAnswer'])) { 
 	
 		/*
 		echo $username."<br>";
@@ -84,10 +84,9 @@ else {
 		
 		$em = $row->username;// email is stored to a variable
 		
-		// Send the email with key
 		*/
 			
-		$key = random_generator(10,1);
+		$key = random_generator(6,1);
 		
 		$password = md5($key);
 		$hash = $hasher->HashPassword($password);

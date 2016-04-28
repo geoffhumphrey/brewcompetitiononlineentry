@@ -67,18 +67,7 @@
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         	<span class="fa fa-exclamation-circle"></span> <strong>No competition contacts have been specified.</strong> <a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=add&amp;go=contacts" class="alert-link">Add a competition contact</a>?
         </div>
-    <?php } ?>
-    
-    <?php //if ($fx) { ?>
-    	<!-- Firefox printing issue -->
-        <!--
-    	<div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
-        	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-exclamation-triangle"></span> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly, RIGHT CLICK on the link and choose &ldquo;Open Link in New Tab.&rdquo; Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser's File > Page Setup... function to specify portrait or landscape, margins, etc.?
-        </div>
-        -->
-    <?php //} ?>
-    
+    <?php } ?>    
     <?php if ($bjcp_2008) { ?>
     	<!-- BJCP 2008 convert to 2015 -->
     	<div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
@@ -102,9 +91,6 @@
         	<span class="fa fa-exclamation-circle"></span> <strong>All unconfirmed entries have been deleted from the database.</strong>
         </div>
    <?php } ?>
-   
-  
-    
 <?php } // end if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin") && ($go == "default")) ?>
 
 <?php if (($logged_in) && ($section == "admin")) { ?>
@@ -188,7 +174,7 @@
 <?php } // end if ($logged_in) ?>
 <?php if (!$logged_in) { ?>
 	
-     <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default") && ($msg == "default")) { ?>
+     <?php if (($registration_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
         <!-- Account registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -196,7 +182,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($entry_window_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default")  && ($msg == "default")) { ?>
+    <?php if (($entry_window_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
         <!-- Entry registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -204,7 +190,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && (!isset($_SESSION['loginUsername'])) && ($section == "default")  && ($judge_window_open == "0") && ($msg == "default")) { ?>
+    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && ($judge_window_open == "0") && ($msg == "default")) { ?>
         <!-- Judge/steward registration not open yet -->
         <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -212,7 +198,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Account and entry registration open -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -220,7 +206,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
         <!-- Entry limit nearly reached -->
         <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -228,15 +214,23 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($comp_entry_limit) && ($msg == "default")) { ?>
-        <!-- Entry limit reached, account and entry registration closed -->
+    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
+        <!-- Entry limit reached -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-exclamation-circle"></span> <strong>Entry Limit Reached.</strong> The limit of <?php echo $row_limits['prefsEntryLimit']; ?> entries has been reached. No further entries will be accepted.
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_paid_entry_limit) && ($msg == "default")) { ?>
+        <!-- Entry limit reached -->
+        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="fa fa-exclamation-circle"></span> <strong>Paid Entry Limit Reached.</strong> The limit of <?php echo $row_limits['prefsEntryLimitPaid']; ?> entries has been reached. No further entries will be accepted.
+        </div>
+    <?php } ?>
+    
+    <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Account registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -244,7 +238,7 @@
         </div>
     <?php } 	?>
     
-    <?php if (($entry_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Entry registration closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -252,7 +246,7 @@
         </div>
     <?php } 	?>
     
-     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Drop-off window closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -260,7 +254,7 @@
         </div>
     <?php } 	?>
     
-    <?php if (($shipping_window_open == 2) && (!$ua) && ($section != "admin") && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
         <!-- Drop-off window closed -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -268,7 +262,7 @@
         </div>
     <?php } 	?>
     
-    <?php if ((($registration_open == 0) || ($registration_open == 2)) && (!$ua) && ($section == "default") && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) { 
+    <?php if ((($registration_open == 0) || ($registration_open == 2)) && (!$ua) && ($section == "default") && ($judge_window_open == 1) && ($msg == "default")) { 
 	
 	if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward";
 	elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge";
@@ -295,5 +289,4 @@
               <span class="fa fa-exclamation-circle"></span> <strong>The limit of registered stewards has been reached.</strong> No further steward registrations will be accepted. <?php if (!$judge_limit) { ?> Registering as a judge is still available.<?php } ?>
             </div>
         <?php } ?>
-    
 <?php } // end if (!$logged_in) ?>

@@ -393,46 +393,6 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			
-			
-			// Send the user an email detailing login information
-			
-			/*
-			$id_verification_beers = array("Pliney the Younger","Pabst Blue Ribbon","Old Ruffian","Westvleteren 12","Dark Lord","Parabola","Hopslam","St. Bernardus Abt 12","Consecration","Enjoy By IPA","Utopias","Celebrator","Serendipity","La Fin Du Monde");
-			
-			$to_recipient = capitalize($_POST['brewerFirstName'])." ".capitalize($_POST['brewerLastName']);
-			$to_email = $_POST['brewerEmail'];
-			$subject = $_SESSION['contestName'].": ID Verification Request";
-			$message = "<html>" . "\r\n";
-			$message .= "<body>" . "\r\n";
-			$message .= "<p>".capitalize($_POST['brewerFirstName']).",</p>";
-			$message .= "<p>An account was created by Administrators using this email address at the ".$_SESSION['contestName']." competition website. This is for record-keeping and competition organization purposes only.</p>";
-			$message .= "<p>Your login information is:</p>";
-			$message .= "<table cellpadding='0' border='0'>";
-			$message .= "<tr><td><strong>ID Verfication Question:</strong></td><td>What is your favorite all-time beer to drink?</td>";
-			$message .= "<tr><td><strong>Random ID Verfication Answer:</strong></td><td>".array_rand($id_verification_beers, 1)."</td></tr></table>";
-			$message .= "<p><em>*The ID Verification Answer is case sensitive.</em></p>";
-			$message .= "<p>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</p>";
-			$message .= "</body>" . "\r\n";
-			$message .= "</html>";
-			
-			//$parse = parse_url($_SERVER['SERVER_NAME']);
-			//print_r($parse);
-			//$url = $parse['host'];
-			//$url = preg_replace('#^www\.(.+\.)#i', '$1', $parse['host']);
-			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-			
-			$headers  = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
-			$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-			$headers .= "From: Competition Server <noreply@".$url. ">\r\n";
-			
-			$emails = $to_email;
-			mail($emails, $subject, $message, $headers);
-			
-			*/
-			
-			
-			
 			//echo $insertSQL;
 			if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
 			elseif (($_POST['brewerJudge'] == "Y") || ($_POST['brewerSteward'] == "Y")) $insertGoTo = $base_url."index.php?section=judge&go=judge";
@@ -509,7 +469,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			brewerStewardLocation=%s,
 			brewerDropOff=%s,
 			brewerJudgeExp=%s,
-			brewerJudgeNotes=%s",
+			brewerJudgeNotes=%s,
+			brewerJudgeWaiver=%s",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -533,23 +494,32 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 							   GetSQLValueString($location_pref2, "text"),
 							   GetSQLValueString($_POST['brewerDropOff'], "int"),
 							   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
-							   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
+							   GetSQLValueString($_POST['brewerJudgeNotes'], "text"),
+							   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
 							   );
 		// Numbers 999999994 through 999999999 are reserved for NHC applications.
 		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
 			$updateSQL .= sprintf(", brewerAHA=%s",GetSQLValueString($_POST['brewerAHA'], "text"));
 		}
-		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));
-		
+		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));	
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
-		//echo $updateSQL."<br>";
+		if (isset($_POST['userQuestion'])) {
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString($_POST['userQuestion'],"text"),GetSQLValueString($_SESSION['user_id'],"int")); 
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (isset($_POST['userQuestionAnswer'])) {
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($_POST['userQuestionAnswer'],"text"),GetSQLValueString($_SESSION['user_id'],"int")); 
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
 		  
 		if ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "J")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='judge' WHERE id='".$id."'"; 
 		elseif ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "S")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 
 		else $updateSQL = "UPDATE $brewer_db_table SET brewerNickname=NULL WHERE id='".$id."'"; 
-		
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		

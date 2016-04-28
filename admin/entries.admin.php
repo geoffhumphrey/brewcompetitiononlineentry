@@ -339,7 +339,7 @@ if ($action != "print") { ?>
 	 else $entry_brewer_display .= "&nbsp;";
 	 
 	
-	if ($row_log['brewUpdated'] != "") $entry_updated_display .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); 
+	if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); 
 	else $entry_updated_display .= "&nbsp;";
 	
 	if (($action != "print") && ($dbTable == "default")) {

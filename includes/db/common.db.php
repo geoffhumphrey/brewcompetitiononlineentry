@@ -172,6 +172,8 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$_SESSION['userCreated'] = $row_user['userCreated'];
 	$_SESSION['user_name'] = $row_user['user_name'];
 	$_SESSION['userLevel'] = $row_user['userLevel'];
+	$_SESSION['userQuestion'] = $row_user['userQuestion'];
+	$_SESSION['userQuestionAnswer'] = $row_user['userQuestionAnswer'];
 
 	$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
 	$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
@@ -228,6 +230,10 @@ session_write_close();
 $query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecialCharLimit,prefsUserSubCatLimit,prefsUSCLEx,prefsUSCLExLimit,prefsEntryLimitPaid FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
+
+$query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s WHERE id='1'", $prefix."judging_preferences");
+$judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
+$row_judge_limits = mysqli_fetch_assoc($judge_limits);
 
 $query_contest_dates = sprintf("SELECT contestCheckInPassword,contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline,contestShippingOpen,contestShippingDeadline,contestDropoffOpen,contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
 $contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));

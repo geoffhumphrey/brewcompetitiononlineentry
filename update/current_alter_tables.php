@@ -128,6 +128,19 @@ $output .=  "<li>Judging preferences table updated to boolean values.</li>";
 */
 
 // -----------------------------------------------------------
+// Alter Table: Brewer
+// Electronically signed waiver
+// -----------------------------------------------------------
+
+$updateSQL = sprintf("ALTER TABLE `%s` CHANGE  `brewerAssignmentStaff`  `brewerJudgeWaiver` CHAR(1) NULL DEFAULT NULL;", $prefix."brewer");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$output .=  "<li>Brewer table updated.</li>"; 
+
+
+// -----------------------------------------------------------
 // Alter Table: Preferences
 // -----------------------------------------------------------
 
@@ -160,4 +173,6 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 
 $output .=  "<li>Judging preferences table updated.</li>";
 
+
+//brewerJudgeWaiver
 ?>

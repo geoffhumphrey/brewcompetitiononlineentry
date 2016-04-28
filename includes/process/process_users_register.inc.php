@@ -178,6 +178,12 @@ if (strstr($username,'@'))  {
 		require(CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
 		$hash = $hasher->HashPassword($password);
+		
+		if ($filter == "admin") {
+			
+		}
+		
+		
 		$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
 					   GetSQLValueString($_POST['userLevel'], "text"),
@@ -235,8 +241,9 @@ if (strstr($username,'@'))  {
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
-			  brewerAHA
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerAHA,
+			  brewerJudgeWaiver
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -256,7 +263,8 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($_POST['brewerAHA'], "int")
+						   GetSQLValueString($_POST['brewerAHA'], "int"),
+						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
 						   );
 		}
 		
@@ -282,8 +290,9 @@ if (strstr($username,'@'))  {
 			  brewerJudgeMead,
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
-			  brewerStewardLocation
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerStewardLocation,
+			  brewerJudgeWaiver
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -302,7 +311,8 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
 						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
 						   GetSQLValueString($location_pref1, "text"),
-						   GetSQLValueString($location_pref2, "text")
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
 						   );
 		}
 		
@@ -419,7 +429,7 @@ if (strstr($username,'@'))  {
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
-			else $insertGoTo = $base_url."index.php?section=breweraction=edit&go=admin&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
+			else $insertGoTo = $base_url."index.php?section=participants=edit&go=admin&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));
 		}
 		else { 

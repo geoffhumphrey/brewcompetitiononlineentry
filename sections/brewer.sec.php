@@ -73,6 +73,51 @@ if ($go != "admin") echo $info_msg;
             <span class="help-block">Please enter only <em>one</em> person&rsquo;s name. You will be able to identify a co-brewer when adding your entries.</span>
         </div>
     </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group">
+				<!-- Input Here -->
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?> required>
+						What is your favorite all-time beer to drink?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_1" value="What was the name of your first pet?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?> required>
+						What was the name of your first pet?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_2" value="What was the name of the street you grew up on?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?> required>
+						What was the name of the street you grew up on?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_3" value="What was your high school mascot?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?> required>
+						What was your high school mascot?
+					</label>
+				</div>
+			</div>
+            <span class="help-block">Choose one. This question will be used to verify your identity should you forget your password.  <?php if ($action == "edit") { ?>You can also <a href="<?php echo edit_user_password_link; ?>">change your password now</a> if you wish.<?php } ?></span>
+		</div>
+	</div><!-- ./Form Group -->
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question Answer</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group has-warning">
+				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" required>
+				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span>
+			</div>
+            <div class="help-block with-errors"></div>
+		</div>
+	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Street Address</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -461,7 +506,21 @@ if ($go != "admin") echo $info_msg;
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>
-        
+        <?php if (($go != "entrant") &&  (($row_brewer['brewerJudge'] == "Y") || ($row_brewer['brewerSteward'] == "Y"))) { ?>
+    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+		<label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Waiver</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="checkbox">
+				<!-- Input Here -->
+                <p>My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.</p>
+				<label>
+					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked required />By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.
+				</label>
+			</div>
+            <div class="help-block with-errors"></div>
+		</div>
+	</div><!-- ./Form Group -->
+    <?php } ?>
         <?php } ?>
     <?php } // end if (($go != "entrant") && ($section != "step2")) ?>
    

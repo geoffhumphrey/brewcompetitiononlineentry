@@ -90,7 +90,7 @@ if ($setup_free_access == TRUE) {
 		  `brewerJudgeExp` varchar(25),
 		  `brewerJudgeNotes` text,
 		  `brewerAssignment` char(1) DEFAULT NULL,
-		  `brewerAssignmentStaff` char(1) DEFAULT NULL,
+		  `brewerJudgeWaiver` char(1) DEFAULT NULL,
 		  `brewerAHA` int(11) DEFAULT NULL,
 		  `brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
 		  `brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
@@ -1316,7 +1316,7 @@ if ($setup_free_access == TRUE) {
 			$hasher = new PasswordHash(8, false);
 			$hash = $hasher->HashPassword($gh_password);
 			// For hosted accounts on brewcompetition.com and brewcomp.com
-			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAssignmentStaff`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
+			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
 			(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$brewer_db_table,$gh_user_name);
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$sql);

@@ -65,15 +65,12 @@ if (strpos($section, 'step') === FALSE) {
 	else $remaining_entries = 1;
 	
 	if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE; else $judge_limit = FALSE;
-	
 	if (open_limit($row_steward_count['count'],$row_judging_prefs['jPrefsCapStewards'],$judge_window_open)) $steward_limit = TRUE; else $steward_limit = FALSE;
-	
 	if (($judge_limit) && ($steward_limit)) $judge_window_open = 2;
+	if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_window_open = 2;
 	
 	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
-	
-	
 
 }
 

@@ -301,6 +301,14 @@ $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Phon
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$phone."</div>";
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Security Question</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$_SESSION['userQuestion']."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Security Question Answer</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$_SESSION['userQuestionAnswer']."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>AHA Number</strong></div>";
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\"><a href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.\" data-placement=\"right\">".$aha_number."</a></div>";
 $table_body1 .= "</div>";
@@ -315,7 +323,7 @@ $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Club
 $table_body1 .=  "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$club."</div>";
 $table_body1 .= "</div>";
 
-if ($row_brewer['brewerJudgeNotes'] != "") { 
+if (($row_brewer['brewerJudgeNotes'] != "") && (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y"))) {  
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Notes to Organizers</strong></div>";
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
@@ -341,6 +349,15 @@ if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) $table_body1 .= 
 else $table_body1 .= "None entered";
 $table_body1 .= "</div>";
 $table_body1 .= "</div>";
+if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Signed Waiver?</strong></div>";
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+	if (!empty($row_brewer['brewerJudgeWaiver'])) $table_body1 .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url); 
+	else $table_body1 .= "None entered";
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+}
 
 if (!empty($assignment)) {
 	
@@ -352,7 +369,7 @@ if (!empty($assignment)) {
 }
 
 
-if (in_array("Judge",$assignment_array)) { 
+if (in_array("Judge",$assignment_array) && ($_SESSION['brewerJudge'] == "Y")) { 
 	$table_body1 .= "<div class=\"row bcoem-account-info hidden-print\">";
     $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>&nbsp;</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>";

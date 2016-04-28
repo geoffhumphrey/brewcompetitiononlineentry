@@ -790,7 +790,7 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 		$totalRows_user = mysqli_num_rows($user);
 		
 		if (($totalRows_user == 1) && ($row_user['userCreated'] != "")) {
-			$result = getTimeZoneDateTime($timezone, strtotime($row_user['userCreated']), $date_format,  $time_format, "short", "date-time-no-gmt");
+			$result = "<span class=\"hidden\">".strtotime($row_user['userCreated'])."</span>".getTimeZoneDateTime($timezone, strtotime($row_user['userCreated']), $date_format,  $time_format, "short", "date-time-no-gmt");
 		}
 		
 		else $result = "&nbsp;";

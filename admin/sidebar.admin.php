@@ -84,8 +84,12 @@ if ($logged_in) {
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Confirmed Entries</strong>";
 	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\">".$totalRows_log_confirmed."</a>";
-	if (!empty($row_limits['prefsEntryLimit'])) $page_info100 .= " of ".$row_limits['prefsEntryLimit'];
-
+	if (!empty($row_limits['prefsEntryLimit'])) {
+		$page_info100 .= " of ";
+		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of total entries\">".$row_limits['prefsEntryLimit']."</a>";
+		else $page_info100 .= $row_limits['prefsEntryLimit'];
+		
+	}
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
@@ -93,9 +97,21 @@ if ($logged_in) {
 	$page_info100 .= "<strong class=\"text-info\">Unconfirmed Entries</strong>";
 	$page_info100 .= "<span class=\"pull-right\">".$entries_unconfirmed."</span>";
 	$page_info100 .= "</div>";
+	
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+	$page_info100 .= "<strong class=\"text-info\">Paid Entries</strong>";
+	$page_info100 .= "<span class=\"pull-right\">".get_entry_count("paid");
+	if (!empty($row_limits['prefsEntryLimitPaid'])) {
+		$page_info100 .= " of ";
+		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of paid entries\">".$row_limits['prefsEntryLimitPaid']."</a>";
+		else $page_info100 .= $row_limits['prefsEntryLimitPaid'];
+	}
+	$page_info100 .= "</span>";
+	$page_info100 .= "</div>";
+
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
-	$page_info100 .= "<strong class=\"text-info\">Paid &amp; Received</strong>";
+	$page_info100 .= "<strong class=\"text-info\">Paid/Rec'd Entries</strong>";
 	$page_info100 .= "<span class=\"pull-right\">".get_entry_count("paid-received")."</span>";
 	$page_info100 .= "</div>";
 
@@ -126,16 +142,28 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Judges</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available judges\">".get_participant_count('judge')."</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available judges\">".get_participant_count('judge')."</a>";
+	if (!empty($row_judge_limits['jprefsCapJudges'])) {
+		$page_info100 .= " of ";
+		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of judges\">".$row_judge_limits['jprefsCapJudges']."</a>";
+		else $page_info100 .= $row_judge_limits['jprefsCapJudges'];
+	}
+	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Stewards</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available stewards\">".get_participant_count('steward')."</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available stewards\">".get_participant_count('steward')."</a>";
+	if (!empty($row_judge_limits['jprefsCapStewards'])) {
+		$page_info100 .= " of ";
+		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of stewards\">".$row_judge_limits['jprefsCapStewards']."</a>";
+		else $page_info100 .= $row_judge_limits['jprefsCapStewards'];
+	}
+	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
-	$page_info100 .= "<strong class=\"text-info\">Entry Window</strong>";
+	$page_info100 .= "<strong class=\"text-info\">Entry Registration</strong>";
 	if ($entry_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
 	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";

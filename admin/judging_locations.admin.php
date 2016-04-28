@@ -155,7 +155,7 @@ if ($section != "step5") {
 			
 			$output_datatables_body .= "<tr>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
-			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
+			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
 			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingRounds']."</td>";
