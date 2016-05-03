@@ -305,6 +305,21 @@ if ($action != "print") { ?>
 	$entry_unconfirmed_row = "";
 	$entry_judging_num = "";
 	$entry_judging_num_hidden = "";
+	$required_info = "";
+	
+	$scoresheet = FALSE;
+	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+	if (file_exists($filename)) $scoresheet = TRUE;
+	
+	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
+			$brewInfo = "";
+			//$brewInfo .= "Required Info: ";
+			if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", "; ", $row_log['brewInfo']);
+			if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
+			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
+			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
+			$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
+		}
 	
 	if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
 	elseif ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion'])) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
@@ -388,22 +403,23 @@ if ($action != "print") { ?>
 		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-envelope\"></span></a> ";
 		
 		
-		if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
-			$brewInfo = "";
-			if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", "; ", $row_log['brewInfo']);
-			if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
-			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
-			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-			$entry_actions .= "<a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"left\" data-trigger=\"focus\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
-		}
+		
+		
+		
+		if ($scoresheet) { 
+		$entry_actions .= " <a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for the entry named ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
+	}
+		
 		
 	}
+	
+	
 	
 	?> 
     <tr class="<?php echo $entry_unconfirmed_row; ?>">
         <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
         <td><?php echo sprintf("%04s",$row_log['id']); ?></td>
-        <td><?php echo $entry_judging_num_display; ?></td>
+        <td nowrap="nowrap"><?php echo $entry_judging_num_display; echo $required_info; ?></td>
         <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
         <td class="hidden-xs"><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>

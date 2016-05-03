@@ -95,7 +95,7 @@ else $link_logout = build_public_url("logout","default","default","default",$sef
 $qr_enable = FALSE;
 $link_qr = "";
 if (!empty($row_contest_dates['contestCheckInPassword'])) {
-	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2)) $qr_enable = TRUE;
+	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && (judging_date_return() > 0)) $qr_enable = TRUE;
 	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url);
 }
 
@@ -262,7 +262,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo "Judge/Steward Registration"; else echo "Register"; ?></a></li>
                 <?php } ?>
                 <?php if ($qr_enable) { ?>
-                <li><a href="<?php echo $link_qr; ?>" target="_blank">QR Code Entry Check-In</a></li>
+                <li><a href="<?php echo $link_qr; ?>" target="_blank">Entry Check-In</a></li>
                 <?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">

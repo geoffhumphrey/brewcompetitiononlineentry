@@ -121,59 +121,7 @@ function checkUncheckAll(theElement) {
 $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 ?>
 
-<script type='text/javascript'>//<![CDATA[ 
-$(document).ready(function(){
-	$("#mead-cider").hide("fast");
-	$("#mead").hide("fast");
-	
-	<?php if (($action == "edit") && ($view == "2")) { ?>
-	
-	$("#mead-cider").show("slow");
-	$("#mead").hide("slow");
-	
-	<?php } ?>
-	
-	<?php if (($action == "edit") && ($view == "3")) { ?>
-	
-	$("#mead-cider").show("slow");
-	$("#mead").show("slow");
-	
-	<?php } ?>
-	
-	$("#brewStyleType").change(function() {
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
-		
-        if ( 
-			$("#brewStyleType").val() == "1"){
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		}
-		
-		else if ( 
-			$("#brewStyleType").val() == "2"){
-			$("#mead").hide("slow");
-			$("#mead-cider").show("slow");
-			
-		}
-		
-		else if ( 
-			$("#brewStyleType").val() == "3"){
-			$("#mead").show("slow");
-			$("#mead-cider").show("slow");
-			
-		}
-		
-		else{
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			
-		}	
-	}
-	);
-});//]]>  
 
-</script>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1" onSubmit="return CheckRequiredFields()">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -197,7 +145,7 @@ $(document).ready(function(){
         <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
     	<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 	</select>
-	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a>
+	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a></span>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -265,7 +213,7 @@ $(document).ready(function(){
 		</div>
 	</div><!-- ./Form Group -->
 </div>
-
+<div id="brewStyleEntry">
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Instructions</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -273,7 +221,7 @@ $(document).ready(function(){
 		<input class="form-control" name="brewStyleEntry" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?>" placeholder="">
 	</div>
 </div><!-- ./Form Group -->
-
+</div>
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
 	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -379,7 +327,12 @@ $(document).ready(function(){
 	</div>
 </div>
 </form>
-<?php } ?>
+<?php 
+
+// Load Show/Hide
+include(INCLUDES.'form_js.inc.php');
+
+} ?>
 <?php if (($action == "default") && ($filter == "judging") && ($bid == "default")) { ?>
 <table>
  <tr>

@@ -9,8 +9,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	if ($action == "update") {
 		if ($_SESSION['jPrefsQueued'] == "N") {
 		foreach ($_POST['random'] as $random) {
+			
+			if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
+			else $unassign = 0;
+			
 			// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
-			if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] == 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
+			if (($unassign == 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
 				
 				//Perform check to see if a record is in the DB. If not, insert a new record.
 				// If so, see will update
@@ -29,12 +33,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				mysqli_real_escape_string($connection,$insertSQL);
 				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
+				//echo $insertSQL."<br>";
 				}
 			}
 			
 			
-			if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
+			if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
+				
 				$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s", 
 					GetSQLValueString($_POST['bid'.$random], "text"),
 					GetSQLValueString($_POST['assignment'.$random], "text"),
@@ -44,12 +49,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					GetSQLValueString($_POST['assignLocation'.$random], "text"),
 					GetSQLValueString($_POST['unassign'.$random], "text")
 					);		   
-				//echo $updateSQL.";<br>";
+				
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				//echo $updateSQL."<br>";
 			}
 			
-			if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
+			if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
 				$query_flights = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignRound='%s' and assignLocation='%s'", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignLocation'.$random]);
 				$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
 				$row_flights = mysqli_fetch_assoc($flights);
@@ -60,15 +66,18 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $row_flights['id']);
 						mysqli_real_escape_string($connection,$deleteSQL);
 						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+						//echo $deleteSQL."<br>";
 					}	
 				}
 			} // end foreach
 	  } // end if ($_SESSION['jPrefsQueued'] == "N")
 	  
 	  if ($_SESSION['jPrefsQueued'] == "Y") {
+		 // print_r($_POST['random']);
 			foreach ($_POST['random'] as $random) {
+				
 				// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
-				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] == 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0)))  {
+				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] == 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0)))  {
 					
 					//Perform check to see if a record is in the DB. If not, insert a new record.
 					// If so, will update
@@ -87,10 +96,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						
 						mysqli_real_escape_string($connection,$insertSQL);
 						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+						//echo $insertSQL."<br>";
 					}
 				}
 			
-				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
+				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0))) {
 					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s WHERE id=%s", 
 						GetSQLValueString($_POST['bid'.$random], "text"),
 						GetSQLValueString($_POST['assignment'.$random], "text"),
@@ -105,10 +115,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				}
 			
-				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
+				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] == 0))) {
 					$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $_POST['unassign'.$random]);
 					mysqli_real_escape_string($connection,$deleteSQL);
 					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+					//echo $deleteSQL."<br>";
 				}
 			} // end foreach	  
 	 }  // end if ($_SESSION['jPrefsQueued'] == "Y")

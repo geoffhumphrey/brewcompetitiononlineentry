@@ -2052,6 +2052,7 @@ function score_count($table_id,$method) {
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
 		switch($rank) {
+			
 			case "Apprentice": 
 			case "Provisional":
 			case "Rank Pending":
@@ -2085,6 +2086,7 @@ function bjcp_rank($rank,$method) {
 			default: $return = "Level 0:";
 		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
+	else $return .= " Novice";
 	}
 	
 	if ($method == "2") {
@@ -2170,17 +2172,17 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerLastName']."^"; 		// 1
 	$r .= $row_brewer_info['brewerPhone1']."^"; 		// 2
 	if (isset($row_brewer_info['brewerJudgeRank'])) $r .= $row_brewer_info['brewerJudgeRank']."^";
-	else $r .= "1^";									// 3
+	else $r .= "Novice^";									// 3
 	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^";
-	else $r .= "1^";									// 4
+	else $r .= "&nbsp;^";									// 4
 	if (isset($row_brewer_info['brewerJudgeBOS'])) $r .= $row_brewer_info['brewerJudgeBOS']."^";
-	else $r .= "1^";									// 5
+	else $r .= "&nbsp;^";									// 5
 	$r .= $row_brewer_info['brewerEmail']."^";			// 6
 	$r .= $row_brewer_info['uid']."^";					// 7
 	if (isset($row_brewer_info['brewerClubs'])) $r .= $row_brewer_info['brewerClubs']."^";
-	else $r .= "1^";									// 8
+	else $r .= "&nbsp;^";									// 8
 	if (isset($row_brewer_info['brewerDiscount'])) $r .= $row_brewer_info['brewerDiscount']."^";
-	else $r .= "1^";									// 9
+	else $r .= "&nbsp;^";									// 9
 	$r .= $row_brewer_info['brewerAddress']."^";		// 10
 	$r .= $row_brewer_info['brewerCity']."^";			// 11
 	$r .= $row_brewer_info['brewerState']."^";			// 12

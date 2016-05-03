@@ -8,7 +8,7 @@ elseif (($action == "assign") && ($filter == "default")) $title = ": Assign Judg
 elseif (($action == "assign") && ($filter == "judges")) $title = ": Assign Judges to a Table"; 
 elseif (($action == "assign") && ($filter == "stewards")) $title = ": Assign Stewards a to Table"; 
 else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Judging Tables (Archive ".get_suffix($dbTable).")";
-
+$output_at_table_modals = "";
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if (($action == "default") && ($filter == "default") && ($dbTable == "default")) { ?>
@@ -511,6 +511,40 @@ if ($totalRows_tables > 0) { ?>
 		if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
 		$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
 		$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+		/* $output_at_table_modals .= "
+		
+		<!-- At Table Judges Modal -->
+<!-- Modal -->
+<div class=\"modal fade\" id=\"atTableModal".$row_tables['tableNumber']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"atTableModalLabel".$row_tables['tableNumber']."\">
+    <div class=\"modal-dialog\" role=\"document\">
+        <div class=\"modal-content\">
+            <div class=\"modal-header bcoem-admin-modal\">
+                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+                <h4 class=\"modal-title\" id=\"atTableModalLabel".$row_tables['tableNumber']."\"><span class=\"text-capitalize\">Judges and Stewards Assigned to Table ".$row_tables['tableNumber']." ".$row_tables['tableName']."</h4>
+            </div>
+            <div class=\"modal-body\">
+            	<p>There are ".$ranked." ranked judges and ".$nonranked." non-ranked judges at this table.</p>
+                <p>The following have been assigned to this table.</p>
+            	<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$row_tables['tableNumber']."\">
+                <thead>
+                    <th>Name</th>
+                    <th>Rank</th>
+					<th>Assignment</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+                </table>
+            </div>
+            <div class=\"modal-footer\">
+                <button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+		
+		";
+		*/
 	?>
     <tr>
     	<td class="hidden-xs hidden-sm"><?php echo $row_tables['tableNumber']; ?></td>
@@ -524,7 +558,7 @@ if ($totalRows_tables > 0) { ?>
         <td class="hidden-xs hidden-sm"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default") ?></td>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
-        <td class="hidden-print">
+        <td nowrap="nowrap" class="hidden-print">
             <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-pencil"></span></a> 
             <a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print the pullsheet for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-print"></span></a> 
             <?php if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) { ?>

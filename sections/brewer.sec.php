@@ -73,6 +73,7 @@ if ($go != "admin") echo $info_msg;
             <span class="help-block">Please enter only <em>one</em> person&rsquo;s name. You will be able to identify a co-brewer when adding your entries.</span>
         </div>
     </div><!-- ./Form Group -->
+     <?php if ($go != "admin") { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -103,7 +104,7 @@ if ($go != "admin") echo $info_msg;
 					</label>
 				</div>
 			</div>
-            <span class="help-block">Choose one. This question will be used to verify your identity should you forget your password.  <?php if ($action == "edit") { ?>You can also <a href="<?php echo edit_user_password_link; ?>">change your password now</a> if you wish.<?php } ?></span>
+            <span class="help-block">Choose one. This question will be used to verify your identity should you forget your password.  <?php if ($action == "edit") { ?>You can also <a href="<?php echo $edit_user_password_link; ?>">change your password now</a> if you wish.<?php } ?></span>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -118,6 +119,7 @@ if ($go != "admin") echo $info_msg;
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
+    <?php } ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Street Address</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -238,7 +240,7 @@ if ($go != "admin") echo $info_msg;
         </div><!-- ./Form Group -->
     <!-- Judging and Stewarding Preferences or Assignments -->
     
-		<?php if ($table_assignment) { ?>
+		<?php if (($table_assignment) && ($go != "admin")) { ?>
         <!-- Already assigned to a table, can't change preferences -->
         <input name="brewerJudge" type="hidden" value="<?php echo $row_brewer['brewerJudge']; ?>" />
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
@@ -554,15 +556,17 @@ else {
 }
 
 ?>
-<?php if ($go == "admin") { ?>
-	<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id,"yes"); ?>">
+<?php if ($go == "admin") { 
+
+?>
+	<input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 <?php } else { ?>
     <input type="hidden" name="relocate" value="<?php echo $base_url; ?>index.php?section=list">
 <?php } ?>
 <div class="form-group">
     <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
         <!-- Input Here -->
-        <button name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?></span> </button>
+        <button name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?> </button>
     </div>
 </div><!-- Form Group -->
 </form>

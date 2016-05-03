@@ -72,6 +72,7 @@ $output_add_edit = FALSE;
 $output_hide_print = "";
 $output_assignment_modals = "";
 $output_user_question_modals = "";
+$assignment_modal_body = "";
 
 if ($action == "print") {
 	$output_hide_print .= "hidden-print";

@@ -1153,7 +1153,7 @@ if ($action == "edit") {
 
 <?php
 // Load Show/Hide
-include(INCLUDES.'entry_form_js.inc.php');
+include(INCLUDES.'form_js.inc.php');
 }  // end adding and editing allowed (line 52 or so)
 else {
 	

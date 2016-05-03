@@ -1,3 +1,18 @@
+<?php if (($section == "admin") && ($go == "styles") && ($action != "default")) { ?>
+<!-- Load Show/Hide Configuration -->
+<script type="text/javascript">
+										  
+$(document).ready(function() {
+	$("#mead-cider").hide("fast");
+	$("#mead").hide("fast");
+	$("#brewStyleEntry").hide("fast");
+});
+
+</script>
+<?php } ?>
+
+
+<?php if ($section == "brew") { ?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
@@ -990,5 +1005,5 @@ $(document).ready(function() {
 		<?php } ?>
 	
 <?php } ?>
-
 </script>
+<?php } // end if ($section == "brew") ?>

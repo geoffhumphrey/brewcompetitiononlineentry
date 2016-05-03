@@ -254,7 +254,7 @@ $(document).ready(function(){
     </div>
 </div><!-- ./Form Group -->
 <?php } else { ?>
-<input type="hidden" name="prefsSEF" value="Y" />
+<input type="hidden" name="prefsSEF" value="N" />
 <input type="hidden" name="prefsUseMods" value="N" />
 <?php } ?>
 

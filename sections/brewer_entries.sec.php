@@ -122,17 +122,14 @@ do {
 	$entry_output .= "</td>";
 	
 	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-	
+	$scoresheet = FALSE;
 	if ($show_scores) {
 	// See if scanned scoresheet file exists, if so, provide link.
 		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-		if (file_exists($filename)) $scoresheet = TRUE;
-		else $scoresheet = FALSE;
-		
+		if (file_exists($filename)) $scoresheet = TRUE;		
 		$entry_output .= "<td>";
 		$entry_output .= $row_log['brewJudgingNumber']; 
 		$entry_output .= "</td>";
-	
 	}
 	
 	$entry_output .= "<td>";
@@ -179,7 +176,7 @@ do {
 		$entry_output .= $score;
 		$entry_output .= "</td>";
 		
-		$entry_output .= "<td>";
+		$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
 			if ($action != "print") $entry_output .= "<span class =\"fa fa-check text-success\"></span>"; 
 			else $entry_output .= "Yes"; 
@@ -236,7 +233,7 @@ do {
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
 	if ($scoresheet) { 
-		$entry_output .= "<a href = \"".$base_url."user_docs/".$row_log['brewJudgingNumber'].".pdf\" target=\"_blank\" data-toggle=\"tooltip\" title=\"View/download judges' scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
+		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
 	}
 	
 	if ((judging_date_return() > 0) && ($action != "print")) {

@@ -1,7 +1,18 @@
 <?php
+require('paths.php');
 require('includes/url_variables.inc.php');
 session_start();
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") && ($section == "default")) {
+
+// Force download of uploaded scoresheet PDF
+// Discourages random viewing of scoresheets by inputting direct URL
+if ((isset($_SESSION['loginUsername'])) && ($section == "pdf-download")) {
+	header("Content-disposition: attachment; filename=$id.pdf");
+	header("Content-type: application/pdf");
+	readfile(USER_DOCS."$id.pdf");
+}
+
+// Upload Function
+elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") && ($section == "default")) {
 	
 	// Redirect if script accessed directly
 	if (empty($_FILES['file'])) {

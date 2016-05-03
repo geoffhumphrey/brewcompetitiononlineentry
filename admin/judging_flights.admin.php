@@ -151,7 +151,7 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<th width="1%" nowrap="nowrap">Flight <?php echo $i; ?></th>
 		<?php } ?>
         <th>Round</th>
-        <th>Special Ingredients/Classic Style</th>
+        <th>Required Info</th>
     </tr>
 </thead>
 <tbody>
@@ -186,7 +186,7 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<td><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($flight_number[0] != "")) echo $flight_number[0]; else echo $random; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($flight_number[1] == $i)) echo "checked"; ?>></td>
 		<?php } ?>
         <td><?php if ($action == "edit") echo $flight_number[3]; ?></td>
-        <td><?php echo $row_entries['brewInfo']; ?></td>
+        <td><?php echo str_replace("^","; ",$row_entries['brewInfo']); ?></td>
 	</tr>
     <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
     <?php } 

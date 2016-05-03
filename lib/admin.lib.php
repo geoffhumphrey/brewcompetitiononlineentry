@@ -1015,7 +1015,7 @@ if ($queued == "Y") { // For queued judging only
     $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table';
     $r .= '</label>';
     $r .= '<label class="radio-inline">';
-    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Keep as Is';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Do Not Assign to This Table';
     $r .= '</label>';
     $r .= '</div>';
 	$r .= '</div>';
@@ -1033,6 +1033,10 @@ if ($queued == "N") { // Non-queued judging
 			}
 		} // end for loop
 	$r .= '</select>';
+	}
+	
+if ($queued == "Y") {
+		$r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
 	}
 return $r;
 }
@@ -1053,10 +1057,23 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 function judge_info($uid) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation']."^".$row_brewer_info['brewerJudgeExp']."^".$row_brewer_info['brewerJudgeNotes'];
+	
+	
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation']."^".$row_brewer_info['brewerJudgeExp']."^".$row_brewer_info['brewerJudgeNotes']."^".$row_brewer_info['id'];
+	
+	
+	if ($_SESSION['jPrefsQueued'] == "N") {
+		$query_judge_info = sprintf("SELECT assignFlight,assignRound FROM %s WHERE bid='%s'", $prefix."judging_assignments", $uid);
+		$judge_info = mysqli_query($connection,$query_judge_info) or die (mysqli_error($connection));
+		$row_judge_info = mysqli_fetch_assoc($judge_info);
+		
+		$r .= "^".$row_judge_info['assignFlight']."^".$row_judge_info['assignRound'];
+	}
+	
+	
 	return $r;
 }
 
@@ -1109,7 +1126,7 @@ function not_assigned($method) {
 					$judge_rank_explode = explode(",",$assignment_info[5]);
 					$judge_rank_display = $judge_rank_explode[0];
 					if (empty($judge_rank)) $judge_rank_display = "Novice";
-					$assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
+					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
 				
 			}
@@ -1127,7 +1144,7 @@ function not_assigned($method) {
 					$judge_rank_explode = explode(",",$assignment_info[5]);
 					$judge_rank_display = $judge_rank_explode[0];
 					if (empty($judge_rank)) $judge_rank_display = "Novice";
-					$assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
+					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
 			}
 	

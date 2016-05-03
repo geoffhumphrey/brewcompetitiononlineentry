@@ -28,17 +28,19 @@ if ($id == "default") { ?>
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[1,'asc'],[0,'asc']],
+                        "aaSorting": [[0,'asc']],
                         "bProcessing" : false,
                         "aoColumns": [
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] },
+                                { "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
                                 { "asSorting": [  ] }
+								<?php } ?>
                                 ]
                         } );
                 } );
         </script>
-    <table class="table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="table table-bordered table-striped dataTable" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     </thead>
     <tbody>
@@ -62,13 +64,7 @@ if ($id == "default") { ?>
     </tbody>
     </table>
     <?php } ?>
-    <table class="table table-bordered table-striped">
-    <?php for($i=0; $i<(8-$totalRows_assignments); $i++) { ?>
-    <tr>
-    	<td>&nbsp;</td>
-    </tr>
-    <?php } ?>
-    </table>
+    
 </div>
 <div style="page-break-after:always;"></div>
 <?php } while ($row_tables = mysqli_fetch_assoc($tables)); 
@@ -88,18 +84,19 @@ if ($id != "default") {
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[1,'asc'],[0,'asc']],
+                        "aaSorting": [[0,'asc']],
                         "bProcessing" : false,
                         "aoColumns": [
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] },
-                                { "asSorting": [  ] },
+                                { "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
                                 { "asSorting": [  ] }
+								<?php } ?>
                                 ]
                         } );
                 } );
         </script>
-    <table class="table table-bordered table-striped" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="table table-bordered table-striped dataTable" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     </thead>
     <tbody>
@@ -115,19 +112,12 @@ if ($id != "default") {
                 <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
-            	<td><?php if ($_SESSION['jPrefsQueued'] == "N")  echo $flight; ?></td>
+				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+            	<td><?php echo $flight; ?></td>
+                <?php } ?>
         </tr>
                 <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
-    </table>
-    <?php } ?>
-    <?php if ($totalRows_assignments < 8) { ?>
-    <table class="table table-bordered table-striped">
-    <?php for($i=0; $i<(12-$totalRows_assignments); $i++) { ?>
-    <tr>
-    	<td>&nbsp;</td>
-    </tr>
-    <?php } ?>
     </table>
     <?php } ?>
 </div>
