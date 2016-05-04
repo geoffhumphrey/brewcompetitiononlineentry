@@ -188,7 +188,7 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 		else {
 			if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; 
 			if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED";
-			$brewInfo = "";
+			$brewInfo = $row_log['brewInfo'];
 		}
 		
 	}
@@ -327,7 +327,8 @@ else $brewPaid = $row_log['brewPaid'];
 					if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 					if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
 					if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-					if ($selected_disabled == "DISABLED") $selection .= " [disabled - style entry limit reached]";
+					if (($selected_disabled == "DISABLED") && ($filter == "default")) $selection .= " [disabled - style entry limit reached]";
+					if (($selected_disabled == "DISABLED") && ($filter != "default")) $selection .= " [disabled - style entry limit reached for user]";
 					
 				if (!empty($row_styles['brewStyleGroup'])) {
 				// Display

@@ -1,7 +1,7 @@
 <?php
 require('paths.php');
 require(CONFIG.'bootstrap.php');
-
+session_start();
 // Validate user input against password in DB
 if ($action == "password-check") {
 	
@@ -66,13 +66,9 @@ if ($action == "password-check") {
 		
 		// If successful, start session and redirect
 		if ($check == 1) {
-			
 			// Start the session and regenerate the session ID
-			session_start();
 			session_regenerate_id(true); 
-			
 			$password_redirect .= "&msg=2";
-			
 			$_SESSION['qrPasswordOK'] = "1";
 			
 			/*
@@ -85,13 +81,11 @@ if ($action == "password-check") {
 				
 			}
 			*/
-			
-			
 		}
 		
 		// If not successful, destroy session and redirect
 		else {
-			
+			session_destroy();
 			$password_redirect .= "&msg=1";
 			
 		}
@@ -127,29 +121,50 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 		
 		if ($action == "update") {
 			
-			$judgingNumber = sprintf("%06s",$_POST['brewJudgingNumber']);
+			// Check if judging number has been input
+			// If so, add to update query and perform redirect
+			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
+				$judgingNumber = sprintf("%06s",$_POST['brewJudgingNumber']);
+				
+				// Check to see if judging number has already been assigned
+				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);
+				$judging_number = mysqli_query($connection,$query_judging_number) or die (mysqli_error($connection));
+				$row_judging_number = mysqli_fetch_assoc($judging_number);
+				$totalRows_judging_number = mysqli_num_rows($judging_number);
+				
+				// If so, redirect with message
+				if ($totalRows_judging_number > 0) {
+					$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."-".$judgingNumber."&msg=5";
+					header(sprintf("Location: %s", $redirect));
+					exit;	
+				}
+				
+				// If not, update DB		
+				$updateSQL = sprintf("UPDATE %s SET brewReceived='1',brewJudgingNumber='%s'",$brewing_db_table,$judgingNumber);
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(",brewBoxNum='%s'",$_POST['brewBoxNum']);
+				$updateSQL .= sprintf(" WHERE id='%s';",$id);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
-			// Check to see if judging number has already been assigned
-			$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);
-			$judging_number = mysqli_query($connection,$query_judging_number) or die (mysqli_error($connection));
-			$row_judging_number = mysqli_fetch_assoc($judging_number);
-			$totalRows_judging_number = mysqli_num_rows($judging_number);
+				$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=3";
+				header(sprintf("Location: %s", $checkin_redirect));
+				exit;
 			
-			// If so, redirect with message
-			if ($totalRows_judging_number > 0) {
-				$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."-".$judgingNumber."&msg=5";
-				header(sprintf("Location: %s", $redirect));
-				exit;	
 			}
 			
-			// If not, update DB			
-			$updateSQL = sprintf("UPDATE %s SET brewReceived='1',brewJudgingNumber='%s' WHERE id='%s';",$brewing_db_table,$judgingNumber,$id);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			else {
+				
+				$updateSQL = sprintf("UPDATE %s SET brewReceived='1'",$brewing_db_table,$judgingNumber);
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(",brewBoxNum='%s'",$_POST['brewBoxNum']);
+				$updateSQL .= sprintf(" WHERE id='%s';",$id);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
-			$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=3";
-			header(sprintf("Location: %s", $checkin_redirect));
-			exit;
+				$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=6";
+				header(sprintf("Location: %s", $checkin_redirect));
+				exit;
+				
+			}
 		}
 		
 		
@@ -186,6 +201,11 @@ if ($msg == "3") {
 	$alert_type = "alert-success";
 }
 
+if ($msg == "6") {
+	$message .= "<p><span class=\"fa fa-check-circle\"></span> <strong>Entry number ".sprintf("%04d",$view)." is checked in.</strong></p>";
+	$alert_type = "alert-success";
+}
+
 if ($msg == "4") {
 	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>Entry number ".sprintf("%04d",$view)." was not found in the database.</strong> Set the bottle(s) aside and alert the competition organizer.";
 }
@@ -196,7 +216,44 @@ if ($msg == "5") {
 }
 
 ?>
-<style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
+    
+	<!-- Load jQuery / http://jquery.com/ -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	
+    <!-- Load Bootstrap / http://www.getbootsrap.com -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+    
+    <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+    <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+	
+	<!-- Load BCOE&M Custom JS -->
+    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    
+    <style>
+body {
+	margin: 0;
+	padding: 0;
+}
 
 .container-signin {
   max-width: 400px;
@@ -232,37 +289,6 @@ if ($msg == "5") {
 }
 
 </style>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
-    
-	<!-- Load jQuery / http://jquery.com/ -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	
-    <!-- Load Bootstrap / http://www.getbootsrap.com -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-    <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
-    
-    <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    
-    <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
-    <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
-	
-	<!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
 </head>
 <body>
 
@@ -278,7 +304,11 @@ if ($msg == "5") {
     <?php } ?>
     
     <div class="page-header clearfix">
+    	<?php if (isset($_SESSION['qrPasswordOK'])) { ?>
+        <h3><?php echo $header_output; ?>: QR Code Entry Check-In</h3>
+        <?php } else { ?>
         <h1><?php echo $header_output; ?>: QR Code Entry Check-In</h1>
+        <?php } ?>
     </div> 
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
     
@@ -297,18 +327,22 @@ if ($msg == "5") {
 	
     <?php } ?>
     
-    <?php if (isset($_SESSION['qrPasswordOK'])) { ?>
-    <p class="lead text-success"><strong>You are signed in.</strong></p>
-    
+    <?php if (isset($_SESSION['qrPasswordOK'])) { ?>    
 	<?php if (($id == "default") && ($action == "default")) { ?>
     <p class="lead"><span class="fa fa-spinner fa-spin"></span> Scan a QR Code...</p>
     <?php } if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
-    <p class="lead text-primary"><strong>Assign a judging number to entry <span class="text-danger"><?php echo sprintf("%04d",$id); ?></span>.</strong></p>
-    <p>Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).</p>
-    <form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+    <p class="lead text-primary"><strong>Assign a judging number and/or box number to entry <span class="text-success"><?php echo sprintf("%04d",$id); ?></span></strong>.</p>
+    <p class="lead small text-danger"><strong>ONLY inupt a judging number if your competition is using judging number labels at sorting.</strong></p>
+    <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     	<div class="form-group">
-            <label for="inputJudgingNumber" class="sr-only">Judging Number</label>
-            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="Six numbers with leading zeros - e.g., 000021" autofocus required>
+            <label for="inputJudgingNumber">Judging Number</label>
+            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="Six numbers with leading zeros - e.g., 000021" data-error="Judging number must be six digits" autofocus>
+            <div class="help-block with-errors"></div>
+            <div class="help-block small">Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).</div>
+        </div>
+        <div class="form-group">
+            <label for="inputBoxNumber">Box Number</label>
+            <input type="number" name="brewBoxNum" id="brewBoxNum" class="form-control" placeholder="">
             <div class="help-block with-errors"></div>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Check In-Entry</button>

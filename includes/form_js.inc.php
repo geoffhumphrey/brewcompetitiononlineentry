@@ -50,11 +50,8 @@ $(document).ready(function() {
 		$("input[name='BDGColor']").prop("required", false);
 	<?php } // end if ($action == "add") ?>
 	
-	$("#type").change(function() {
+	$("#type").change(function() {	
 		
-		
-		
-		<?php if ($action == "add") { ?>
 	 	$("#special").hide("fast");
 		$("#carbonation").hide("fast");
 		$("#sweetness").hide("fast");
@@ -88,7 +85,7 @@ $(document).ready(function() {
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
 		
-		<?php } ?>
+		
 		
 		if ( 
 			$("#type").val() == "00-A"){
