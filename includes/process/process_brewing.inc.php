@@ -710,7 +710,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			if ($_POST["brewPaid".$id] == "1") $brewPaid = "1"; else $brewPaid = "0";
 			if ($_POST["brewReceived".$id] == "1") $brewReceived = "1"; else $brewReceived = "0";
 			
-			if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) {
+			
 				$updateSQL = "UPDATE $brewing_db_table SET 
 				brewPaid='".$brewPaid."',
 				brewReceived='".$brewReceived."',
@@ -720,20 +720,11 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				mysql_select_db($database, $brewing);
 				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());	
 				//echo $updateSQL."<br>";
-				}
 			
-			else {
-				$updateSQL = "UPDATE $brewing_db_table SET 
-				brewPaid='".$brewPaid."',
-				brewReceived='".$brewReceived."',
-				brewBoxNum='".$_POST["brewBoxNum".$id]."'
-				WHERE id='".$id."'";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
-				//echo $updateSQL."<br>";
-				}
+			
+			
 			} 
+
 			//echo $massUpdateGoTo;
 			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
 			$pattern = array('\'', '"');
