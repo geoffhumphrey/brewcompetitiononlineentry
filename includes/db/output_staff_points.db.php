@@ -23,7 +23,7 @@ $row_organizer = mysqli_fetch_assoc($organizer);
 $totalRows_organizer = mysqli_num_rows($organizer);
 
 $query_org = sprintf("SELECT brewerLastName,brewerFirstName,brewerJudgeID FROM %s WHERE uid='%s'",$brewer_db_table,$row_organizer['uid']);
-$org = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
+$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
 $row_org = mysqli_fetch_assoc($org);
 $totalRows_org = mysqli_num_rows($org);
 

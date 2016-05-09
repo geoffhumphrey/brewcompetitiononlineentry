@@ -306,6 +306,8 @@ if ($action != "print") { ?>
 	$entry_judging_num = "";
 	$entry_judging_num_hidden = "";
 	$required_info = "";
+	$entry_judging_num = "";
+	$entry_judging_num_display = "";
 	
 	$scoresheet = FALSE;
 	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
@@ -326,15 +328,11 @@ if ($action != "print") { ?>
 	
 	if (isset($row_log['brewJudgingNumber'])) {
 		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>";
-		if ($_SESSION['prefsEntryForm'] == "N") $entry_judging_num .= sprintf("%06s",$row_log['brewJudgingNumber']);
-  		else $entry_judging_num .= readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+		$entry_judging_num .= sprintf("%06s",$row_log['brewJudgingNumber']);
 	}
 	
-	if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels)) && ($action != "print") && ($dbTable == "default")) { 
-		$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
-	}
+	$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
 	
-	else $entry_judging_num_display .= $entry_judging_num; 
 	
 	// Entry Style
 	if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) 
@@ -383,13 +381,9 @@ if ($action != "print") { ?>
 		else $entry_received_display .= "<span class=\"fa fa-times text-danger\"></span>";
 	}
 	
-	if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels)) && ($action != "print") && ($dbTable == "default")) {
+	
 		$entry_box_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewBoxNum\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" />";
 		$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
-	}
-	else {
-		$entry_box_num_display .= $row_log['brewBoxNum'];
-	}
 	
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;filter=".$row_log['brewBrewerID']."&amp;id=".$row_log['id']; 

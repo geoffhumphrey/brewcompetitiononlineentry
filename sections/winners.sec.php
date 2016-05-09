@@ -76,7 +76,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
 				$table_head1 .= "<th>Style</th>";
 				$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-				if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
+				if ($filter == "scores") $table_head1 .= "<th nowrap>Score</th>";
 				$table_head1 .= "</tr>";
 				
 				// Build table body
@@ -117,7 +117,7 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 					
 					if ($filter == "scores") { 
-						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						$table_body1 .= "<td>";
 						$table_body1 .= $row_scores['scoreEntry'];
 						$table_body1 .= "</td>";
 					}

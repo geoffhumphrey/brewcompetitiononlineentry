@@ -725,12 +725,11 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	if ($action == "update") {
 		
 		foreach($_POST['id'] as $id) { 
-		if ((isset($_POST["brewPaid".$id])) && ($_POST["brewPaid".$id] == "1")) $brewPaid = "1"; 
-		if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
-		if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
-		if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
+			if ((isset($_POST["brewPaid".$id])) && ($_POST["brewPaid".$id] == "1")) $brewPaid = "1"; 
+			if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
+			if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1"; 
+			if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
 		
-		if ((in_array($_SESSION['prefsEntryForm'],$prefs_barcode_labels))) {
 			$updateSQL = "UPDATE $brewing_db_table SET 
 			brewPaid='".$brewPaid."',
 			brewReceived='".$brewReceived."',
@@ -739,19 +738,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			WHERE id='".$id."'";
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-			//echo $updateSQL."<br>";
-			}
-		
-		else {
-			$updateSQL = "UPDATE $brewing_db_table SET 
-			brewPaid='".$brewPaid."',
-			brewReceived='".$brewReceived."',
-			brewBoxNum='".$_POST["brewBoxNum".$id]."'
-			WHERE id='".$id."'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			//echo $updateSQL."<br>";
-			}
+
 		} 
 		//echo $massUpdateGoTo;
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";

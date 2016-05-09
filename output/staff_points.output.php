@@ -50,6 +50,8 @@ if ($view == "default") {
 	$output_staff = "";
 	
 	if ($totalRows_organizer > 0) { 
+		
+		
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
 		$output_organizer .= "<tr>";
 		$output_organizer .= "<td>".$org_name."</td>";

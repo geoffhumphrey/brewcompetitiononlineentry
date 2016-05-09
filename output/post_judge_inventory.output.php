@@ -65,7 +65,7 @@ if (NHC) $base_url = "../";
             <td><?php echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?></td>
             <td><?php echo str_replace("^","; ",$row_post_inventory['brewInfo']); ?></td> 
             <?php if ($go == "scores") { ?> 
-            <td><?php if (isset($row_post_inventory['scoreEntry'])) echo $row_post_inventory['scoreEntry']; ?></td>
+            <td><?php if (isset($row_post_inventory_entry['scoreEntry'])) echo $row_post_inventory_entry['scoreEntry']; ?></td>
             <?php } ?>
         </tr>
     <?php 
