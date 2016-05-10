@@ -200,6 +200,16 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Using Barcodes/QR Codes?</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
 							<div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Entry Check-In</strong>
