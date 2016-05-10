@@ -173,10 +173,12 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 
 $output .=  "<li>Judging preferences table updated.</li>";
 
+/*
 $updateSQL = sprintf("ALTER TABLE `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;",$prefix."contest_info");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Contest info table updated.</li>";
+*/
 ?>

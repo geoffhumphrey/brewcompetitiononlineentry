@@ -235,26 +235,51 @@
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
-                                        <li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
+                                        <li><a data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
+                                        <li><a data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
                                     </ul>
 									<ul class="list-unstyled">
-										<li>Entry Numbers with Special Ingredients
-											<div class="dropdown bcoem-admin-dashboard-select">
+										<li>With Required Info - All Categories (Entry Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu1">
+													<?php for($i=1; $i<=6; $i++) { ?>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+													<?php } ?>
+												</ul>
+											</div>
+										</li>
+                                        <li>With Required Info - Only Categories Where Required (Entry Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu2">
 													<?php for($i=1; $i<=6; $i++) { ?>
 													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
 										</li>
-										<li>Judging Numbers with Special Ingredients
-											<div class="dropdown bcoem-admin-dashboard-select">
-												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+										
+									</ul>
+                                    <ul class="list-unstyled">
+										<li>With Required Info - All Categories (Judging Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu" aria-labelledby="sortingMenu2">
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu3">
+													<?php for($i=1; $i<=6; $i++) { ?>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+													<?php } ?>
+												</ul>
+											</div>
+										</li>
+										<li>With Required Info - Only Categories Where Required (Judging Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu4">
 													<?php for($i=1; $i<=6; $i++) { ?>
 													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
 													<?php } ?>
@@ -271,23 +296,48 @@
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
-                                        <li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
+                                        <li><a data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
+                                        <li><a data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
-                                   		<li>Entry Numbers with Special Ingredients
-											<div class="dropdown bcoem-admin-dashboard-select">
-												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+										<li>With Required Info - All Categories (Entry Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu" aria-labelledby="sortingMenu3">
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu1">
 													<?php for($i=1; $i<=6; $i++) { ?>
-													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
 													<?php } ?>
 												</ul>
 											</div>
 										</li>
-										<li>Judging Numbers with Special Ingredients
-											<div class="dropdown bcoem-admin-dashboard-select">
+                                        <li>With Required Info - Only Categories Where Required (Entry Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu2">
+													<?php for($i=1; $i<=6; $i++) { ?>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+													<?php } ?>
+												</ul>
+											</div>
+										</li>
+										
+									</ul>
+                                    <ul class="list-unstyled">
+										<li>With Required Info - All Categories (Judging Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
+												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="sortingMenu3">
+													<?php for($i=1; $i<=6; $i++) { ?>
+													<li class="small"><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+													<?php } ?>
+												</ul>
+											</div>
+										</li>
+										<li>With Required Info - Only Categories Where Required (Judging Numbers)
+										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="sortingMenu4">
@@ -888,7 +938,7 @@
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Assigned Staff</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=winners">Winners</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

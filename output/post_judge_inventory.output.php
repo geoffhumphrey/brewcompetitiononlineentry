@@ -43,7 +43,7 @@ if (NHC) $base_url = "../";
             <th width="5%" nowrap>Judging</th>
             <th>Entry Name</th>
             <th width="25%">Category</th>
-            <th width="40%">Special Ingredients / Classic Style</th>
+            <th width="40%">Required Info</th>
             <?php if ($go == "scores") { ?> 
             <th width="5%" nowrap>Score</th>
             <?php } ?>

@@ -2238,7 +2238,8 @@ function display_place($place,$method) {
 			break;
 			case "4": $place = addOrdinalNumberSuffix($place);
 			break;
-			case "5": $place = "HM";
+			case "5": 
+			case "HM": $place = "HM";
 			break;
 		default: $place = "N/A";
 		}
@@ -2253,7 +2254,8 @@ function display_place($place,$method) {
 			break;
 			case "4": $place = "<span class='fa fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "5": $place = "<span class='fa fa-trophy text-forest-green'></span> HM";
+			case "5": 
+			case "HM": $place = "<span class='fa fa-trophy text-teal'></span> HM";
 			break;
 			default: $place = "N/A";
 			}
@@ -2266,6 +2268,8 @@ function display_place($place,$method) {
 			case "2": $place = "<span class='fa fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
 			break;
 			case "3": $place = "<span class='fa fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
+			break;
+			case "HM":  $place = "<span class='fa fa-trophy text-teal'></span> HM";
 			break;
 			default: $place = "<span class='fa fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
@@ -2792,15 +2796,7 @@ function str_osplit($string, $offset){
  }
  
 function readable_judging_number($style,$number) {
-	/*
-	if (strlen($number) == 5) {
-		if ($style < 10) $number = "0".$number;
-		else $number = $number;
-		$judging_number = str_osplit($number, 2);
-		return $judging_number[0]."-".$judging_number[1];
-	}
-	*/
-	
+		
 	if (strlen($number) == 5) {
 		$judging_number = str_osplit($number, 2);
 		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);

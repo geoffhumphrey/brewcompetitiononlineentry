@@ -92,7 +92,7 @@ function checkUncheckAll(theElement) {
   <td><?php echo $row_styles['brewStyle']; ?></td>
   <td><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
   <td><?php if (style_type($row_styles['brewStyleType'],"1","") <= "3") $style_own = "bcoe"; else $style_own = "custom"; echo style_type($row_styles['brewStyleType'],"2",$style_own); ?></td>
-  <td><?php if ($row_styles['brewStyleReqSpec'] == 1)  echo "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Special ingredients required for ".$row_styles['brewStyle']."\"></span> "; ?>
+  <td><?php if ($row_styles['brewStyleReqSpec'] == 1)  echo "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Additional info required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleStrength'] == 1) echo "<span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Strength required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleCarb'] == 1)  echo "<span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Carbonation required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleSweet'] == 1)  echo "<span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Sweetness required for ".$row_styles['brewStyle']."\"></span>"; ?></td>
@@ -150,7 +150,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Require Special Ingredients</label>
+	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Required Info</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->

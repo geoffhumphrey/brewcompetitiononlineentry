@@ -75,9 +75,6 @@ $header1_1 .= "<a name=\"entries\"></a><h2>Entries</h2>";
  
 $firefox_warning .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
 
-// Show Scores?
-if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
-
 // Build Warnings
 $warnings = "";
 if (($totalRows_log > 0) && ($action != "print")) {
@@ -117,7 +114,7 @@ do {
 	else $entry_tr_style = "";
 	
 	$entry_output .= "<tr class=\"".$entry_tr_style."\">";
-	$entry_output .= "<td>";
+	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= sprintf("%04s",$row_log['id']);
 	$entry_output .= "</td>";
 	
@@ -127,7 +124,7 @@ do {
 	// See if scanned scoresheet file exists, if so, provide link.
 		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
 		if (file_exists($filename)) $scoresheet = TRUE;		
-		$entry_output .= "<td>";
+		$entry_output .= "<td class=\"hidden-xs\">";
 		$entry_output .= $row_log['brewJudgingNumber']; 
 		$entry_output .= "</td>";
 	}
@@ -137,7 +134,7 @@ do {
 	if ($row_log['brewCoBrewer'] != "") $entry_output .= "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>";
 	$entry_output .= "</td>";
 	
-	$entry_output .= "<td>";
+	$entry_output .= "<td class=\"hidden-xs\">";
 	if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
 	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<strong class=\"text-danger\">Style NOT Entered</strong>";
 	else $entry_output .= $entry_style;
@@ -176,7 +173,7 @@ do {
 		$entry_output .= $score;
 		$entry_output .= "</td>";
 		
-		$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
+		$entry_output .= "<td class=\"hidden-xs\">";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
 			if ($action != "print") $entry_output .= "<span class =\"fa fa-check text-success\"></span>"; 
 			else $entry_output .= "Yes"; 
@@ -318,12 +315,12 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
-  	<th><?php if ($show_scores) echo "Entry" ?>#</th>
+  	<th class="hidden-xs"><?php if ($show_scores) echo "Entry" ?>#</th>
     <?php if ($show_scores) { ?>
-    <th>Judging#</th>
+    <th class="hidden-xs">Judging#</th>
     <?php } ?>
   	<th>Name</th>
-  	<th>Style</th>
+  	<th class="hidden-xs">Style</th>
     <?php if (!$show_scores) { ?>
   	<th class="hidden-xs hidden-sm">Confirmed</th> 
   	<th class="hidden-xs hidden-sm">Paid</th> 
@@ -331,7 +328,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
     <?php } ?>
   	<?php if ($show_scores) { ?>
   	<th>Score</th>
-    <th class="hidden-xs hidden-sm" nowrap>Mini-BOS</th>
+    <th class="hidden-xs" nowrap>Mini-BOS</th>
   	<th>Winner?</th>
   	<?php } ?>
     <th class="hidden-print">Actions</th>

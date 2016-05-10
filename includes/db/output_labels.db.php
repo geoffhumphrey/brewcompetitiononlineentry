@@ -5,7 +5,7 @@
 
 if ($go == "entries") {
 
-	if (($action == "bottle-entry") && ($view != "special")) {
+	if ($action == "bottle-entry") {
 			
 		$query_log = "SELECT * FROM $brewing_db_table";
 		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
@@ -13,15 +13,7 @@ if ($go == "entries") {
 		
 	}
 	
-	if (($action == "bottle-entry") && ($view == "special")) {
-		
-		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s' AND brewReceived='1'",$filter);
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
-		
-	}
-	
-	if (($action == "bottle-judging") && ($view == "default")) {
+	if ($action == "bottle-judging") {
 		
 		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
 		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
@@ -59,13 +51,6 @@ if ($go == "entries") {
 				
 	}
 	
-	if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-		
-		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s' AND brewReceived='1'",$filter);
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
-		
-	}
 
 	// Execute query
 	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));

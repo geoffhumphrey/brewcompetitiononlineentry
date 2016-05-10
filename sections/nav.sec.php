@@ -287,7 +287,9 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>">Import an Entry Using BeerXML</a><?php } ?>
                     <?php } ?> 
+                    <?php if (!$disable_pay) { ?>
                     <li><a href="<?php echo $link_pay; ?>">Pay Entry Fees</a></li>
+                    <?php } ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php">Log Out</a></li>
                 </ul>

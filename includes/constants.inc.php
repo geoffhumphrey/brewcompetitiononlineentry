@@ -93,6 +93,12 @@ if (isset($_SESSION['loginUsername']))  {
 	$total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $_SESSION['user_id'], $filter);
 	$total_to_pay = $total_entry_fees - $total_paid_entry_fees; 
 	
+	// Disable Pay?
+	if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2)) $disable_pay = TRUE; else $disable_pay = FALSE;
+	
+	// Show Scores?
+	if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; else $show_scores = FALSE;
+	
 }
 
 else $logged_in = FALSE;

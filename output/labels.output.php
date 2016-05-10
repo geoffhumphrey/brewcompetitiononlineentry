@@ -35,7 +35,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
-		if (($go == "entries") && ($action == "bottle-entry") && ($view != "special")) {
+		if (($go == "entries") && ($action == "bottle-entry") && ($view == "default")) {
 		
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
 			if ($filter != "default") 	$filename .= "_Category_".$filter;
@@ -73,24 +73,10 @@ if (isset($_SESSION['loginUsername'])) {
 		
 		if (($go == "entries") && ($action == "bottle-entry") && ($view == "special")) {
 			
-			/*
-			$section = "brew";
-			require(DB.'styles.db.php');
-			
-			// Custom styles where special ingredients are required
-			if ($totalRows_styles2 > 0) {
-				do { 
-					$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
-					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
-				}  while ($row_styles2 = mysqli_fetch_assoc($styles2));
-			}
-			*/
-			
-			// print_r($special_ingredients); exit;
 		
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
 			if ($filter != "default") 	$filename .= "_Category_".$filter;
-										$filename .= "_Special_Mead-Cider";
+										$filename .= "_Req_Info_Mead-Cider";
 			if ($psort == "3422") 		$filename .= "_Avery3422";
 			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
@@ -115,7 +101,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$special = strtr($special,$html_remove);
 						
 				if (in_array($style,$special_ingredients)) {
-					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
+					$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
 						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
@@ -133,6 +119,65 @@ if (isset($_SESSION['loginUsername'])) {
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');
+		}
+		
+		
+		if (($go == "entries") && ($action == "bottle-entry") && ($view == "all")) {
+			
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
+			if ($filter != "default")	$filename .= "_Category_".$filter;
+										$filename .= "_Req_Info_Mead-Cider";
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160'); 
+			
+			$pdf->AddPage();
+			$pdf->SetFont('Arial','',10);
+		
+			// Print labels
+			do {
+				
+				for($i=0; $i<$sort; $i++) {
+					$entry_no = sprintf("%04s",$row_log['id']);
+					
+					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+					if ($style == "21A") $style_name = "S.H.V.";
+					else $style_name = truncate($row_log['brewStyle'],22);
+					
+					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+					$style_name = truncate($row_log['brewStyle'],22);
+							
+					$text = sprintf("\n%s  %s  #%s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no);
+					
+						
+					if (in_array($style,$special_ingredients)) {
+						
+						$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
+						$special = strtr($special,$html_remove);
+						
+						$text .= sprintf("\nReq Info: %s", $special);
+						
+						if (in_array($style,$mead)) {
+							$text .= "\n";
+							if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
+							
+						}
+						
+					}					
+					
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+				}
+				
+			} while ($row_log = mysqli_fetch_assoc($log));
+			//$pdf->Output();
+			ob_end_clean();
+			$pdf->Output($filename,'D');
+			
 		}
 		
 		
@@ -281,58 +326,12 @@ if (isset($_SESSION['loginUsername'])) {
 			$pdf->Output($filename,'D');
 			
 		}
-		/*
-		if (($go == "entries") && ($action == "bottle-entry-round") && ($view == "default")) {
 		
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Round_Bottle_Labels";
-			if ($filter != "default") $filename .= "_Category_".$filter;
-			if ($psort == "OL5275WR") $filename .= "_.75_Inch";
-			else $filename .= "_.50_Inch";
-			$filename .= ".pdf";
-			
-			$pdf = new PDF_Label($psort);
-			
-			$pdf->AddPage();
-			if ($psort == "OL32") $pdf->SetFont('Arial','',7);
-			else $pdf->SetFont('Arial','',10);
-		
-			// Print labels
-			do {
-				for($i=0; $i<$sort; $i++) {
-					$entry_no = sprintf("%04s",$row_log['id']);																						  
-					
-					$text = sprintf("\n%s (%s)",
-					$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
-					);
-					
-					$text = iconv('UTF-8', 'windows-1252', $text);
-					$pdf->Add_Label($text);
-				}
-			} while ($row_log = mysqli_fetch_assoc($log));
-		
-			ob_end_clean();
-			$pdf->Output($filename,'D');
-			
-		}
-		*/
 		if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-			/*
-			$section = "brew";
-			require(DB.'styles.db.php');
-			
-			// Custom styles where special ingredients are required
-			if ($totalRows_styles2 > 0) {
-				do { 
-					$style_special = ltrim($row_styles2['brewStyleGroup'],"0");
-					$special_ingredients[] .= $style_special.$row_styles2['brewStyleNum']; 
-				}  while ($row_styles2 = mysqli_fetch_assoc($styles2));
-			}
-			*/
-			//print_r($special_ingredients); exit;
 		
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Judging_Numbers";
 			if ($filter != "default") $filename .= "_Category_".$filter;
-			$filename .= "_Special_Mead-Cider";
+			$filename .= "_Req_Info_Mead-Cider";
 			if ($psort == "3422") 		$filename .= "_Avery3422";
 			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
@@ -357,7 +356,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$special = strtr($special,$html_remove);
 						
 				if (in_array($style,$special_ingredients)) {
-					$text = sprintf("\n%s  %s  #%s\nSpecial: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
+					$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					if (in_array($style,$mead)) {
 						$text .= "\n";
 						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
@@ -372,6 +371,65 @@ if (isset($_SESSION['loginUsername'])) {
 				}
 				
 			} while ($row_log = mysqli_fetch_assoc($log));
+			//$pdf->Output();
+			ob_end_clean();
+			$pdf->Output($filename,'D');
+			
+		}
+		
+		if (($go == "entries") && ($action == "bottle-judging") && ($view == "all")) {
+		
+			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Judging_Numbers";
+			if ($filter != "default") $filename .= "_Category_".$filter;
+			$filename .= "_Req_Info_Mead-Cider";
+			if ($psort == "3422") 		$filename .= "_Avery3422";
+			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
+			
+			$pdf->AddPage();
+			$pdf->SetFont('Arial','',10);
+		
+			// Print labels
+			do {
+				
+				for($i=0; $i<$sort; $i++) {
+					
+					if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $entry_no = $row_log['brewJudgingNumber'];
+					else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+					
+					
+					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+					$style_name = truncate($row_log['brewStyle'],22);
+							
+					$text = sprintf("\n%s  %s  #%s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no);
+					
+						
+					if (in_array($style,$special_ingredients)) {
+						
+						$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
+						$special = strtr($special,$html_remove);
+						
+						$text .= sprintf("\nReq Info: %s", $special);
+						
+						if (in_array($style,$mead)) {
+							$text .= "\n";
+							if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
+							
+						}
+						
+					}
+					
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+				
+				}
+				
+			} while ($row_log = mysqli_fetch_assoc($log));
+			
 			//$pdf->Output();
 			ob_end_clean();
 			$pdf->Output($filename,'D');

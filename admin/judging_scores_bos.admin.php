@@ -284,6 +284,7 @@ include(DB.'admin_judging_scores_bos.db.php');
           <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
           <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
           <?php } ?>
+          <option value="HM" <?php if ($bos_entry_info[10] == "HM") echo "selected"; ?>><?php echo "Hon. Men."; ?></option>
         </select>
         </td>
 	</tr>
