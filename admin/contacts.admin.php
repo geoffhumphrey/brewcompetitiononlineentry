@@ -59,7 +59,7 @@
   <!--<img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span>
   --></td>
  </tr>
-  <?php } while($row_contact = mysql_fetch_assoc($contact)) ?>
+  <?php } while($row_contact = mysqli_fetch_assoc($contact)) ?>
 </tbody>
 </table>
 <?php } } else { ?>

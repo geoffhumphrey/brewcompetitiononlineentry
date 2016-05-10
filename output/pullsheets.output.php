@@ -2,6 +2,7 @@
 require(DB.'admin_common.db.php');
 include(LIB.'output.lib.php');
 include(DB.'output_pullsheets.db.php');
+include(INCLUDES.'scrubber.inc.php');
 
 
 if (($go == "judging_tables") && ($totalRows_tables == 0)) { 
@@ -98,13 +99,13 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
 		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
 		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>"; 
+		echo "</p>";  
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
@@ -114,14 +115,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     </tr>
     <?php 
 				} 
-		} while ($row_entries = mysql_fetch_assoc($entries));
+		} while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     </table>
     <?php if ($flights > 0) { ?><div style="page-break-after:always;"></div><?php } ?>
     <?php } ?>
 <?php if ($flights == 0) { ?><div style="page-break-after:always;"></div><?php } ?>
-<?php 	} while ($row_tables = mysql_fetch_assoc($tables)); 
+<?php 	} while ($row_tables = mysqli_fetch_assoc($tables)); 
 
 
 if ((($go == "judging_tables") || ($go == "judging_locations")) &&  ($id != "default")) { 
@@ -209,7 +210,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -225,9 +226,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     </tr>
     <?php 
 				}	
-		} while ($row_entries = mysql_fetch_assoc($entries));
-		mysql_free_result($styles);
-		mysql_free_result($entries);
+		} while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     </table>
@@ -320,29 +319,28 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>";
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
 		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
 		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>"; 
+		echo "</p>";  
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysql_fetch_assoc($entries));
-	mysql_free_result($styles);
-	mysql_free_result($entries);
+    <?php } while ($row_entries = mysqli_fetch_assoc($entries));
+	
 	} // end foreach ?>
     </tbody>
     </table>
     <?php } ?>
 <div style="page-break-after:always;"></div>
 <?php 	} 
-} while ($row_tables = mysql_fetch_assoc($tables)); 
+} while ($row_tables = mysqli_fetch_assoc($tables)); 
 if (($round != "default") && (array_sum($round_count) == 0)) echo "<h2>No tables have been assigned to this round at this location</h2>";
 if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "default")) { 
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
@@ -414,22 +412,22 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries['brewInfo']."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
 		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
 		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>";  
+		echo "</p>";   
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysql_fetch_assoc($entries));
-	mysql_free_result($styles);
-	mysql_free_result($entries);
+    <?php } while ($row_entries = mysqli_fetch_assoc($entries));
+	
+	
 	} // end foreach ?>
     </tbody>
     </table>
@@ -444,7 +442,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 if ($go == "judging_scores_bos") { ?>
 <?php
 if ($id == "default") {
-	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 	sort($a);
 }
 if ($id != "default") $a[] = $id;
@@ -524,25 +522,19 @@ if ($style_type_info[0] == "Y") {
 		$carb = $special[6];
 		$sweet = $special[7];
 		echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; 
-		if (($row_entries_1['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Special Ingredients/Classic Style: </strong>".$row_entries_1['brewInfo']."</p>";
+		if (($row_entries_1['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".$row_entries_1['brewInfo']."</p>";
 		if ($row_entries_1['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";  
 		if (style_convert($style,"5")) echo "<p>"; 
-		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
-		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
-		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>"; 
+		if (($row_entries_1['brewMead1'] != '') && ($strengh == "1")) echo $row_entries_1['brewMead1']."&nbsp;&nbsp;"; 
+		if (($row_entries_1['brewMead2'] != '') && ($carb == "1")) echo $row_entries_1['brewMead2']."&nbsp;&nbsp;"; 
+		if (($row_entries_1['brewMead3'] != '') && ($sweet == "1")) echo $row_entries_1['brewMead3']."</p>"; 
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
-	mysql_free_result($bos);
-	mysql_free_result($style_type);
-	mysql_free_result($tables_1);
-	mysql_free_result($entries_1);
-	?>
+    <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
 <?php } else echo "<p class=\"lead\">No entries are eligible.</p>"; 

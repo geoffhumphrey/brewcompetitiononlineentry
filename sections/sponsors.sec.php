@@ -91,7 +91,7 @@ do {
 		}
 	}
 	
-} while ($row_sponsors = mysql_fetch_assoc($sponsors));
+} while ($row_sponsors = mysqli_fetch_assoc($sponsors));
 
 // Insert Empty Column if No Content Available
 if ($sponsors_endRow != 0) {

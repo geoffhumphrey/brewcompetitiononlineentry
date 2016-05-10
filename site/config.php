@@ -4,7 +4,13 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: July 27, 2015
+ * Last Modified: March 31, 2016
+ 
+ ******************************************************************************
+ * A CHANGE HAS BEEN MADE TO THIS FILE for Version 2.1.0!
+ * Be sure to input all variables here and upload to your server EVEN IF YOU ARE
+ * PERFORMING AN UPGRADE!
+ ****************************************************************************** 
  */
 
 /*
@@ -33,7 +39,7 @@ $password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
-If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
+If you haven't set up the database yet, please refer to http://www.brewcompetition.com/install-instructions for setup instructions. 
 */
 //$database = "";
 $database = "";
@@ -42,7 +48,7 @@ $database = "";
 This line strings the information together and connects to MySQL.  
 If MySQL is not found or the username/password combo is not correct an error will be returned.
 */
-$connection = mysql_connect($hostname, $username, $password) or trigger_error(mysql_error());
+$connection = new mysqli($hostname, $username, $password, $database);
 
 /* 
 Do not change the following line.
@@ -54,13 +60,13 @@ $brewing = $connection;
 
 
 /*
-Set up your images directory path.  This is used for label image uploading.
+Set up your images directory path.  This is used for image and document uploading.
 The predefined variable below will be fine for most installations.
 
 ONLY change this line to your installation's home directory on the server 
 if the predefined variable doesn't work.
 
-If not, use absolute paths (exemplified below).Generally something like 
+If not, use absolute paths (exemplified below). Generally something like 
 /home/[account_name]/public_html/folder_name (do NOT put a forward slash [/] 
 at the end).
 
@@ -146,19 +152,25 @@ $sub_directory = "";
 Set the base URL of your installation. In most cases the default will be OK. 
 
 IF you are installing on a server where you do not have a domain name set up,
-you'll need to replace the $base_url below with something formatted like this:
-$base_url = "http://hostingdomain/~accountname/subdirectoryname/";
+you'll need to replace the last $base_url variable below with something 
+formatted like this:
+$base_url .= "ipaddressorhostingdomain/~accountname/subdirectoryname/";
 
 Example:
-$base_url = "http://123.45.678.9/~accountname/bcoem/";
+$base_url .= "147.21.160.5/~brewcompetition/bcoem/";
 
 OR:
-$base_url = "http://www.yourhost.com/~accountname/bcoem/";
+$base_url .= "www.bluehost.com/~brewcompeition/bcoem/";
 
 
 */
 
-$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+$base_url = ""; 
+if ((!empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== "off")) || ($_SERVER['SERVER_PORT'] == 443)) $base_url .= "https://"; 
+else $base_url .= "http://";
+
+// ONLY alter this line if needed (see above): 
+$base_url .= $_SERVER['SERVER_NAME'].$sub_directory."/";
 
 /*
 ******************************************************************************

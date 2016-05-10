@@ -46,18 +46,19 @@ include(DB.'contacts.db.php');
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $primary_page_info = "";
 $page_info = "";
+$page_info10 = "";
 $page_info20 = "";
+$page_info30 = "";
+$header1_1 = "";
 $header1_10 = "";
 $header1_20 = "";
+$header1_30 = "";
 
 $message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No drop-off locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>Add a drop-off location</a>?</div>";
 $message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
 
 
-
-
-
-if ((judging_date_return() == 0) && ($registration_open == "2")) {
+if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 	
 	include ('judge_closed.sec.php'); 
 	include (DB.'winners.db.php');
@@ -106,7 +107,7 @@ else {
 			$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition']; 
 			if ($action == "print") $page_info10 .= " (".$row_contact['contactEmail'].")";
 			$page_info10 .= "</li>";
-		} while ($row_contact = mysql_fetch_assoc($contact));
+		} while ($row_contact = mysqli_fetch_assoc($contact));
 		$page_info10 .= "</ul>";
 	}
 	
@@ -134,9 +135,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 echo $primary_page_info;
 //echo $totalRowsSponsors;
 
-if ((judging_date_return() == 0) && ($registration_open == "2")) { 
+if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) { 
 	
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
+		
+		include(DB.'score_count.db.php');
 		
 		if (judging_winner_display($delay)) {
 			
@@ -152,7 +155,7 @@ if ((judging_date_return() == 0) && ($registration_open == "2")) {
 		}
 		
 		else {
-			echo $page_info;
+			if (isset($page_info)) echo $page_info;
 		}
 	} 
 }
@@ -162,7 +165,7 @@ else {
 	echo $page_info;
 	
 	
-	if (($registration_open == "2") || ($comp_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
+	if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
 	else include('reg_open.sec.php');
 	
 	// Display Competition Official(s)

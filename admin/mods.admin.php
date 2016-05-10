@@ -130,7 +130,7 @@ function mod_info($info,$method) {
       <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_mods['mod_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a>
       </td>
      </tr>
-    <?php } while($row_mods = mysql_fetch_assoc($mods)) ?>
+    <?php } while($row_mods = mysqli_fetch_assoc($mods)) ?>
      </tbody>
     </table>
 <div class="bcoem-admin-element hidden-print">

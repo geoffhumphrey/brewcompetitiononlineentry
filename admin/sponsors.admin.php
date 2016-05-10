@@ -74,7 +74,7 @@
   <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-link\"></span></a> "; ?> 
   </td>
  </tr>
-<?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
+<?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
@@ -156,8 +156,8 @@ if ($action == "default") { ?>
     <label for="sponsorText" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="sponsorText" name="sponsorText" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?>" placeholder="">
-		<span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
+        <textarea class="form-control" name="sponsorText" rows="6" class="mceNoEditor"><?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?></textarea>
+        <span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
     </div>
 </div><!-- ./Form Group -->
 

@@ -61,7 +61,7 @@
       <!-- Better formatting and/or conditional display would greatly improve layout here -->
       <div>
       [onshow;block=div;when [var.brewing_info.brewInfo]!='']
-      <li>Special ingredients/style: [onshow.brewing_info.brewInfo]</li>
+      <li>Required info: [onshow.brewing_info.brewInfo]</li>
       </div>
       <div>
       [onshow;block=div;when [var.brewing_info.sweetness]!='']
@@ -149,17 +149,17 @@ days.</p>
 <div style="page-break-after:always;"></div>
 <a name="labels" id="labels"></a>
 <h1>Bottle Labels</h1>
-<table align="center" class="bottleLabel">
+<table align="center" class="bottleLabel" cellpadding="10" cellspacing="10">
   <tr>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">Competition</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -208,12 +208,12 @@ days.</p>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">Competition</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -263,12 +263,12 @@ days.</p>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">Competition</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -317,12 +317,12 @@ days.</p>
     <td align="center">
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">Competition</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id] </td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>

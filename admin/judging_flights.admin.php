@@ -45,7 +45,7 @@ if ($totalRows_tables > 0) {
 				?>
 				<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
 				<?php 
-				} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+				} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
 		</select>
 		</div>
 	</div><!-- ./Form Group -->
@@ -151,7 +151,7 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<th width="1%" nowrap="nowrap">Flight <?php echo $i; ?></th>
 		<?php } ?>
         <th>Round</th>
-        <th>Special Ingredients/Classic Style</th>
+        <th>Required Info</th>
     </tr>
 </thead>
 <tbody>
@@ -186,11 +186,11 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<td><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($flight_number[0] != "")) echo $flight_number[0]; else echo $random; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($flight_number[1] == $i)) echo "checked"; ?>></td>
 		<?php } ?>
         <td><?php if ($action == "edit") echo $flight_number[3]; ?></td>
-        <td><?php echo $row_entries['brewInfo']; ?></td>
+        <td><?php echo str_replace("^","; ",$row_entries['brewInfo']); ?></td>
 	</tr>
     <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
     <?php } 
-	while ($row_entries = mysql_fetch_assoc($entries));
+	while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     <tfoot>
@@ -216,9 +216,8 @@ if (($action == "assign") && ($filter == "rounds")) {
 	if ($totalRows_tables > 0) { 
 ?>
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
-<p><input type="submit" class="btn btn-primary" value="Assign"></p>
 <?php 
-		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
+		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
 		
 		foreach (array_unique($a) as $flight_table) {
 			
@@ -255,7 +254,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 		<?php }
 	} else echo "<p>No flights have been defined.</p>";
   } ?>
-<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary"  value="Assign"></p>
+<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary" value="Assign"></p>
 
 <!-- Form submit confirmation modal -->
 <!-- Refer to bcoem_custom.js for configuration -->

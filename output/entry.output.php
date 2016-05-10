@@ -3,11 +3,14 @@ session_start();
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
-include(CLASSES.'tiny_but_strong/tbs_class_php5.php');
+include(CLASSES.'tiny_but_strong/tbs_class.php');
 include(DB.'output_entry.db.php');
 
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
-if ((NHC) && ($prefix == "final_")) $contest_name = date('Y')." NHC Final Round"; else $contest_name = $contest_info['contestName'];
+$contest_name = $contest_info['contestName'];
+
+$barcode_qrcode_array = array("0","2","N","C","3","4");
+$no_entry_form_array = array("0","1","2","E","C");
 
 // Check access restrictions
 if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
@@ -16,20 +19,25 @@ if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_
   	echo "</body>";
   	exit();
 }
+
 if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe")) {
 	echo "<html><head><title>Error</title></head><body>";
-  	echo "<p>You must pay for your entry to print its entry form and bottle labels.</p>";
+  	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
   	echo "</body>";
   	exit();
 }
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 23; else $category_end = 34;
 
-if ($prefix == "final_") $brewing_info['id'] = sprintf("%06s",$brewing_info['id']);
-else $brewing_id = sprintf("%04s",$brewing_info['id']);
+$brewing_id = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
 $style_entry = $brewing_info['brewCategory']."-".$brewing_info['brewSubCategory'];
+
+
+
+
+$brewing_info['brewInfo'] = str_replace("^","; ",$brewing_info['brewInfo']);
 $brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove); 
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewer_info['brewerLastName'] = strtr($brewer_info['brewerLastName'],$html_remove);
@@ -40,21 +48,18 @@ $brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
 $brewer_info['brewerEmail'] = strtr($brewer_info['brewerEmail'],$html_remove);
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
 
-// Barcode
-$barcode = $brewing_id;
-if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
-$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
+if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
+	
+	// Generate Barcode
+	$barcode = $brewing_id;
+	if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
+	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&checksum=&code=BCGcode39";
 
-// QR Code
-//$barcode_link = "http://qrickit.com/api/qr?d=".$base_url."qr.php?id=".$brewing_info['id']."&qrsize=100&t=p&e=m";
-
-// Get some values that are easier to work with in the templates
-$brewing_info['carbonation'] = 'unknown';
-if ($brewing_info['brewCarbonationMethod'] == "Y") {
-  $brewing_info['sparkling'] = 'forced';
-}
-if ($brewing_info['brewCarbonationMethod'] == "N") {
-  $brewing_info['sparkling'] = 'bottleConditioned';
+	// Generate QR Code
+	$qrcode_url = $base_url."qr.php?id=".$brewing_info['id'];
+	$qrcode_url = urlencode($qrcode_url);
+	$qrcode_link = "http://qrickit.com/api/qr?d=".$qrcode_url."&qrsize=90&t=p&e=m&addtext=".$brewing_id;
+	
 }
 
 // Various mead and cider info
@@ -107,29 +112,34 @@ switch ($brewing_info['brewMead3']) {
     break;
 }
 
+// Paid or not
+if ($brewing_info['brewPaid'] == 1) $brewing_paid = "*** PAID ***";
+else $brewing_paid = "";
+
 // Style name
 if ($brewing_info['brewCategory'] < $category_end) { 
   	$brewing_info['styleName'] = $brewing_info['brewStyle'];
  	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
 }
 
-else
-  	$brewing_info['styleName'] = $brewing_info['brewStyle']; 
+else $brewing_info['styleName'] = $brewing_info['brewStyle']; 
+
+if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
+	
+	// Get some values that are easier to work with in the templates
+	$brewing_info['carbonation'] = 'unknown';
+	if ($brewing_info['brewCarbonationMethod'] == "Y") {
+	  $brewing_info['sparkling'] = 'forced';
+	}
+	if ($brewing_info['brewCarbonationMethod'] == "N") {
+	  $brewing_info['sparkling'] = 'bottleConditioned';
+	}
+	
 	// Some metric/US conversions
 	$brewing_info['brewSize']['us']=$brewing_info['brewYield'];
 	$brewing_info['brewSize']['metric']=round($brewing_info['brewYield']*3.78541,2);
 	$brewing_info['styleCat'] = "";
-if ($_SESSION['prefsEntryForm'] == "N") { 
 	
-	if (strstr($prefix,"region")) {  // Only for NHC - comment out in general release
-		include (MODS.'nhc_region.php');
-		$region_city = nhc_region($prefix,1);
-		$region = nhc_region($prefix,3);
-	}
-	
-}
-
-//if (($_SESSION['prefsEntryForm'] != "N") || ($go == "recipe")) { 
 	// Convert fermentation temperature
 	$brewPrimaryTemp=$brewing_info['brewPrimaryTemp'];
 	$brewing_info['brewPrimaryTemp']=array();
@@ -154,8 +164,9 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	  $brewing_info['brewSecondaryTemp']['c']  = 
 		  round((5/9)*($brewSecondaryTemp-32), 0);
 	}
-// Arrays for ingredients and mashing
-//
+	
+	// Arrays for ingredients and mashing
+	//
 	$totalFermentables=0;
 	$totalHops=0;
 	$totalMash=0;
@@ -184,7 +195,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Extracts
 	$brewing_info['extracts']=array();
 	for ($i=1; $i <= 10; $i++) {
-	  if ($brewing_info['brewExtract'.$i] != "") {
+	  if (isset($brewing_info['brewExtract'.$i])) {
 		$brewing_info['extracts'][$i]['name']=strtr($brewing_info['brewExtract'.$i],$html_remove);;
 	
 		// Metric/US conversion
@@ -206,7 +217,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Adjuncts
 	$brewing_info['adjuncts']=array();
 	for ($i=1; $i <= 20; $i++) {
-	  if ($brewing_info['brewAddition'.$i] != "") {
+	  if (isset($brewing_info['brewAddition'.$i])) {
 		$brewing_info['adjuncts'][$i]['name']=strtr($brewing_info['brewAddition'.$i],$html_remove);;
 	
 		// Metric/US conversion
@@ -247,7 +258,7 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 	// Hops
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 20; $i++) {
-	  if ($brewing_info['brewHops'.$i] != "") {
+	  if (isset($brewing_info['brewHops'.$i])) {
 		$brewing_info['hops'][$i]['name'] = strtr($brewing_info['brewHops'.$i],$html_remove);
 		$brewing_info['hops'][$i]['alphaAcid'] = $brewing_info['brewHops'.$i.'IBU'];
 		$brewing_info['hops'][$i]['minutes'] = $brewing_info['brewHops'.$i.'Time'];
@@ -266,14 +277,14 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 		 }
 		
 		$totalHops+=$brewing_info['brewHops'.$i.'Weight'];	 
-
+	
 	  }
 	}
 	
 	// Mashing
 	$brewing_info['mashSteps']=array();
 	for ($i=1; $i <= 10; $i++) {
-	  if ($brewing_info['brewMashStep'.$i.'Temp'] != 0) {
+	  if (isset($brewing_info['brewMashStep'.$i.'Temp'])) {
 		$brewing_info['mashSteps'][$i]['name']=strtr($brewing_info['brewMashStep'.$i.'Name'],$html_remove);
 		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
 		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];
@@ -289,11 +300,25 @@ if ($_SESSION['prefsEntryForm'] == "N") {
 		 }
 	  }
 	}
-// } // end if ($_SESSION['prefsEntryForm'] != "N")
+} // end if (in_array($_SESSION['prefsEntryForm'],$no_entry_form_array))
+
 $TBS = new clsTinyButStrong;
-//$TBS->SetOption('noerr',TRUE);
+$TBS->SetOption('noerr',TRUE);
 
 if ($go == "default") {
+	
+	if ($_SESSION['prefsEntryForm'] == "0") { 
+		$TBS->LoadTemplate(TEMPLATES.'anon-entry.html');
+	}
+	
+	if ($_SESSION['prefsEntryForm'] == "1") { 
+		$TBS->LoadTemplate(TEMPLATES.'bcoem-entry.html');
+	}
+	
+	if ($_SESSION['prefsEntryForm'] == "2") { 
+		$TBS->LoadTemplate(TEMPLATES.'bcoem-entry-barcode.html');
+	}
+	
 	if ($_SESSION['prefsEntryForm'] == "B") { 
 		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 	}
@@ -306,8 +331,16 @@ if ($go == "default") {
 		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
 	}
 	
+	if ($_SESSION['prefsEntryForm'] == "3") { 
+		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry-barcode.html');
+	}
+	
 	if ($_SESSION['prefsEntryForm'] == "U") { 
 		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
+	}
+	
+	if ($_SESSION['prefsEntryForm'] == "4") { 
+		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry-barcode.html');
 	}
 	
 	if ($_SESSION['prefsEntryForm'] == "N") { 
@@ -325,13 +358,12 @@ if ($go == "recipe") {
 	$TBS->LoadTemplate(TEMPLATES.'recipe.html');
 }
 
-//if ((($go == "default") && ($_SESSION['prefsEntryForm'] != "N")) || ($go == "recipe")) { 
-	$TBS->MergeBlock('grains',$brewing_info['grains']);
-	$TBS->MergeBlock('extracts',$brewing_info['extracts']);
-	$TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
-	$TBS->MergeBlock('hops',$brewing_info['hops']);
-	$TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
-//}
+if (isset($brewing_info['grains'])) $TBS->MergeBlock('grains',$brewing_info['grains']);
+if (isset($brewing_info['extracts'])) $TBS->MergeBlock('extracts',$brewing_info['extracts']);
+if (isset($brewing_info['adjuncts'])) $TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
+if (isset($brewing_info['hops'])) $TBS->MergeBlock('hops',$brewing_info['hops']);
+if (isset($brewing_info['mashSteps'])) $TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
+
 $TBS->NoErr;
 $TBS->Show();
 ?>

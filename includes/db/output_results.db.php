@@ -1,6 +1,6 @@
 <?php
 // Get the winner method
 $query_prefs = sprintf("SELECT prefsWinnerMethod FROM %s WHERE id=1", $prefix."preferences");
-$prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
-$row_prefs = mysql_fetch_assoc($prefs);
+$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+$row_prefs = mysqli_fetch_assoc($prefs);
 ?>

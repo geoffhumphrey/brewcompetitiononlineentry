@@ -6,6 +6,7 @@
  *              specific, site-wide variables.
  * 
  */
+ 
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
@@ -23,6 +24,7 @@ define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
 define('UPDATE',ROOT.'update'.DIRECTORY_SEPARATOR);
 define('OUTPUT',ROOT.'output'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
+define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
 
 // --------------------------------------------------------
 // GLOBAL DEFINITIONS
@@ -36,8 +38,9 @@ define('TESTING', FALSE); 		// Top-level constant for testing functionality. Set
 
 // --------------------------------------------------------
 //Error reporting
-error_reporting(0);	// comment out to debug
-//error_reporting(E_ALL); // uncomment to debug 
+//error_reporting(0);	// comment out to debug
+error_reporting(E_ALL); // uncomment to debug 
 
-require(CONFIG.'config.php');
+require (CONFIG.'config.php');
+require (INCLUDES.'current_version.inc.php'); 
 ?>

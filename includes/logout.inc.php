@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require('../paths.php');
+require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 
 if (NHC) $logout_location = "http://www.brewingcompetition.com/index.php?msg=3";

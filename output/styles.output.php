@@ -16,6 +16,9 @@ if ($go == "default") $replacement2 = array('<p><strong class="text-danger">Entr
 else $replacement2 = array('<p><strong class="text-danger">Entry Instructions:</strong>','<p><strong class="text-info">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
 $info = str_replace($replacement1,$replacement2,$row_styles['brewStyleInfo']);
 
+$comEx = "<strong class=\"text-info\">Commercial Examples:</strong> ".$row_styles['brewStyleComEx'];
+$entryReq = "<strong class=\"text-danger\">Entry Instructions:</strong> ".$row_styles['brewStyleEntry'];
+
     if (($sort == "brewStyleSRM") 	&& (($row_styles['brewStyleSRM'] == "") || ($row_styles['brewStyleSRM'] == "N/A"))) echo ""; 
 elseif (($sort == "brewStyleIBU") 	&& (($row_styles['brewStyleIBU'] == "") || ($row_styles['brewStyleIBU'] == "N/A"))) echo "";
 elseif (($sort == "brewStyleOG") 	&& ($row_styles['brewStyleOG'] == "")) echo "";
@@ -34,7 +37,11 @@ else {
 	<li><strong>Number:</strong></li>
     <li><?php echo $row_styles['brewStyleGroup']; ?><?php echo $row_styles['brewStyleNum']; ?></li>
 </ul>
-<?php echo "<p>".$info."</p>"; ?>
+<?php 
+echo "<p>".$info."</p>"; 
+if (!empty($row_styles['brewStyleComEx'])) echo "<p>".$comEx."</p>";
+if (!empty($row_styles['brewStyleEntry'])) echo "<p>".$entryReq."</p>"; 
+?>
 <?php //echo "<p>".$row_styles['brewStyleInfo']."</p>"; ?>
 <table class="table table-bordered table-striped">
     <tr>
@@ -48,21 +55,21 @@ else {
         <td nowrap>
         <?php 
 			if ($row_styles['brewStyleOG'] == "") { echo "Varies"; }
-			elseif ($row_styles['brewStyleOG'] != "") { echo $row_styles['brewStyleOG']." &ndash; ".$row_styles['brewStyleOGMax']; }
+			elseif ($row_styles['brewStyleOG'] != "") { echo number_format((float)$row_styles['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_styles['brewStyleOGMax'], 3, '.', ''); }
 			else { echo "&nbsp;"; }
 		?>
 		</td>
         <td nowrap>
         <?php 
 			if ($row_styles['brewStyleFG'] == "") { echo "Varies"; }
-			elseif ($row_styles['brewStyleFG'] != "") { echo $row_styles['brewStyleFG']." &ndash; ".$row_styles['brewStyleFGMax']; }
+			elseif ($row_styles['brewStyleFG'] != "") { echo number_format((float)$row_styles['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_styles['brewStyleFGMax'], 3, '.', ''); }
 			else { echo "&nbsp;"; }
 		?>
         </td>
         <td nowrap>
         <?php 
 			if ($row_styles['brewStyleABV'] == "") { echo "Varies"; }
-			elseif ($row_styles['brewStyleABV'] != "" ) { echo $row_styles['brewStyleABV']."% &ndash; ".$row_styles['brewStyleABVMax']."%"; } 
+			elseif ($row_styles['brewStyleABV'] != "" ) { echo number_format((float)$row_styles['brewStyleABV'], 1, '.', '')."% &ndash; ".number_format((float)$row_styles['brewStyleABVMax'], 1, '.', '')."%"; } 
 			else { echo "&nbsp;"; }
 		?>
         </td>
@@ -96,10 +103,10 @@ else {
         </td>
     </tr>
 </table>
-<p><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
+<p class="hidden-print"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
 <?php if (($go == "default") && ($view == "default")) { ?>
-<p><a href="#top">Top of Page</a></p>
+<p class="hidden-print"><a href="#top">Top of Page</a></p>
 <?php }
 	} 
- } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+ } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
 <?php } else echo "<p>Styles in this category are not accepted in this competition.</p>"; ?>

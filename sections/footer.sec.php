@@ -5,11 +5,10 @@
  * 
  */
 $footer = "";
-$current_version = "2.0.1";
 if(!empty($_SESSION['contestName'])) $footer .= $_SESSION['contestName']." &ndash; ";
 $footer .= "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ";
-if (HOSTED) $footer .= $current_version." Hosted Edition";
-else $footer .= $current_version;
+if (HOSTED) $footer .= $current_version_display." Hosted Edition";
+else $footer .= $current_version_display;
 $footer .= " &copy;2009-".date('Y');
 if (TESTING) {
 		$mtime = microtime(); 

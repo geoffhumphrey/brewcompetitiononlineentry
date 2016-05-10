@@ -1,12 +1,6 @@
 <?php 
 include(DB.'styles.db.php'); 
 include(DB.'admin_judging_tables.db.php');
-// Check and see if scores have been entered for this table already
-$query_table_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'",$judging_scores_db_table,$id);
-$table_scores = mysql_query($query_table_scores, $brewing) or die(mysql_error());
-$row_table_scores = mysql_fetch_assoc($table_scores);
-if ($row_table_scores['count'] > 0) $already_scored = TRUE; else $already_scored = FALSE;
-// If so, activate the JS popup warnings if unchecking styles
 
 if ($action == "edit") $title = ": Edit a Table"; 
 elseif ($action == "add") $title = ": Add a Table"; 
@@ -14,7 +8,7 @@ elseif (($action == "assign") && ($filter == "default")) $title = ": Assign Judg
 elseif (($action == "assign") && ($filter == "judges")) $title = ": Assign Judges to a Table"; 
 elseif (($action == "assign") && ($filter == "stewards")) $title = ": Assign Stewards a to Table"; 
 else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Judging Tables (Archive ".get_suffix($dbTable).")";
-
+$output_at_table_modals = "";
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if (($action == "default") && ($filter == "default") && ($dbTable == "default")) { ?>
@@ -212,7 +206,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 													$flight_count = explode("^",$flight_count);
 											?>
                                             <option value="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php if ($flight_count[0] > 0) echo "edit"; else echo "add"; echo "&amp;id=".$row_tables_edit['id']; ?>"><?php echo "#".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
-                                            <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+                                            <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
                                         </select>
                                         <?php } else { ?>
                                         <ul class="list-unstyled">
@@ -277,7 +271,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                                         <option value="" selected disabled>For Table...</option>
                                             <?php do { $score_count = table_count_total($row_tables_edit_2['id']); ?>
                                             <option value="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($score_count  > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "#".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></option>
-                                            <?php } while ($row_tables_edit_2 = mysql_fetch_assoc($tables_edit_2)); ?>
+                                            <?php } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
                                         </select>
                                 	</div>
                                 </div><!-- ./row -->
@@ -299,7 +293,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 										<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types['id'] ?>">BOS Places - <?php echo $row_style_types['styleTypeName']; ?></a></li>
 									<?php 
 										}
-									} while ($row_style_types = mysql_fetch_assoc($style_types));
+									} while ($row_style_types = mysqli_fetch_assoc($style_types));
 									?>
                                 </ul>
 							</div>
@@ -327,7 +321,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                     <strong class="text-info"><?php echo $row_judging['judgingLocName']; ?></strong>
                     <span class="pull-right"><?php $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']); $all_loc_total[] = $loc_total; echo $loc_total; ?></span>
             	</div>
-                <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+                <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
                 <div class="bcoem-sidebar-panel">
                 	<strong class="text-info">All Sessions</strong>
                     <span class="pull-right"><?php echo array_sum($all_loc_total); ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a></span>
@@ -391,7 +385,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
                     <ul>
                         <?php do { ?>
                         <li><?php echo $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each table to BOS)."; ?></li>
-                        <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+                        <?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
                     </ul>
                     </div>
                     <div class="modal-footer">
@@ -414,7 +408,7 @@ else $title = " Judging Tables"; if ($dbTable != "default") $title .= ": All Jud
 					$orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";  
 				}
 			} 
-		} while ($row_styles = mysql_fetch_assoc($styles));
+		} while ($row_styles = mysqli_fetch_assoc($styles));
 		$b = array_sum($a);
 		if ($b == 0) $orphan_modal_body .= "<p>All style sub-categories with entries have been assigned to tables.</p>";
 		else $orphan_modal_body .= "<p>The following sub-categories with entries have not been assigned to tables:</p>";
@@ -517,6 +511,40 @@ if ($totalRows_tables > 0) { ?>
 		if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
 		$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
 		$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+		/* $output_at_table_modals .= "
+		
+		<!-- At Table Judges Modal -->
+<!-- Modal -->
+<div class=\"modal fade\" id=\"atTableModal".$row_tables['tableNumber']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"atTableModalLabel".$row_tables['tableNumber']."\">
+    <div class=\"modal-dialog\" role=\"document\">
+        <div class=\"modal-content\">
+            <div class=\"modal-header bcoem-admin-modal\">
+                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+                <h4 class=\"modal-title\" id=\"atTableModalLabel".$row_tables['tableNumber']."\"><span class=\"text-capitalize\">Judges and Stewards Assigned to Table ".$row_tables['tableNumber']." ".$row_tables['tableName']."</h4>
+            </div>
+            <div class=\"modal-body\">
+            	<p>There are ".$ranked." ranked judges and ".$nonranked." non-ranked judges at this table.</p>
+                <p>The following have been assigned to this table.</p>
+            	<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$row_tables['tableNumber']."\">
+                <thead>
+                    <th>Name</th>
+                    <th>Rank</th>
+					<th>Assignment</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+                </table>
+            </div>
+            <div class=\"modal-footer\">
+                <button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+		
+		";
+		*/
 	?>
     <tr>
     	<td class="hidden-xs hidden-sm"><?php echo $row_tables['tableNumber']; ?></td>
@@ -530,7 +558,7 @@ if ($totalRows_tables > 0) { ?>
         <td class="hidden-xs hidden-sm"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default") ?></td>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
-        <td class="hidden-print">
+        <td nowrap="nowrap" class="hidden-print">
             <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-pencil"></span></a> 
             <a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print the pullsheet for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-print"></span></a> 
             <?php if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) { ?>
@@ -543,7 +571,7 @@ if ($totalRows_tables > 0) { ?>
         </td>
         <?php } ?>
     </tr>
-    <?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+    <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
     </tbody>
 </table>
 
@@ -570,7 +598,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 			} );
 		} );
 	</script>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?>" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?>" name="form1" id="form1">
 <div class="bcoem-admin-element hidden-print">
 
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -590,7 +618,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <!-- Input Here -->
         <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<50+1; $i++) { ?>
-    		<option value="<?php echo $i; ?>" <?php if (in_array($i,$a)) echo "DISABLED"; if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    		<option value="<?php echo $i; ?>" <?php if ((isset($a)) && (in_array($i,$a))) echo "DISABLED";  if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
         </select>
         </div>
@@ -603,7 +631,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <select class="selectpicker" name="tableLocation" id="tableLocation" data-size="10" data-width="auto">
             <?php do { ?>
           	<option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
-          	<?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
+          	<?php } while ($row_judging1 = mysqli_fetch_assoc($judging1)) ?>
         </select>
         </div>
     </div><!-- ./Form Group -->
@@ -639,7 +667,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 					<td><?php echo $received_entry_count_style; ?></td>
 				</tr>
 				<?php } } ?>
-				<?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+				<?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
 				</tbody>
 			</table>
 		<?php } else echo "There are no available sub-styles."; ?>
@@ -697,7 +725,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <!-- Input Here -->
         <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<150+1; $i++) { ?>
-    		<option value="<?php echo $i; ?>" <?php if ($row_tables_edit['tableNumber'] == $i) echo "selected"; elseif (in_array($i,$a)) echo "disabled"; ?>><?php echo $i; ?></option>
+    		<option value="<?php echo $i; ?>" <?php if ($row_tables_edit['tableNumber'] == $i) echo "selected"; elseif ((isset($a)) && (in_array($i,$a))) echo "DISABLED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
         </select>
         </div>
@@ -710,7 +738,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <select class="selectpicker" name="tableLocation" id="tableLocation" data-size="10" data-width="auto">
             <?php do { ?>
           		<option value="<?php echo $row_judging1['id']; ?>" <?php if ($row_tables_edit['tableLocation'] == $row_judging1['id']) echo "selected"; ?>><?php echo $row_judging1['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")"; ?></option>
-          <?php } while ($row_judging1 = mysql_fetch_assoc($judging1)) ?>
+          <?php } while ($row_judging1 = mysqli_fetch_assoc($judging1)) ?>
         </select>
         </div>
     </div><!-- ./Form Group -->
@@ -742,7 +770,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
                         <td style="text-align:right;"><?php echo get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default"); ?></td>
                     </tr>
                     <?php } ?>
-                    <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
+                    <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
 				</tbody>
 			</table>
 		<?php } else echo "There are no available sub-styles."; ?>
@@ -788,7 +816,7 @@ if ($already_scored) {
             <option value="" disabled selected>Choose Below...</option>
             <?php do { ?>
             <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
-            <?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+            <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
        </select>
         </div>
     </div><!-- ./Form Group -->
@@ -801,7 +829,7 @@ if ($already_scored) {
             <option value="" disabled selected>Choose Below...</option>
             <?php do { ?>
             <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&amp;id=<?php echo $row_tables_edit['id']; ?>"><?php echo "Table ".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
-            <?php } while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+            <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
        </select>
         </div>
     </div><!-- ./Form Group -->

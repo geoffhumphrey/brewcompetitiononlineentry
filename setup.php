@@ -1,25 +1,16 @@
 <?php
 ob_start();
-$current_version = "2.0.1.0";
 require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
+require(DB.'setup.db.php');
 require(INCLUDES.'db_tables.inc.php');
-date_default_timezone_set('America/Denver');
 require(INCLUDES.'headers.inc.php');
 require(INCLUDES.'constants.inc.php');
+date_default_timezone_set('America/Denver');
 $setup_alerts = "";
 $setup_body = "";
 
-// Check to see if initial setup has taken place
-
-if (table_exists($prefix."system")) {
-	mysql_select_db($database, $brewing);
-	$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
-	$system = mysql_query($query_system, $brewing) or die(mysql_error());
-	$row_system = mysql_fetch_assoc($system);
-	if ($row_system['setup'] == 1) header (sprintf("Location: %s",$base_url."index.php"));
-}
 
 if ($setup_free_access == FALSE) {
 	
@@ -35,7 +26,6 @@ else {
 	if ($section != "step0") require(DB.'common.db.php');
 	require(INCLUDES.'version.inc.php');
 	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
-	include(INCLUDES.'form_check.inc.php');
 	$setup_body .= $output;
 }
 
@@ -137,12 +127,7 @@ else {
 				
 				if (table_exists($prefix."system")) {
 					
-					mysql_select_db($database, $brewing);
-					$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
-					$system = mysql_query($query_system, $brewing) or die(mysql_error());
-					$row_system = mysql_fetch_assoc($system);
-					
-					if ($row_system['setup'] == 0) {
+					if (($row_system['setup'] == 0) && ($section != "step0")) {
 						if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
 						if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
 						if ($section == "step3") 	include(SETUP.'site_preferences.setup.php');

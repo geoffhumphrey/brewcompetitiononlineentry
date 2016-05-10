@@ -9,11 +9,6 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 include(DB.'mods.db.php');
 
-// Remove the following after 2.0.X release (for those using committed code pre-release)
-if (!check_update("sponsorEnable", $prefix."sponsors")) {
-	include (UPDATE.'current_update.php');
-}
-
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
 	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99")); exit;
@@ -57,7 +52,7 @@ else {
 // Load libraries only when needed for performance
 $tinymce_load = array("contest_info","special_best","styles");
 $datetime_load = array("contest_info","judging","testing");
-if ((judging_date_return() == 0) && ($registration_open == "2")) $datatables_load = array("admin","list","default");
+if ((judging_date_return() == 0) && ($registration_open == 2)) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list");
 
 if (($section == "admin") && (($filter == "default") && ($bid == "default") && ($view == "default"))) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
@@ -109,11 +104,11 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 	<?php } ?>
 	
-	<?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
+	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
-		<?php if (($section == "admin") && ($go == "upload")) { ?>
+		<?php if (($section == "admin") && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
         <!-- Load DropZone / http://www.dropzonejs.com -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
@@ -137,17 +132,18 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
     
-    <!-- Opengraph implementation -->
+    <!-- Opengraph Implementation -->
     <?php if (!empty($_SESSION['contestName'])) { ?>
         <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
     <?php } ?>
     <?php if (!empty($_SESSION['contestLogo'])) { ?>
         <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']?>" />
     <?php } ?>
-    <meta property="og:url" content="<?php echo "http" . (($_SERVER['HTTPS'] == "on") ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>" />
-    
+    <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
+  
 </head>
 <body>
+	
     <!-- MAIN NAV -->
 	<div class="<?php echo $container_main; ?> hidden-print">
 		<?php include (SECTIONS.'nav.sec.php'); ?>
@@ -202,19 +198,21 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 			if ($go == "count_by_style")				include (ADMIN.'entries_by_style.admin.php');
 			if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
 			if ($action == "register")				include (SECTIONS.'register.sec.php');
+			if ($go == "upload_scoresheets")			include (ADMIN.'upload_scoresheets.admin.php');
 			
 				if ($_SESSION['userLevel'] == "0") {
-					if ($go == "styles") 	    	include (ADMIN.'styles.admin.php');
-					if ($go == "archive") 	    	include (ADMIN.'archive.admin.php');
-					if ($go == "make_admin") 		include (ADMIN.'make_admin.admin.php');
-					if ($go == "contest_info") 		include (ADMIN.'competition_info.admin.php');
-					if ($go == "preferences") 		include (ADMIN.'site_preferences.admin.php');
-					if ($go == "sponsors") 	   		include (ADMIN.'sponsors.admin.php');
-					if ($go == "style_types")    	include (ADMIN.'style_types.admin.php');
-					if ($go == "special_best") 	    include (ADMIN.'special_best.admin.php');
-					if ($go == "special_best_data") 	include (ADMIN.'special_best_data.admin.php');
-					if ($go == "mods") 	    		include (ADMIN.'mods.admin.php');
-					if ($go == "upload")				include (ADMIN.'upload.admin.php');
+					if ($go == "styles") 	    		include (ADMIN.'styles.admin.php');
+					if ($go == "archive") 	    		include (ADMIN.'archive.admin.php');
+					if ($go == "make_admin") 			include (ADMIN.'make_admin.admin.php');
+					if ($go == "contest_info") 			include (ADMIN.'competition_info.admin.php');
+					if ($go == "preferences") 			include (ADMIN.'site_preferences.admin.php');
+					if ($go == "sponsors") 	   			include (ADMIN.'sponsors.admin.php');
+					if ($go == "style_types")    		include (ADMIN.'style_types.admin.php');
+					if ($go == "special_best") 	    	include (ADMIN.'special_best.admin.php');
+					if ($go == "special_best_data") 		include (ADMIN.'special_best_data.admin.php');
+					if ($go == "mods") 	    			include (ADMIN.'mods.admin.php');
+					if ($go == "upload")					include (ADMIN.'upload.admin.php');
+					if ($go == "change_user_password") 	include (ADMIN.'change_user_password.admin.php');
 				}
 			
 			} ?>

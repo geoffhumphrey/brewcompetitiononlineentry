@@ -52,7 +52,7 @@ if ($_SESSION['prefsContact'] == "N") {
 	$page_info .= "<ul>";
 	do {
 		$page_info .= "<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition']." &ndash; <a href='mailto:".$row_contact['contactEmail']."'>".$row_contact['contactEmail']."</a></li>";
-	} while ($row_contact = mysql_fetch_assoc($contact)); 
+	} while ($row_contact = mysqli_fetch_assoc($contact)); 
 	$page_info .= "</ul>";
 	
 	echo $page_info;
@@ -71,9 +71,7 @@ if ($_SESSION['prefsContact'] == "Y") {
 		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
 
 	
-	} while ($row_contact = mysql_fetch_assoc($contact)); 
-   
-   	mysql_free_result($contacts);
+	} while ($row_contact = mysqli_fetch_assoc($contact)); 
 
 	$primary_page_info = "<p>Use the form below to contact a competition official. All fields with a star are <span class=\"text-warning\">required</span>.</p>";
 	$label1 = "Contact";
@@ -137,7 +135,7 @@ if ($_SESSION['prefsContact'] == "Y") {
                 	<div class="input-group has-warning">
                     	<span class="input-group-addon" id="subject-addon5"><span class="fa fa-info-circle"></span></span>
                 		<!-- Input Here -->
-                		<input class="form-control" name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; else echo $_COOKIE['contestName']; ?>" required>
+                		<input class="form-control" name="subject" type="text" value="<?php if ($msg == "2") echo $_COOKIE['subject']; ?>" required>
                         <span class="input-group-addon" id="subject-addon2"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>

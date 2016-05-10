@@ -1,21 +1,6 @@
 <?php
-
-if (NHC) {
-
-	// Place NHC SQL calls below
-	
-	
-}
-
-// end if (NHC)
-
-else {
-
-	$query_archive = "SELECT id,archiveSuffix FROM $archive_db_table";
-	$archive = mysql_query($query_archive, $brewing) or die(mysql_error());
-	$row_archive = mysql_fetch_assoc($archive);
-	$totalRows_archive = mysql_num_rows($archive);
-
-}
-
+$query_archive = "SELECT id,archiveSuffix FROM $archive_db_table";
+$archive = mysqli_query($connection,$query_archive) or die (mysqli_error($connection));
+$row_archive = mysqli_fetch_assoc($archive);
+$totalRows_archive = mysqli_num_rows($archive);
 ?>

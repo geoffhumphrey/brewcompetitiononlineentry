@@ -81,6 +81,7 @@ if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
 
 
 // Build Subtitle
+$subtitle = "";
 if ($section != "step5") {
 	if ($action == "add") $subtitle .= ": Add a Judging Location"; 
 	elseif ($action == "edit") $subtitle .= ": Edit a Judging Location"; 
@@ -131,7 +132,7 @@ if ($filter == "bos") {
 
 // Judging Locations & Dates List
 if ($section != "step5") {
-	if (($totalRows_judging_locs > 0) && ($action == "default")) {
+	if (($action == "default") && ($totalRows_judging_locs > 0)) {
 		$output_datatables_aaSorting = "[1,'asc']";
 		$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
 		$output_datatables_head .= "<tr>";
@@ -146,22 +147,22 @@ if ($section != "step5") {
 		
 		do {
 			
-			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"Edit ".$row_judging_locs['judgingLocName']);
+			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"default",0,"Edit ".$row_judging_locs['judgingLocName']);
 			
-			$output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? This cannot be undone");
+			$output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","judging","delete",$filter,$row_judging_locs['id'],$judging_locations_db_table,"Are you sure you want to delete ".$row_judging_locs['judgingLocName']."? All judge/steward account location preferences for this location will be removed. This cannot be undone.",0,"Delete ".$row_judging_locs['judgingLocName']);
 			
 			$output_datatables_actions = $output_datatables_edit_link." ".$output_datatables_delete_link;
 			
 			$output_datatables_body .= "<tr>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
-			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
+			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
 			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingRounds']."</td>";
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 			
-		} while($row_judging_locs = mysql_fetch_assoc($judging_locs));
+		} while($row_judging_locs = mysqli_fetch_assoc($judging_locs));
 		
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
 } // end if ($section != "step5")
@@ -175,6 +176,7 @@ if ($section != "step5") {
 	
 		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
 		$form_organizer_select = "";
+		$form_submit_button_help = "";
 		
 		if ($filter == "staff") {
 			
@@ -184,7 +186,7 @@ if ($section != "step5") {
 				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
 				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " (Selected Competition Organizer)";
 				$form_organizer_select .= "</option>";
-			} while ($row_brewers = mysql_fetch_assoc($brewers));
+			} while ($row_brewers = mysqli_fetch_assoc($brewers));
 			
 		}
 		
@@ -302,7 +304,7 @@ if ($section != "step5") {
 						}
 					$output = rtrim($output,"<br>");
 				}
-				if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> None specified.";
+				if (empty($output)) $output_location = "<span class=\"fa fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 				else $output_location = $output;
 				
 				$output_datatables_body .= "<tr>";
@@ -331,7 +333,7 @@ if ($section != "step5") {
 				
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
 					$output_datatables_body .= "<td>".$display_rank;
-					if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+					if ((isset($row_brewer['brewerJudgeMead'])) && ($row_brewer['brewerJudgeMead'] == "Y")) $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
 					if (!empty($bjcp_rank[1])) {
 						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
 					}
@@ -345,7 +347,7 @@ if ($section != "step5") {
 				
 				$output_datatables_body .= "</tr>";
 				
-			} while ($row_brewer = mysql_fetch_assoc($brewer));
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 			
 		} // end if ($totalRows_brewer > 0)
 	
@@ -372,8 +374,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	
 	$judging_date = "";
 	$judging_time = "";
-	if ($action == "edit") $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date");
-	if ($action == "edit") $judging_time .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "time");
+	if ($action == "edit") $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
 		
 } // end if ((($action == "add") || ($action == "edit")) || ($section == "step5")) 
 
@@ -597,23 +598,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 </div><!-- ./Form Group -->
 <script type="text/javascript">
 	$('#judgingDate').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-</script>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingTime" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<input class="form-control" id="judgingTime" name="judgingTime" type="text" size="10" maxlength="255" value="<?php echo $judging_time; ?>" placeholder="<?php echo $current_time; ?>" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
-		</div>
-        <span class="help-block with-errors"></span>
-	</div>
-</div><!-- ./Form Group -->
-<script type="text/javascript">
-	$('#judgingTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 </script>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -664,7 +649,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
    </select>
   </td>
 </tr>

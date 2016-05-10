@@ -28,20 +28,9 @@
 // | Author: Oskar Stephens <oskar.stephens@gmail.com>	                    |
 // +------------------------------------------------------------------------+
 //}}}
-function generate_judging_num($style_cat_num) {
-	// Generate the Judging Number each entry 
-	require(CONFIG.'config.php');
-	mysql_select_db($database, $brewing);
-	$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
-	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
-	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
-	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
-	
-	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $output = $style_cat_num."001";
-	else $output = $row_brewing_styles['brewJudgingNumber'] + 1;
-	return sprintf("%05s",$output) ;
-}
+
 include (INCLUDES.'beerXML/parse_beer_xml.inc.php');
+include (LIB.'process.lib.php');
 //{{{ InputBeerXML
 class InputBeerXML {
     public $recipes; 
@@ -49,7 +38,7 @@ class InputBeerXML {
     public $brewer;
     //{{{InputBeerXML
     function InputBeerXML($filename) {
-        $this->brewer = $GLOBALS['loginUsername'];
+        $this->brewer = $_SESSION['loginUsername'];
         $this->recipes = new BeerXMLParser($filename);
     }
     //}}}
@@ -57,11 +46,11 @@ class InputBeerXML {
 	//{{{ convertUnit()
     function convertUnit($value,$type){
 	    require(CONFIG.'config.php');
-		mysql_select_db($database, $brewing);
+		mysqli_select_db($connection,$database);
 		$query_pref_xml = sprintf("SELECT prefsWeight1,prefsTemp,prefsLiquid2,prefsWeight2 FROM %s", $prefix."preferences");
-		$pref_xml = mysql_query($query_pref_xml, $brewing) or die(mysql_error());
-		$row_pref_xml = mysql_fetch_assoc($pref_xml);
-		$totalRows_pref_xml = mysql_num_rows($pref_xml);
+		$pref_xml = mysqli_query($connection,$query_pref_xml) or die (mysqli_error($connection));
+		$row_pref_xml = mysqli_fetch_assoc($pref_xml);
+		$totalRows_pref_xml = mysqli_num_rows($pref_xml);
 		
         switch($type){
             case "hopWeight";
@@ -94,6 +83,7 @@ class InputBeerXML {
 	include(CONFIG.'config.php');
 	include (INCLUDES.'scrubber.inc.php');
 	//include (INCLUDES.'url_variables.inc.php');
+	mysqli_select_db($connection,$database);
         $brewing = $connection;
         $sqlQuery = "INSERT INTO ".$prefix."brewing";
         $fields = "(brewName";
@@ -105,8 +95,8 @@ class InputBeerXML {
 		$vf["brewBrewerFirstName"] = $_POST["brewBrewerFirstName"];
 		$vf["brewBrewerLastName"] = $_POST["brewBrewerLastName"];
 		$query_limits = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-		$limits = mysql_query($query_limits, $brewing) or die(mysql_error());
-		$row_limits = mysql_fetch_assoc($limits);
+		$limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
+		$row_limits = mysqli_fetch_assoc($limits);
 		
 		$style_value = ltrim($recipe->style->categoryNumber, "0")."-".$recipe->style->styleLetter;
 		if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
@@ -241,15 +231,15 @@ class InputBeerXML {
             $fields .= ", " . $field;
             $values .= ", '" . $value . "'";
         }
-		mysql_select_db($database, $brewing) or die(mysql_error());
+		mysqli_select_db($connection,$database);
         $fields .= ", brewUpdated";
         $fields .= ")";
 		$values .= ", NOW( )";
         $values .= ")";
         $sqlQuery .= $fields . $values;        
 		
-        $Result1 = mysql_query($sqlQuery, $brewing) or die(mysql_error());
-		$this->insertedRecipes[mysql_insert_id()] = $recipe->name;
+        $result = mysqli_query($connection,$sqlQuery) or die (mysqli_error($connection));
+		//$this->insertedRecipes[mysqli_insert_id()] = $recipe->name;
 		//header(sprintf("Location: %s", $base_url."index.php?section=list"));
         }
     //}}}

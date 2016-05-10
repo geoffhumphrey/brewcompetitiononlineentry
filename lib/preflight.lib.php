@@ -1,13 +1,12 @@
 <?php
-
 function check_setup($tablename, $database) {
 	
 	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_log = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '$database' AND table_name = '$tablename'";
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log = mysqli_fetch_assoc($log);
 
     if ($row_log['count'] == 0) return FALSE;
 	else return TRUE;
@@ -17,11 +16,11 @@ function check_setup($tablename, $database) {
 function check_update($column_name, $table_name) {
 	
 	require(CONFIG.'config.php');	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	
 	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log_exists = mysql_num_rows($log);
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log_exists = mysqli_num_rows($log);
 
     if ($row_log_exists) return TRUE;
 	else return FALSE;
@@ -56,16 +55,16 @@ elseif (MAINT) {
 
 if (check_setup($prefix."system",$database)) {
 	
-	mysql_select_db($database, $brewing);
+	mysqli_select_db($connection,$database);
 	$query_version_check = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
-	$version_check = mysql_query($query_version_check, $brewing) or die(mysql_error());
-	$row_version_check = mysql_fetch_assoc($version_check);
+	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
+	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.0.1.0 and update is NOT needed
+	// For 2.1.0.0 and update is NOT needed
 	
-	// For updating to 2.0.0, check if "sponsorEnable" column is in the sponsors table
+	// For updating to 2.1.0.0, check if "prefsEntryLimitPaid" column is in the sponsors table
 	// If so, run the update
-	if (!check_update("sponsorEnable", $prefix."sponsors")) {
+	if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
 		
 		$update_required = TRUE;
 		$setup_success = FALSE;
@@ -86,10 +85,10 @@ if (check_setup($prefix."system",$database)) {
 		// Change version number in DB only if there is no need to run the update scripts
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-02-15");
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL);
-			$result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-03-01");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 			$setup_relocate = "Location: ".$base_url;
 			$setup_success = TRUE;

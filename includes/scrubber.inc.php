@@ -336,6 +336,7 @@ $html_remove = array(
 "&copy;" => "",
 "&reg;" => "",
 "<p>" => "",
+"^" => " ", 		// used in process_brewing.inc.php to separate extra requirements for BJCP 2015 styles
 "“" => "\"",   	// left side double smart quote
 "”" => "\"",  	// right side double smart quote
 "‘" => "'",  	// left side single smart quote

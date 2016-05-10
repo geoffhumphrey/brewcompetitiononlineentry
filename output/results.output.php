@@ -1,6 +1,7 @@
 <?php 
 require(DB.'winners.db.php');
 require(DB.'output_results.db.php');
+require(DB.'score_count.db.php');
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	if (NHC) $base_url = "../";
 	

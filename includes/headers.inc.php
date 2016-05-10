@@ -7,7 +7,9 @@
  * 
  */
 
-if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+if (strpos($section, 'step') === FALSE) {
+	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+}
 
 $header_output = "";
 $output = "";
@@ -46,7 +48,9 @@ switch($section) {
 	break;
 	
 	case "register":
-	$header_output = $_SESSION['contestName']." - Register";
+	$header_output = $_SESSION['contestName'];
+	if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $header_output .= " - Judge/Steward Registration";
+	else $header_output .= " - Register";
 	if     ($msg == "1") $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please try again.";
 	elseif ($msg == "2") { $output = "<strong>Sorry, the user name you entered is already in use.</strong>"; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
 	elseif ($msg == "3") $output = "<strong>The user name provided is not a valid email address.</strong> Please enter a valid email address.";
@@ -74,7 +78,7 @@ switch($section) {
 	else $header_output = $_SESSION['contestName']." - Log In";
 	if ($msg == "0") $output = "<strong>You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.</strong> "; 
 	elseif     ($msg == "1") { $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please make sure your email address and password are correct."; $output_extend = ""; }
-	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong>."; $output_extend = "<p>You can now log in using your current username and the new password above.</p>"; }
+	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong> - you can now log in using your current username and the new password.</p>"; $output_extend = ""; }
 	elseif ($msg == "3") $output = "<strong>You have been logged out.</strong> Log in again?"; 
 	elseif ($msg == "4") $output = "<strong>Your verification question does not match what is in the database.</strong> Please try again."; 
 	elseif ($msg == "5") $output = "<strong>Your ID verification information has been sent to the email address associated with your account.</strong>"; 
@@ -133,11 +137,10 @@ switch($section) {
 	// end if (NHC)
 	
 	else {
-	
-		mysql_select_db($database, $brewing);
+
 		$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
-		$contact = mysql_query($query_contact, $brewing) or die(mysql_error());
-		$row_contact = mysql_fetch_assoc($contact);
+		$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
+		$row_contact = mysqli_fetch_assoc($contact);
 		
 	}
 	
@@ -164,17 +167,17 @@ switch($section) {
 				case "1-23-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the &ldquo;Experimental Nature&rdquo; of the beer (e.g., type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn't fit an established style. For historical styles or unusual ingredients/techniques that may not be known to all beer judges, you should provide descriptions of the styles, ingredients and/or techniques as an aid to the judges.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-24-A":
 				case "1-24-B":
-				case "1-24-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Special Ingredients and/or Classic Style field). <br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "1-25-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Special Ingredients and/or Classic Style field). You MAY specify varieties of apples used (if specified, a varietal character will be expected - use the Special Ingredients and/or Classic Style field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "1-25-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties  (use the Special Ingredients and/or Classic Style field). You MAY specify varieties of grapes used (if specified, a varietal character will be expected - use the Special Ingredients and/or Classic Style field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "1-25-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the fruit(s) used. You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Special Ingredients and/or Classic Style field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "1-26-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the spice(s) used. You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Special Ingredients and/or Classic Style field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "1-26-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level, strength, and sweetness. You MAY specify honey varieties. You MAY specify the base style or beer or types of malt used (use the Special Ingredients and/or Classic Style field). Products with a relatively low proportion of honey should be entered in the Specialty Beer category (23A) as a Honey Beer<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-24-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Required Info field). <br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-25-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Required Info field). You MAY specify varieties of apples used (if specified, a varietal character will be expected - use the Required Info field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-25-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties  (use the Required Info field). You MAY specify varieties of grapes used (if specified, a varietal character will be expected - use the Required Info field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-25-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the fruit(s) used. You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Required Info field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-26-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the spice(s) used. You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet). You MAY specify honey varieties (use the Required Info field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-26-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level, strength, and sweetness. You MAY specify honey varieties. You MAY specify the base style or beer or types of malt used (use the Required Info field). Products with a relatively low proportion of honey should be entered in the Specialty Beer category (23A) as a Honey Beer<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-26-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, a historical mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared. You MUST specify carbonation level (still; petillant or lightly carbonated; sparkling or highly carbonated). You MUST specify strength level (hydromel or light mead; standard mead; sack or strong mead). You MUST specify sweetness level (dry; semi-sweet; sweet).  You MAY specify honey varieties.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-27-A":
 				case "1-27-B":
 				case "1-27-C": 
-				case "1-27-D": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). You MAY specify variety of apple for a single varietal cider; if specified, varietal character will be expected (use the Special Ingredients and/or Classic Style field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
+				case "1-27-D": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). You MAY specify variety of apple for a single varietal cider; if specified, varietal character will be expected (use the Required Info field).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-27-E": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). Variety of pear(s) used MUST be stated.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-28-A": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). You MUST specify if the cider was barrel-fermented or aged.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-28-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). You MUST specify what fruit(s) and/or fruit juice(s) were added.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
@@ -563,6 +566,14 @@ switch($section) {
 			case "upload":
 			$header_output .= ": Upload Logo Images";
 			break;
+			
+			case "upload_scoresheets":
+			$header_output .= ": Upload Scoresheets and Other Documents";
+			break;
+			
+			case "change_user_password":
+			$header_output .= ": Change User Password";
+			break;
 		}
 	
 	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
@@ -606,15 +617,17 @@ switch($section) {
 	elseif ($msg == "25") $output = "<strong>All entry styles have been converted from BJCP 2008 to BJCP 2015.</strong>";
 	elseif ($msg == "26") $output = "<strong>Data has been deleted from the database.</strong>";
 	elseif ($msg == "28") $output = "<strong>The judge/steward has been added successfully.</strong> Remember to assign the user as a judge or steward before assigning to tables.";
-	elseif ($msg == "29") $output = "<strong>The image has been uploaded successfully.</strong> Check the list to verify.";
-	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an image file.</strong> Please try again.";
+	elseif ($msg == "29") $output = "<strong>The file has been uploaded successfully.</strong> Check the list to verify.";
+	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an accepted file type.</strong> Please try again.";
 	elseif ($msg == "31") $output = "<strong>The file has been deleted.</strong>";
+	elseif ($msg == "32") $output = "<strong>The test email has been generated. Be sure to check your spam folder.</strong>";
+	elseif ($msg == "33") $output = "<strong>The user&rsquo;s password has been changed.</strong> Be sure to let them know what their new password is!";
 	elseif ($msg == "755") $output = "<strong>Change permission of user_images folder to 755 has failed.</strong>  You will need to change the folder&rsquo;s permission manually.  Consult your FTP program or ISP&rsquo;s documentation for chmod (folder permissions).";
 	else $output = "";
 	break;
 }
 
-if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated using the method you specified.</strong>";
+if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated.</strong>";
 if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"></span> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";

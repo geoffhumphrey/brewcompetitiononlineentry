@@ -151,7 +151,7 @@ httpxml.send(null);
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
-                <input class="form-control" name="password" type="password" placeholder="" id="newPassword">
+                <input class="form-control" name="password" type="password" placeholder="" id="newPassword" required>
                 <span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>

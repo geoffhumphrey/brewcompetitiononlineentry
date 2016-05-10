@@ -139,8 +139,16 @@ echo $primary_links;
 </form>
 <?php } ?>
 <?php if ($verify_form_display) {
-	if ((empty($message2)) || (empty($msg))) { ?>	
-	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $user_check[1]; ?></em></small></p>
+	if ((empty($message2)) || (empty($msg))) { 
+	
+	if ($user_check[1] == "Randomly generated.") {
+		$secret_question = "<strong>Unavailable.</strong> Your account was created by an administrator and your &quot;secret answer&quot; was randomly generated. Please contact a website administrator to recover or change your password."; 
+		if ($_SESSION['prefsContact'] == "Y") $secret_question .= " Or, use the email option below.";
+	}
+	else $secret_question = $user_check[1];
+	
+	?>	
+	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $secret_question; ?></em></small></p>
 	<?php if ($_SESSION['prefsContact'] == "Y") { ?>
 	<?php if ($msg =="5") { ?>
 	<p class='lead'><small>If you didn't receive the email, <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.">click here to resend it to <?php echo $username_check; ?></a>.</small></p>

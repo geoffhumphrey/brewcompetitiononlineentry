@@ -102,7 +102,7 @@
       </td>
      </tr>
     <?php
-	} while($row_sbd = mysql_fetch_assoc($sbd));  ?>
+	} while($row_sbd = mysqli_fetch_assoc($sbd));  ?>
      </tbody>
     </table>
     <?php } 
@@ -193,7 +193,7 @@ if ($action == "add") {
 			<p class="form-control-static"><?php  echo $info2[0]." ".$info2[1]; ?></p>
 		</div>
 	</div><!-- ./Form Group -->
-  	<?php } while($row_sbd = mysql_fetch_assoc($sbd)); 
+  	<?php } while($row_sbd = mysqli_fetch_assoc($sbd)); 
 	
 	if ($totalRows_sbd < $row_sbi['sbi_places']) {
 	
@@ -231,7 +231,7 @@ if ($action == "add") {
 
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-10">
+		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-xs-offset-12">
 			<input type="submit" name="Submit" id="updateSBD" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Entries" />
 		</div>
 	</div>

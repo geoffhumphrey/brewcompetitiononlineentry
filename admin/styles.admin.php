@@ -90,9 +90,9 @@ function checkUncheckAll(theElement) {
   <td width="1%" nowrap><input name="brewStyleJudgingLoc<?php echo $row_styles['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if ($row_styles['brewStyleJudgingLoc'] == $bid) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td><?php echo $row_styles['brewStyle']; ?></td>
-  <td><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; if (preg_match("/^[[:digit:]]+$/",$style[0])) echo sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']; else echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
+  <td><?php if ($row_styles['brewStyleOwn'] != "bcoe") echo "* "; echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; if ($row_styles['brewStyleOwn'] != "bcoe") echo " - Custom Style"; ?></td>
   <td><?php if (style_type($row_styles['brewStyleType'],"1","") <= "3") $style_own = "bcoe"; else $style_own = "custom"; echo style_type($row_styles['brewStyleType'],"2",$style_own); ?></td>
-  <td><?php if ($row_styles['brewStyleReqSpec'] == 1)  echo "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Special ingredients required for ".$row_styles['brewStyle']."\"></span> "; ?>
+  <td><?php if ($row_styles['brewStyleReqSpec'] == 1)  echo "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Additional info required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleStrength'] == 1) echo "<span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Strength required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleCarb'] == 1)  echo "<span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Carbonation required for ".$row_styles['brewStyle']."\"></span> "; ?>
   <?php if ($row_styles['brewStyleSweet'] == 1)  echo "<span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Sweetness required for ".$row_styles['brewStyle']."\"></span>"; ?></td>
@@ -106,7 +106,7 @@ function checkUncheckAll(theElement) {
   </td>
 	<?php } ?>
  </tr>
-<?php  } while($row_styles = mysql_fetch_assoc($styles)) ?>
+<?php  } while($row_styles = mysqli_fetch_assoc($styles)) ?>
  </tbody>
  </table>
  <div class="bcoem-admin-element hidden-print">
@@ -121,59 +121,7 @@ function checkUncheckAll(theElement) {
 $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 ?>
 
-<script type='text/javascript'>//<![CDATA[ 
-$(document).ready(function(){
-	$("#mead-cider").hide("fast");
-	$("#mead").hide("fast");
-	
-	<?php if (($action == "edit") && ($view == "2")) { ?>
-	
-	$("#mead-cider").show("slow");
-	$("#mead").hide("slow");
-	
-	<?php } ?>
-	
-	<?php if (($action == "edit") && ($view == "3")) { ?>
-	
-	$("#mead-cider").show("slow");
-	$("#mead").show("slow");
-	
-	<?php } ?>
-	
-	$("#brewStyleType").change(function() {
-		$("#mead-cider").hide("fast");
-		$("#mead").hide("fast");
-		
-        if ( 
-			$("#brewStyleType").val() == "1"){
-			$("#mead-cider").hide("fast");
-			$("#mead").hide("fast");
-		}
-		
-		else if ( 
-			$("#brewStyleType").val() == "2"){
-			$("#mead").hide("slow");
-			$("#mead-cider").show("slow");
-			
-		}
-		
-		else if ( 
-			$("#brewStyleType").val() == "3"){
-			$("#mead").show("slow");
-			$("#mead-cider").show("slow");
-			
-		}
-		
-		else{
-			$("#mead").hide("fast");
-			$("#mead-cider").hide("fast");
-			
-		}	
-	}
-	);
-});//]]>  
 
-</script>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1" onSubmit="return CheckRequiredFields()">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -192,17 +140,17 @@ $(document).ready(function(){
 	<label for="brewStyleType" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Type</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 has-warning">
 	<!-- Input Here -->
-	<select class="selectpicker" data-width="auto"  name="brewStyleType" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();" data-size="10" data-width="auto">
+	<select class="selectpicker" name="brewStyleType" id="brewStyleType" onclick="craateUserJsObject.ShowMeadCider();" data-size="10" data-width="auto">
         <?php do { ?>
         <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
-    	<?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+    	<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 	</select>
-	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a>
+	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a></span>
 	</div>
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Require Special Ingredients</label>
+	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Required Info</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
@@ -265,6 +213,22 @@ $(document).ready(function(){
 		</div>
 	</div><!-- ./Form Group -->
 </div>
+<div id="brewStyleEntry">
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Instructions</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<input class="form-control" name="brewStyleEntry" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?>" placeholder="">
+	</div>
+</div><!-- ./Form Group -->
+</div>
+<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
+	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<textarea class="form-control" name="brewStyleInfo" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
+	 </div>
+</div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="brewStyleOG" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">OG Minimum</label>
@@ -346,13 +310,7 @@ $(document).ready(function(){
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<!-- Input Here -->
-		<textarea class="form-control" name="brewStyleInfo" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
-	 </div>
-</div><!-- ./Form Group -->
+
 
 <input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo $row_styles['brewStyle'];?>">
 <input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup'];?>">
@@ -369,17 +327,22 @@ $(document).ready(function(){
 	</div>
 </div>
 </form>
-<?php } ?>
+<?php 
+
+// Load Show/Hide
+include(INCLUDES.'form_js.inc.php');
+
+} ?>
 <?php if (($action == "default") && ($filter == "judging") && ($bid == "default")) { ?>
 <table>
  <tr>
    <td class="dataLabel">Choose a judging location:</td>
    <td class="data">
-   <select class="selectpicker" data-width="auto"  name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
+   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
 	<option value=""></option>
     <?php do { ?>
 	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysql_fetch_assoc($judging)); ?>
+    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
   </select>
   </td>
 </tr>

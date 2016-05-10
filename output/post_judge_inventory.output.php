@@ -43,22 +43,18 @@ if (NHC) $base_url = "../";
             <th width="5%" nowrap>Judging</th>
             <th>Entry Name</th>
             <th width="25%">Category</th>
-            <th width="40%">Special Ingredients / Classic Style</th>
-            <?php if ($section == "scores") { ?> 
+            <th width="40%">Required Info</th>
+            <?php if ($go == "scores") { ?> 
             <th width="5%" nowrap>Score</th>
             <?php } ?>
         </tr>
     </thead>
     <tbody>
     <?php do { 
+
+		include(DB.'output_post_judge.db.php');
 	
 		// Query scores table for each entry. If no score and not placing, or if score is not entered at all, put on the list
-		
-		$query_post_inventory_entry = sprintf("SELECT id,scoreEntry,scorePlace FROM %s WHERE eid='%s'",$prefix."judging_scores",$row_post_inventory['id']);
-		$post_inventory_entry = mysql_query($query_post_inventory_entry, $brewing) or die(mysql_error());
-		$row_post_inventory_entry = mysql_fetch_assoc($post_inventory_entry);
-		$totalRows_post_inventory_entry = mysql_num_rows($post_inventory_entry);
-		
 		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
 		
 	?>
@@ -67,13 +63,13 @@ if (NHC) $base_url = "../";
             <td><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
             <td><?php echo $row_post_inventory['brewName']; ?></td> 
             <td><?php echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?></td>
-            <td><?php echo $row_post_inventory['brewInfo']; ?></td> 
-            <?php if ($section == "scores") { ?> 
-            <td><?php echo $row_post_inventory['scoreEntry']; ?></td>
+            <td><?php echo str_replace("^","; ",$row_post_inventory['brewInfo']); ?></td> 
+            <?php if ($go == "scores") { ?> 
+            <td><?php if (isset($row_post_inventory_entry['scoreEntry'])) echo $row_post_inventory_entry['scoreEntry']; ?></td>
             <?php } ?>
         </tr>
     <?php 
 		}
-	} while ($row_post_inventory = mysql_fetch_assoc($post_inventory)); ?>
+	} while ($row_post_inventory = mysqli_fetch_assoc($post_inventory)); ?>
     </tbody>
     </table>

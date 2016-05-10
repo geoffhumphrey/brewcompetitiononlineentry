@@ -40,7 +40,7 @@ if ($go == "default") {  ?>
     </thead>
     <tbody>
     <?php 
-	do { $dropoff_id[] = $row_dropoff['id']; } while ($row_dropoff = mysql_fetch_assoc($dropoff));
+	do { $dropoff_id[] = $row_dropoff['id']; } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 	
 	foreach ($dropoff_id as $id) { 
 		
@@ -76,7 +76,19 @@ if ($go == "default") {  ?>
 <?php } // end if ($go == "default") ?>
 
 <?php if ($go == "check") { ?>
-	<script type="text/javascript" language="javascript">
+	<div class="page-header">
+        <h1>Entries By Drop-Off Location</h1>
+    </div>
+    <?php do { 
+	$random = random_generator(5,2);
+	$entries_by_dropoff_loc = entries_by_dropoff_loc($row_dropoff['id']);
+	$location_count = location_count($row_dropoff['id']);
+	if ($location_count > 0) {
+	?>
+    <h3>Location: <?php echo $row_dropoff['dropLocationName']; ?></h3>
+    <p class="lead"><?php echo $row_dropoff['dropLocation']; ?></p>
+    <p class="lead"><small>Total Entries at this Location: <?php echo $location_count; ?></small></p>
+    <script type="text/javascript" language="javascript">
         $(document).ready(function() {
             $('#sortable<?php echo $random; ?>').dataTable( {
                 "bPaginate" : false,
@@ -93,23 +105,10 @@ if ($go == "default") {  ?>
             } );
         } );
     </script>
-	<div class="page-header">
-        <h1>Entries By Drop-Off Location</h1>
-    </div>
-    <?php do { 
-	$random = random_generator(5,2);
-	$entries_by_dropoff_loc = entries_by_dropoff_loc($row_dropoff['id']);
-	$location_count = location_count($row_dropoff['id']);
-	if ($location_count > 0) {
-	?>
-    <h3>Location: <?php echo $row_dropoff['dropLocationName']; ?></h3>
-    <p class="lead"><?php echo $row_dropoff['dropLocation']; ?></p>
-    <p class="lead"><small>Total Entries at this Location: <?php echo $location_count; ?></small></p>
-    
     <table class="table table-bordered table-striped" id="sortable<?php echo $random; ?>">
     <thead>
     	<tr>
-        	<th width="5%" nowrap="nowrap">Entry #</th>
+        	<th width="5%" nowrap="nowrap">Entry#</th>
             <th width="45%" nowrap="nowrap">Entry Name</th>
             <th width="45%" nowrap="nowrap">Participant Name</th>
             <th width="5%" nowrap="nowrap">Picked Up?</th>
@@ -122,7 +121,7 @@ if ($go == "default") {  ?>
     <div style="page-break-after:always;"></div>
     <?php
 		} // end if ($location_count > 0)
-	} while ($row_dropoff = mysql_fetch_assoc($dropoff)) ?>   
+	} while ($row_dropoff = mysqli_fetch_assoc($dropoff)) ?>   
     <!-- END content -->
 <?php } ?>
 

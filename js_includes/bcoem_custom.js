@@ -283,83 +283,51 @@ function stateck() {
 // JavaScript Document
 $(function () {
 	$('#contestEntryOpen').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestEntryOpenTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestEntryDeadline').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestEntryDeadlineTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestRegistrationOpen').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestRegistrationOpenTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestRegistrationDeadline').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestRegistrationDeadlineTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestJudgeOpen').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestJudgeOpenTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestJudgeDeadline').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestJudgeDeadlineTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestShippingOpen').datetimepicker({
-		format: 'YYYY-MM-DD'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestShippingDeadline').datetimepicker({
-		format: 'YYYY-MM-DD'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestDropoffOpen').datetimepicker({
-		format: 'YYYY-MM-DD'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestDropoffDeadline').datetimepicker({
-		format: 'YYYY-MM-DD'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#contestAwardsLocDate').datetimepicker({
-			format: 'YYYY-MM-DD'
-	});
-	
-	$('#contestAwardsLocTime').datetimepicker({
-			format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#judgingDate').datetimepicker({
-		format: 'YYYY-MM-DD'
-	});
-	
-	$('#judgingTime').datetimepicker({
-		format: 'LT'
+		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
 	$('#brewDate').datetimepicker({

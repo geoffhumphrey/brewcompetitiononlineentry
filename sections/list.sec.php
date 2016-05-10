@@ -66,9 +66,6 @@ $judging_date = judging_date_return();
 $delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
-// Add the help link for the page
-if ($action != "print") echo $help_link;
-
 // Call the brewer's info information
 include (SECTIONS.'brewer_info.sec.php');
 

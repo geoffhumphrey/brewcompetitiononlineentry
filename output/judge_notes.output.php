@@ -38,7 +38,7 @@ include(LIB.'output.lib.php');
 	<td><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
 	<td><?php echo $row_brewer['brewerJudgeNotes']; ?></td>
 </tr>
-<?php } while ($row_brewer = mysql_fetch_assoc($brewer)); ?>
+<?php } while ($row_brewer = mysqli_fetch_assoc($brewer)); ?>
 </tbody>
 </table>
 <?php } 

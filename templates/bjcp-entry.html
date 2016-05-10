@@ -100,8 +100,8 @@
   </tr>
   <tr>
     <td nowrap="nowrap">Entry #</td>
-    <td nowrap="nowrap" class="bdr1B">[onshow.brewing_info.id]</td>
-    <td>Competition:</td>
+    <td nowrap="nowrap" class="bdr1B">[onshow.brewing_id]</td>
+    <td>Competition</td>
     <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
     </tr>
   <tr>
@@ -180,7 +180,7 @@
     <td width="49%" align="left" valign="top">
     <table>
       <tr>
-        <td>Special Ingredients/Classic Style</td>
+        <td>Required Info</td>
       </tr>
       
       <tr>
@@ -228,7 +228,7 @@
              [onshow_lyeast;block=td;when [var.brewing_info.brewYeastForm]='Liquid']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_lyeast;block=td;default]
           </td>
           <td>Liquid</td>
@@ -238,7 +238,7 @@
              [onshow_dyeast;block=td;when [var.brewing_info.brewYeastForm]='Dry']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_dyeast;block=td;default]
           </td>
           <td>Dried</td>
@@ -250,7 +250,7 @@
              [onshow_withstarter;block=td;when [var.brewing_info.brewYeastStarter]='Y']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_withstarter;block=td;default]
           </td>
           <td>Yes</td>
@@ -260,7 +260,7 @@
              [onshow_withoutstarter;block=td;when [var.brewing_info.brewYeastStarter]='N']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_withoutstarter;block=td;default]
           </td>
           <td>No</td>
@@ -291,7 +291,7 @@
              [onshow_fcarb;block=td;when [var.brewing_info.sparkling]='forced']
           </td>
           <td width="5%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_fcarb;block=td;default]
           </td>
           <td>forced CO<sub>2</sub></td>
@@ -302,7 +302,7 @@
              [onshow_carb;block=td;when [var.brewing_info.sparkling]='bottleConditioned']
           </td>
           <td width="5%">
-             <span class="fa fa-square-o">
+             <span class="fa fa-square-o"></span>
              [onshow_carb;block=td;default]
           </td>
           
@@ -655,7 +655,7 @@
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -711,7 +711,7 @@
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -767,7 +767,7 @@
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>
@@ -824,7 +824,7 @@
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #</td>
-        <td colspan="3" class="bdr1B">[onshow.brewing_info.id]</td>
+        <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Name</td>

@@ -10,8 +10,8 @@ if ($_SESSION['prefsWinnerMethod'] == 2) $query_scores = sprintf("SELECT a.score
 
 if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
 $query_scores .= " ORDER BY a.scorePlace ASC";
-$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
-$row_scores = mysql_fetch_assoc($scores);
-$totalRows_scores = mysql_num_rows($scores);
+$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
+$row_scores = mysqli_fetch_assoc($scores);
+$totalRows_scores = mysqli_num_rows($scores);
 
 ?>

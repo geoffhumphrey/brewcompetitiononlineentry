@@ -8,24 +8,24 @@ require(LIB.'common.lib.php');
 require(DB.'common.db.php');
 require(CLASSES.'phpass/PasswordHash.php');
 $hasher = new PasswordHash(8, false);
-mysql_select_db($database, $brewing);
+mysqli_select_db($connection,$database);
+
 
 if (($action == "email") && ($id != "default")) {
 		
 	$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
-	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-	$row_forgot = mysql_fetch_assoc($forgot);
-	$totalRows_forgot = mysql_num_rows($forgot);
+	$forgot = mysqli_query($connection,$query_forgot) or die (mysqli_error($connection));
+	$row_forgot = mysqli_fetch_assoc($forgot);
+	$totalRows_forgot = mysqli_num_rows($forgot);
 	
 	$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_assoc($brewer);
-	$totalRows_brewer = mysql_num_rows($brewer);
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
+	$totalRows_brewer = mysqli_num_rows($brewer);
 
 	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
 	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 	
-		
 	$to_recipient = $first_name." ".$last_name;
 	$to_email = $row_forgot['user_name'];
 	$subject = $_SESSION['contestName'].": ID Verification Request";
@@ -63,33 +63,45 @@ if (($action == "email") && ($id != "default")) {
 else {
 	$username = $_POST['loginUsername'];
 		
-	$query_forgot = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$users_db_table,$username);
-	$forgot = mysql_query($query_forgot, $brewing) or die(mysql_error());
-	$row_forgot = mysql_fetch_assoc($forgot);
-	$totalRows_forgot = mysql_num_rows($forgot);
+	$query_forgot = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$users_db_table,$_POST['loginUsername']);
+	$forgot = mysqli_query($connection,$query_forgot) or die (mysqli_error($connection));
+	$row_forgot = mysqli_fetch_assoc($forgot);
+	$totalRows_forgot = mysqli_num_rows($forgot);
 			
 	if ($totalRows_forgot == 0) { 
-		header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1")); 
+		header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&msg=1"));
+		exit; 
 	}
+
+	//if answer is correct
+	if (strtolower($_POST['userQuestionAnswer']) == strtolower($row_forgot['userQuestionAnswer'])) { 
 	
-	if (strtolower($_POST['userQuestionAnswer']) == strtolower($row_forgot['userQuestionAnswer'])) { //if answer is correct
-	
-		$key = random_generator(10,1);
-	
+		/*
+		echo $username."<br>";
+		echo $query_forgot."<br>";
+		echo $row_forgot['user_name']."<br>";
+		echo $totalRows_forgot."<br>";
+		
+		$em = $row->username;// email is stored to a variable
+		
+		*/
+			
+		$key = random_generator(6,1);
+		
 		$password = md5($key);
 		$hash = $hasher->HashPassword($password);
-			
-		mysql_select_db($database, $brewing);
-		$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
-		$Result = mysql_query($updateSQL, $brewing) or die(mysql_error());
 		
-	  	$updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
-	  	header(sprintf("Location: %s", $updateGoTo)); 
-
+		$updateSQL = sprintf("UPDATE $users_db_table SET password='%s' WHERE id='%s'", $hash, $row_forgot['id']);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		$updateGoTo = $base_url."index.php?section=login&go=".$key."&msg=2";
+		header(sprintf("Location: %s", $updateGoTo)); 
+		exit;
+	
 	} else {
-	
-		header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=".$username)); 
-	
-    	}
+		$updateGoTo = sprintf($base_url."index.php?section=login&action=forgot&go=verify&msg=4&username=%s",$_POST['loginUsername']);
+		header(sprintf("Location: %s", $updateGoTo)); 
+		exit;
+	}	
 }
 ?>
