@@ -130,9 +130,9 @@ Declare all variables empty at the top of the script. Add on later...
 		
 			if ($_SESSION['prefsPaypal'] == "Y")  { 
 						
-				if ($_SESSION['prefsTransFee'] == "Y") $payment_amount = $total_to_pay + number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
+				$fee = number_format((($total_to_pay * .03) + .30), 2, '.', '') + .01; // Hack to resolve payments being off by a penny
+				if ($_SESSION['prefsTransFee'] == "Y") $payment_amount = $total_to_pay + $fee; 
 				else $payment_amount = number_format($total_to_pay, 2);
-				$fee = number_format((($total_to_pay * .03) + .30), 2, '.', ''); 
 			
 				// Online
 				$header1_3 .= "<h2>Pay Online</h2>";

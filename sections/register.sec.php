@@ -284,7 +284,7 @@ if ($go == "default") {  ?>
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" required>
-				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>
+				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
