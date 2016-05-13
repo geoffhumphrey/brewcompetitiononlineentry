@@ -133,7 +133,8 @@ if (file_exists($filename)) {
 						
 						// Last version to have a db update was 2.0.0.0
 						// If current version is 2.0.0.0 or later, only perform the 2.1.0.0 update
-						if (($version >= "2000") && ($version < "2100"))  {
+						// No DB changes to for 2.1.1.0
+						if (($version >= "2000") && ($version < "2190"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

@@ -1,7 +1,7 @@
 <?php 
 // -----------------------------------------------------------
 // If version is below 2.1.0.0, the following will run.
-// 2.0.0.0 was the last version with updates.
+// 2.1.0.0 was the last version with updates.
 // -----------------------------------------------------------
 
 $output .= "<h4>Version ".$current_version."...</h4>";
