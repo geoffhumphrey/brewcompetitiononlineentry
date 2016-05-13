@@ -1,14 +1,16 @@
 <?php 
 // -----------------------------------------------------------
-// Version 2.0.0.0
+// Version 2.1.1.0
 // -----------------------------------------------------------
 require('paths.php');
 require(INCLUDES.'authentication_nav.inc.php');  
 session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 
+require(LIB.'common.lib.php');
 require(LIB.'update.lib.php');
 require(DB.'update.db.php');
+if (HOSTED) check_hosted_gh();
 
 // Define vars
 $section = "update";

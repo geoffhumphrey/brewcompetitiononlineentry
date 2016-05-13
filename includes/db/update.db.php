@@ -36,7 +36,6 @@ if (HOSTED) {
 	if ($action == "default") {
 		
 		require(INCLUDES.'url_variables.inc.php');
-		require(LIB.'common.lib.php');
 		
 		$gh_user_name = "geoff@zkdigital.com";	
 		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
