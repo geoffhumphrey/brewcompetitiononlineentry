@@ -27,6 +27,41 @@ function check_update($column_name, $table_name) {
 
 }
 
+// For hosted accounts on brewcompetition.com or brewcomp.com 
+function check_hosted_gh() {
+	
+	require(CONFIG.'config.php');	
+	mysqli_select_db($connection,$database);
+	
+	$query_gh_user = sprintf("SELECT id FROM %s WHERE user_name='%s'",$users_db_table,$gh_user_name);
+	$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
+	$row_gh_user = mysqli_fetch_assoc($gh_user);
+	$totalRows_gh_user = mysqli_num_rows($gh_user);
+	
+	if ($totalRows_gh_user == 0) {
+	
+		$gh_user_name = "geoff@zkdigital.com";
+		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
+		$random1 = random_generator(7,2);
+		$random2 = random_generator(7,2);
+		require(CLASSES.'phpass/PasswordHash.php');
+		$hasher = new PasswordHash(8, false);
+		$hash = $hasher->HashPassword($gh_password);
+		
+		$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $gh_user_name,$users_db_table,$hash,$random1,$random2);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		
+		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
+		(NULL, %s, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$query_gh_user['id'],$brewer_db_table,$gh_user_name);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	}
+	
+}
+
 $update_required = FALSE;
 $setup_success = TRUE;
 
@@ -60,7 +95,7 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.0.0 and update is NOT needed
+	if (HOSTED) check_hosted_gh();
 	
 	// For updating to 2.1.0.0, check if "prefsEntryLimitPaid" column is in the sponsors table
 	// If so, run the update
@@ -99,7 +134,6 @@ if (check_setup($prefix."system",$database)) {
 
 }
 	
-
 if (!$setup_success) {
 	
 	header ($setup_relocate);
