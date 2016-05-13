@@ -39,6 +39,8 @@ if (TESTING) {
 	$starttime = $mtime; 
 }
 
+if (HOSTED) check_hosted_gh();
+
 if ($section == "admin") {
 	$container_main = "container-fluid";
 	$nav_container = "navbar-inverse";
