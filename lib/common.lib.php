@@ -1301,6 +1301,8 @@ function style_convert($number,$type,$base_url="") {
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 	
+	$style_convert = "";
+	
 	switch ($type) {		
 		
 		case "1": 
@@ -1681,7 +1683,7 @@ function style_convert($number,$type,$base_url="") {
 		// 
 		case "9":
 		$number = explode("^",$number);
-		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$_SESSION['prefsStyleSet']); 
+		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]); 
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
 		
@@ -1690,7 +1692,6 @@ function style_convert($number,$type,$base_url="") {
 		
 		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$style_name."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
 		break;
-		$style_convert = $query_style;
 	}
 	return $style_convert;
 }

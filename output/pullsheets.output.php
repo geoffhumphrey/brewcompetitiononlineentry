@@ -94,12 +94,9 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         <?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		$special = $special[4];
-		$strength = $special[5];
-		$carb = $special[6];
-		$sweet = $special[7];
+		
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -205,12 +202,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		$special = $special[4];
-		$strength = $special[5];
-		$carb = $special[6];
-		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -314,12 +307,8 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		$special = $special[4];
-		$strength = $special[5];
-		$carb = $special[6];
-		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -407,12 +396,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		$special = $special[4];
-		$strength = $special[5];
-		$carb = $special[6];
-		$sweet = $special[7];
 		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
+		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
@@ -517,12 +502,8 @@ if ($style_type_info[0] == "Y") {
 		$special = style_convert($style_special,"9");
 		//echo $special."<br>";
 		$special = explode("^",$special);
-		$special = $special[4];
-		$strength = $special[5];
-		$carb = $special[6];
-		$sweet = $special[7];
 		echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; 
-		if (($row_entries_1['brewInfo'] != "") && ($special == "1")) echo "<p><strong>Required Info: </strong>".$row_entries_1['brewInfo']."</p>";
+		if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".$row_entries_1['brewInfo']."</p>";
 		if ($row_entries_1['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";  
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (($row_entries_1['brewMead1'] != '') && ($strengh == "1")) echo $row_entries_1['brewMead1']."&nbsp;&nbsp;"; 

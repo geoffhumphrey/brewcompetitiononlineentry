@@ -137,7 +137,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString($_POST['brewStyleEntry'], "text"),
+						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
 						   GetSQLValueString($_POST['brewStyleComEx'], "text")
 						   );
 	
@@ -207,7 +207,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString($_POST['brewStyleEntry'], "text"),
+						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
 						   GetSQLValueString($_POST['brewStyleComEx'], "text"),
 						   GetSQLValueString($id, "int"));
 	

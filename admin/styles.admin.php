@@ -214,14 +214,14 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 	</div><!-- ./Form Group -->
 </div>
 <div id="brewStyleEntry">
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Instructions</label>
+
+<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
+	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-		<input class="form-control" name="brewStyleEntry" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?>" placeholder="">
-	</div>
+		<textarea class="form-control" name="brewStyleEntry" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?></textarea>
+	 </div>
 </div><!-- ./Form Group -->
-</div>
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
 	<label for="brewStyleInfo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
