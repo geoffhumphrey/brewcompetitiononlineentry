@@ -237,10 +237,7 @@ $(document).ready(function()
 
 <?php echo $modals; ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
-<?php 
-if ($total_to_pay == 0) $brewPaid = "1";
-else $brewPaid = $row_log['brewPaid'];
-?>
+
 <input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>">
 
 <?php if ($_SESSION['userLevel'] > 1) { ?>

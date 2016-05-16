@@ -1235,6 +1235,18 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	// ----------------------------------------------------------------------	
 }
 
+function total_entries_brewer($bid) { 
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	$query_all = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $bid);
+	$all = mysqli_query($connection,$query_all) or die (mysqli_error($connection));
+	$row_all = mysqli_fetch_assoc($all);
+
+	return $row_all['count'];
+}
+
+
 function total_not_paid_brewer($bid) { 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
