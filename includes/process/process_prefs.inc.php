@@ -192,7 +192,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsStyleSet=%s,
 		prefsAutoPurge=%s,
 		prefsEntryLimitPaid=%s,
-		prefsEmailRegConfirm=%s
+		prefsEmailRegConfirm=%s,
+		prefsSponsorLogos=%s
 		
 		WHERE id=%s",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -240,12 +241,14 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
+							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
 							   
 							   GetSQLValueString($id, "int"));
 							   
 			
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 

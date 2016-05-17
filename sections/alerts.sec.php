@@ -173,7 +173,6 @@
 	<?php } // end if ($section == "brew") ?>
 <?php } // end if ($logged_in) ?>
 <?php if (!$logged_in) { ?>
-	
      <?php if (($registration_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
         <!-- Account registration not open yet -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
@@ -198,7 +197,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Account and entry registration open -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -206,7 +205,7 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
+    <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
         <!-- Entry limit nearly reached -->
         <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -214,7 +213,9 @@
         </div>
     <?php } ?>
     
-    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <?php 
+	// $entry_window_open variable will be at 2, meaning closed - only show if account registration is open
+	if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
         <!-- Entry limit reached -->
         <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -272,7 +273,7 @@
     <!-- Account and entry registration closed, but Judge/steward registration open -->
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Account Registration is Open.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
+      <span class="fa fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Account Registration is Open for <?php echo $j_s_text; ?> Only.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
     </div>
     <?php } ?>
 		<?php if (($judge_limit) && ($section == "register")) { ?>
