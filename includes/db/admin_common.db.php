@@ -7,6 +7,7 @@ if (table_exists($style_types_db_table)) {
 		if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 		if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 		if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
+		if ($go == "styles") $query_style_type .= " ORDER BY id ASC";
 		if ((($go == "judging_tables") || ($go == "judging_scores_bos")) && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
 		$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 		$row_style_type = mysqli_fetch_assoc($style_type);

@@ -6,7 +6,7 @@ if ($prefix != "") $prefix_session = md5(rtrim($prefix,"_"));
 else $prefix_session = md5("BCOEM12345");
 
 /*
-// For 2.1.0, must be defined before session_start();
+// For 2.1.2.0, set a unique session name before session_start();
 // -------------- Set unique session name by using the server document root ----------------
 // Use server document root (since all pages are served by index.php) and remove slashes
 $session_name = str_replace("/","",$_SERVER['DOCUMENT_ROOT']);

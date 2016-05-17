@@ -60,7 +60,7 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For updating to 2.1.1.0, check if "prefsEntryLimitPaid" column is in the sponsors table
+	// For 2.1.2.0, check if "prefsEntryLimitPaid" column is in the sponsors table
 	// If so, run the update
 	if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
 		

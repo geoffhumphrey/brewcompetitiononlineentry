@@ -58,7 +58,7 @@
 <tbody>
 	<?php do { ?>
 	<tr>
-    	<td><?php echo $row_style_type['styleTypeName']; ?></td>
+    	<td><?php echo $row_style_type['styleTypeName']; if ($row_style_type['styleTypeOwn']  == "custom") echo " (Custom Style Type)"; ?></td>
         <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<span class=\"fa fa-check text-success\"></span>"; else echo "<span class=\"fa fa-times text-danger\"></span>"; ?></td>
         <td class="data"><?php echo bos_method($row_style_type['styleTypeBOSMethod']); ?></td>
         <td class="data">

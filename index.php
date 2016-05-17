@@ -53,7 +53,7 @@ else {
 
 // Load libraries only when needed for performance
 $tinymce_load = array("contest_info","special_best","styles");
-$datetime_load = array("contest_info","judging","testing");
+$datetime_load = array("contest_info","judging","testing","preferences");
 if ((judging_date_return() == 0) && ($registration_open == 2)) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list");
 

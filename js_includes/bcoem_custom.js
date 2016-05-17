@@ -326,6 +326,10 @@ $(function () {
 		format: 'YYYY-MM-DD hh:mm A'
 	});
 	
+	$('#prefsWinnerDelay').datetimepicker({
+		format: 'YYYY-MM-DD hh:mm A'
+	});
+	
 	$('#judgingDate').datetimepicker({
 		format: 'YYYY-MM-DD hh:mm A'
 	});

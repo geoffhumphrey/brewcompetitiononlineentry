@@ -26,31 +26,16 @@ include(DB.'styles.db.php');
 	</div>
 	<?php } ?>
 </div>
-<?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { 
-?>
-<script language="javascript" type="text/javascript">
-//Custom JavaScript Functions by Shawn Olson
-//Copyright 2006-2008
-//http://www.shawnolson.net
-function checkUncheckAll(theElement) {
-     var theForm = theElement.form, z = 0;
-	 for(z=0; z<theForm.length;z++){
-      if(theForm[z].type == 'checkbox' && theForm[z].name != 'checkall'){
-	  theForm[z].checked = theElement.checked;
-	  }
-     }
-    }
-	</script>
-	<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
+<?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
+<script type="text/javascript" language="javascript">
+	$(document).ready(function() {
 		$('#sortable').dataTable( {
-			"bPaginate" : true,
-			"sPaginationType" : "full_numbers",
-			"bLengthChange" : true,
-			"iDisplayLength" : <?php echo $limit; ?>,
-			"sDom": 'rtp',
+			"bPaginate" : false,
+			"sDom": 'rt',
 			"bStateSave" : false,
+			"bLengthChange" : false,
 			"aaSorting": [[2,'asc']],
+			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
 				null,
@@ -62,15 +47,26 @@ function checkUncheckAll(theElement) {
 				<?php } ?>
 				]
 			} );
-		} );
+		} ); 
 </script>  
+<script type="text/javascript" language="javascript">
+function checkUncheckAll(theElement) {
+     var theForm = theElement.form, z = 0;
+	 for(z=0; z<theForm.length;z++){
+      if(theForm[z].type == 'checkbox' && theForm[z].name != 'checkall'){
+	  theForm[z].checked = theElement.checked;
+	  }
+     }
+    }
+</script>
+
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step7") echo "setup"; else echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
  <tr>
   <th><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></th>
   <th>Category Name</th>
-  <th title="Category Number and Subcategory Letter">#</th>
+  <th>#</th>
   <th>Style Type</th>
   <th>Requirements</th>
   <?php if ($section != "step7") { ?>
@@ -122,7 +118,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 ?>
 
 
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1" onSubmit="return CheckRequiredFields()">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="brewStyle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>

@@ -76,6 +76,13 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	$brewer_info = brewer_info($brewer_id);
 	$brewer_info = explode("^",$brewer_info);
 	
+	// Check to see if the amount the entrant has paid is equal to or exceeds the entry fee cap (if defined)
+	$brewPaid = 0;
+	if (isset($_SESSION['contestEntryCap'])) {
+		// if so, mark this entry as paid
+		if ($total_paid_entry_fees >= $_SESSION['contestEntryCap']) $brewPaid = 1;
+	}
+	
 	// Define custom functions
 	function display_array_content_style($arrayname,$method,$base_url) {
 		$a = "";
@@ -1142,6 +1149,7 @@ if ($action == "edit") {
 	</div>
 </div><!-- Form Group -->
 </div>
+<input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>">
 <input type="hidden" name="brewConfirmed" value="1">
 <input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
 </form>

@@ -12,7 +12,7 @@ include (INCLUDES.'current_version.inc.php');
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.1.0, change version in system table if not
+// Current version is 2.1.2.0, change version in system table if not
 // If are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -27,7 +27,12 @@ function version_check($version,$current_version) {
 	mysqli_select_db($connection,$database);
 	if ($version != $current_version) {
 		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='%s'",$prefix."system","2.1.1.0","2016-05-13","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.2.0","2016-05-31","1");
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		// For 2.1.2.0 ONLY, correct misspelling in DB.
+		$updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
