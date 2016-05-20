@@ -81,7 +81,7 @@ if ($go != "admin") echo $info_msg;
 				<!-- Input Here -->
 				<div class="radio">
 					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?> required>
+						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; else echo "CHECKED"; ?> required>
 						What is your favorite all-time beer to drink?
 					</label>
 				</div>

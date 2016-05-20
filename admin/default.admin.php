@@ -177,21 +177,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            <!--
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Emails</strong>
-                                </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
-                                        <li><a data-tooltip="true" title="Send a custom email message to judges" href="#" data-toggle="modal" data-target="#CustomMessage">Custom Message to Judges and/or Stewards</a><li>
-            							<?php if ($totalRows_tables > 1) { ?>
-                                        <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Judge and Steward Table Assignments</a></li>
-										<?php } ?>
-                                    </ul>
-                                </div>
-                            </div>
-                            -->
+                            
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
@@ -546,19 +532,9 @@
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
-                            <!--
-							<?php if ($totalRows_tables > 1) { ?>
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Table Assignments</strong>
-                                </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
-                                        <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Send Table Assignment Emails to Judges and Stewards</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            -->
+                            
+                            
+                            <?php if ($totalRows_tables > 1) { ?>
 							<div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>BOS Judges</strong>
@@ -881,11 +857,11 @@
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</li>
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
 								</ul>
 								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</li>
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</li>
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
 								<ul class="list-inline">
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
@@ -1194,7 +1170,35 @@
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
 
+<!-- For 2.1.2 Release -->
+<!--
+<div class="row">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <strong>Emails</strong>
+    </div>
+    <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+        <ul class="list-inline">
+            <li><a data-tooltip="true" title="Send a custom email message to judges" href="#" data-toggle="modal" data-target="#CustomMessage">Custom Message to Judges and/or Stewards</a><li>
+            <?php if ($totalRows_tables > 1) { ?>
+            <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Judge and Steward Table Assignments</a></li>
+            <?php } ?>
+        </ul>
+    </div>
+</div>
+					
+<div class="row">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <strong>Table Assignments</strong>
+    </div>
+    <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+        <ul class="list-inline">
+            <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Send Table Assignment Emails to Judges and Stewards</a></li>
+        </ul>
+    </div>
+</div>
+-->
 <!-- Send Message Modal -->
+<!--
 <div class="modal fade" id="CustomMessage" tabindex="-1" role="dialog" aria-labelledby="CustomMessageLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -1204,7 +1208,7 @@
       </div>
       <div class="modal-body">
         <form data-toggle="validator" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=custom-message" name="form2">
-        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <div class="form-group">
             <label for="contestCheckInPassword">Message</label>
             <textarea style="height: 175px;" class="form-control" id="judgeMessage" name="judgeMessage" data-error="Please provide a message body" rows="15" required>
             <p>[Compose your message here...]</p>
@@ -1212,11 +1216,10 @@
             </textarea>
             <div class="help-block with-errors">Compose only the body of your message. Each email will be customized with the name and the role of the user as a greeting.</div>
             <div class="help-block with-errors"></div>
-        </div><!-- ./Form Group -->
-        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        </div>
+        <div class="form-group">
         <label for="messageAudience">Audience</label>
         <div class="input-group">
-            <!-- Input Here -->
             <label class="radio-inline">
                 <input type="radio" name="messageAudience" value="J" id="messageAudience_0" checked /> Judges
             </label>
@@ -1231,7 +1234,7 @@
             </label>
 
         </div>
-        </div><!-- ./Form Group -->
+        </div>
         <input name="submit" type="submit" class="btn btn-primary" value="Send Message">
         <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin"; ?>">
         </form>
@@ -1242,7 +1245,7 @@
     </div>
   </div>
 </div>
-
+-->
 <!-- Dashboard Help Modals -->
 <?php foreach ($bcoem_dashboard_help_array as $content)  {
 	echo bcoem_dashboard_help($content);
