@@ -27,7 +27,7 @@ function version_check($version,$current_version) {
 	mysqli_select_db($connection,$database);
 	if ($version != $current_version) {
 		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.2.0","2016-05-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.1.0","2016-05-31","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		/*
