@@ -41,6 +41,10 @@ if (TESTING) {
 
 if (HOSTED) check_hosted_gh();
 
+if ((!HOSTED) && (strpos($section, 'step') === FALSE))  {
+	version_check($version,$current_version);
+}
+
 if ($section == "admin") {
 	$container_main = "container-fluid";
 	$nav_container = "navbar-inverse";
@@ -52,7 +56,7 @@ else {
 }
 
 // Load libraries only when needed for performance
-$tinymce_load = array("contest_info","special_best","styles");
+$tinymce_load = array("contest_info","special_best","styles","default");
 $datetime_load = array("contest_info","judging","testing","preferences");
 if ((judging_date_return() == 0) && ($registration_open == 2)) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list");

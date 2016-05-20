@@ -145,7 +145,7 @@ $(document).ready(function(){
 
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Send Registration Confirmation Emails</label>
+    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Send Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
@@ -160,7 +160,7 @@ $(document).ready(function(){
         <div class="btn-group" role="group" aria-label="contactFormModal">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">
-				   Registration Confirmation Emails Info
+				   Confirmation Emails Info
 				</button>
 			</div>
             <div class="btn-group" role="group">
@@ -178,10 +178,20 @@ $(document).ready(function(){
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="regEmailFormModalLabel">Registration Confirmation Emails Info</h4>
+                <h4 class="modal-title" id="regEmailFormModalLabel">Confirmation Emails</h4>
             </div>
             <div class="modal-body">
-                <p>Do you want a system-generated confirmation email sent to all users upon registering and/or changing their account information?  This may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+            	<p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
+            	<!--
+                <p>Do you want a system-generated confirmation email sent to:</p>
+                <ul>
+                	<li>All users upon registering and/or changing their account information?</li>
+                    <li>All users who register as a judge and/or steward with information specific to their role?</li>
+                    <li>All mid- and top-level admin users when a participant registers as a judge and/or steward?</li>
+                </li>
+                </ul>
+                -->
+                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -189,9 +199,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
-
-
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>

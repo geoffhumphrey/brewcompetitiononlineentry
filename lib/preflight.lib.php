@@ -60,15 +60,27 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.2.0, check if "prefsEntryLimitPaid" column is in the sponsors table
-	// If so, run the update
-	if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
+	if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
+		
+		$updateSQL= "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+	}
+	
+	// For 2.1.1.0, no DB updates are required
+	/*
+	// For 2.1.0.0, check if "brewStyleEntry" column is in the sponsors table
+	// If not, run the update
+	if (!check_update("brewStyleEntry", $prefix."styles")) {
 		
 		$update_required = TRUE;
 		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."update.php";
 		
 	}
+	*/
 		
 	if ($row_version_check['version'] != $current_version) {
 		

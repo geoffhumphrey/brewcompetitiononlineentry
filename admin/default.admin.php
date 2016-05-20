@@ -177,10 +177,31 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                        
+                            <!--
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Emails</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a data-tooltip="true" title="Send a custom email message to judges" href="#" data-toggle="modal" data-target="#CustomMessage">Custom Message to Judges and/or Stewards</a><li>
+            							<?php if ($totalRows_tables > 1) { ?>
+                                        <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Judge and Steward Table Assignments</a></li>
+										<?php } ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            -->
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
+                
+                
+                
+                
+                
+                
+                
 				<!-- Sorting Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -525,7 +546,19 @@
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
+                            <!--
 							<?php if ($totalRows_tables > 1) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Table Assignments</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=table-assignments">Send Table Assignment Emails to Judges and Stewards</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            -->
 							<div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>BOS Judges</strong>
@@ -1160,6 +1193,55 @@
         </div><!-- ./ right column -->
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
+
+<!-- Send Message Modal -->
+<div class="modal fade" id="CustomMessage" tabindex="-1" role="dialog" aria-labelledby="CustomMessageLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="CustomMessageLabel">Compose a Custom Message</h4>
+      </div>
+      <div class="modal-body">
+        <form data-toggle="validator" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=custom-message" name="form2">
+        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+            <label for="contestCheckInPassword">Message</label>
+            <textarea style="height: 175px;" class="form-control" id="judgeMessage" name="judgeMessage" data-error="Please provide a message body" rows="15" required>
+            <p>[Compose your message here...]</p>
+            <p>Cheers,<br><?php echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?><br><a href="mailto:<?php echo $_SESSION['brewerEmail']; ?>"><?php echo $_SESSION['brewerEmail']; ?></a><br>[Your title]<br><?php echo $_SESSION['contestName']; ?></p>
+            </textarea>
+            <div class="help-block with-errors">Compose only the body of your message. Each email will be customized with the name and the role of the user as a greeting.</div>
+            <div class="help-block with-errors"></div>
+        </div><!-- ./Form Group -->
+        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="messageAudience">Audience</label>
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="messageAudience" value="J" id="messageAudience_0" checked /> Judges
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="messageAudience" value="S" id="messageAudience_1" /> Stewards
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="messageAudience" value="JS" id="messageAudience_2" /> Judges and Stewards
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="messageAudience" value="X" id="messageAudience_3" /> Staff
+            </label>
+
+        </div>
+        </div><!-- ./Form Group -->
+        <input name="submit" type="submit" class="btn btn-primary" value="Send Message">
+        <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin"; ?>">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Dashboard Help Modals -->
 <?php foreach ($bcoem_dashboard_help_array as $content)  {

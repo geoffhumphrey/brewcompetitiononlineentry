@@ -420,6 +420,7 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 $output .= "<li>Styles data updated.</li>";
 
 
+
 // -----------------------------------------------------------
 // Data Update: Update Version in System Table
 // -----------------------------------------------------------

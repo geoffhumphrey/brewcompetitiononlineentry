@@ -12,7 +12,7 @@ include (INCLUDES.'current_version.inc.php');
 include (LIB.'date_time.lib.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.2.0, change version in system table if not
+// Current version is 2.1.1.0, change version in system table if not
 // If are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -30,17 +30,13 @@ function version_check($version,$current_version) {
 		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.2.0","2016-05-31","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+		/*
 		// For 2.1.2.0 ONLY, correct misspelling in DB.
 		$updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+		*/
 	}
-}
-
-if ((!HOSTED) && (strpos($section, 'step') === FALSE))  {
-	version_check($version,$current_version);
 }
 
 // ---------------------------------------------------  
@@ -2757,11 +2753,13 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				$output .= "\t\t\t<td class='dataList'>Table ".$table_info[0]." - ".$table_info[1]."</td>\n";
 				$output .= "\t\t</tr>\n";
 			}
-			elseif ($method2 == "1") {
+			
+			elseif ($method2 == 1) {
 				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 				
 			}
+			
 			else {
 				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
