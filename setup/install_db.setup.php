@@ -662,7 +662,7 @@ if ($setup_free_access == TRUE) {
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_preferences_db_table` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
-		  `jPrefsQueued` tinyint(1) NULL DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
+		  `jPrefsQueued` char(1) NULL DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
 		  `jPrefsFlightEntries` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
 		  `jPrefsMaxBOS` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
 		  `jPrefsRounds` int(11) NULL DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',

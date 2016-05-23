@@ -1,20 +1,55 @@
--- phpMyAdmin SQL Dump
--- version 3.5.8.2
--- http://www.phpmyadmin.net
+-- ------------------------------------------------------------------------------------
 --
--- Host: localhost
--- Generation Time: May 10, 2016 at 08:55 AM
--- Server version: 5.5.42-37.1-log
--- PHP Version: 5.4.31
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+-- This baseline sql document is *ONLY* for new installations.
+-- Use *ONLY* if you experience problems with the browser-based setup.
+--
+-- ------------------------------------------------------------------------------------
+-- 
+-- UPDATED 05.24.2016 for Version 2.1.1.0
+--
+-- ------------------------------------------------------------------------------------
+--
+-- Sets up a basic install and baseline data for version 2.0.X.
+-- Import this DB structure and dummy data via phpMyAdmin or shell access.
+-- Adds a top-level admin user:
+--   - Username: user.baseline@brewcompetition.com
+--   - Password: bcoem
+--   - Security question: What is your favorite all-time beer to drink?
+--   - Answer: pabst
+-- !! CHANGE THIS USER'S PASSWORD *IMMEDIATELY* FOR SECURITY !!
+-- !! CHANGE THIS USER's SECURITY ANSWER IMMEDIATELY **VIA PHPMYADMIN** OR 
+--    ON THE LAST LINE OF THIS DOCUMENT !!
+-- If the password above does not work, use the password forgot/reset
+-- function:
+-- www.yoursite.com/index.php?section=login&go=password&action=forgot
+--
+-- ------------------------------------------------------------------------------------
+--
+-- Be sure to edit the config.php file to your environment.
+-- Each DB table is has a prefix of baseline_
+-- be sure to define the $prefix variable in config.php (e.g., $prefix = "baseline_";)
+-- You can change the baseline_ prefix here by doing a global find/replace.
+-- Be sure to update/alter the $prefix variable in config.php.
+--
+-- ------------------------------------------------------------------------------------
+-- 
+-- Once you have installed the DB tables, browse to your site and log in.
+-- Update the default information to suit your own needs. Be sure to update:
+--   -  Site Preferences
+--   -  Competition Organization Preferences
+--   -  Competition Info
+--   -  Style Types
+--   -  Accepted Style Categories
+--   -  Judging Locations/Dates
+--   -  Drop-off Locations
+--   -  Competition Contacts
+--   -  Sponsors
+--
+-- ------------------------------------------------------------------------------------
+-- 
+-- BEGIN MYSQL
+--
+-- ------------------------------------------------------------------------------------
 
 --
 -- Database: `brewcomp_bcoetest`
@@ -28,13 +63,12 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `archiveUserTableName` varchar(255) DEFAULT NULL,
   `archiveBrewerTableName` varchar(255) DEFAULT NULL,
   `archiveBrewingTableName` varchar(255) DEFAULT NULL,
-  `archiveSuffix` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `archiveSuffix` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `baseline_archive` (
 
 DROP TABLE IF EXISTS `baseline_brewer`;
 CREATE TABLE IF NOT EXISTS `baseline_brewer` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `uid` int(8) DEFAULT NULL,
   `brewerFirstName` varchar(200) DEFAULT NULL,
   `brewerLastName` varchar(200) DEFAULT NULL,
@@ -74,9 +108,8 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `brewerAHA` int(11) DEFAULT NULL,
   `brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
   `brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
-  `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_brewer`
@@ -93,7 +126,7 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 
 DROP TABLE IF EXISTS `baseline_brewing`;
 CREATE TABLE IF NOT EXISTS `baseline_brewing` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `brewName` varchar(255) DEFAULT NULL,
   `brewStyle` varchar(255) DEFAULT NULL,
   `brewCategory` char(2) DEFAULT NULL,
@@ -450,9 +483,8 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `brewJudgingNumber` varchar(10) DEFAULT NULL,
   `brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
   `brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
-  `brewBoxNum` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `brewBoxNum` varchar(10) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -462,13 +494,12 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
 
 DROP TABLE IF EXISTS `baseline_contacts`;
 CREATE TABLE IF NOT EXISTS `baseline_contacts` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `contactFirstName` varchar(255) DEFAULT NULL,
   `contactLastName` varchar(255) DEFAULT NULL,
   `contactPosition` varchar(255) DEFAULT NULL,
-  `contactEmail` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `contactEmail` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_contacts`
@@ -521,8 +552,7 @@ CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
   `contestID` varchar(11) DEFAULT NULL,
   `contestCircuit` text,
   `contestVolunteers` text,
-  `contestCheckInPassword` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `contestCheckInPassword` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -540,14 +570,13 @@ INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contes
 
 DROP TABLE IF EXISTS `baseline_drop_off`;
 CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `dropLocation` text,
   `dropLocationName` varchar(255) DEFAULT NULL,
   `dropLocationPhone` varchar(255) DEFAULT NULL,
   `dropLocationWebsite` varchar(255) DEFAULT NULL,
-  `dropLocationNotes` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `dropLocationNotes` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_drop_off`
@@ -564,15 +593,14 @@ INSERT INTO `baseline_drop_off` (`id`, `dropLocation`, `dropLocationName`, `drop
 
 DROP TABLE IF EXISTS `baseline_judging_assignments`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `bid` int(11) DEFAULT NULL COMMENT 'id from brewer table',
   `assignment` char(1) DEFAULT NULL,
   `assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables table',
   `assignFlight` int(11) DEFAULT NULL,
   `assignRound` int(11) DEFAULT NULL,
-  `assignLocation` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `assignLocation` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -582,13 +610,12 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
 
 DROP TABLE IF EXISTS `baseline_judging_flights`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` text COMMENT 'array of ids of each entry from the brewing table',
-  `flightRound` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `flightRound` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -598,14 +625,13 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
 
 DROP TABLE IF EXISTS `baseline_judging_locations`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `judgingDate` varchar(255) DEFAULT NULL,
   `judgingTime` varchar(255) DEFAULT NULL,
   `judgingLocName` varchar(255) DEFAULT NULL,
   `judgingLocation` text,
-  `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_locations`
@@ -622,16 +648,15 @@ INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `j
 
 DROP TABLE IF EXISTS `baseline_judging_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
   `jPrefsRounds` int(11) DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
   `jPrefsCapJudges` int(3) DEFAULT NULL,
   `jPrefsCapStewards` int(3) DEFAULT NULL,
-  `jPrefsBottleNum` int(3) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `jPrefsBottleNum` int(3) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_preferences`
@@ -648,16 +673,15 @@ INSERT INTO `baseline_judging_preferences` (`id`, `jPrefsQueued`, `jPrefsFlightE
 
 DROP TABLE IF EXISTS `baseline_judging_scores`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
   `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
   `scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
   `scoreEntry` float DEFAULT NULL COMMENT 'numerical score assigned by judges',
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
   `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom styles',
-  `scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -667,14 +691,13 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
 
 DROP TABLE IF EXISTS `baseline_judging_scores_bos`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
   `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
   `scoreEntry` int(11) DEFAULT NULL COMMENT 'numerical score assigned by judges',
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
-  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom stylesr',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom stylesr'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -684,15 +707,14 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
 
 DROP TABLE IF EXISTS `baseline_judging_tables`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
   `tableStyles` text COMMENT 'Array of ids from styles table',
   `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
   `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
   `tableJudges` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
-  `tableStewards` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `tableStewards` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -702,7 +724,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
 
 DROP TABLE IF EXISTS `baseline_mods`;
 CREATE TABLE IF NOT EXISTS `baseline_mods` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
   `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
   `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
@@ -712,9 +734,8 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
   `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
   `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
   `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
-  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -724,7 +745,7 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
 
 DROP TABLE IF EXISTS `baseline_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_preferences` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `prefsTemp` varchar(255) DEFAULT NULL,
   `prefsWeight1` varchar(20) DEFAULT NULL,
   `prefsWeight2` varchar(20) DEFAULT NULL,
@@ -771,9 +792,8 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsStyleSet` varchar(20) DEFAULT NULL,
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
   `prefsEntryLimitPaid` int(4) DEFAULT NULL,
-  `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_preferences`
@@ -790,14 +810,13 @@ INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWei
 
 DROP TABLE IF EXISTS `baseline_special_best_data`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
   `bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
   `eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
   `sbd_place` int(11) DEFAULT NULL,
-  `sbd_comments` text,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sbd_comments` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -807,14 +826,13 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
 
 DROP TABLE IF EXISTS `baseline_special_best_info`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `sbi_name` varchar(255) DEFAULT NULL,
   `sbi_description` text,
   `sbi_places` int(11) DEFAULT NULL,
   `sbi_rank` int(11) DEFAULT NULL,
-  `sbi_display_places` int(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sbi_display_places` int(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -824,16 +842,15 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
 
 DROP TABLE IF EXISTS `baseline_sponsors`;
 CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `sponsorName` varchar(255) DEFAULT NULL,
   `sponsorURL` varchar(255) DEFAULT NULL,
   `sponsorImage` varchar(255) DEFAULT NULL,
   `sponsorText` text,
   `sponsorLocation` text,
   `sponsorLevel` tinyint(1) DEFAULT NULL,
-  `sponsorEnable` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sponsorEnable` tinyint(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -843,15 +860,14 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
 
 DROP TABLE IF EXISTS `baseline_staff`;
 CREATE TABLE IF NOT EXISTS `baseline_staff` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL COMMENT 'user&rsquo;s id from user table',
+  `id` int(11) NOT NULL,
+  `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
   `staff_judge` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_judge_bos` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_steward` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_organizer` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  `staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -861,7 +877,7 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
 
 DROP TABLE IF EXISTS `baseline_styles`;
 CREATE TABLE IF NOT EXISTS `baseline_styles` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `brewStyleNum` varchar(3) DEFAULT NULL,
   `brewStyle` varchar(250) DEFAULT NULL,
   `brewStyleCategory` varchar(255) DEFAULT NULL,
@@ -888,9 +904,8 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleSweet` int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
   `brewStyleTags` varchar(255) DEFAULT NULL,
   `brewStyleComEx` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `brewStyleEntry` text CHARACTER SET utf8 COLLATE utf8_bin,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=227 ;
+  `brewStyleEntry` text CHARACTER SET utf8 COLLATE utf8_bin
+) ENGINE=MyISAM AUTO_INCREMENT=227 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `baseline_styles`
@@ -903,7 +918,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (4, 'D', 'Munich Helles', 'Light Lager', '1.045', '1.051', '1.008', '1.012', '4.7', '5.4', '16', '22', '3', '5', 'Lager', 'Unlike Pilsner but like its cousin, Munich Dunkel, Helles is a malt-accentuated beer that is not overly sweet, but rather focuses on malt flavor with underlying hop bitterness in a supporting role.', 'http://www.bjcp.org/2008styles/style01.php#1d', '01', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Weihenstephaner Original, Hacker-Pschorr Munchner Gold, BurgerbrÃ¤u Wolznacher Hell Naturtrub, Mahr&rsquo;s Hell, Paulaner Premium Lager, Spaten Premium Lager, Stoudt&rsquo;s Gold Lager.', ''),
 (5, 'E', 'Dortmunder Export', 'Light Lager', '1.048', '1.056', '1.01', '1.015', '4.8', '6', '23', '30', '4', '6', 'Lager', 'Brewed to a slightly higher starting gravity than other light lagers, providing a firm malty body and underlying maltiness to complement the sulfate-accentuated hop bitterness. The term &rsquo;Export&rsquo; is a beer strength category under German beer tax law, and is not strictly synonymous with the &rsquo;Dortmunder&rsquo; style. Beer from other cities or regions can be brewed to Export strength, and labeled as such.', 'http://www.bjcp.org/2008styles/style01.php#1e', '01', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'DAB Export, Dortmunder Union Export, Dortmunder Kronen, Ayinger Jahrhundert, Great Lakes Dortmunder Gold, Barrel House Duveneck&rsquo;s Dortmunder, Bell&rsquo;s Lager, Dominion Lager, Gordon Biersch Golden Export, Flensburger Gold.', ''),
 (6, 'A', 'German Pilsner (Pils)', 'Pilsner', '1.044', '1.05', '1.008', '1.013', '4.4', '5.2', '25', '45', '2', '5', 'Lager', 'Drier and crisper than a Bohemian Pilsener with a bitterness that tends to linger more in the aftertaste due to higher attenuation and higher-sulfate water. Lighter in body and color, and with higher carbonation than a Bohemian Pilsener. Modern examples of German pilsners tend to become paler in color, drier in finish, and more bitter as you move from South to North in Germany. ', 'http://www.bjcp.org/2008styles/style02.php#1a', '02', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Victory Prima Pils, Bitburger, Warsteiner, Trumer Pils, Old Dominion Tupper&rsquo;s Hop Pocket Pils, Konig Pilsener, Jever Pils, Left Hand Polestar Pilsner, Holsten Pils, Spaten Pils, Brooklyn Pilsner. ', ''),
-(7, 'B', 'Bohemian Pilsener', 'Pilsner', '1.044', '1.056', '1.013', '1.017', '4.2', '5.4', '35', '45', '3.5', '6', 'Lager', 'Uses Moravian malted barley and a decoction mash for rich, malt character. Saaz hops and low sulfate, low carbonate water provide a distinctively soft, rounded hop profile. Traditional yeast sometimes can provide a background diacetyl note. Dextrins provide additional body, and diacetyl enhances the perception of a fuller palate. ', 'http://www.bjcp.org/2008styles/style02.php#1b', '02', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Pilsner Urquell, Kruovice Imperial 12&deg;, Budweiser Budvar (Czechvar in the US), Czech Rebel, Staropramen, Gambrinus Pilsner, Zlaty Bazant Golden Pheasant, Dock Street Bohemian Pilsner. ', ''),
+(7, 'B', 'Bohemian Pilsener', 'Pilsner', '1.044', '1.056', '1.013', '1.017', '4.2', '5.4', '35', '45', '3.5', '6', 'Lager', 'Uses Moravian malted barley and a decoction mash for rich, malt character. Saaz hops and low sulfate, low carbonate water provide a distinctively soft, rounded hop profile. Traditional yeast sometimes can provide a background diacetyl note. Dextrins provide additional body, and diacetyl enhances the perception of a fuller palate. ', 'http://www.bjcp.org/2008styles/style02.php#1b', '02', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Pilsner Urquell, Kruovice Imperial 12Â°, Budweiser Budvar (Czechvar in the US), Czech Rebel, Staropramen, Gambrinus Pilsner, Zlaty Bazant Golden Pheasant, Dock Street Bohemian Pilsner. ', ''),
 (8, 'C', 'Classic American Pilsner', 'Pilsner', '1.044', '1.06', '1.01', '1.015', '4.5', '6', '25', '40', '3', '6', 'Lager', 'A substantial Pilsner that can stand up to the classic European Pilsners, but exhibiting the native American grains and hops available to German brewers who initially brewed it in the USA. Refreshing, but with the underlying malt and hops that stand out when compared to other modern American light lagers. Maize lends a distinctive grainy sweetness. Rice contributes a crisper, more neutral character. A version of Pilsner brewed in the USA by immigrant German brewers who brought the process and yeast with them when they settled in America. They worked with the ingredients that were native to America to create a unique version of the original Pilsner. This style died out after Prohibition but was resurrected as a home-brewed style by advocates of the hobby.', 'http://www.bjcp.org/2008styles/style02.php#1c', '02', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Occasional brewpub and microbrewery specials. ', ''),
 (9, 'A', 'Vienna Lager', 'European Amber Lager', '1.046', '1.052', '1.01', '1.014', '4.5', '5.7', '18', '30', '10', '16', 'Lager', 'Characterized by soft, elegant maltiness that dries out in the finish to avoid becoming sweet.', 'http://www.bjcp.org/2008styles/style03.php#1a', '03', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Great Lakes Eliot Ness, Boulevard Bob&rsquo;s 47 Munich-Style Lager, Negra Modelo, Old Dominion Aviator Amber Lager, Gordon Biersch Vienna Lager, Capital Wisconsin Amber, Olde Saratoga Lager, Penn Pilsner. ', ''),
 (10, 'B', 'Oktoberfest/Marzen', 'European Amber Lager', '1.05', '1.057', '1.012', '1.016', '4.8', '5.7', '20', '28', '7', '14', 'Lager', 'Smooth, clean, and rather rich, with a depth of malt character. This is one of the classic malty styles, with a maltiness that is often described as soft, complex, and elegant but never cloying.', 'http://www.bjcp.org/2008styles/style03.php#1b', '03', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Paulaner Oktoberfest, Ayinger Oktoberfest-MÃ¤rzen, Hacker-Pschorr Original Oktoberfest, HofbrÃ¤u Oktoberfest, Victory Festbier, Great Lakes Oktoberfest, Spaten Oktoberfest, Capital Oktoberfest, Gordon Biersch MÃ¤rzen, Goose Island Oktoberfest, Samuel Adams Oktoberfest. ', ''),
@@ -1003,10 +1018,10 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (103, 'A', 'International Pale Lager', 'International Lager', '1.042', '1.05', '1.008', '1.012', '4.6', '6', '18', '25', '2', '6', 'Lager', 'A highly-attenuated pale lager without strong flavors, typically well-balanced and highly carbonated. Served cold, it is refreshing and thirst-quenching.', 'http://bjcp.org/stylecenter.php', '02', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, traditional-style, pale-lager-family, balanced', 'Heineken, Corona Extra, Asahi Super Dry, Full Sail Session Premium Lager, Birra Moretti, Red Stripe, Singha, Devils Backbone Gold Leaf Lager.', ''),
 (104, 'B', 'International Amber Lager', 'International Lager', '1.042', '1.055', '1.008', '1.014', '4.6', '6', '8', '25', '7', '14', 'Lager', 'A well-attenuated malty amber lager with an interesting caramel or toast quality and restrained bitterness. Usually fairly well-attenuated, and can have an adjunct quality to it. Smooth, easily-drinkable lager character.', 'http://bjcp.org/stylecenter.php', '02', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, traditional-style, amber-lager-family, malty', 'Schell&rsquo;s Oktoberfest, Capital Winter Skal, Dos Equis Amber, Yuengling Lager, Brooklyn Lager.', ''),
 (105, 'C', 'International Dark Lager', 'International Lager', '1.044', '1.056', '1.008', '1.012', '4.2', '6', '8', '20', '14', '22', 'Lager', 'A darker and somewhat sweeter version of international pale lager with a little more body and flavor, but equally restrained in bitterness. The low bitterness leaves the malt as the primary flavor element, and the low hop levels provide very little in the way of balance.', 'http://bjcp.org/stylecenter.php', '02', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, traditional-style, dark-lager-family, malty', 'Dixie Blackened Voodoo, Shiner Bock, San Miguel Dark, Baltika 4, Saint Pauli Girl Dark.', ''),
-(106, 'A', 'Czech Pale Lager', 'Czech Lager', '1.036', '1.044', '1.008', '1.014', '3', '4', '25', '35', '3', '6', 'Lager', 'A lighter-bodied, rich, refreshing, hoppy, bitter, crisp pale Czech lager having the familiar flavors of the stronger Czech Pilsner-type beer but in a lower alcohol, lighter-bodied, and slightly less intense format.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, bitter, hoppy', 'Uneticke Pivo 10&deg;, Pivovar Kout na Sumave Koutska 10&deg;, Novosad Glassworks Brewery Hutske Vycepni 8&deg;, Cernyy Orel Svetle 11&deg;, Breznak Svetle Vycepni Pivo, Notch Session Pils.', ''),
-(107, 'B', 'Czech Premium Pale Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.2', '5.8', '30', '45', '3.5', '6', 'Lager', 'Rich, characterful pale Czech lager, with considerable malt and hop character and a long, crisp finish. Complex yet well-balanced and refreshing. The malt flavors are complex for a Pilsner-type beer, and the bitterness is strong but clean and without harshness, which gives a rounded impression that enhances drinkability.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pilsner-family, balanced, hoppy', 'Kout na Sumave Koutska 12&deg;, Uneticka 12&deg;, Pilsner Urquell, Bernard Svatecn', ''),
-(108, 'C', 'Czech Amber Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '20', '35', '10', '16', 'Lager', 'Malt-driven amber Czech lager with hop character that can vary from low to quite significant. The malt flavors can vary quite a bit, leading to different interpretations ranging from drier, bready, and slightly biscuity to sweeter and somewhat caramelly. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, central-europe, traditional-style, amber-lager-family, balanced', 'Cerny Orel polotmava 12&deg;, Primator polotmavy 13&deg;, Jihlavsky Radnicni Pivovar Zikmund, Pivovar Vysoky Chlumec Demon, Pivovar Benesov Sedm kuli, Bernard Jantar.', ''),
-(109, 'D', 'Czech Dark Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '18', '38', '14', '35', 'Lager', 'A rich, dark, malty Czech lager with a roast character that can vary from almost absent to quite prominent. Malty with an interesting and complex flavor profile, with variable levels of hopping providing a range of possible interpretations. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, central-europe, traditional-style, dark-lager-family, balanced', 'Kout na Sumav Tmavy 14&deg;, Pivovar Breznice Herold, U Fleku, Budvar Tmavy Lezak, Bohemian Brewery Cherny Bock 4, Devils Backbone Moran, Notch Cerne Pivo.', ''),
+(106, 'A', 'Czech Pale Lager', 'Czech Lager', '1.036', '1.044', '1.008', '1.014', '3', '4', '25', '35', '3', '6', 'Lager', 'A lighter-bodied, rich, refreshing, hoppy, bitter, crisp pale Czech lager having the familiar flavors of the stronger Czech Pilsner-type beer but in a lower alcohol, lighter-bodied, and slightly less intense format.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, bitter, hoppy', 'Uneticke Pivo 10Â°, Pivovar Kout na Sumave Koutska 10Â°, Novosad Glassworks Brewery Hutske Vycepni 8Â°, Cernyy Orel Svetle 11Â°, Breznak Svetle Vycepni Pivo, Notch Session Pils.', ''),
+(107, 'B', 'Czech Premimum Pale Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.2', '5.8', '30', '45', '3.5', '6', 'Lager', 'Rich, characterful pale Czech lager, with considerable malt and hop character and a long, crisp finish. Complex yet well-balanced and refreshing. The malt flavors are complex for a Pilsner-type beer, and the bitterness is strong but clean and without harshness, which gives a rounded impression that enhances drinkability.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pilsner-family, balanced, hoppy', 'Kout na Sumave Koutska 12Â°, Uneticka 12Â°, Pilsner Urquell, Bernard Svatecn', ''),
+(108, 'C', 'Czech Amber Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '20', '35', '10', '16', 'Lager', 'Malt-driven amber Czech lager with hop character that can vary from low to quite significant. The malt flavors can vary quite a bit, leading to different interpretations ranging from drier, bready, and slightly biscuity to sweeter and somewhat caramelly. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, central-europe, traditional-style, amber-lager-family, balanced', 'Cerny Orel polotmava 12Â°, Primator polotmavy 13Â°, Jihlavsky Radnicni Pivovar Zikmund, Pivovar Vysoky Chlumec Demon, Pivovar Benesov Sedm kuli, Bernard Jantar.', ''),
+(109, 'D', 'Czech Dark Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '18', '38', '14', '35', 'Lager', 'A rich, dark, malty Czech lager with a roast character that can vary from almost absent to quite prominent. Malty with an interesting and complex flavor profile, with variable levels of hopping providing a range of possible interpretations. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, central-europe, traditional-style, dark-lager-family, balanced', 'Kout na Sumav Tmavy 14Â°, Pivovar Breznice Herold, U Fleku, Budvar Tmavy Lezak, Bohemian Brewery Cherny Bock 4, Devils Backbone Moran, Notch Cerne Pivo.', ''),
 (110, 'A', 'Munich Helles', 'Pale Malty European Lager', '1.044', '1.048', '1.006', '1.012', '4.7', '5.4', '16', '22', '3', '5', 'Lager', 'A clean, malty, gold-colored German lager with a smooth grainy-sweet malty flavor and a soft, dry finish. Subtle spicy, floral, or herbal hops and restrained bitterness help keep the balance malty but not sweet, which helps make this beer a refreshing, everyday drink.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, malty', 'Weihenstephaner Original, Hacker-Pschorr Munchner Gold, Burgerbrau Wolznacher Hell Naturtrub, Paulaner Premium Lager, Spaten Premium Lager, Lowenbrau Original.', ''),
 (111, 'B', 'Festbier', 'Pale Malty European Lager', '1.054', '1.057', '1.01', '1.012', '5.8', '6.3', '18', '24', '4', '6', 'Lager', 'A smooth, clean, pale German lager with a moderately strong malty flavor and a light hop character. Deftly balances strength and drinkability, with a palate impression and finish that encourages drinking. Showcases elegant German malt flavors without becoming too heavy or filling.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, malty', 'Paulaner Wiesn, Lowenbrau Oktoberfestbier, Hofbrau Festbier, Hacker-Pschorr Superior Festbier, Augustiner Oktoberfest, Schonramer Gold.', ''),
 (112, 'C', 'Helles Bock', 'Pale Malty European Lager', '1.064', '1.072', '1.011', '1.008', '6.3', '7.4', '23', '35', '6', '11', 'Lager', 'A relatively pale, strong, malty German lager beer with a nicely attenuated finish that enhances drinkability. The hop character is generally more apparent than in other bocks.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, bock-family, malty', 'Ayinger Maibock, Mahr&rsquo;s Bock, Hacker-Pschorr Hubertus Bock, Altenmunster Maibock, Capital Maibock, Einbecker Mai-Urbock, Blind Tiger Maibock.', ''),
@@ -1049,26 +1064,26 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (148, 'C', 'Tropical Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '5.5', '8', '30', '50', '30', '40', 'Ale', 'A very dark, sweet, fruity, moderately strong ale with smooth roasty flavors without a burnt harshness. ', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, malty, roasty, sweet', 'Lion Stout (Sri Lanka), Dragon Stout (Jamaica), ABC Stout (Singapore), Royal Extra &quot;The Lion Stout&quot; (Trinidad), Jamaica Stout (Jamaica).', ''),
 (149, 'D', 'Foreign Extra Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '6.5', '8', '50', '70', '30', '40', 'Ale', 'A very dark, moderately strong, fairly dry, stout with prominent roast flavors.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty', 'Guinness Foreign Extra Stout, Ridgeway Foreign Export Stout, Coopers Best Extra Stout, Elysian Dragonstooth Stout.', ''),
 (150, 'A', 'English Strong Ale', 'Strong British Ale', '1.055', '1.08', '1.015', '1.022', '5.5', '8', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', ''),
-(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', ''),
+(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged', 'Gale''s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', ''),
 (152, 'C', 'Wee Heavy', 'Strong British Ale', '1.07', '1.013', '1.018', '1.04', '6.5', '10', '17', '35', '14', '25', 'Ale', 'Rich, malty, dextrinous, and usually caramel-sweet, these beers can give an impression that is suggestive of a dessert. Complex secondary malt and alcohol flavors prevent a one-dimensional quality. Strength and maltiness can vary, but should not be cloying or syrupy. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Traquair House Ale, Belhaven Wee Heavy, McEwan&rsquo;s Scotch Ale, MacAndrew&rsquo;s Scotch Ale, Orkney Skull Splitter, Inveralmond Black Friar, Broughton Old Jock, Gordon Highland Scotch Ale, AleSmith Wee Heavy.', ''),
-(153, 'D', 'English Barleywine', 'Strong British Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'A showcase of malty richness and complex, intense flavors. Chewy and rich in body, with warming alcohol and a pleasant fruity or hoppy interest. When aged, it can take on port-like flavors. A wintertime sipper. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Adnam&rsquo;s Tally Ho, Burton Bridge Thomas Sykes Old Ale, J.W. Lee&rsquo;s Vintage Harvest Ale, Fuller&rsquo;s Vintage Ale, Robinson&rsquo;s Old Tom, Fuller&rsquo;s Golden Pride, Whitbread Gold Label.', ''),
+(153, 'D', 'English Barleywine', 'Strong British Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'A showcase of malty richness and complex, intense flavors. Chewy and rich in body, with warming alcohol and a pleasant fruity or hoppy interest. When aged, it can take on port-like flavors. A wintertime sipper. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Adnam''s Tally Ho, Burton Bridge Thomas Sykes Old Ale, J.W. Lee''s Vintage Harvest Ale, Fuller''s Vintage Ale, Robinson''s Old Tom, Fuller''s Golden Pride, Whitbread Gold Label.', ''),
 (154, 'A', 'Blonde Ale', 'Pale American Ale', '1.038', '1.054', '1.008', '1.013', '3.8', '5.5', '15', '28', '3', '6', 'Ale', 'Easy-drinking, approachable, malt-oriented American craft beer, often with interesting fruit, hop, or character malt notes. Well-balanced and clean, is a refreshing pint without aggressive flavors.', 'http://bjcp.org/stylecenter.php', '18', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, any-fermentation, north-america, craft-style, pale-ale-family, balanced', 'Kona Big Wave, Pelican Kiwanda Cream Ale, Victory Summer Love, Russian River Aud Blonde, Widmer Blonde Ale.', ''),
 (155, 'B', 'American Pale Ale', 'Pale American Ale', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '30', '50', '5', '10', 'Ale', 'A pale, refreshing and hoppy ale, yet with sufficient supporting malt to make the beer balanced and drinkable. The clean hop presence can reflect classic or modern American or New World hop varieties with a wide range of characteristics. An average-strength hop-forward pale American craft beer, generally balanced to be more accessible than modern American IPAs. ', 'http://bjcp.org/stylecenter.php', '18', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, north-america, craft-style, pale-ale-family, bitter, hoppy', 'Sierra Nevada Pale Ale, Firestone Walker Pale 31, Deschutes Mirror Pond, Great Lakes Burning River, Flying Dog Doggie Style, Troegs Pale Ale, Big Sky Scape Goat.', ''),
-(156, 'A', 'American Amber Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '25', '40', '10', '17', 'Ale', 'An amber, hoppy, moderate-strength American craft beer with a caramel malty flavor. The balance can vary quite a bit, with some versions being fairly malty and others being aggressively hoppy. Hoppy and bitter versions should not have clashing flavors with the caramel malt profile. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north-america, craft-style, amber-ale-family, balanced, hoppy', 'Troegs HopBack Amber Ale, Kona Lavaman Red Ale, Full Sail Amber, Deschutes Cinder Cone Red, Rogue American Amber Ale, Anderson Valley Boont Amber Ale, McNeill&rsquo;s Firehouse Amber Ale, Mendocino Red Tail Ale.', ''),
+(156, 'A', 'American Amber Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '25', '40', '10', '17', 'Ale', 'An amber, hoppy, moderate-strength American craft beer with a caramel malty flavor. The balance can vary quite a bit, with some versions being fairly malty and others being aggressively hoppy. Hoppy and bitter versions should not have clashing flavors with the caramel malt profile. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north-america, craft-style, amber-ale-family, balanced, hoppy', 'Troegs HopBack Amber Ale, Kona Lavaman Red Ale, Full Sail Amber, Deschutes Cinder Cone Red, Rogue American Amber Ale, Anderson Valley Boont Amber Ale, McNeill''s Firehouse Amber Ale, Mendocino Red Tail Ale.', ''),
 (157, 'B', 'California Common', 'Amber and Brown American Beer', '1.048', '1.054', '1.011', '1.014', '4.5', '5.5', '30', '45', '10', '14', 'Ale', 'A lightly fruity beer with firm, grainy maltiness, interesting toasty and caramel flavors, and showcasing the signature Northern Brewer varietal hop character.', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, north-america, traditional-style, amber-lager-family, bitter, hoppy', 'Anchor Steam, Steamworks Steam Engine Lager, Flying Dog Old Scratch Amber Lager, Schlafly Pi Common.', ''),
-(158, 'C', 'American Brown Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.016', '4.3', '6.2', '20', '30', '18', '35', 'Ale', 'A malty but hoppy beer frequently with chocolate and caramel flavors. The hop flavor and aroma complements and enhances the malt rather than clashing with it. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, brown-ale-family, balanced, hoppy', 'Big Sky Moose Drool Brown Ale, Cigar City Maduro Brown Ale, Bell&rsquo;s Best Brown, Smuttynose Old Brown Dog Ale, Brooklyn Brown Ale, Lost Coast Downtown Brown, Avery Ellie&rsquo;s Brown Ale.', ''),
+(158, 'C', 'American Brown Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.016', '4.3', '6.2', '20', '30', '18', '35', 'Ale', 'A malty but hoppy beer frequently with chocolate and caramel flavors. The hop flavor and aroma complements and enhances the malt rather than clashing with it. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, brown-ale-family, balanced, hoppy', 'Big Sky Moose Drool Brown Ale, Cigar City Maduro Brown Ale, Bell''s Best Brown, Smuttynose Old Brown Dog Ale, Brooklyn Brown Ale, Lost Coast Downtown Brown, Avery Ellie&rsquo;s Brown Ale.', ''),
 (159, 'A', 'American Porter', 'American Porter and Stout', '1.05', '1.07', '1.012', '1.018', '4.8', '6.5', '25', '50', '22', '40', 'Ale', 'A substantial, malty dark beer with a complex and flavorful dark malt character.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, porter-family, bitter, roasty, hoppy', 'Great Lakes Edmund Fitzgerald Porter, Anchor Porter, Smuttynose Robust Porter, Sierra Nevada Porter, Deschutes Black Butte Porter, Boulevard Bully! Porter.', ''),
 (160, 'B', 'American Stout', 'American Porter and Stout', '1.05', '1.075', '1.01', '1.022', '5', '7', '35', '75', '30', '40', 'Ale', 'A fairly strong, highly roasted, bitter, hoppy dark stout. Has the body and dark flavors typical of stouts with a more aggressive American hop character and bitterness.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, stout-family, bitter, roasty, hoppy', 'Rogue Shakespeare Stout, Deschutes Obsidian Stout, Sierra Nevada Stout, North Coast Old No. 38, Avery Out of Bounds Stout.', ''),
 (161, 'C', 'Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.03', '8', '12', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty', 'American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', ''),
 (162, 'A', 'American IPA', 'IPA', '1.056', '1.07', '1.008', '1.014', '5.5', '7.5', '40', '70', '6', '14', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties. The balance is hop-forward, with a clean fermentation profile, dryish finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Blind Pig IPA, Bell&rsquo;s Two-Hearted Ale, Firestone Walker Union Jack, Alpine Duet, New Belgium Ranger IPA, Fat Heads Head Hunter, Stone IPA, Lagunitas IPA.', ''),
 (163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '', 'Entrant must specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. Entrant must specify specific type of Specialty IPA from the library of known types listed in the Style Guidelines, or as amended by the BJCP web site; or the entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). Currently Defined Types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA.'),
-(164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell&rsquo;s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', ''),
+(164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell''s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', ''),
 (165, 'B', 'American Strong Ale', 'Strong American Ale', '1.062', '1.09', '1.014', '1.024', '6.3', '10', '50', '100', '7', '19', 'Ale', 'A strong, full-flavored American ale that challenges and rewards the palate with full malty and hoppy flavors and substantial bitterness. The flavors are bold but complementary, and are stronger and richer than average-strength pale and amber American ales.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Stone Arrogant Bastard, Great Lakes Nosferatu, Bear Republic Red Rocket Ale, Terrapin Big Hoppy Monster, Lagunitas Censored, Port Brewing Shark Attack Double Red.', ''),
-(166, 'C', 'American Barleywine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '100', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell&rsquo;s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''),
+(166, 'C', 'American Barleywine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '100', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell''s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''),
 (167, 'D', 'Wheatwine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '30', '60', '8', '15', 'Ale', 'A richly textured, high alcohol sipping beer with a significant grainy, bready flavor and sleek body. The emphasis is first on the bready, wheaty flavors with interesting complexity from malt, hops, fruity yeast character and alcohol complexity.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, wheat-beer-family, balanced, hoppy', 'Rubicon Brewing Company Winter Wheat Wine, Two Brothers Bare Trees Weiss Wine, Smuttynose Wheat Wine, Boulevard Brewing Company Harvest Dance, Portsmouth Wheat Wine.', ''),
 (168, 'A', 'Berliner Weisse', 'European Sour Ale', '1.028', '1.032', '1.003', '1.006', '2.8', '3.8', '3', '8', '2', '3', 'Ale', 'A very pale, refreshing, low-alcohol German wheat beer with a clean lactic sourness and a very high carbonation level. A light bread dough malt flavor supports the sourness, which shouldn&rsquo;t seem artificial or funky.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-beer, pale-color, top-fermented, central-europe, traditional-style, wheat-beer-family, sour', 'Schultheiss Berliner Weisse, Berliner Kindl Weisse, Nodding Head Berliner Weisse, Bahnhof Berliner Style Weisse, New Glarus Berliner Weiss.', ''),
 (169, 'B', 'Flanders Red Ale', 'European Sour Ale', '1.048', '1.057', '1.002', '1.012', '4.6', '6.5', '10', '25', '10', '16', 'Ale', 'A complex, sour, fruity, red wine-like Belgian-style ale with interesting supportive malt flavors and a melange of fruit complexity. The dry finish and tannin completes the mental image of a fine red wine.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermenting, western-europe, traditional-style, sour-ale-family, balanced, sour, wood', 'Rodenbach Grand Cru, Rodenbach Klassiek, Bellegems Bruin, Duchesse de Bourgogne, Petrus Oud Bruin, Southampton Flanders Red Ale.', ''),
-(170, 'C', 'Oud Bruin', 'European Sour Ale', '1.04', '1.074', '1.008', '1.012', '4', '8', '20', '25', '15', '22', 'Ale', 'A malty, fruity, aged, somewhat sour Belgian-style brown ale.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, western-europe, traditional-style, sour-ale-family, malty, sour', 'Liefman&rsquo;s Goudenband, Liefman&rsquo;s Odnar, Liefman&rsquo;s Oud Bruin, Ichtegem Old Brown, Riva Vondel.', ''),
+(170, 'C', 'Oud Bruin', 'European Sour Ale', '1.04', '1.074', '1.008', '1.012', '4', '8', '20', '25', '15', '22', 'Ale', 'A malty, fruity, aged, somewhat sour Belgian-style brown ale.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, western-europe, traditional-style, sour-ale-family, malty, sour', 'Liefman''s Goudenband, Liefman''s Odnar, Liefman''s Oud Bruin, Ichtegem Old Brown, Riva Vondel.', ''),
 (171, 'D', 'Lambic', 'European Sour Ale', '1.04', '1.054', '1.001', '1.01', '5', '6.5', '0', '10', '3', '7', 'Ale', 'A fairly sour, often moderately funky wild Belgian wheat beer with sourness taking the place of hop bitterness in the balance. Traditionally spontaneously fermented in the Brussels area and served uncarbonated, the refreshing acidity makes for a very pleasant cafe drink.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, sour', 'The only bottled version readily available is Cantillon Grand Cru Bruocsella of whatever single batch vintage the brewer deems worthy to bottle. De Cam sometimes bottles their very old (5 years) lambic. In and around Brussels there are specialty cafes that often have draught lambics from traditional brewers or blenders such as Boon, De Cam, Cantillon, Drie Fonteinen, Lindemans, Timmermans and Girardin.', ''),
 (172, 'E', 'Gueuze', 'European Sour Ale', '1.04', '1.06', '1', '1.006', '5', '8', '0', '10', '3', '7', 'Ale', 'A complex, pleasantly sour but balanced wild Belgian wheat beer that is highly carbonated and very refreshing. The spontaneous fermentation character can provide a very interesting complexity, with a wide range of wild barnyard, horse blanket, or leather characteristics intermingling with citrusy-fruity flavors and acidity', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, aged, sour', 'Boon Oude Gueuze, Boon Oude Gueuze Mariage Parfait, De Cam Gueuze, De Cam/Drei Fonteinen Millennium Gueuze, Drie Fonteinen Oud Gueuze, Cantillon Gueuze, Hanssens Oude Gueuze, Lindemans Gueuze Cuvee Rene, Girardin Gueuze (Black Label), Mort Subite (Unfiltered) Gueuze, Oud Beersel Oude Gueuze.', ''),
 (173, 'F', 'Fruit Lambic', 'European Sour Ale', '1.04', '1.06', '1', '1.006', '5', '7', '0', '10', '3', '7', 'Ale', 'A complex, fruity, pleasantly sour, wild wheat ale fermented by a variety of Belgian microbiota, and showcasing the fruit contributions blended with the wild character.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, sour, fruit', 'Boon Framboise Marriage Parfait, Boon Kriek Mariage Parfait, Boon Oude Kriek, Cantillon Fou&rsquo; Foune, Cantillon Kriek, Cantillon Lou Pepe Kriek, Cantillon Lou Pepe Framboise, Cantillon Rose de Gambrinus, Cantillon St. Lamvinus, Cantillon Vigneronne, De Cam Oude Kriek, Drie Fonteinen Kriek, Girardin Kriek, Hanssens Oude Kriek, Oud Beersel Kriek, Mort Subite Kriek.', 'The type of fruit used must be specified. The brewer must declare a carbonation level (low, medium, high) and a sweetness level (low/none, medium, high).'),
@@ -1086,7 +1101,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (185, 'A', 'Brett Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'An interesting and refreshing variation on the base style, often drier and fruitier than expected, with at most a light acidity. Funky notes are generally restrained in 100% Brett examples, except in older examples.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer', '', 'The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.'),
 (186, 'B', 'Mixed Fermentation Sour Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a base style of beer.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour', 'Bruery Tart of Darkness, Jolly Pumpkin Calabaza Blanca, Cascade Vlad the Imp Aler, Russian River Temptation, Boulevard Love Child, Hill Farmstead Bi', 'The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer.'),
 (187, 'C', 'Wild Specialty Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit, herb, or spice beer, or a wild beer aged in wood. If wood-aged, the wood should not be the primary or dominant character.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit', 'Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Glarus Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme.', 'Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items.'),
-(188, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer, but still recognizable as a beer. The fruit character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', 'Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Ebulum Elderberry Black Ale.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren''t lambics should be entered in the American Wild Ale category.'),
+(188, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer, but still recognizable as a beer. The fruit character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', 'Bell''s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Ebulum Elderberry Black Ale.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren''t lambics should be entered in the American Wild Ale category.'),
 (189, 'B', 'Fruit and Spice Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, spice, and beer, but still recognizable as a beer. The fruit and spice character should each be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit, spice', '', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit and spices, herbs, or vegetables (SHV) used; individual SHV ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).'),
 (190, 'C', 'Speciality Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, sugar, and beer, but still recognizable as a beer. The fruit and sugar character should both be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', '', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. The entrant must specify the type of additional fermentable sugar or special process employed.'),
 (191, 'A', 'Spice, Herb, or Vegetable Beer', 'Spiced Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of SHV and beer, but still recognizable as a beer. The SHV character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '30', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, spice', 'Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Elysian Avatar IPA.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).'),
@@ -1097,22 +1112,22 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (196, 'A', 'Classic Style Smoked Beer', 'Smoked Beer', '', '', '', '', '', '', '', '', '', '', '', 'A smoke-enhanced beer showing good balance between the smoke and beer character, while remaining pleasant to drink. Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://bjcp.org/stylecenter.php', '32', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, smoke', 'Alaskan Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier.', 'The entrant must specify a Classic Style base beer. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable.'),
 (197, 'B', 'Specialty Smoked Beer', 'Smoked Beer', '', '', '', '', '', '', '', '', '', '', '', 'A smoke-enhanced beer showing good balance between the smoke, the beer character, and the added ingredients, while remaining pleasant to drink. Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://bjcp.org/stylecenter.php', '32', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, smoke', '', 'The entrant must specify a base beer style; the base beer does not have to be a Classic Style. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable. The entrant must specify the additional ingredients or processes that make this a specialty smoked beer.'),
 (198, 'A', 'Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood. The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', '', 'The entrant must specify the type of wood used and the char level (if charred). The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood has been used, the entrant must supply a brief description of the sensory aspects the wood adds to beer.'),
-(199, 'B', 'Specialty Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', 'The Lost Abbey Angel&rsquo;s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Founders Kentucky Breakfast Stout, Goose Island Bourbon County Stout, many microbreweries have specialty beers served only on premises often directly from the cask.', 'The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer.'),
+(199, 'B', 'Specialty Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', 'The Lost Abbey Angel''s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Founders Kentucky Breakfast Stout, Goose Island Bourbon County Stout, many microbreweries have specialty beers served only on premises often directly from the cask.', 'The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer.'),
 (200, 'A', 'Clone Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'Based on declared clone beer.', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', 'The entrant must specify the name of the commercial beer being cloned, specifications (vital statistics) for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges who are unfamiliar with the beer will have no basis for comparison.'),
 (201, 'B', 'Mixed-Style Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'Based on the declared base styles. As with all Specialty-Type Beers, the resulting combination of beer styles needs to be harmonious and balanced, and be pleasant to drink.', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', 'The entrant must specify the styles being mixed. The entrant may provide an additional description of the sensory profile of the beer or the vital statistics of the resulting beer.');
 INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES
 (202, 'C', 'Experimental Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'This style is the ultimate in creativity, since it cannot represent a well-known commercial beer (otherwise it would be a clone beer) and cannot fit into any other existing Specialty-Type style (including those within this major category).', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', ' The entrant must specify the special nature of the experimental beer, including the special ingredients or processes that make it not fit elsewhere in the guidelines. The entrant must provide vital statistics for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges will have no basis for comparison.'),
 (203, 'A', 'Dry Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a dry white wine, with a pleasant mixture of subtle honey character, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'White Winter Dry Mead, Sky River Dry Mead, Intermiel Bouquet Printanier.', 'Entry Instructions: Entrants must specify carbonation level and strength. Sweetness is assumed to be DRY in this category. Entrants may specify honey varieties.'),
 (204, 'B', 'Semi-Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a semisweet (or medium-dry) white wine, with a pleasant mixture of honey character, light sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Lurgashall English Mead, Redstone Traditional Mountain Honey Wine, Sky River Semi-Sweet Mead, Intermiel Verge d&rsquo;Or and Melilot.', 'Entrants must specify carbonation level and strength. Sweetness is assumed to be SEMI-SWEET in this category. Entrants MAY specify honey varieties.'),
-(205, 'C', 'Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a well-made dessert wine (such as Sauternes), with a pleasant mixture of honey character, residual sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Moonlight Sensual, Lurgashall Christmas Mead, Chaucer&rsquo;s Mead, Rabbit&rsquo;s Foot Sweet Wildflower Honey Mead, Intermiel Benoite.', 'Entrants MUST specify carbonation level and strength. Sweetness is assumed to be SWEET in this category. Entrants MAY specify honey varieties.'),
+(205, 'C', 'Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a well-made dessert wine (such as Sauternes), with a pleasant mixture of honey character, residual sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Moonlight Sensual, Lurgashall Christmas Mead, Chaucer''s Mead, Rabbit''s Foot Sweet Wildflower Honey Mead, Intermiel Benoite.', 'Entrants MUST specify carbonation level and strength. Sweetness is assumed to be SWEET in this category. Entrants MAY specify honey varieties.'),
 (206, 'A', 'Cyser', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Some of the best strong examples have the taste and aroma of an aged Calvados (apple brandy from northern France), while subtle, dry versions can taste similar to many fine white wines. There should be an appealing blend of the fruit and honey character but not necessarily an even balance. Generally a good tannin-sweetness balance is desired, though very dry and very sweet examples do exist.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Moonlight Blossom, White Winter Cyser, Rabbit&rsquo;s Foot Apple Cyser.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of apple used; if specified, a varietal character will be expected. Products with a relatively low proportion of honey are better entered as a Specialty Cider. A spiced cyser should be entered as a Fruit and Spice Mead. A cyser with other fruit should be entered as a Melomel. A cyser with additional ingredients should be entered as an Experimental mead.'),
 (207, 'B', 'Pyment', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the grape is both distinctively vinous and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. White and red versions can be quite different, and the overall impression should be characteristic of the type of grapes used and suggestive of a similar variety wine. There should be an appealing blend of the fruit and honey character but not necessarily an even balance. Generally a good tannin-sweetness balance is desired, though very dry and very sweet examples do exist.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Celestial Meads Que Syrah, Moonlight Slow Dance, Redstone Pinot Noir and White Pyment Mountain Honey Wines.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of grape used; if specified, a varietal character will be expected. A spiced pyment (hippocras) should be entered as a Fruit and Spice Mead. A pyment made with other fruit should be entered as a Melomel. A pyment with other ingredients should be entered as an Experimental Mead. '),
 (208, 'C', 'Berry Mead', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Blissful, Wild, Caress, and Mischief, White Winter Blueberry, Raspberry and Strawberry Melomels, Celestial Meads Miel Noir, Redstone Black Raspberry Nectar, Bees Brothers Raspberry Mead, Intermiel Honey Wine and Raspberries, Honey Wine and Blueberries, and Honey Wine and Blackcurrants, Mountain Meadows Cranberry Mead.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A mead made with both berries and non-berry fruit (including apples and grapes) should be entered as a Melomel. A berry mead that is spiced should be entered as a Fruit and Spice Mead. A berry mead containing other ingredients should be entered as an Experimental Mead.'),
 (209, 'D', 'Stone Fruit Mead', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Mountain Meadows Cherry Mead, Moonlight Entice, Sumptuous, Flirt, and Smitten, Redstone Sunshine Nectar.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A stone fruit mead that is spiced should be entered as a Fruit and Spice Mead. A stone fruit mead that contains non-stone fruit should be entered as a Melomel. A stone fruit mead that contains other ingredients should be entered as an Experimental Mead.'),
 (210, 'E', 'Melomel', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Desire, Paramour, and Iniquity.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A melomel that is spiced should be entered as a Fruit and Spice Mead. A melomel containing other ingredients should be entered as an Experimental Mead. Melomels made with either apples or grapes as the only fruit source should be entered as Cysers and Pyments, respectively. Melomels with apples or grapes, plus other fruit should be entered in this category, not Experimental.'),
-(211, 'A', 'Fruit and Spice Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruits and spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruits and spices can result in widely different characteristics; allow for significant variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Kurt&rsquo;s Apple Pie, Mojo, Flame, Fling, and Deviant, Celestial Meads Scheherazade, Rabbit&rsquo;s Foot Private Reserve Pear Mead, Intermiel Rosee.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.'),
+(211, 'A', 'Fruit and Spice Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruits and spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruits and spices can result in widely different characteristics; allow for significant variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Kurt&rsquo;s Apple Pie, Mojo, Flame, Fling, and Deviant, Celestial Meads Scheherazade, Rabbit''s Foot Private Reserve Pear Mead, Intermiel Rosee.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.'),
 (212, 'B', 'Spice, Herb, or Vegetable Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of spices can result in widely different characteristics; allow for a variation in the final product. ', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Wicked, Breathless, Madagascar, and Seduction, Redstone Vanilla Beans and Cinnamon Sticks Mountain Honey Wine, Bonair Chili.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used (although well-known spice blends may be referred to by common name, such as apple pie spices)'),
-(213, 'A', 'Braggot', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'A harmonious blend of mead and beer, with the distinctive characteristics of both. A wide range of results are possible, depending on the base style of beer, variety of honey and overall sweetness and strength. Beer flavors tend to somewhat mask typical honey flavors found in other meads. and honey, although the specific balance is open to creative interpretation by brewers.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Rabbit&rsquo;s Foot Diabhal and Biere de Miele, Magic Hat Braggot, Brother Adams Braggot Barleywine Ale, White Winter Traditional Brackett.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MAY specify the base style or beer or types of malt used. Products with a relatively low proportion of honey should be entered in the Spiced Beer category as a Honey Beer.'),
+(213, 'A', 'Braggot', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'A harmonious blend of mead and beer, with the distinctive characteristics of both. A wide range of results are possible, depending on the base style of beer, variety of honey and overall sweetness and strength. Beer flavors tend to somewhat mask typical honey flavors found in other meads. and honey, although the specific balance is open to creative interpretation by brewers.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Rabbit''s Foot Diabhal and Biere de Miele, Magic Hat Braggot, Brother Adams Braggot Barleywine Ale, White Winter Traditional Brackett.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MAY specify the base style or beer or types of malt used. Products with a relatively low proportion of honey should be entered in the Spiced Beer category as a Honey Beer.'),
 (214, 'B', 'Historical Mead', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'This mead should exhibit the character of all of the ingredients in varying degrees, and should show a good blending or balance between the various flavor elements. Whatever ingredients are included, the result should be identifiable as a honey-based fermented beverage.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Jadwiga, Saba Tej.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, providing a description of the mead for judges if no such description is available from the BJCP.'),
 (215, 'C', 'Experimental Mead', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'This mead should exhibit the character of all of the ingredients in varying degrees, and should show a good blending or balance between the various flavor elements. Whatever ingredients are included, the result should be identifiable as a honey-based fermented beverage.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Utopian, Hanssens/Lurgashall Mead the Gueuze, White Winter Cherry Bracket, Mountain Meadows Trickster&rsquo;s Treat Agave Mead.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared.'),
 (216, 'A', 'New World Cider', 'Standard Cider and Perry', '1.045', '1.065', '0.995', '1.02', '5', '8', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'A refreshing drink of some substance - not bland or watery. Sweet ciders must not be cloying. Dry ciders must not be too austere. ', 'http://bjcp.org/stylecenter.php', 'C1', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John&rsquo;s Fruit House Winery Apple Hard Cider, Tandem Ciders Pretty Penny (MI), Bellwether Spyglass (NY), West County Pippin (MA), White Winter Hard Apple Cider (WI), Wandering Aengus Ciderworks Bloom (OR), &Aelig;ppeltreow Appely Brut and Doux (WI).', ''),
@@ -1122,7 +1137,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (220, 'E', 'Traditional Perry', 'Standard Cider and Perry', '1.05', '1.07', '1', '1.02', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Tannic. Medium to medium-sweet. Still to lightly sparkling. Only very slight acetification is acceptable. Mousiness and ropy/oily characters are serious faults.', 'http://bjcp.org/stylecenter.php', 'C1', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Appeltreow Orchard Oriole Perry (WI); [France] Bordelet Poire Authentique and Poire Granit, Christian Drouin Poire, [UK] Oliver&rsquo;s Classic, Blakeney Red, and Herefordshire Dry; Hogan&rsquo;s Vintage Perry.', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST state variety of pear(s) used.'),
 (221, 'A', 'New England Cider', 'Specialty Cider and Perry', '1.06', '1.1', '0.995', '1.02', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial body and character. Typically relatively dry, but can be somewhat sweet if in balance and not containing hot alcohol.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Snowdrift Semi-Dry (WA), Blackbird Cider Works New England Style (NY).', 'Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
 (222, 'B', 'Cider with Other Fruit', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial. May be significantly tannic, depending on fruit added.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] West County Blueberry-Apple Wine (MA), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry, Apple Blueberry, and Apricot Apple Hard Cider (MI).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all fruit(s) and/or fruit juice(s) added.'),
-(223, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.02', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Typically like a dry white wine, balanced, and with low astringency and bitterness. ', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John&rsquo;s Fruit House Winery Fruit House Apple (MI), McClure&rsquo;s Sweet Apple Wine (IN).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
+(223, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.02', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Typically like a dry white wine, balanced, and with low astringency and bitterness. ', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John''s Fruit House Winery Fruit House Apple (MI), McClure&rsquo;s Sweet Apple Wine (IN).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
 (224, 'D', 'Ice Cider', 'Specialty Cider and Perry', '1.13', '1.18', '1.06', '1.085', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is a cider style in which the juice is concentrated before fermentation either by freezing fruit before pressing or freezing juice and removing water.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 0, '', '[US] various from Eden Ice Cider Company and Champlain Orchards. [Canada] Domaine Pinnacle, Les Vergers de la Colline, and Cidrerie St-Nicolas (Quebec).', 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level (3 levels).'),
 (225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.'),
 (226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '', 'Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).');
@@ -1135,13 +1150,12 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 
 DROP TABLE IF EXISTS `baseline_style_types`;
 CREATE TABLE IF NOT EXISTS `baseline_style_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `styleTypeName` varchar(255) DEFAULT NULL,
   `styleTypeOwn` varchar(255) DEFAULT NULL,
   `styleTypeBOS` char(1) DEFAULT NULL,
-  `styleTypeBOSMethod` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `styleTypeBOSMethod` int(11) DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_style_types`
@@ -1160,20 +1174,19 @@ INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styl
 
 DROP TABLE IF EXISTS `baseline_system`;
 CREATE TABLE IF NOT EXISTS `baseline_system` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `version` varchar(12) DEFAULT NULL,
   `version_date` date DEFAULT NULL,
   `data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
-  `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_system`
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.1.1.0', '2016-05-20', '2016-05-20 00:01:01', 1);
+(1, '2.1.1.0', '2016-05-24', '2016-05-23 11:00:01', 1);
 
 -- --------------------------------------------------------
 
@@ -1183,23 +1196,278 @@ INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `s
 
 DROP TABLE IF EXISTS `baseline_users`;
 CREATE TABLE IF NOT EXISTS `baseline_users` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(8) NOT NULL,
   `user_name` varchar(255) DEFAULT NULL,
   `password` varchar(250) DEFAULT NULL,
   `userLevel` char(1) DEFAULT NULL,
   `userQuestion` varchar(255) DEFAULT NULL,
   `userQuestionAnswer` varchar(255) DEFAULT NULL,
-  `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_users`
 --
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-01-01 07:00:01');
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-05-01 07:00:01');
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `baseline_archive`
+--
+ALTER TABLE `baseline_archive`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_brewer`
+--
+ALTER TABLE `baseline_brewer`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_brewing`
+--
+ALTER TABLE `baseline_brewing`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_contacts`
+--
+ALTER TABLE `baseline_contacts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_contest_info`
+--
+ALTER TABLE `baseline_contest_info`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_drop_off`
+--
+ALTER TABLE `baseline_drop_off`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_assignments`
+--
+ALTER TABLE `baseline_judging_assignments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_flights`
+--
+ALTER TABLE `baseline_judging_flights`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_locations`
+--
+ALTER TABLE `baseline_judging_locations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_preferences`
+--
+ALTER TABLE `baseline_judging_preferences`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_scores`
+--
+ALTER TABLE `baseline_judging_scores`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_scores_bos`
+--
+ALTER TABLE `baseline_judging_scores_bos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_judging_tables`
+--
+ALTER TABLE `baseline_judging_tables`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_mods`
+--
+ALTER TABLE `baseline_mods`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_preferences`
+--
+ALTER TABLE `baseline_preferences`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_special_best_data`
+--
+ALTER TABLE `baseline_special_best_data`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_special_best_info`
+--
+ALTER TABLE `baseline_special_best_info`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_sponsors`
+--
+ALTER TABLE `baseline_sponsors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_staff`
+--
+ALTER TABLE `baseline_staff`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_styles`
+--
+ALTER TABLE `baseline_styles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_style_types`
+--
+ALTER TABLE `baseline_style_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_system`
+--
+ALTER TABLE `baseline_system`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `baseline_users`
+--
+ALTER TABLE `baseline_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `baseline_archive`
+--
+ALTER TABLE `baseline_archive`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_brewer`
+--
+ALTER TABLE `baseline_brewer`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_brewing`
+--
+ALTER TABLE `baseline_brewing`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_contacts`
+--
+ALTER TABLE `baseline_contacts`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_drop_off`
+--
+ALTER TABLE `baseline_drop_off`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_judging_assignments`
+--
+ALTER TABLE `baseline_judging_assignments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_judging_flights`
+--
+ALTER TABLE `baseline_judging_flights`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_judging_locations`
+--
+ALTER TABLE `baseline_judging_locations`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_judging_preferences`
+--
+ALTER TABLE `baseline_judging_preferences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_judging_scores`
+--
+ALTER TABLE `baseline_judging_scores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_judging_scores_bos`
+--
+ALTER TABLE `baseline_judging_scores_bos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_judging_tables`
+--
+ALTER TABLE `baseline_judging_tables`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_mods`
+--
+ALTER TABLE `baseline_mods`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_preferences`
+--
+ALTER TABLE `baseline_preferences`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_special_best_data`
+--
+ALTER TABLE `baseline_special_best_data`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_special_best_info`
+--
+ALTER TABLE `baseline_special_best_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_sponsors`
+--
+ALTER TABLE `baseline_sponsors`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_staff`
+--
+ALTER TABLE `baseline_staff`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `baseline_styles`
+--
+ALTER TABLE `baseline_styles`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=227;
+--
+-- AUTO_INCREMENT for table `baseline_style_types`
+--
+ALTER TABLE `baseline_style_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `baseline_system`
+--
+ALTER TABLE `baseline_system`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `baseline_users`
+--
+ALTER TABLE `baseline_users`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

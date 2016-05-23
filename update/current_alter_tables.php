@@ -171,7 +171,13 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jPrefsQueued` `jPrefsQueued` CHAR(1) NULL DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA'",$prefix."judging_preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 $output .=  "<li>Judging preferences table updated.</li>";
+
 
 if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;",$prefix."contest_info");
