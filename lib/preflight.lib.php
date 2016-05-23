@@ -60,14 +60,7 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
-		
-		$updateSQL= "ALTER TABLE  `".$prefix."contest_info` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;";
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
-	}
+	
 	
 	// For 2.1.1.0, no DB updates are required
 	/*

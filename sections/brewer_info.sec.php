@@ -131,6 +131,13 @@ $email = "";
 $phone = "";
 $discount = "";
 $aha_number = "";
+$judgeLikes = "";
+$exploder = "";
+$judgeLikesDisplay = "";
+$judgeLikesModals = "";
+$judgeDislikesDisplay = "";
+$judgeDislikesModals = "";
+
 
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;

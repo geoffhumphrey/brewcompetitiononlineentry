@@ -14,7 +14,7 @@ include(INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
 // Current version is 2.1.1.0, change version in system table if not
-// If are NO database structure or data updates for the current version,
+// If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
@@ -32,6 +32,78 @@ function version_check($version,$current_version) {
 		$updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		// Check if new 2.1.0 column names are present - if not, add
+		if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
+			$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
+			$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("jPrefsCapJudges", $prefix."judging_preferences")) {
+			$updateSQL = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("jPrefsCapStewards", $prefix."judging_preferences")) {
+			$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;",	$prefix."judging_preferences");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
+			$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
+			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;",$prefix."contest_info");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("brewStyleEntry", $prefix."styles")) {
+			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."contest_info");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (check_update("brewStyleEntry", $prefix."styles")) {
+			$updateSQL= sprintf("ALTER TABLE  `%s` CHANGE `brewStyleEntry` `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."contest_info");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (!check_update("brewStyleComEx", $prefix."styles")) {
+			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."styles");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+		
+		if (check_update("brewStyleComEx", $prefix."styles")) {
+			$updateSQL= sprintf("ALTER TABLE  `%s` CHANGE `brewStyleComEx` `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."styles");
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+		}
 		
 	}
 }

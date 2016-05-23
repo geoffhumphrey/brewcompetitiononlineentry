@@ -23,7 +23,7 @@ if ($action == "password") {
 }
 
 if ($action == "username") {
-	if ($filter == "admin")$current_email_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name)."; 
+	if ($filter == "admin") $current_email_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name)."; 
 	else $current_email_msg = "Your current email address is: <small class=\"text-muted\">".$_SESSION['user_name']."</small>.";
 }
 
@@ -88,9 +88,8 @@ httpxml.send(null);
 }
 //-->
 </script>
-
-<?php } // end if ($action == "username") ?>
 <p class="lead"><?php echo $current_email_msg; ?></p>
+<?php } // end if ($action == "username") ?>
 <form data-toggle="validator" role="form" class="form-horizontal"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

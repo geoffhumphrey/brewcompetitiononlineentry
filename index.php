@@ -41,7 +41,7 @@ if (TESTING) {
 
 if (HOSTED) check_hosted_gh();
 
-if ((!HOSTED) && (strpos($section, 'step') === FALSE))  {
+if (strpos($section, 'step') === FALSE)  {
 	version_check($version,$current_version);
 }
 

@@ -110,7 +110,7 @@ do {
 	
 	if ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = "warning";
 	else $entry_tr_style = "";
-	if (in_array($row_log['id'],$entries_unconfirmed)) $entry_tr_style = "warning";
+	if ((is_array($entries_unconfirmed)) && (in_array($row_log['id'],$entries_unconfirmed))) $entry_tr_style = "warning";
 	else $entry_tr_style = "";
 	
 	$entry_output .= "<tr class=\"".$entry_tr_style."\">";
