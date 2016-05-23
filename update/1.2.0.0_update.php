@@ -1,6 +1,6 @@
 <?php 
 // Need to escape!
-$output .= "<h4>Version 1.2.0.0...</h4>";
+$output .= "<h4>Version 1.2.0.0</h4>";
 $output .= "<ul>";
 
 $updateSQL = "RENAME TABLE `".$prefix."judging` TO `".$prefix."judging_locations`;";

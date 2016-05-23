@@ -1,7 +1,7 @@
 <?php
 // Need to escape!
 
-$output .= "<h4>Version 1.2.1.0-1.2.1.3...</h4>";
+$output .= "<h4>Version 1.2.1.0-1.2.1.3</h4>";
 $output .= "<ul>";
 // -----------------------------------------------------------
 // Alter Table: contest_info

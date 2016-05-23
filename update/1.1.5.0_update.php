@@ -1,5 +1,5 @@
 <?php 
-$output .= "<h4>Version 1.1.5.0..</h4>";
+$output .= "<h4>Version 1.1.5.0</h4>";
 $output .= "<ul>";
 
 $updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;"; 

@@ -37,7 +37,7 @@ if (file_exists($filename)) {
 				if ($action == "default") { 
 				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
                 
-				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version_display.".</p>";
+				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version.".</p>";
 				
 				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog\"></span> Begin The Update</a></div>";		
 				}

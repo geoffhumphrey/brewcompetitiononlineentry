@@ -164,7 +164,7 @@
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
+    <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         	<input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if ($section != "step4") echo

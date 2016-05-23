@@ -1,5 +1,5 @@
 <?php 
-$output .= "<h4>Version 1.2.0.1, 1.2.0.2, and 1.2.0.3...</h4>";
+$output .= "<h4>Version 1.2.0.1, 1.2.0.2, and 1.2.0.3</h4>";
 $output .= "<ul>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD  `brewJudgingNumber` VARCHAR( 10 ) NULL;"; 

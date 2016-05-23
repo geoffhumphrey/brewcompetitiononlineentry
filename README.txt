@@ -6,7 +6,7 @@ Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 SourceForge: http://sourceforge.net/projects/brewcompetition
 
-Release 2.1.0, May 10, 2016
+Release 2.1.1, May 24, 2016
 
 Developed utilizing the following extensions and functions, with gratitude to their
 respective developers and online communities:
@@ -94,7 +94,7 @@ Also check http://www.brewcompetition.com/change-log.
 Fallback DB Install
 ***********************************************************************************
 For those experiencing any issues related to initial browser-based setup of BCOE&M, 
-the bcoem_baseline_2.0.X.sql document is available in the package. It contains the 
+the bcoem_baseline_2.1.X.sql document is available in the package. It contains the 
 necessary database structure and dummy data for a new installation that can be 
 installed manually via phpMyAdmin or shell access. Be sure to follow the directions 
 in the document BEFORE use.

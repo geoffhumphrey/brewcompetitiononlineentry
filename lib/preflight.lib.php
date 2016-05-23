@@ -60,12 +60,10 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	
-	
-	// For 2.1.1.0, no DB updates are required
-	/*
-	// For 2.1.0.0, check if "brewStyleEntry" column is in the sponsors table
+	// For 2.1.1.0, no DB updates are required	
+	// For 2.1.X.0, check if "brewStyleEntry" column is in the styles table since it was added in the 2.1.0.0 release
 	// If not, run the update
+	
 	if (!check_update("brewStyleEntry", $prefix."styles")) {
 		
 		$update_required = TRUE;
@@ -73,7 +71,6 @@ if (check_setup($prefix."system",$database)) {
 		$setup_relocate = "Location: ".$base_url."update.php";
 		
 	}
-	*/
 		
 	if ($row_version_check['version'] != $current_version) {
 		
@@ -88,7 +85,7 @@ if (check_setup($prefix."system",$database)) {
 		// Change version number in DB only if there is no need to run the update scripts
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-03-01");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-23");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
