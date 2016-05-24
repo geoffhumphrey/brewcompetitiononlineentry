@@ -46,6 +46,7 @@ if (file_exists($filename)) {
 				
 						// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
+						if ($version == "200") $version = "2000";
 						if ($version < "113") {
 							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
 							$output .= "<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>";
@@ -133,8 +134,8 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						// Last version to have a db update was 2.0.0.0
-						// If current version is 2.0.0.0 or later, only perform the 2.1.1.0 update
+						// Last version to have a db update was 2.1.0.0
+						// If current version is 2.0.0.0 or later, only perform the 2.1.X.X update
 						if (($version >= "2000") && ($version < "2100"))  {
 							include (UPDATE.'current_update.php');
 						}

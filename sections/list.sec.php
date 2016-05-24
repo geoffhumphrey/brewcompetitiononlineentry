@@ -63,7 +63,6 @@ if (NHC) {
 	}	
 }
 $judging_date = judging_date_return();
-$delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
 // Call the brewer's info information

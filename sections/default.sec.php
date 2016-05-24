@@ -43,7 +43,6 @@ include(DB.'dropoff.db.php');
 include(DB.'sponsors.db.php');
 include(DB.'contacts.db.php');
 
-$delay = $_SESSION['prefsWinnerDelay'] * 3600;
 $primary_page_info = "";
 $page_info = "";
 $page_info10 = "";

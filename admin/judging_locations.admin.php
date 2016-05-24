@@ -63,6 +63,8 @@ $form_submit_url = "";
 $form_submit_button = "";
 $output_no_records = "";
 $goto_nav = "";
+$judge_loc_url_yes = "";
+$judge_loc_url_no = "";
 
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";

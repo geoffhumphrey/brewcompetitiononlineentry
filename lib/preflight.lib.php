@@ -60,8 +60,24 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.1.0, no DB updates are required	
-	// For 2.1.X.0, check if "brewStyleEntry" column is in the styles table since it was added in the 2.1.0.0 release
+	// For 2.1.2.0, one DB update is required - no need to run full update
+	if ($row_version_check['version'] == "2.1.1.0") {
+		
+		$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jPrefsQueued` `jPrefsQueued` CHAR(1) NULL DEFAULT NULL;",$prefix."judging_preferences");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		$updateSQL = sprintf("UPDATE `%s` SET jPrefsQueued = 'Y' WHERE id=1;",$prefix."judging_preferences");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		$update_required = FALSE;
+		$setup_success = FALSE;
+	}
+	
+	// For 2.1.X.X, check if "brewStyleEntry" column is in the styles table since it was added in the 2.1.0.0 release
 	// If not, run the update
 	
 	if (!check_update("brewStyleEntry", $prefix."styles")) {
@@ -83,15 +99,16 @@ if (check_setup($prefix."system",$database)) {
 		}
 		
 		// Change version number in DB only if there is no need to run the update scripts
+		
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-23");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-24");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
-			$setup_relocate = "Location: ".$base_url;
 			$setup_success = TRUE;
+			$setup_relocate = "Location: ".$base_url;
 			
 		}
 		

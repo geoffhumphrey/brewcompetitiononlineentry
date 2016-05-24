@@ -71,6 +71,8 @@ if (strpos($section, 'step') === FALSE) {
 	
 	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
+	
+	$delay = $_SESSION['prefsWinnerDelay'] * 3600;
 
 }
 

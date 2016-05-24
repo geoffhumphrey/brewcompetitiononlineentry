@@ -1,4 +1,6 @@
 <?php include(DB.'dropoff.db.php'); 
+$dropoff_loc_url_yes = "";
+$dropoff_loc_url_no = "";
 if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 if ($section != "step6") {
 ?>
