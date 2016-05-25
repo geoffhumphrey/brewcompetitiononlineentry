@@ -65,6 +65,7 @@ $output_no_records = "";
 $goto_nav = "";
 $judge_loc_url_yes = "";
 $judge_loc_url_no = "";
+$assignment_modal_body = "";
 
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";

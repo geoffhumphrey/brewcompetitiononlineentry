@@ -315,17 +315,19 @@ $output_at_table_modals = "";
             	<h4 class="panel-title">Entries Assigned to Tables</h4>
           	</div>
           	<div class="panel-body">
-            <?php if (($totalRows_judging > 1) && ($dbTable == "default") && ($action == "default")) { ?>
+            <?php if (($totalRows_judging > 0) && ($dbTable == "default") && ($action == "default")) { ?>
             	<?php do { ?>
             	<div class="bcoem-sidebar-panel">
                     <strong class="text-info"><?php echo $row_judging['judgingLocName']; ?></strong>
                     <span class="pull-right"><?php $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']); $all_loc_total[] = $loc_total; echo $loc_total; ?></span>
             	</div>
                 <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
+                <?php if ($totalRows_judging > 1) { ?>
                 <div class="bcoem-sidebar-panel">
                 	<strong class="text-info">All Sessions</strong>
                     <span class="pull-right"><?php echo array_sum($all_loc_total); ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a></span>
                 </div>
+                <?php } ?>
             <?php } // end if (($totalRows_judging > 1) && ($dbTable == "default")); ?>
           	</div>
      	</div>        
@@ -401,8 +403,9 @@ $output_at_table_modals = "";
 	if ($totalRows_tables > 0) {
 		
 		do { 
+		
+		$a[] = 0;
 			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default")) { 
-				$a[] = 0;
 				if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) { 
 					$a[] = $row_styles['id'];
 					$orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";  

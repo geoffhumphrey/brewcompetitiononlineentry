@@ -276,7 +276,7 @@ $(document).ready(function()
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>" <?php if ((($action == "add") && ($remaining_entries == 0) && ($registration_open == 1) && ($filter != "default")) || (($action == "add") && ($registration_open == "2") && ($_SESSION['userLevel'] > 1))) echo "disabled";?> placeholder="" data-error="The entry's name is required" required>
+                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>" <?php if ((($action == "add") && ($remaining_entries == 0) && ($entry_window_open == 1) && ($filter != "default")) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] > 1))) echo "disabled";?> placeholder="" data-error="The entry's name is required" required>
                 <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>

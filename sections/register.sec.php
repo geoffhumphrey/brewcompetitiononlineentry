@@ -243,7 +243,11 @@ if ($go == "default") {  ?>
     <?php } // end if ($view == "quick")?>
 <?php } // end if ($section == "admin") ?>
     <input type="hidden" name="userLevel" value="2" />
+    <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
     <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+    <?php } else { ?>
+    <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
+   	<?php } ?>
     <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
 <?php if ($go == "entrant") { ?>
     <input type="hidden" name="brewerJudge" value="N" />

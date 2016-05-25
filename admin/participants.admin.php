@@ -305,7 +305,7 @@ do {
 					else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
 				}
 				if (strpos($brewer_assignment,"Steward") !== false) {
-					if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
+					if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
 					else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
 				}
 				if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in the following categories: ".$judge_entries."</p>";

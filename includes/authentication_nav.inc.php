@@ -12,7 +12,7 @@ function authenticateUserNav($connection, $username, $password)
 	
 	mysqli_select_db($connection,$database);
 	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";	
-  	if (!$result = @ mysqli_query($connection,$query_XXX)) showerror();
+  	if (!$result = @ mysqli_query($connection,$query)) showerror();
   	// Is the returned result exactly one row? If so, then we have found the user
   	if (mysqli_num_rows($result) != 1)
     return false;

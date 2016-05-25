@@ -241,6 +241,7 @@ do {
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
+		else $entry_output .= "<span class=\"fa fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_log['brewName']." has been marked as paid - it cannot be deleted.\" href=\"#\"></span>";
 		
 		
 	}

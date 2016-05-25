@@ -95,8 +95,11 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 	if ($action == "edit") {
 	
 	// Check to see if email address is already in the system. If so, redirect.
-	$username = strtolower($_POST['user_name']);
-	$usernameOld = strtolower($_POST['user_name_old']);
+	if (isset($_POST['user_name'])) $username = strtolower($_POST['user_name']);
+	else $username = "";
+	if (isset($_POST['user_name_old'])) $usernameOld = strtolower($_POST['user_name_old']);
+	else $usernameOld = "";
+	
 	if (strstr($username,'@'))  {
 	
 	$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
@@ -111,7 +114,9 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 	
 		// --------------------------- If Changing a Participant's User Level ------------------------------- //
 		if ($go == "make_admin") {
-		$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s WHERE user_name=%s", 
+			
+			$updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
+			$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s WHERE user_name=%s", 
 							   GetSQLValueString($_POST['userLevel'], "text"),
 							   GetSQLValueString($_POST['user_name'], "text"));
 							   

@@ -954,7 +954,7 @@ $(document).ready(function() {
 	
 	<?php } // if ($_SESSION['prefsStyleSet'] == "BJCP2015") ?>
 	
-	<?php if (array_key_exists($view,$custom_entry_information)) { 
+	<?php if ((isset($custom_entry_information)) && (array_key_exists($view,$custom_entry_information))) { 
 		$explodies = explode("|",$custom_entry["$view"]);
 		//print_r($explodies);
 		?>

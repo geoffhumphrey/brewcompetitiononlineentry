@@ -4,9 +4,27 @@
  * Description: This module does all the heavy lifting for adding a user's info to the "users" and
  *              the "brewer" tables upon registration
  */
+
+if (isset($_POST['brewerJudgeID'])) $brewerJudgeID = $_POST['brewerJudgeID'];
+else $brewerJudgeID = "";
+
+if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
+else $brewerJudgeMead = "";
+
+if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
+else $brewerJudgeRank = "";
+
+if (isset($_POST['brewerAHA'])) $brewerAHA = $_POST['brewerAHA'];
+else $brewerAHA = "";
+
+if (isset($_POST['brewerClubs'])) $brewerClubs = $_POST['brewerClubs'];
+else $brewerClubs = "";
+
+if (isset($_POST['brewerPhone2'])) $brewerPhone2 = $_POST['brewerPhone2'];
+else $brewerPhone2 = "";
+
  
 // Custom Code for AHA NHC
-
 if (NHC) {
 	
 	include (DB.'common.db.php');
@@ -35,7 +53,7 @@ if (NHC) {
 		}
 		
 		
-		$aha = $_POST['brewerAHA']; 
+		$aha = $brewerAHA; 
 		if ($aha != "") {
 			$query_aha_exists = "SELECT COUNT(*) AS count FROM nhcentrant WHERE AHANumber = '$aha'";
 			$aha_exists = mysqli_query($connection,$query_aha_exists) or die (mysqli_error($connection));
@@ -62,9 +80,9 @@ if (NHC) {
 			setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 			setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 			setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-			setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
-			setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
-			setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+			setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+			setcookie("brewerClubs", $brewerClubs, 0, "/");
+			setcookie("brewerAHA", $brewerAHA, 0, "/");
 			setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
 			setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
 			//echo "AHA exists!";
@@ -103,9 +121,9 @@ if (NHC) {
 	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-	setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
-	setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
-	setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+	setcookie("brewerClubs", $brewerClubs, 0, "/");
+	setcookie("brewerAHA", $brewerAHA, 0, "/");
 	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
 	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
 	$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
@@ -126,9 +144,9 @@ if (NHC) {
 	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-	setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
-	setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
-	setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+	setcookie("brewerClubs", $brewerClubs, 0, "/");
+	setcookie("brewerAHA", $brewerAHA, 0, "/");
 	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
 	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
 	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
@@ -162,9 +180,9 @@ if (strstr($username,'@'))  {
 		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-		setcookie("brewerPhone2", $_POST['brewerPhone2'], 0, "/");
-		setcookie("brewerClubs", $_POST['brewerClubs'], 0, "/");
-		setcookie("brewerAHA", $_POST['brewerAHA'], 0, "/");
+		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+		setcookie("brewerClubs", $brewerClubs, 0, "/");
+		setcookie("brewerAHA", $brewerAHA, 0, "/");
 		setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
 		setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
 		
@@ -217,7 +235,7 @@ if (strstr($username,'@'))  {
 	
 		// Add the user's info to the "brewer" table
 	  	// Numbers 999999994 through 999999999 are reserved for NHC applications.
-		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
+		if (($brewerAHA < "999999994") || ($brewerAHA == "")) {
 			
 			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
 			  uid,
@@ -253,20 +271,21 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
 						   GetSQLValueString($_POST['brewerPhone1'], "text"),
-						   GetSQLValueString($_POST['brewerPhone2'], "text"),
-						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($brewerPhone2, "text"),
+						   GetSQLValueString($brewerClubs, "text"),
 						   GetSQLValueString($username, "text"),
 						   GetSQLValueString($_POST['brewerSteward'], "text"),
 						   GetSQLValueString($_POST['brewerJudge'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($brewerJudgeID, "text"),
+						   GetSQLValueString($brewerJudgeMead, "text"),
+						   GetSQLValueString($brewerJudgeRank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($_POST['brewerAHA'], "int"),
+						   GetSQLValueString($brewerAHA, "int"),
 						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
 						   );
 		}
+		
 		
 		else {
 			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
@@ -302,14 +321,14 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
 						   GetSQLValueString($_POST['brewerPhone1'], "text"),
-						   GetSQLValueString($_POST['brewerPhone2'], "text"),
-						   GetSQLValueString($_POST['brewerClubs'], "text"),
+						   GetSQLValueString($brewerPhone2, "text"),
+						   GetSQLValueString($brewerClubs, "text"),
 						   GetSQLValueString($username, "text"),
 						   GetSQLValueString($_POST['brewerSteward'], "text"),
 						   GetSQLValueString($_POST['brewerJudge'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeID'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeMead'], "text"),
-						   GetSQLValueString($_POST['brewerJudgeRank'], "text"),
+						   GetSQLValueString($brewerJudgeID, "text"),
+						   GetSQLValueString($brewerJudgeMead, "text"),
+						   GetSQLValueString($brewerJudgeRank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
@@ -331,7 +350,7 @@ if (strstr($username,'@'))  {
 							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
 							   GetSQLValueString($username, "text"),
-							   GetSQLValueString($_POST['brewerAHA'], "text"),
+							   GetSQLValueString($brewerAHA, "text"),
 							   GetSQLValueString($prefix, "text"));
 			
 			mysqli_real_escape_string($connection,$updateSQL);
@@ -372,9 +391,9 @@ if (strstr($username,'@'))  {
 			$message .= "<tr><td valign='top'><strong>Security Question Answer:</strong></td><td valign='top'>".$_POST['userQuestionAnswer']."</td></tr>";
 			$message .= "<tr><td valign='top'><strong>Address:</strong></td><td valign='top'>".$_POST['brewerAddress']."<br>".$_POST['brewerCity'].", ".$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
 			$message .= "<tr><td valign='top'><strong>Phone 1:</strong></td><td valign='top'>".$_POST['brewerPhone1']."</td></tr>";
-			if (isset($_POST['brewerPhone2'])) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$_POST['brewerPhone2']."</td></tr>";
-			if (isset($_POST['brewerClubs'])) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$_POST['brewerClubs']."</td></tr>";
-			if (isset($_POST['brewerAHA'])) 			$message .= "<tr><td valign='top'><strong>AHA Number:</strong></td><td valign='top'>".$_POST['brewerAHA']."</td></tr>";
+			if (isset($brewerPhone2)) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$brewerPhone2."</td></tr>";
+			if (isset($brewerClubs)) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$brewerClubs."</td></tr>";
+			if (isset($brewerAHA)) 			$message .= "<tr><td valign='top'><strong>AHA Number:</strong></td><td valign='top'>".$brewerAHA."</td></tr>";
 			if (isset($_POST['brewerJudge'])) 		$message .= "<tr><td valign='top'><strong>Available to Judge?</strong></td><td valign='top'>".$_POST['brewerJudge']."</td></tr>";
 			if (isset($_POST['brewerSteward'])) 		$message .= "<tr><td valign='top'><strong>Available to Steward?</strong></td><td valign='top'>".$_POST['brewerSteward']."</td></tr>";
 			$message .= "</table>";

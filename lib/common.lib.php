@@ -1865,6 +1865,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 		do { 
 			$a = explode(",", $row_table['tableStyles']);
 			$b = $input;
+			$c = "";
 			foreach ($a as $value) {
 				if ($value == $input) $c = "<br><em>Assigned to Table ".$row_table['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table['id']."'>".$row_table['tableName']."</a></em>";
 			}

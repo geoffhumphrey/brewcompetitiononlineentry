@@ -66,6 +66,7 @@ Declare all variables empty at the top of the script. Add on later...
 	$header1_7 = "";
 	$page_info7 = "";
 	$return_entries = "";
+	$entries = "";
 	
 	if ($disable_pay) {
 		$primary_page_info .= sprintf("<p class=\"lead\">%s, the payment window has passed. <small><a href=\"%s\">Contact</a> a competition official if you have any questions.</small></p>",$_SESSION['brewerFirstName'],$link_contacts);
@@ -80,6 +81,7 @@ Declare all variables empty at the top of the script. Add on later...
 		$primary_page_info .= sprintf("<p class=\"lead\">%s, the following are your options for paying your entry fees.</p>",$_SESSION['brewerFirstName']);
 		$primary_page_info .= "<p class=\"lead\"><small>";
 		$primary_page_info .= sprintf("<span class=\"fa fa-money text-success\"></span> Fees are <strong class=\"text-success\">%s</strong> per entry.",$currency_symbol.number_format($_SESSION['contestEntryFee'],2));
+		
 		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
 		if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2));
 		$primary_page_info .= "</small></p>";
@@ -109,7 +111,7 @@ Declare all variables empty at the top of the script. Add on later...
 		}
 		
 		$return = $base_url."index.php?section=pay&msg=10&view=".$return_entries;
-		$entries = "";
+		
 		
 		if (($total_to_pay > 0) && ($view == "default")) {
 			

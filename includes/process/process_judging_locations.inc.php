@@ -37,7 +37,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		//echo $updateSQL;
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}

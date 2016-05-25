@@ -168,7 +168,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				
 				// Clear any Staff Assignments
 				$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
-				$staff_assign = mysqli_query($connection,$query_XXX) or die (mysqli_error($connection));
+				$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
 				$row_staff_assign = mysqli_fetch_assoc($staff_assign);
 			  
 				do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
@@ -210,6 +210,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
 			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
 			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
+			
+			$c = "";
 			
 			if ($totalRows_delete_assign > 0) {
 				do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));

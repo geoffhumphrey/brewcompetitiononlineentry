@@ -10,7 +10,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	else $brew_style_link = "";
 	
 	if ($action == "update") {
-	foreach($_POST['id'] as $id)	{ 
+	foreach($_POST['id'] as $id)	{
+		
+		if (isset($_POST["brewStyleActive".$id])) {
 	
 			if ($filter == "default") {
 				
@@ -37,29 +39,31 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			 	$totalRows_loc = mysqli_num_rows($loc);
 				
 				if ($totalRows_loc > 0) {
-					do { 
+						do { 
 					
-						if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
+							if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
 							
 							$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingLocation='%s' WHERE id='%s';", $_POST["brewStyleJudgingLoc".$id], $row_loc['id']); 
 							mysqli_real_escape_string($connection,$updateSQL);
 							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
 							
-						}
+							}
 						
-					} while($row_loc = mysqli_fetch_assoc($loc));
-				}
-			 }
+						} while($row_loc = mysqli_fetch_assoc($loc));
+					}
+			 	}
+			}
 		}
 			 
-	if($result){ 
-		if ($section == "setup") header("location:../setup.php?section=step8"); 
-		else {
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		if($result){ 
+			if ($section == "setup") header("location:../setup.php?section=step8"); 
+			else {
+				$pattern = array('\'', '"');
+				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+			}
 		}
-		}
+	
 	}
 	
 	if ($action == "add") {
@@ -104,8 +108,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	  brewStyleStrength,
 	  brewStyleCarb,
 	  brewStyleSweet,
-	  brewStyleEntry,
-	  brewStyleComEx
+	  brewStyleEntry
 	  ) 
 	  VALUES (
 	  %s, %s, %s, %s, %s, 
@@ -137,8 +140,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
-						   GetSQLValueString($_POST['brewStyleComEx'], "text")
+						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
 						   );
 	
 	
@@ -181,8 +183,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		  brewStyleStrength=%s,
 		  brewStyleCarb=%s,
 		  brewStyleSweet=%s,
-		  brewStyleEntry=%s,
-		  brewStyleComEx=%s
+		  brewStyleEntry=%s
 		  
 		  WHERE id=%s",
 						   GetSQLValueString($_POST['brewStyleNum'], "text"),
@@ -208,7 +209,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
 						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
-						   GetSQLValueString($_POST['brewStyleComEx'], "text"),
 						   GetSQLValueString($id, "int"));
 	
 	  	mysqli_real_escape_string($connection,$updateSQL);

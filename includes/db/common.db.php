@@ -215,7 +215,7 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 		$totalRows_user_level = mysqli_num_rows($user_level);
 		}
 	elseif (($section == "brewer") && ($action == "edit")) { 
-		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users",$row_brewer['brewerEmail']);
+		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users",$row_name['brewerEmail']);
 		$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
 		$row_user_level = mysqli_fetch_assoc($user_level);
 		$totalRows_user_level = mysqli_num_rows($user_level);
