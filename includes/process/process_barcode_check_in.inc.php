@@ -1,6 +1,7 @@
 <?php
 	
 $entry_list = "";
+$entries_updated[] = "";
 
 foreach ($_POST['id'] as $id) {
 	
@@ -17,8 +18,7 @@ foreach ($_POST['id'] as $id) {
 		$enum = mysqli_query($connection,$query_enum) or die (mysqli_error($connection));
 		$row_enum = mysqli_fetch_assoc($enum);
 		
-		if (($row_enum['brewJudgingNumber'] != "") && (strlen($row_enum['brewJudgingNumber']) == 6)) $flag_enum[] = $row_enum['brewJudgingNumber']."*".$_POST['eid'.$id];
-		elseif ($row_jnum['count'] > 0) $flag_jnum[] = $judging_number."*".$_POST['eid'.$id];
+		if ($row_jnum['count'] > 0) $flag_jnum[] = $judging_number."*".$_POST['eid'.$id];
 		
 		else {
 			

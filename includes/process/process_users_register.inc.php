@@ -23,6 +23,10 @@ else $brewerClubs = "";
 if (isset($_POST['brewerPhone2'])) $brewerPhone2 = $_POST['brewerPhone2'];
 else $brewerPhone2 = "";
 
+if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
+else $brewerJudgeWaiver = "";
+
+
  
 // Custom Code for AHA NHC
 if (NHC) {
@@ -282,7 +286,7 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($brewerAHA, "int"),
-						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
+						   GetSQLValueString($brewerJudgeWaiver, "text")
 						   );
 		}
 		
@@ -331,7 +335,7 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($brewerJudgeRank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
+						   GetSQLValueString($brewerJudgeWaiver, "text")
 						   );
 		}
 		

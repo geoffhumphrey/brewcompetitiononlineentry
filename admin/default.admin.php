@@ -213,7 +213,7 @@
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels</a></li>
+                                        <li><a href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-external-link"></span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->

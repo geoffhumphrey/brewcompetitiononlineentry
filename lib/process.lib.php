@@ -173,10 +173,12 @@ function generate_judging_numbers($brewing_db_table) {
 	
 	// Generate and insert new judging numbers
 	do { 	
-	
+		
+		$brewJudgingNumber = generate_judging_num(1);
+		
 		$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
 					$brewing_db_table,
-				   	GetSQLValueString(generate_judging_num($row_judging_numbers['brewCategory']), "text"),
+				   	GetSQLValueString($brewJudgingNumber, "text"),
 				   	GetSQLValueString($row_judging_numbers['id'], "text"));
 					
 		mysqli_real_escape_string($connection,$updateSQL);
