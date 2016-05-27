@@ -1,6 +1,6 @@
 			<div class="panel panel-info">
                 <div class="panel-heading">
-                    <h4 class="panel-title">Entry Status<span class="fa fa-beer text-primary pull-right"></span></h4>
+                    <h4 class="panel-title">Entry Status<span class="fa fa-lg fa-beer text-primary pull-right"></span></h4>
                     <span class="small text-muted">As of <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></span>
                 </div>
                 <div class="panel-body">

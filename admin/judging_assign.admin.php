@@ -98,7 +98,7 @@ do {
 			
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
 				$assign_row_color = "bg-orange text-orange";
-				$assign_flag = "<span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
+				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
 				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
 				//$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
 				if ($rank_number >= 2) {

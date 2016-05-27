@@ -76,7 +76,7 @@ if ($logged_in) {
 	// Competition Status Panel
 	$header1_100 .= "<div class=\"panel panel-info\">";
 	$header1_100 .= "<div class=\"panel-heading\">";
-	$header1_100 .= "<h4 class=\"panel-title\">Competition Status<span class=\"fa fa-bar-chart text-info pull-right\"></span></h4>";
+	$header1_100 .= "<h4 class=\"panel-title\">Competition Status<span class=\"fa fa-2x fa-bar-chart text-info pull-right\"></span></h4>";
 	$header1_100 .= "<span class=\"small text-muted\">As of ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span>";
 	$header1_100 .= "</div>";
 	$page_info100 .= "<div class=\"panel-body\">";
@@ -164,32 +164,32 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Entry Registration</strong>";
-	if ($entry_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
-	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
+	if ($entry_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
+	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 	
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Drop-Off Window</strong>";
-	if ($dropoff_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
-	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
+	if ($dropoff_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
+	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 	
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Shipping Window</strong>";
-	if ($shipping_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
-	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
+	if ($shipping_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
+	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Registration</strong>";
-	if ($registration_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
-	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
+	if ($registration_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
+	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Judge Registration</strong>";
-	if ($judge_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-check\"></span> Open</span>";
-	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-times\"></span> Closed</span>";
+	if ($judge_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lgfa-check\"></span> Open</span>";
+	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 	
 	$page_info100 .= "</div>";

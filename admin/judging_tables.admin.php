@@ -511,7 +511,7 @@ if ($totalRows_tables > 0) { ?>
 		$styles = display_array_content($a,1);
 		$received = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 		$scored =  get_table_info(1,"score_total",$row_tables['id'],$dbTable,"default");
-		if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
+		if (($received > $scored) && ($dbTable == "default")) $scored = "<a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span></a> ".$scored.""; else $scored = $scored;
 		$assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
 		$assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
 		/* $output_at_table_modals .= "
@@ -562,15 +562,14 @@ if ($totalRows_tables > 0) { ?>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
         <td nowrap="nowrap" class="hidden-print">
-            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-pencil"></span></a> 
-            <a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print the pullsheet for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-print"></span></a> 
+            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
+            <a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print the pullsheet for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-lg fa-print"></span></a> 
             <?php if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) { ?>
-            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Add/edit flights for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-send"></span></a>
+            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Add/edit flights for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-lg fa-send"></span></a>
             <?php } ?>
-            <?php if (score_count($row_tables['id'],1)) { ?>
-            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Add/edit scores for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-trophy"></span></a> 
-            <?php } ?>
-            <a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=judging_tables&amp;action=delete&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>" data-confirm="Are you sure you want to delete Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>? ALL associated FLIGHTS and SCORES will be deleted as well. This cannot be undone."><span class="fa fa-trash-o"></span></a> 
+            <?php if (score_count($row_tables['id'],1)) $scoreAction = "edit"; else $scoreAction = "add"; ?>
+            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php echo $scoreAction; ?>&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Add/edit scores for Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>"><span class="fa fa-lg fa-trophy"></span></a>   
+            <a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=judging_tables&amp;action=delete&amp;id=<?php echo $row_tables['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>" data-confirm="Are you sure you want to delete Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?>? ALL associated FLIGHTS and SCORES will be deleted as well. This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
         </td>
         <?php } ?>
     </tr>

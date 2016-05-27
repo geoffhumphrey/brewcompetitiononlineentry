@@ -14,7 +14,7 @@ $setup_body = "";
 
 if ($setup_free_access == FALSE) {
 	
-	$setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>Setup Cannot Run.</strong> The variable called &#36;setup_free_access is set to FALSE.</div>";
+	$setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Setup Cannot Run.</strong> The variable called &#36;setup_free_access is set to FALSE.</div>";
 	$setup_body .= "<p>The &#36;setup_free_access variable is in the config.php file, which is located in the &ldquo;site&rdquo; folder on your server.</p>
 	<p>For the install and setup scripts to run, <strong>the &#36;setup_free_access variable must be set to TRUE</strong>. Server access is required to change the config.php file.</p>
 	<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>
@@ -146,7 +146,7 @@ else {
             <div class="sidebar col col-lg-3 col-md-12 col-sm-12 col-xs-12">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h4 class="panel-title">Setup Status<span class="fa fa-bar-chart text-primary pull-right"></span></h4>
+						<h4 class="panel-title">Setup Status<span class="fa fa-lg fa-bar-chart text-primary pull-right"></span></h4>
 					</div>
 					<div class="panel-body">
 						<div class="bcoem-sidebar-panel <?php echo $sidebar_status_0; ?>">

@@ -19,8 +19,8 @@
 <?php if ($totalRows_sponsors > 0) { ?>
 <?php if ($action == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
-<p><span class="fa fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
-<p><span class="fa fa-times text-danger"></span> =  No logo.
+<p><span class="fa fa-lg fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
+<p><span class="fa fa-lg fa-times text-danger"></span> =  No logo.
 </div>
 <?php } ?>
 <?php if ($action == "default") { ?>
@@ -65,13 +65,13 @@
   <td><?php echo $row_sponsors['sponsorName']; ?></td>
   <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td><?php echo $row_sponsors['sponsorLevel']; ?></td>
-  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-check text-success"></span><?php } else { ?><span class="fa fa-times text-danger"></span><?php } ?></td>
+  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-lg fa-check text-success"></span><?php } else { ?><span class="fa fa-lg fa-times text-danger"></span><?php } ?></td>
   <td><?php echo $row_sponsors['sponsorText']; ?></td>
   <td><input id="mod_enable" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" /></td>
   <td nowrap="nowrap">
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-pencil"></span></a> 
-  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
-  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-link\"></span></a> "; ?> 
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
+  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
+  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?> 
   </td>
  </tr>
 <?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>

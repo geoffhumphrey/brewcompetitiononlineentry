@@ -5,7 +5,7 @@ if ($setup_free_access == TRUE) {
 
 	if ($action == "default") { 
 	
-		$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be installed.</strong> These tables hold all of your competition data.</div>";
+		$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be installed.</strong> These tables hold all of your competition data.</div>";
 		$output .= "<p>Click the &ldquo;Install DB Tables and Data&rdquo; button below to install the database schema into the following database:</p>";
 		$output .= "<ul>";
 		$output .= "<li>".$database."</li>";
@@ -17,17 +17,17 @@ if ($setup_free_access == TRUE) {
 			$output .= "</ul>";
 		}
 		
-		$output .= "<a class=\"btn btn-lg btn-primary\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-download\"></span> Install DB Tables and Data</a>";
+		$output .= "<a class=\"btn btn-lg btn-primary\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-lg fa-download\"></span> Install DB Tables and Data</a>";
 		
 		}
 		
 	if ($action == "install-db") {
 		
-		$setup_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"></span> <strong>All database tables and default data have been installed successfully.</strong></div>
-		<div class=\"alert alert-info\"><strong><span class=\"fa fa-info-circle\"></span> The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
-		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-chevron-right\"><span></a></div>";
+		$setup_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>All database tables and default data have been installed successfully.</strong></div>
+		<div class=\"alert alert-info\"><strong><span class=\"fa fa-lg fa-info-circle\"></span> The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
+		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-lg fa-chevron-right\"><span></a></div>";
 	
-		//$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Database tables install details are below.</strong></div>";
+		//$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Database tables install details are below.</strong></div>";
 		$output .= "<div class=\"panel panel-primary\">";
 		$output .= "<div class=\"panel-heading\"><strong>Table Installation Details</strong></div>";
 		$output .= "<div class=\"panel-body\">";
@@ -55,7 +55,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Archive</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Archive</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -106,7 +106,7 @@ if ($setup_free_access == TRUE) {
 		
 		
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Participants</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Participants</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Brewing Table
@@ -482,7 +482,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Entries</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Entries</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -505,7 +505,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Contacts</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Contacts</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -560,7 +560,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Drop Off Table
@@ -583,7 +583,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Drop Off Locations</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Drop Off Locations</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Assignments Table
@@ -607,7 +607,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		//echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Assignments</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Assignments</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Flights Table
@@ -629,7 +629,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Flights</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Flights</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Locations Table
@@ -652,7 +652,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Locations</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Locations</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -685,7 +685,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Preferences</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Preferences</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -711,7 +711,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Scores</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Scores</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -735,7 +735,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Scores BOS</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Scores BOS</strong> table was installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -760,7 +760,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Judging Tables</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Tables</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Mods Table
@@ -847,7 +847,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Special Best Data Table
@@ -870,7 +870,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Data</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Special Best Data</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Special Best Info Table
@@ -893,7 +893,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Special Best Info</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Special Best Info</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Sponsors Table
@@ -918,7 +918,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Sponsors</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Sponsors</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Staff Table
@@ -942,7 +942,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Staff</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Staff</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Styles Table
@@ -1339,7 +1339,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));			
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
 		
 		// ------------------- 
 		// Style Types Table
@@ -1358,7 +1358,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Style Types</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Style Types</strong> table was installed successfully.</li>";
 		
 		$sql = "
 		INSERT INTO `$style_types_db_table` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
@@ -1371,7 +1371,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>Style Types</strong> data installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Style Types</strong> data installed successfully.</li>";
 		
 		
 		// ------------------- 
@@ -1391,7 +1391,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
 		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.2.0', '2016-05-23', NOW( ),'0');";
 		mysqli_select_db($connection,$database);
@@ -1399,7 +1399,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
 		
 		// ------------------- 
 		// Users Table
@@ -1445,7 +1445,7 @@ if ($setup_free_access == TRUE) {
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		}
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
 	
 		$output .=  "</ul>";
 		$output .=  "</div>";

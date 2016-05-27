@@ -81,7 +81,7 @@ if ($view == "default") {
 					else $output_judges .=  judge_points($uid,$judge_info['5']);
 					$output_judges .= "</td>";
 					$output_judges .= "<td>";
-					if ($bos_judge) $output_judges .= "<span class=\"fa fa-check\"></span>";
+					if ($bos_judge) $output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
 					else $output_judges .= "&nbsp;";
 					$output_judges .= "</td>";
 					$output_judges .= "</tr>";
@@ -103,7 +103,7 @@ if ($view == "default") {
 				$output_judges .= "1.0"; 
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
-				$output_judges .= "<span class=\"fa fa-check\"></span>";
+				$output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
 				$output_judges .= "</td>";
 				$output_judges .= "</tr>";
 			}

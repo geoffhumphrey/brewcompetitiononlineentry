@@ -97,8 +97,8 @@
       <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td nowrap="nowrap">
 	  
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Category entries"><span class="fa fa-pencil"></span></a> 
-	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Category"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Category entries"><span class="fa fa-lg fa-pencil"></span></a> 
+	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Category"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
       </td>
      </tr>
     <?php

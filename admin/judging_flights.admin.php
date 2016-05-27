@@ -224,7 +224,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 			include(DB.'admin_judging_flights.db.php');
 			
 ?>
-	<h4>Table <?php echo $row_tables['tableNumber']." <small>&ndash; ".$row_tables['tableName']; ?> <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $flight_table; ?>" data-toggle="tooltip" data-placement="top" title="Define/Edit the <?php echo $row_tables['tableName']; ?> Flights"><span class="fa fa-pencil-square-o"></span></a></small></h4>
+	<h4>Table <?php echo $row_tables['tableNumber']." <small>&ndash; ".$row_tables['tableName']; ?> <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $flight_table; ?>" data-toggle="tooltip" data-placement="top" title="Define/Edit the <?php echo $row_tables['tableName']; ?> Flights"><span class="fa fa-lg fa-pencil-square-o"></span></a></small></h4>
 
 	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
 	<?php 

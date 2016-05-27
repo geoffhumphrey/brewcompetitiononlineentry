@@ -73,7 +73,7 @@ $firefox_warning = "";
 // Build Headers
 $header1_1 .= "<a name=\"entries\"></a><h2>Entries</h2>";
  
-$firefox_warning .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+$firefox_warning .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
 
 // Build Warnings
 $warnings = "";
@@ -84,13 +84,13 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<span class=\"fa fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each  entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
+			$warnings .= "<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each  entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
 			$warnings .= "</div>"; 
 		}
 		
 	if (entries_no_special($_SESSION['user_id'])) {
-		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"></span> <strong>You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.</strong> For each entry below with a <span class=\"fa fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.</div>";
+		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.</strong> For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.</div>";
 	}
 }
 
@@ -144,8 +144,8 @@ do {
 	
 	if (!$show_scores) {
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
-	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
-	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-exclamation-circle text-danger\"></span>";
+	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
+	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
 	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
 	$entry_output .= "</td>";
 	
@@ -175,7 +175,7 @@ do {
 		
 		$entry_output .= "<td class=\"hidden-xs\">";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
-			if ($action != "print") $entry_output .= "<span class =\"fa fa-check text-success\"></span>"; 
+			if ($action != "print") $entry_output .= "<span class =\"fa fa-lg fa-check text-success\"></span>"; 
 			else $entry_output .= "Yes"; 
 			}
 		else $entry_output .= "&nbsp;";
@@ -201,7 +201,7 @@ do {
 	
 	$edit_link .= "&amp;view=".$brewCategory."-".$row_log['brewSubCategory'];
 	$edit_link .= "\" data-toggle=\"tooltip\" title=\"Edit ".$row_log['brewName']."\">";
-	$edit_link .= "<span class=\"fa fa-pencil\"></a>&nbsp;&nbsp;";
+	$edit_link .= "<span class=\"fa fa-lg fa-pencil\"></a>&nbsp;&nbsp;";
 	
 	
 	// Print Forms
@@ -215,22 +215,22 @@ do {
 	$print_forms_link .= "id=".$row_log['id'];
 	$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
 	$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
-	$print_forms_link .= "<span class=\"fa fa-print\"></a>&nbsp;&nbsp;";
+	$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></a>&nbsp;&nbsp;";
 	
 	// Print Recipe
-	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-book\"><span></a>&nbsp;&nbsp;";
+	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;";
 	
 	if ($comp_entry_limit) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
 	
 	
 	$delete_alt_title = "Delete ".$row_log['brewName'];
 	$delete_warning = "Delete ".$row_log['brewName']."? This cannont be undone.";
-	$delete_link = "<a data-toggle=\"tooltip\" title=\"".$delete_alt_title."\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-confirm=\"Are you sure you want to delete the entry called ".$row_log['brewName']."? This cannot be undone.\"><span class=\"fa fa-trash-o\"></a>";
+	$delete_link = "<a data-toggle=\"tooltip\" title=\"".$delete_alt_title."\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-confirm=\"Are you sure you want to delete the entry called ".$row_log['brewName']."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
 	//$delete_link = build_action_link("bin_closed",$base_url,$section,$go,"delete",$filter,$row_log['id'],$brewing_db_table,"Delete ".$row_log['brewName']."? This cannot be undone. ".$warning_append,1,"Delete");
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
 	if ($scoresheet) { 
-		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
+		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
 	}
 	
 	if ((judging_date_return() > 0) && ($action != "print")) {
@@ -241,7 +241,7 @@ do {
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-		else $entry_output .= "<span class=\"fa fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_log['brewName']." has been marked as paid - it cannot be deleted.\" href=\"#\"></span>";
+		else $entry_output .= "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_log['brewName']." has been marked as paid - it cannot be deleted.\" href=\"#\"></span>";
 		
 		
 	}

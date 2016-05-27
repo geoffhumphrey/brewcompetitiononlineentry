@@ -196,7 +196,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	elseif ($row_scores['scorePlace'] == "") $score_place = "<span style=\"display:none\">N/A</span>"; 
 	else $score_place =  $row_scores['scorePlace'];
 	
-	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-check text-success\"></span>";
+	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
 	else $mini_bos = "&nbsp;";
 	
 	
@@ -216,8 +216,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php echo $score_place; ?></td>  
         <td><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-pencil"></span></a> 
-        <a href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-trash-o"></span></a>
+        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a> 
+        <a href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
         </td>
         <?php } ?>
     </tr>
@@ -261,8 +261,8 @@ $(document).ready(function() {
 			null,
 			null,
 			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] }
+			null,
+			null
 		]
 	} );
 } );
@@ -314,9 +314,6 @@ $(document).ready(function() {
 				if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$row_entries['id']);
 				else $entry_number = sprintf("%04s",$row_entries['id']);
 				
-				if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']); 
-				else $judging_number = readable_judging_number($table_score_data[1],$row_entries['brewJudgingNumber']);
-				
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 				 
 				$style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
@@ -335,19 +332,22 @@ $(document).ready(function() {
         <td><?php echo $judging_number; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $style_display; ?></td>
         <td><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($score_entry_data[5] == "1")) echo "CHECKED"; ?> /></td>
-        
-    	<td><input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" /></td>
+    	<td>
+        	<span class="hidden"><?php if ($action == "edit") echo $score_entry_data[3]; ?></span>
+        	<input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" />
+        </td>
         <td>
-        <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">
-          <option value=""></option>
-          <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
-          <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
-          <option value="3" <?php if (($action == "edit") && ($score_entry_data[4] == "3")) echo "SELECTED"; ?>>3rd</option>
-          <?php if (!NHC) { ?>
-          <option value="4" <?php if (($action == "edit") && ($score_entry_data[4] == "4")) echo "SELECTED"; ?>>4th</option>
-          <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
-          <?php } ?>
-        </select>
+        <span class="hidden"><?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo $score_entry_data[4]; ?></span>
+            <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">
+              	<option value=""></option>
+                  <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
+                  <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
+                  <option value="3" <?php if (($action == "edit") && ($score_entry_data[4] == "3")) echo "SELECTED"; ?>>3rd</option>
+                  <?php if (!NHC) { ?>
+                  <option value="4" <?php if (($action == "edit") && ($score_entry_data[4] == "4")) echo "SELECTED"; ?>>4th</option>
+                  <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
+                  <?php } ?>
+            </select>
         </td>
 	</tr>
     <?php }

@@ -64,7 +64,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$user_check = explode("^",$user_check);
 	
 	if (($user_check[0] == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
+		$message2 .= sprintf("<div class='alert alert-danger'><span class=\"fa fa-lg fa-exclamation-circle\"></span> There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
 	}
 	
 }
@@ -73,8 +73,8 @@ else $verify_form_display = FALSE;
 // Build Links
 
 if ($section != "update") {
-	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Have you <a href='%s'>registered your account</a> yet?</p>",build_public_url("register","default","default","default",$sef,$base_url));
-	if ($login_form_display) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</p>",$base_url."index.php?section=login&amp;go=password&amp;action=forgot");
+	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class='lead'><span class='fa fa-lg fa-exlamation-circle'></span> Have you <a href='%s'>registered your account</a> yet?</p>",build_public_url("register","default","default","default",$sef,$base_url));
+	if ($login_form_display) $primary_links .= sprintf("<p class='lead'><span class='fa fa-lg fa-exlamation-circle'></span> Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</p>",$base_url."index.php?section=login&amp;go=password&amp;action=forgot");
 }
 
 

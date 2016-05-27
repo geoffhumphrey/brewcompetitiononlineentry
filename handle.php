@@ -56,7 +56,8 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		*/
 		
 		// If file type is on the blacklist
-		if ((in_array(end(explode('.', $_FILES['file']['name'])), $backlist)) || (!in_array($file_ext, $file_exts))) {
+		$file_extension = explode('.', $_FILES['file']['name']);
+		if ((in_array(end($file_extension), $backlist)) || (!in_array($file_ext, $file_exts))) {
 			if ($action == "html") $errorGoTo = "index.php?section=admin&go=upload&action=html&msg=30";
 			else $errorGoTo = "index.php?section=admin&go=upload&msg=30";
 			header(sprintf("Location: %s", $errorGoTo));

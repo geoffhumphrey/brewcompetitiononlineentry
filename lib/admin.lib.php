@@ -750,7 +750,7 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 		$icon = "fa-edit";
 		$title = "Edit judges assigned to this table.";
 	}
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa '.$icon.'"></span></a> '.$row_assignments['count'];
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a> '.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -769,7 +769,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 		$icon = "fa-edit";
 		$title = "Edit stewards assigned to this table.";
 	}
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa '.$icon.'"></span></a> '.$row_assignments['count'];
+	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a> '.$row_assignments['count'];
 	else $r = $row_assignments['count'];
 	return $r;
 }

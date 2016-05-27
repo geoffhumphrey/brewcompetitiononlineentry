@@ -131,7 +131,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	//$return .= "<a>";
 	
 	if (($method == 1) || ($method == 2)) {
-		$return .= "<span class=\"fa ".$icon."\"></span>";
+		$return .= "<span class=\"fa fa-lg ".$icon."\"></span>";
 		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;"; 
 	}
 
@@ -164,7 +164,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	
 	else {
 		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>"; 
-		$return .= "<span class=\"fa ".$icon."\"></span>";
+		$return .= "<span class=\"fa fa-lg ".$icon."\"></span>";
 		
 	}
 	
@@ -2330,16 +2330,16 @@ function display_place($place,$method) {
 	}
 	if ($method == "2") { 
 		switch($place){
-			case "1": $place = "<span class='fa fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class='fa fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class='fa fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "4": $place = "<span class='fa fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place);
+			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place);
 			break;
 			case "5": 
-			case "HM": $place = "<span class='fa fa-trophy text-teal'></span> HM";
+			case "HM": $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM";
 			break;
 			default: $place = "N/A";
 			}
@@ -2347,15 +2347,15 @@ function display_place($place,$method) {
 	
 	if ($method == "3") { 
 		switch($place){
-			case "1": $place = "<span class='fa fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
+			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "2": $place = "<span class='fa fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
+			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "3": $place = "<span class='fa fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
+			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
 			break;
-			case "HM":  $place = "<span class='fa fa-trophy text-teal'></span> HM";
+			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM";
 			break;
-			default: $place = "<span class='fa fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
+			default: $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
 	}
 	
@@ -3226,12 +3226,12 @@ function yes_no($input,$base_url,$method=0) {
 	$output = "";
 	if ($method != 3) {
 		if (($input == "Y") || ($input == 1)) { 
-			$output = "<span class='fa fa-check text-success'></span> ";
+			$output = "<span class='fa fa-lg fa-check text-success'></span> ";
 			if ($method == 0) $output = "Yes";
 			
 		}
 		else {
-			$output .= "<span class='fa fa-times text-danger'></span> ";
+			$output .= "<span class='fa fa-lg fa-times text-danger'></span> ";
 			if ($method == 0) $output = "No";
 			
 		}

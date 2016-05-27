@@ -67,12 +67,12 @@ if ($totalRows_entries > 0) {
         <?php if ($view == "default") { ?>
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <?php } ?>
-        <td><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
+        <td><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if (isset($row_entries['brewCoBrewer'])) echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td><?php echo $row_entries['brewName']; ?></td>
         <td><?php echo $row_entries['brewStyle']; ?></td>
         <td><?php echo $row_entries['brewSubCategory']; ?></td>
         <td><small><?php echo $brewer_info[6]; ?><br><?php echo $phone; ?></small></td>
-        <td><?php if ($row_entries['brewPaid'] == "1") echo "<p class=\"box_small\" style=\"vertical-align:middle; text-align: center;\"><span class=\"fa fa-check\"></span></p>"; else echo "<p class='box_small'></p>"; ?></td>
+        <td><?php if ($row_entries['brewPaid'] == "1") echo "<p class=\"box_small\" style=\"vertical-align:middle; text-align: center;\"><span class=\"fa fa-lg fa-check\"></span></p>"; else echo "<p class='box_small'></p>"; ?></td>
         <td><p class="box_small"></p></td>
         <td><p class="box"></p></td>
     </tr>

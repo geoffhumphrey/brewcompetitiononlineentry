@@ -80,22 +80,22 @@ Declare all variables empty at the top of the script. Add on later...
 		// Build top of page info: total entry fees, list of unpaid entries, etc.
 		$primary_page_info .= sprintf("<p class=\"lead\">%s, the following are your options for paying your entry fees.</p>",$_SESSION['brewerFirstName']);
 		$primary_page_info .= "<p class=\"lead\"><small>";
-		$primary_page_info .= sprintf("<span class=\"fa fa-money text-success\"></span> Fees are <strong class=\"text-success\">%s</strong> per entry.",$currency_symbol.number_format($_SESSION['contestEntryFee'],2));
+		$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-money text-success\"></span> Fees are <strong class=\"text-success\">%s</strong> per entry.",$currency_symbol.number_format($_SESSION['contestEntryFee'],2));
 		
 		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
 		if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2));
 		$primary_page_info .= "</small></p>";
 		if ($row_brewer['brewerDiscount'] == "Y") {
-			$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-star-o text-primary\"></span> Your fees have been discounted to <strong class=\"text-success\">%s</strong> per entry.</small></p>",$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2));
+			$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> Your fees have been discounted to <strong class=\"text-success\">%s</strong> per entry.</small></p>",$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2));
 		}
-		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-exclamation-triangle text-danger\"></span>  Your total entry fees are <strong class=\"text-success\">%s</strong>. You need to pay <strong class=\"text-danger\">%s</strong>.</small></p>",$currency_symbol.number_format($total_entry_fees,2),$currency_symbol.number_format($total_to_pay,2));
+		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>  Your total entry fees are <strong class=\"text-success\">%s</strong>. You need to pay <strong class=\"text-danger\">%s</strong>.</small></p>",$currency_symbol.number_format($total_entry_fees,2),$currency_symbol.number_format($total_to_pay,2));
 		
-		if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-thumbs-o-up text-danger\"></span> %s</p>","Your fees have been paid. Thank you!</small></p>");
+		if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-thumbs-o-up text-danger\"></span> %s</p>","Your fees have been paid. Thank you!</small></p>");
 		
 		
 		else {
 			$primary_page_info .= "<p class=\"lead\"><small>";
-			$primary_page_info .= sprintf("<span class=\"fa fa-exclamation-triangle text-danger\"></span>  You currently have <strong class=\"text-danger\">%s unpaid confirmed ",readable_number($total_not_paid));
+			$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>  You currently have <strong class=\"text-danger\">%s unpaid confirmed ",readable_number($total_not_paid));
 			if ($total_not_paid == "1") $primary_page_info .= "entry</strong>:"; else $primary_page_info .= "entries</strong>:";
 			$primary_page_info .= "</small></p>";
 			$primary_page_info .= "<ol>";
@@ -141,10 +141,10 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info3 .= "<p>Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</p>";
 			
 				// PayPal
-				$header2_4 .= "<h3>PayPal <span class=\"fa fa-cc-paypal\"></span> <span class=\"fa fa-cc-visa\"></span> <span class=\"fa fa-cc-mastercard\"></span> <span class=\"fa fa-cc-discover\"></span> <span class=\"fa fa-cc-amex\"></span></h3>";
+				$header2_4 .= "<h3>PayPal <span class=\"fa fa-lg fa-cc-paypal\"></span> <span class=\"fa fa-lg fa-cc-visa\"></span> <span class=\"fa fa-lg fa-cc-mastercard\"></span> <span class=\"fa fa-lg fa-cc-discover\"></span> <span class=\"fa fa-lg fa-cc-amex\"></span></h3>";
 				$page_info4 .= "<p>Click the &ldquo;Pay with PayPal&rdquo; button below to pay online.";
 				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
-				//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
+				//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
 				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
 				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
 				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">";
@@ -221,10 +221,10 @@ Declare all variables empty at the top of the script. Add on later...
 			$page_info7 .= "</form>";
 		}
 		
-		if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= "<span class=\"fa fa-thumbs-o-up\"></span> Your fees have been paid. Thank you!</p>";
+		if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= "<span class=\"fa fa-lg fa-thumbs-o-up\"></span> Your fees have been paid. Thank you!</p>";
 		if ($total_entry_fees == 0) $page_info6 .= "<p>You have not logged any entries yet.</p>";
 		
-		if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>You cannot pay for your entries because one or more of your entries is unconfirmed.</strong> Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</div>"; 
+		if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>You cannot pay for your entries because one or more of your entries is unconfirmed.</strong> Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</div>"; 
 		
 			
 		// --------------------------------------------------------------
@@ -235,7 +235,7 @@ Declare all variables empty at the top of the script. Add on later...
 		
 		if ($total_entry_fees > 0) { 
 			
-			if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a class=\"alert-link\" href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
+			if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a class=\"alert-link\" href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
 			
 			echo $warning1;
 			echo $warning2;

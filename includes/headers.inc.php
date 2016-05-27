@@ -21,13 +21,13 @@ switch($section) {
 	$header_output = $_SESSION['contestName'];
 	if ($msg == "success") { 
 		$output = "Setup was successful.";
-		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> You are now logged in and ready to further customize your competition's site.</p>"; 
+		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> You are now logged in and ready to further customize your competition's site.</p>"; 
 	}
 	
 	if ($msg == "chmod") { 
 		$output = "<strong>Setup was successful.</strong> However, your config.php permissions file could not be changed.";
-		$output_extend = "<div class='alert alert-warning hidden-print'><span class=\"fa fa-exclamation-triangle\"> It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
-		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='alert alert-warning hidden-print'><span class=\"fa fa-exclamation-triangle\"> Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
+		$output_extend = "<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\"> It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
+		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\"> Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
 	}
 	
 	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
@@ -246,15 +246,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-refresh";
-	$sidebar_status_icon_1 = "fa fa-clock-o";
-	$sidebar_status_icon_2 = "fa fa-clock-o";
-	$sidebar_status_icon_3 = "fa fa-clock-o";
-	$sidebar_status_icon_4 = "fa fa-clock-o";
-	$sidebar_status_icon_5 = "fa fa-clock-o";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_1 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_2 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_3 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_4 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_5 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	
 	break;
 
@@ -270,15 +270,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-refresh";
-	$sidebar_status_icon_2 = "fa fa-clock-o";
-	$sidebar_status_icon_3 = "fa fa-clock-o";
-	$sidebar_status_icon_4 = "fa fa-clock-o";
-	$sidebar_status_icon_5 = "fa fa-clock-o";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_2 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_3 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_4 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_5 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step2":
@@ -292,15 +292,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-refresh";
-	$sidebar_status_icon_3 = "fa fa-clock-o";
-	$sidebar_status_icon_4 = "fa fa-clock-o";
-	$sidebar_status_icon_5 = "fa fa-clock-o";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_3 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_4 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_5 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step3":
@@ -314,15 +314,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-refresh";
-	$sidebar_status_icon_4 = "fa fa-clock-o";
-	$sidebar_status_icon_5 = "fa fa-clock-o";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_4 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_5 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step4":
@@ -336,15 +336,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-check";
-	$sidebar_status_icon_4 = "fa fa-refresh";
-	$sidebar_status_icon_5 = "fa fa-clock-o";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-check";
+	$sidebar_status_icon_4 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_5 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step5":
@@ -358,15 +358,15 @@ switch($section) {
 	$sidebar_status_6 = "text-muted";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-check";
-	$sidebar_status_icon_4 = "fa fa-check";
-	$sidebar_status_icon_5 = "fa fa-refresh";
-	$sidebar_status_icon_6 = "fa fa-clock-o";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-check";
+	$sidebar_status_icon_4 = "fa fa-lg fa-check";
+	$sidebar_status_icon_5 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_6 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 
 	case "step6":
@@ -380,15 +380,15 @@ switch($section) {
 	$sidebar_status_6 = "text-danger";
 	$sidebar_status_7 = "text-muted";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-check";
-	$sidebar_status_icon_4 = "fa fa-check";
-	$sidebar_status_icon_5 = "fa fa-check";
-	$sidebar_status_icon_6 = "fa fa-refresh";
-	$sidebar_status_icon_7 = "fa fa-clock-o";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-check";
+	$sidebar_status_icon_4 = "fa fa-lg fa-check";
+	$sidebar_status_icon_5 = "fa fa-lg fa-check";
+	$sidebar_status_icon_6 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_7 = "fa fa-lg fa-clock-o";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step7":
@@ -402,15 +402,15 @@ switch($section) {
 	$sidebar_status_6 = "text-success";
 	$sidebar_status_7 = "text-danger";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-check";
-	$sidebar_status_icon_4 = "fa fa-check";
-	$sidebar_status_icon_5 = "fa fa-check";
-	$sidebar_status_icon_6 = "fa fa-check";
-	$sidebar_status_icon_7 = "fa fa-refresh";
-	$sidebar_status_icon_8 = "fa fa-clock-o";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-check";
+	$sidebar_status_icon_4 = "fa fa-lg fa-check";
+	$sidebar_status_icon_5 = "fa fa-lg fa-check";
+	$sidebar_status_icon_6 = "fa fa-lg fa-check";
+	$sidebar_status_icon_7 = "fa fa-lg fa-refresh";
+	$sidebar_status_icon_8 = "fa fa-lg fa-clock-o";
 	break;
 	
 	case "step8":
@@ -424,22 +424,22 @@ switch($section) {
 	$sidebar_status_6 = "text-success";
 	$sidebar_status_7 = "text-success";
 	$sidebar_status_8 = "text-muted";
-	$sidebar_status_icon_0 = "fa fa-check";
-	$sidebar_status_icon_1 = "fa fa-check";
-	$sidebar_status_icon_2 = "fa fa-check";
-	$sidebar_status_icon_3 = "fa fa-check";
-	$sidebar_status_icon_4 = "fa fa-check";
-	$sidebar_status_icon_5 = "fa fa-check";
-	$sidebar_status_icon_6 = "fa fa-check";
-	$sidebar_status_icon_7 = "fa fa-check";
-	$sidebar_status_icon_8 = "fa fa-refresh";
+	$sidebar_status_icon_0 = "fa fa-lg fa-check";
+	$sidebar_status_icon_1 = "fa fa-lg fa-check";
+	$sidebar_status_icon_2 = "fa fa-lg fa-check";
+	$sidebar_status_icon_3 = "fa fa-lg fa-check";
+	$sidebar_status_icon_4 = "fa fa-lg fa-check";
+	$sidebar_status_icon_5 = "fa fa-lg fa-check";
+	$sidebar_status_icon_6 = "fa fa-lg fa-check";
+	$sidebar_status_icon_7 = "fa fa-lg fa-check";
+	$sidebar_status_icon_8 = "fa fa-lg fa-refresh";
 	break;
 
 	case "beerxml":
 	include(DB.'styles.db.php');
 	$header_output = "Import an Entry Using BeerXML";
 	if ($msg == "default") { 
-	if ($totalRows_styles < 98) $output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> <strong>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles.</strong> To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
+	if ($totalRows_styles < 98) $output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles.</strong> To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
 	}
 	if ($msg == "1") $output = "<strong>Your entry has been recorded.</strong>";
 	if ($msg == "2") $output = "<strong>Your entry has been confirmed.</strong>";
@@ -585,7 +585,7 @@ switch($section) {
 	elseif ($msg == "7") { 
 		if (HOSTED) $output = "<strong>The specified competition data has been cleared.</strong>"; 
 		else $output = "<strong>Archives created successfully.</strong> Click the archive name to view. ";
-		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-info-circle\"></span> <strong>Remember to update your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</strong></div>";
+		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Remember to update your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</strong></div>";
 	
 	}
 	elseif ($msg == "8") $output = "<strong>Archive \"".$filter."\" deleted.</strong>"; 
@@ -628,7 +628,7 @@ switch($section) {
 }
 
 if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated.</strong>";
-if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"></span> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
+if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
 if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
 if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
 if ($msg == "99") $output = "<strong>Please log in to access your account.</strong>";

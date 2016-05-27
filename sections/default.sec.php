@@ -53,8 +53,8 @@ $header1_10 = "";
 $header1_20 = "";
 $header1_30 = "";
 
-$message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No drop-off locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>Add a drop-off location</a>?</div>";
-$message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
+$message1 = "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> No drop-off locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>Add a drop-off location</a>?</div>";
+$message2 = "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> No judging dates/locations have been specified. <a href='index.php?section=admin&amp;action=add&amp;go=judging'>Add a judging location</a>?</div>";
 
 
 if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {

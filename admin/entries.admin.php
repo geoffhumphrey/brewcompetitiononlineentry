@@ -320,7 +320,7 @@ if ($action != "print") { ?>
 			if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
 			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-			$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
+			$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-lg fa-comment\"></span></a>";
 		}
 	
 	if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
@@ -362,11 +362,11 @@ if ($action != "print") { ?>
 		else $entry_paid_display .= ">";
 		$entry_paid_display .= "</label></div>";
         $entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>"; 
-		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<span class=\"fa fa-star-o\"></span>"; 
+		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<span class=\"fa fa-lg fa-star-o\"></span>"; 
 	} 
 	else { 
-		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "<span class=\"fa fa-check text-success\"></span>";
-		else $entry_paid_display .= "<span class=\"fa fa-times text-danger\"></span>";
+		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
+		else $entry_paid_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
 	}
 	
 	if (($action != "print") && ($dbTable == "default")) { 
@@ -377,8 +377,8 @@ if ($action != "print") { ?>
 		$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>"; 
 	} 
 	else { 
-		if ($row_log['brewReceived'] == "1") $entry_received_display .= "<span class=\"fa fa-check text-success\"></span>"; 
-		else $entry_received_display .= "<span class=\"fa fa-times text-danger\"></span>";
+		if ($row_log['brewReceived'] == "1") $entry_received_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>"; 
+		else $entry_received_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
 	}
 	
 	
@@ -390,18 +390,18 @@ if ($action != "print") { ?>
 		if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory']; 
 		else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory']; 
 		$entry_actions .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit &ldquo;".$row_log['brewName']."&rdquo;\">";
-		$entry_actions .= "<span class=\"fa fa-pencil\"></span>";
+		$entry_actions .= "<span class=\"fa fa-lg fa-pencil\"></span>";
 		$entry_actions .= "</a> ";
-		$entry_actions .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-trash-o\"></a> ";
-		$entry_actions .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-print hidden-xs hidden-sm\"></a> ";
-		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-envelope\"></span></a> ";
+		$entry_actions .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
+		$entry_actions .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print hidden-xs hidden-sm\"></a> ";
+		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		
 		
 		
 		
 		
 		if ($scoresheet) { 
-		$entry_actions .= " <a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for the entry named ".$row_log['brewName'].".\"><span class=\"fa fa-gavel\"></span></a> ";
+		$entry_actions .= " <a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for the entry named ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
 	}
 		
 		
@@ -414,7 +414,7 @@ if ($action != "print") { ?>
         <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
         <td><?php echo sprintf("%04s",$row_log['id']); ?></td>
         <td nowrap="nowrap"><?php echo $entry_judging_num_display; echo $required_info; ?></td>
-        <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
+        <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
         <td class="hidden-xs"><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>
         <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $brewer_info[8] ; ?></td>

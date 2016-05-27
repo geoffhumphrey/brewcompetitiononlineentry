@@ -26,7 +26,7 @@ if (file_exists($filename)) {
 	// check to see if the "system" db table is present, if not, use the legacy hard-coded version
 	if (!check_setup($prefix."system",$database)) require(INCLUDES.'version.inc.php');
 	
-	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>The BCOE&amp;M ".$current_version_display." Database Update Script must be run to update the database.</strong></div>";
+	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>The BCOE&amp;M ".$current_version_display." Database Update Script must be run to update the database.</strong></div>";
 	
 	if (check_setup($prefix."preferences",$database)) {
 		
@@ -35,11 +35,11 @@ if (file_exists($filename)) {
 			if ($current_version != $version) {
 				
 				if ($action == "default") { 
-				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
+				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
                 
 				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version.".</p>";
 				
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog\"></span> Begin The Update</a></div>";		
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-lg fa-cog\"></span> Begin The Update</a></div>";		
 				}
 			
 				if ($action == "update") {
@@ -48,7 +48,7 @@ if (file_exists($filename)) {
 						$version = str_replace(".","",$version);
 						if ($version == "200") $version = "2000";
 						if ($version < "113") {
-							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
+							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
 							$output .= "<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>";
 						}
 						if (($version == "113") || ($version == "1130")) {
@@ -149,7 +149,7 @@ if (file_exists($filename)) {
 					session_write_close();
 					session_regenerate_id(true);
 						
-					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
+					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
 					
 					// -----------------------------------------------------------
 					//  Finish and Clean Up
@@ -173,7 +173,7 @@ if (file_exists($filename)) {
 			
 			// if current version is same as installed version...
 			else {
-				$update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-info-circle\"></span> <strong>The installed version (".$version.") is the same as the version for upgrade.</strong> No updates are necessary.</div>";
+				$update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>The installed version (".$version.") is the same as the version for upgrade.</strong> No updates are necessary.</div>";
 				$update_body .= "<p class=\"lead\">Your installation is up to date!</p>";
 				$update_body .= "<div class=\"btn-group\" role=\"group\">";
 				$update_body .= "<a class=\"btn btn-default btn-lg\" href=\"".$base_url."\">Go to the Home Page</a>";
@@ -184,7 +184,7 @@ if (file_exists($filename)) {
 		
 		// if user is not logged in or an admin...
 		else {
-			$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>Only top level administrators are able to access and perform updates.</strong>";
+			$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Only top level administrators are able to access and perform updates.</strong>";
 			if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] > 0))  $update_alerts .= " You do not have administrative access to this site.";
 			$update_alerts .= "</div>";
 			if (!isset($_SESSION['loginUsername'])) {
@@ -196,14 +196,14 @@ if (file_exists($filename)) {
 	
 	// If preferences table does not exist...
 	else {
-		$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>It looks like one or more tables in the database called $database are either missing or not setup correctly.</strong></div>";
+		$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>It looks like one or more tables in the database called $database are either missing or not setup correctly.</strong></div>";
 		if ($prefix != "") $update_alerts .= "<h3>Prefix Defined</h3>";
 		$update_body .= "<p>You have indicated in the config.php file that a prefix of $prefix should be prepended to each table name. Is this correct? If not, make the required changes to the config.php file and try again.</p>";
 		$update_body .= "<p>Please run the <a href='setup.php'>install and setup utility</a> to install the correct database tables.</p>";
 	}
 } // end if version.inc.php file exists
 else { 
-    $update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-exclamation-circle\"></span> <strong>The update script cannot run.</strong> The version.inc.php file does not exist in the /includes/ directory of your BCOE&amp;M installation.</div>";
+    $update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>The update script cannot run.</strong> The version.inc.php file does not exist in the /includes/ directory of your BCOE&amp;M installation.</div>";
 	$update_body .= "<p>Currently your installation's base URL is <strong><?php echo $base_url; ?></strong>. If this is incorrect, you will need to <strong>edit the &#36base_url variable in the config.php file</strong>, located in your installation's /sites/ directory.</p>";
 	$update_body .= "<p><strong>Make sure the version.inc.php file from your <em>previous</em> installation is in your current installation's /includes/ directory.</strong> The update script utilizes this file to determine which database tables to update and install.</p>";
 	$update_body .= "<p>If you do not have the version.inc.php file from your previous version, create a new document locally, name it <em>version.inc.php</em> and copy/paste the following single line of code into the new document. <strong> Don't forget to change the version number!</strong></p>";

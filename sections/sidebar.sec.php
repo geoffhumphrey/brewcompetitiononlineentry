@@ -168,7 +168,7 @@ if ($section != "admin") {
 		// Online Registration Dates
 		$header1_100 .= "<div class=\"panel panel-info\">";
 		$header1_100 .= "<div class=\"panel-heading\">";
-		$header1_100 .= "<h4 class=\"panel-title\">My Account Summary<span class=\"fa fa-info-circle text-primary pull-right\"></span></h4> ";
+		$header1_100 .= "<h4 class=\"panel-title\">My Account Summary<span class=\"fa fa-lg fa-info-circle text-primary pull-right\"></span></h4> ";
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
 		//$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
@@ -286,7 +286,7 @@ if ($section != "admin") {
 	else {
 		do {
 			$page_info400 .= "<p>";
-			if ($row_judging['judgingLocation'] != "") $page_info400 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']." at ".$row_judging['judgingLocation']."\">".$row_judging['judgingLocName']."</a> <span class=\"fa fa-map-marker\"></span>";
+			if ($row_judging['judgingLocation'] != "") $page_info400 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']." at ".$row_judging['judgingLocation']."\">".$row_judging['judgingLocName']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
 			else $page_info400 .= $row_judging['judgingLocName'];
 			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			$page_info400 .= "</p>";
