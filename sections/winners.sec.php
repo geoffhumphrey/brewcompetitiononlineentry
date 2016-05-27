@@ -72,11 +72,11 @@ if ($row_scored_entries['count'] > 0) {
 				// Build table headers
 				$table_head1 .= "<tr>";
 				$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
-				$table_head1 .= "<th>Brewer(s)</th>";
-				$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
-				$table_head1 .= "<th>Style</th>";
-				$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-				if ($filter == "scores") $table_head1 .= "<th nowrap>Score</th>";
+				$table_head1 .= "<th width=\"24%\">Brewer(s)</th>";
+				$table_head1 .= "<th width=\"24%\"><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
+				$table_head1 .= "<th width=\"24%\">Style</th>";
+				$table_head1 .= "<th width=\"24%\" class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
+				if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
 				$table_head1 .= "</tr>";
 				
 				// Build table body

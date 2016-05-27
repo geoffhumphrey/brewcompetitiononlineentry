@@ -17,6 +17,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 	session_start();
 	unset($_SESSION['prefs'.$prefix_session]);
 	
+	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = $_POST['jPrefsBottleNum'];
+	else $jPrefsBottleNum = "";
+	
 	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $_SESSION['jPrefsFlightEntries'];
 	$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 					 
@@ -32,7 +35,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 					   GetSQLValueString($flight_ent, "int"),
 					   GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
 					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
-					   GetSQLValueString($_POST['jPrefsBottleNum'], "int"),
+					   GetSQLValueString($jPrefsBottleNum, "int"),
 					   GetSQLValueString($_POST['jPrefsCapStewards'], "int"),
 					   GetSQLValueString($_POST['jPrefsCapJudges'], "int"),
 					   GetSQLValueString($id, "int"));

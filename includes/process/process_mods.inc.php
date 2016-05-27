@@ -6,13 +6,14 @@
  
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
-	if (($_POST['mod_extend_function_admin'] == "") && ($_POST['mod_extend_function'] == 9)) $mod_extend_function_admin = "default"; 
-	else $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
+	if ((!isset($_POST['mod_extend_function_admin'])) && ((isset($_POST['mod_extend_function'])) && ($_POST['mod_extend_function'] == 9))) $mod_extend_function_admin = "default"; 
+	elseif (isset($_POST['mod_extend_function_admin'])) $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
+	else $mod_extend_function_admin = "";
 
 	if ($action == "update") {
 		foreach($_POST['id'] as $id) {  
 		
-			if ($_POST['mod_enable'.$id] == 1) $enable = 1; else $enable = 0;
+			if ((isset($_POST['mod_enable'.$id])) && ($_POST['mod_enable'.$id] == 1)) $enable = 1; else $enable = 0;
 			$updateSQL = sprintf("UPDATE %s SET mod_enable='%s' WHERE id='%s'",$mods_db_table,$enable,$id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));;

@@ -19,6 +19,8 @@ require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 require(INCLUDES.'scrubber.inc.php');
 
+$header = "";
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 /* -------------- ENTRY Exports -------------- */
@@ -90,15 +92,24 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			
 			do {
 				
-				$brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-				$brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-				$brewName = strtr($row_sql['brewName'],$html_remove);
-				$brewInfo = str_replace("^","; ",$row_sql['brewInfo']);
-				$brewInfo = strtr($brewInfo,$html_remove);
-				$brewSpecifics = strtr($row_sql['brewComments'],$html_remove); 
+				if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
+				else $brewerFirstName = "";
+				if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+				else $brewerLastName = "";
+				if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
+				else $brewName = "";
+				if (isset($row_sql['brewInfo'])) {
+					$brewInfo = str_replace("^","; ",$row_sql['brewInfo']);
+					$brewInfo = strtr($brewInfo,$html_remove);
+				}
+				else $brewInfo = "";
+				if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove); 
+				else $brewSpecifics = "";
 				$entryNo = sprintf("%04s",$row_sql['id']);
-				$judgingNo = readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']);
-				$brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+				if (isset($row_sql['brewCategory'])) $judgingNo = readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']);
+				else $judgingNo = "";
+				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+				else $brewer_info = "";
 				
 				// Winner Downloads
 				if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] == 0)) {
@@ -256,6 +267,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		include(DB.'contacts.db.php');
 		include(DB.'styles.db.php'); 
 		include(DB.'judging_locations.db.php'); 
+		include(DB.'entry_info.db.php');
 
 		if ($_SESSION['contestHostWebsite'] != "") $website = $_SESSION['contestHostWebsite']; 
 		else $website = $_SERVER['SERVER_NAME'];
@@ -311,7 +323,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		} // end if prefs dictate display sponsors 
 		
 		$output .= "<h2>Competition Rules</h2>\n";
-		$output .= $_SESSION['contestRules']."\n";
+		$output .= $row_contest_info['contestRules']."\n";
 		$output .= "<h3>Entry Fee</h3>\n";
 		$output .= "<p>".$currency_symbol.$_SESSION['contestEntryFee']." per entry."; if ($_SESSION['contestEntryFeeDiscount'] == "Y") $output .= $currency_symbol.number_format($_SESSION['contestEntryFee2'], 2)." per entry after ".$_SESSION['contestEntryFeeDiscountNum']." entries. "; if ($_SESSION['contestEntryCap'] != "") $output .= $currency_symbol.number_format($_SESSION['contestEntryCap'], 2)." for unlimited entries."; 
 		$output .= "</p>\n";
@@ -341,9 +353,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		} while ($row_styles = mysqli_fetch_assoc($styles));
 		$output .= "</ul>\n";
 		 
-		if ($_SESSION['contestBottles'] != "") {
+		if ($row_contest_info['contestBottles'] != "") {
 			$output .= "<h3>Entry Acceptance Rules</h3>\n";
-			$output .= $_SESSION['contestBottles']."\n";
+			$output .= $row_contest_info['contestBottles']."\n";
 		}
 		
 		if ($_SESSION['contestShippingAddress'] != "") { 
@@ -364,21 +376,21 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			} while($row_dropoff = mysqli_fetch_assoc($dropoff));
 		}
 		
-		if ($_SESSION['contestBOSAward'] != "") 
+		if ($row_contest_info['contestBOSAward'] != "") 
 			$output .= "<h2>Best of Show</h2>\n";
-			$output .= "<p>".$_SESSION['contestBOSAward']."</p>\n";
+			$output .= "<p>".$row_contest_info['contestBOSAward']."</p>\n";
 			
-		if ($_SESSION['contestAwards'] != "") { 
+		if ($row_contest_info['contestAwards'] != "") { 
 			$output .= "<h2>Awards</h2>\n";
-			$output .= "<p>".$_SESSION['contestAwards']."</p>\n";
+			$output .= "<p>".$row_contest_info['contestAwards']."</p>\n";
 		 } 
 		
-		if ($_SESSION['contestAwardsLocName'] != "") { 
+		if ($row_contest_info['contestAwardsLocName'] != "") { 
 			$output .= "<h3>Award Ceremony</h3>\n";
 			$output .= "<p>";
-				if ($_SESSION['contestAwardsLocDate'] != "") 
-				$output .= "<strong>".$_SESSION['contestAwardsLocName']."</strong><br />";
-				$output .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+				if ($row_contest_info['contestAwardsLocDate'] != "") 
+				$output .= "<strong>".$row_contest_info['contestAwardsLocName']."</strong><br />";
+				$output .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 				if ($_SESSION['contestAwardsLocation'] != "") $output .= "<br />".$_SESSION['contestAwardsLocation'];
 			$output .= "</p>\n"; 
 		 } 
@@ -439,8 +451,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				do { 
 					$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 					if ($entry_count > 0) { 
-					$html .= '<br><br><strong>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</strong><br>';
-					$html .= '<table border="1">';
+					$html .= '<br><br><h3>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</h3><br>';
+					$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 					$html .= '<tr>';
 					$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Pl.</strong></td>';
 					$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
@@ -713,6 +725,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$total_entries = total_paid_received("judging_scores","default");
 		//$total_entries = 750;
 		
+		$st_running_total = "";
+		
 		// Figure out whether BOS Judge Points are awarded or not
 		// "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
 		$beer_styles[] = 0;
@@ -851,7 +865,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$html .= '</tr>';
 				do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
 				foreach (array_unique($st) as $uid) { 
-					if (array_sum($st_running_total) < $staff_points_total) {
+					if ((is_array($st_running_total)) && (array_sum($st_running_total) < $staff_points_total)) {
 						$staff_info = explode("^",brewer_info($uid));
 						$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 						$html .= '<tr>';
@@ -900,7 +914,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
 			$output .= "\t</CompData>\n";
 			$output .= "\t<BJCPpoints>\n";
-			//$st_running_total[] = 0;
+			
 			
 				// Judges with a properly formatted BJCP IDs in the system
 				foreach (array_unique($j) as $uid) { 
@@ -961,7 +975,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				//Staff Members with a properly formatted BJCP IDs in the system
 				foreach (array_unique($st) as $uid) { 
-				if (array_sum($st_running_total) <= $staff_points_total) {
+				if ((is_array($st_running_total)) && (array_sum($st_running_total) <= $staff_points_total)) {
 					$staff_info = explode("^",brewer_info($uid));
 						if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
 							$staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
