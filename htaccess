@@ -1,0 +1,22 @@
+#No indexing
+IndexIgnore *
+
+# Make sure index.php is the default page
+DirectoryIndex index.php
+
+RewriteEngine on
+# If storing your installation in a sub-folder, uncomment the following line and replace [subfolder] with the name of your subfolder
+# RewriteBase /[subfolder] 
+RewriteRule ^$ index.php [L]
+RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3&id=$4 [L]
+
+# Custom error pages
+ErrorDocument 404     /404.php
+ErrorDocument 401     /401.php 
+ErrorDocument 403     /403.php 
+ErrorDocument 404     /404.php 
+ErrorDocument 500     /500.html
+
