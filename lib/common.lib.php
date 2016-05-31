@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include(INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.2.0, change version in system table if not
+// Current version is 2.1.3.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE

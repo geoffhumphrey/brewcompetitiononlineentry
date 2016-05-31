@@ -60,7 +60,7 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.2.0, one DB update is required - no need to run full update
+	// For 2.1.2.0, one DB update was required - no need to run full update
 	/*
 	if ($row_version_check['version'] == "2.1.1.0") {
 		
