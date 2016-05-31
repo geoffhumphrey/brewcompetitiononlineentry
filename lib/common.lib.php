@@ -2280,6 +2280,7 @@ function get_entry_count($method) {
 	mysqli_select_db($connection,$database);
 	
 	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewing");
+	if ($method == "paid") $query_paid .= " WHERE brewPaid='1'";
 	if ($method == "received") $query_paid .= " WHERE brewReceived='1'";
 	if ($method == "paid-received") $query_paid .= " WHERE brewReceived='1' AND brewPaid='1'";
 	if ($method == "unpaid-received") $query_paid .= " WHERE brewReceived='1' AND brewPaid='0'";
