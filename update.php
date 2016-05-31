@@ -173,7 +173,7 @@ if (file_exists($filename)) {
 			
 			// if current version is same as installed version...
 			else {
-				$update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>The installed version (".$version.") is the same as the version for upgrade.</strong> No updates are necessary.</div>";
+				$update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> No database updates are necessary for version ".$current_version_display.".</div>";
 				$update_body .= "<p class=\"lead\">Your installation is up to date!</p>";
 				$update_body .= "<div class=\"btn-group\" role=\"group\">";
 				$update_body .= "<a class=\"btn btn-default btn-lg\" href=\"".$base_url."\">Go to the Home Page</a>";

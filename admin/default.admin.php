@@ -1170,7 +1170,7 @@
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
 
-<!-- For 2.1.2 Release -->
+<!-- For 2.1.4 Release -->
 <!--
 <div class="row">
     <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">

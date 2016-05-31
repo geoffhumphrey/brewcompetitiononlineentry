@@ -23,11 +23,7 @@ function version_check($version,$current_version) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	if ($version != $current_version) {
-		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.2.0","2016-05-24","1");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+				
 		// Fix typo in styles
 		$updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
 		mysqli_real_escape_string($connection,$updateSQL);
@@ -104,6 +100,10 @@ function version_check($version,$current_version) {
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 		}
+		
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.3.0","2016-05-31","1");
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 	}
 }

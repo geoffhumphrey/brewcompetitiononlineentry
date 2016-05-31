@@ -61,6 +61,7 @@ if (check_setup($prefix."system",$database)) {
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
 	// For 2.1.2.0, one DB update is required - no need to run full update
+	/*
 	if ($row_version_check['version'] == "2.1.1.0") {
 		
 		$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jPrefsQueued` `jPrefsQueued` CHAR(1) NULL DEFAULT NULL;",$prefix."judging_preferences");
@@ -76,6 +77,7 @@ if (check_setup($prefix."system",$database)) {
 		$update_required = FALSE;
 		$setup_success = FALSE;
 	}
+	*/
 	
 	// For 2.1.X.X, check if "brewStyleEntry" column is in the styles table since it was added in the 2.1.0.0 release
 	// If not, run the update
@@ -102,7 +104,7 @@ if (check_setup($prefix."system",$database)) {
 		
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-24");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-31");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
