@@ -172,7 +172,11 @@ if ($_SESSION['prefsContact'] == "Y") {
                 </div>
             </div><!-- Form Group -->
             
+        <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
         <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+        <?php } else { ?>
+        <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
+        <?php } ?>
         </form>    
 <?php } // end if ($msg != 1);
 } // end if ($_SESSION['prefsContact'] == "Y")

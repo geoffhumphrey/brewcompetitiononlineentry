@@ -206,7 +206,11 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
 	</tfoot>
 </table>
 <input type="submit" class="btn btn-primary" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>">
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } // end if ($filter !="default") 
 ?>
@@ -275,7 +279,11 @@ if (($action == "assign") && ($filter == "rounds")) {
         </div>
     </div>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } // end if ($totalRows_tables > 0) ?>
 <?php } // end if ($action == "assign") ?>

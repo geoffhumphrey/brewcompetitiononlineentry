@@ -747,7 +747,11 @@ httpxml.send(null);
   	</tr>
 </table>
 <input type="hidden" name="userLevel" value="2" />
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=participants","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 </div>
 <?php } 

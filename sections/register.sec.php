@@ -196,7 +196,11 @@ if ($go == "default") {  ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->	
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
+<?php } ?>
 
 </form>
 <?php } else { ?> 

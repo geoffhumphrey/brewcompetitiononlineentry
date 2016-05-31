@@ -188,7 +188,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Judge Registration</strong>";
-	if ($judge_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lgfa-check\"></span> Open</span>";
+	if ($judge_window_open == 1) $page_info100 .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
 	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 	

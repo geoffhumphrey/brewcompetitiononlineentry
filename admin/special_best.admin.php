@@ -160,7 +160,10 @@
 		</div>
 	</div>
 </div>
-
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=special_best","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } ?>

@@ -137,7 +137,11 @@ function mod_info($info,$method) {
 	<input type="submit" name="Submit" id="updateCustomMods" class="btn btn-primary" aria-describedby="helpBlock" value="Update Custom Modules" />
     <span id="helpBlock" class="help-block">Click "Update Custom Modules" <em>before</em> paging through records.</span>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=mods","default",$msg,$id); ?>">
+<?php } ?>
 </form>
     <?php } else echo "<p>No custom modules were found in the database.</p>";
 } 
@@ -297,6 +301,10 @@ if (($action == "add") || ($action == "edit")) { ?>
 		</div>
 	</div>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=mods","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } ?>

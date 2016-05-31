@@ -406,7 +406,11 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 </tbody>
 </table>
 <p><input type="submit" class="btn btn-primary" name="Submit" value="Assign to Table <?php echo $row_tables_edit['tableNumber']; ?>" /></p>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$row_tables_edit['id']); if ($msg != "default") echo "&id=".$row_tables_edit['id']; ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php
 } // end if ($row_rounds['flightRound'] != "")

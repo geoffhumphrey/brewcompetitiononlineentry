@@ -114,7 +114,7 @@
 		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site's <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>
 	</div>
 </div><!-- ./Form Group -->
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=contacts","default",$msg,$id); ?>">
 </div>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">

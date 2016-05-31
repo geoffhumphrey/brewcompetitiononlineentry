@@ -441,7 +441,7 @@ if ($action != "print") { ?>
     <span id="helpBlock" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
 </div>
 <?php } ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=entries","default",$msg,$id); ?>">
 </form>
 <?php } ?>
 <?php } else echo "<p>No entries have been added to the database yet.</p>"; ?>

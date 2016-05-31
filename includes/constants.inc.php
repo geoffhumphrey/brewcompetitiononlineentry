@@ -52,10 +52,10 @@ if (strpos($section, 'step') === FALSE) {
 	$currency_code = $currency[1];
 
 	$total_entries = $totalRows_entry_count;
-	if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$registration_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
+	if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$entry_window_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
 	
-	$total_paid = total_paid();
-	if (open_limit($total_paid,$row_limits['prefsEntryLimitPaid'],$registration_open)) $comp_paid_entry_limit = TRUE; else $comp_paid_entry_limit = FALSE;
+	$total_paid = get_entry_count("paid");
+	if (open_limit($total_paid,$row_limits['prefsEntryLimitPaid'],$entry_window_open)) $comp_paid_entry_limit = TRUE; else $comp_paid_entry_limit = FALSE;
 	
 	if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 	if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;

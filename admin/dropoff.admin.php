@@ -99,7 +99,7 @@ if ($section != "step6") {
 		</div>
 	</div>
 </div>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin","default",$msg,$id); ?>">
 </form>
 <?php } 
  } 

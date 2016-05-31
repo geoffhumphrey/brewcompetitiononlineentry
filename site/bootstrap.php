@@ -71,14 +71,21 @@ if ($setup_success) {
 	
 	// ---------------------------- IE Browser Check ---------------------------- 
 	
-	// Check for IE and redirect if not using a version beyond 7
-	$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
-	$msie_key = array_search('MSIE', $ua_array);
+	// Check for IE and redirect if not using a version beyond 9
+	
 	$ua = FALSE;
-	if($msie_key !== false) {
-		$msie_version_key = $msie_key + 1;
-		$msie_version = intval($ua_array[$msie_version_key]);
-		if ($msie_version <= 9) $ua = TRUE;
+	
+	if (isset($_SERVER['HTTP_USER_AGENT'])) {
+		
+		$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
+		$msie_key = array_search('MSIE', $ua_array);
+		
+		if($msie_key !== false) {
+			$msie_version_key = $msie_key + 1;
+			$msie_version = intval($ua_array[$msie_version_key]);
+			if ($msie_version <= 9) $ua = TRUE;
+		}
+	
 	}
 	
 	// ---------------------------- Load Required Scripts ----------------------------

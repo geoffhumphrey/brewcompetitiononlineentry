@@ -1151,7 +1151,11 @@ if ($action == "edit") {
 </div>
 <input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>">
 <input type="hidden" name="brewConfirmed" value="1">
-<input type="hidden" name="relocate" value="<?php echo $_SERVER['HTTP_REFERER']; ?>">
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 
 <?php

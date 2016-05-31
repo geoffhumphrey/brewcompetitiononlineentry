@@ -296,7 +296,11 @@ include(DB.'admin_judging_scores_bos.db.php');
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="updateBOS" class="btn btn-primary" value="<?php if ($action == "enter") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" />
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } 
 else echo "<p>There are no qualifying entries available.</p>";
