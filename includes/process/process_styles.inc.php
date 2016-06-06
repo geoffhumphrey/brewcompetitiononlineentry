@@ -12,13 +12,14 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	if ($action == "update") {
 	foreach($_POST['id'] as $id)	{
 		
-		if (isset($_POST["brewStyleActive".$id])) {
+		if (isset($_POST["brewStyleActive".$id])) $brewStyleActive = "Y"; else $brewStyleActive = "N";
 	
 			if ($filter == "default") {
 				
-			 	$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$_POST["brewStyleActive".$id]."' WHERE id='".$id."'";
+			 	$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
 			 	mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				echo $updateSQL."<br>";
 				
 			 }
 			 
@@ -52,9 +53,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						} while($row_loc = mysqli_fetch_assoc($loc));
 					}
 			 	}
-			}
 		}
-			 
+		
 		if($result){ 
 			if ($section == "setup") header("location:../setup.php?section=step8"); 
 			else {
