@@ -267,7 +267,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[10])) echo "Y"; elseif (!empty($bos_entry_info[11])) echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[14])) echo "Y"; else echo "N"; ?>" />
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $score_id; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />

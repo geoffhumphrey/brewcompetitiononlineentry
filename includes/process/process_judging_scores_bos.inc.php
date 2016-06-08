@@ -9,7 +9,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	if ($action == "enter") {
 		foreach($_POST['score_id'] as $score_id)	{
 			
-			if ($_POST['scorePrevious'.$score_id] == "Y") {
+			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 				$updateSQL = sprintf("UPDATE $judging_scores_bos_db_table SET
 				eid=%s,
 				bid=%s,
@@ -30,7 +30,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 			}
 			
-			if (($_POST['scorePlace'.$score_id] != "") && ($_POST['scorePrevious'.$score_id] == "N")) {
+			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "N")) {
 				$insertSQL = sprintf("INSERT INTO $judging_scores_bos_db_table (
 				eid, 
 				bid, 
@@ -49,6 +49,16 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));	
 				
 			}
+			
+			if ((empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
+				
+				$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $_POST['id'.$score_id]);
+				mysqli_real_escape_string($connection,$deleteSQL);
+				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+				
+			}
+			
+			
 			
 		}
 		$pattern = array('\'', '"');
