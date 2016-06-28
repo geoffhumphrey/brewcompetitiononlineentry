@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 05.31.2016 for Version 2.1.3.0
+-- UPDATED 06.29.2016 for Version 2.1.4.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -1186,7 +1186,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.1.3.0', '2016-05-31', '2016-05-31 11:00:01', 1);
+(1, '2.1.4.0', '2016-06-30', '2016-06-30 11:00:01', 1);
 
 -- --------------------------------------------------------
 
@@ -1353,121 +1353,8 @@ ALTER TABLE `baseline_system`
 --
 ALTER TABLE `baseline_users`
   ADD PRIMARY KEY (`id`);
+  
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `baseline_archive`
---
-ALTER TABLE `baseline_archive`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_brewer`
---
-ALTER TABLE `baseline_brewer`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_brewing`
---
-ALTER TABLE `baseline_brewing`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_contacts`
---
-ALTER TABLE `baseline_contacts`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_drop_off`
---
-ALTER TABLE `baseline_drop_off`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_judging_assignments`
---
-ALTER TABLE `baseline_judging_assignments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_judging_flights`
---
-ALTER TABLE `baseline_judging_flights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_judging_locations`
---
-ALTER TABLE `baseline_judging_locations`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_judging_preferences`
---
-ALTER TABLE `baseline_judging_preferences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_judging_scores`
---
-ALTER TABLE `baseline_judging_scores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_judging_scores_bos`
---
-ALTER TABLE `baseline_judging_scores_bos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_judging_tables`
---
-ALTER TABLE `baseline_judging_tables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_mods`
---
-ALTER TABLE `baseline_mods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_preferences`
---
-ALTER TABLE `baseline_preferences`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_special_best_data`
---
-ALTER TABLE `baseline_special_best_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_special_best_info`
---
-ALTER TABLE `baseline_special_best_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_sponsors`
---
-ALTER TABLE `baseline_sponsors`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_staff`
---
-ALTER TABLE `baseline_staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `baseline_styles`
---
-ALTER TABLE `baseline_styles`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=227;
---
--- AUTO_INCREMENT for table `baseline_style_types`
---
-ALTER TABLE `baseline_style_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `baseline_system`
---
-ALTER TABLE `baseline_system`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `baseline_users`
---
-ALTER TABLE `baseline_users`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

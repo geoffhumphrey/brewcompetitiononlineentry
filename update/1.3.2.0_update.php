@@ -12,15 +12,19 @@ $output .= "<ul>";
 // Adding style set preferences
 // -----------------------------------------------------------
 
-$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsStyleSet` VARCHAR( 20 ) NULL";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (!check_update("prefsStyleSet",$prefix."preferences")) {
+	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsStyleSet` VARCHAR( 20 ) NULL";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+}
 
-$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsAutoPurge` TINYINT( 1 ) NULL";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (!check_update("prefsAutoPurge",$prefix."preferences")) {
+	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsAutoPurge` TINYINT( 1 ) NULL";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+}
 
 $output .=  "<li>Preferences table altered successfully.</li>";
 
@@ -31,35 +35,47 @@ $output .=  "<li>Preferences table altered successfully.</li>";
 // shift carbonation, sweetnes, and strength to DB side
 // -----------------------------------------------------------
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` CHANGE `brewStyleJudgingLoc` `brewStyleVersion` VARCHAR(20) NULL DEFAULT NULL;";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (check_update("brewStyleJudgingLoc",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` CHANGE `brewStyleJudgingLoc` `brewStyleVersion` VARCHAR(20) NULL DEFAULT NULL;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+}
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleStrength` INT(1) NULL COMMENT 'Requires strength? 0=No, 1=Yes';";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (!check_update("brewStyleStrength",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleStrength` INT(1) NULL COMMENT 'Requires strength? 0=No, 1=Yes';";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+}
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCarb` INT(1) NULL COMMENT 'Requires carbonation? 0=No, 1=Yes';";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (!check_update("brewStyleCarb",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCarb` INT(1) NULL COMMENT 'Requires carbonation? 0=No, 1=Yes';";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleSweet` INT(1) NULL COMMENT 'Requires sweetness? 0=No, 1=Yes';";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+if (!check_update("brewStyleSweet",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleSweet` INT(1) NULL COMMENT 'Requires sweetness? 0=No, 1=Yes';";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+}
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCategory` VARCHAR(255) NULL DEFAULT NULL AFTER `brewStyle`;";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+if (!check_update("brewStyleCategory",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCategory` VARCHAR(255) NULL DEFAULT NULL AFTER `brewStyle`;";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
 
-$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleTags` VARCHAR(255) NULL DEFAULT NULL";
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+if (!check_update("brewStyleTags",$prefix."styles")) {
+	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleTags` VARCHAR(255) NULL DEFAULT NULL";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
 
 //if (check_db_table_column("preferences","prefsStyleSet")) 
 $output .=  "<li>Styles table altered successfully.</li>";
