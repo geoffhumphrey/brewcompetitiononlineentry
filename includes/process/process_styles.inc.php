@@ -68,7 +68,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	
 	if ($action == "add") {
 		
-		
+	
+	
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $category_end = 34;	
 	
@@ -79,6 +80,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	// Get the difference between the category end and the last number
 	// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
 	$style_add_one = $row_style_name['brewStyleGroup'] + 1;
+	
+	
 	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink']; else $brew_style_link = "";
 	
 	  $insertSQL = sprintf("INSERT INTO $styles_db_table (
@@ -105,6 +108,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	  brewStyleOwn,
 	  brewStyleVersion,
 	  brewStyleReqSpec,
+	  
 	  brewStyleStrength,
 	  brewStyleCarb,
 	  brewStyleSweet,
@@ -115,7 +119,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 	  %s, %s, %s, %s, %s, 
 	  %s, %s, %s, %s, %s, 
 	  %s, %s, %s, %s, %s,
-	  %s, %s, %s, %s, %s
+	  %s, %s, %s, %s
 	  )",
 						   GetSQLValueString("A", "text"),
 						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
@@ -143,7 +147,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
 						   );
 	
-	
+		//echo $insertSQL;
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 

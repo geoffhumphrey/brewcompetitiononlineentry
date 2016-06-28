@@ -216,7 +216,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 <div id="brewStyleEntry">
 
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
+	<label for="brewStyleEntry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Info</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
 		<textarea class="form-control" name="brewStyleEntry" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleEntry']; ?></textarea>
