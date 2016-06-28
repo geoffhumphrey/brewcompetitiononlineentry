@@ -85,9 +85,16 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		$brewMead2 = "";
 		$brewMead3 = "";
 		
-		if (isset($_POST['brewMead1'])) $brewMead1 .= $_POST['brewMead1']; 
-		if (isset($_POST['brewMead2'])) $brewMead2 .= $_POST['brewMead2']; 
-		if (isset($_POST['brewMead3'])) $brewMead3 .= $_POST['brewMead3']; 	
+		if (isset($_POST['brewMead1'])) $brewMead1 .= $_POST['brewMead1']; // Carbonation
+		if (isset($_POST['brewMead2'])) $brewMead2 .= $_POST['brewMead2']; // Sweetness
+		if (isset($_POST['brewMead3'])) $brewMead3 .= $_POST['brewMead3']; // Strength
+		
+		/*
+		echo "Carb: ".$brewMead1."<br>";
+		echo "Sweet: ".$brewMead2."<br>";
+		echo "Strength: ".$brewMead3;
+		exit;
+		*/
 	
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
 		if ($_SESSION['prefsHideRecipe'] == "N") {
@@ -445,7 +452,50 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			  
 		 }
 		 
-		 // Check if mead/cider entry has carbonation and sweetness
+		
+		// $brewMead1 - Check if entry style requires carbonation  
+		if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
+			 
+			if (empty($brewMead1)) {
+				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+			
+			if ($section == "admin") {
+				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+			}
+			
+			else {
+				if (empty($brewMead1)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				else $insertGoTo = $base_url."index.php?section=list&msg=2";
+			}
+			  
+		 }
+		 
+		 // $brewMead2 - Check if entry style requires sweetness
+		 if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
+			 
+			if (empty($brewMead2)) {
+				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+			
+			if ($section == "admin") {
+				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+			}
+			
+			else {
+				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				else $insertGoTo = $base_url."index.php?section=list&msg=2";
+			}
+			  
+		 }
+		 
+		// $brewMead3 - Check if entry style requires strength
 		 
 		if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 			
@@ -465,28 +515,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 		}
-		  
-		if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
-			 
-			if ((empty($brewMead1)) || (empty($brewMead2))) {
-				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			}
-			
-			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
-				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-			}
-			
-			else {
-				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
-				else $insertGoTo = $base_url."index.php?section=list&msg=2";
-			}
-			  
-		 }
 		
-		if ((check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) && (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet']))) {
+		if ((check_carb($styleBreak,$_SESSION['prefsStyleSet'])) && (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) && (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet']))) {
 			 
 			if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3))) {
 				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "int"));
@@ -665,21 +695,41 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		 
 		 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
 		 
-		 if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
+		 if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 			 
-			if ((empty($brewMead1)) || (empty($brewMead2))) {
+			if (empty($brewMead1)) {
 				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			}
 			
 			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2))) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if ((empty($brewMead1)) || (empty($brewMead2)))$updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				else $updateGoTo = $base_url."index.php?section=list&msg=2";
+			}
+			  
+		 }
+		 
+		 if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
+			 
+			if (empty($brewMead2)) {
+				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+			
+			if ($section == "admin") {
+				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
+			}
+			
+			else {
+				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -696,13 +746,13 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
-				else $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=list&msg=2";
-				else $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 		}
 		
@@ -714,7 +764,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		echo $style[0]."<br>";
 		echo $styleTrim."<br>";
 		if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES strength<br>"; else echo "No strength<br>";
-		if (check_carb_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES carb/sweetness<br>"; else echo "No carb/sweeness<br>";
+		if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES carb<br>"; else echo "No carb/sweeness<br>";
+		if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES sweetness<br>"; else echo "No carb/sweeness<br>";
 		echo $brewMead1."<br>";
 		echo $brewMead2."<br>";
 		echo $brewMead3."<br>";

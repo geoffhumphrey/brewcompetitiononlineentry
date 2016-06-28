@@ -206,7 +206,7 @@ function check_special_ingredients($style,$styleSet) {
 }
 */
 	  
-function check_carb_sweetness($style,$styleSet) {
+function check_sweetness($style,$styleSet) {
 	
 	include(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -216,11 +216,30 @@ function check_carb_sweetness($style,$styleSet) {
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
 	else $style_0 = $style[0];
 
-	$query_brews = sprintf("SELECT brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $_SESSION['prefsStyleSet']);
+	$query_brews = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $_SESSION['prefsStyleSet']);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 	
-	if (($row_brews['brewStyleCarb'] == 1) || ($row_brews['brewStyleSweet'] == 1)) return TRUE;
+	if ($row_brews['brewStyleSweet'] == 1) return TRUE;
+	else return FALSE;
+}
+
+
+function check_carb($style,$styleSet) {
+	
+	include(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+		
+	$style = explode("-",$style);
+	
+	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style[0]);
+	else $style_0 = $style[0];
+
+	$query_brews = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style[1], $_SESSION['prefsStyleSet']);
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+	$row_brews = mysqli_fetch_assoc($brews);
+	
+	if ($row_brews['brewStyleCarb'] == 1) return TRUE;
 	else return FALSE;
 }
 	
