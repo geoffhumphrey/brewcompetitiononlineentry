@@ -90,16 +90,7 @@ function DelWithCon(deletepage_url,field_name,field_value,messagetext) { //v1.0 
 
 // -------------------------------- TinyMCE Configuration ------------------------------------
 
-tinymce.init({
-	selector: "textarea",
-	menubar: false,
-	plugins: [
-    "advlist autolink autosave link image lists charmap preview hr anchor pagebreak spellchecker",
-    "searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking",
-    "paste"
-  ],
-	toolbar: "cut copy paste | undo redo | bold italic underline bullist numlist outdent indent | link unlink | code charmap"
-});
+// Moved to tinymce_init_js.inc.php
 
 
 // -------------------------------- Jump Menu ------------------------------------------------

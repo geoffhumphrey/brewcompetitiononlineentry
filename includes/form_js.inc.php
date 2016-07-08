@@ -1,4 +1,13 @@
-<?php if (($section == "admin") && ($go == "styles") && ($action != "default")) { ?>
+<?php 
+
+/*
+Checked SSO
+2016-06-06
+*/
+
+if (($section == "admin") && ($go == "styles") && ($action != "default")) { 
+
+?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">
 										  
@@ -189,8 +198,8 @@ $(document).ready(function() {
 				$("input[name='BDGColor']").prop("required", false);
 				
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $value; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+				$("#specialInfoText").html("<?php echo $value; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { 
 				if (($key == "09-A") || ($key == "10-C") || ($key == "07-C")){
 			?>
@@ -289,8 +298,8 @@ $(document).ready(function() {
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
 			
-			$('#specialInfoText').html("<?php echo $value; ?>");
-			$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+			$("#specialInfoText").html("<?php echo $value; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } ?>
 		
@@ -492,8 +501,8 @@ $(document).ready(function() {
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			
-			$('#specialInfoText').html("<?php echo $value; ?>");
-			$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+			$("#specialInfoText").html("<?php echo $value; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } ?>
 		
@@ -541,8 +550,8 @@ $(document).ready(function() {
 			$("input[name='brewMead1']").prop("required", true);
 			
 			$("#specialInfo").show("fast");
-			$('#specialInfoText').html("<?php echo $value; ?>");
-			$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+			$("#specialInfoText").html("<?php echo $value; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } ?>
 		
@@ -597,8 +606,8 @@ $(document).ready(function() {
 			
 			<?php if (!empty($value)) { ?>
 			$("#specialInfo").show("fast");
-			$('#specialInfoText').html("<?php echo $value; ?>");
-			$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+			$("#specialInfoText").html("<?php echo $value; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 			<?php } ?>
 			
 			<?php if ($explodies[3] == 1) { ?>
@@ -698,8 +707,8 @@ $(document).ready(function() {
 		$("input[name='brewMead3']").prop("required", true);
 		
 		$("#specialInfo").show("fast");
-		$('#specialInfoText').html("<?php echo $carb_str_sweet_special_info["$view"]; ?>");
-		$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+		$("#specialInfoText").html("<?php echo $carb_str_sweet_special_info["$view"]; ?>");
+		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 		
 	});
 	<?php } ?>
@@ -805,8 +814,8 @@ $(document).ready(function() {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$('#specialInfoText').html("<?php echo $spec_sweet_carb_only_info["$view"]; ?>");
-		$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+		$("#specialInfoText").html("<?php echo $spec_sweet_carb_only_info["$view"]; ?>");
+		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 	});
 	<?php } ?>
 	
@@ -833,8 +842,8 @@ $(document).ready(function() {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$('#specialInfoText').html("<?php echo $spec_carb_only_info["$view"]; ?>");
-		$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+		$("#specialInfoText").html("<?php echo $spec_carb_only_info["$view"]; ?>");
+		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 	});
 	<?php } ?>
 	
@@ -863,8 +872,8 @@ $(document).ready(function() {
 		$("input[name='BDGColor']").prop("required", false);
 		
 		$("#specialInfo").show("fast");
-		$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-		$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+		$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 	});
 	<?php } ?>
 	
@@ -883,8 +892,8 @@ $(document).ready(function() {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
 		<?php } elseif ($view == "24-C") { ?>
 			$(document).ready(function() {
@@ -899,8 +908,8 @@ $(document).ready(function() {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").show("fast");
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
 		<?php } elseif ($view == "21-B") { ?>
 			$(document).ready(function() {
@@ -915,8 +924,8 @@ $(document).ready(function() {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
 		<?php } elseif ($view == "23-F") { ?>
 			$(document).ready(function() {
@@ -931,8 +940,8 @@ $(document).ready(function() {
 				$("#carbLambic").show("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
 		<?php } elseif ($view == "25-B") { ?>
 			$(document).ready(function() {
@@ -947,8 +956,8 @@ $(document).ready(function() {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").show("fast");
-				$('#specialInfoText').html("<?php echo $special_beer_info["$view"]; ?>");
-				$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
 		<?php }	?>
 	
@@ -979,8 +988,8 @@ $(document).ready(function() {
 			
 			<?php if (!empty($value)) { ?>
 			$("#specialInfo").show("fast");
-			$('#specialInfoText').html("<?php echo $custom_entry_information["$view"]; ?>");
-			$('#specialInfoName').html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			$("#specialInfoText").html("<?php echo $custom_entry_information["$view"]; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			<?php } ?>
 			
 			<?php if ($explodies[3] == 1) { ?>

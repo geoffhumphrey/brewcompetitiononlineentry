@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include(INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.3.0, change version in system table if not
+// Current version is 2.1.4.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -101,7 +101,7 @@ function version_check($version,$current_version) {
 			
 		}
 		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.3.0","2016-05-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.4.0","2016-06-30","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -818,7 +818,7 @@ function currency_info($input,$method) {
 	
 }
 
-function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
+function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id) {
 	require(CONFIG.'config.php');
 	
 	// ----------------------------------------------------------------------
@@ -1001,7 +1001,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	
 }
 
-function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter) {
+function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
  	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
@@ -1360,7 +1360,7 @@ function total_paid() {
 	return $row['count'];
 }
 
-function total_nopay_received($go,$id) {
+function total_nopay_received($go, $id, $comp_id) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	

@@ -6,15 +6,20 @@ if ($setup_free_access == TRUE) {
 	if ($action == "default") { 
 	
 		$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be installed.</strong> These tables hold all of your competition data.</div>";
-		$output .= "<p>Click the &ldquo;Install DB Tables and Data&rdquo; button below to install the database schema into the following database:</p>";
+		$output .= "<p>Click the &ldquo;Install DB Tables and Data&rdquo; button below to install the database schema";
+		if (!HOSTED) $output .= "into the following database:";
+		else $output .= ".";
+		$output .= "</p>";
+		if (!HOSTED) {
 		$output .= "<ul>";
 		$output .= "<li>".$database."</li>";
 		$output .= "</ul>";
-		if ($prefix != "") {
-			$output .= "<p>Each table in the database will be prepended with the following prefix:</p>";
-			$output .= "<ul>";
-			$output .= "<li>".$prefix."</li>";
-			$output .= "</ul>";
+			if ($prefix != "") {
+				$output .= "<p>Each table in the database will be prepended with the following prefix:</p>";
+				$output .= "<ul>";
+				$output .= "<li>".$prefix."</li>";
+				$output .= "</ul>";
+			}
 		}
 		
 		$output .= "<a class=\"btn btn-lg btn-primary\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-lg fa-download\"></span> Install DB Tables and Data</a>";
@@ -1393,7 +1398,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.3.0', '2016-05-31', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.4.0', '2016-06-30', NOW( ),'0');";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
@@ -1439,7 +1444,7 @@ if ($setup_free_access == TRUE) {
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 			
 			// For hosted accounts on brewcompetition.com or brewcomp.com 
-			$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $gh_user_name,$users_db_table,$hash,$random1,$random2);
+			$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $users_db_table,$gh_user_name,$hash,$random1,$random2);
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

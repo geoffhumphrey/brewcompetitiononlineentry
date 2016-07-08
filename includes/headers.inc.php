@@ -1,5 +1,10 @@
 <?php
 
+/*
+Checked SSO
+2016-06-06
+*/
+
 /**
  * Module:      headers.inc.php
  * Description: This module defines all header text for the application based
@@ -199,7 +204,7 @@ switch($section) {
 		}
 	}
 	
-	if ((strstr($msg,"1-")) && ($_SESSION['prefsAutoPurge'] == 1)) $output .= "Unconfirmed entries may be deleted from the system without warning.";
+	if ((strstr($msg,"1-")) && ($_SESSION['prefsAutoPurge'] == 1)) $output .= " Unconfirmed entries may be deleted from the system without warning.";
 	break;
 	
 	case "brewer":

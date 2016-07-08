@@ -23,8 +23,8 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	
 	// Define variables directory to upload to
 	$ds = DIRECTORY_SEPARATOR; // Directory separator
-	if (($action == "default") || ($action == "html")) $storeFolder = "user_images";
-	if (($action == "docs") || ($action == "html_docs")) $storeFolder = "user_docs";
+	if (($action == "default") || ($action == "html")) $storeFolder = USER_IMAGES;
+	if (($action == "docs") || ($action == "html_docs")) $storeFolder = USER_DOCS;
 	$backlist = array('php', 'php3', 'php4', 'phtml', 'exe'); // Restrict file extensions
 	$valid_chars_regex = "A-Za-z0-9_-\s "; // Characters allowed in the file name (in a Regular Expression format)
 	
@@ -32,7 +32,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	chmod($storeFolder, 0755);
 	
 	// Redirect if chmod can't be changed via php
-	if (!chmod(dirname( __FILE__ ).$ds.$storeFolder.$ds,0755)) {
+	if (!chmod($storeFolder,0755)) {
 		$errorGoTo = "index.php?section=admin&go=upload&msg=755";
 		header(sprintf("Location: %s", $errorGoTo));
 		exit;
@@ -52,7 +52,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		echo $file_type."<br>";
 		echo $file_ext."<br>";
 		echo $_FILES['file']['name']."<br>";
-		echo dirname( __FILE__ ).$ds.$storeFolder.$ds;
+		echo $storeFolder;
 		*/
 		
 		// If file type is on the blacklist
@@ -67,9 +67,9 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		// Do upload if all parameters met
 		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {
 			$tempFile = $_FILES['file']['tmp_name'];          
-			$targetPath = dirname( __FILE__ ).$ds.$storeFolder.$ds;
+			$targetPath = $storeFolder;
 			$targetFile =  $targetPath. $_FILES['file']['name'];
-			echo $targetFile;
+			//echo $targetFile;
 			move_uploaded_file($tempFile,$targetFile);
 			
 			// Redirect if using single upload option

@@ -120,8 +120,6 @@ function checkUncheckAll(theElement) {
 <?php if (($action == "add") || ($action == "edit")) {
 $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 ?>
-
-
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
