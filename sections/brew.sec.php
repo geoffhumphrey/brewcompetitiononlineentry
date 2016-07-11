@@ -539,10 +539,10 @@ $(document).ready(function()
         <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Brewer&rsquo;s Specifics</label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <textarea rows="6" class="form-control" name="brewComments" id="brewComments" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry."><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea>
+            <textarea rows="6" class="form-control" name="brewComments" id="brewComments" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.)."><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea>
             <span id="helpBlock" class="help-block">
-            	<!-- <p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>-->
-                <p>Use to record specifics that you would like judges to consider when evaluating your entry (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.). <p><strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong></p>
+            	<p><strong class="text-danger">DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.</strong></p>
+                <p><strong class="text-primary">Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.</strong></p>
                 <p><strong><?php echo $_SESSION['prefsSpecialCharLimit']; ?> character limit</strong> - use keywords and abbreviations. Characters remaining: <span id="count-comments"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p>
             </span>
         </div>

@@ -34,3 +34,5 @@ sections/brew-ba.sec.php
 sections/nhc_pay.sec.php
 
 sections/nav_admin.php
+
+libraries/*
