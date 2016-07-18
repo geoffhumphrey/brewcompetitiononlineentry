@@ -1,7 +1,7 @@
 <?php
 
 /*
-Checked SSO
+Checked Single
 2016-06-06
 */
 

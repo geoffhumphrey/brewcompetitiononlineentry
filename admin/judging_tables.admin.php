@@ -248,7 +248,7 @@ $output_at_table_modals = "";
 						<div id="collapseStep5" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<li>	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges and Stewers to Tables</a></li>
+                                	<li>	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables">Assign Judges and Stewards to Tables</a></li>
                                 </ul>
 							</div>
 						</div>
@@ -465,29 +465,43 @@ $output_at_table_modals = "";
 <?php 
 if ((($action == "default") && ($filter == "default")) || ($action == "print")) { 
 if ($totalRows_tables > 0) { ?>
-<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"bProcessing" : false,
-			"aoColumns": [
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>,null<?php } ?>
-				<?php if (($action != "print") && ($dbTable == "default"))  { ?>,{ "asSorting": [  ] }<?php } ?>
-				]
-			} );
-		} );
+
+
+<!--
+<script>
+$(document).ready(function() {
+    $('#tables').DataTable( {
+        "order": [[ 0, "asc" ]]
+    } );
+} );
 </script>
-<table class="table table-responsive table-bordered table-striped" id="sortable"> 
+-->
+
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#judgingTables').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			{ "asSorting": [  ] }				
+			]
+		} );
+	} );
+</script>
+
+<table class="table table-responsive table-bordered table-striped" id="judgingTables"> 
 	<thead>
     <tr>
     	<th class="hidden-xs hidden-sm">No.</th>

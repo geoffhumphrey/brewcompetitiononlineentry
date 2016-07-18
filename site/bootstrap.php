@@ -89,17 +89,23 @@ if ($setup_success) {
 	}
 	
 	// ---------------------------- Load Required Scripts ----------------------------
+	
+	if (SINGLE) require(SSO.'sso.inc.php');
+	
+	else {
 
-	require(INCLUDES.'authentication_nav.inc.php'); 
-	require(LIB.'common.lib.php');
-	require(INCLUDES.'db_tables.inc.php');
-	require(LIB.'help.lib.php');
-	require(DB.'common.db.php');
-	require(DB.'brewer.db.php');
-	require(DB.'entries.db.php');
-	require(INCLUDES.'constants.inc.php');
-	require(INCLUDES.'headers.inc.php');
-	require(INCLUDES.'scrubber.inc.php');
+		require(INCLUDES.'authentication_nav.inc.php'); 
+		require(LIB.'common.lib.php');
+		require(INCLUDES.'db_tables.inc.php');
+		require(LIB.'help.lib.php');
+		require(DB.'common.db.php');
+		require(DB.'brewer.db.php');
+		require(DB.'entries.db.php');
+		require(INCLUDES.'constants.inc.php');
+		require(INCLUDES.'headers.inc.php');
+		require(INCLUDES.'scrubber.inc.php');
+	
+	}
 		
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";

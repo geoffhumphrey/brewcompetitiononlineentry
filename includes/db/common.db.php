@@ -24,7 +24,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 mysqli_select_db($connection,$database);
 
-$query_version1 = sprintf("SELECT * FROM %s WHERE id=1", $prefix."system");
+$query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."system");
 $version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
 $row_version1 = mysqli_fetch_assoc($version1);
 $version = $row_version1['version'];
@@ -49,10 +49,16 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 	}
 }
 
+
+if (!SINGLE) $_SESSION['comp_id'] = 1;
+
+
 // Get the general info for the competition from the DB and store in session variables
 if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	
-	$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
+	$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
+	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_SESSION['comp_id']);
+	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info); 
 
@@ -88,7 +94,8 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 // Get the general info for the competition from the DB and store in cookies
 if (empty($_SESSION['prefs'.$prefix_session])) {	
 
-	$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
+	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."preferences",$_SESSION['comp_id']);
+	else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
@@ -131,7 +138,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
 	$_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
 
-	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
+	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
 	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);	
 	
@@ -145,6 +153,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	
 	// Get counts for common, mostly static items
 	$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
+	if (SINGLE) $query_sponsor_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 	$result_sponsor_count = mysqli_query($connection,$query_sponsor_count) or die (mysqli_error($connection));
 	$row_sponsor_count = mysqli_fetch_assoc($result_sponsor_count);
 	$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
@@ -262,34 +271,42 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 }
 
 // Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup
-$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
+else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 $judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
 $row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
 
 $query_judge_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
+if (SINGLE) $query_judge_count = sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $judge_count = mysqli_query($connection,$query_judge_count) or die (mysqli_error($connection));
 $row_judge_count = mysqli_fetch_assoc($judge_count);
 
 $query_steward_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'", $prefix."brewer");
+if (SINGLE) $query_judge_count = sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $steward_count = mysqli_query($connection,$query_steward_count) or die (mysqli_error($connection));
 $row_steward_count = mysqli_fetch_assoc($steward_count);
 
 
 if ($section == "default") {
 		
-	$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1",$prefix."judging_locations");
+	$query_check = sprintf("SELECT judgingDate FROM %s",$prefix."judging_locations");
+	if (SINGLE) $query_judge_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+	$query_check .= " ORDER BY judgingDate DESC LIMIT 1";
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
 
 }
 	
-$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
+if (SINGLE) $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='%s'", $prefix."contest_info",$_SESSION['comp_id']);
+else $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
 $contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
 $row_contest_rules = mysqli_fetch_assoc($contest_rules);	
 
 if ($section == "volunteers") {
 
-	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s WHERE id=1", $prefix."contest_info");
+	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s", $prefix."contest_info");
+	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_SESSION['comp_id']);
+	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
 

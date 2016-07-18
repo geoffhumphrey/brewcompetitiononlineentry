@@ -115,16 +115,97 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 		$row_table = mysqli_fetch_assoc($table);
 		
-		// If so, delete all associated scores
+		// If so...
 		if ($table_styles != $row_table['tableStyles']) {
 			
+			// Delete all associated scores
 			$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $prefix."judging_scores",$id);
 			mysqli_real_escape_string($connection,$deleteSQL);
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 			
-		}
+			// Delete all entries in flights table that were previously assigned
+			// Fool-proof way to avoid breaking system when adding new tables
+			$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			
+			// Add back in
+			$query_table = sprintf("SELECT tableLocation FROM $judging_tables_db_table WHERE id=%s",$id);
+			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
+			$row_table = mysqli_fetch_assoc($table);
+			
+			$query_table_rounds = sprintf("SELECT judgingRounds FROM $judging_locations_db_table WHERE id='%s'", $row_table['tableLocation']);
+			$table_rounds = mysqli_query($connection,$query_table_rounds) or die (mysqli_error($connection));
+			$row_table_rounds = mysqli_fetch_assoc($table_rounds);
+			if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
+			
+			$a = explode(",",$table_styles);
 		
-	
+			foreach (array_unique($a) as $value) {
+				
+				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
+				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+				$row_styles = mysqli_fetch_assoc($styles);
+				
+				$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
+				$row_entries = mysqli_fetch_assoc($entries);
+				
+				do {
+					// Update any scores that have been entered already for the entry with the new table number
+					$updateSQL = sprintf("UPDATE $judging_scores_db_table SET scoreTable=%s WHERE eid=%s",
+								   GetSQLValueString($row_table['id'], "text"),
+								   GetSQLValueString($row_entries['id'], "text"));
+					
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));			
+					
+					// Check if entry is already in the judging_flights table
+					$query_empty_count = sprintf("SELECT id FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_entries['id']);
+					$empty_count = mysqli_query($connection,$query_empty_count) or die (mysqli_error($connection));
+					$row_empty_count = mysqli_fetch_assoc($empty_count);
+					$totalRows_empty_count = mysqli_num_rows($empty_count);
+					
+					// if so, update the record with the new judging_table id
+					if ($totalRows_empty_count > 0) {
+						
+						$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
+									   GetSQLValueString($id, "text"),
+									   GetSQLValueString($row_entries['id'], "text"));
+									   
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					}
+					
+					// if not, add a new record to the judging_flights table
+					else {
+						
+						$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
+							flightTable, 
+							flightNumber, 
+							flightEntryID,
+							flightRound
+							) VALUES (%s, %s, %s, %s)",
+								   GetSQLValueString($id, "text"),
+								   GetSQLValueString("1", "text"),
+								   GetSQLValueString($row_entries['id'], "text"),
+								   GetSQLValueString($rounds, "text")
+								   );
+			
+						mysqli_real_escape_string($connection,$insertSQL);
+						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+						
+					}
+					
+				} while ($row_entries = mysqli_fetch_assoc($entries));
+				
+			}
+			
+		} // End if ($table_styles != $row_table['tableStyles'])
+		
+		
+		
+		// Update table in judging_tables table
 		$updateSQL = sprintf("UPDATE $judging_tables_db_table SET 
 		tableName=%s, 
 		tableStyles=%s, 
@@ -140,7 +221,18 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	  
+		
+		/*************
+		
+		07-18-2016
+		Below was elimintated in favor of the more foolproof, yet far less convoluted,
+		method of simply erasing all associated records in the judging_flights table and
+		replacing with all new records when editing a judging table. Kinda brute force, 
+		but hey, it works.
+		
+		**************/
+		
+		/*
 		// Check to see if flights have been designated already
 		$query_flight_count = sprintf("SELECT id,flightEntryID FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
 		$flight_count = mysqli_query($connection,$query_flight_count) or die (mysqli_error($connection));
@@ -228,7 +320,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				// This "saves" the row for future use
 				if (($delete == 0) && ($update == "")) {
 					
-					//$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $row_flight_info['id']);
+					$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $row_flight_info['id']);
 					//echo $delete."<br>";
 					$updateSQL = sprintf("UPDATE $judging_flights_db_table SET
 						flightTable=%s, 
@@ -265,6 +357,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			}
 		} //end if (($row_flight_count['count'] > 0) && ($table_styles != ""))
 		
+		*/
 		
 		// Check rows for "blank" flightTables in the judging_flights table
 				
@@ -273,8 +366,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$row_empty_count = mysqli_fetch_assoc($empty_count);
 		$totalRows_empty_count = mysqli_num_rows($empty_count);
 		
-		// If so, match up the flightEntryID with the id in the brewing table
-		// determine its style, and assign the row to the proper table
+		// If so, match up the flightEntryID with the id in the brewing table,
+		// Determine its style, and assign the row to the proper table
 		
 		if ($totalRows_empty_count > 0) {
 			

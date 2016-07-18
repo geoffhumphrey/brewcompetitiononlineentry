@@ -1,9 +1,16 @@
 <?php 
+
+/*
+Checked Single
+2016-06-06
+*/
+
 /*
  * Module:      process.inc.php
  * Description: This module does all the heavy lifting for any DB updates; new entries,
  *              new users, organization, etc.
  */
+ 
 ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
@@ -180,6 +187,7 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	elseif ($action == "check_discount") {
 		
 			$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
+			if (SINGLE) $query_contest_info1 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 			$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
 			$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
 			

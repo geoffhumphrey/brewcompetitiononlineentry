@@ -1,4 +1,10 @@
 <?php 
+
+/*
+Checked Single
+2016-06-06
+*/
+
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
 //$total_entries = 88;
@@ -71,6 +77,7 @@ function judge_points($bid,$bos) {
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysqli_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $bid, $location);
+		if (SINGLE) $query_assignments .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 		$assignments =  mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 		$row_assignments = mysqli_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 1.0; 
@@ -97,6 +104,7 @@ function steward_points($bid) {
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysqli_fetch_assoc($judging));
 	foreach (array_unique($a) as $location) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM $judging_assignments_db_table WHERE bid='%s' AND assignLocation='%s' AND assignment='S'", $bid, $location);
+		if (SINGLE) $query_assignments .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 		$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 		$row_assignments = mysqli_fetch_assoc($assignments);
 		if ($row_assignments['count'] > 1) $b[] = 0.5; 
@@ -123,6 +131,7 @@ $judge_points = number_format(total_points($total_entries,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
 $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'",$staff_db_table);
+if (SINGLE) $query_assignments .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $assignments =  mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
 
@@ -134,29 +143,34 @@ else $staff_points = 0;
 
 // Organizer
 $query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+if (SINGLE) $query_organizer .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $organizer =  mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
 $row_organizer = mysqli_fetch_assoc($organizer);
 $totalRows_organizer = mysqli_num_rows($organizer);
 
 // Judges
 $query_judges = sprintf("SELECT uid FROM %s WHERE staff_judge='1'",$staff_db_table);
+if (SINGLE) $query_judges .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $judges =  mysqli_query($connection,$query_judges) or die (mysqli_error($connection));
 $row_judges = mysqli_fetch_assoc($judges);
 $totalRows_judges = mysqli_num_rows($judges);
 
 $query_bos_judges = sprintf("SELECT uid FROM %s WHERE staff_judge_bos='1'",$staff_db_table);
+if (SINGLE) $query_bos_judges .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $bos_judges = mysqli_query($connection,$query_bos_judges) or die (mysqli_error($connection));
 $row_bos_judges = mysqli_fetch_assoc($bos_judges);
 $totalRows_bos_judges = mysqli_num_rows($bos_judges);
 
 // Stewards
 $query_stewards = sprintf("SELECT uid FROM %s WHERE staff_steward='1'",$staff_db_table);
+if (SINGLE) $query_stewards .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $stewards = mysqli_query($connection,$query_stewards) or die (mysqli_error($connection));
 $row_stewards = mysqli_fetch_assoc($stewards);
 $totalRows_stewards = mysqli_num_rows($stewards);
 
 // Staff
 $query_staff = sprintf("SELECT uid FROM %s WHERE staff_staff='1'",$staff_db_table);
+if (SINGLE) $query_staff .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $staff = mysqli_query($connection,$query_staff) or die (mysqli_error($connection));
 $row_staff = mysqli_fetch_assoc($staff);
 $totalRows_staff = mysqli_num_rows($staff);

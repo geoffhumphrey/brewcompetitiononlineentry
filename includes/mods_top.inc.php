@@ -1,4 +1,10 @@
 <?php 
+
+/*
+Checked Single
+2016-06-06
+*/
+
 if (isset($_SESSION['loginUsername'])) $user_level_mods = $_SESSION['userLevel']; 
 else $user_level_mods = "2";
 

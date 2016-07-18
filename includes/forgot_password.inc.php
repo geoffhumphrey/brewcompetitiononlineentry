@@ -1,4 +1,9 @@
 <?php
+/*
+Checked Single
+2016-06-06
+*/
+
 ob_start();
 include('../paths.php');
 require(CONFIG.'config.php');

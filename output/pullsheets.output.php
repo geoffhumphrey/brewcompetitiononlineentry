@@ -47,9 +47,9 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }

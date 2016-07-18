@@ -73,9 +73,9 @@ if ($filter == "judges") {
 	$output_datatables_head .= "<th>Comps Judged</th>";
 }
 for($i=1; $i<$row_flights['flightRound']+1; $i++) {
-	if  (table_round($row_tables_edit['id'],$i)) { 
+	//if  (table_round($row_tables_edit['id'],$i)) { 
 		$output_datatables_head .= "<th>Round ".$i."</th>";
-	}
+	//}
 }
 
 $output_datatables_head .= "</tr>";

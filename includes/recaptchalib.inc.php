@@ -1,4 +1,10 @@
 <?php
+
+/*
+Checked Single
+2016-06-06
+*/
+
 /*
  * This is a PHP library that handles calling reCAPTCHA.
  *    - Documentation and latest version

@@ -1,4 +1,10 @@
 <?php
+
+/*
+Checked Single
+2016-06-06
+*/
+
 $id = "default";
 if (isset($_GET['id'])) {
   $id = (get_magic_quotes_gpc()) ? $_GET['id'] : addslashes($_GET['id']);
@@ -79,7 +85,6 @@ $psort = "default";
 if (isset($_GET['psort'])) {
   $psort = (get_magic_quotes_gpc()) ? $_GET['psort'] : addslashes($_GET['psort']);
 }
-// ------------------ 
 
 // ------------------ Only applies to process funtions
 $limit = "999999";
@@ -92,7 +97,6 @@ $purge = "default";
 if (isset($_GET['purge'])) {
   $purge = (get_magic_quotes_gpc()) ? $_GET['purge'] : addslashes($_GET['purge']);
 }
-// ------------------ 
 
 // ------------------ The following only apply to printing of specific location and rounds in admin/default.admin.php
 $round = "default";
@@ -104,8 +108,6 @@ $location = "default";
 if (isset($_GET['location'])) {
   $location = (get_magic_quotes_gpc()) ? $_GET['location'] : addslashes($_GET['location']);
 }
-// ------------------ 
-
 
 // ------------------ Apparently unused
 $inserted = "default";

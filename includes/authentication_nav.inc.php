@@ -1,4 +1,9 @@
 <?php
+/*
+Checked Single
+2016-06-06
+*/
+
 $username = strtolower($username);
 function authenticateUserNav($connection, $username, $password)
 {
