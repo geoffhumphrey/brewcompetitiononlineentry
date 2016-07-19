@@ -676,7 +676,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 				if (!get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) {
 				?>
 				<tr>
-					<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php //if (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; ?>></td>
+					<td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>"></td>
 					<td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
 					<td><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?>
 					<td><?php echo $row_styles['brewStyle']; //.get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>
@@ -705,7 +705,12 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 <?php } ?>
 </form>
 <?php } // end if ($action == "add") ?>
+
+
+
+
 <?php if ($action == "edit") { ?>
+<!-- Edit a Table -->
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -769,7 +774,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <?php 
 		if ($row_entry_count['count'] > 0) { ?>
-			<table class="table table-responsive table-striped table-bordered small" id="sortable">
+			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>
 					<th width="1%">&nbsp;</th>
@@ -780,14 +785,24 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
 				</tr>
 				</thead>
 				<tbody>
-				<?php do { ?>
+				<?php do { 
+				
+				$style_assigned_this = get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default");
+				$style_assigned_other = get_table_info($row_styles['id'],"styles","default",$dbTable,"default");
+				$style_assigned_location = get_table_info($row_styles['id'],"assigned","default",$dbTable,"default");
+				
+				$table_row_class = "bg-success";
+				if (!empty($style_assigned_location)) $table_row_class = "bg-info"; 
+				if ($style_assigned_this) $table_row_class = "bg-warning";
+				
+				?>
 					<?php if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default") > 0) { ?>
-                    <tr>
-                        <td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if (get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default")) echo " checked"; elseif (get_table_info($row_styles['id'],"styles","default",$dbTable,"default")) echo "disabled"; else echo ""; ?>></td>
+                    <tr class="<?php echo $table_row_class; ?>">
+                        <td><input type="checkbox" name="tableStyles[]" value="<?php echo $row_styles['id']; ?>" <?php if ($style_assigned_this) echo " checked"; elseif ($style_assigned_other) echo "disabled"; ?>></td>
                         <td><?php echo $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']; ?></td>
                         <td><?php echo style_convert($row_styles['brewStyleGroup'],"1"); ?></td>
-                        <td><?php echo $row_styles['brewStyle'].get_table_info($row_styles['id'],"assigned","default",$dbTable,"default"); ?></td>
-                        <td style="text-align:right;"><?php echo get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default"); ?></td>
+                        <td><?php echo $row_styles['brewStyle'].$style_assigned_location; ?></td>
+                        <td><span class="pull-right"><?php echo get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default"); ?></span></td>
                     </tr>
                     <?php } ?>
                     <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>

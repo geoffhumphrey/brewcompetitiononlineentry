@@ -1167,7 +1167,7 @@ function not_assigned($method) {
 	}
 	
 	// Return modal body text if no assignments
-	else $return = "<p>No participants have been added to the ".$human_readable." pool yet. Therefore, there no table assignments.</p>"; 
+	else $return = "<p>No participants have been added to the ".$human_readable." pool yet. Therefore, there are no table assignments.</p>"; 
 	
 	return $return;
 	

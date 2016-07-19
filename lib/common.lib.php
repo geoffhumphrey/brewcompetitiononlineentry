@@ -1862,15 +1862,16 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	}
 	
 	if ($method == "assigned") {
-		do { 
-			$a = explode(",", $row_table['tableStyles']);
-			$b = $input;
-			$c = "";
-			foreach ($a as $value) {
-				if ($value == $input) $c = "<br><em>Assigned to Table ".$row_table['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table['id']."'>".$row_table['tableName']."</a></em>";
-			}
-		} while ($row_table = mysqli_fetch_assoc($table));
-	return $c;
+		
+		$d = "";
+		$query_table_info = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table WHERE tableStyles LIKE '%{$input}%'";
+		$table_info = mysqli_query($connection,$query_table_info) or die (mysqli_error($connection));
+		$row_table_info = mysqli_fetch_assoc($table_info);
+		$totalRows_table_info = mysqli_num_rows($table_info);
+		if ($totalRows_table_info > 0) $d = "<br><em>Assigned to Table ".$row_table_info['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table_info['id']."'>".$row_table_info['tableName']."</a></em>";
+		
+		return $d;
+		
   	}
 	
 	if ($method == "list") {

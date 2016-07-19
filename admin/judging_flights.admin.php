@@ -223,14 +223,30 @@ if (($action == "assign") && ($filter == "rounds")) {
 <?php 
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
 		
+		//print_r($a);
+		
 		foreach (array_unique($a) as $flight_table) {
 			
 			include(DB.'admin_judging_flights.db.php');
+			//echo $query_flights."<br>";
+			//echo $totalRows_flights."<br>";
 			
-?>
-	<h4>Table <?php echo $row_tables['tableNumber']." <small>&ndash; ".$row_tables['tableName']; ?> <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $flight_table; ?>" data-toggle="tooltip" data-placement="top" title="Define/Edit the <?php echo $row_tables['tableName']; ?> Flights"><span class="fa fa-lg fa-pencil-square-o"></span></a></small></h4>
+			
+			
+			$judging_location_rounds = "";
+			if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
+			else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
+			
+			$judging_table_name = "Table ".$row_tables['tableNumber']." &ndash; ".$row_tables['tableName'];
+			if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
+			
+			$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."(".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
+			?>
+            
+            
+	<h4><?php echo $judging_table_name; ?></h4>
 
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<p><strong>Location:</strong> <?php echo $judging_location_string; ?></p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		if ($_SESSION['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
