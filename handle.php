@@ -28,6 +28,8 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	$backlist = array('php', 'php3', 'php4', 'phtml', 'exe'); // Restrict file extensions
 	$valid_chars_regex = "A-Za-z0-9_-\s "; // Characters allowed in the file name (in a Regular Expression format)
 	
+	/* 
+	// Commenting out by request - GitHub Issue #623
 	// Change chmod permission if needed
 	chmod($storeFolder, 0755);
 	
@@ -37,6 +39,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		header(sprintf("Location: %s", $errorGoTo));
 		exit;
 	}
+	*/
 	
 	// Security check variables
 	$max_size = 10000000; // Limit size of upload to 10MB

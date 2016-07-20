@@ -33,7 +33,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				// First, get the id of the entry's style category/subcategory
 				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']); 
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-				$row_style = mysqli_ifetch_assoc($style);
+				$row_style = mysqli_fetch_assoc($style);
 				//echo $query_style."<br>";
 				
 				// Then, get the id of the user defined judging table
