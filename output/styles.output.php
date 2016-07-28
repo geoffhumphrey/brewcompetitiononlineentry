@@ -89,14 +89,14 @@ if (!empty($row_styles['brewStyleEntry'])) echo "<p>".$entryReq."</p>";
 				$SRMmin = ltrim ($row_styles['brewStyleSRM'], "0"); 
 				$SRMmax = ltrim ($row_styles['brewStyleSRMMax'], "0"); 
 				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
-				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-					echo "
-					<table width='75%'>
-					<tr>
-					<td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td>
-					</tr>
-					</table>
-					"; 
+				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
+				
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				
+				echo $styleColor;
+				 
 			} 
 			else { echo "&nbsp;"; }
 		?>

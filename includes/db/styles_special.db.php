@@ -68,7 +68,11 @@ do {
 				$SRMmax = ltrim ($row_spec_beer['brewStyleSRMMax'], "0"); 
 				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-					$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+				
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+						
 			} 
 			else $styleColor = "&nbsp;";
 	
@@ -154,7 +158,11 @@ do {
 				$SRMmax = ltrim ($row_spec_all['brewStyleSRMMax'], "0"); 
 				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-					$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+				
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				
 			} 
 			else $styleColor = "&nbsp;";
 	
@@ -269,7 +277,11 @@ do {
 				$SRMmax = ltrim ($row_spec_sweet_carb['brewStyleSRMMax'], "0"); 
 				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-					$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+				
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				
 			} 
 			else $styleColor = "&nbsp;";
 	
@@ -353,7 +365,11 @@ do {
 				$SRMmax = ltrim ($row_spec_carb['brewStyleSRMMax'], "0"); 
 				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-					$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+				
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				 
 			} 
 			else $styleColor = "&nbsp;";
 	
@@ -444,8 +460,12 @@ if ($totalRows_custom_entry_info > 0) {
 					$SRMmin = ltrim ($row_custom_entry_info['brewStyleSRM'], "0"); 
 					$SRMmax = ltrim ($row_custom_entry_info['brewStyleSRMMax'], "0"); 
 					if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
-					if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-						$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+					if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
+					
+					$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+					$styleColor .= " &ndash; ";
+					$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+					
 				} 
 				else $styleColor = "&nbsp;";
 		

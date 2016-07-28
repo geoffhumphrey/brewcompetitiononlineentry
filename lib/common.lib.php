@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include(INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.4.0, change version in system table if not
+// Current version is 2.1.5.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -101,7 +101,7 @@ function version_check($version,$current_version) {
 			
 		}
 		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.4.0","2016-06-30","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.5.0","2017-07-31","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -1664,7 +1664,11 @@ function style_convert($number,$type,$base_url="") {
 						$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0"); 
 						if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
 						if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-							$styleColor = "<table width='75%'><tr><td width='50%' style='text-align: center; background-color: ".srm_color($SRMmin,"srm")."; border: 1px solid #000000; color: ".$color1."'>".$SRMmin."</td><td style='text-align: center; background-color: ".srm_color($SRMmax,"srm")."; border: 1px solid #000000; color: ".$color2."'>".$SRMmax."</td></tr></table>"; 
+						
+						$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+						$styleColor .= " &ndash; ";
+						$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+					
 					} 
 			else $styleColor = "&nbsp;";
 			
@@ -2199,15 +2203,15 @@ function bjcp_rank($rank,$method) {
 function srm_color($srm,$method) {
 	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
 	
-    if ($srm >= 01 && $srm < 02) $return = "#f3f993";
-	elseif ($srm >= 02 && $srm < 03) $return = "#f5f75c";
-	elseif ($srm >= 03 && $srm < 04) $return = "#f6f513";
-	elseif ($srm >= 04 && $srm < 05) $return = "#eae615";
-	elseif ($srm >= 05 && $srm < 06) $return = "#e0d01b";
-	elseif ($srm >= 06 && $srm < 07) $return = "#d5bc26";
-	elseif ($srm >= 07 && $srm < 08) $return = "#cdaa37";
-	elseif ($srm >= 08 && $srm < 09) $return = "#c1963c";
-	elseif ($srm >= 09 && $srm < 10) $return = "#be8c3a";
+    if ($srm >= 1 && $srm < 2) $return = "#f3f993";
+	elseif ($srm >= 2 && $srm < 3) $return = "#f5f75c";
+	elseif ($srm >= 3 && $srm < 4) $return = "#f6f513";
+	elseif ($srm >= 4 && $srm < 5) $return = "#eae615";
+	elseif ($srm >= 5 && $srm < 6) $return = "#e0d01b";
+	elseif ($srm >= 6 && $srm < 7) $return = "#d5bc26";
+	elseif ($srm >= 7 && $srm < 8) $return = "#cdaa37";
+	elseif ($srm >= 8 && $srm < 9) $return = "#c1963c";
+	elseif ($srm >= 9 && $srm < 10) $return = "#be8c3a";
 	elseif ($srm >= 10 && $srm < 11) $return = "#be823a";
 	elseif ($srm >= 11 && $srm < 12) $return = "#c17a37";
 	elseif ($srm >= 12 && $srm < 13) $return = "#bf7138";

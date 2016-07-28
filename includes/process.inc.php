@@ -177,7 +177,7 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	}
 	
 	elseif ($action == "generate_judging_numbers") {
-		generate_judging_numbers($prefix."brewing");	
+		generate_judging_numbers($prefix."brewing",$sort);	
 		if ($go == "hidden") $updateGoTo = $base_url."index.php";
 		elseif ($go == "entries") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=14";
 		else $updateGoTo = $base_url."index.php?section=admin&msg=14";

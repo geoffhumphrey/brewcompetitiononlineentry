@@ -8,9 +8,10 @@ sort($s);
 foreach (array_unique($s) as $style) { 
 include(DB.'output_sorting.db.php');
 if ($totalRows_entries > 0) {
+	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
 ?>
     <div class="page-header">
-       <h1><?php echo "Category ".ltrim($style,"0").": ".style_convert($style,1); echo " (".$totalRows_entries." Entries)"; ?></h1>
+       <h2><?php echo "Category ".ltrim($style,"0").": ".style_convert($style,1); echo "<br><small><em class=\"text-muted\">".$total_entries."</em></small>"; ?></h2>
 	</div>
     <?php if ($go == "default") { ?>
      <script type="text/javascript" language="javascript">
@@ -20,7 +21,12 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[5,'asc'],[4,'asc'],[0,'asc']],
+			<?php if ($view == "default") { ?>
+			"aaSorting": [[4,'asc'],[1,'asc']],
+			<?php } ?>
+			<?php if ($view == "entry") { ?>
+			"aaSorting": [[4,'asc'],[0,'asc']],
+			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -69,7 +75,7 @@ if ($totalRows_entries > 0) {
         <?php } ?>
         <td><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if (isset($row_entries['brewCoBrewer'])) echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td><?php echo $row_entries['brewName']; ?></td>
-        <td><?php echo $row_entries['brewStyle']; ?></td>
+        <td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewStyle']; ?></td>
         <td><?php echo $row_entries['brewSubCategory']; ?></td>
         <td><small><?php echo $brewer_info[6]; ?><br><?php echo $phone; ?></small></td>
         <td><?php if ($row_entries['brewPaid'] == "1") echo "<p class=\"box_small\" style=\"vertical-align:middle; text-align: center;\"><span class=\"fa fa-lg fa-check\"></span></p>"; else echo "<p class='box_small'></p>"; ?></td>
@@ -82,7 +88,8 @@ if ($totalRows_entries > 0) {
     </table>
 <div style="page-break-after:always;"></div>
 	<?php } // end if ($go == "default") ?>
-    <?php if ($go == "cheat") { ?>
+
+	<?php if ($go == "cheat") { ?>
     <h4>Entry Number / Judging Number Cheat Sheet</h4>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -91,9 +98,10 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
@@ -104,8 +112,9 @@ if ($totalRows_entries > 0) {
     <table class="table table-striped table-bordered" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-    	<th width="10%" nowrap>Entry</th>
-        <th width="10%" nowrap>Judging</th>
+		<th width="5%" nowrap>Sub</th>
+    	<th width="20%" nowrap>Entry</th>
+        <th width="20%" nowrap>Judging</th>
         <th>Label Affixed?</th>
     </tr>
     </thead>
@@ -115,6 +124,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
+		<td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td>
         <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>
