@@ -523,6 +523,14 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
+		$updateSQL = sprintf("UPDATE $users_db_table SET userCreated=%s WHERE id=%s", 
+						   	"NOW( )",
+							GetSQLValueString($_POST['uid'], "text")
+							); 
+		
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
 		//echo $updateSQL."<br>";
 		//exit;
 		

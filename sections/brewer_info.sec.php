@@ -153,7 +153,8 @@ else $assignment = "";
 // Build header
 $header1_1 .= "<h2>Info</h2>";
 // Build primary page info (thank you message)
-$primary_page_info .= sprintf("<p class=\"lead\">Thank you for entering the %s, %s. <small>Your account details are listed below.</small></p>",$_SESSION['contestName'],$_SESSION['brewerFirstName']); 
+$primary_page_info .= sprintf("<p class=\"lead\">Thank you for entering the %s, %s. <small>Your account details were last updated %s.</small></p>",$_SESSION['contestName'],$_SESSION['brewerFirstName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($_SESSION['userCreated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt")); 
+
 if ($totalRows_log > 0) { 
 	$primary_page_info .= "<p class=\"lead hidden-print\"><small>Take a moment to <a href=\"#entries\">review your entries</a>"; 
 	if (!$disable_pay) $primary_page_info .= " or <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">pay your entry fees</a>";

@@ -52,6 +52,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0")) {
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
 			
+			// Clear judging preferences
+			if (!SINGLE) { 
+				$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+			
 			header(sprintf("Location: %s", $base_url."index.php?section=admin&msg=26"));
 			
 		}

@@ -195,7 +195,7 @@ else {
 		$output_datatables_head .= "<th class=\"".$output_hide_print."\">Has Entries In...</th>";
 		
 	}
-	$output_datatables_head .= "<th class=\"".$output_hide_print."\">Date Created</th>";
+	$output_datatables_head .= "<th class=\"".$output_hide_print."\">Updated</th>";
 	if (($action != "print") && ($dbTable == "default")) $output_datatables_head .= "<th>Actions</th>";
 	$output_datatables_head .= "</tr>";
 	

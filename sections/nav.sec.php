@@ -82,7 +82,8 @@ if ($section == "contact") $link_contacts = "#";
 else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url);
 
 if ($section == "register") $link_register = "#"; 
-elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url); 
+elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url);
+elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 else $link_register = build_public_url("register","default","default","default",$sef,$base_url);
 

@@ -183,6 +183,7 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$_SESSION['userLevel'] = $row_user['userLevel'];
 	$_SESSION['userQuestion'] = $row_user['userQuestion'];
 	$_SESSION['userQuestionAnswer'] = $row_user['userQuestionAnswer'];
+	$_SESSION['userCreated'] = $row_user['userCreated'];
 
 	$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
 	$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));

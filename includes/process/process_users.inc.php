@@ -116,9 +116,11 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		if ($go == "make_admin") {
 			
 			$updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
-			$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s WHERE user_name=%s", 
+			$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s,userCreated=%s WHERE user_name=%s", 
 							   GetSQLValueString($_POST['userLevel'], "text"),
-							   GetSQLValueString($_POST['user_name'], "text"));
+							   "NOW( )",
+							   GetSQLValueString($_POST['user_name'], "text")
+							   );
 							   
 			
 			mysqli_real_escape_string($connection,$updateSQL);
@@ -136,9 +138,11 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		  }
 		  else  {  
 			
-			$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s WHERE id=%s", 
+			$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s,userCreated=%s WHERE id=%s", 
 							   GetSQLValueString(strtolower($_POST['user_name']), "text"),
-							   GetSQLValueString($id, "text")); 
+							   "NOW( )",
+							   GetSQLValueString($id, "text")
+							   ); 
 			
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -213,9 +217,11 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		if (!$check) header(sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id));
 		
 		if ($check)  {  
-			$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
-						   GetSQLValueString($hash_new, "text"),
-						   GetSQLValueString($id, "text")); 
+			$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s", 
+						   	GetSQLValueString($hash_new, "text"),
+						   	"NOW( )",
+						   	GetSQLValueString($id, "text")
+							); 
 			
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -232,9 +238,11 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		$password_new = md5($_POST['password']);
 		$hash_new = $hasher->HashPassword($password_new);
 	
-		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s WHERE id=%s", 
-						   GetSQLValueString($hash_new, "text"),
-						   GetSQLValueString($id, "text")); 
+		$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s", 
+						   	GetSQLValueString($hash_new, "text"),
+						   	"NOW( )",
+							GetSQLValueString($id, "text")
+							); 
 			
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

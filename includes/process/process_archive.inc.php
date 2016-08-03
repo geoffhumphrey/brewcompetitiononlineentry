@@ -175,12 +175,28 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		
 		// If participants were kept, no need to kill session and re-login - just redirect
 		if ($keep_participants) {
+			
+			// First, clear judging preferences
+			if (!SINGLE) { 
+				$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}			
+			
 			header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
 			exit;
 		}
 		
 		// If no participants were kept except admin users, log the user in and redirect 
 		else {
+			
+			// First, clear judging preferences for remaining users
+			if (!SINGLE) { 
+				$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+			
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
 			$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 			$row_login = mysqli_fetch_assoc($login);
