@@ -28,6 +28,7 @@ if (strstr($username,'@'))  {
 	$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 	header(sprintf("Location: %s", stripslashes($insertGoTo)));	
 	
+	session_name($prefix_session);
 	session_start();
 	$_SESSION['loginUsername'] = $username;
 }

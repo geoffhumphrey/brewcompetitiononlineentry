@@ -55,7 +55,8 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 		$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 		$row_login = mysqli_fetch_assoc($login);
 		$totalRows_login = mysqli_num_rows($login);
-	
+		
+		session_name($prefix_session);
 		session_start();
 			// Authenticate the user
 			if ($totalRows_login == 1)
@@ -166,6 +167,8 @@ if (($action == "add") && ($section == "setup")) 	include_once (PROCESS.'process
 			$row_login = mysqli_fetch_assoc($login);
 			$totalRows_login = mysqli_num_rows($login);
 			//echo $query_login;
+			
+			session_name($prefix_session);
 			session_start();
 				// Authenticate the user
 				if ($totalRows_login == 1) {

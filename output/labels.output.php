@@ -1,6 +1,8 @@
 <?php
-session_start(); 
+ 
 require('../paths.php');
+session_name($prefix_session);
+session_start(); 
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'fpdf/pdf_label.php');
 mysqli_select_db($connection,$database);

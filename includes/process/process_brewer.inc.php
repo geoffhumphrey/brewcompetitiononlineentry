@@ -13,6 +13,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 	
 	// Empty the user_info session variable
 	// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+	session_name($prefix_session);
 	session_start();
 	unset($_SESSION['user_info'.$prefix_session]);
 	

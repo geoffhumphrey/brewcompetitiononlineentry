@@ -143,6 +143,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 		

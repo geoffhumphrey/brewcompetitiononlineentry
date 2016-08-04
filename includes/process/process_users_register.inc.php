@@ -429,6 +429,8 @@ if (strstr($username,'@'))  {
 	
 	if ($filter == "default") {
 	    // Log in the user and redirect
+		
+		session_name($prefix_session);
 		session_start();
 		$_SESSION['loginUsername'] = $username;
 		

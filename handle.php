@@ -1,6 +1,7 @@
 <?php
 require('paths.php');
 require('includes/url_variables.inc.php');
+session_name($prefix_session);
 session_start();
 
 // Force download of uploaded scoresheet PDF

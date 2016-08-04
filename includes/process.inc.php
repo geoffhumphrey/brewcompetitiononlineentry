@@ -207,7 +207,7 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	elseif ($action == "convert_bjcp") {
 		
 		bjcp_convert();
-		
+		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 		

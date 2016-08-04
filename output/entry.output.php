@@ -1,6 +1,7 @@
 <?php 
-session_start(); 
 require('../paths.php');
+session_name($prefix_session);
+session_start(); 
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 include(CLASSES.'tiny_but_strong/tbs_class.php');

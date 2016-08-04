@@ -2,12 +2,6 @@
 // General vars
 $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
-if (empty($installation_id)) $prefix_session = md5("BCOEM012345"); 
-else $prefix_session = md5($installation_id);
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 mysqli_select_db($connection,$database);
 
@@ -22,6 +16,7 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 	session_destroy();
 	session_write_close();
 	session_regenerate_id(true);
+	session_name($prefix_session);
 	session_start();
 	$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 

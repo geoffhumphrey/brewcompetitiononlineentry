@@ -4,6 +4,7 @@
 // -----------------------------------------------------------
 require('paths.php');
 require(INCLUDES.'authentication_nav.inc.php');  
+session_name($prefix_session);
 session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php'); 

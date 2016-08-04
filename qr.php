@@ -1,6 +1,7 @@
 <?php
 require('paths.php');
 require(CONFIG.'bootstrap.php');
+session_name($prefix_session);
 session_start();
 // Validate user input against password in DB
 if ($action == "password-check") {

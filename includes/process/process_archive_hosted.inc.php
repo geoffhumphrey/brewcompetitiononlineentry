@@ -1,6 +1,6 @@
 <?php
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
-	
+	session_name($prefix_session);
 	session_start();
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
@@ -132,6 +132,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			session_destroy();
 			session_write_close();
 			session_regenerate_id(true);
+			session_name($prefix_session);
 			session_start();
 			
 			$_SESSION['session_set_'.$prefix_session] = $prefix_session;

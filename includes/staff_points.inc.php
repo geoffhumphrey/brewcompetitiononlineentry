@@ -67,6 +67,7 @@ function total_points($total_entries,$method) {
 
 // calculate a Judge's points
 function judge_points($bid,$bos) { 
+	session_name($prefix_session);
 	session_start(); 
 	require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
@@ -94,7 +95,7 @@ function judge_points($bid,$bos) {
 	
 // calculate a Steward's points
 function steward_points($bid) {
-	session_start(); 
+	
 	require('../paths.php'); 
 	require(DB.'judging_locations.db.php');
 	

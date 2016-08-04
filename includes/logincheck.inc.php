@@ -136,6 +136,7 @@ else {
 if ($check == 1) {
 	
 	// Start the session and regenerate the session ID
+	session_name($prefix_session);
 	session_start();
 	session_regenerate_id(true); 
 	

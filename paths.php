@@ -48,6 +48,14 @@ error_reporting(0);	// comment out to debug
 require (CONFIG.'config.php');
 require (INCLUDES.'current_version.inc.php'); 
 
+if (empty($installation_id)) $prefix_session = md5("BCOEM012345"); 
+else $prefix_session = md5($installation_id);
+
+if (session_status() == PHP_SESSION_NONE) {
+	session_name($prefix_session);
+    session_start();
+}
+
 // Uncomment to display paths
 /*
 echo ROOT."<br>";

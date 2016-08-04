@@ -188,6 +188,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		else {
 			// Empty the contest_info_general session variable
 			// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+			session_name($prefix_session);
 			session_start();
 			unset($_SESSION['contest_info_general'.$prefix_session]);
 			
