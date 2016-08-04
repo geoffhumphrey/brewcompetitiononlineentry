@@ -36,3 +36,5 @@ sections/nhc_pay.sec.php
 sections/nav_admin.php
 
 libraries/*
+
+config_for_release.php

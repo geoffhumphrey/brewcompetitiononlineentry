@@ -65,9 +65,10 @@ if ($section != "admin") {
 	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
 
 		// Conditional display of panel colors based upon open/closed dates
-		if ($registration_open == 0) $reg_panel_display = "panel-default";
-		elseif (($registration_open == 1) || ($judge_window_open == 1)) $reg_panel_display = "panel-success";
-		elseif ($registration_open == 2) $reg_panel_display = "panel-danger";
+		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-default";
+		elseif (($registration_open != 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
+		elseif (($registration_open == 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
+		elseif (($registration_open == 2) && ($judge_window_open == 2)) $reg_panel_display = "panel-danger";
 		else $reg_panel_display = "panel-default";
 		
 		if ($entry_window_open == 0) $entry_panel_display = "panel-default";
@@ -115,22 +116,22 @@ if ($section != "admin") {
 			$header1_100 .= "<div class=\"panel ".$reg_panel_display."\">";
 			$header1_100 .= "<div class=\"panel-heading\">";
 			$header1_100 .= "<h4 class=\"panel-title\">Account Registration is";
-			if (($registration_open == 1) || ($judge_window_open == 1)) $header1_100 .= " Open";
-			elseif (($registration_open == 2) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Judges or Stewards Only";
-			elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Stewards Only";
-			elseif (($registration_open == 2) && ($judge_window_open == 1) && (!$judge_limit) && ($steward_limit)) $header1_100 .= " Open for Judges Only";
+			if ($registration_open == 1) $header1_100 .= " Open";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Judges or Stewards Only";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Stewards Only";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && ($steward_limit)) $header1_100 .= " Open for Judges Only";
 			else $header1_100 .= " Closed";
 			$header1_100 .= "</h4>";
 			$header1_100 .= "</div>";
 			$page_info100 .= "<div class=\"panel-body\">";
-			$page_info100 .= "Account";
+			//$page_info100 .= "Account";
 			
-			if (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" <a href=\"%s\">registrations</a> for <strong class=\"text-success\">judges or stewards only</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
-				elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" <a href=\"%s\">registrations</a> for <strong class=\"text-success\">stewards only</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
-				elseif (($registration_open != 1) && (!$judge_limit) && ($judge_window_open == 1) && ($steward_limit)) $page_info100 .= sprintf(" <a href=\"%s\">registrations</a> for <strong class=\"text-success\">judges only</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
-				elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= " registrations no longer accepted. The limit of judges and stewards has been reached.";
+			if (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">judges or stewards</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">stewards</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open != 1) && (!$judge_limit) && ($judge_window_open == 1) && ($steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">judges</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= "Account registrations no longer accepted. The limit of judges and stewards has been reached.";
 			else {
-				if ($registration_open == 1) $page_info100 .= sprintf(" <a href=\"%s\">registrations</a> accepted %s through %s.", $link_register, $reg_open_sidebar, $reg_closed_sidebar);
+				if ($registration_open == 1) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> accepted %s through %s.", $link_register, $reg_open_sidebar, $reg_closed_sidebar);
 				else $page_info100 .= sprintf(" registrations accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
 			}
 			$page_info100 .= "</div>";

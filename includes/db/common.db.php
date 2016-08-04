@@ -2,21 +2,8 @@
 // General vars
 $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
-if ($prefix != "") $prefix_session = md5(rtrim($prefix,"_"));
-else $prefix_session = md5("BCOEM12345");
-
-/*
-// Set a unique session name before session_start();
-// -------------- Set unique session name by using the server document root ----------------
-// Use server document root (since all pages are served by index.php) and remove slashes
-$session_name = str_replace("/","",$_SERVER['DOCUMENT_ROOT']);
-// Obfuscate with md5
-$session_name = md5($session_name);
-
-// Set the session name
-session_name($session_name);
-*/
-
+if (empty($installation_id)) $prefix_session = md5("BCOEM012345"); 
+else $prefix_session = md5($installation_id);
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -50,17 +37,20 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 }
 
 
-if (!SINGLE) $_SESSION['comp_id'] = 1;
-
-
 // Get the general info for the competition from the DB and store in session variables
 if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	
 	$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
-	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_SESSION['comp_id']);
+	
+	// if SSO, get information from user choice on login screen
+	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
+	
+	// if not, use 1
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info); 
+	
+	$_SESSION['comp_id'] = $row_contest_info['id'];
 
 	// Comp Name
 	$_SESSION['contestName'] = $row_contest_info['contestName'];

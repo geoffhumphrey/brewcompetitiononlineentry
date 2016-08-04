@@ -4,10 +4,10 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: March 31, 2016
+ * Last Modified: August 4, 2016
  
  ******************************************************************************
- * A CHANGE HAS BEEN MADE TO THIS FILE for Version 2.1.0!
+ * A CHANGE HAS BEEN MADE TO THIS FILE for Version 2.1.X!
  * Be sure to input all variables here and upload to your server EVEN IF YOU ARE
  * PERFORMING AN UPGRADE!
  ****************************************************************************** 
@@ -54,6 +54,20 @@ $brewing = $connection;
 
 
 /******End MySQL Connections*******
+
+/*
+Give your installation a unique ID. If you plan on running multiple instances
+of BCOE&M from the same domain, you'll need to give each installation a 
+unique identifier. This prevents "cross-pollination" of session cookie data.
+
+For single installations, the default below will be sufficient. Otherwise,
+change the variable to something completely unique for each installation.
+
+For example:
+$installation_id = "20BcoeM06!";
+*/
+
+$installation_id = "";
 
 
 /*
@@ -151,7 +165,7 @@ Set the base URL of your installation. In most cases the default will be OK.
 IF you are installing on a server where you do not have a domain name set up,
 you'll need to replace the last $base_url variable below with something 
 formatted like this:
-$base_url .= "ipaddressorhostingdomain/~accountname/subdirectoryname/";
+$base_url .= "hostingdomain/~accountname/subdirectoryname/";
 
 Example:
 $base_url .= "147.21.160.5/~brewcompetition/bcoem/";

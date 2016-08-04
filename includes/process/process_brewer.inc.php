@@ -443,6 +443,92 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		}
 		else $rank = "";
 		
+		// Check for and clear assignments in staff DB table and judge assignments table if 
+		if ($_POST['brewerJudge'] == "N") {
+			
+			$query_staff_assign = sprintf("SELECT id,uid,staff_judge FROM %s WHERE uid='%s'",$prefix."staff",$_POST['uid']);
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
+			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
+			
+			if ($totalRows_staff_assign > 0) {
+				
+				do {
+					
+					if ($row_staff_assign['staff_judge'] == 1) {
+						$updateSQL = sprintf("DELETE FROM %s WHERE id=%s",$prefix."staff",$row_staff_assign['id']);	
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					}
+					
+				} while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
+				
+			}
+			
+			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",$_POST['uid']);
+			$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+			$row_table_assign = mysqli_fetch_assoc($table_assign);
+			$totalRows_table_assign = mysqli_num_rows($table_assign);
+			
+			if ($totalRows_table_assign > 0) {
+				
+				do {
+					
+					if ($row_table_assign['assignment'] == "J") {
+						$updateSQL = sprintf("DELETE FROM %s WHERE id=%s",$prefix."judging_assignments",$row_table_assign['id']);	
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					}
+					
+				} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
+				
+			}
+		
+		}
+		
+		
+		if ($_POST['brewerSteward'] == "N") {
+			
+			$query_staff_assign = sprintf("SELECT id,uid,staff_steward FROM %s WHERE uid='%s'",$prefix."staff",$_POST['uid']);
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
+			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
+			
+			if ($totalRows_staff_assign > 0) {
+				
+				do {
+					
+					if ($row_staff_assign['staff_steward'] == 1) {
+						$updateSQL = sprintf("DELETE FROM %s WHERE id=%s",$prefix."staff",$row_staff_assign['id']);	
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					}
+					
+				} while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
+				
+			}
+			
+			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",$_POST['uid']);
+			$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+			$row_table_assign = mysqli_fetch_assoc($table_assign);
+			$totalRows_table_assign = mysqli_num_rows($table_assign);
+			
+			if ($totalRows_table_assign > 0) {
+				
+				do {
+					
+					if ($row_table_assign['assignment'] == "S") {
+						$updateSQL = sprintf("DELETE FROM %s WHERE id=%s",$prefix."judging_assignments",$row_table_assign['id']);	
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					}
+					
+				} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
+				
+			}
+		
+		}
+		
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET 
 			uid=%s,
 			brewerFirstName=%s, 

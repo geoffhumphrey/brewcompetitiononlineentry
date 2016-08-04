@@ -10,7 +10,7 @@
 // Define the current version
 include (INCLUDES.'current_version.inc.php'); 
 include (LIB.'date_time.lib.php');
-include(INCLUDES.'version.inc.php');
+include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
 // Current version is 2.1.5.0, change version in system table if not
@@ -332,9 +332,9 @@ function random_generator($digits,$method){
 	srand ((double) microtime() * 10000000);
 
 	//Array of alphabet
-	if ($method == "1") $input = array ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9");
-	if ($method == "2") $input = array ("1","2","3","4","5","6","7","8","9");
-	if ($method == "3") $input = array ("1","2","3","4");
+	if ($method == "1") $input = array ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","t","d","y","u","b","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9");
+	if ($method == "2") $input = array ("0","1","2","3","4","5","6","7","8","9");
+	if ($method == "3") $input = array ("0","1","2","3","4");
 
 	$random_generator = "";// Initialize the string to store random numbers
 	for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
@@ -346,12 +346,12 @@ function random_generator($digits,$method){
 		
 		if ($method == "3")
 		{
-		// Add one numeric digit between 1 and 10
+		// Add one numeric digit between 0 and 4
 		$random_generator = rand(1,4); // one number is added
 		}
 		
 		else {
-		// Add one numeric digit between 1 and 10
+		// Add one numeric digit between 0 and 9
 		$random_generator .=rand(1,10); // one number is added
 		} // end of if else
 	} // end of for loop 

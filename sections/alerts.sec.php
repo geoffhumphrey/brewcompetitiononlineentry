@@ -273,7 +273,7 @@
     <!-- Account and entry registration closed, but Judge/steward registration open -->
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Account Registration is Open.</strong> <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register here</a> as a <?php echo strtolower($j_s_text); ?>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
+      <span class="fa fa-lg fa-info-circle"></span> <strong><?php echo $j_s_text; ?> Account Registration is Open </strong> &ndash; <a class="alert-link" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Register Here</a>. <?php echo $j_s_text; ?> registration will close <?php echo $judge_closed; ?>.
     </div>
     <?php } ?>
 		<?php if (($judge_limit) && ($section == "register")) { ?>

@@ -9,7 +9,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- Sets up a basic install and baseline data for version 2.0.X.
+-- Sets up a basic install and baseline data for version 2.1.X.
 -- Import this DB structure and dummy data via phpMyAdmin or shell access.
 -- Adds a top-level admin user:
 --   - Username: user.baseline@brewcompetition.com
