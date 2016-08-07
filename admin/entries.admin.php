@@ -20,7 +20,7 @@ $header .= " Entries ".$header1_2;
 
 if (($filter == "default") && ($bid == "default") && ($view == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 if ($filter != "default") $sidebar_extension .= " in this Category";
-if ($bid != "default") $sidebar_extension .= " for this Particpant";
+if ($bid != "default") $sidebar_extension .= " for this Participant";
 
 if (($filter == "default") && ($bid == "default")) { 
   	if ($totalRows_log_paid > 0) $sidebar_paid_entries .= "<a href=\"index.php?section=".$section."&amp;go=".$go."&amp;view=paid\" title=\"View All Paid Entries\">".$totalRows_log_paid."</a>";
