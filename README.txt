@@ -4,25 +4,25 @@ Oskar Stephens, and Luis Balbinot.
 
 Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
-SourceForge: http://sourceforge.net/projects/brewcompetition
+SourceForge: http://sourceforge.net/projects/brewcompetition [Archives ONLY]
 
-Release 2.0.1, February 15, 2016
+Release 2.1.5, July 31, 2016
 
 Developed utilizing the following extensions and functions, with gratitude to their
 respective developers and online communities:
-- jQuery                    http://jquery.com
-- Bootstrap 3               http://getbootstrap.com 
-- DataTables                http://www.datatables.net 
-- Fancybox                  http://www.fancyapps.com   
-- TinyMCE                   http://www.tinymce.com
-- Jasny Bootstrap           http://www.jasny.net/bootstrap
-- DropZone                  http://www.dropzonejs.com
-- Bootstrap Form Validator  http://1000hz.github.io/bootstrap-validator
-- Bootstrap-Select          http://silviomoreto.github.io/bootstrap-select
-- Font Awesome              http://fortawesome.github.io/Font-Awesome   
-- FPDF                      http://www.fpdf.org
-- PHPass                    http://www.openwall.com/phpass
-- Tiny But Strong           http://www.tinybutstrong.com
+- jQuery 3.1.0                    http://jquery.com
+- Bootstrap 3.3.7                 http://getbootstrap.com 
+- DataTables 1.10.12              http://www.datatables.net 
+- Fancybox 2.1.5                  http://www.fancyapps.com   
+- TinyMCE 4.4.0                   http://www.tinymce.com
+- Jasny Bootstrap 3.1.3           http://www.jasny.net/bootstrap
+- DropZone 4.2.0                  http://www.dropzonejs.com
+- Bootstrap Form Validator 0.9.0  http://1000hz.github.io/bootstrap-validator
+- Bootstrap-Select 1.9.3          http://silviomoreto.github.io/bootstrap-select
+- Font Awesome 4.5.0              http://fortawesome.github.io/Font-Awesome   
+- FPDF 1.6                        http://www.fpdf.org
+- PHPass 0.3                      http://www.openwall.com/phpass
+- Tiny But Strong 3.10.1          http://www.tinybutstrong.com
 
 This software is free, open source, and is covered under the General Public
 License (GPL) from the Open Source Initiative. Therefore, you are permitted to 
@@ -41,7 +41,7 @@ Please read this entire document before attempting to install or use the
 application. Step-by-step installation instructions are available at
 http://www.brewcompetition.com/install.
 
-This software utilizes PHP 5.3+ and MySQL 5+ to process and store data. 
+This software utilizes PHP 5.6.X and MySQL 5.5.X to process and store data.
 
 A modern web browser is also required to take full advantage of the many HTML 5
 attributes and functions of the application. The latest versions of Chrome, Firefox,
@@ -94,7 +94,7 @@ Also check http://www.brewcompetition.com/change-log.
 Fallback DB Install
 ***********************************************************************************
 For those experiencing any issues related to initial browser-based setup of BCOE&M, 
-the bcoem_baseline_2.0.X.sql document is available in the package. It contains the 
+the bcoem_baseline_2.1.X.sql document is available in the package. It contains the 
 necessary database structure and dummy data for a new installation that can be 
 installed manually via phpMyAdmin or shell access. Be sure to follow the directions 
 in the document BEFORE use.

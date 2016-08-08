@@ -106,7 +106,7 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if (($registration_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['user_level'] == 2))) {
+if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
 	
 	$page_info1 .= "<p class=\"lead\">Account registration has closed. <span class=\"small\">Thank you for your interest.</p>";
 	echo $page_info1;
@@ -122,7 +122,7 @@ require_once(INCLUDES.'recaptchalib.inc.php');
 if (NHC) $totalRows_log = $totalRows_entry_count;
 else $totalRows_log = $totalRows_log;
 if ($go != "default") {
-	
+	$country_select = "";
 	foreach ($countries as $country) { 
 		$country_select .= "<option value='".$country."' ";
 		if (($msg > 0) && ($_COOKIE['brewerCountry'] == $country)) $country_select .= "SELECTED";
@@ -142,7 +142,7 @@ if ($go != "default") {
 			if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>";
-   		} while ($row_dropoff = mysql_fetch_assoc($dropoff));
+   		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 	} 
 }
 
@@ -160,7 +160,7 @@ if ($section == "admin") {
 
 if (($go != "default") && ($section != "admin")) $page_info1 .= "<p>To register for the competition, create your online account by filling out the form below.</p>";
 if ($view == "quick") $page_info1 .= "<p>Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.</p>";
-if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && (!$comp_entry_limit)) {
+if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && ((!$comp_entry_limit) || (!$comp_paid_entry_limit))) {
 	$page_info1 .= "<p>Entry into this competition is conducted completely online.</p>";
 	$page_info1 .= "<ul>";
 	if (!NHC) {
@@ -181,7 +181,8 @@ if (($section != "admin") && ($action != "print")) echo $warning1;
 if (NHC) echo $warning2;
 echo $header1_1;
 echo $page_info1;
-if ($go == "default") { ?>
+
+if ($go == "default") {  ?>
 <form class="form-horizontal" name="judgeChoice" id="judgeChoice">
 	<div class="form-group">
 		<label for="judge_steward" class="col-lg-5 col-md-6 col-sm-6 col-xs-12 control-label">Are You Registering as a Judge or Steward?</label>
@@ -195,7 +196,11 @@ if ($go == "default") { ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->	
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
+<?php } ?>
 
 </form>
 <?php } else { ?> 
@@ -218,33 +223,35 @@ if ($go == "default") { ?>
 </div>
 <?php } ?>
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
-<?php if ($view == "quick") { ?>
+<?php if ($section == "admin") { ?>
     <input type="hidden" name="password" value="bcoem">
-    <input type="hidden" name="userQuestion" value="Randomly generated. Use the email function to recover your password.">
-    <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(7,2); ?>">
-    <input type="hidden" name="brewerAddress" value="1234 Main Street">
-    <input type="hidden" name="brewerCity" value="Anytown">
-    <input type="hidden" name="brewerState" value="CO">
-    <input type="hidden" name="brewerZip" value="80000">
-    <input type="hidden" name="brewerCountry" value="<?php echo $random_country; ?>">
-    <input type="hidden" name="brewerPhone1" value="1234567890">
-    <input type="hidden" name="brewerJudge" value="Y">
-    <input type="hidden" name="brewerSteward" value="Y">
-    <?php if ($totalRows_judging > 1) { ?>
-    <?php do { ?>
-    <input type="hidden" name="brewerJudgeLocation[]" value="<?php echo "Y-".$row_judging3['id']; ?>">
-	<?php } while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
-    <?php do { ?>
-    <input type="hidden" name="brewerStewardLocation[]" value="<?php echo "Y-".$row_stewarding['id']; ?>">
-    <?php } while ($row_stewarding = mysql_fetch_assoc($stewarding)); ?>
-    <?php } // end if ($totalRows_judging > 1) ?>
-<?php } ?>
-<?php if ($section != "admin") { ?>
-	<input type="hidden" name="userQuestion" value="What is your favorite all-time beer to drink?">
-	<input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(7,2); ?>">
-<?php } ?>
+    <input type="hidden" name="userQuestion" value="Randomly generated.">
+    <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(6,2); ?>">
+    <?php if ($view == "quick") { ?>
+        <input type="hidden" name="brewerAddress" value="1234 Main Street">
+        <input type="hidden" name="brewerCity" value="Anytown">
+        <input type="hidden" name="brewerState" value="CO">
+        <input type="hidden" name="brewerZip" value="80000">
+        <input type="hidden" name="brewerCountry" value="<?php echo $random_country; ?>">
+        <input type="hidden" name="brewerPhone1" value="1234567890">
+        <input type="hidden" name="brewerJudge" value="Y">
+        <input type="hidden" name="brewerSteward" value="Y">
+        <?php if ($totalRows_judging > 1) { ?>
+        <?php do { ?>
+        	<input type="hidden" name="brewerJudgeLocation[]" value="<?php echo "Y-".$row_judging3['id']; ?>">
+        <?php } while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
+        <?php do { ?>
+       		<input type="hidden" name="brewerStewardLocation[]" value="<?php echo "Y-".$row_stewarding['id']; ?>">
+        <?php } while ($row_stewarding = mysqli_fetch_assoc($stewarding)); ?>
+        <?php } // end if ($totalRows_judging > 1) ?>
+    <?php } // end if ($view == "quick")?>
+<?php } // end if ($section == "admin") ?>
     <input type="hidden" name="userLevel" value="2" />
+    <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
     <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+    <?php } else { ?>
+    <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
+   	<?php } ?>
     <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
 <?php if ($go == "entrant") { ?>
     <input type="hidden" name="brewerJudge" value="N" />
@@ -285,7 +292,7 @@ if ($go == "default") { ?>
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" required>
-				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>
+				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -555,7 +562,9 @@ if ($go == "default") { ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } ?>
+	
 	<?php if ($go != "entrant") { ?>
+	<?php if (!$judge_limit) { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging</label>
@@ -584,16 +593,18 @@ if ($go == "default") { ?>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
 				<select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>No</option>
+                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>Yes</option>
                 </select>
 			</div>
 			</div>
-		<?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?>
+		<?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // end if ($view == "default") ?>
 	<?php } // end if ($totalRows_judging > 1) ?>
+	<?php } // end if (!$judge_limit) ?>
+	<?php if (!$steward_limit) { ?>
     <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
@@ -622,24 +633,41 @@ if ($go == "default") { ?>
 			<div class="input-group input-group-sm">
 				<!-- Input Here -->
 				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>No</option>
+					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>>Yes</option>
 				</select>
 			</div>
 			</div>
-		<?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?>
+		<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<?php } ?>
-	
-	
 	<?php } // end if ($totalRows_judging > 1) 
-	else { ?>
+		else { ?>
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
     <?php } ?>
+    <?php } // end if (!$steward_limit) ?>
     
-	
+    <?php if ($go != "entrant") { ?>
+    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+		<label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Waiver</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="checkbox">
+				<!-- Input Here -->
+                <p>My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.</p>
+				<label>
+					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked required />By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.
+				</label>
+			</div>
+            <div class="help-block with-errors"></div>
+		</div>
+	</div><!-- ./Form Group -->
+    <?php } ?>
+    
+    
+    
+    
 <?php } // end if ($go != "entrant") ?>	
 	<?php if ($section != "admin") { ?>
    	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->

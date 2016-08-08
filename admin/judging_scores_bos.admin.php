@@ -83,7 +83,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
                     <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places for <?php echo $row_style_types_2['styleTypeName']; ?></a>
                 <?php 
                     }
-                } while ($row_style_types_2 = mysql_fetch_assoc($style_types_2));
+                } while ($row_style_types_2 = mysqli_fetch_assoc($style_types_2));
                 ?>
                 </ul>
             </div>
@@ -101,7 +101,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
                     <li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
             <?php }
-                } while ($row_style_type = mysql_fetch_assoc($style_type));
+                } while ($row_style_type = mysqli_fetch_assoc($style_type));
                 ?>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
@@ -113,7 +113,7 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
 </div>
 <?php 
 if (($action == "default") && ($totalRows_style_type > 0)) {
-do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 sort($a);
 
 foreach ($a as $type) {
@@ -189,7 +189,9 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $judging_number; ?></td>
         <td><?php echo $bos_entry_info[9] ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>
-        <td><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
+        <td>
+		<?php if ($filter == "default") echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; else echo $style.": ".$bos_entry_info[0]; ?>
+        </td>
         <?php if ($dbTable == "default") { ?>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scorePlace']; ?></td>
@@ -202,9 +204,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $bos_entry_info[11]; ?></td>
         <td><?php echo $bos_entry_info[10] ?></td>
     </tr>
-    <?php } while ($row_bos = mysql_fetch_assoc($bos)); 
-	mysql_free_result($bos);
-	?>
+    <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
 <?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>"; 
@@ -267,7 +267,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[10])) echo "Y"; elseif (!empty($bos_entry_info[11])) echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[14])) echo "Y"; else echo "N"; ?>" />
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $score_id; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
@@ -284,18 +284,23 @@ include(DB.'admin_judging_scores_bos.db.php');
           <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
           <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
           <?php } ?>
+          <option value="HM" <?php if ($bos_entry_info[10] == "HM") echo "selected"; ?>><?php echo "Hon. Men."; ?></option>
         </select>
         </td>
 	</tr>
     <?php 
-	} while ($row_enter_bos = mysql_fetch_assoc($enter_bos)); 
+	} while ($row_enter_bos = mysqli_fetch_assoc($enter_bos)); 
 	?>	
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="updateBOS" class="btn btn-primary" value="<?php if ($action == "enter") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" />
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } 
 else echo "<p>There are no qualifying entries available.</p>";

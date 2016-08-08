@@ -14,7 +14,7 @@ $special_mead = array("24A","24B","24C","25A","25B","25C","26A","26B","26C");
 $special_cider = array("27B","27C","27E","28A","28B","28C","28D");
 
 if ($view == "default") {
-	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 	sort($a);
 }
 
@@ -45,10 +45,10 @@ foreach ($a as $type) {
 				$output .= '<p class="lead">'.$style.': '.$row_scores['brewStyle'].'</p>';
 				if ($filter == "entry") $output .= '<p>#'.$row_scores['id'].'</p>';
 				else $output .= '<p>#'.readable_judging_number($row_scores['brewCategorySort'],$row_scores['brewJudgingNumber']).'</p>';
-				$output .= '<p><small><em>'.$row_scores['brewInfo'].'</em></small></p>';
+				$output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfo']).'</em></small></p>';
 				$output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
-				if ($type == 2) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</p>';
-				if ($type == 3) $output .= '<p>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</p>';
+				if ($type == 2) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</small></p>';
+				if ($type == 3) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</small></p>';
 				$output .= '</td>';
 				
 				$endRow++;
@@ -59,7 +59,7 @@ foreach ($a as $type) {
 				}
 			}
 			
-		} while ($row_scores = mysql_fetch_assoc($scores));
+		} while ($row_scores = mysqli_fetch_assoc($scores));
 		
 		if ($endRow != 0) {
 			while ($endRow < $columns) {

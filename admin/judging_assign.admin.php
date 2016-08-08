@@ -57,6 +57,11 @@ $output_datatables_other_link = "";
 $output_datatables_view_link = "";
 $output_datatables_actions = "";
 $output_available_modal_body = "";
+$output_at_table_modal_body = "";
+$ranked = 0;
+$nonranked = 0;
+$ranked_judge = "";
+$nonranked_judge = "";
 
 
 // Build DataTables Header
@@ -68,26 +73,44 @@ if ($filter == "judges") {
 	$output_datatables_head .= "<th>Comps Judged</th>";
 }
 for($i=1; $i<$row_flights['flightRound']+1; $i++) {
-	if  (table_round($row_tables_edit['id'],$i)) { 
+	//if  (table_round($row_tables_edit['id'],$i)) { 
 		$output_datatables_head .= "<th>Round ".$i."</th>";
-	}
+	//}
 }
 
 $output_datatables_head .= "</tr>";
 
 do {
+	$table_location = "Y-".$row_tables_edit['tableLocation'];
+	$judge_info = judge_info($row_brewer['uid']);
+	$judge_info = explode("^",$judge_info);
+	$bjcp_rank = explode(",",$judge_info[5]);
+	$display_rank = bjcp_rank($bjcp_rank[0],1);	
+	
 	$assign_row_color = "";
+	$flights_display = "";
 	$assign_flag = "";
 	
 	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 		
 		if  (table_round($row_tables_edit['id'],$i)) {
 			
-			$flights_display = "";
+			
+			$flights_display .= "<td>";
 			
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
 				$assign_row_color = "bg-orange text-orange";
-				$assign_flag = "<span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
+				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
+				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
+				//$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
+				if ($rank_number >= 2) {
+					$ranked_judge[] = 1;
+					$nonranked_judge[] = 0;
+				}
+				else {
+					$ranked_judge[] = 0;
+					$nonranked_judge[] = 1;
+				}
 			}
 			
 			else {
@@ -104,14 +127,11 @@ do {
 			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued);
 			
 			
+			$flights_display .= "</td>";
 		}
+		
 	}
 	
-	$table_location = "Y-".$row_tables_edit['tableLocation'];
-	$judge_info = judge_info($row_brewer['uid']);
-	$judge_info = explode("^",$judge_info);
-	$bjcp_rank = explode(",",$judge_info[5]);
-	$display_rank = bjcp_rank($bjcp_rank[0],1);	
 	
 	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
 	 
@@ -127,7 +147,7 @@ do {
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">";
 		
 		$output_datatables_body .= "<td nowrap>";
-		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>"; 
+		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>"; 
 		$output_datatables_body .= "</td>";
 		
 		if ($filter == "judges") { 
@@ -135,44 +155,65 @@ do {
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 			if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]); 
 			else $output_datatables_body .= "N/A";
+			if (!empty($judge_info[10])) $output_datatables_body .= "<br><strong>Judge&rsquo;s Notes to Organizers:</strong> <em>".$judge_info[10]."</em>";
 			$output_datatables_body .= "</td>";
 			$output_datatables_body .= "<td>".$judge_info[9]."</td>";
 			
 		}
 		
-		$at_table = at_table($row_brewer['uid'],$row_tables_edit['id']);
 		
-		// Build Available Modal
+		
 		$modal_rank = $bjcp_rank[0];
 		if (empty($modal_rank)) $modal_rank = "Novice";
-		if ((!$at_table) && (!$unavailable)) $output_available_modal_body .= "<tr><td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td><td class=\"small\">".$modal_rank."</td></tr>";
 		
-		$output_datatables_body .= "<td>".$flights_display;
-		if (!empty($judge_info[10])) $output_datatables_body .= "<br><strong>Judge&rsquo;s Notes to Organizers:</strong> <em>".$judge_info[10]."</em>";
-		$output_datatables_body .= "</td>";
+		$at_table = at_table($row_brewer['uid'],$row_tables_edit['id']);
+		
+		
+		// Build Assigned Modal
+		if (($at_table) && ($unavailable)) {
+			
+			$output_at_table_modal_body .= "<tr>";
+			$output_at_table_modal_body .= "<td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td>";
+			$output_at_table_modal_body .= "<td class=\"small\">".$modal_rank."</td>";
+			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[12]."</td>";
+			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[13]."</td>";
+			$output_at_table_modal_body .= "</tr>";
+			
+		}
+		
+		// Build Available Modal
+		if ((!$at_table) && (!$unavailable)) $output_available_modal_body .= "<tr><td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td><td class=\"small\">".$modal_rank."</td></tr>";
+
+		$output_datatables_body .= $flights_display;
 		$output_datatables_body .= "</tr>";
 		
 	}
-} while ($row_brewer = mysql_fetch_assoc($brewer)); 
+} while ($row_brewer = mysqli_fetch_assoc($brewer)); 
+if (is_array($ranked_judge)) $ranked = array_sum($ranked_judge); else $ranked = $ranked; 
+if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $nonranked = $nonranked; 
 ?>
 <div class="bcoem-admin-element hidden-print">
-	<div class="row">
-	<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
+	<div class="btn-group" role="group" aria-label="modals">
         <!-- Input Here -->
         <select class="selectpicker" name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)" data-width="auto">
         <option value="" disabled selected>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table...</option>
             <?php do { ?>
 				<option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
-    		<?php } while ($row_tables = mysql_fetch_assoc($tables)); ?>
+    		<?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
         </select>
-    
-    <div class="btn-group" role="group" aria-label="availModal">
+    </div>
+    <div class="btn-group" role="group" aria-label="modals">
+    		<?php if (!empty($output_available_modal_body)) { ?>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#availModal">
-              Available <span class="text-capitalize"><?php echo $filter; ?>
+              Available <span class="text-capitalize"><?php echo $filter; ?></span>
             </button>
-        </div>
-    </div>
-    </div>
+            <?php } ?>
+        	<?php if (!empty($output_at_table_modal_body)) { ?>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#atTableModal">
+              <span class="text-capitalize"><?php echo $filter; ?> Assigned to this Table</span>
+            </button>
+            <?php } ?>
+     </div>   
 </div>
 <p>Make sure you have <a href="<?php echo $base_url; ?>index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($_SESSION['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.</p>
 <?php if ($totalRows_judging > 1) { ?>
@@ -183,7 +224,10 @@ do {
 </ol>
 <?php } ?>
 
-<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table<?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> <small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
+<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> <small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
+<?php if ((!empty($output_at_table_modal_body)) && ($filter == "judges"))  { ?>
+<p>Currently, there are <?php echo $ranked; ?> ranked judges and <?php echo $nonranked; ?> non-ranked judges at this table.</p>
+<?php } ?>
 <p><strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>
 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
 <ul class="list-unstyled">
@@ -297,7 +341,63 @@ do {
         </div>
     </div>
 </div><!-- ./modal -->
+<?php } ?>
 
+<?php if (!empty($output_at_table_modal_body)) { ?>
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#sortable4').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			null,
+			null<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+			null,
+			null
+			<?php } ?>
+			
+							]
+		} );
+	} );
+</script>
+<!-- At Table Judges Modal -->
+<!-- Modal -->
+<div class="modal fade" id="atTableModal" tabindex="-1" role="dialog" aria-labelledby="atTableModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="atTableModalLabel"><span class="text-capitalize"><?php echo $filter; ?></span> Assigned to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> </h4>
+            </div>
+            <div class="modal-body">
+            	<?php if ($filter == "judges") { ?>
+                <p>There are <?php echo $ranked; ?> ranked judges and <?php echo $nonranked; ?> non-ranked judges at this table.</p>
+                <?php } ?>
+                <p>The following <?php echo $filter; ?> have been assigned to this table.</p>
+            	<table class="table table-responsive table-striped table-bordered table-condensed" id="sortable4">
+                <thead>
+                    <th>Name</th>
+                    <th>Rank</th>
+                    <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+                    <th>Flight</th>
+                    <th>Round</th>
+                    <?php } ?>
+                </thead>
+                <tbody>
+                    <?php echo $output_at_table_modal_body; ?>	
+                </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <?php } ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
 <table class="table table-responsive table-bordered table" id="sortable">
@@ -309,12 +409,13 @@ do {
 </tbody>
 </table>
 <p><input type="submit" class="btn btn-primary" name="Submit" value="Assign to Table <?php echo $row_tables_edit['tableNumber']; ?>" /></p>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$row_tables_edit['id']); if ($msg != "default") echo "&id=".$row_tables_edit['id']; ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php
-//mysql_free_result($styles);
-mysql_free_result($tables);
-mysql_free_result($tables_edit);
 } // end if ($row_rounds['flightRound'] != "")
 else { 
 	if ($_SESSION['jPrefsQueued'] == "N") "<p>Flights from this table have not been assigned to rounds yet. <a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds\">Assign flights to rounds?</a></p>"; 

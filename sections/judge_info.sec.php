@@ -73,7 +73,7 @@
   				<?php $endRow = 0;
   				}
 				}
-				} while ($row_styles = mysql_fetch_assoc($styles));
+				} while ($row_styles = mysqli_fetch_assoc($styles));
 				if ($endRow != 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");
@@ -105,7 +105,7 @@
   				<?php $endRow = 0;
   				}
 				}
-				} while ($row_styles2 = mysql_fetch_assoc($styles2));
+				} while ($row_styles2 = mysqli_fetch_assoc($styles2));
 				if ($endRow != 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");

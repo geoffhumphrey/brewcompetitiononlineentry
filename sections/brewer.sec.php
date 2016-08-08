@@ -5,8 +5,6 @@
  *              information - references the "brewer" database table.
  * 
  */
- 
-mysql_select_db($database, $brewing);
 
 if ($section != "step2") {
 	include(DB.'judging_locations.db.php');
@@ -51,14 +49,14 @@ else {
 if ($go != "admin") echo $info_msg;
 ?>
 <!-- Checking if correct page -->
-<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerFirstName-addon1"><span class="fa fa-user"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus>
+                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if ($psort == "default") echo "autofocus"; ?>>
                 <span class="input-group-addon" id="brewerFirstName-addon2"><span class="fa fa-star"></span></span>
             </div>
         </div>
@@ -75,6 +73,53 @@ if ($go != "admin") echo $info_msg;
             <span class="help-block">Please enter only <em>one</em> person&rsquo;s name. You will be able to identify a co-brewer when adding your entries.</span>
         </div>
     </div><!-- ./Form Group -->
+     <?php if (($go != "admin") && ($section != "step2")) { ?>
+    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group">
+				<!-- Input Here -->
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; else echo "CHECKED"; ?> required>
+						What is your favorite all-time beer to drink?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_1" value="What was the name of your first pet?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?> required>
+						What was the name of your first pet?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_2" value="What was the name of the street you grew up on?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?> required>
+						What was the name of the street you grew up on?
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="userQuestion" id="userQuestion_3" value="What was your high school mascot?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?> required>
+						What was your high school mascot?
+					</label>
+				</div>
+			</div>
+            <span class="help-block">Choose one. This question will be used to verify your identity should you forget your password.  <?php if ($action == "edit") { ?>You can also <a href="<?php echo $edit_user_password_link; ?>">change your password now</a> if you wish.<?php } ?></span>
+		</div>
+	</div><!-- ./Form Group -->
+	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question Answer</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="input-group has-warning">
+				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
+				<!-- Input Here -->
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" required>
+				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span></span>
+			</div>
+            <div class="help-block with-errors"></div>
+		</div>
+	</div><!-- ./Form Group -->
+    <?php } ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Street Address</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -86,8 +131,7 @@ if ($go != "admin") echo $info_msg;
             </div>
         </div>
     </div><!-- ./Form Group -->
-
-
+	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerCity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">City</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -121,7 +165,6 @@ if ($go != "admin") echo $info_msg;
         </div>
     </div><!-- ./Form Group -->
 
-
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
         <label for="brewerCountry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Country</label>
         <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12 has-warning">
@@ -133,7 +176,7 @@ if ($go != "admin") echo $info_msg;
         </select>
         </div>
     </div><!-- ./Form Group -->
-	<!-- Is phone number wrong? -->
+	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerPhone1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Phone 1</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -154,7 +197,6 @@ if ($go != "admin") echo $info_msg;
         </div>
     </div><!-- ./Form Group -->
     
-    
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
         <label for="brewerDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop Off Location</label>
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -162,7 +204,7 @@ if ($go != "admin") echo $info_msg;
         <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="auto">
         <?php do { ?>
             <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-        <?php } while ($row_dropoff = mysql_fetch_assoc($dropoff)); ?>
+        <?php } while ($row_dropoff = mysqli_fetch_assoc($dropoff)); ?>
             <option disabled="disabled">-------------</option>
     		<option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>>I'm Shipping My Entries</option>
         </select>
@@ -187,8 +229,6 @@ if ($go != "admin") echo $info_msg;
     </div><!-- ./Form Group -->
     
     <?php if (($go != "entrant") && ($section != "step2")) { ?>
-    
-    
         
         <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
             <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes To Organizer</label>
@@ -200,7 +240,7 @@ if ($go != "admin") echo $info_msg;
         </div><!-- ./Form Group -->
     <!-- Judging and Stewarding Preferences or Assignments -->
     
-		<?php if ($table_assignment) { ?>
+		<?php if (($table_assignment) && ($go != "admin")) { ?>
         <!-- Already assigned to a table, can't change preferences -->
         <input name="brewerJudge" type="hidden" value="<?php echo $row_brewer['brewerJudge']; ?>" />
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
@@ -210,10 +250,7 @@ if ($go != "admin") echo $info_msg;
         <input name="brewerJudgeLikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeLikes']; ?>" />
         <input name="brewerJudgeDislikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeDislikes']; ?>" />
         <input name="brewerSteward" type="hidden" value="<?php echo $row_brewer['brewerSteward']; ?>" />
-        <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
-        
-        
-        
+        <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />        
         <?php } // end if ($table_assignment) 
 		else { ?>
         <!-- Judging preferences -->
@@ -244,12 +281,11 @@ if ($go != "admin") echo $info_msg;
                 <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
             </select>
             
-            <?php }  while ($row_judging3 = mysql_fetch_assoc($judging3)); ?> 
+            <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?> 
             </div>
         </div><!-- ./Form Group -->
         <?php }
-		else {	?>
-        
+		else {	?>        
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <?php } ?>
@@ -257,7 +293,7 @@ if ($go != "admin") echo $info_msg;
             <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP ID</label>
             <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 <!-- Input Here -->
-                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="">
+                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
             </div>
         </div><!-- ./Form Group -->
         
@@ -368,16 +404,13 @@ if ($go != "admin") echo $info_msg;
                     </div>
                     <div class="checkbox">
                         <label>
-                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>>Judge with Sensory Training
+                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>> Judge with Sensory Training
                         </label>
                     </div>
                  </div>
                 <span class="help-block">Only the first two checked will appear on your Judge Scoresheet Labels</span>
             </div>
         </div><!-- ./Form Group -->
-        
-        
-        
         <div class="form-group"><!-- Form Group REQUIRED Select -->
             <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competitions Judged</label>
             <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -392,40 +425,57 @@ if ($go != "admin") echo $info_msg;
             </div>
             
         </div><!-- ./Form Group -->
-        
-        <div class="form-group"><!-- Form Group Checkbox  -->
-            <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
-            
-            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-            <p><strong class="text-danger">For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it – there's no need to check all that your available to judge.</p>
-            	<!-- <div class="row"> -->
-                <?php do { ?>
-                	<div class="checkbox">
-                        <label>
-                        	<input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
-                    	</label>
-                    </div>
+        <div class="form-group">
+        <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref">Specify Preferred Styles to Judge</button>
+        			<span class="help-block">Click the button to expand the preferred styles to judge list.</span>
+                </div>
                 
-                <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
-               	<!-- </div> -->
-            </div>
-        </div><!-- ./Form Group -->
-        <div class="form-group"><!-- Form Group Checkbox  -->
-            <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Non Preferred Styles</label>
-            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-            	<p><strong class="text-danger">There is no need to mark those styles for which you have entries</strong>; the system will not allow you to be assigned to any table where you have entries.</p>
-                <!-- <div class="row"> -->
-                <?php do { ?>
-                <!-- Input Here -->
-                    <div class="checkbox">
-                        <label>
-                        	<input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
-                    	</label>
-                    </div>
-                <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>
-               	<!-- </div> -->
-            </div>
-        </div><!-- ./Form Group -->
+        </div><!-- ./Form Group --> 
+        <div class="collapse" id="collapsePref">
+          	<div class="form-group"><!-- Form Group Checkbox  -->
+                <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Preferred Styles</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                <p><strong class="text-danger">For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it – there's no need to check all that your available to judge.</p>
+                    
+                    <?php do { ?>
+                        <div class="checkbox">
+                            <label>
+                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
+                            </label>
+                        </div>
+                    
+                    <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+                    
+                </div>
+            </div><!-- ./Form Group --> 
+        </div>
+        <div class="form-group">
+        <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseNonPref" aria-expanded="false" aria-controls="collapseNonPref">Specify Non-Preferred Styles to Judge</button>
+                    <span class="help-block">Click the button to expand the non-preferred styles to judge list.</span>
+                </div>
+        </div><!-- ./Form Group --> 
+ 		<div class="collapse" id="collapseNonPref">
+          	<div class="form-group"><!-- Form Group Checkbox  -->
+                <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Non Preferred Styles</label>
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                    <p><strong class="text-danger">There is no need to mark those styles for which you have entries</strong>; the system will not allow you to be assigned to any table where you have entries.</p>
+                    <!-- <div class="row"> -->
+                    <?php do { ?>
+                    <!-- Input Here -->
+                        <div class="checkbox">
+                            <label>
+                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
+                            </label>
+                        </div>
+                    <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
+                    <!-- </div> -->
+                </div>
+            </div><!-- ./Form Group -->
+        </div>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
@@ -454,11 +504,25 @@ if ($go != "admin") echo $info_msg;
                 <option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
             </select>
             
-            <?php }  while ($row_stewarding = mysql_fetch_assoc($stewarding));  ?> 
+            <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?> 
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>
-        
+        <?php if (($go != "entrant") &&  (($row_brewer['brewerJudge'] == "Y") || ($row_brewer['brewerSteward'] == "Y"))) { ?>
+    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+		<label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Waiver</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<div class="checkbox">
+				<!-- Input Here -->
+                <p>My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.</p>
+				<label>
+					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked required />By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.
+				</label>
+			</div>
+            <div class="help-block with-errors"></div>
+		</div>
+	</div><!-- ./Form Group -->
+    <?php } ?>
         <?php } ?>
     <?php } // end if (($go != "entrant") && ($section != "step2")) ?>
    
@@ -492,15 +556,21 @@ else {
 }
 
 ?>
-<?php if ($go == "admin") { ?>
-	<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id,"yes"); ?>">
+<?php if ($go == "admin") { 
+
+?>
+	<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
+    <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+    <?php } else { ?>
+    <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=participants","default",$msg,$id); ?>">
+    <?php } ?>
 <?php } else { ?>
     <input type="hidden" name="relocate" value="<?php echo $base_url; ?>index.php?section=list">
 <?php } ?>
 <div class="form-group">
     <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
         <!-- Input Here -->
-        <button name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?></span> </button>
+        <button name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?> </button>
     </div>
 </div><!-- Form Group -->
 </form>

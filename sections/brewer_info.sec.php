@@ -122,6 +122,7 @@ $table_head2 = "";
 $table_body2 = "";
 $table_head3 = "";
 $table_body3 = "";
+$brewer_assignment = "";
 
 // Page specific variables
 $user_edit_links = "";
@@ -130,6 +131,13 @@ $email = "";
 $phone = "";
 $discount = "";
 $aha_number = "";
+$judgeLikes = "";
+$exploder = "";
+$judgeLikesDisplay = "";
+$judgeLikesModals = "";
+$judgeDislikesDisplay = "";
+$judgeDislikesModals = "";
+
 
 // Build useful variables
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
@@ -144,20 +152,26 @@ else $assignment = "";
 
 // Build header
 $header1_1 .= "<h2>Info</h2>";
-
 // Build primary page info (thank you message)
-$primary_page_info .= sprintf("<p class=\"lead\">Thank you for entering the %s, %s. <small>Your account details are listed below.</small></p>",$_SESSION['contestName'],$_SESSION['brewerFirstName']); 
-if ($totalRows_log > 0) $primary_page_info .= "<p class=\"lead hidden-print\"><small>Take a moment to <a href=\"#entries\">review your entries</a> or <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">pay your entry fees</a>.</small></p>";	
-	
-	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
-	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_info_link."\"><span class=\"fa fa-user\"></span> Edit Account</a>";
-	if (!NHC) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> Change Email</a>";
-	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-key\"></span> Change Password</a>";
-	$user_edit_links .= "</div><!-- ./button group --> ";
-	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
-	if (($entry_window_open == "1") && (!$comp_entry_limit)) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
+$primary_page_info .= sprintf("<p class=\"lead\">Thank you for entering the %s, %s. <small>Your account details were last updated %s.</small></p>",$_SESSION['contestName'],$_SESSION['brewerFirstName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($_SESSION['userCreated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt")); 
+
+if ($totalRows_log > 0) { 
+	$primary_page_info .= "<p class=\"lead hidden-print\"><small>Take a moment to <a href=\"#entries\">review your entries</a>"; 
+	if (!$disable_pay) $primary_page_info .= " or <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">pay your entry fees</a>";
+	$primary_page_info .= ".</small></p>";	
+}
+
+$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
+$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_info_link."\"><span class=\"fa fa-user\"></span> Edit Account</a>";
+if (!NHC) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> Change Email</a>";
+$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-key\"></span> Change Password</a>";
+$user_edit_links .= "</div><!-- ./button group --> ";
+$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
+if ($add_entry_link_show) { 
+	$user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> Add an Entry</a>";
 	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= "<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> Add an Entry Using BeerXML</a>";
-	$user_edit_links .= "</div><!-- ./button group -->";
+}
+$user_edit_links .= "</div><!-- ./button group -->";
 	
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];
@@ -186,7 +200,6 @@ if (!empty($_SESSION['brewerAHA'])) {
 // Build Judge Info Display
 
 	$judge_info = "";
-	echo $a;
 	$a = explode(",",$_SESSION['brewerJudgeLocation']);
 	arsort($a);
 	foreach ($a as $value) {
@@ -224,7 +237,6 @@ $steward_info = "";
 				$judging_location_info = judging_location_info($b);
 				$judging_location_info = explode("^",$judging_location_info);
 				
-				
 					if ($judging_location_info[0] > 0) {
 						$steward_info .= "<tr>\n";
 						$steward_info .= "<td>";
@@ -246,6 +258,24 @@ else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION[
 
 if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+
+	if ($_SESSION['brewerJudgeLikes'] != "") {
+		$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
+		$exploder = explode("|",$judgeLikes);
+		$judgeLikesDisplay = $exploder[0];
+		$judgeLikesModals = $exploder[1];
+		
+	} 
+	else $judgeLikesDisplay = "N/A";
+	
+	if ($_SESSION['brewerJudgeDislikes'] != "") {
+		$judgeDislikes = style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url);
+		$exploder = explode("|",$judgeDislikes);
+		$judgeDislikesDisplay = $exploder[0];
+		$judgeDislikesModals = $exploder[1];
+		
+	} 
+	else $judgeDislikesDisplay = "N/A";
 
 // Build User Info table body
 
@@ -283,19 +313,29 @@ $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Phon
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$phone."</div>";
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Security Question</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$_SESSION['userQuestion']."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Security Question Answer</strong></div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$_SESSION['userQuestionAnswer']."</div>";
+$table_body1 .= "</div>";
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>AHA Number</strong></div>";
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\"><a href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.\" data-placement=\"right\">".$aha_number."</a></div>";
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Drop Off Location</strong></div>";
-$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".dropoff_location($_SESSION['brewerDropOff'])."</div>";
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".dropoff_location($_SESSION['brewerDropOff']);
+if ($_SESSION['brewerDropOff'] == 0) $table_body1 .= "<br><a id=\"modal_window_link\" data-toggle=\"tooltip\" title=\"Print shipping labels to attach to your box(es) of bottles\" href =\"".$base_url."output/print.output.php?section=shipping-label\">Print Shipping Labels</a>"; 
+$table_body1 .= "</div>";
 $table_body1 .= "</div>";
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Club</strong></div>";
 $table_body1 .=  "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$club."</div>";
 $table_body1 .= "</div>";
 
-if ($row_brewer['brewerJudgeNotes'] != "") { 
+if (($row_brewer['brewerJudgeNotes'] != "") && (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y"))) {  
 $table_body1 .= "<div class=\"row bcoem-account-info\">";
 $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Notes to Organizers</strong></div>";
 $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
@@ -321,6 +361,15 @@ if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) $table_body1 .= 
 else $table_body1 .= "None entered";
 $table_body1 .= "</div>";
 $table_body1 .= "</div>";
+if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Signed Waiver?</strong></div>";
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+	if (!empty($row_brewer['brewerJudgeWaiver'])) $table_body1 .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url); 
+	else $table_body1 .= "None entered";
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+}
 
 if (!empty($assignment)) {
 	
@@ -332,7 +381,7 @@ if (!empty($assignment)) {
 }
 
 
-if (in_array("Judge",$assignment_array)) { 
+if (in_array("Judge",$assignment_array) && ($_SESSION['brewerJudge'] == "Y")) { 
 	$table_body1 .= "<div class=\"row bcoem-account-info hidden-print\">";
     $table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>&nbsp;</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">Print your judging scoresheet labels: <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">Letter</a> or <a href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>";
@@ -373,14 +422,14 @@ if ($_SESSION['brewerJudge'] == "Y") {
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
 	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Preferred</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-    if ($_SESSION['brewerJudgeLikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeLikes'],4,$base_url); else $table_body1 .= "N/A";	
+	$table_body1 .= $judgeLikesDisplay;
     $table_body1 .= "</div>";
 	$table_body1 .= "</div>";
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
 	$table_body1 .= "<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>Non-Preferred</strong></div>";
     $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-    if ($_SESSION['brewerJudgeDislikes'] != "") $table_body1 .= style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url); else $table_body1 .= "N/A";		
-    $table_body1 .= "</div>";
+    $table_body1 .= $judgeDislikesDisplay;
+	$table_body1 .= "</div>";
 	$table_body1 .= "</div>";
 
 	if (!empty($judge_info)) {
@@ -507,14 +556,24 @@ if ($_SESSION['brewerSteward'] == "Y") {
 // --------------------------------------------------------------
 
 // Display primary page info and subhead
+$judgeLikesModals = explode("^",$judgeLikesModals);
+$judgeDislikesModals = explode("^",$judgeDislikesModals);
+
+foreach ($judgeLikesModals as $judgeLikesModalDisplay) {
+	echo $judgeLikesModalDisplay;
+}
+
+
+foreach ($judgeDislikesModals as $judgeDislikesModalDisplay) {
+	echo $judgeDislikesModalDisplay;
+}
+
 echo $primary_page_info;
 // Display User Edit Links
 echo "<div class=\"bcoem-account-info\">";
 echo $user_edit_links; 
 echo "</div>";
 echo $header1_1;
-
-
 
 ?>
 <!-- Display User Info -->

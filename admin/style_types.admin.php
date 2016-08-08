@@ -58,19 +58,19 @@
 <tbody>
 	<?php do { ?>
 	<tr>
-    	<td><?php echo $row_style_type['styleTypeName']; ?></td>
-        <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<span class=\"fa fa-check text-success\"></span>"; else echo "<span class=\"fa fa-times text-danger\"></span>"; ?></td>
+    	<td><?php echo $row_style_type['styleTypeName']; if ($row_style_type['styleTypeOwn']  == "custom") echo " (Custom Style Type)"; ?></td>
+        <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<span class=\"fa fa-lg fa-check text-success\"></span>"; else echo "<span class=\"fa fa-lg fa-times text-danger\"></span>"; ?></td>
         <td class="data"><?php echo bos_method($row_style_type['styleTypeBOSMethod']); ?></td>
         <td class="data">
-  		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"><span class="fa fa-pencil"></a> 
+  		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"><span class="fa fa-lg fa-pencil"></a> 
 		<?php if ($row_style_type['styleTypeOwn'] != "bcoe") { ?>
-		<a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_style_type['styleTypeName']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone."><span class="fa fa-trash-o"></a>
+		<a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_style_type['styleTypeName']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></a>
   		<?php } else { ?>
- 		<span class="fa fa-trash-o text-muted"></span>
+ 		<span class="fa fa-lg fa-trash-o text-muted"></span>
   		<?php } ?>
         </td>
     </tr>
-    <?php } while ($row_style_type = mysql_fetch_assoc($style_type)); ?>
+    <?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 </tbody>
 </table>
 <?php } // END if ($action == "default")?>
@@ -136,6 +136,10 @@
 	</div>
 </div>
 <input type="hidden" name="styleTypeOwn" value="<?php if ($action == "add") echo "custom"; else echo $row_style_type['styleTypeOwn']; ?>">
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=style_types","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } // END if (($action == "add") || ($action == "edit")) ?>

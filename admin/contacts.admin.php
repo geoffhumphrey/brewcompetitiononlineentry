@@ -54,12 +54,12 @@
   <td><?php echo $row_contact['contactPosition']; ?></td>
   <td><?php echo $row_contact['contactEmail']; ?></td>
   <td>
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>&rsquo;s contact information"><span class="fa fa-pencil"></span></a> <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']; ?> as a contact? This cannot be undone."><span class="fa fa-trash-o"></span></a>
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>&rsquo;s contact information"><span class="fa fa-lg fa-pencil"></span></a> <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']; ?> as a contact? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
   
   <!--<img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span>
   --></td>
  </tr>
-  <?php } while($row_contact = mysql_fetch_assoc($contact)) ?>
+  <?php } while($row_contact = mysqli_fetch_assoc($contact)) ?>
 </tbody>
 </table>
 <?php } } else { ?>
@@ -114,7 +114,7 @@
 		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site's <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>
 	</div>
 </div><!-- ./Form Group -->
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=contacts","default",$msg,$id); ?>">
 </div>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">

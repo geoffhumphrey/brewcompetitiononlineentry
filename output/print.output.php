@@ -19,11 +19,11 @@ if (isset($_SESSION['loginUsername'])) {
         
     <!-- Load Bootstrap and jQuery -->
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/print.min.css">
     
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,14 +31,14 @@ if (isset($_SESSION['loginUsername'])) {
     
     <!-- Load DataTables -->
     <!-- Homepage URL: https://www.datatables.net -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
-	<script type="text/javascript" src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
+	<script type="text/javascript" src="//cdn.datatables.net/1.10.8/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
     
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         
   	</head>
 	<body>    
@@ -62,6 +62,7 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 		
 		if ($section == "styles") 			include (OUTPUT.'styles.output.php'); 
+		if ($section == "shipping-label")	include (OUTPUT.'shipping_label.output.php'); 
 		
 		if ($section == "admin") {
 			include(LIB.'admin.lib.php');

@@ -76,20 +76,20 @@
       <td width="20%"><?php echo $row_sbi['sbi_name']; ?></td>
       <td><?php echo $row_sbi['sbi_description']; ?></td>
       <td><?php echo $row_sbi['sbi_places']; ?></td>
-      <td><?php if ($row_sbi['sbi_display_places'] == 1) echo "<span class=\"fa fa-check text-success\"></span>"; else echo "<span class=\"fa fa-times text-danger\"></span>" ?></td>
+      <td><?php if ($row_sbi['sbi_display_places'] == 1) echo "<span class=\"fa fa-lg fa-check text-success\"></span>"; else echo "<span class=\"fa fa-lg fa-times text-danger\"></span>" ?></td>
       <td><?php echo $row_sbi['sbi_rank']; ?></td>
       <td>
-      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-pencil"></span></a> 
-	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a> 
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
+	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-lg fa-trash-o"></span></a> 
 	  <?php if ($sbd_count > 0) { ?>
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-pencil-square-o"></span></a> 
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil-square-o"></span></a> 
 	  <?php } else { ?>
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-plus-circle-sign"></span></a>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-plus-circle-sign"></span></a>
 	  <?php } ?>
 	  
       </td>
      </tr>
-    <?php } while($row_sbi = mysql_fetch_assoc($sbi)) ?>
+    <?php } while($row_sbi = mysqli_fetch_assoc($sbi)) ?>
      </tbody>
     </table>
 <?php } if (($totalRows_sbi == 0) && ($action == "default")) echo "<p>No custom categories were found in the database.</p>"; ?>
@@ -144,7 +144,7 @@
 	<label for="sbi_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rank</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
-	<select class="selectpicker" data-width="auto"  name="sbi_rank" id="sbi_rank" data-size="10" data-width="auto">
+	<select class="selectpicker" name="sbi_rank" id="sbi_rank" data-size="10" data-width="auto">
 		<?php for($i=1; $i<=20; $i++) { ?>
 		<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>
@@ -160,7 +160,10 @@
 		</div>
 	</div>
 </div>
-
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=special_best","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } ?>

@@ -49,9 +49,11 @@ include(DB.'entries.db.php');
 
 $primary_page_info = "";
 $header1_1 = "";
+$header1_3 = "";
 $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
+$page_info3 = "";
 
 // Header
 $header1_1 .= sprintf("<h2>Thanks and Good Luck To All Who Entered the %s!</h2>",$_SESSION['contestName']);
@@ -61,7 +63,8 @@ else {
 	$page_info1 .= sprintf("<p>As of %s, there are <strong class=\"text-success\">%s</strong> received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).</p>",$current_time, get_entry_count('received'));
 }
 
-
+$header1_3 .= "<a name='rules'></a><h2>Rules</h2>";
+$page_info3 .= $row_contest_rules['contestRules'];
 
 if ($totalRows_judging > 1) $header1_2 .= "<h2>Judging Locations/Dates</h2>";
 else $header1_2 .= "<h2>Judging Location/Date</h2>";
@@ -70,15 +73,17 @@ else {
 	do {
 		$page_info2 .= "<p>";
 		if ($row_judging['judgingLocName'] != "") $page_info2 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-		if ($row_judging['judgingLocation'] != "") $page_info2 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-map-marker\"></span>";
+		if ($row_judging['judgingLocation'] != "") $page_info2 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
 		else $page_info2 .= $row_judging['judgingLocName'];
 		if ($row_judging['judgingDate'] != "") $page_info2 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 		$page_info2 .= "</p>";
-	} while ($row_judging = mysql_fetch_assoc($judging));
+	} while ($row_judging = mysqli_fetch_assoc($judging));
 }
 
 echo $header1_1;
 echo $page_info1;
+echo $header1_3;
+echo $page_info3;
 echo $header1_2;
 echo $page_info2;
 

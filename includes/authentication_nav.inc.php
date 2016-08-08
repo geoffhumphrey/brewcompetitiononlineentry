@@ -1,4 +1,9 @@
 <?php
+/*
+Checked Single
+2016-06-06
+*/
+
 $username = strtolower($username);
 function authenticateUserNav($connection, $username, $password)
 {
@@ -10,24 +15,11 @@ function authenticateUserNav($connection, $username, $password)
   	if (!isset($username) || !isset($password))
     return false;
 	
-	if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-	}
-	// end if (NHC)
-	
-	else {
-	
-		$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";	
-	
-	}
-  	
-  	// Execute the query
-  	if (!$result = @ mysql_query ($query, $connection)) 
-    showerror();
+	mysqli_select_db($connection,$database);
+	$query = "SELECT password FROM $users_db_table WHERE user_name = '{$username}' AND password = '{$password}'";	
+  	if (!$result = @ mysqli_query($connection,$query)) showerror();
   	// Is the returned result exactly one row? If so, then we have found the user
-  	if (mysql_num_rows($result) != 1)
+  	if (mysqli_num_rows($result) != 1)
     return false;
   	else
     return true;

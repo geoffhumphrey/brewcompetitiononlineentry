@@ -77,7 +77,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
         <td class="data bdr1B_gray"><?php echo $row_assignments['assignFlight']; ?></td>
 		<?php } ?>
     </tr>
-    <?php } while ($row_assignments = mysql_fetch_assoc($assignments)); ?>
+    <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
     <?php } else { echo "<p class=\"lead\">No "; if ($filter == "S") echo "steward "; else echo "judge "; echo "assignments have been made.</p>"; } ?>   
@@ -93,6 +93,14 @@ if ($totalRows_brewer > 0) { ?>
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				<?php if ($filter == "J") { ?>
+				{ "asSorting": [  ] },
+				<?php } ?>
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				]
 			} );
 		} );
 	</script>
@@ -106,10 +114,10 @@ if ($totalRows_brewer > 0) { ?>
     <thead>
     <tr>
     	<th width="30%">Name</th>
-        <th width="20%">Judge ID</th>
         <?php if ($filter == "J") { ?>
-        <th width="10%">Signed Waiver?</th>
+        <th width="20%">Judge ID</th>
         <?php } ?>
+        <th width="10%">Signed Waiver?</th>
         <th>Signature</th>
     </tr>
     </thead>
@@ -119,11 +127,11 @@ if ($totalRows_brewer > 0) { ?>
     	<td nowrap="nowrap"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
         <?php if ($filter == "J") { ?>
     	<td><?php echo strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace)); ?></td>
-        <td>Yes / No</td>
         <?php } ?>
+        <td><?php if ($row_brewer['brewerJudgeWaiver'] == "Y") echo "Yes"; else echo "No"; ?></td>
         <td>&nbsp;</td>
     </tr>
-    <?php } while ($row_brewer = mysql_fetch_assoc($brewer));	?>
+    <?php } while ($row_brewer = mysqli_fetch_assoc($brewer));	?>
     </tbody>
     </table>
     <div style="page-break-after:always;"></div>
@@ -146,8 +154,8 @@ if ($totalRows_brewer > 0) { ?>
 				{ "asSorting": [  ] },
 				<?php if ($filter == "J") { ?>
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				<?php } ?>
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -160,8 +168,8 @@ if ($totalRows_brewer > 0) { ?>
     	<th class="dataHeading bdr1B" width="30%">Name</th>
         <?php if ($filter == "J") { ?>
         <th class="dataHeading bdr1B" width="20%">Judge ID</th>
-        <th class="dataHeading bdr1B" width="10%">Signed Waiver?</th>
         <?php } ?>
+        <th class="dataHeading bdr1B" width="10%">Signed Waiver?</th>
         <th class="dataHeading bdr1B">Signature</th>
     </tr>
     </thead>
@@ -171,8 +179,8 @@ if ($totalRows_brewer > 0) { ?>
     	<td nowrap="nowrap" width="30%"></td>
         <?php if ($filter == "J") { ?>
     	<td width="20%">&nbsp;</td>
-        <td width="10%">Yes / No</td>
         <?php } ?>
+        <td width="10%">Yes / No</td>
         <td>&nbsp;</td>
     </tr>
 	<?php } ?>

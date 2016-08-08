@@ -44,135 +44,137 @@ Declare all variables empty at the top of the script. Add on later...
 	etc., etc., etc.
 
  * ---------------- END Rebuild Info --------------------- */
- 
 
-
-do { 
-$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-
-if ($entry_count > 0) { 
+if ($row_scored_entries['count'] > 0) {
 	
-	if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
+	do { 
+	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+	
+	if ($entry_count > 0) { 
 		
-		if (score_count($row_tables['id'],"1"))	{
+		if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
 			
-			$primary_page_info = "";
-			$header1_1 = "";
-			$page_info1 = "";
-			$header1_2 = "";
-			$page_info2 = "";
-		
-			$table_head1 = "";
-			$table_body1 = "";
-			
-			// Build page headers
-			$header1_1 .= "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3>";
-			$header1_2 .= "<div class=\"bcoem-winner-table\"><h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p></div>";
-			
-			// Build table headers
-			$table_head1 .= "<tr>";
-			$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
-			$table_head1 .= "<th>Brewer(s)</th>";
-			$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
-			$table_head1 .= "<th>Style</th>";
-			$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-			if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
-			$table_head1 .= "</tr>";
-			
-			// Build table body
-			include(DB.'scores.db.php');
-			
-			do { 
-				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+			if (score_count($row_tables['id'],"1"))	{
 				
-				$table_body1 .= "<tr>";
+				$primary_page_info = "";
+				$header1_1 = "";
+				$page_info1 = "";
+				$header1_2 = "";
+				$page_info2 = "";
+			
+				$table_head1 = "";
+				$table_body1 = "";
 				
-				if ($action == "print") { 
+				// Build page headers
+				$header1_1 .= "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3>";
+				$header1_2 .= "<div class=\"bcoem-winner-table\"><h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p></div>";
+				
+				// Build table headers
+				$table_head1 .= "<tr>";
+				$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
+				$table_head1 .= "<th width=\"24%\">Brewer(s)</th>";
+				$table_head1 .= "<th width=\"24%\"><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
+				$table_head1 .= "<th width=\"24%\">Style</th>";
+				$table_head1 .= "<th width=\"24%\" class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
+				if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
+				$table_head1 .= "</tr>";
+				
+				// Build table body
+				include(DB.'scores.db.php');
+				
+				do { 
+					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					
+					$table_body1 .= "<tr>";
+					
+					if ($action == "print") { 
+						$table_body1 .= "<td nowrap>";
+						$table_body1 .= display_place($row_scores['scorePlace'],1);
+						$table_body1 .= "</td>";
+					}
+					
+					else {
+						$table_body1 .= "<td nowrap>";
+						$table_body1 .= display_place($row_scores['scorePlace'],2);
+						$table_body1 .= "</td>";
+					}
+					
 					$table_body1 .= "<td>";
-					$table_body1 .= display_place($row_scores['scorePlace'],1);
+					$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+					if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 					$table_body1 .= "</td>";
-				}
-				
-				else {
+					
 					$table_body1 .= "<td>";
-					$table_body1 .= display_place($row_scores['scorePlace'],2);
+					$table_body1 .= $row_scores['brewName'];
 					$table_body1 .= "</td>";
-				}
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-				if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $row_scores['brewName'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $style.": ".$row_scores['brewStyle'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-				$table_body1 .= $row_scores['brewerClubs'];
-				$table_body1 .= "</td>";
-				
-				if ($filter == "scores") { 
+					
+					$table_body1 .= "<td>";
+					$table_body1 .= $style.": ".$row_scores['brewStyle'];
+					$table_body1 .= "</td>";
+					
 					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-					$table_body1 .= $row_scores['scoreEntry'];
+					$table_body1 .= $row_scores['brewerClubs'];
 					$table_body1 .= "</td>";
-				}
-				
-				$table_body1 .= "</tr>";
-				
-			 } while ($row_scores = mysql_fetch_assoc($scores));
-
-
-
-$random1 = "";	
-$random1 .= random_generator(12,1);
-
-
-// --------------------------------------------------------------
-// Display
-// --------------------------------------------------------------
-?>
-<script type="text/javascript" language="javascript">
- $(document).ready(function() {
-	$('#sortable<?php echo $random1; ?>').dataTable( {
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
-		"bProcessing" : false,
-		"aoColumns": [
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
-			{ "asSorting": [  ] }
-			<?php } ?>
-			]
+					
+					if ($filter == "scores") { 
+						$table_body1 .= "<td>";
+						$table_body1 .= $row_scores['scoreEntry'];
+						$table_body1 .= "</td>";
+					}
+					
+					$table_body1 .= "</tr>";
+					
+				 } while ($row_scores = mysqli_fetch_assoc($scores));
+	
+	
+	
+	$random1 = "";	
+	$random1 .= random_generator(12,1);
+	
+	
+	// --------------------------------------------------------------
+	// Display
+	// --------------------------------------------------------------
+	?>
+	<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $random1; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
+				{ "asSorting": [  ] }
+				<?php } ?>
+				]
+			} );
 		} );
-	} );
-</script>
-<div class="bcoem-winner-table">
-	<?php echo $header1_1; ?>
-    <table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
-    <thead>
-        <?php echo $table_head1; ?>
-    </thead>
-    <tbody>
-        <?php echo $table_body1; ?>
-    </tbody>
-    </table>
-</div>
-<?php 
-		} else echo $header1_2;
-	} // end if ($entry_count > 0);
-} while ($row_tables = mysql_fetch_assoc($tables));
+	</script>
+	<div class="bcoem-winner-table">
+		<?php echo $header1_1; ?>
+		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
+		<thead>
+			<?php echo $table_head1; ?>
+		</thead>
+		<tbody>
+			<?php echo $table_body1; ?>
+		</tbody>
+		</table>
+	</div>
+	<?php 
+			} else echo $header1_2;
+		} // end if ($entry_count > 0);
+	} while ($row_tables = mysqli_fetch_assoc($tables));
+}
 
+else echo "<p>Winning entries have not been posted yet. Please check back later.</p>";
 ?>
 
 <!-- Public Page Rebuild completed 08.26.15 --> 

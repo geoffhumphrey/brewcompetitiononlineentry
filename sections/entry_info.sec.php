@@ -45,7 +45,6 @@ Declare all variables empty at the top of the script. Add on later...
 
  
 include(DB.'dropoff.db.php');
-
 include(DB.'judging_locations.db.php');
 include(DB.'styles.db.php');
 include(DB.'entry_info.db.php');
@@ -187,11 +186,11 @@ else {
 	do {
 		$page_info7 .= "<p>";
 		if ($row_judging['judgingLocName'] != "") $page_info7 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-		if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-map-marker\"></span>";
+		if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
 		else $page_info7 .= $row_judging['judgingLocName'];
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 		$page_info7 .= "</p>";
-	} while ($row_judging = mysql_fetch_assoc($judging));
+	} while ($row_judging = mysqli_fetch_assoc($judging));
 }
 
 
@@ -219,7 +218,7 @@ do {
 	$styles_endRow++;
 	if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
 		
-} while ($row_styles = mysql_fetch_assoc($styles));
+} while ($row_styles = mysqli_fetch_assoc($styles));
 
 if ($styles_endRow != 0) {
 		while ($styles_endRow < $styles_columns) {
@@ -232,14 +231,16 @@ if ($styles_endRow != 0) {
 
 $page_info8 .= "</table>";
 
+// Show bottle acceptance, shipping location, and dropoff locations if open
+
 // Bottle Acceptance
-if (($row_contest_info['contestBottles'] != "") && ($entry_window_open < 2)) {
-	$header1_9 .= "<a name=\"bottle\"></a><h2>Bottle Acceptance Rules</h2>";
+if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
+	$header1_9 .= "<a name=\"bottle\"></a><h2>Entry Acceptance Rules</h2>";
 	$page_info9 .= $row_contest_info['contestBottles'];
 }
 
 // Shipping Locations
-if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
+if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) {
 	$header1_10 .= "<a name=\"shipping\"></a><h2>Shipping Info</h2>";
 	$page_info10 .= sprintf("<p>Entry bottles accepted at our shipping location from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$shipping_open,$shipping_closed);
 	$page_info10 .= "<p>Ship entries to:</p>";
@@ -257,49 +258,50 @@ if (($_SESSION['contestShippingAddress'] != "") && ($entry_window_open < 2)) {
 }
 
 // Drop Off
-if (($totalRows_dropoff > 0) && ($entry_window_open < 2)) {
+if (($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) {
 	if ($totalRows_dropoff == 1) $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Location</h2>";
 	else $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Locations</h2>";
 	$page_info11 .= sprintf("<p>Entry bottles accepted at our drop-off locations from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$dropoff_open,$dropoff_closed);
 	
 	do {
+		
 		$page_info11 .= "<p>";
-		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Go to the ".$row_dropoff['dropLocationName']." website\"><strong>%s</strong></a> <span class=\"fa fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$row_dropoff['dropLocationName']);
+		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Go to the ".$row_dropoff['dropLocationName']." website\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$row_dropoff['dropLocationName']);
 		else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 		$page_info11 .= "<br />";
-		$page_info11 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-map-marker\"></span>";
+		$page_info11 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
 		$page_info11 .= "<br />";
 		$page_info11 .= $row_dropoff['dropLocationPhone'];
 		$page_info11 .= "<br />";
 		if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
 		$page_info11 .= "</p>";
-	 } while ($row_dropoff = mysql_fetch_assoc($dropoff));
+	 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 }
 
 // Best of Show
-if ($row_contest_info['contestBOSAward'] != "") {
+if (isset($row_contest_info['contestBOSAward'])) {
 	$header1_12 .= "<a name=\"bos\"></a><h2>Best of Show</h2>";
 	$page_info12 .= $row_contest_info['contestBOSAward'];;
 }
 
 // Awards and Awards Ceremony Location
-if ($row_contest_info['contestAwards'] != "") {
+if (isset($row_contest_info['contestAwards'])) {
 	$header1_13 .= "<a name=\"awards\"></a><h2>Awards</h2>";
 	$page_info13 .= $row_contest_info['contestAwards'];;
 }
 
-if ($_SESSION['contestAwardsLocName'] != "") {
+if (isset($_SESSION['contestAwardsLocName'])) {
 	$header1_14 .= "<a name=\"ceremony\"></a><h2>Award Ceremony</h2>";
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
-	if ($_SESSION['contestAwardsLocation'] != "") $page_info14 .= sprintf("<br /><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $_SESSION['contestAwardsLocation'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\">%s</a> <span class=\"fa fa-map-marker\"></span>",$_SESSION['contestAwardsLocation']);
+	if ($_SESSION['contestAwardsLocation'] != "") $page_info14 .= sprintf("<br /><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $_SESSION['contestAwardsLocation'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\">%s</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$_SESSION['contestAwardsLocation']);
 	if ($_SESSION['contestAwardsLocTime'] != "") $page_info14 .= sprintf("<br />%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 	$page_info14 .= "</p>";
 	
 }
 
 // Circuit Qualification
-if ($row_contest_info['contestCircuit'] != "") {
+if (isset($row_contest_info['contestCircuit'])) {
 	$header1_15 .= "<a name=\"circuit\"></a><h2>Circuit Qualification</h2>";
 	$page_info15 .= $row_contest_info['contestCircuit'];
 }
@@ -337,7 +339,7 @@ echo $page_info16;
 echo $header1_6;
 echo $page_info6;
 
-// Display Bottle Acceptance Rules
+// Display Entry Acceptance Rules
 echo $header1_9;
 echo $page_info9;
 

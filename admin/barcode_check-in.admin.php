@@ -3,9 +3,11 @@
  * Module:      barcode_check-in.admin.php 
  * Description: Originally deployed as a "mod" for NHC 2013.
  * 
- */
+ */ 
  
 $fields = 15;
+$entry_list = "";
+
 if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form
@@ -88,7 +90,7 @@ foreach ($flag_enum as $num) {
                       <li>Use the space bar to place a checkmark in the &quot;Paid&quot; box.</li>
                     </ul>
                 <p>This function is intended to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/bottle-labels" target="_blank">available for download at brewcompetition.com</a>. </p>
-                <p>Also available are <a href="http://www.brewcompetition.com/downloads/entry_check-in.pdf" target="_blank">suggested usage instructions</a>.</p>
+                <p>Also available are <a href="http://www.brewcompetition.com/barcode-check-in" target="_blank">suggested usage instructions</a>.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -118,12 +120,17 @@ foreach ($flag_enum as $num) {
     	<label for="">Box Number</label>
     	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>"  onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
   	</div>
+	<?php if ($_SESSION['prefsPayToPrint'] == "N") { ?>
     <div class="form-group">
     	<label for="">Paid</label>
     	<input type="checkbox" class="form-control" id="brewPaid<?php echo $i; ?>" name="brewPaid<?php echo $i; ?>" value="1" onClick="moveOnCheck(this,'eid<?php echo ($i+1); ?>')" />
   	</div>
+	<?php } ?>
     </div>
   	<?php } ?>
 </div>
 <p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
+ 
+ 
+ 

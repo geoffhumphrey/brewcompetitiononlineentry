@@ -49,7 +49,7 @@ require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
 	do { 
-		$a[] = $row_style_types['id']; } while ($row_style_types = mysql_fetch_assoc($style_types));
+		$a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 		sort($a);
 		
 		foreach ($a as $type) {
@@ -78,13 +78,13 @@ require(DB.'winners.db.php');
 					$table_body1 .= "<tr>";
 				
 					if ($action == "print") { 
-						$table_body1 .= "<td>";
+						$table_body1 .= "<td nowrap>";
 						$table_body1 .= display_place($row_bos['scorePlace'],1);
 						$table_body1 .= "</td>";
 					}
 					
 					else {
-						$table_body1 .= "<td>";
+						$table_body1 .= "<td nowrap>";
 						$table_body1 .= display_place($row_bos['scorePlace'],2);
 						$table_body1 .= "</td>";
 					}
@@ -112,7 +112,7 @@ require(DB.'winners.db.php');
 					
 					$table_body1 .= "</tr>";
 					
-				} while ($row_bos = mysql_fetch_assoc($bos));
+				} while ($row_bos = mysqli_fetch_assoc($bos));
 			
 	$random = "";	 
 	$random = random_generator(7,2);
@@ -169,7 +169,7 @@ if ($totalRows_sbi > 0) {
 				
 				// Build table headers
 				$table_head2 .= "<tr>";
-				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= "<th width='5%'>Place</th>";
+				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= "<th width='5%' nowrap>Place</th>";
 				$table_head2 .= "<th width='25%'>Brewer(s)</th>";
 				$table_head2 .= "<th width='20%'>Entry Name</th>";
 				$table_head2 .= "<th width='25%'>Style</th>";
@@ -186,13 +186,13 @@ if ($totalRows_sbi > 0) {
 					if ($row_sbi['sbi_display_places'] == "1") {
 						
 						if ($action == "print") { 
-							$table_body2 .= "<td>";
+							$table_body2 .= "<td nowrap>";
 							$table_body2 .= display_place($row_sbd['sbd_place'],0); 
 							$table_body2 .= "</td>";
 						}
 						
 						else {
-							$table_body2 .= "<td>";
+							$table_body2 .= "<td nowrap>";
 							$table_body2 .= display_place($row_sbd['sbd_place'],3);
 							$table_body2 .= "</td>";
 						}
@@ -223,7 +223,7 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</tr>";
 					
 					
-				} while ($row_sbd = mysql_fetch_assoc($sbd));
+				} while ($row_sbd = mysqli_fetch_assoc($sbd));
 				
 				$random1 = "";
 				$random1 .= random_generator(7,2);
@@ -266,7 +266,7 @@ echo $header2_1;
 </tbody>
 </table>
 <?php }
-	} while ($row_sbi = mysql_fetch_assoc($sbi));
+	} while ($row_sbi = mysqli_fetch_assoc($sbi));
 } 
 ?>
 

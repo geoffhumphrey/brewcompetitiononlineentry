@@ -19,8 +19,8 @@
 <?php if ($totalRows_sponsors > 0) { ?>
 <?php if ($action == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
-<p><span class="fa fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
-<p><span class="fa fa-times text-danger"></span> =  No logo.
+<p><span class="fa fa-lg fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
+<p><span class="fa fa-lg fa-times text-danger"></span> =  No logo.
 </div>
 <?php } ?>
 <?php if ($action == "default") { ?>
@@ -65,23 +65,27 @@
   <td><?php echo $row_sponsors['sponsorName']; ?></td>
   <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td><?php echo $row_sponsors['sponsorLevel']; ?></td>
-  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-check text-success"></span><?php } else { ?><span class="fa fa-times text-danger"></span><?php } ?></td>
+  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-lg fa-check text-success"></span><?php } else { ?><span class="fa fa-lg fa-times text-danger"></span><?php } ?></td>
   <td><?php echo $row_sponsors['sponsorText']; ?></td>
   <td><input id="mod_enable" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" /></td>
   <td nowrap="nowrap">
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-pencil"></span></a> 
-  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-trash-o"></span></a> 
-  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-link\"></span></a> "; ?> 
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
+  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
+  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?> 
   </td>
  </tr>
-<?php } while($row_sponsors = mysql_fetch_assoc($sponsors)) ?>
+<?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="updateCustomMods" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" />
     <span id="helpBlock" class="help-block">Click "Update Sponsors" <em>before</em> paging through records.</span>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=sponsors","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } } else { 
 if ($action == "default") { ?>
@@ -156,8 +160,8 @@ if ($action == "default") { ?>
     <label for="sponsorText" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="sponsorText" name="sponsorText" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?>" placeholder="">
-		<span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
+        <textarea class="form-control" name="sponsorText" rows="6" class="mceNoEditor"><?php if ($action == "edit") echo $row_sponsors['sponsorText']; ?></textarea>
+        <span id="helpBlock" class="help-block">Any additional information about the sponsor (e.g., a description of sponsorship level, the items donated, money contributed, etc.).</span>
     </div>
 </div><!-- ./Form Group -->
 
@@ -184,6 +188,10 @@ if ($action == "default") { ?>
 		</div>
 	</div>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=sponsors","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } ?>

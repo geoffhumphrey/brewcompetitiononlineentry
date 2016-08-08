@@ -23,7 +23,7 @@ if ($action == "password") {
 }
 
 if ($action == "username") {
-	if ($filter == "admin")$current_email_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name)."; 
+	if ($filter == "admin") $current_email_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name)."; 
 	else $current_email_msg = "Your current email address is: <small class=\"text-muted\">".$_SESSION['user_name']."</small>.";
 }
 
@@ -88,13 +88,15 @@ httpxml.send(null);
 }
 //-->
 </script>
-
-<?php } // end if ($action == "username") ?>
 <p class="lead"><?php echo $current_email_msg; ?></p>
+<?php } // end if ($action == "username") ?>
 <form data-toggle="validator" role="form" class="form-horizontal"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
-
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
+<?php } ?>
 <?php if ($action == "username") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="user_name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Email</label>
@@ -151,7 +153,7 @@ httpxml.send(null);
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
-                <input class="form-control" name="password" type="password" placeholder="" id="newPassword">
+                <input class="form-control" name="password" type="password" placeholder="" id="newPassword" required>
                 <span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>

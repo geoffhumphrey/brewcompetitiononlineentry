@@ -51,6 +51,8 @@ if ($section != "admin") {
 	$page_info300 = "";
 	$header1_400 = ""; 
 	$page_info400 = "";
+	$header1_500 = ""; 
+	$page_info500 = "";
 	$header1_5 = ""; 
 	$page_info5 = "";
 	$header1_6 = ""; 
@@ -60,18 +62,21 @@ if ($section != "admin") {
 	$header1_8 = ""; 
 	$page_info8 = "";
 
-	if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
+	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
 
 		// Conditional display of panel colors based upon open/closed dates
-		if ($registration_open == 0) $reg_panel_display = "panel-default";
-		elseif (($registration_open == 1) || ($judge_window_open == 1)) $reg_panel_display = "panel-success";
-		elseif ($registration_open == 2) $reg_panel_display = "panel-danger";
+		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-default";
+		elseif (($registration_open != 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
+		elseif (($registration_open == 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
+		elseif (($registration_open == 2) && ($judge_window_open == 2)) $reg_panel_display = "panel-danger";
 		else $reg_panel_display = "panel-default";
 		
 		if ($entry_window_open == 0) $entry_panel_display = "panel-default";
 		elseif ($entry_window_open == 1) $entry_panel_display = "panel-success";
 		elseif ($entry_window_open == 2) $entry_panel_display = "panel-danger";
 		else $entry_panel_display = "panel-default";
+		
+		if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_panel_display = "panel-danger";
 		
 		if ($dropoff_window_open == 0) $dropoff_panel_display = "panel-default";
 		elseif ($dropoff_window_open == 1) $dropoff_panel_display = "panel-success";
@@ -86,6 +91,8 @@ if ($section != "admin") {
 
 	if (!$logged_in) {	
 		// Online Registration Dates
+		
+		/*
 		$header1_100 .= "<div class=\"panel ".$reg_panel_display."\">";
 		$header1_100 .= "<div class=\"panel-heading\">";
 		$header1_100 .= "<h4 class=\"panel-title\">Account Registration is";
@@ -95,10 +102,43 @@ if ($section != "admin") {
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
 		$page_info100 .= "Account registrations";
-		if (($registration_open == 2) && ($judge_window_open == 1)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges and stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar); 
+		if (($registration_open == 2) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges or stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($registration_open == 2) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">stewards only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($registration_open == 2) && (!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf(" for <strong class=\"text-success\">judges only</strong> accepted %s through %s.", $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($judge_limit) && ($steward_limit)) $page_info100 .= " no longer accepted. The limit of judges and stewards has been reached.";
 		else $page_info100 .= sprintf(" accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
+		*/
+		
+		if (!$logged_in) {	
+			// Online Registration Dates
+			$header1_100 .= "<div class=\"panel ".$reg_panel_display."\">";
+			$header1_100 .= "<div class=\"panel-heading\">";
+			$header1_100 .= "<h4 class=\"panel-title\">Account Registration is";
+			if ($registration_open == 1) $header1_100 .= " Open";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Judges or Stewards Only";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $header1_100 .= " Open for Stewards Only";
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && ($steward_limit)) $header1_100 .= " Open for Judges Only";
+			else $header1_100 .= " Closed";
+			$header1_100 .= "</h4>";
+			$header1_100 .= "</div>";
+			$page_info100 .= "<div class=\"panel-body\">";
+			//$page_info100 .= "Account";
+			
+			if (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">judges or stewards</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">stewards</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open != 1) && (!$judge_limit) && ($judge_window_open == 1) && ($steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> for <strong class=\"text-success\">judges</strong> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= "Account registrations no longer accepted. The limit of judges and stewards has been reached.";
+			else {
+				if ($registration_open == 1) $page_info100 .= sprintf("<a href=\"%s\">Account registrations</a> accepted %s through %s.", $link_register, $reg_open_sidebar, $reg_closed_sidebar);
+				else $page_info100 .= sprintf(" registrations accepted %s through %s.", $reg_open_sidebar, $reg_closed_sidebar);
+			}
+			$page_info100 .= "</div>";
+			$page_info100 .= "</div>";
+		}
+
+		
 
 	}
 
@@ -106,12 +146,18 @@ if ($section != "admin") {
 	$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";
 	$header1_200 .= "<div class=\"panel-heading\">";
 	$header1_200 .= "<h4 class=\"panel-title\">Entry Registration is";
-	if ($entry_window_open == 1) $header1_200 .= " Open";
+	if (($entry_window_open == 1) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) $header1_200 .= " Open";
 	else $header1_200 .= " Closed";
 	$header1_200 .= "</h4>";
 	$header1_200 .= "</div>";
 	$page_info200 .= "<div class=\"panel-body\">";
-	$page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
+	if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("Entry registrations accepted %s through %s.", $entry_open_sidebar, $entry_closed_sidebar);
+	if (($comp_entry_limit) || ($comp_paid_entry_limit)) {
+		$page_info200 .= "<span class=\"text-danger\">The competition";
+		if ($comp_paid_entry_limit) $page_info200 .= " paid";
+	 	$page_info200 .= " entry limit has been reached.</span>";
+	}
+	$page_info200 .= "";
 	$page_info200 .= "</div>";
 	$page_info200 .= "</div>";
 	
@@ -122,7 +168,7 @@ if ($section != "admin") {
 		// Online Registration Dates
 		$header1_100 .= "<div class=\"panel panel-info\">";
 		$header1_100 .= "<div class=\"panel-heading\">";
-		$header1_100 .= "<h4 class=\"panel-title\">My Account Summary<span class=\"fa fa-info-circle text-primary pull-right\"></span></h4> ";
+		$header1_100 .= "<h4 class=\"panel-title\">My Account Summary<span class=\"fa fa-lg fa-info-circle text-primary pull-right\"></span></h4> ";
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
 		//$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
@@ -140,10 +186,11 @@ if ($section != "admin") {
 			else $page_info100 .= "<span class=\"pull-right\"><a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You have unconfirmed entries - action is needed to confirm\">".($totalRows_log - $totalRows_log_confirmed)."</a></span>";
 			$page_info100 .= "</div>";
 		}
-		
-		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
-		$page_info100 .= "<strong class=\"text-danger\">Unpaid Confirmed Entries</strong><span class=\"pull-right\">".$total_not_paid."</span>";
-		$page_info100 .= "</div>";
+		if ($total_to_pay > 0) {
+			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+			$page_info100 .= "<strong class=\"text-danger\">Unpaid Confirmed Entries</strong><span class=\"pull-right\">".$total_not_paid."</span>";
+			$page_info100 .= "</div>";
+		}
 		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 		$page_info100 .= "<strong class=\"text-danger\">Total Entry Fees";
 		if (($totalRows_log - $totalRows_log_confirmed) > 0) $page_info100 .= "*";
@@ -163,7 +210,7 @@ if ($section != "admin") {
 		}
 		
 		
-		if ($row_limits['prefsUserEntryLimit'] != "") {
+		if (!empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) {
 			
 			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 			if ($remaining_entries > 0) {
@@ -239,11 +286,11 @@ if ($section != "admin") {
 	else {
 		do {
 			$page_info400 .= "<p>";
-			if ($row_judging['judgingLocation'] != "") $page_info400 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']." at ".$row_judging['judgingLocation']."\">".$row_judging['judgingLocName']."</a> <span class=\"fa fa-map-marker\"></span>";
+			if ($row_judging['judgingLocation'] != "") $page_info400 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']." at ".$row_judging['judgingLocation']."\">".$row_judging['judgingLocName']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
 			else $page_info400 .= $row_judging['judgingLocName'];
 			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			$page_info400 .= "</p>";
-		} while ($row_judging = mysql_fetch_assoc($judging));
+		} while ($row_judging = mysqli_fetch_assoc($judging));
 		
 	}
 	$page_info400 .= "</div>";

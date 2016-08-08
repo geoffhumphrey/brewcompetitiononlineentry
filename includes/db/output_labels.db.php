@@ -5,7 +5,7 @@
 
 if ($go == "entries") {
 
-	if (($action == "bottle-entry") && ($view != "special")) {
+	if ($action == "bottle-entry") {
 			
 		$query_log = "SELECT * FROM $brewing_db_table";
 		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
@@ -13,15 +13,7 @@ if ($go == "entries") {
 		
 	}
 	
-	if (($action == "bottle-entry") && ($view == "special")) {
-		
-		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s' AND brewReceived='1'",$filter);
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
-		
-	}
-	
-	if (($action == "bottle-judging") && ($view == "default")) {
+	if ($action == "bottle-judging") {
 		
 		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
 		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
@@ -59,18 +51,11 @@ if ($go == "entries") {
 				
 	}
 	
-	if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-		
-		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s' AND brewReceived='1'",$filter);
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
-		
-	}
 
 	// Execute query
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-	$totalRows_log = mysql_num_rows($log);
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log = mysqli_fetch_assoc($log);
+	$totalRows_log = mysqli_num_rows($log);
 	
 }
 
@@ -98,8 +83,8 @@ if ($go == "participants") {
 		
 		if ($filter == "with_entries") { 
 			$query_with_entries = sprintf("SELECT brewBrewerID FROM %s WHERE brewReceived='1'",$brewing_db_table);
-			$with_entries = mysql_query($query_with_entries, $brewing) or die(mysql_error());
-			$row_with_entries = mysql_fetch_assoc($with_entries);
+			$with_entries = mysqli_query($connection,$query_with_entries) or die (mysqli_error($connection));
+			$row_with_entries = mysqli_fetch_assoc($with_entries);
 		}
 	}
 	
@@ -110,9 +95,9 @@ if ($go == "participants") {
 	}
 	
 	// Execute the query
-	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
-	$row_brewer = mysql_fetch_assoc($brewer);
-	$totalRows_brewer = mysql_num_rows($brewer);
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
+	$totalRows_brewer = mysqli_num_rows($brewer);
 }
 
 // ---------------------------------------------------------

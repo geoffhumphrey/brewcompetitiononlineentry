@@ -4,17 +4,17 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: July 27, 2015
+ * Last Modified: May 29, 2015
  */
 
 /*
 
 
-/*******Set up MySQL connection variables*******
+/*******Set up MySQL connection variables*******/
+/*
 Generally, this line is left alone.
 */
 $hostname = "localhost";
-
 
 /* 
 Change the word root to the username for your database (generally the same as your login code for your web hosting company).
@@ -22,27 +22,28 @@ INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username = "fred".
 */
 //$username = "";
-$username = "";
+$username = "brewcomp_bcoe";
 
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password = "flintsone".
 */
 //$password = "";
-$password = "";
+$password = "Ze9P#vK9tE";
 
 /*
 The following line is the name of your MySQL database you set up already.  
 If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
 */
 //$database = "";
-$database = "";
+$database = "brewcomp_bcoetest2";
 
 /* 
 This line strings the information together and connects to MySQL.  
 If MySQL is not found or the username/password combo is not correct an error will be returned.
 */
-$connection = mysql_connect($hostname, $username, $password) or trigger_error(mysql_error());
+// $connection = mysql_connect($hostname, $username, $password) or trigger_error(mysql_error());
+$connection = new mysqli($hostname, $username, $password, $database);
 
 /* 
 Do not change the following line.
@@ -50,7 +51,18 @@ Do not change the following line.
 $brewing = $connection; 
 
 
-/******End MySQL Connections*******
+/******End MySQL Connections*******/
+
+/*
+Give your installation a unique ID. If you plan on running multiple instances
+of BCOE&M from the same domain, you'll need to give each installation a 
+unique identifier. This prevents "cross-pollination" of session data display.
+
+For single installations, the default below will be sufficient. Otherwise,
+change the variable to something completely unique for each installation.
+*/
+
+$installation_id = "Btdw@fv1980!";
 
 
 /*
@@ -58,11 +70,14 @@ Set up your images directory path.  This is used for label image uploading.
 The predefined variable below will be fine for most installations.
 
 ONLY change this line to your installation's home directory on the server 
-if the predefined variable doesn't work.
+if the predefined variable doesn't work. 
 
-If not, use absolute paths (exemplified below).Generally something like 
+If not, use absolute paths (exemplified below). Generally something like 
 /home/[account_name]/public_html/folder_name (do NOT put a forward slash [/] 
 at the end).
+
+Check your web host's documentation for the correct path. The below are examples
+ONLY.
 
 ******************************************************************************
 CORRECT example if installation is in the web root folder:
@@ -86,7 +101,7 @@ Leave as if you have a database dedicated to your BCOE&M installation.
 
 ******************************************************************************
 
-Suggested Usage 
+// Suggested Usage 
 If you wish to define a prefix to the database tables, it is HIGHLY suggested 
 that you use an underscore (_), after a short descriptor that identifies which 
 install is using which tables. 
@@ -100,7 +115,8 @@ $prefix = "comp1_";
 ******************************************************************************
 */
 
-$prefix = "";
+//$prefix = "";
+$prefix = "bigbeers_";
 
 
 /*
@@ -111,12 +127,12 @@ If you are going to go through the installation and setup process, you will
 need to modify the access check statement below. Change the FALSE to a TRUE 
 to disable the access check.
 
-After finishing setup, be sure to open this file again and change TRUE back 
-to FALSE!
+After finishing setup, be sure to open this file again and change the 
+TRUE back to a FALSE!
  
 */
 
-$setup_free_access = FALSE;
+$setup_free_access =  FALSE;
 
 
 /*
@@ -133,32 +149,35 @@ $sub_directory = "/bcoem";
 
 WARNING!!!
 IF you do enable the subdirectory variable, YOU MUST alter your .htaccess file
-Otherwise, the URLs will not be generated correctly.
-
-Directions are in the .htaccess file.
+Otherwise, the URLs will not be generated correctly
+Directions are in the .htaccess file
 
 */
 
-$sub_directory = "";
+$sub_directory = "/bcoetest";
 
 /*
 ******************************************************************************
 Set the base URL of your installation. In most cases the default will be OK. 
 
 IF you are installing on a server where you do not have a domain name set up,
-you'll need to replace the $base_url below with something formatted like this:
-$base_url = "http://hostingdomain/~accountname/subdirectoryname/";
+you'll need to replace the last $base_url variable below with something 
+formatted like this:
+$base_url .= "ipaddressorhostingdomain/~accountname/subdirectoryname/";
 
 Example:
-$base_url = "http://123.45.678.9/~accountname/bcoem/";
+$base_url .= "147.21.160.5/~brewcompetition/bcoem/";
 
 OR:
-$base_url = "http://www.yourhost.com/~accountname/bcoem/";
+$base_url .= "www.bluehost.com/~brewcompeition/bcoem/";
 
 
 */
 
-$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+$base_url = ""; 
+if ((!empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== "off")) || ($_SERVER['SERVER_PORT'] == 443)) $base_url .= "https://"; 
+else $base_url .= "http://"; 
+$base_url .= $_SERVER['SERVER_NAME'].$sub_directory."/";
 
 /*
 ******************************************************************************

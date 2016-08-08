@@ -1,4 +1,10 @@
 <?php 
+
+/*
+Checked Single
+2016-06-06
+*/
+
 // ---------------------------- Scrubber --------------------------------------------------------------------
 $string = array( 
 chr(38) => "&#38;", 
@@ -9,6 +15,23 @@ chr(35) => "&#35;",
 chr(39) => "&#39;",
 chr(176) => "&#176;"
 );
+
+$quote_convert = array(
+chr(34) => "&quot;",
+chr(39) => "&rsquo;",
+"&#39;" => "&rsquo;",
+"&apos;" => "&rsquo;",
+"“" => "&ldquo;",   // left side double smart quote
+"”" => "&rdquo;",  	// right side double smart quote
+"‘" => "&lsquo;",  	// left side single smart quote
+"’" => "&rsquo;", 	// right side single smart quote
+"…" => "...",  		// elipsis
+"—" => "&mdash;",  	// em dash
+"–" => "&ndash;",  	// en dash
+"\n" => " ",
+"\t" => " ",
+);
+
 $html_string = array( 
 chr(34) => "&quot;",  
 chr(37) => "&#37;",
@@ -336,6 +359,7 @@ $html_remove = array(
 "&copy;" => "",
 "&reg;" => "",
 "<p>" => "",
+"^" => " ", 		// used in process_brewing.inc.php to separate extra requirements for BJCP 2015 styles
 "“" => "\"",   	// left side double smart quote
 "”" => "\"",  	// right side double smart quote
 "‘" => "'",  	// left side single smart quote

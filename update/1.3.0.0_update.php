@@ -1,5 +1,5 @@
 <?php 
-$output .= "<h4>Version 1.3.0.0, 1.3.0.1, etc...</h4>";
+$output .= "<h4>Version 1.3.0.0, 1.3.0.1, etc.</h4>";
 $output .= "<ul>";
 
 
@@ -31,9 +31,8 @@ if (!NHC) {
 		  `staff_staff` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing); 
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		$output .= "<li>Staff table created.</li>";
 	
@@ -58,9 +57,8 @@ if (!NHC) {
 			  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '0=no 1=yes',
 			  PRIMARY KEY (`id`)
 			) ENGINE=MyISAM;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing); 
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));; 
 		//echo $updateSQL."<br>";
 	
 	$output .=  "<li>Custom Modules table created.</li>";
@@ -74,66 +72,56 @@ if (!NHC) {
 if (!NHC) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUserEntryLimit`  VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 	
-	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUserSubCatLimit` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUserSubCatLimit` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory';"; 
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUSCLEx` VARCHAR(255) NULL DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUSCLExLimit` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsPayToPrint`  CHAR(1) NULL DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsHideRecipe` CHAR(1) NULL DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUseMods` CHAR(1) NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsSEF` CHAR(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 
 }
 
 $updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD  `prefsSpecialCharLimit` INT(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field';";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 
 if (NHC) $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='Y', prefsHideRecipe='Y', prefsUseMods='Y', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'";
 else $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'"; 
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 			
 $output .=  "<li>Site Preferences table updated.</li>";
@@ -144,15 +132,13 @@ $output .=  "<li>Site Preferences table updated.</li>";
 
 if (!NHC) {
 	$updateSQL = "ALTER TABLE  `".$prefix."brewer` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "UPDATE `".$prefix."brewer` SET `brewerDropOff` = '0';";
-	mysql_select_db($database, $brewing); 
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 	
 	$output .=  "<li>Brewer table updated.</li>";
@@ -165,21 +151,18 @@ if (!NHC) {
 if (!NHC) {
 
 	$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` ADD `scoreMiniBOS` TINYINT(1) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "UPDATE `".$prefix."judging_scores` SET `scoreMiniBOS` = '0';";
-	mysql_select_db($database, $brewing); 
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` CHANGE  `scoreEntry`  `scoreEntry` FLOAT NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>"; 
 	
 	$output .=  "<li>Judging Scores table updated.</li>"; 
@@ -201,69 +184,58 @@ if (!NHC) {
 // Update character counts for ingredient columns to keep under 65000 threshold
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead1` `brewMead1` VARCHAR(25) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead2` `brewMead2` VARCHAR(25) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead3` `brewMead3` VARCHAR(25) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastNutrients` `brewYeastNutrients` text;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFinings` `brewFinings` text;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewWaterNotes` `brewWaterNotes` text;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationMethod` `brewCarbonationMethod` CHAR(1) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 // -----------------------------------------------------------
@@ -279,116 +251,94 @@ $result = mysql_query($updateSQL, $brewing);
 // Update character counts for ingredient columns to keep under 65000 threshold
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBoilHours` `brewBoilHours` VARCHAR(5) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBoilMins` `brewBoilMins` VARCHAR(5) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOG` `brewOG` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFG` `brewFG` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewPrimary` `brewPrimary` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewPrimaryTemp` `brewPrimaryTemp` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewSecondary` `brewSecondary` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewSecondaryTemp` `brewSecondaryTemp` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOther` `brewOther` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOtherTemp` `brewOtherTemp` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationVol` `brewCarbonationVol` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastAmount` `brewYeastAmount` VARCHAR(25) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBrewerID` `brewBrewerID` VARCHAR(8) NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFinings` `brewFinings` TEXT NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewWaterNotes` `brewWaterNotes` TEXT NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewComments` `brewComments` TEXT NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationNotes` `brewCarbonationNotes` TEXT NULL DEFAULT NULL;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 for ($i=1; $i <= 5; $i++) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewExtract".$i."Use` `brewExtract".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 }
@@ -396,75 +346,63 @@ for ($i=1; $i <= 5; $i++) {
 for ($i=1; $i <= 9; $i++) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."` `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."Use` `brewGrain".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."Weight` `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."` `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."Amt` `brewAddition".$i."Amt` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."Use` `brewAddition".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."` `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."IBU` `brewHops".$i."IBU` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Time` `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Use` `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Type` `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Form` `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL;";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 		
 }
@@ -474,9 +412,8 @@ if (!NHC) {
 	// Add brewBoxNum column
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewBoxNum` VARCHAR(10) NULL DEFAULT NULL COMMENT 'The box where the entry is located after sorting';";
-	mysql_select_db($database, $brewing);
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	//echo $updateSQL."<br>";
 	
 	// Add additional ingredient columns
@@ -488,85 +425,72 @@ if (!NHC) {
 		// Grains
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewGrain".$one_less."`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Weight`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Use`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		// Additions, Adjucnts, etc.
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewAddition".$one_less."`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."Amt` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Amt`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Use`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		// Hops
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewHops".$one_less."`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Weight`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Use`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."IBU` VARCHAR(6) NULL DEFAULT NULL AFTER `brewHops".$one_less."IBU`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Time`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Type`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Form`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 	}
@@ -575,9 +499,8 @@ if (!NHC) {
 	
 	for ($i=1; $i <= 5; $i++) {
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMashStep".$i."Name` `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 	}
 	
@@ -586,21 +509,18 @@ if (!NHC) {
 		$one_less = ($i - 1);
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Name`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Temp` CHAR(3) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Temp`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Time` CHAR(3) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Time`;";
-		mysql_select_db($database, $brewing);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
 		
 	}
@@ -614,10 +534,10 @@ if (!NHC) {
 // -----------------------------------------------------------
 
 
-$query_user_passwords = sprintf("SELECT id,password FROM %s",$users_db_table);
-$user_passwords = mysql_query($query_user_passwords, $brewing);
-$row_user_passwords = mysql_fetch_assoc($user_passwords);
-$totalRows_user_passwords = mysql_num_rows($user_passwords);
+$query_user_passwords = sprintf("SELECT * FROM %s",$users_db_table);
+$user_passwords = mysqli_query($connection,$query_user_passwords) or die (mysqli_error($connection));
+$row_user_passwords = mysqli_fetch_assoc($user_passwords);
+$totalRows_user_passwords = mysqli_num_rows($user_passwords);
 require(CLASSES.'phpass/PasswordHash.php');
 
 do {
@@ -627,11 +547,17 @@ do {
 	$hash = $hasher->HashPassword($password);
 	
 	$updateSQL = sprintf("UPDATE %s SET password = '%s' WHERE id = '%s'", $users_db_table, $hash, $row_user_passwords['id']);
-	mysql_select_db($database, $brewing); 
-	mysql_real_escape_string($updateSQL);
-	$result = mysql_query($updateSQL, $brewing);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
-} while ($row_user_passwords = mysql_fetch_assoc($user_passwords));
+	// Top Level Admin introduced in 1.3.0.0, need to change all admins to top-level
+	if ($row_user_passwords['userLevel'] == 1) {
+		$updateSQL = sprintf("UPDATE %s SET userLevel = '0' WHERE id = '%s'", $users_db_table, $row_user_passwords['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	}
+	
+} while ($row_user_passwords = mysqli_fetch_assoc($user_passwords));
 
 
 // -----------------------------------------------------------
@@ -661,21 +587,21 @@ if ($totalRows_log > 0) {
 								 "1",
 								 "NOW()",
 								 $row_log['id']);
-			mysql_select_db($database, $brewing);
-			$result = mysql_query($updateSQL, $brewing); 	
-	} while ($row_log = mysql_fetch_assoc($log));
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 	
+	} while ($row_log = mysqli_fetch_assoc($log));
 	$output .= "<li>All entry data updated.</li>";
 }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` 
 CHANGE  `brewPaid`  `brewPaid` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
-mysql_select_db($database, $brewing);
-$result = mysql_query($updateSQL, $brewing); 
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
 //$output .= $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewReceived`  `brewReceived` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
-mysql_select_db($database, $brewing);
-$result = mysql_query($updateSQL, $brewing);  
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));  
 
 //$output .= $updateSQL."<br>";
 
@@ -696,119 +622,99 @@ $output .=  "<li>Brewing table updated.</li>";
 // -----------------------------------------------------------
 
 $updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleReqSpec` TINYINT(1) NULL DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no';";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '0'";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 // Designate all BJCP styles that require special ingredients
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 21;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 59;";
-mysql_select_db($database, $brewing);
-
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
+
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 65;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 74;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 75;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 76;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 78;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 79;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 80;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 86;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 87;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 89;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 94;";
-
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 95;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 96;";
-mysql_select_db($database, $brewing);
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 97;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 98;";
-mysql_select_db($database, $brewing); 
-mysql_real_escape_string($updateSQL);
-$result = mysql_query($updateSQL, $brewing);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //echo $updateSQL."<br>";
 
 $output .=  "<li>Styles table updated.</li>";
@@ -828,13 +734,13 @@ $output .=  "<li>Styles table updated.</li>";
 if (!NHC) {
 		
 	$query_archive_current = "SELECT archiveSuffix FROM $archive_db_table";
-	$archive_current = mysql_query($query_archive_current, $brewing);
-	$row_archive_current = mysql_fetch_assoc($archive_current);
-	$totalRows_archive_current = mysql_num_rows($archive_current);
+	$archive_current = mysqli_query($connection,$query_archive_current) or die (mysqli_error($connection));
+	$row_archive_current = mysqli_fetch_assoc($archive_current);
+	$totalRows_archive_current = mysqli_num_rows($archive_current);
 	
 	if ($totalRows_archive_current > 0) {
 		
-		do { $a_current[] = $row_archive_current['archiveSuffix']; } while ($row_archive_current = mysql_fetch_assoc($archive_current));
+		do { $a_current[] = $row_archive_current['archiveSuffix']; } while ($row_archive_current = mysqli_fetch_assoc($archive_current));
 		
 		foreach ($a_current as $suffix_current) {
 			//if (strpos($suffix_current,'_') !== false) $suffix_current = $suffix_current;
@@ -844,158 +750,132 @@ if (!NHC) {
 			
 			if (check_setup($prefix."judging_scores".$suffix_current,$database)) {
 				$updateSQL = "ALTER TABLE  `".$prefix."judging_scores".$suffix_current."` ADD `scoreMiniBOS` INT(4) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 			
-			$updateSQL = "ALTER TABLE  `".$prefix."judging_scores".$suffix_current."` CHANGE  `scoreEntry`  `scoreEntry` DECIMAL( 11, 2 ) NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
-			mysql_select_db($database, $brewing);
-			mysql_real_escape_string($updateSQL);
-			$result = mysql_query($updateSQL, $brewing);
-			//echo $updateSQL."<br>"; 
+				$updateSQL = "ALTER TABLE  `".$prefix."judging_scores".$suffix_current."` CHANGE  `scoreEntry`  `scoreEntry` DECIMAL( 11, 2 ) NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				//echo $updateSQL."<br>"; 
 			}
 			
 			if (check_setup($prefix."brewer".$suffix_current,$database)) {
 				$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>";
 			}
 			
 			if (check_setup($prefix."brewing".$suffix_current,$database)) {
 				
 				$updateSQL = "ALTER TABLE `".$prefix."brewing".$suffix_current."` ADD `brewBoxNum` VARCHAR(10) NULL DEFAULT NULL COMMENT 'The box where the entry is located after sorting';";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>";  
 			
 				// Update character counts for ingredient columns to keep under 65000 threshold
-				
-				
-		
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead1` `brewMead1` VARCHAR(25) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead2` `brewMead2` VARCHAR(25) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead3` `brewMead3` VARCHAR(25) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastNutrients` `brewYeastNutrients` text;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewFinings` `brewFinings` text;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewWaterNotes` `brewWaterNotes` text;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewCarbonationMethod` `brewCarbonationMethod` CHAR(1) NULL DEFAULT NULL;";
-				mysql_select_db($database, $brewing);
-				mysql_real_escape_string($updateSQL);
-				$result = mysql_query($updateSQL, $brewing);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				//echo $updateSQL."<br>";
 				
 				for ($i=1; $i <= 9; $i++) {
 			
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewGrain".$i."` `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewAddition".$i."` `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewAddition".$i."Amt` `brewAddition".$i."Amt` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."` `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."IBU` `brewHops".$i."IBU` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 				
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Time` `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Use` `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Type` `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Form` `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 						
 				}
@@ -1007,85 +887,72 @@ if (!NHC) {
 					// Grains
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewGrain".$one_less."`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Weight`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Use`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					// Additions, Adjucnts, etc.
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewAddition".$one_less."`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."Amt` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Amt`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Use`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					// Hops
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewHops".$one_less."`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Weight`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Use`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."IBU` VARCHAR(6) NULL DEFAULT NULL AFTER `brewHops".$one_less."IBU`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Time` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Time`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Type` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Type`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Form` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Form`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					
@@ -1093,9 +960,8 @@ if (!NHC) {
 				
 				for ($i=1; $i <= 5; $i++) {
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMashStep".$i."Name` `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 				}
 				
@@ -1104,21 +970,18 @@ if (!NHC) {
 					$one_less = ($i - 1);
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Name`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Temp` VARCHAR(10) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Temp`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Time` VARCHAR(10) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Time`;";
-					mysql_select_db($database, $brewing);
-					mysql_real_escape_string($updateSQL);
-					$result = mysql_query($updateSQL, $brewing);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 					
 				}

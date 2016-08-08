@@ -1,8 +1,14 @@
 <?php
+
+/*
+Checked Single
+2016-06-06
+*/
+
 ob_start();
 require('../paths.php');
 require(CONFIG.'config.php');
-mysql_select_db($database, $brewing);
+mysqli_select_db($connection,$database);
 //require(CONFIG.'bootstrap.php');
 //require(INCLUDES.'url_variables.inc.php'); 
 //require(INCLUDES.'db_tables.inc.php');
@@ -48,8 +54,8 @@ if (strlen($password) > 72) {
 	exit;
 }
 
-mysql_real_escape_string($loginUsername);
-mysql_real_escape_string($password);
+mysqli_real_escape_string($connection,$loginUsername);
+mysqli_real_escape_string($connection,$password);
 $password = md5($password);
 
 
@@ -74,9 +80,9 @@ else {
 		
 		$loginUsername = strtolower($loginUsername);	
 		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
-		$login = mysql_query($query_login, $brewing) or die(mysql_error());
-		$row_login = mysql_fetch_assoc($login);
-		$totalRows_login = mysql_num_rows($login);
+		$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+		$row_login = mysqli_fetch_assoc($login);
+		$totalRows_login = mysqli_num_rows($login);
 		
 		$stored_hash = $row_login['password'];
 		
@@ -101,9 +107,9 @@ else {
 		
 		$loginUsername = strtolower($loginUsername);	
 		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
-		$login = mysql_query($query_login, $brewing) or die(mysql_error());
-		$row_login = mysql_fetch_assoc($login);
-		$totalRows_login = mysql_num_rows($login);
+		$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+		$row_login = mysqli_fetch_assoc($login);
+		$totalRows_login = mysqli_num_rows($login);
 		
 		$stored_hash = $row_login['password'];
 		
@@ -130,6 +136,7 @@ else {
 if ($check == 1) {
 	
 	// Start the session and regenerate the session ID
+	session_name($prefix_session);
 	session_start();
 	session_regenerate_id(true); 
 	
@@ -144,13 +151,13 @@ if ($check == 1) {
 	
 		// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
 		$updateSQL = sprintf("UPDATE %s SET user_name='%s' WHERE id='%s'",$prefix."users",$loginUsername, $row_login['id']);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 		// Convert email address in the user's accociate record in the "brewer" table
 		$updateSQL = sprintf("UPDATE %s SET brewerEmail='%s' WHERE uid='%s'",$prefix."brewer",$loginUsername, $row_login['id']);
-		mysql_real_escape_string($updateSQL);
-		$result = mysql_query($updateSQL, $brewing) or die(mysql_error());
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 	} // end else NHC
 	

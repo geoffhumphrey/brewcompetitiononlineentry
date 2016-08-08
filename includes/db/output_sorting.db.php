@@ -1,18 +1,6 @@
 <?php
-if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-}
-// end if (NHC)
-
-else {
-
-	$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid,brewReceived FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
-	$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
-	$row_entries = mysql_fetch_assoc($entries);
-	$totalRows_entries = mysql_num_rows($entries);
-
-}
-
+$query_entries = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewBrewerLastName,brewBrewerFirstName,brewBrewerID,brewJudgingNumber,brewPaid,brewReceived FROM $brewing_db_table WHERE brewCategorySort='%s'", $style);
+$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
+$row_entries = mysqli_fetch_assoc($entries);
+$totalRows_entries = mysqli_num_rows($entries);
 ?>

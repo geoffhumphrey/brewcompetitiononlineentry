@@ -64,7 +64,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$user_check = explode("^",$user_check);
 	
 	if (($user_check[0] == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
+		$message2 .= sprintf("<div class='alert alert-danger'><span class=\"fa fa-lg fa-exclamation-circle\"></span> There is no email address in the system that matches the one you entered. <a class='alert-link' href='%s'>Try again?</a></div>",build_public_url("login","password","forgot","default",$sef,$base_url));
 	}
 	
 }
@@ -73,8 +73,8 @@ else $verify_form_display = FALSE;
 // Build Links
 
 if ($section != "update") {
-	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Have you <a href='%s'>registered your account</a> yet?</p>",build_public_url("register","default","default","default",$sef,$base_url));
-	if ($login_form_display) $primary_links .= sprintf("<p class='lead'><span class='fa fa-exlamation-circle'></span> Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</p>",$base_url."index.php?section=login&amp;go=password&amp;action=forgot");
+	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class='lead'><span class='fa fa-lg fa-exlamation-circle'></span> Have you <a href='%s'>registered your account</a> yet?</p>",build_public_url("register","default","default","default",$sef,$base_url));
+	if ($login_form_display) $primary_links .= sprintf("<p class='lead'><span class='fa fa-lg fa-exlamation-circle'></span> Did you forget your password? If so, <a href='%s'>click here to reset it</a>.</p>",$base_url."index.php?section=login&amp;go=password&amp;action=forgot");
 }
 
 
@@ -139,8 +139,16 @@ echo $primary_links;
 </form>
 <?php } ?>
 <?php if ($verify_form_display) {
-	if ((empty($message2)) || (empty($msg))) { ?>	
-	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $user_check[1]; ?></em></small></p>
+	if ((empty($message2)) || (empty($msg))) { 
+	
+	if ($user_check[1] == "Randomly generated.") {
+		$secret_question = "<strong>Unavailable.</strong> Your account was created by an administrator and your &quot;secret answer&quot; was randomly generated. Please contact a website administrator to recover or change your password."; 
+		if ($_SESSION['prefsContact'] == "Y") $secret_question .= " Or, use the email option below.";
+	}
+	else $secret_question = $user_check[1];
+	
+	?>	
+	<p class="lead">Your ID verification question is... <small class="text-muted"><em><?php echo $secret_question; ?></em></small></p>
 	<?php if ($_SESSION['prefsContact'] == "Y") { ?>
 	<?php if ($msg =="5") { ?>
 	<p class='lead'><small>If you didn't receive the email, <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.">click here to resend it to <?php echo $username_check; ?></a>.</small></p>
@@ -165,7 +173,7 @@ echo $primary_links;
 			<button name="submit" type="submit" class="btn btn-primary" >Reset Password <span class="fa fa-key" aria-hidden="true"></span></button>
 		</div>
 	</div><!-- Form Group -->
-<input type="hidden" name="loginUsername" value="<?php echo $username; ?>">
+<input type="hidden" name="loginUsername" value="<?php echo $username_check; ?>">
 </form>
     <?php }
 	}

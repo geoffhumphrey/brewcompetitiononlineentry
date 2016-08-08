@@ -1,4 +1,5 @@
 <?php
+
 $totalRows_entry_count = total_paid_received($go,0);
 
 if (NHC) {
@@ -6,14 +7,14 @@ if (NHC) {
 	
 	$query_package_count = sprintf("SELECT a.scorePlace, a.scoreEntry FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND b.brewBrewerID = '%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $_SESSION['user_id']); 
 	if ($prefix != "final_") $query_package_count .= " AND a.scoreEntry >=25";
-	$package_count = mysql_query($query_package_count, $brewing) or die(mysql_error());
-	$row_package_count = mysql_fetch_assoc($package_count);
-	$totalRows_package_count = mysql_num_rows($package_count);
+	$package_count = mysqli_query($connection,$query_package_count) or die (mysqli_error($connection));
+	$row_package_count = mysqli_fetch_assoc($package_count);
+	$totalRows_package_count = mysqli_num_rows($package_count);
 	//echo $totalRows_package_count;
 	
 	$query_admin_adv = sprintf("SELECT COUNT(*) AS 'count' FROM $brewing_db_table WHERE brewBrewerID = '%s' AND brewWinner='6'", $_SESSION['user_id']);
-	$admin_adv = mysql_query($query_admin_adv, $brewing) or die(mysql_error());
-	$row_admin_adv = mysql_fetch_assoc($admin_adv);
+	$admin_adv = mysqli_query($connection,$query_admin_adv) or die (mysqli_error($connection));
+	$row_admin_adv = mysqli_fetch_assoc($admin_adv);
 }
 // end if (NHC)
 
@@ -31,9 +32,8 @@ else {
 			$a = explode('-', $view);
 			foreach (array_unique($a) as $value) {
 				$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
-				//echo $updateSQL;
-				mysql_select_db($database, $brewing);
-				$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			}
 		}
 
@@ -42,17 +42,17 @@ else {
 		$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table  WHERE brewBrewerID = '%s' AND brewConfirmed='1' ORDER BY id ASC", $_SESSION['user_id']);
 		
 		$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
-		$contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
-		$row_contest_info = mysql_fetch_assoc($contest_info);
+		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+		$row_contest_info = mysqli_fetch_assoc($contest_info);
 		}
 		
-	elseif (($section == "brew") && ($action == "add")) {  
+	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "add")) {  
 		$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s'", $_SESSION['user_id']); 
 		$query_log_paid = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1'", $_SESSION['user_id']); 
 		$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'", $_SESSION['user_id']);
 		}
 	
-	elseif (($section == "brew") && ($action == "edit")) {  
+	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "edit")) {  
 		$query_log = "SELECT * FROM $brewing_db_table WHERE id = '$id'"; 
 		$query_log_paid = "SELECT * FROM $brewing_db_table WHERE brewPaid='1'"; 
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
@@ -65,8 +65,8 @@ else {
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewConfirmed='1'";
 		
 		$query_total_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		$total_count = mysql_query($query_total_count, $brewing) or die(mysql_error());
-		$row_total_count = mysql_fetch_assoc($total_count);
+		$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+		$row_total_count = mysqli_fetch_assoc($total_count);
 		}
 		
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "paid")) { 
@@ -76,8 +76,8 @@ else {
 		$query_log_confirmed = "SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'";
 			
 		$query_total_count = "SELECT COUNT(*) as 'count' FROM $brewing_db_table";
-		$total_count = mysql_query($query_total_count, $brewing) or die(mysql_error());
-		$row_total_count = mysql_fetch_assoc($total_count);
+		$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+		$row_total_count = mysqli_fetch_assoc($total_count);
 		}
 		
 	elseif (($section == "admin") && ($go == "entries") && ($filter == "default") && ($dbTable == "default") && ($bid == "default") && ($view == "unpaid")) { 
@@ -128,17 +128,17 @@ else {
 	echo $dbTable."<br>";
 	*/
 	
-	$log = mysql_query($query_log, $brewing) or die(mysql_error());
-	$row_log = mysql_fetch_assoc($log);
-	$totalRows_log = mysql_num_rows($log); 
+	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+	$row_log = mysqli_fetch_assoc($log);
+	$totalRows_log = mysqli_num_rows($log); 
 		
-	$log_paid = mysql_query($query_log_paid, $brewing) or die(mysql_error());
-	$row_log_paid = mysql_fetch_assoc($log_paid);
-	$totalRows_log_paid = mysql_num_rows($log_paid);
+	$log_paid = mysqli_query($connection,$query_log_paid) or die (mysqli_error($connection));
+	$row_log_paid = mysqli_fetch_assoc($log_paid);
+	$totalRows_log_paid = mysqli_num_rows($log_paid);
 	
-	$log_confirmed = mysql_query($query_log_confirmed, $brewing) or die(mysql_error());
-	$row_log_confirmed = mysql_fetch_assoc($log_confirmed);
-	$totalRows_log_confirmed = mysql_num_rows($log_confirmed);
+	$log_confirmed = mysqli_query($connection,$query_log_confirmed) or die (mysqli_error($connection));
+	$row_log_confirmed = mysqli_fetch_assoc($log_confirmed);
+	$totalRows_log_confirmed = mysqli_num_rows($log_confirmed);
 	
 
 }

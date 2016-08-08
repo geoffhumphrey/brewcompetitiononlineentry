@@ -13,7 +13,7 @@ if ($totalRows_archive > 0) { ?>
 		if (ltrim($dbTable, "brewing_") != $row_archive['archiveSuffix']) echo "</a>"; 
 		else echo "</strong>"; 
 		echo "&nbsp;&nbsp;&nbsp;"; 
-	} while ($row_archive = mysql_fetch_assoc($archive)); ?><p>
+	} while ($row_archive = mysqli_fetch_assoc($archive)); ?><p>
 <?php }
 	include (SECTIONS.'bos.sec.php');
 	include (SECTIONS.'winners.sec.php'); 

@@ -45,7 +45,7 @@ if ($totalRows_tables > 0) {
 				?>
 				<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
 				<?php 
-				} while ($row_tables_edit = mysql_fetch_assoc($tables_edit)); ?>
+				} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
 		</select>
 		</div>
 	</div><!-- ./Form Group -->
@@ -151,7 +151,7 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<th width="1%" nowrap="nowrap">Flight <?php echo $i; ?></th>
 		<?php } ?>
         <th>Round</th>
-        <th>Special Ingredients/Classic Style</th>
+        <th>Required Info</th>
     </tr>
 </thead>
 <tbody>
@@ -186,11 +186,11 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
     	<td><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($flight_number[0] != "")) echo $flight_number[0]; else echo $random; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($flight_number[1] == $i)) echo "checked"; ?>></td>
 		<?php } ?>
         <td><?php if ($action == "edit") echo $flight_number[3]; ?></td>
-        <td><?php echo $row_entries['brewInfo']; ?></td>
+        <td><?php echo str_replace("^","; ",$row_entries['brewInfo']); ?></td>
 	</tr>
     <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
     <?php } 
-	while ($row_entries = mysql_fetch_assoc($entries));
+	while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     <tfoot>
@@ -206,7 +206,11 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
 	</tfoot>
 </table>
 <input type="submit" class="btn btn-primary" value="<?php if ($action == "edit") echo "Update"; else echo "Submit"; ?>">
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } // end if ($filter !="default") 
 ?>
@@ -216,18 +220,33 @@ if (($action == "assign") && ($filter == "rounds")) {
 	if ($totalRows_tables > 0) { 
 ?>
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
-<p><input type="submit" class="btn btn-primary" value="Assign"></p>
 <?php 
-		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysql_fetch_assoc($tables_edit));
+		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
+		
+		//print_r($a);
 		
 		foreach (array_unique($a) as $flight_table) {
 			
 			include(DB.'admin_judging_flights.db.php');
+			//echo $query_flights."<br>";
+			//echo $totalRows_flights."<br>";
 			
-?>
-	<h4>Table <?php echo $row_tables['tableNumber']." <small>&ndash; ".$row_tables['tableName']; ?> <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $flight_table; ?>" data-toggle="tooltip" data-placement="top" title="Define/Edit the <?php echo $row_tables['tableName']; ?> Flights"><span class="fa fa-pencil-square-o"></span></a></small></h4>
+			
+			
+			$judging_location_rounds = "";
+			if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
+			else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
+			
+			$judging_table_name = "Table ".$row_tables['tableNumber']." &ndash; ".$row_tables['tableName'];
+			if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
+			
+			$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."(".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
+			?>
+            
+            
+	<h4><?php echo $judging_table_name; ?></h4>
 
-	<p><strong>Location:</strong> <?php echo $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time") ?> (<?php echo $row_table_location['judgingRounds']; ?> rounds <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_table_location['id']; ?>" title="Edit the <?php echo $row_table_location['judgingLocName']; ?> location">defined for this location</a>).</p>
+	<p><strong>Location:</strong> <?php echo $judging_location_string; ?></p>
 	<?php 
 	if ($totalRows_flights > 0) {
 		if ($_SESSION['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
@@ -255,7 +274,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 		<?php }
 	} else echo "<p>No flights have been defined.</p>";
   } ?>
-<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary"  value="Assign"></p>
+<p><input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary" value="Assign"></p>
 
 <!-- Form submit confirmation modal -->
 <!-- Refer to bcoem_custom.js for configuration -->
@@ -276,7 +295,11 @@ if (($action == "assign") && ($filter == "rounds")) {
         </div>
     </div>
 </div>
+<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php } else { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
+<?php } ?>
 </form>
 <?php } // end if ($totalRows_tables > 0) ?>
 <?php } // end if ($action == "assign") ?>

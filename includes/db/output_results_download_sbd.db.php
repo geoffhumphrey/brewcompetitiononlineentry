@@ -1,19 +1,6 @@
 <?php
-
-if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-}
-// end if (NHC)
-
-else {
-	
-	$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$row_sbi['id']);
-	$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
-	$row_sbd = mysql_fetch_assoc($sbd);
-	$totalRows_sbd = mysql_num_rows($sbd);
-	
-}
-
+$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s' ORDER BY sbd_place ASC",$prefix."special_best_data",$row_sbi['id']);
+$sbd = mysqli_query($connection,$query_sbd) or die (mysqli_error($connection));
+$row_sbd = mysqli_fetch_assoc($sbd);
+$totalRows_sbd = mysqli_num_rows($sbd);
 ?>

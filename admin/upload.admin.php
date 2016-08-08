@@ -53,30 +53,35 @@
 		);
 	</script>
 <?php 
-// List Files in the directory
 $upload_dir = (USER_IMAGES);
-$handle = opendir($upload_dir);
-$filelist = "<h2>Files in the Directory</h2>";
-$filelist .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
-$filelist .= "<thead>\n";
-$filelist .= "<tr>\n";
-$filelist .= "<th>File Name</th>\n";
-$filelist .= "<th>Date/Time Uploaded</th>\n";
-$filelist .= "<th>Actions</th>\n";
-$filelist .= "</thead>\n";
-$filelist .= "<tbody>\n";
-while ($file = readdir($handle)) {
-   if(!is_dir($file) && !is_link($file)) {
-		$filelist .= "<tr>\n";
-		$filelist .= "<td><a class=\"user_images\" rel=\"group1\" href=\"".$base_url."user_images/$file\" title=\"".$file."\" >".$file."</a></td>\n";
-		$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
-		$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=image&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-trash\"></span></a></td>\n";
-		$filelist .= "</tr>\n";
-   }
+
+if (!is_dir_empty($upload_dir)) {
+	
+	// List Files in the directory
+	$handle = opendir($upload_dir);
+	$filelist = "<h2>Files in the Directory</h2>";
+	$filelist .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
+	$filelist .= "<thead>\n";
+	$filelist .= "<tr>\n";
+	$filelist .= "<th>File Name</th>\n";
+	$filelist .= "<th>Date/Time Uploaded</th>\n";
+	$filelist .= "<th>Actions</th>\n";
+	$filelist .= "</thead>\n";
+	$filelist .= "<tbody>\n";
+	while ($file = readdir($handle)) {
+	   if(!is_dir($file) && !is_link($file)) {
+			$filelist .= "<tr>\n";
+			$filelist .= "<td><a class=\"user_images\" rel=\"group1\" href=\"".$base_url."user_images/$file\" title=\"".$file."\" >".$file."</a></td>\n";
+			$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
+			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=image&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
+			$filelist .= "</tr>\n";
+	   }
+	}
+	$filelist .= "</tbody>\n";
+	$filelist .= "</table>\n";
+	echo $filelist;
+
 }
-$filelist .= "</tbody>\n";
-$filelist .= "</table>\n";
-echo $filelist;
 
 ?>
 
