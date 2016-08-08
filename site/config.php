@@ -14,29 +14,26 @@
 /*
 Generally, this line is left alone.
 */
-$hostname = "localhost";
+$hostname = "";
 
 /* 
 Change the word root to the username for your database (generally the same as your login code for your web hosting company).
 INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your username is fred then the line should read $username = "fred".
 */
-//$username = "";
-$username = "brewcomp_bcoe";
+$username = "";
 
 /* 
 INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
 For example, if your password is flintstone then the line should read $password = "flintsone".
 */
-//$password = "";
-$password = "Ze9P#vK9tE";
+$password = "";
 
 /*
 The following line is the name of your MySQL database you set up already.  
 If you haven't set up the database yet, please refer to http://www.brewcompetition.com/index.php?page=install for setup instructions. 
 */
-//$database = "";
-$database = "brewcomp_bcoetest2";
+$database = "";
 
 /* 
 This line strings the information together and connects to MySQL.  
@@ -52,18 +49,6 @@ $brewing = $connection;
 
 
 /******End MySQL Connections*******/
-
-/*
-Give your installation a unique ID. If you plan on running multiple instances
-of BCOE&M from the same domain, you'll need to give each installation a 
-unique identifier. This prevents "cross-pollination" of session data display.
-
-For single installations, the default below will be sufficient. Otherwise,
-change the variable to something completely unique for each installation.
-*/
-
-$installation_id = "Btdw@fv1980!";
-
 
 /*
 Set up your images directory path.  This is used for label image uploading.
@@ -115,8 +100,7 @@ $prefix = "comp1_";
 ******************************************************************************
 */
 
-//$prefix = "";
-$prefix = "bigbeers_";
+$prefix = "";
 
 
 /*
@@ -154,7 +138,7 @@ Directions are in the .htaccess file
 
 */
 
-$sub_directory = "/bcoetest";
+$sub_directory = "";
 
 /*
 ******************************************************************************
