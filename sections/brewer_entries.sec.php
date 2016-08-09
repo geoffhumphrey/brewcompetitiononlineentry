@@ -119,9 +119,6 @@ do {
 	$entry_output .= "</td>";
 
 //	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";	
-	$judgingnumber = $row_log['brewJudgingNumber'];
-	$scoresheetfilename = $judgingnumber.".pdf";
-	$scoresheetfile = USER_DOCS.$scoresheetfilename;
 	$scoresheet = FALSE;
 	if ($show_scores) {
 
@@ -130,7 +127,10 @@ do {
 		$entry_output .= "</td>";
 
 		// Check whether scoresheet file exists, and, if so, provide link.
-		$scoresheetfile = USER_DOCS.$judgingnumber.".pdf";
+		$judgingnumber = $row_log['brewJudgingNumber'];
+		$scoresheetfilename = $judgingnumber.".pdf";
+		$scoresheetfile = USER_DOCS.$scoresheetfilename;
+//		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
 //		if (file_exists($filename)) $scoresheet = TRUE;		
 		if (file_exists($scoresheetfile)) {
 			$scoresheet = TRUE;
