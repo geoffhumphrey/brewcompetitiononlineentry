@@ -137,16 +137,16 @@ do {
 			
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 
 			$random_num_str = str_pad(mt_rand(1,9999999999),10,'0',STR_PAD_LEFT);
-			$randomfilename = $judgingnumber."-".$random_num_str."-view.pdf";
+			$randomfilename = $random_num_str.".pdf";
 			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
 			$scoresheetrandomfile = USER_TEMP.$randomfilename;
 			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
 		
 			$scoresheet_link = "";			
-			$scoresheet_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
 			$scoresheet_link .= "scoresheetfilename=".$scoresheetfilename;
-			$scoresheet_link .= "&amp;randomfilename=".$randomfilename;
-			$scoresheet_link .= "\" data-toggle=\"tooltip\" title=\"PDF of the scoresheets for entry '".$row_log['brewName']."'.\">";
+			$scoresheet_link .= "&amp;randomfilename=".$randomfilename."&amp;download=true";
+			$scoresheet_link .= "\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for '".$row_log['brewName']."'.\">";
 			$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 		}		
 

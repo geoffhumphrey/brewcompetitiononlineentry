@@ -83,15 +83,39 @@ if (!is_dir_empty($upload_dir)) {
 	$filelist .= "<tbody>\n";
 	while ($file = readdir($handle)) {
 	   if(!is_dir($file) && !is_link($file)) {
+		   
+		   	// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 
+			$random_num_str = str_pad(mt_rand(1,9999999999),10,'0',STR_PAD_LEFT);
+			$randomfilename = $random_num_str.".pdf";
+			$scoresheetfilename = $file;
+			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
+			$scoresheetrandomfile = USER_TEMP.$randomfilename;
+			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
+			
+			$scoresheet_link = "";			
+			$scoresheet_link .= "<a id=\"modal_window_link\" class=\"user_images\" href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link .= "scoresheetfilename=".$scoresheetfilename;
+			$scoresheet_link .= "&amp;randomfilename=".$randomfilename;
+			$scoresheet_link .= "\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for this entry.\">";
+			$scoresheet_link .= $file."</a>&nbsp;&nbsp;";
+		   
 			$filelist .= "<tr>\n";
-			$filelist .= "<td><a id=\"modal_window_link\" class=\"user_images\" href=\"".$base_url."user_docs/$file\" title=\"".$file."\" >".$file."</a></td>\n";
+			$filelist .= "<td>".$scoresheet_link."</td>\n";
 			$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
 			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$file." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
 			$filelist .= "</tr>\n";
+			
+			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+			foreach ($tempfiles as $file) {
+				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judgingnumber) !== FALSE))) {
+					unlink(USER_TEMP.$file);
+				}
+			}
 	   }
 	}
 	$filelist .= "</tbody>\n";
 	$filelist .= "</table>\n";
+		
 	echo $filelist;
 
 }

@@ -24,13 +24,20 @@ if (isset($_SESSION['loginUsername'])) {
 									
 	if (copy($scoresheetfile, $scoresheetrandomfile)) {
 		header('Content-type: application/pdf');
-		header('Content-Disposition: inline; filename="' . $scoresheetfilename . '"');
+		
+		// Force Download
+		if (isset($_GET['download'])) header("Content-disposition: attachment; filename=$scoresheetfilename"); 
+		else header('Content-Disposition: inline; filename="' . $scoresheetfilename . '"');
+	
 		header('Content-Transfer-Encoding: binary');
 		header('Content-Length: ' . filesize($scoresheetrandomfile));
 		header('Accept-Ranges: bytes');
    		ob_clean();
 	    flush();
+		
+		
     	readfile($scoresheetrandomfile);
+		
 	}
 	else {
   		echo "<html><head><title>Error</title></head><body>";
@@ -40,4 +47,5 @@ if (isset($_SESSION['loginUsername'])) {
 	}
 //	exit();
 } // end if logged in
+
 ?>
