@@ -117,16 +117,46 @@ do {
 	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= sprintf("%04s",$row_log['id']);
 	$entry_output .= "</td>";
-	
-	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+
+//	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";	
 	$scoresheet = FALSE;
 	if ($show_scores) {
-	// See if scanned scoresheet file exists, if so, provide link.
-		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-		if (file_exists($filename)) $scoresheet = TRUE;		
+
 		$entry_output .= "<td class=\"hidden-xs\">";
 		$entry_output .= $row_log['brewJudgingNumber']; 
 		$entry_output .= "</td>";
+
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$judgingnumber = $row_log['brewJudgingNumber'];
+		$scoresheetfilename = $judgingnumber.".pdf";
+		$scoresheetfile = USER_DOCS.$scoresheetfilename;
+//		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+//		if (file_exists($filename)) $scoresheet = TRUE;		
+		if (file_exists($scoresheetfile)) {
+			$scoresheet = TRUE;
+			
+			// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 
+			$random_num_str = str_pad(mt_rand(1,9999999999),10,'0',STR_PAD_LEFT);
+			$randomfilename = $judgingnumber."-".$random_num_str."-view.pdf";
+			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
+			$scoresheetrandomfile = USER_TEMP.$randomfilename;
+			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
+		
+			$scoresheet_link = "";			
+			$scoresheet_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link .= "scoresheetfilename=".$scoresheetfilename;
+			$scoresheet_link .= "&amp;randomfilename=".$randomfilename;
+			$scoresheet_link .= "\" data-toggle=\"tooltip\" title=\"PDF of the scoresheets for entry '".$row_log['brewName']."'.\">";
+			$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+		}		
+
+		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+		foreach ($tempfiles as $file) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judgingnumber) !== FALSE))) {
+				unlink(USER_TEMP.$file);
+			}
+		}
 	}
 	
 	$entry_output .= "<td>";
@@ -230,7 +260,8 @@ do {
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
 	if ($scoresheet) { 
-		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
+		$entry_output .= $scoresheet_link;	
+//		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
 	}
 	
 	if ((judging_date_return() > 0) && ($action != "print")) {
