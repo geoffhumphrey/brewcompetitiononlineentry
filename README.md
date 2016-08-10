@@ -1,7 +1,11 @@
 # Brew Competition Online Entry & Management
+
 Working repository of BCOE&M. 
+
 Website: http://www.brewcompetition.com.
+
 [Installation Instructions] (http://www.brewcompetition.com/install-instructions)
+
 [Upgrade Instructions] (http://www.brewcompetition.com/upgrade-instructions)
 
 The Brew Competition Online Entry and Management (BCOE&M) system is an online application to assist homebrew competition organizers - of the beer/mead/cider variety - to collect, store, and manage their competition entry, organization, and scoring data.
