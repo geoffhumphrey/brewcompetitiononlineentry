@@ -389,6 +389,11 @@ if ($go != "admin") echo $info_msg;
                     <!-- Input Here -->
                     <div class="checkbox">
                         <label>
+                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>> Judge with Sensory Training
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
                             <input type="checkbox" name="brewerJudgeRank[]" value="Professional Brewer" <?php if (($action == "edit") && in_array("Professional Brewer",$judge_array)) echo "CHECKED"; ?>> Professional Brewer
                         </label>
                     </div>
@@ -399,14 +404,15 @@ if ($go != "admin") echo $info_msg;
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="brewerJudgeRank[]" value="Master Cicerone" <?php if (($action == "edit") && in_array("Master Cicerone",$judge_array)) echo "CHECKED"; ?>> Master Cicerone
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Advanced Cicerone" <?php if (($action == "edit") && in_array("Advanced Cicerone",$judge_array)) echo "CHECKED"; ?>> Advanced Cicerone
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                             <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>> Judge with Sensory Training
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Master Cicerone" <?php if (($action == "edit") && in_array("Master Cicerone",$judge_array)) echo "CHECKED"; ?>> Master Cicerone
                         </label>
                     </div>
+                    
                  </div>
                 <span class="help-block">Only the first two checked will appear on your Judge Scoresheet Labels</span>
             </div>

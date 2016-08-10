@@ -106,6 +106,14 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
+if ($section == "admin") {
+	$you_volunteer = "Is the volunteer ";
+}
+
+else {
+	$you_volunteer = "Are you ";
+}
+
 if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
 	
 	$page_info1 .= "<p class=\"lead\">Account registration has closed. <span class=\"small\">Thank you for your interest.</p>";
@@ -227,6 +235,7 @@ if ($go == "default") {  ?>
     <input type="hidden" name="password" value="bcoem">
     <input type="hidden" name="userQuestion" value="Randomly generated.">
     <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(6,2); ?>">
+    <input type="hidden" name="brewerJudgeWaiver" value="Y">
     <?php if ($view == "quick") { ?>
         <input type="hidden" name="brewerAddress" value="1234 Main Street">
         <input type="hidden" name="brewerCity" value="Anytown">
@@ -234,16 +243,6 @@ if ($go == "default") {  ?>
         <input type="hidden" name="brewerZip" value="80000">
         <input type="hidden" name="brewerCountry" value="<?php echo $random_country; ?>">
         <input type="hidden" name="brewerPhone1" value="1234567890">
-        <input type="hidden" name="brewerJudge" value="Y">
-        <input type="hidden" name="brewerSteward" value="Y">
-        <?php if ($totalRows_judging > 1) { ?>
-        <?php do { ?>
-        	<input type="hidden" name="brewerJudgeLocation[]" value="<?php echo "Y-".$row_judging3['id']; ?>">
-        <?php } while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
-        <?php do { ?>
-       		<input type="hidden" name="brewerStewardLocation[]" value="<?php echo "Y-".$row_stewarding['id']; ?>">
-        <?php } while ($row_stewarding = mysqli_fetch_assoc($stewarding)); ?>
-        <?php } // end if ($totalRows_judging > 1) ?>
     <?php } // end if ($view == "quick")?>
 <?php } // end if ($section == "admin") ?>
     <input type="hidden" name="userLevel" value="2" />
@@ -257,7 +256,6 @@ if ($go == "default") {  ?>
     <input type="hidden" name="brewerJudge" value="N" />
     <input type="hidden" name="brewerSteward" value="N" />
 <?php } ?>
-
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -565,11 +563,11 @@ if ($go == "default") {  ?>
 	
 	<?php if ($go != "entrant") { ?>
 	<?php if (!$judge_limit) { ?>
-    <?php if ($view == "default") { ?>
+    
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<p>Are you willing and qualified to serve as a judge in this competition?</p>
+			<p><?php echo $you_volunteer; ?> willing and qualified to serve as a judge in this competition?</p>
 			<div class="input-group">
 				<!-- Input Here -->
 				<label class="radio-inline">
@@ -581,9 +579,9 @@ if ($go == "default") {  ?>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
-    <?php } // end if ($view == "default") ?>
+    
 	<?php if ($totalRows_judging > 1) { ?>
-    <?php if ($view == "default") { ?>
+    
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Availability</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -601,15 +599,14 @@ if ($go == "default") {  ?>
 		<?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
 		</div>
 	</div><!-- ./Form Group -->
-    <?php } // end if ($view == "default") ?>
-	<?php } // end if ($totalRows_judging > 1) ?>
+    
 	<?php } // end if (!$judge_limit) ?>
+	<?php } // end if ($go != "entrant") ?>
 	<?php if (!$steward_limit) { ?>
-    <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<p>Are you willing to serve as a steward in this competition?</p>
+			<p><?php echo $you_volunteer; ?> willing to serve as a steward in this competition?</p>
 			<div class="input-group">
 				<!-- Input Here -->
 				<label class="radio-inline">
@@ -621,9 +618,8 @@ if ($go == "default") {  ?>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
-    <?php } ?>
+    
 	<?php if ($totalRows_judging > 1) { ?>
-    <?php if ($view == "default") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Stewarding Availability</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -641,7 +637,6 @@ if ($go == "default") {  ?>
 		<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 		</div>
 	</div><!-- ./Form Group -->
-	<?php } ?>
 	<?php } // end if ($totalRows_judging > 1) 
 		else { ?>
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
@@ -649,7 +644,7 @@ if ($go == "default") {  ?>
     <?php } ?>
     <?php } // end if (!$steward_limit) ?>
     
-    <?php if ($go != "entrant") { ?>
+    <?php if (($go != "entrant") && ($section != "admin")) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Waiver</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -664,10 +659,6 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } ?>
-    
-    
-    
-    
 <?php } // end if ($go != "entrant") ?>	
 	<?php if ($section != "admin") { ?>
    	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
