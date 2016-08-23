@@ -27,6 +27,7 @@ define('OUTPUT',ROOT.'output'.DIRECTORY_SEPARATOR);
 define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
 define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
+define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 
 // --------------------------------------------------------
 // Global Definitions

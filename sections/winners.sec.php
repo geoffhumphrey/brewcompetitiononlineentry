@@ -52,7 +52,7 @@ if ($row_scored_entries['count'] > 0) {
 	
 	if ($entry_count > 0) { 
 		
-		if ($entry_count > 1) $entries = "entries"; else $entries = "entry";
+		if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
 			
 			if (score_count($row_tables['id'],"1"))	{
 				
@@ -66,17 +66,17 @@ if ($row_scored_entries['count'] > 0) {
 				$table_body1 = "";
 				
 				// Build page headers
-				$header1_1 .= "<h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3>";
-				$header1_2 .= "<div class=\"bcoem-winner-table\"><h3>Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." ".$entries.")</h3><p>No winners have been entered yet for this table. Please check back later.</p></div>";
+				$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+				$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 				
 				// Build table headers
 				$table_head1 .= "<tr>";
-				$table_head1 .= "<th width=\"1%\" nowrap>Place</th>";
-				$table_head1 .= "<th width=\"24%\">Brewer(s)</th>";
-				$table_head1 .= "<th width=\"24%\"><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
-				$table_head1 .= "<th width=\"24%\">Style</th>";
-				$table_head1 .= "<th width=\"24%\" class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-				if ($filter == "scores") $table_head1 .= "<th width=\"1%\" nowrap>Score</th>";
+				$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
+				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
+				$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
+				$table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+				if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
 				$table_head1 .= "</tr>";
 				
 				// Build table body
@@ -174,7 +174,7 @@ if ($row_scored_entries['count'] > 0) {
 	} while ($row_tables = mysqli_fetch_assoc($tables));
 }
 
-else echo "<p>Winning entries have not been posted yet. Please check back later.</p>";
+else echo sprintf("<p>%s</p>",$winners_text_001);
 ?>
 
 <!-- Public Page Rebuild completed 08.26.15 --> 

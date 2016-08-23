@@ -99,12 +99,12 @@ httpxml.send(null);
 <?php } ?>
 <?php if ($action == "username") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="user_name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Email</label>
+        <label for="user_name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_new." ".$label_email; ?></label>
         <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="user_name-addon1"><span class="fa fa-envelope"></span></span>
-                <input class="form-control" id="user_name" name="user_name" type="email" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" placeholder="" data-error="Your new email address is required and must be in valid form" required>
+                <input class="form-control" id="user_name" name="user_name" type="email" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" placeholder="" data-error="<?php echo $user_text_000; ?>" required>
                 <span class="input-group-addon" id="user_name-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
@@ -114,12 +114,12 @@ httpxml.send(null);
     </div><!-- ./Form Group -->
 
 	<div class="form-group"><!-- Form Group Checkbox INLINE -->
-        <label for="sure" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Are You Sure?</label>
+        <label for="sure" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sure; ?></label>
         <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="checkbox-inline">
-                    <input type="checkbox" name="sure" value="Y" id="sure_0" required> Yes
+                    <input type="checkbox" name="sure" value="Y" id="sure_0" data-error="<?php echo $user_text_003; ?>" required> <?php echo $label_yes; ?>
                 </label>
             </div>
             <div class="help-block with-errors"></div>
@@ -129,18 +129,18 @@ httpxml.send(null);
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Change Email</button>
+			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_email; ?></button>
 		</div>
 	</div><!-- Form Group -->
 <?php } ?>
 <?php if ($action == "password") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="passwordOld" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Old Password</label>
+        <label for="passwordOld" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_old." ".$label_password; ?></label>
         <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="passwordOld-addon1"><span class="fa fa-key"></span></span>
-                <input class="form-control" name="passwordOld" type="password" placeholder="" id="passwordOld" required>
+                <input class="form-control" name="passwordOld" type="password" placeholder="" id="passwordOld" data-error="<?php echo $user_text_001; ?>" required>
                 <span class="input-group-addon" id="passwordOld-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
@@ -148,12 +148,12 @@ httpxml.send(null);
     </div><!-- ./Form Group -->
 
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="password" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Password</label>
+        <label for="password" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_new." ".$label_password; ?></label>
         <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
-                <input class="form-control" name="password" type="password" placeholder="" id="newPassword" required>
+                <input class="form-control" name="password" type="password" placeholder="" id="newPassword" data-error="<?php echo $user_text_002; ?>" required>
                 <span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
@@ -163,7 +163,7 @@ httpxml.send(null);
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Change Password</button>
+			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_password; ?></button>
 		</div>
 	</div><!-- Form Group -->
 

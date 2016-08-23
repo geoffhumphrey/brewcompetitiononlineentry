@@ -5,6 +5,7 @@ require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 require(DB.'setup.db.php');
 require(INCLUDES.'db_tables.inc.php');
+require(LANG.'language.lang.php');
 require(INCLUDES.'headers.inc.php');
 if (($section == "step2") || ($section == "step3")) require(INCLUDES.'constants.inc.php');
 

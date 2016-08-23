@@ -65,51 +65,48 @@ $message7 = "";
 $message8 = "";
 $message9 = "";
 
-// Build Links
-//$help_link = "<p><span class='icon'><img src='".$base_url."images/help.png' /></span><a id='modal_window_link' href='http://help.brewcompetition.com/files/beerxml_import.html' title='BCOE&amp;M Help: BeerXML'>My Account Help</a></p>";
-
 // Build Messages
 
 // Disaable entry add/edit if registration closed and entry window closed
 if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
-	$message1 .= "<div class='error'>Importing Entries Not Available</div>";
-	if ($registration_open == "0") $message1 .= "<p>Entry registration has not opened yet.</p>";
-	if ($registration_open == "2") $message1 .= "<p>Entry registration has closed.</p>";
+	$message1 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	if ($registration_open == "0") $message1 .= sprintf("<p>%s</p>",$alert_text_027);
+	if ($registration_open == "2") $message1 .= sprintf("<p>%s</p>",$alert_text_028);
 }
 
 // Open but entry limit reached
 // No importing
 elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit)) {
-	$message2 .= "<div class='error'>Importing Entries Not Available</div>";
-	$message2 .= "<p>The competition entry limit has been reached.</p>";
+	$message2 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message2 .= sprintf("<p>%s</p>",$alert_text_030);
 }
 
 // Open but personal entry limit reached
 // No importing
 elseif (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($remaining_entries == 0)) {
-	$message3 .= "<div class='error'>Adding Entries Not Available</div>";
-	$message3 .= "<p>Your personal entry limit has been reached.</p>";
+	$message3 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message3 .= sprintf("<p>%s</p>",$alert_text_031);
 }
 
 // Registration open, but entry window not
 // No importing
 elseif (($registration_open == 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
-	$message4 .= "<div class='error'>Importing Entries Not Available</div>";
-	$message4 .= "<p>You will be able to add or import entries on or after $entry_open.</p>";
+	$message4 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message4 .= sprintf("<p>%s</p>",$alert_text_032);
 }
 
 // Special for NHC
 // No importing
 elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($prefix != "final_")) {
-	$message5 .= "<div class='error'>Importing Entries Not Available</div>";
-	$message5 .= "<p>NHC registration has closed.</p>";
+	$message5 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message5 .= sprintf("<p>%s</p>",$alert_text_028);
 }
 
 // Special for NHC
 // Close adding or editing during the entry window as well
 elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($entry_window_open != 1) && ($prefix == "final_")) {
-	$message6 .= "<div class='error'>Importing Entries Not Available</div>";
-	$message6 .= "<p>NHC registration has closed.</p>";
+	$message6 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message6 .= sprintf("<p>%s</p>",$alert_text_028);
 }
 
 else {
@@ -138,11 +135,11 @@ else {
 				
 				// File size check
 				if ($_FILES['userfile']['size'] > $MAX_SIZE) 
-				$message .= "The file size is over 2MB.  Please adjust the size and try again.";
+				$message .= $beerxml_text_003;
 				  
 				//File type and extension check
 				elseif (!in_array($file_type, $FILE_MIMES) && !in_array($file_ext, $FILE_EXTS))
-				$message .= "Sorry, that file type is not allowed to be uploaded.  Only .xml file extensions are allowed.";
+				$message .= $beerxml_text_002;
 				  
 				// Check if file uploaded, if so, parse.
 				elseif(is_uploaded_file($_FILES['userfile']['tmp_name'])) {
@@ -151,12 +148,12 @@ else {
 					
 					if($_POST["insert_type"] == "recipes"){
 						$insertedRecipes = $input->insertRecipes();
-						if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " entries added.";
-						else $message .= ucwords(readable_number(count($insertedRecipes))) . " entry added.";
+						if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_011.".";
+						else $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_012.".";
 					} 
 					
 					//$_SESSION['recipes'] = $recipes;
-					$message .= " ".$_FILES['userfile']['name']." has been uploaded and the brew has been added to your list of entries.";
+					$message .= sprintf(" ".$_FILES['userfile']['name']." %s", $beerxml_text_001);
 				}
 				
 				
@@ -166,12 +163,12 @@ else {
 				*/
 			}
 			elseif (!$_FILES['userfile']) $message .= "";
-			else $message .= "Invalid file specified.";
-			if (!empty($message)) $message7 .= "<p><strong class=\"text-danger\">".$message."</strong> However, it has not been confirmed. To confirm your entry, access your <a href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">entries list</a> for further instructions.</p><p>Or, you can add upload another BeerXML entry below.</p>";
+			else $message .= $beerxml_text_004;
+			if (!empty($message)) $message7 .= sprintf("<p><strong class=\"text-danger\">".$message."</strong> %s</p>",$beerxml_text_005);
 		}
 	}
 }
-if (!$php_OK) $message9 .= "<div class='error'>Your server's version of PHP does not support the BeerXML import feature.</div><p>PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version.".</p>";
+if (!$php_OK) $message9 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong> %s</div>",$beerxml_text_006,$beerxml_text_007);
 
 
 // --------------------------------------------------------------
@@ -184,20 +181,16 @@ echo $message3;
 echo $message4;
 echo $message5;
 echo $message6;
-//echo $message8;
 echo $message9;
-
 if ($upload_form_display) { ?>
-<p class="lead">Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.</p>
+<p class="lead"><?php echo $beerxml_text_008; ?></p>
 <?php echo $message7; ?>
 <form name="upload" id="upload" ENCTYPE="multipart/form-data" method="post" action="<?php echo $base_url; ?>index.php?section=beerxml&amp;go=upload">
-
 <div class="fileinput fileinput-new" data-provides="fileinput">
-    <span class="btn btn-default btn-file"><span>Choose BeerXML File</span><input type="file" name="userfile" /></span>
-    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
+    <span class="btn btn-default btn-file"><span><?php echo $beerxml_text_009; ?></span><input type="file" name="userfile" /></span>
+    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger"><?php echo $beerxml_text_010; ?></span>
 </div>
-
-<p><input class="btn btn-primary" name="upload" type="submit" class="button" value="Upload" /></p>
+<p><input class="btn btn-primary" name="upload" type="submit" class="button" value="<?php echo $label_upload; ?>" /></p>
 <input type="hidden" name="insert_type" value="recipes" />
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>" />
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>" />

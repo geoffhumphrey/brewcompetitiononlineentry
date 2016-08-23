@@ -46,8 +46,8 @@ Declare all variables empty at the top of the script. Add on later...
 $header_jc_1 = "";
 $page_info_jc_1 = "";
 
-$header_jc_1 .= sprintf("<p class='lead'>Thanks to all who participated in the %s.</p>",$_SESSION['contestName']);
-$page_info_jc_1 .= sprintf("<p class='lead'><small>There were <strong class='text-success'>%s</strong> entries judged and <strong class='text-success'>%s</strong> registered participants, judges, and stewards.</small></p>",get_entry_count('received'),get_participant_count('default'));
+$header_jc_1 .= sprintf("<p class=\"lead\">%s %s.</p>",$_SESSION['contestName']);
+$page_info_jc_1 .= sprintf("<p class=\"lead\"><small>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong> %s</small></p>",$judge_closed_001,get_entry_count('received'),$judge_closed_002,get_participant_count('default'),$judge_closed_003);
 
 echo $header_jc_1;
 echo $page_info_jc_1;

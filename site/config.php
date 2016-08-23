@@ -3,7 +3,7 @@
  * Module:        config.php 
  * Description:   This module houses configuration variables for DB connection, etc.
  *              
- * Last Modified: August 8, 2015
+ * Last Modified: August 17, 2015
  */
 /*
 
@@ -41,6 +41,10 @@ If MySQL is not found or the username/password combo is not correct an error wil
 */
 
 $connection = new mysqli($hostname, $username, $password, $database);
+mysqli_set_charset($connection,'utf8');
+mysqli_query($connection, "SET NAMES 'utf8';");
+mysqli_query($connection, "SET CHARACTER SET 'utf8';");
+mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8_unicode_ci';");
 
 /* Do not change the following line. */
 

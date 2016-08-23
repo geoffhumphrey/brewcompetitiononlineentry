@@ -48,7 +48,7 @@ require_once(INCLUDES.'recaptchalib.inc.php');
 
 if ($_SESSION['prefsContact'] == "N") {
 	$page_info = "";
-	$page_info .= "<p>Use the links below to contact individuals involved with coordinating this competition:</p>";
+	$page_info .= sprintf("<p>%s</p>",$contact_text_000);
 	$page_info .= "<ul>";
 	do {
 		$page_info .= "<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition']." &ndash; <a href='mailto:".$row_contact['contactEmail']."'>".$row_contact['contactEmail']."</a></li>";
@@ -73,18 +73,16 @@ if ($_SESSION['prefsContact'] == "Y") {
 	
 	} while ($row_contact = mysqli_fetch_assoc($contact)); 
 
-	$primary_page_info = "<p>Use the form below to contact a competition official. All fields with a star are <span class=\"text-warning\">required</span>.</p>";
-	$label1 = "Contact";
-	$label2 = "Your Name";
-	$label3 = "Your Email";
-	$label4 = "Subject";
-	$label5 = "Message";
-	$label6 = "Are You Human?";
-
-	$required_label = "Required";
+	$primary_page_info = sprintf("<p>%s</p>",$contact_text_001);
+	$label1 = $label_contact;
+	$label2 = $label_name;
+	$label3 = $label_email;
+	$label4 = $label_subject;
+	$label5 = $label_message;
+	$label6 = "CAPTCHA";
 
 	if ($msg == "1") {
-		$message1 = "<p>Additionally, a copy has been sent to the email address you provided.</p><p>Would you like to send <a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>another message</a>?</p>";
+		$message1 = sprintf("<p>%s <a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>%s</a></p>",$contact_text_002,$contact_text_003);
 		echo $message1; 
 	}
 	
@@ -146,10 +144,10 @@ if ($_SESSION['prefsContact'] == "Y") {
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label5; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 	<div class="input-group has-warning">
-                    	<span class="input-group-addon" id="contact-addon7"><span class="fa fa-pencil"></span></span>
+                    	<span class="input-group-addon" id="message-addon7"><span class="fa fa-pencil"></span></span>
                 		<!-- Input Here -->
                 		<textarea class="form-control" name="message" rows="6" required><?php if ($msg == "2") echo $_COOKIE['message']; ?></textarea>
-                        <span class="input-group-addon" id="XXX-addon2"><span class="fa fa-star"></span></span>
+                        <span class="input-group-addon" id="message-addon2"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -168,7 +166,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="form-group">
                 <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-xs-12">
                 	<!-- Input Here -->
-                  	<button name="submit" type="submit" class="btn btn-primary" >Send Message <span class="fa fa-send"></span> </button>
+                  	<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_send_message; ?> <span class="fa fa-send"></span> </button>
                 </div>
             </div><!-- Form Group -->
             

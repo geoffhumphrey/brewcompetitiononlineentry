@@ -3,6 +3,10 @@ require('paths.php');
 require(CONFIG.'bootstrap.php');
 session_name($prefix_session);
 session_start();
+$section = "qr";
+// Load language file
+require(LANG.'language.lang.php');
+
 // Validate user input against password in DB
 if ($action == "password-check") {
 	
@@ -110,9 +114,6 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 	$row_entry = mysqli_fetch_assoc($entry);
 	$totalRows_entry = mysqli_num_rows($entry);
-	
-	
-	
 	$entry_found = FALSE;
 	if ($totalRows_entry > 0) $entry_found = TRUE;
 	
@@ -188,32 +189,32 @@ $message = "";
 $alert_type = "alert-danger";
 
 if ($msg == "1") {
-	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>Password incorrect.</strong> Please try again.";
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
 }
 
 if ($msg == "2") {
-	$message .= "<span class=\"fa fa-check-circle\"></span> <strong>Password accepted.</strong>";
+	$message .= sprintf("<span class=\"fa fa-check-circle\"></span> <strong>%s</strong>",$qr_text_001);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "3") {
 	$view = explode("-",$view);
-	$message .= "<p><span class=\"fa fa-check-circle\"></span> <strong>Entry number ".sprintf("%04d",$view[0])." is checked in with <span class=\"text-danger\">".$view[1]."</span> as its judging number.</strong></p><p>If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number</strong>.<p>";
+	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p><p>%s<p>",$qr_text_002,$qr_text_003);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "6") {
-	$message .= "<p><span class=\"fa fa-check-circle\"></span> <strong>Entry number ".sprintf("%04d",$view)." is checked in.</strong></p>";
+	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p>",$qr_text_004);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "4") {
-	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>Entry number ".sprintf("%04d",$view)." was not found in the database.</strong> Set the bottle(s) aside and alert the competition organizer.";
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$qr_text_005);
 }
 
 if ($msg == "5") {
 	$view = explode("-",$view);
-	$message .= "<span class=\"fa fa-exclamation-circle\"></span> <strong>The judging number you entered - ".sprintf("%06d",$view[1])." - is already assigned to entry number ".sprintf("%04d",$view[0]).".</strong> Please try again.";
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
 }
 
 ?>
@@ -292,7 +293,6 @@ body {
 </style>
 </head>
 <body>
-
 <div class="container">
     <div class="container-signin">
     
@@ -306,9 +306,9 @@ body {
     
     <div class="page-header clearfix">
     	<?php if (isset($_SESSION['qrPasswordOK'])) { ?>
-        <h3><?php echo $header_output; ?>: QR Code Entry Check-In</h3>
+        <h3><?php echo $header_output.": ".$qr_text_007; ?></h3>
         <?php } else { ?>
-        <h1><?php echo $header_output; ?>: QR Code Entry Check-In</h1>
+        <h1><?php echo $header_output.": ".$qr_text_007; ?></h1>
         <?php } ?>
     </div> 
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
@@ -317,36 +317,38 @@ body {
     
     <!-- Password Form if Not Signed In -->
 	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
-        <p class="lead container-signin-heading">To check in entries via QR code, please provide the correct password.</p>
+        <p class="lead container-signin-heading"><?php echo $qr_text_008; ?></p>
         <div class="form-group">
-            <label for="inputPassword" class="sr-only">Password</label>
+            <label for="inputPassword" class="sr-only"><?php $label_password; ?></label>
             <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" autofocus required>
             <div class="help-block with-errors"></div>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>
    	</form>
 	
     <?php } ?>
     
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>    
 	<?php if (($id == "default") && ($action == "default")) { ?>
-    <p class="lead"><span class="fa fa-spinner fa-spin"></span> Scan a QR Code...</p>
+    <p class="lead text-primary"><span class="fa fa-spinner fa-spin"></span> <strong><?php echo $qr_text_014; ?></strong></p>
+    <p class="lead text-danger"><small><span class="fa fa-exclamation-triangle"></span> <?php echo $qr_text_015; ?></small></p>
+    <p><?php echo $qr_text_016; ?></p>
     <?php } if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
-    <p class="lead text-primary"><strong>Assign a judging number and/or box number to entry <span class="text-success"><?php echo sprintf("%04d",$id); ?></span></strong>.</p>
-    <p class="lead small text-danger"><strong>ONLY inupt a judging number if your competition is using judging number labels at sorting.</strong></p>
+    <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="text-success"><?php echo sprintf("%04d",$id); ?></span></strong>.</p>
+    <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     	<div class="form-group">
-            <label for="inputJudgingNumber">Judging Number</label>
-            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="Six numbers with leading zeros - e.g., 000021" data-error="Judging number must be six digits" autofocus>
+            <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
+            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>
             <div class="help-block with-errors"></div>
-            <div class="help-block small">Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).</div>
+            <div class="help-block small"><?php echo $qr_text_012; ?></div>
         </div>
         <div class="form-group">
-            <label for="inputBoxNumber">Box Number</label>
+            <label for="inputBoxNumber"><?php echo $label_box_number; ?></label>
             <input type="number" name="brewBoxNum" id="brewBoxNum" class="form-control" placeholder="">
             <div class="help-block with-errors"></div>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Check In-Entry</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_check_in; ?></button>
    	</form>	    
     <?php } ?>
     

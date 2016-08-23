@@ -56,33 +56,14 @@ elseif (MAINT) {
 if (check_setup($prefix."system",$database)) {
 	
 	mysqli_select_db($connection,$database);
-	$query_version_check = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."system");
+	$query_version_check = sprintf("SELECT version,version_date FROM %s WHERE id='1'",$prefix."system");
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.2.0, one DB update was required - no need to run full update
-	/*
-	if ($row_version_check['version'] == "2.1.1.0") {
-		
-		$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jPrefsQueued` `jPrefsQueued` CHAR(1) NULL DEFAULT NULL;",$prefix."judging_preferences");
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
-		$updateSQL = sprintf("UPDATE `%s` SET jPrefsQueued = 'Y' WHERE id=1;",$prefix."judging_preferences");
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
-		$update_required = FALSE;
-		$setup_success = FALSE;
-	}
-	*/
-	
-	// For 2.1.X.X, check if "brewStyleEntry" column is in the styles table since it was added in the 2.1.0.0 release
+	// For 2.1.5.0, check if "prefsLanguage" column is in the prefs table since it was added in the 2.1.5.0 release
 	// If not, run the update
 	
-	if (!check_update("brewStyleEntry", $prefix."styles")) {
+	if (!check_update("prefsLanguage", $prefix."preferences")) {
 		
 		$update_required = TRUE;
 		$setup_success = FALSE;
@@ -94,7 +75,6 @@ if (check_setup($prefix."system",$database)) {
 		
 		// Run update scripts if required
 		if ($update_required) {
-			
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
 			
@@ -104,7 +84,7 @@ if (check_setup($prefix."system",$database)) {
 		
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-05-31");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-08-31");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

@@ -49,6 +49,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		
 	// If file present without errors
 	if ((!empty($_FILES['file'])) && ($_FILES['file']['error'] == 0)) { 
+	
 		$file_type = $_FILES['file']['type'];
 		$file_ext = strtolower(substr($_FILES['file']['name'],strrpos($_FILES['file']['name'],".")));
 		

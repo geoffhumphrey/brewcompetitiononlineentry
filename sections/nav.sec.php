@@ -252,54 +252,54 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
         </div>
         <div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
               <ul class="nav navbar-nav">
-                <li<?php if ($section == "default") echo $active_class; ?>><a href="<?php echo $link_home; ?>">Home</a></li>
-                <li<?php if ($section == "entry") echo $active_class; ?>><a href="<?php echo $link_entry_info; ?>">Info</a></li>
-                <li<?php if ($section == "volunteers") echo $active_class; ?>><a href="<?php echo $link_volunteer_info; ?>">Volunteers</a></li>
+                <li<?php if ($section == "default") echo $active_class; ?>><a href="<?php echo $link_home; ?>"><?php echo $label_home; ?></a></li>
+                <li<?php if ($section == "entry") echo $active_class; ?>><a href="<?php echo $link_entry_info; ?>"><?php echo $label_info; ?></a></li>
+                <li<?php if ($section == "volunteers") echo $active_class; ?>><a href="<?php echo $link_volunteer_info; ?>"><?php echo $label_volunteers; ?></a></li>
                 <?php if ($sponsors) { ?>
-                <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>">Sponsors</a></li>
+                <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>"><?php echo $label_sponsors; ?></a></li>
                 <?php } ?>
-                <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>">Contact</a></li>
+                <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>"><?php echo $label_contact; ?></a></li>
                 <?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
-                <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo "Judge/Steward Registration"; else echo "Register"; ?></a></li>
+                <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo $label_judge_steward_reg; else echo $label_register; ?></a></li>
                 <?php } ?>
                 <?php if ($qr_enable) { ?>
-                <li><a href="<?php echo $link_qr; ?>" target="_blank">Entry Check-In</a></li>
+                <li><a href="<?php echo $link_qr; ?>" target="_blank"><?php echo $label_entry_check_in; ?></a></li>
                 <?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
-            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-placement="bottom" title="Help" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
+            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-placement="bottom" title="<?php echo $label_help; ?>" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
-          	<li><a href="javascript:window.print()" role="button" data-toggle="tooltip" data-placement="bottom" title="Print"><span class="fa fa-print"></span></a></li>
+          	<li><a href="javascript:window.print()" role="button" data-toggle="tooltip" data-placement="bottom" title="<?php echo $label_print; ?>"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
             <li class="dropdown">
                 <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="bottom"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                	<li class="dropdown-header">Logged in as:<br><strong><?php echo $_SESSION['loginUsername']; ?></strong></li>
+                	<li class="dropdown-header"><strong><?php echo $_SESSION['loginUsername']; ?></strong></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="<?php echo $link_list; ?>" tabindex="-1">My Account</a></li>
-                    <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1">Edit Account</a></li>
-                    <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1">Change Email</a></li>
-                    <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1">Change Password</a></li> 
-                    <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1">Entries</a></li>
+                    <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
+                    <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>
+                    <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1"><?php echo $label_change_email; ?></a></li>
+                    <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li> 
+                    <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1"><?php echo $label_entries; ?></a></li>
                     <?php if ($add_entry_link_show) { ?>
-                    <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1">Add an Entry</a></li>
-                    <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>">Import an Entry Using BeerXML</a><?php } ?>
+                    <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
+                    <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>"><?php echo $label_add_beerXML; ?></a><?php } ?>
                     <?php } ?> 
                     <?php if (!$disable_pay) { ?>
-                    <li><a href="<?php echo $link_pay; ?>">Pay Entry Fees</a></li>
+                    <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
                     <?php } ?>
                     <li role="separator" class="divider"></li>
-                    <li><a href="<?php echo $base_url; ?>includes/logout.inc.php">Log Out</a></li>
+                    <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>
                 </ul>
             </li>
             <?php if ($admin_user) { ?>
-            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> Admin</a></li>
+            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
             <?php } ?>
             <?php } else { ?>
-            <li<?php if ($section == "login") echo $active_class; ?>><a href="<?php echo $link_login; ?>" role="button">Log In</a></li>
+            <li<?php if ($section == "login") echo $active_class; ?>><a href="<?php echo $link_login; ?>" role="button"><?php echo $label_log_in; ?></a></li>
             <?php } ?>
             </ul>
           </div>

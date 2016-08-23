@@ -80,7 +80,7 @@ if ($setup_free_access == TRUE) {
 		  `brewerCountry` varchar(255) DEFAULT NULL,
 		  `brewerPhone1` varchar(25) DEFAULT NULL,
 		  `brewerPhone2` varchar(25) DEFAULT NULL,
-		  `brewerClubs` text,
+		  `brewerClubs` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 		  `brewerEmail` varchar(255) DEFAULT NULL,
 		  `brewerNickname` varchar(255) DEFAULT NULL,
 		  `brewerSteward` char(1) DEFAULT NULL,
@@ -88,12 +88,12 @@ if ($setup_free_access == TRUE) {
 		  `brewerJudgeID` varchar(25) DEFAULT NULL,
 		  `brewerJudgeMead` char(1) DEFAULT NULL,
 		  `brewerJudgeRank` varchar(255) DEFAULT NULL,
-		  `brewerJudgeLikes` text,
-		  `brewerJudgeDislikes` text,
-		  `brewerJudgeLocation` text,
-		  `brewerStewardLocation` text,
+		  `brewerJudgeLikes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerJudgeDislikes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerJudgeLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerStewardLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 		  `brewerJudgeExp` varchar(25),
-		  `brewerJudgeNotes` text,
+		  `brewerJudgeNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 		  `brewerAssignment` char(1) DEFAULT NULL,
 		  `brewerJudgeWaiver` char(1) DEFAULT NULL,
 		  `brewerAHA` int(11) DEFAULT NULL,
@@ -128,7 +128,7 @@ if ($setup_free_access == TRUE) {
 			`brewBottleDate` date DEFAULT NULL,
 			`brewDate` date DEFAULT NULL,
 			`brewYield` varchar(10) DEFAULT NULL,
-			`brewInfo` text,
+			`brewInfo` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`brewMead1` varchar(25) DEFAULT NULL,
 			`brewMead2` varchar(25) DEFAULT NULL,
 			`brewMead3` varchar(25) DEFAULT NULL,
@@ -443,7 +443,7 @@ if ($setup_free_access == TRUE) {
 			`brewYeastType` varchar(10) DEFAULT NULL,
 			`brewYeastAmount` varchar(25) DEFAULT NULL,
 			`brewYeastStarter` char(1) DEFAULT NULL,
-			`brewYeastNutrients` text,
+			`brewYeastNutrients` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`brewOG` varchar(10) DEFAULT NULL,
 			`brewFG` varchar(10) DEFAULT NULL,
 			`brewPrimary` varchar(10) DEFAULT NULL,
@@ -452,13 +452,13 @@ if ($setup_free_access == TRUE) {
 			`brewSecondaryTemp` varchar(10) DEFAULT NULL,
 			`brewOther` varchar(10) DEFAULT NULL,
 			`brewOtherTemp` varchar(10) DEFAULT NULL,
-			`brewComments` text,
-			`brewFinings` text,
-			`brewWaterNotes` text,
+			`brewComments` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewFinings` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewWaterNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`brewBrewerID` varchar(8) DEFAULT NULL,
 			`brewCarbonationMethod` char(1) DEFAULT NULL,
 			`brewCarbonationVol` varchar(10) DEFAULT NULL,
-			`brewCarbonationNotes` text,
+			`brewCarbonationNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`brewBoilHours` varchar(5) DEFAULT NULL,
 			`brewBoilMins` varchar(5) DEFAULT NULL,
 			`brewBrewerFirstName` varchar(255) DEFAULT NULL,
@@ -532,8 +532,8 @@ if ($setup_free_access == TRUE) {
 			`contestJudgeDeadline` varchar(255) DEFAULT NULL,
 			`contestDropoffOpen` varchar(255) DEFAULT NULL,
 			`contestDropoffDeadline` varchar(255) DEFAULT NULL,
-			`contestRules` text,
-			`contestAwardsLocation` text,
+			`contestRules` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestAwardsLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`contestAwardsLocName` varchar(255) DEFAULT NULL,
 			`contestAwardsLocDate` varchar(255) DEFAULT NULL,
 			`contestAwardsLocTime` varchar(255) DEFAULT NULL,
@@ -543,18 +543,18 @@ if ($setup_free_access == TRUE) {
 			`contestEntryFee2` int(11) DEFAULT NULL,
 			`contestEntryFeeDiscount` char(1) DEFAULT NULL,
 			`contestEntryFeeDiscountNum` char(4) DEFAULT NULL,
-			`contestBottles` text,
-			`contestShippingAddress` text,
+			`contestBottles` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestShippingAddress` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`contestShippingName` varchar(255) DEFAULT NULL,
-			`contestAwards` text,
+			`contestAwards` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`contestLogo` varchar(255) DEFAULT NULL,
-			`contestBOSAward` text,
+			`contestBOSAward` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`contestEntryCap` int(8) DEFAULT NULL,
 			`contestEntryFeePassword` varchar(255) DEFAULT NULL,
 			`contestEntryFeePasswordNum` int(11) DEFAULT NULL,
 			`contestID` varchar(11) DEFAULT NULL,
-			`contestCircuit` text,
-			`contestVolunteers` text,
+			`contestCircuit` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestVolunteers` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`contestCheckInPassword` varchar(255) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -574,7 +574,7 @@ if ($setup_free_access == TRUE) {
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$drop_off_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
-			`dropLocation` text,
+			`dropLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`dropLocationName` varchar(255) DEFAULT NULL,
 			`dropLocationPhone` varchar(255) DEFAULT NULL,
 			`dropLocationWebsite` varchar(255) DEFAULT NULL,
@@ -646,7 +646,7 @@ if ($setup_free_access == TRUE) {
 			`judgingDate` varchar(255) DEFAULT NULL,
 			`judgingTime` varchar(255) DEFAULT NULL,
 			`judgingLocName` varchar(255) DEFAULT NULL,
-			`judgingLocation` text,
+			`judgingLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -843,6 +843,8 @@ if ($setup_free_access == TRUE) {
 			`prefsAutoPurge` tinyint(1) DEFAULT NULL,
 			`prefsEntryLimitPaid` int(4) DEFAULT NULL,
 			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
+			`prefsLanguage` tinyint(1) DEFAULT NULL,
+			`prefsSpecific` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -865,7 +867,7 @@ if ($setup_free_access == TRUE) {
 			`bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
 			`eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
 			`sbd_place` int(11) DEFAULT NULL,
-			`sbd_comments` text,
+			`sbd_comments` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -885,7 +887,7 @@ if ($setup_free_access == TRUE) {
 		CREATE TABLE IF NOT EXISTS `$special_best_info_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sbi_name` varchar(255) DEFAULT NULL,
-			`sbi_description` text,
+			`sbi_description` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`sbi_places` int(11) DEFAULT NULL,
 			`sbi_rank` int(11) DEFAULT NULL,
 			`sbi_display_places` int(1) DEFAULT NULL,
@@ -910,8 +912,8 @@ if ($setup_free_access == TRUE) {
 			`sponsorName` varchar(255) DEFAULT NULL,
 			`sponsorURL` varchar(255) DEFAULT NULL,
 			`sponsorImage` varchar(255) DEFAULT NULL,
-			`sponsorText` text,
-			`sponsorLocation` text,
+			`sponsorText` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`sponsorLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
 			`sponsorLevel` tinyint(1) DEFAULT NULL,
 			`sponsorEnable` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
@@ -977,7 +979,7 @@ if ($setup_free_access == TRUE) {
 		  brewStyleSRM varchar(250) DEFAULT NULL,
 		  brewStyleSRMMax varchar(25) DEFAULT NULL,
 		  brewStyleType varchar(25) DEFAULT NULL,
-		  brewStyleInfo text,
+		  brewStyleInfo text CHARACTER SET utf8 COLLATE utf8_general_ci,
 		  brewStyleLink varchar(200) DEFAULT NULL,
 		  brewStyleGroup varchar(3) DEFAULT NULL,
 		  brewStyleActive char(1) DEFAULT 'Y',
@@ -988,11 +990,11 @@ if ($setup_free_access == TRUE) {
 		  brewStyleCarb int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
 		  brewStyleSweet int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
 		  brewStyleTags varchar(255) DEFAULT NULL,
-		  brewStyleComEx text CHARACTER SET utf8 COLLATE utf8_bin,
-		  brewStyleEntry text CHARACTER SET utf8 COLLATE utf8_bin,
+		  brewStyleComEx text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  brewStyleEntry text CHARACTER SET utf8 COLLATE utf8_general_ci,
 		  PRIMARY KEY (id)
 		) 
-		ENGINE=MyISAM;
+		ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
@@ -1042,6 +1044,7 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(28, 'A', 'Scottish Light 60/-', 'Scottish and Irish Ale', '1.03', '1.035', '1.01', '1.013', '2.5', '3.2', '10', '20', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1a', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Belhaven 60/-, McEwan&rsquo;s 60/-, Maclay 60/- Light (all are cask-only products not exported to the US).', ''), ";
 		$updateSQL .= "(29, 'B', 'Scottish Heavy 70/-', 'Scottish and Irish Ale', '1.035', '1.04', '1.01', '1.015', '3.2', '3.9', '10', '25', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1b', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Caledonian 70/- (Caledonian Amber Ale in the US), Belhaven 70/-, Orkney Raven Ale, Maclay 70/-, Tennents Special, Broughton Greenmantle Ale.', ''), ";
 		$updateSQL .= "(30, 'C', 'Scottish Export 80/-', 'Scottish and Irish Ale', '1.04', '1.054', '1.01', '1.016', '3.9', '5', '15', '30', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1c', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Orkney Dark Island, Caledonian 80/- Export Ale, Belhaven 80/- (Belhaven Scottish Ale in the US), Southampton 80 Shilling, Broughton Exciseman&rsquo;s 80/-, Belhaven St. Andrews Ale, McEwan&rsquo;s Export (IPA), Inveralmond Lia Fail, Broughton Merlin&rsquo;s Ale, Arran Dark', ''); ";
+		
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
@@ -1062,7 +1065,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
 		
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
-		$updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), Nøgne ø porter (Norway), Neuzeller Kloster-Bräu Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
+		$updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), N&oslash;gne ø porter (Norway), Neuzeller Kloster-Bräu Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
 		$updateSQL .= "(42, 'A', 'Dry Stout', 'Stout', '1.036', '1.05', '1.007', '1.011', '4', '5', '30', '45', '25', '40', 'Ale', 'A very dark, roasty, bitter, creamy ale.', 'http://www.bjcp.org/2008styles/style13.php#1a', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Guinness Draught Stout (also canned), Murphy&rsquo;s Stout, Beamish Stout, O&rsquo;Hara&rsquo;s Celtic Stout, Russian River O.V.L. Stout, Three Floyd&rsquo;s Black Sun Stout, Dorothy Goodbody&rsquo;s Wholesome Stout, Orkney Dragonhead Stout, Old Dominion Stout, Goose Island Dublin Stout, Brooklyn Dry Stout.', ''), ";
 		$updateSQL .= "(43, 'B', 'Sweet Stout', 'Stout', '1.044', '1.06', '1.012', '1.024', '4', '6', '20', '40', '30', '40', 'Ale', 'A very dark, sweet, full-bodied, slightly roasty ale. Often tastes like sweetened espresso.', 'http://www.bjcp.org/2008styles/style13.php#1b', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Mackeson&rsquo;s XXX Stout, Watney&rsquo;s Cream Stout, Farson&rsquo;s Lacto Stout, St. Peter&rsquo;s Cream Stout, Marston&rsquo;s Oyster Stout, Sheaf Stout, Hitachino Nest Sweet Stout (Lacto), Samuel Adams Cream Stout, Left Hand Milk Stout, Widmer Snowplow Milk Stout.', ''), ";
 		$updateSQL .= "(44, 'C', 'Oatmeal Stout', 'Stout', '1.048', '1.065', '1.01', '1.018', '4.2', '5.9', '25', '40', '22', '40', 'Ale', 'A very dark, full-bodied, roasty, malty ale with a complementary oatmeal flavor.', 'http://www.bjcp.org/2008styles/style13.php#1c', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Samuel Smith Oatmeal Stout, Young&rsquo;s Oatmeal Stout, McAuslan Oatmeal Stout, Maclay&rsquo;s Oat Malt Stout, Broughton Kinmount Willie Oatmeal Stout, Anderson Valley Barney Flats Oatmeal Stout, Troegs Oatmeal Stout, New Holland The Poet, Goose Island Oatmeal Stout, Wolaver&rsquo;s Oatmeal Stout.', ''), ";
@@ -1107,7 +1110,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
 		
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
-		$updateSQL .= "(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; – Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''), ";
+		$updateSQL .= "(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; &ndash; Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''), ";
 		$updateSQL .= "(72, 'B', 'English Barleywine', 'Strong Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'The richest and strongest of the English Ales. A showcase of malty richness and complex, intense flavors. The character of these ales can change significantly over time; both young and old versions should be appreciated for what they are. The malt profile can vary widely; not all examples will have all possible flavors or aromas.', 'http://www.bjcp.org/2008styles/style19.php#1b', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Thomas Hardy&rsquo;s Ale, Burton Bridge Thomas Sykes Old Ale, J.W. Lee&rsquo;s Vintage Harvest Ale, Robinson&rsquo;s Old Tom, Fuller&rsquo;s Golden Pride, AleSmith Old Numbskull, Young&rsquo;s Old Nick (unusual in its 7.2% ABV), Whitbread Gold Label, Old Dominion Millenium, North Coast Old Stock Ale (when aged), Weyerbacher Blithering Idiot.', ''), ";
 		$updateSQL .= "(73, 'C', 'American Barleywine', 'Strong Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '120', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://www.bjcp.org/2008styles/style19.php#1c', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell&rsquo;s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''), ";
 		$updateSQL .="(74, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer. The key attributes of the underlying style will be different with the addition of fruit; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination.', 'http://www.bjcp.org/2008styles/style20.php#1a', '20', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'New Glarus Belgian Red and Raspberry Tart, Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Founders Rubæus, Ebulum Elderberry Black Ale, Stiegl Radler, Weyerbacher Raspberry Imperial Stout, Abita Purple Haze, Melbourne Apricot Beer and Strawberry Beer, Saxer Lemon Lager, Magic Hat #9, Grozet Gooseberry and Wheat Ale, Pyramid Apricot Ale, Dogfish Head Fort.', 'Entrant must specify the underlying beer style as well as the type of fruit(s) used.'), ";
@@ -1398,7 +1401,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.5.0', '2016-07-31', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.5.0', '2016-08-31', NOW( ),'0');";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

@@ -10,6 +10,7 @@ include(CONFIG.'config.php');
 include(INCLUDES.'url_variables.inc.php');
 include(INCLUDES.'db_tables.inc.php');
 include(LIB.'common.lib.php');
+include(LANG.'language.lang.php');
 mysqli_select_db($connection,$database);
 
 if ($action == "username") {
@@ -18,8 +19,8 @@ if ($action == "username") {
 		$user_name = strtolower($_POST['user_name']);
 		$query_user_name = "SELECT user_name FROM ".$users_db_table." WHERE user_name='".$user_name."'";
 		$sql_check = mysqli_query($connection,$query_user_name) or die (mysqli_error($connection));
-		if (mysqli_num_rows($sql_check)) echo "<span class=\"text-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> The email address you entered is already in use. Please choose another.</span>";
-		else echo "<span class=\"text-success\"><span class=\"glyphicon glyphicon-ok\"></span> The email address you entered is not in use.</span>";
+		if (mysqli_num_rows($sql_check)) echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_in_use);
+		else echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_not_in_use);
 	}
 	
 } // end if ($action == "username")
@@ -1109,8 +1110,8 @@ if ($action == "email") {
 		return ($diagnose) ? $final_status : ($final_status < ISEMAIL_THRESHOLD);
 	}
 	$email = $_GET['email'];
-	if (is_email($email)) echo "<span class=\"text-success\"><span class=\"glyphicon glyphicon-ok\"></span> Email format is valid.</span>";
-	else echo "<span class=\"text-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> Email format is not valid! Please check the address you entered and try again.</span>";
+	if (is_email($email)) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_valid);
+	else echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_not_valid);
 	
 	
 }

@@ -5,8 +5,11 @@
  * 
  */
 
+// $locale = system('locale -a');
 require('paths.php');
 require(CONFIG.'bootstrap.php');
+
+// Load any mods
 include(DB.'mods.db.php');
 
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
@@ -55,7 +58,7 @@ else {
 	$nav_container = "navbar-default";
 }
 
-// Load libraries only when needed for performance
+// Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","special_best","styles","default");
 $datetime_load = array("contest_info","judging","testing","preferences");
 if ((judging_date_return() == 0) && ($registration_open == 2)) $datatables_load = array("admin","list","default");
@@ -68,6 +71,7 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
@@ -78,7 +82,7 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 	
 	// Load Locally
 	// Refer to instructions at http://brewcompetition.com/local-load
-	// To load libraries locally uncomment the line below and comment out line 78 above 
+	// To load libraries locally uncomment the line below and comment out line 81 above 
 	// include(INCLUDES.'load_local_libraries.inc.php'); 
 	
 	?>
@@ -186,7 +190,7 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
         		<h1><?php echo $header_output; ?></h1>
         	</div>             
         	<?php 
-			
+				
 				if ($section == "default") 		include (SECTIONS.'default.sec.php');
 				if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 				if ($section == "contact") 		include (SECTIONS.'contact.sec.php');

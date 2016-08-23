@@ -12,10 +12,6 @@ Checked Single
  * 
  */
 
-if (strpos($section, 'step') === FALSE) {
-	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
-}
-
 $header_output = "";
 $output = "";
 $output_extend = "";
@@ -25,140 +21,129 @@ switch($section) {
 	case "default":
 	$header_output = $_SESSION['contestName'];
 	if ($msg == "success") { 
-		$output = "Setup was successful.";
-		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> You are now logged in and ready to further customize your competition's site.</p>"; 
+		$output = "<strong>".$header_text_000."</strong>";
+		$output_extend = sprintf("<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> %s</p>",$header_text_001); 
 	}
 	
 	if ($msg == "chmod") { 
-		$output = "<strong>Setup was successful.</strong> However, your config.php permissions file could not be changed.";
-		$output_extend = "<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\"> It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.</div>"; 
-		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= "<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\"> Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.</div>"; 
+		$output = sprintf("<strong>%s</strong> ",$header_text_000,$header_text_002); 
+		$output_extend = sprintf("<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\">%s</div>",$header_text_003); 
+		if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= sprintf("<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\">%s</div>",$header_text_004); 
 	}
 	
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error. </strong>Please try again.";
-	elseif ($msg == "4") $output = "<strong>You must be an administrator to access the admin functions. </strong>";
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
+	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
 	break;
 
 	case "user":
-	$header_output = "Change "; 
-	if ($action == "username") $header_output .= "Email Address"; 
-	if ($action == "password") $header_output .= "Password";
-	if     ($msg == "1") $output = "<strong>The email address provided is already in use, please provide another email address.</strong>";
-	elseif ($msg == "2") $output = "<strong>There was a problem with the last request, please try again.</strong>";
-	elseif ($msg == "3") $output = "<strong>Your current password was incorrect.</strong> Please try again.";
-	elseif ($msg == "4") $output = "<strong>Please provide an email address.</strong>";
+	$header_output = $header_text_010." "; 
+	if ($action == "username") $header_output .= $header_text_011; 
+	if ($action == "password") $header_output .= $header_text_012;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_013);
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_014);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_015, $header_text_008);
+	elseif ($msg == "4") $output = sprintf("<strong></strong>",$header_text_016);
 	else $output = "";
 	break;
 	
 	case "register":
 	$header_output = $_SESSION['contestName'];
-	if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $header_output .= " - Judge/Steward Registration";
-	else $header_output .= " - Register";
-	if     ($msg == "1") $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please try again.";
-	elseif ($msg == "2") { $output = "<strong>Sorry, the user name you entered is already in use.</strong>"; $output_extend = "<p>Perhaps you have already created an account? If so, <a href=\"index.php?section=login\">log in here</a>.</p>"; }
-	elseif ($msg == "3") $output = "<strong>The user name provided is not a valid email address.</strong> Please enter a valid email address.";
-	elseif ($msg == "4") $output = "<strong>The characters you entered in the CAPTCHA section below were not correct.</strong> Please try again.";
-	elseif ($msg == "5") $output = "<strong>The email addresses you entered do not match.</strong> Please check and try again.";
-	elseif ($msg == "6") $output = "<strong>The AHA number you entered is already in the system.</strong> Please check the number and try again.";
+	if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $header_output .= " - ".$label_judge_steward_reg;
+	else $header_output .= " - ".$label_reg;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
+	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong>",$header_text_018); $output_extend = sprintf("<p>%s <a href=\"index.php?section=login\">%s</a></p>",$header_text_019,$header_text_020); }
+	elseif ($msg == "3") $output = sprintf("<strong>%</strong> %s",$header_text_021, $header_text_022);
+	elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_023, $header_text_008);
+	elseif ($msg == "5") $output = sprintf("<strong>%s</strong> %s",$header_text_024, $header_text_008);
+	elseif ($msg == "6") $output = sprintf("<strong></strong> %s",$header_text_025, $header_text_008);
 	else $output = "";
 	break;
 
 	case "pay":
-	$header_output = $_SESSION['contestName']." - Pay Entry Fees";
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
-	elseif ($msg == "10") $output = "<strong>Your online payment has been received.</strong> Please make sure to print the receipt and attach it to one of your entries as proof of payment."; 
-	elseif ($msg == "11") $output = "<strong>Your online payment has been cancelled.</strong>";
-	elseif ($msg == "12") $output = "<strong>The code has been verified.</strong>";
-	elseif ($msg == "13") $output = "<strong>Sorry, the code you entered was incorrect.</strong>";
+	$header_output = $_SESSION['contestName']." - ".$label_pay;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
+	elseif ($msg == "10") $output = sprintf("<strong>%s</strong> %s",$header_text_026,$header_text_027); 
+	elseif ($msg == "11") $output = sprintf("<strong>%s</strong>",$header_text_028);
+	elseif ($msg == "12") $output = sprintf("<strong>%s</strong>",$header_text_029);
+	elseif ($msg == "13") $output = sprintf("<strong>%s</strong>",$header_text_030);
 	else $output = "";
 	break;
 	
 	case "login":
-	if ($action == "forgot") $header_output = $_SESSION['contestName']." - Reset Password"; 
-	elseif ($action == "logout") $header_output = $_SESSION['contestName']." - Logged Out"; 
-	else $header_output = $_SESSION['contestName']." - Log In";
-	if ($msg == "0") $output = "<strong>You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.</strong> "; 
-	elseif     ($msg == "1") { $output = "<strong>Sorry, there was a problem with your last login attempt.</strong> Please make sure your email address and password are correct."; $output_extend = ""; }
-	elseif ($msg == "2") { $output = "<strong>Your password has been randomly generated and reset to ".$go."</strong> - you can now log in using your current username and the new password.</p>"; $output_extend = ""; }
-	elseif ($msg == "3") $output = "<strong>You have been logged out.</strong> Log in again?"; 
-	elseif ($msg == "4") $output = "<strong>Your verification question does not match what is in the database.</strong> Please try again."; 
-	elseif ($msg == "5") $output = "<strong>Your ID verification information has been sent to the email address associated with your account.</strong>"; 
+	if ($action == "forgot") $header_output = $_SESSION['contestName']." - ".$label_reset_password; 
+	elseif ($action == "logout") $header_output = $_SESSION['contestName']." - ".$label_logged_out; 
+	else $header_output = $_SESSION['contestName']." - ".$label_log_in;
+	if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031); 
+	elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
+	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s</p>",$header_text_034,$header_text_035); $output_extend = ""; }
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_036,$header_text_037); 
+	elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008); 
+	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_039); 
 	else $output = ""; 
 	break;
 	
 	case "entry":
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+	$header_output = $_SESSION['contestName']." ".$label_info;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	else $output = "";
-	$header_output = $_SESSION['contestName']." Info";
 	break;
 	
 	case "sponsors":
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+	$header_output = $_SESSION['contestName']." ".$label_sponsors;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	else $output = "";
-	$header_output = $_SESSION['contestName']." Sponsors";
 	break;
 	
 	case "rules":
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+	$header_output = $_SESSION['contestName']." ".$label_rules;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	else $output = "";
-	$header_output = $_SESSION['contestName']." Rules";
 	break;
 	
 	case "volunteers":
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	else $output = "";
-	$header_output = $_SESSION['contestName']." Volunteer Info";
+	$header_output = $_SESSION['contestName']." ".$label_volunteer_info;
 	break;	
 	
 	case "past_winners":
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+	$header_output = $_SESSION['contestName']." - ".$label_past_winners;
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005); 
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	else $output = "";
-	$header_output = $_SESSION['contestName']." - Past Winners";
 	break;
 	
 	case "contact":
-	$header_output = $_SESSION['contestName']." - Contact";
+	$header_output = $_SESSION['contestName']." - ".$label_contact;
+	
 	if ($msg == "1") {
 	
-	if (NHC) {
-	// Place NHC SQL calls below
-	
-	
-	}
-	// end if (NHC)
-	
-	else {
-
 		$query_contact = sprintf("SELECT contactFirstName,contactLastName,contactPosition FROM $contacts_db_table WHERE id='%s'", $id);
 		$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
 		$row_contact = mysqli_fetch_assoc($contact);
 		
+		$output = sprintf("<strong>%s ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".</strong>",$header_text_040);
 	}
-	
-	
-	$output = "<strong>Your message has been sent to ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".</strong>";
-	}
-	elseif ($msg == "2") $output = "<strong>The characters you entered in the CAPTCHA section below were not correct.</strong> Please try again.";
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong> %s",$header_text_041,$header_text_008);
 	else $output = "";
 	break;
 	
 	case "brew":
-	if ($action == "add") $header_output = "Add an Entry"; 
-	else $header_output = "Edit an Entry";
+	if ($action == "add") $header_output = $label_add_entry; 
+	else $header_output = $label_edit_entry;
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
 			switch ($msg) {
 				case "1-6-D":  $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify if wheat or rye is used.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
@@ -188,18 +173,16 @@ switch($section) {
 				case "1-28-B": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet). You MUST specify what fruit(s) and/or fruit juice(s) were added.<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-28-C": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
 				case "1-28-D": $output = "<strong>See the area(s) highlighted in RED below.</strong> You MUST specify all major ingredients and adjuncts. You MUST specify carbonation level (still, petillant, or sparkling) AND sweetness (dry, medium, sweet).<br /> If you do not specify the required items above, your entry cannot be confirmed. "; break;
-				case "2": $output = "<strong>Info edited successfully.</strong><br />"; break;
-				case "3": $output = "<strong>There was an error.</strong> Please try again.<br />"; break;
-				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries may be deleted from the system without warning.<br />"; break;
-				default: $output = "<strong>This entry has not yet been confirmed.</strong> Please review the information as listed and correct any errors. "; break;
+				case "2": $output = sprintf("<strong>%s</strong><br>",$header_text_006); break;
+				case "3": $output = sprintf("<strong>%s</strong> %s<br>",$header_text_007,$header_text_008); break;
+				default: $output = "<strong>This entry has not yet been confirmed.</strong> Please review the information as listed and correct any errors."; break;
 			}
 		}
 	
 	else {
 		switch ($msg) {
-				case "2": $output = "<strong>Info edited successfully.</strong><br />"; break;
-				case "3": $output = "<strong>There was an error.</strong> Please try again.<br />"; break;
-				case "4": $output = "<strong>This competition utilizes custom entry categories.</strong> All custom entry categories require that you specify the special ingredients, classic style, or special procedures of the entry.<br>If you DO NOT specify these items, your entry cannot be confirmed. Unconfirmed entries may be deleted from the system without warning.<br />"; break;
+				case "2": $output = sprintf("<strong>%s</strong><br>",$header_text_006); break;
+				case "3": $output = sprintf("<strong>%s</strong> %s<br>",$header_text_007,$header_text_008); break;
 				default: $output = "<strong>More information is required for your entry to be accepted and confirmed.</strong> See the area(s) highlighted in RED below."; break;
 		}
 	}
@@ -208,40 +191,40 @@ switch($section) {
 	break;
 	
 	case "brewer":
-		if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-		elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-		elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
+		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 		else $output = "";
-		if ($action == "add") $header_output = "Step 2: Account Info"; 
-		elseif ($go == "admin")  $header_output = "Edit User Account";
-		else  $header_output = "Edit Account";
+		if ($action == "add") $header_output = $label_step." 2: ".$label_account_info; 
+		elseif ($go == "admin")  $header_output = $label_admin_edit_account;
+		else  $header_output = $label_edit_account;
 		
 	break;
 	
 	case "judge":
 		$header_output = "Judge Info"; 
-		if ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-		elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-		elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
+		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
+		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 		else $output = "";
 	break;
 
 	case "list":
-	$header_output = "My Account";
-	if ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>"; 
-	elseif ($msg == "3") $output = "<strong>Your email address has been updated.</strong>"; 
-	elseif ($msg == "4") $output = "<strong>Your password has been updated.</strong>"; 
-	elseif ($msg == "5") $output = "<strong>Info deleted successfully.</strong>"; 
-	elseif ($msg == "6") $output = "<strong>You should verify all your entries imported using BeerXML.</strong>"; 
-	elseif ($msg == "7") $output = "<strong>You have registered as a judge or steward.</strong> Thank you.";
-	elseif ($msg == "8") $output = "<strong>You have reached the entry limit.</strong> Your entry was not added.";
-	elseif ($msg == "9") $output = "<strong>You have reached the entry limit for the sub-category.</strong> Your entry was not added."; 
-	else $output = "";
+		$header_output = "My Account";
+		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
+		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong>",$header_text_042); 
+		elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_043); 
+		elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_044);
+		elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$header_text_045); 
+		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$header_text_046);
+		elseif ($msg == "8") $output = sprintf("<strong>%s</strong> %s",$header_text_047,$header_text_048);
+		elseif ($msg == "9") $output = sprintf("<strong>%s</strong> %s",$header_text_049,$header_text_048); 
+		else $output = "";
 	break;
 	
 	case "step0":
-	$header_output = "Set Up: Install DB Tables and Data";
+	$header_output = $header_text_050;
 	$sidebar_status_0 = "text-danger";
 	$sidebar_status_1 = "text-muted";
 	$sidebar_status_2 = "text-muted";
@@ -264,8 +247,8 @@ switch($section) {
 	break;
 
 	case "step1":
-	$header_output = "Set Up: Create Admin User";
-	if ($msg == "1") $output = "<strong>Please provide an email address.</strong>";
+	$header_output = $header_text_051;
+	if ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_016);
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-danger";
 	$sidebar_status_2 = "text-muted";
@@ -287,7 +270,7 @@ switch($section) {
 	break;
 	
 	case "step2":
-	$header_output = "Set Up: Add Admin User Info";
+	$header_output = $header_text_052;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-danger";
@@ -309,7 +292,7 @@ switch($section) {
 	break;
 	
 	case "step3":
-	$header_output = "Set Up: Set Website Preferences";
+	$header_output = $header_text_053;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -331,7 +314,7 @@ switch($section) {
 	break;
 	
 	case "step4":
-	$header_output = "Set Up: Add Competition Info";
+	$header_output = $header_text_054;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -353,7 +336,7 @@ switch($section) {
 	break;
 	
 	case "step5":
-	$header_output = "Set Up: Add Judging Locations";
+	$header_output = $header_text_055;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -375,7 +358,7 @@ switch($section) {
 	break;
 
 	case "step6":
-	$header_output = "Set Up: Add Drop-Off Locations";
+	$header_output = $header_text_056;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -397,7 +380,7 @@ switch($section) {
 	break;
 	
 	case "step7":
-	$header_output = "Set Up: Designate Accepted Styles";
+	$header_output = $header_text_057;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -419,7 +402,7 @@ switch($section) {
 	break;
 	
 	case "step8":
-	$header_output = "Set Up: Set Judging Preferences";
+	$header_output = $header_text_058;
 	$sidebar_status_0 = "text-success";
 	$sidebar_status_1 = "text-success";
 	$sidebar_status_2 = "text-success";
@@ -440,80 +423,78 @@ switch($section) {
 	$sidebar_status_icon_8 = "fa fa-lg fa-refresh";
 	break;
 
+
 	case "beerxml":
 	include(DB.'styles.db.php');
-	$header_output = "Import an Entry Using BeerXML";
-	if ($msg == "default") { 
-	if ($totalRows_styles < 98) $output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Our competition accepts ".$totalRows_styles." of the 98 BJCP sub-styles.</strong> To make sure each of your entries are entered into one of the accepted categories, you should verify each entry.</div>"; else $output_extend = ""; 
-	}
-	if ($msg == "1") $output = "<strong>Your entry has been recorded.</strong>";
-	if ($msg == "2") $output = "<strong>Your entry has been confirmed.</strong>";
+	$header_output = $header_text_058;
+	if ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_060);
+	if ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_061);
 	break;
 
 	case "admin":
-	if ($action != "print") $header_output = "Administration"; 
+	if ($action != "print") $header_output = $label_admin; 
 	else $header_output = $_SESSION['contestName'];
 	
 		switch($go) {
 			
 			case "default": 
-			$header_output .= " Dashboard";
+			$header_output .= " ".$label_admin_dashboard;
 			break;
 		
 			case "judging":
-			$header_output .= ": Judging";
+			$header_output .= ": ".$label_admin_judging;
 			break;
 			
 			case "stewards":
-			$header_output .= ": Stewarding";
+			$header_output .= ": ".$label_admin_stewarding;
 			break;
 			
 			case "participants":
-			$header_output .= ": Participants";
+			$header_output .= ": ".$label_admin_participants;
 			break;
 			
 			case "entrant":
-			$header_output .= ": Participants";
+			$header_output .= ": ".$label_admin_participants;
 			break;
 			
 			case "judge":
-			$header_output .= ": Participants";
+			$header_output .= ": ".$label_admin_participants;
 			break;
 			
 			case "entries":
-			$header_output .= ": Entries";
+			$header_output .= ": ".$label_admin_entries;
 			break;
 			
 			case "contest_info":
-			$header_output .= ": Competition Info"; 
+			$header_output .= ": ".$label_admin_comp_info; 
 			break;
 						
 			case "preferences":
-			$header_output .= ": Website Preferences";
+			$header_output .= ": ".$label_admin_web_prefs;
 			break;
 			
 			case "judging_preferences":
-			$header_output .= ": Competition Organization Preferences";
+			$header_output .= ": ".$label_admin_judge_prefs;
 			break;
 			
 			case "archive":
-			$header_output .= ": Archives";
+			$header_output .= ": ".$label_admin_archives;
 			break;
 			
 			case "styles":
-			$header_output .= ": Styles";
+			$header_output .= ": ".$label_admin_styles;
 			break;
 			
 			case "dropoff":
-			$header_output .= ": Drop-Off Locations";
+			$header_output .= ": ".$label_admin_dropoff;
 			break;
 			
 			case "contacts":
-			$header_output .= ": Contacts";
+			$header_output .= ": ".$label_admin_contacts;
 			break;
 			
 			case "judging_tables":
-			$header_output .= ": Tables";
+			$header_output .= ": ".$label_admin_tables;
 			break;
 			
 			case "judging_flights":
@@ -521,120 +502,130 @@ switch($section) {
 			break;
 			
 			case "judging_scores":
-			$header_output .= ": Scoring";
+			$header_output .= ": ".$label_admin_scores;
 			break;
 			
 			case "judging_scores_bos":
-			$header_output .= ": Best of Show";
+			$header_output .= ": ".$label_admin_web_prefs;
 			break;
 			
 			case "style_types":
-			$header_output .= ": Style Types";
+			$header_output .= ": ".$label_admin_style_types;
 			break;
 			
 			case "special_best":
-			$header_output .= ": Custom Categories";
+			$header_output .= ": ".$label_admin_custom_cat;
 			break;
 			
 			case "special_best_data":
-			$header_output .= ": Custom Category Entries";
+			$header_output .= ": ".$label_admin_custom_cat_date;
 			break;
 			
 			case "sponsors":
-			$header_output .= ": Sponsors";
+			$header_output .= ": ".$label_admin_sponsors;
 			break;
 			
 			case "count_by_style":
-			$header_output .= ": Entry Count by Style";
+			$header_output .= ": ".$label_admin_entry_count;
 			break;
 			
 			case "count_by_substyle":
-			$header_output .= ": Entry Count by Sub-Style";
+			$header_output .= ": ".$label_admin_entry_count_sub;
 			break;
 			
 			case "mods":
-			$header_output .= ": Custom Modules";
+			$header_output .= ": ".$label_admin_custom_mods;
 			break;
 			
 			case "checkin":
-			$header_output .= ": Entry Check-In";
+			$header_output .= ": ".$label_admin_check_in;
 			break;
 			
 			case "make_admin":
-			$header_output .= ": Change User Level";
+			$header_output .= ": ".$label_admin_make_admin;
 			break;
 			
 			case "register":
-			$header_output .= ": Register a Participant";
+			$header_output .= ": ".$label_admin_register;
 			break;
 			
 			case "upload":
-			$header_output .= ": Upload Logo Images";
+			$header_output .= ": ".$label_admin_upload_img;
 			break;
 			
 			case "upload_scoresheets":
-			$header_output .= ": Upload Scoresheets and Other Documents";
+			$header_output .= ": ".$label_admin_upload_doc;
 			break;
 			
 			case "change_user_password":
-			$header_output .= ": Change User Password";
+			$header_output .= ": ".$label_admin_password;
 			break;
 		}
 	
-	if     ($msg == "1") $output = "<strong>Info added successfully.</strong>"; 
-	elseif ($msg == "2") $output = "<strong>Info edited successfully.</strong>";
-	elseif ($msg == "3") $output = "<strong>There was an error.</strong> Please try again.";
-	elseif ($msg == "4") $output = "<strong>All received entries have been checked and those not assigned to tables have been assigned.</strong>"; 
-	elseif ($msg == "5") $output = "<strong>Info deleted successfully.</strong>";
-	elseif ($msg == "6") $output = "<strong>The suffix you entered is already in use, please enter a different one.</strong>"; 
+	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
+	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
+	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_065); 
+	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_066); 
+	elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$header_text_067); 
 	elseif ($msg == "7") { 
-		if (HOSTED) $output = "<strong>The specified competition data has been cleared.</strong>"; 
-		else $output = "<strong>Archives created successfully.</strong> Click the archive name to view. ";
-		$output_extend = "<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Remember to update your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Competition Information</a> and your <a class='alert-link' href='".$base_url."/index.php?section=admin&amp;go=contest_info'>Judging Dates</a> if you are starting a new competition.</strong></div>";
+		if (HOSTED) $output = sprintf("<strong>%s</strong>",$header_text_068); 
+		else $output = sprintf("<strong>%s</strong> %s",$header_text_069,$header_text_070);
+		$output_extend = sprintf("<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong></div>",$header_text_071);
 	
 	}
-	elseif ($msg == "8") $output = "<strong>Archive \"".$filter."\" deleted.</strong>"; 
-	elseif ($msg == "9") $output = "<strong>The records have been updated.</strong>";
-	elseif ($msg == "10") $output = "<strong>The username you have entered is already in use.</strong>";
+	elseif ($msg == "8") $output = sprintf("<strong>%s</strong>",$header_text_072);  
+	elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_073); 
+	elseif ($msg == "10") $output = sprintf("<strong>%s</strong>",$header_text_074); 
 	elseif ($msg == "11") { 
-		$output = "Add another drop-off location?"; 
-		$output_extend = "<p><a href='"; 
-		if ($section == "step4") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin&amp;go=dropoff"; 
-		$output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; if ($section == "step4")
-		$output_extend .= "setup.php?section=step5"; else $output_extend .= "index.php?section=admin'>No</a>"; 
+		$output = sprintf("%s",$header_text_075); 
+		$output_extend = "<p><a href=\""; 
+		if ($section == "step4") $output_extend .= "setup.php?section=step4"; 
+		else $output_extend .= "index.php?section=admin&amp;go=dropoff"; 
+		$output_extend .= sprintf("'>%s</a>&nbsp;&nbsp;&nbsp;<a href='",$label_yes);
+		if ($section == "step4")	$output_extend .= "setup.php?section=step5";
+		else $output_extend .= sprintf("index.php?section=admin\">%s</a>",$label_no); 
 		}
 	elseif ($msg == "12") { 
-		$output = "Add another judging location, date, or time?"; 
-		$output_extend = "<p><a href='"; 
-		if ($section == "step3") $output_extend .= "setup.php?section=step3"; else $output_extend .= "index.php?section=admin&amp;go=judging"; 
-		$output_extend .="'>Yes</a>&nbsp;&nbsp;&nbsp;<a href='"; 
-		if ($section == "step3") $output_extend .= "setup.php?section=step4"; else $output_extend .= "index.php?section=admin'>No</a>"; 
+		$output = sprintf("%s",$header_text_076); 
+		$output_extend = "<p><a href=\""; 
+		if ($section == "step3") $output_extend .= "setup.php?section=step3"; 
+		else $output_extend .= "index.php?section=admin&amp;go=judging"; 
+		$output_extend .= sprintf("'>%s</a>&nbsp;&nbsp;&nbsp;<a href='",$label_yes); 
+		if ($section == "step3") $output_extend .= "setup.php?section=step4"; 
+		else $output_extend .= sprintf("index.php?section=admin\">%s</a>",$label_no);
 		}
-	elseif ($msg == "13") $output = "<strong>The table that was just defined does not have any associated styles.</strong>";
-	elseif ($msg == "15") $output = "<strong>One or more pieces of required data are missing - outlined in red below.</strong> Please check your data and enter again.";
-	elseif ($msg == "18") $output = "<strong>The email addresses you entered do not match.</strong> Please check and try again.";
-	elseif ($msg == "19") $output = "<strong>The AHA number you entered is already in the system.</strong> Please check the number and try again.";
-	elseif ($msg == "20") $output = "<strong>All entries have been marked as paid.</strong>";
-	elseif ($msg == "21") $output = "<strong>All entries have been marked as received.</strong>";
-	elseif ($msg == "22") $output = "<strong>All unconfirmed entries are now marked as confirmed.</strong>";
-	elseif ($msg == "23") $output = "<strong>All participant assignments have been cleared.</strong>";
-	elseif ($msg == "24") $output = "<strong>A judging number you entered wasn't found in the database.</strong> Please check and re-enter.";
-	elseif ($msg == "25") $output = "<strong>All entry styles have been converted from BJCP 2008 to BJCP 2015.</strong>";
-	elseif ($msg == "26") $output = "<strong>Data has been deleted from the database.</strong>";
-	elseif ($msg == "28") $output = "<strong>The judge/steward has been added successfully.</strong> Remember to assign the user as a judge or steward before assigning to tables.";
-	elseif ($msg == "29") $output = "<strong>The file has been uploaded successfully.</strong> Check the list to verify.";
-	elseif ($msg == "30") $output = "<strong>The file that was attempted to be uploaded is not an accepted file type.</strong> Please try again.";
-	elseif ($msg == "31") $output = "<strong>The file has been deleted.</strong>";
-	elseif ($msg == "32") $output = "<strong>The test email has been generated. Be sure to check your spam folder.</strong>";
-	elseif ($msg == "33") $output = "<strong>The user&rsquo;s password has been changed.</strong> Be sure to let them know what their new password is!";
-	elseif ($msg == "755") $output = "<strong>Change permission of user_images folder to 755 has failed.</strong>  You will need to change the folder&rsquo;s permission manually.  Consult your FTP program or ISP&rsquo;s documentation for chmod (folder permissions).";
+		
+	elseif ($msg == "13") $output = sprintf("<strong>%s</strong>",$header_text_077);
+	elseif ($msg == "15") $output = sprintf("<strong>%s</strong> %s",$header_text_078,$header_text_008);
+	elseif ($msg == "18") $output = sprintf("<strong>%s</strong> %s",$header_text_079,$header_text_008);
+	elseif ($msg == "19") $output = sprintf("<strong>%s</strong> %s",$header_text_080,$header_text_008);
+	elseif ($msg == "20") $output = sprintf("<strong>%s</strong>",$header_text_081);
+	elseif ($msg == "21") $output = sprintf("<strong>%s</strong>",$header_text_082);
+	elseif ($msg == "22") $output = sprintf("<strong>%s</strong>",$header_text_083);
+	elseif ($msg == "23") $output = sprintf("<strong>%s</strong>",$header_text_084);
+	elseif ($msg == "24") $output = sprintf("<strong>%s</strong> %s",$header_text_085,$header_text_008);
+	elseif ($msg == "25") $output = sprintf("<strong>%s</strong>",$header_text_086);
+	elseif ($msg == "26") $output = sprintf("<strong>%s</strong>",$header_text_087);
+	elseif ($msg == "28") $output = sprintf("<strong>%s</strong>",$header_text_088);
+	elseif ($msg == "29") $output = sprintf("<strong>%s</strong>",$header_text_089);
+	elseif ($msg == "30") $output = sprintf("<strong>%s</strong> %s",$header_text_090,$header_text_008);
+	elseif ($msg == "31") $output = sprintf("<strong>%s</strong>",$header_text_091);
+	elseif ($msg == "32") $output = sprintf("<strong>%s</strong>",$header_text_092);
+	elseif ($msg == "33") $output = sprintf("<strong>%s</strong>",$header_text_093);
+	elseif ($msg == "755") $output = sprintf("<strong>%s</strong> ",$header_text_094,$header_text_095);
 	else $output = "";
 	break;
+	
+
 }
 
-if ($msg == "14") $output = "<strong>Judging Numbers have been regenerated.</strong>";
-if ($msg == "16") { $output = "<strong>Your installation has been set up successfully!</strong>"; $output_extend = "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.</strong> Otherwise, your installation and server are vulerable to security breaches.</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Log in now to access the Admin Dashboard</strong>.</div>"; }
-if ($msg == "17") $output = "<strong>Your installation has been updated successfully!</strong>";
-if ($msg == "27") $output = "<strong>The email addresses do not match. Please enter again.</strong>";
-if ($msg == "99") $output = "<strong>Please log in to access your account.</strong>";
+if ($msg == "14") $output = sprintf("<strong>%s</strong>",$header_text_096);
+if ($msg == "16") { 
+	$output = sprintf("<strong>%s</strong>",$header_text_097); 
+	$output_extend = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100); 
+	}
+if ($msg == "17") $output = sprintf("<strong>%s</strong>",$header_text_101);
+if ($msg == "27") $output = sprintf("<strong>%s</strong> %s",$header_text_102,$header_text_008);
+if ($msg == "99") $output = sprintf("<strong>%s</strong>",$header_text_103);
 ?>

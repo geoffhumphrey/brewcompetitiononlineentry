@@ -52,7 +52,7 @@ $page_info1 .= "<section class=\"row\">";
 do {
 	if ($row_sponsors['sponsorEnable'] == "1") {
 	
-		if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) $page_info1 .= "<section class='row'>";
+		if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) $page_info1 .= "<section class=\"row\">";
 		
 		// Layout Column DIV
 		$page_info1 .= "<section class=\"col-lg-3 col-md-6 col-sm-9 col-xs-12 bcoem-sponsor-container\">";
@@ -60,13 +60,13 @@ do {
 		// Sponsor Name
 		$page_info1 .= "<section class=\"bcoem-sponsor-name\">";
 		$page_info1 .= "<h5>";
-		if ($row_sponsors['sponsorURL'] != "") $page_info1 .= "<a href=\"".$row_sponsors['sponsorURL']."\" data-toggle=\"tooltip\" title=\"Go to the ".$row_sponsors['sponsorName']." website\" target=\"_blank\">".$row_sponsors['sponsorName']."</a>";
+		if ($row_sponsors['sponsorURL'] != "") $page_info1 .= sprintf("<a href=\"%s\" data-toggle=\"tooltip\" title=\"%s %s\" target=\"_blank\">%s</a>",$row_sponsors['sponsorURL'],$row_sponsors['sponsorName'],strtolower($label_website),$row_sponsors['sponsorName']);
 		else $page_info1 .= $row_sponsors['sponsorName'];
 		$page_info1 .= "</h5>";
 		$page_info1 .= "</section>";
 
 		// Sponsor Location
-		if ($row_sponsors['sponsorLocation'] != "") $page_info1 .= "<section class=\"bcoem-sponsor-location\">".$row_sponsors['sponsorLocation']."</section>";
+		if ($row_sponsors['sponsorLocation'] != "") $page_info1 .= sprintf("<section class=\"bcoem-sponsor-location\">%s</section>",$row_sponsors['sponsorLocation']);
 		else $page_info1 .= "<section class=\"bcoem-sponsor-location\">&nbsp;</section>"; // provides uniformity in display
 		
 		if ($_SESSION['prefsSponsorLogos'] == "Y") {

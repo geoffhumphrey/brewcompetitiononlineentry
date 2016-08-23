@@ -52,6 +52,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -62,7 +63,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <tr>
     	<th nowrap>Pull Order</th>
         <th>#</th>
-        <th>Style/Sub-Style</th>
+        <th>Style</th>
+        <th>Info</th>
         <th>Loc/Box</th>
         <th>Round</th>
         <th>Score</th>
@@ -90,19 +92,18 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
+        <td><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; ?></td>
         <td>
         <?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		
-		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
 		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
 		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
 		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
 		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>";  
+		echo "</p>";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
@@ -160,6 +161,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -170,7 +172,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <tr>
     	<th nowrap>Pull Order</th>
         <th>#</th>
-        <th>Style/Sub-Style</th>
+        <th>Style</th>
+        <th>Info</th>
         <th>Loc/Box</th>
         <th>Round</th>
         <th>Score</th>
@@ -198,18 +201,18 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
+        <td><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; ?></td>
         <td>
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
 		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
-		if (isset($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
-		if (isset($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
-		if (isset($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>"; 
+		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
+		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
+		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
+		echo "</p>";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
@@ -269,6 +272,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -279,7 +283,8 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
     <tr>
     	<th nowrap>Pull Order</th>
         <th>#</th>
-        <th>Style/Sub-Style</th>
+        <th>Style</th>
+        <th>Info</th>
         <th>Loc/Box</th>
         <th>Score</th>
         <th>Place</th>
@@ -303,18 +308,18 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
+        <td><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; ?></td>
         <td>
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
-		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
-		if (isset($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
-		if (isset($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
-		if (isset($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>";  
+		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
+		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
+		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
+		echo "</p>";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
@@ -357,6 +362,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -367,7 +373,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <tr>
     	<th nowrap>Pull Order</th>
         <th>#</th>
-        <th>Style/Sub-Style</th>
+        <th>Style</th>
+        <th>Info</th>
         <th>Loc/Box</th>
         <th>Score</th>
         <th>Place</th>
@@ -392,18 +399,18 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		else echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']); 
 		?>
         </td>
+        <td><?php echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; ?></td>
         <td>
 		<?php 
 		$special = style_convert($style_special,"9");
 		$special = explode("^",$special);
-		echo $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>"; 
 		if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>"; 
 		if ($row_entries['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>"; 
 		if (style_convert($style,"5")) echo "<p>"; 
-		if (isset($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
-		if (isset($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
-		if (isset($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-		echo "</p>";   
+		if (!empty($row_entries['brewMead1'])) echo "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>"; 
+		if (!empty($row_entries['brewMead2'])) echo "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>"; 
+		if (!empty($row_entries['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries['brewMead3'];
+		echo "</p>";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
@@ -462,6 +469,7 @@ if ($style_type_info[0] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -472,7 +480,8 @@ if ($style_type_info[0] == "Y") {
     <tr>
     	<th nowrap>Pull Order</th>
         <th>#</th>
-        <th>Style/Sub-Style</th>
+        <th>Style</th>
+        <th>Info</th>
         <th>Loc/Box</th>
         <th>Score</th>
         <th>Place</th>
@@ -496,13 +505,13 @@ if ($style_type_info[0] == "Y") {
 		else echo readable_judging_number($row_entries_1['brewCategory'],$row_entries_1['brewJudgingNumber']); 
 		?>
         </td>
+        <td><?php echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; ?>
         <td>
 		<?php 
 		$style_special = $row_entries_1['brewCategorySort']."^".$row_entries_1['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		$special = style_convert($style_special,"9");
 		//echo $special."<br>";
 		$special = explode("^",$special);
-		echo $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>"; 
 		if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) echo "<p><strong>Required Info: </strong>".$row_entries_1['brewInfo']."</p>";
 		if ($row_entries_1['brewComments'] != "") echo "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";  
 		if (style_convert($style,"5")) echo "<p>"; 

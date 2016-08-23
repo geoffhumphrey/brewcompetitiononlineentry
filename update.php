@@ -7,7 +7,8 @@ require(INCLUDES.'authentication_nav.inc.php');
 session_name($prefix_session);
 session_start(); 
 require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php'); 
+require(INCLUDES.'db_tables.inc.php');
+require(LANG.'language.lang.php'); 
 require(LIB.'common.lib.php');
 require(LIB.'update.lib.php');
 require(DB.'update.db.php');
@@ -33,12 +34,21 @@ if (file_exists($filename)) {
 		
 		if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] <= 1)) {
 			
-			if ($current_version != $version) {
+			if (($current_version != $version) || (($current_version == $version) && ($version_date < $current_version_date))) {
 				
 				if ($action == "default") { 
 				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
                 
-				$update_body .= "<p class=\"lead\">This script will update your BCOE&amp;M database from its current version, ".$version.", to the latest version, ".$current_version.".</p>";
+				$update_body .= "<p class=\"lead\">";
+				$update_body .= "This script will update your BCOE&amp;M database from its current version, ";
+				$update_body .= rtrim($version,".0");
+				if ($version_date < $current_version_date) $update_body .= " (Build ".$row_version['version_date'].")";
+				$update_body .= ", to the latest version, ";
+				$update_body .= $current_version_display;
+				if ($version_date < $current_version_date) $update_body .= " (Build ".$current_version_date_display.")";
+				$update_body .= ".</p>";
+				
+				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
 				
 				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-lg fa-cog\"></span> Begin The Update</a></div>";		
 				}
@@ -62,6 +72,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -74,6 +85,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -85,6 +97,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -95,6 +108,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -104,6 +118,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -113,6 +128,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -120,24 +136,32 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.0.0_update.php');
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						if (($version >= "1300") && ($version < "1320")) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						
 						if (($version >= "1320") && ($version < "2000"))  {
 							include (UPDATE.'2.0.0.0_update.php');
+							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
-						// Last version to have a db update was 2.1.0.0
-						// If current version is 2.0.0.0 or later, only perform the 2.1.X.X update
+						
 						if (($version >= "2000") && ($version < "2100"))  {
+							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						// If current version is 2.1.0.0 or later, only perform the current (2.1.5) update
+						if (($version > "2100") && ($version < "2160"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

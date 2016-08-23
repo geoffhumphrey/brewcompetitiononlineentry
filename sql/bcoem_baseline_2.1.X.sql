@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 07.20.2016 for Version 2.1.5.0
+-- UPDATED 08.31.2016 for Version 2.1.5.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -49,12 +49,12 @@
 -- 
 -- BEGIN MYSQL
 --
--- ------------------------------------------------------------------------------------
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `baseline_archive`
 --
 
-DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
   `id` int(8) NOT NULL,
   `archiveUserTableName` varchar(255) DEFAULT NULL,
@@ -69,7 +69,6 @@ CREATE TABLE IF NOT EXISTS `baseline_archive` (
 -- Table structure for table `baseline_brewer`
 --
 
-DROP TABLE IF EXISTS `baseline_brewer`;
 CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `id` int(8) NOT NULL,
   `uid` int(8) DEFAULT NULL,
@@ -99,10 +98,10 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `brewerAssignment` char(1) DEFAULT NULL,
   `brewerJudgeWaiver` char(1) DEFAULT NULL,
   `brewerAHA` int(11) DEFAULT NULL,
-  `brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
-  `brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
+  `brewerDiscount` char(1) DEFAULT NULL,
+  `brewerJudgeBOS` char(1) DEFAULT NULL,
   `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table'
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_brewer`
@@ -117,7 +116,6 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 -- Table structure for table `baseline_brewing`
 --
 
-DROP TABLE IF EXISTS `baseline_brewing`;
 CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `id` int(8) NOT NULL,
   `brewName` varchar(255) DEFAULT NULL,
@@ -485,14 +483,13 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
 -- Table structure for table `baseline_contacts`
 --
 
-DROP TABLE IF EXISTS `baseline_contacts`;
 CREATE TABLE IF NOT EXISTS `baseline_contacts` (
   `id` int(8) NOT NULL,
   `contactFirstName` varchar(255) DEFAULT NULL,
   `contactLastName` varchar(255) DEFAULT NULL,
   `contactPosition` varchar(255) DEFAULT NULL,
   `contactEmail` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_contacts`
@@ -507,7 +504,6 @@ INSERT INTO `baseline_contacts` (`id`, `contactFirstName`, `contactLastName`, `c
 -- Table structure for table `baseline_contest_info`
 --
 
-DROP TABLE IF EXISTS `baseline_contest_info`;
 CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
   `id` int(1) NOT NULL DEFAULT '0',
   `contestName` varchar(255) DEFAULT NULL,
@@ -553,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
 --
 
 INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contestHostWebsite`, `contestHostLocation`, `contestRegistrationOpen`, `contestRegistrationDeadline`, `contestEntryOpen`, `contestEntryDeadline`, `contestJudgeOpen`, `contestJudgeDeadline`, `contestRules`, `contestAwardsLocation`, `contestAwardsLocName`, `contestAwardsLocDate`, `contestAwardsLocTime`, `contestShippingOpen`, `contestShippingDeadline`, `contestEntryFee`, `contestEntryFee2`, `contestEntryFeeDiscount`, `contestEntryFeeDiscountNum`, `contestDropoffOpen`, `contestBottles`, `contestShippingAddress`, `contestShippingName`, `contestAwards`, `contestLogo`, `contestBOSAward`, `contestDropoffDeadline`, `contestEntryCap`, `contestEntryFeePassword`, `contestEntryFeePasswordNum`, `contestID`, `contestCircuit`, `contestVolunteers`, `contestCheckInPassword`) VALUES
-(1, 'Baseline Data', 'Baseline', 'http://www.brewcompetition.com', 'Denver, CO', '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Baseline Awards Location', NULL, '1483798980', '1438322400', '1483253940', 8, NULL, 'N', NULL, '1438322400', '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Shipping Location', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, '1483253940', NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>', NULL);
+(1, 'Baseline Data Installation', 'Baseline', 'http://www.brewcompetition.com', 'Denver, CO', '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Baseline Awards Location', NULL, '1483798980', '1438322400', '1483253940', 8, NULL, 'N', NULL, '1438322400', '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Shipping Location', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, '1483253940', NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>', NULL);
 
 -- --------------------------------------------------------
 
@@ -561,7 +557,6 @@ INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contes
 -- Table structure for table `baseline_drop_off`
 --
 
-DROP TABLE IF EXISTS `baseline_drop_off`;
 CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
   `id` int(8) NOT NULL,
   `dropLocation` text,
@@ -569,7 +564,7 @@ CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
   `dropLocationPhone` varchar(255) DEFAULT NULL,
   `dropLocationWebsite` varchar(255) DEFAULT NULL,
   `dropLocationNotes` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_drop_off`
@@ -584,7 +579,6 @@ INSERT INTO `baseline_drop_off` (`id`, `dropLocation`, `dropLocationName`, `drop
 -- Table structure for table `baseline_judging_assignments`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_assignments`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
   `id` int(11) NOT NULL,
   `bid` int(11) DEFAULT NULL COMMENT 'id from brewer table',
@@ -593,7 +587,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
   `assignFlight` int(11) DEFAULT NULL,
   `assignRound` int(11) DEFAULT NULL,
   `assignLocation` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -601,12 +595,11 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
 -- Table structure for table `baseline_judging_flights`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_flights`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
   `id` int(11) NOT NULL,
   `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
   `flightNumber` int(11) DEFAULT NULL,
-  `flightEntryID` text COMMENT 'array of ids of each entry from the brewing table',
+  `flightEntryID` text,
   `flightRound` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -616,7 +609,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
 -- Table structure for table `baseline_judging_locations`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_locations`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
   `id` int(8) NOT NULL,
   `judgingDate` varchar(255) DEFAULT NULL,
@@ -624,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
   `judgingLocName` varchar(255) DEFAULT NULL,
   `judgingLocation` text,
   `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location'
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_locations`
@@ -639,17 +631,16 @@ INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `j
 -- Table structure for table `baseline_judging_preferences`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
   `id` int(11) NOT NULL,
-  `jPrefsQueued` char(1) DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA',
+  `jPrefsQueued` char(1) DEFAULT NULL,
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
   `jPrefsRounds` int(11) DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
   `jPrefsCapJudges` int(3) DEFAULT NULL,
   `jPrefsCapStewards` int(3) DEFAULT NULL,
   `jPrefsBottleNum` int(3) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_preferences`
@@ -664,7 +655,6 @@ INSERT INTO `baseline_judging_preferences` (`id`, `jPrefsQueued`, `jPrefsFlightE
 -- Table structure for table `baseline_judging_scores`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_scores`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
   `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
@@ -672,7 +662,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
   `scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
   `scoreEntry` float DEFAULT NULL COMMENT 'numerical score assigned by judges',
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
-  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom styles',
+  `scoreType` char(1) DEFAULT NULL,
   `scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -682,14 +672,13 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
 -- Table structure for table `baseline_judging_scores_bos`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_scores_bos`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
   `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
   `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
   `scoreEntry` int(11) DEFAULT NULL COMMENT 'numerical score assigned by judges',
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
-  `scoreType` char(1) DEFAULT NULL COMMENT 'type of entry used for custom stylesr'
+  `scoreType` char(1) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -698,15 +687,14 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
 -- Table structure for table `baseline_judging_tables`
 --
 
-DROP TABLE IF EXISTS `baseline_judging_tables`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
   `id` int(11) NOT NULL,
-  `tableName` varchar(255) DEFAULT NULL COMMENT 'Name of table that will judge the prescribed categories',
-  `tableStyles` text COMMENT 'Array of ids from styles table',
+  `tableName` varchar(255) DEFAULT NULL,
+  `tableStyles` text,
   `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
   `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
-  `tableJudges` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table',
-  `tableStewards` varchar(255) DEFAULT NULL COMMENT 'Array of ids from brewer table'
+  `tableJudges` varchar(255) DEFAULT NULL,
+  `tableStewards` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -715,15 +703,14 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
 -- Table structure for table `baseline_mods`
 --
 
-DROP TABLE IF EXISTS `baseline_mods`;
 CREATE TABLE IF NOT EXISTS `baseline_mods` (
   `id` int(11) NOT NULL,
-  `mod_name` varchar(255) DEFAULT NULL COMMENT 'Name of the custom module',
+  `mod_name` varchar(255) DEFAULT NULL,
   `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
   `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
-  `mod_extend_function_admin` varchar(255) DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
-  `mod_filename` varchar(255) DEFAULT NULL COMMENT 'File name of the custom module',
-  `mod_description` text COMMENT 'Short description of the custom module',
+  `mod_extend_function_admin` varchar(255) DEFAULT NULL,
+  `mod_filename` varchar(255) DEFAULT NULL,
+  `mod_description` text,
   `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
   `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
   `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
@@ -736,7 +723,6 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
 -- Table structure for table `baseline_preferences`
 --
 
-DROP TABLE IF EXISTS `baseline_preferences`;
 CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `id` int(8) NOT NULL,
   `prefsTemp` varchar(255) DEFAULT NULL,
@@ -752,7 +738,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsCheckPayee` varchar(255) DEFAULT NULL,
   `prefsTransFee` char(1) DEFAULT NULL,
   `prefsGoogle` char(1) DEFAULT NULL,
-  `prefsGoogleAccount` varchar(255) DEFAULT NULL COMMENT 'Google Merchant ID',
+  `prefsGoogleAccount` varchar(255) DEFAULT NULL,
   `prefsSponsors` char(1) DEFAULT NULL,
   `prefsSponsorLogos` char(1) DEFAULT NULL,
   `prefsSponsorLogoSize` varchar(255) DEFAULT NULL,
@@ -761,8 +747,8 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsWinnerDelay` int(11) DEFAULT NULL COMMENT 'Hours after last judging date beginning time to delay displaying winners',
   `prefsWinnerMethod` int(11) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
   `prefsDisplaySpecial` char(1) DEFAULT NULL,
-  `prefsBOSMead` char(1) DEFAULT 'N',
-  `prefsBOSCider` char(1) DEFAULT 'N',
+  `prefsBOSMead` char(1) DEFAULT NULL,
+  `prefsBOSCider` char(1) DEFAULT NULL,
   `prefsEntryForm` char(1) DEFAULT NULL,
   `prefsRecordLimit` int(11) DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
   `prefsRecordPaging` int(11) DEFAULT '30' COMMENT 'User defined per page record limit',
@@ -773,27 +759,29 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsTimeZone` decimal(10,3) DEFAULT NULL,
   `prefsEntryLimit` int(11) DEFAULT NULL,
   `prefsTimeFormat` tinyint(1) DEFAULT NULL,
-  `prefsUserEntryLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
-  `prefsUserSubCatLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
-  `prefsUSCLEx` varchar(255) DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
-  `prefsUSCLExLimit` varchar(4) DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted',
-  `prefsPayToPrint` char(1) DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
-  `prefsHideRecipe` char(1) DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?',
-  `prefsUseMods` char(1) DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
-  `prefsSEF` char(1) DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
+  `prefsUserEntryLimit` varchar(4) DEFAULT NULL,
+  `prefsUserSubCatLimit` varchar(4) DEFAULT NULL,
+  `prefsUSCLEx` varchar(255) DEFAULT NULL,
+  `prefsUSCLExLimit` varchar(4) DEFAULT NULL,
+  `prefsPayToPrint` char(1) DEFAULT NULL,
+  `prefsHideRecipe` char(1) DEFAULT NULL,
+  `prefsUseMods` char(1) DEFAULT NULL,
+  `prefsSEF` char(1) DEFAULT NULL,
   `prefsSpecialCharLimit` int(3) DEFAULT NULL,
   `prefsStyleSet` varchar(20) DEFAULT NULL,
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
   `prefsEntryLimitPaid` int(4) DEFAULT NULL,
-  `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
+  `prefsLanguage` varchar(25) DEFAULT NULL,
+  `prefsSpecifics` tinyint(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL);
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecifics`) VALUES
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1);
 
 -- --------------------------------------------------------
 
@@ -801,7 +789,6 @@ INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWei
 -- Table structure for table `baseline_special_best_data`
 --
 
-DROP TABLE IF EXISTS `baseline_special_best_data`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
   `id` int(11) NOT NULL,
   `sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
@@ -817,7 +804,6 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
 -- Table structure for table `baseline_special_best_info`
 --
 
-DROP TABLE IF EXISTS `baseline_special_best_info`;
 CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
   `id` int(11) NOT NULL,
   `sbi_name` varchar(255) DEFAULT NULL,
@@ -833,7 +819,6 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
 -- Table structure for table `baseline_sponsors`
 --
 
-DROP TABLE IF EXISTS `baseline_sponsors`;
 CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
   `id` int(8) NOT NULL,
   `sponsorName` varchar(255) DEFAULT NULL,
@@ -851,7 +836,6 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
 -- Table structure for table `baseline_staff`
 --
 
-DROP TABLE IF EXISTS `baseline_staff`;
 CREATE TABLE IF NOT EXISTS `baseline_staff` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
@@ -868,7 +852,6 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
 -- Table structure for table `baseline_styles`
 --
 
-DROP TABLE IF EXISTS `baseline_styles`;
 CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `id` int(8) NOT NULL,
   `brewStyleNum` varchar(3) DEFAULT NULL,
@@ -888,17 +871,17 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleInfo` text,
   `brewStyleLink` varchar(200) DEFAULT NULL,
   `brewStyleGroup` varchar(3) DEFAULT NULL,
-  `brewStyleActive` char(1) DEFAULT 'Y',
-  `brewStyleOwn` varchar(255) DEFAULT 'bcoe',
+  `brewStyleActive` char(1) DEFAULT NULL,
+  `brewStyleOwn` varchar(255) DEFAULT NULL,
   `brewStyleVersion` varchar(20) DEFAULT NULL,
   `brewStyleReqSpec` tinyint(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
   `brewStyleStrength` int(1) DEFAULT NULL COMMENT 'Requires strength? 0=No, 1=Yes',
   `brewStyleCarb` int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
   `brewStyleSweet` int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
   `brewStyleTags` varchar(255) DEFAULT NULL,
-  `brewStyleComEx` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `brewStyleEntry` text CHARACTER SET utf8 COLLATE utf8_bin
-) ENGINE=MyISAM AUTO_INCREMENT=227 DEFAULT CHARSET=latin1;
+  `brewStyleComEx` text,
+  `brewStyleEntry` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_styles`
@@ -975,15 +958,15 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (68, 'C', 'Belgian Tripel', 'Belgian Strong Ale', '1.075', '1.085', '1.008', '1.014', '7.5', '9.5', '20', '40', '4.5', '7', 'Ale', 'Strongly resembles a Strong Golden Ale but slightly darker and somewhat fuller-bodied. Usually has a more rounded malt flavor but should not be sweet.', 'http://www.bjcp.org/2008styles/style18.php#1c', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Westmalle Tripel, La Rulles Tripel, St. Bernardus Tripel, Chimay Cinq Cents (White), Watou Tripel, Val-Dieu Triple, Affligem Tripel, Grimbergen Tripel, La Trappe Tripel, Witkap Pater Tripel, Corsendonk Abbey Pale Ale, St. Feuillien Tripel, Bink Tripel, Tripel Karmeliet, New Belgium Trippel, Unibroue La Fin du Monde, Dragonmead Final Absolution, Allagash Tripel Reserve, Victory Golden Monkey.', ''),
 (69, 'D', 'Belgian Golden Strong Ale', 'Belgian Strong Ale', '1.07', '1.095', '1.005', '1.016', '7.5', '10.5', '22', '35', '3', '6', 'Ale', 'A golden, complex, effervescent, strong Belgian-style ale.', 'http://www.bjcp.org/2008styles/style18.php#1d', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Duvel, Russian River Damnation, Hapkin, Lucifer, Brigand, Judas, Delirium Tremens, Dulle Teve, Piraat, Great Divide Hades, Avery Salvation, North Coast Pranqster, Unibroue Eau Benite, AleSmith Horny Devil.', ''),
 (70, 'E', 'Belgian Dark Strong Ale', 'Belgian Strong Ale', '1.075', '1.11', '1.01', '1.024', '8', '11', '20', '35', '12', '22', 'Ale', 'A dark, very rich, complex, very strong Belgian ale. Complex, rich, smooth and dangerous.', 'http://www.bjcp.org/2008styles/style18.php#1e', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Westvleteren 12 (yellow cap), Rochefort 10 (blue cap), St. Bernardus Abt 12, Gouden Carolus Grand Cru of the Emperor, Achel Extra Brune, Rochefort 8 (green cap), Southampton Abbot 12, Chimay Grande Reserve (Blue), Brasserie des Rocs Grand Cru, Gulden Draak, Kasteelbier Biere du Chateau Donker, Lost Abbey Judgment Day, Russian River Salvation.', ''),
-(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; â€“ Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''),
+(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; – Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''),
 (72, 'B', 'English Barleywine', 'Strong Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'The richest and strongest of the English Ales. A showcase of malty richness and complex, intense flavors. The character of these ales can change significantly over time; both young and old versions should be appreciated for what they are. The malt profile can vary widely; not all examples will have all possible flavors or aromas.', 'http://www.bjcp.org/2008styles/style19.php#1b', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Thomas Hardy&rsquo;s Ale, Burton Bridge Thomas Sykes Old Ale, J.W. Lee&rsquo;s Vintage Harvest Ale, Robinson&rsquo;s Old Tom, Fuller&rsquo;s Golden Pride, AleSmith Old Numbskull, Young&rsquo;s Old Nick (unusual in its 7.2% ABV), Whitbread Gold Label, Old Dominion Millenium, North Coast Old Stock Ale (when aged), Weyerbacher Blithering Idiot.', ''),
 (73, 'C', 'American Barleywine', 'Strong Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '120', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://www.bjcp.org/2008styles/style19.php#1c', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell&rsquo;s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', '');
 INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES
 (74, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer. The key attributes of the underlying style will be different with the addition of fruit; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination.', 'http://www.bjcp.org/2008styles/style20.php#1a', '20', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'New Glarus Belgian Red and Raspberry Tart, Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Founders RubÃ¦us, Ebulum Elderberry Black Ale, Stiegl Radler, Weyerbacher Raspberry Imperial Stout, Abita Purple Haze, Melbourne Apricot Beer and Strawberry Beer, Saxer Lemon Lager, Magic Hat #9, Grozet Gooseberry and Wheat Ale, Pyramid Apricot Ale, Dogfish Head Fort.', 'Entrant must specify the underlying beer style as well as the type of fruit(s) used.'),
 (75, 'A', 'Spice, Herb, or Vegetable Beer', 'Spice / Herb / Vegetable Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of spices, herbs and/or vegetables and beer. The key attributes of the underlying style will be different with the addition of spices, herbs and/or vegetables; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination.', 'http://www.bjcp.org/2008styles/style21.php#1a', '21', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Fraoch Heather Ale, Southampton Pumpkin Ale, Rogue Hazelnut Nectar, Hitachino Nest Real Ginger Ale, Breckenridge Vanilla Porter, Left Hand JuJu Ginger Beer, Dogfish Head Punkin Ale, Dogfish Head Midas Touch, Redhook Double Black Stout, Buffalo Bill&rsquo;s Pumpkin Ale, BluCreek Herbal Ale, Christian Moerlein Honey Almond, Rogue Chocolate Stout, Birrificio Baladin Nora, Cave Creek Chili Beer.', 'Entrant must specify the underlying beer style as well as the type of spices, herbs, or vegetables used. Classic styles do not have to be cited.'),
 (76, 'B', 'Christmas/Winter Specialty Spiced Beer', 'Spice / Herb / Vegetable Beer', '', '', '', '', '', '', '', '', '', '', '', 'A stronger, darker, spiced beer that often has a rich body and warming finish suggesting a good accompaniment for the cold winter season.', 'http://www.bjcp.org/2008styles/style21.php#1b', '21', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Anchor Our Special Ale, Harpoon Winter Warmer, Weyerbacher Winter Ale, Nils Oscar Julol, Goose Island Christmas Ale, North Coast Wintertime Ale, Great Lakes Christmas Ale, Lakefront Holiday Spice Lager Beer, Samuel Adams Winter Lager, Troegs The Mad Elf, Jamtlands Julol.', 'Entrant may specify an underlying beer style as well as the special ingredients used. The base style, spices, or other ingredients need not be identified. The beer must include spices and may inlcude other fermentables or fruit.'),
-(77, 'A', 'Classic Rauchbier', 'Smoke-Flavored and Wood-Aged Beer', '1.05', '1.057', '1.012', '1.016', '4.8', '6', '20', '30', '12', '22', 'Lager', 'MÃ¤rzen/Oktoberfest-style beer with a sweet, smoky aroma and flavor and a somewhat darker color.', 'http://www.bjcp.org/2008styles/style22.php#1a', '22', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Schlenkerla Rauchbier MÃ¤rzen, Kaiserdom Rauchbier, Eisenbahn Rauchbier, Victory Scarlet Fire Rauchbier, Spezial Rauchbier MÃ¤rzen, Saranac Rauchbier.', ''),
-(78, 'B', 'Other Smoked Beer', 'Smoke-Flavored and Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', '', 'This is any beer that is exhibiting smoke as a principle flavor and aroma characteristic other than the Bamberg-style Rauchbier (i.e. beechwood-smoked MÃ¤rzen). Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://www.bjcp.org/2008styles/style22.php#1b', '22', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Alaskan Smoked Porter, O&rsquo;Fallons Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier, Rogue Smoke, Oskar Blues Old Chub, Left Hand Smoke Jumper, Dark Horse Fore Smoked Stout, Magic Hat Jinx. ', 'Entrant must specify the type of wood or other source of smoke. If the beer is based on a classic style then the specific style must be specified. Classic styles do not have to be cited.'),
+(77, 'A', 'Classic Rauchbier', 'Smoke-Flavored and Wood-Aged Beer', '1.05', '1.057', '1.012', '1.016', '4.8', '6', '20', '30', '12', '22', 'Lager', 'Märzen/Oktoberfest-style beer with a sweet, smoky aroma and flavor and a somewhat darker color.', 'http://www.bjcp.org/2008styles/style22.php#1a', '22', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Schlenkerla Rauchbier MÃ¤rzen, Kaiserdom Rauchbier, Eisenbahn Rauchbier, Victory Scarlet Fire Rauchbier, Spezial Rauchbier MÃ¤rzen, Saranac Rauchbier.', ''),
+(78, 'B', 'Other Smoked Beer', 'Smoke-Flavored and Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', '', 'This is any beer that is exhibiting smoke as a principle flavor and aroma characteristic other than the Bamberg-style Rauchbier (i.e. beechwood-smoked Märzen). Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://www.bjcp.org/2008styles/style22.php#1b', '22', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Alaskan Smoked Porter, O&rsquo;Fallons Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier, Rogue Smoke, Oskar Blues Old Chub, Left Hand Smoke Jumper, Dark Horse Fore Smoked Stout, Magic Hat Jinx. ', 'Entrant must specify the type of wood or other source of smoke. If the beer is based on a classic style then the specific style must be specified. Classic styles do not have to be cited.'),
 (79, 'C', 'Wood-Aged Beer', 'Smoke-Flavored and Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including any alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged. ', 'http://www.bjcp.org/2008styles/style22.php#1c', '22', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'The Lost Abbey Angel&rsquo;s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Bush Prestige, Petrus Aged Pale, Firestone Walker Double Barrel Ale, Dominion Oak Barrel Stout, New Holland Dragons Milk, Great Divide Oak Aged Yeti Imperial Stout, Goose Island Bourbon County Stout, Le Coq Imperial Extra Double Stout, Harviestoun Old Engine Oil Special Reserve, many microbreweries have specialty beers served only on premises often directly from the cask.', 'Entrant must specify the type of wood if a varietal character is noticeable. If the beer is based on a classic style then the specific style must be specified. Classic styles do not have to be cited.'),
 (80, 'A', 'Specialty Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of ingredients, processes and beer. The key attributes of the underlying style (if declared) will be atypical due to the addition of special ingredients or techniques; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and harmony of the resulting combination. The overall uniqueness of the process, ingredients used, and creativity should be considered. The overall rating of the beer depends heavily on the inherently subjective assessment of distinctiveness and drinkability. Entry Instructions: The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn&rsquo;t fit into an established style.', 'http://www.bjcp.org/2008styles/style23.php#1a', '23', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Bell&rsquo;s Rye Stout, Bell&rsquo;s Eccentric Ale, Samuel Adams Triple Bock and Utopias, Hair of the Dog Adam, Great Alba Scots Pine, Tommyknocker Maple Nut Brown Ale, Great Divide Bee Sting Honey Ale, Stoudt&rsquo;s Honey Double Mai Bock, Rogue Dad&rsquo;s Little Helper, Rogue Honey Cream Ale, Dogfish Head India Brown Ale, Zum Uerige Sticke and Doppel Sticke Altbier, Yards Brewing Company General Washington Tavern Porter, Rauchenfels Steinbier, Odells 90 Shilling Ale, Bear Republic Red Rocket Ale, Stone Arrogant Bastard.', 'The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn&rsquo;t fit into an established style.'),
 (81, 'A', 'Dry Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a dry white wine, with a pleasant mixture of subtle honey character, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol and honey character is the essential final measure of any mead.', 'http://www.bjcp.org/2008styles/style24.php#1a', '24', 'Y', 'bcoe', 'BJCP2008', 0, 1, 1, 1, '', 'White Winter Dry Mead, Sky River Dry Mead, Intermiel Bouquet Printanier.', ''),
@@ -1012,7 +995,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (104, 'B', 'International Amber Lager', 'International Lager', '1.042', '1.055', '1.008', '1.014', '4.6', '6', '8', '25', '7', '14', 'Lager', 'A well-attenuated malty amber lager with an interesting caramel or toast quality and restrained bitterness. Usually fairly well-attenuated, and can have an adjunct quality to it. Smooth, easily-drinkable lager character.', 'http://bjcp.org/stylecenter.php', '02', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, traditional-style, amber-lager-family, malty', 'Schell&rsquo;s Oktoberfest, Capital Winter Skal, Dos Equis Amber, Yuengling Lager, Brooklyn Lager.', ''),
 (105, 'C', 'International Dark Lager', 'International Lager', '1.044', '1.056', '1.008', '1.012', '4.2', '6', '8', '20', '14', '22', 'Lager', 'A darker and somewhat sweeter version of international pale lager with a little more body and flavor, but equally restrained in bitterness. The low bitterness leaves the malt as the primary flavor element, and the low hop levels provide very little in the way of balance.', 'http://bjcp.org/stylecenter.php', '02', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, traditional-style, dark-lager-family, malty', 'Dixie Blackened Voodoo, Shiner Bock, San Miguel Dark, Baltika 4, Saint Pauli Girl Dark.', ''),
 (106, 'A', 'Czech Pale Lager', 'Czech Lager', '1.036', '1.044', '1.008', '1.014', '3', '4', '25', '35', '3', '6', 'Lager', 'A lighter-bodied, rich, refreshing, hoppy, bitter, crisp pale Czech lager having the familiar flavors of the stronger Czech Pilsner-type beer but in a lower alcohol, lighter-bodied, and slightly less intense format.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, bitter, hoppy', 'Uneticke Pivo 10Â°, Pivovar Kout na Sumave Koutska 10Â°, Novosad Glassworks Brewery Hutske Vycepni 8Â°, Cernyy Orel Svetle 11Â°, Breznak Svetle Vycepni Pivo, Notch Session Pils.', ''),
-(107, 'B', 'Czech Premimum Pale Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.2', '5.8', '30', '45', '3.5', '6', 'Lager', 'Rich, characterful pale Czech lager, with considerable malt and hop character and a long, crisp finish. Complex yet well-balanced and refreshing. The malt flavors are complex for a Pilsner-type beer, and the bitterness is strong but clean and without harshness, which gives a rounded impression that enhances drinkability.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pilsner-family, balanced, hoppy', 'Kout na Sumave Koutska 12Â°, Uneticka 12Â°, Pilsner Urquell, Bernard Svatecn', ''),
+(107, 'B', 'Czech Premium Pale Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.2', '5.8', '30', '45', '3.5', '6', 'Lager', 'Rich, characterful pale Czech lager, with considerable malt and hop character and a long, crisp finish. Complex yet well-balanced and refreshing. The malt flavors are complex for a Pilsner-type beer, and the bitterness is strong but clean and without harshness, which gives a rounded impression that enhances drinkability.', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pilsner-family, balanced, hoppy', 'Kout na Sumave Koutska 12Â°, Uneticka 12Â°, Pilsner Urquell, Bernard Svatecn', ''),
 (108, 'C', 'Czech Amber Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '20', '35', '10', '16', 'Lager', 'Malt-driven amber Czech lager with hop character that can vary from low to quite significant. The malt flavors can vary quite a bit, leading to different interpretations ranging from drier, bready, and slightly biscuity to sweeter and somewhat caramelly. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, central-europe, traditional-style, amber-lager-family, balanced', 'Cerny Orel polotmava 12Â°, Primator polotmavy 13Â°, Jihlavsky Radnicni Pivovar Zikmund, Pivovar Vysoky Chlumec Demon, Pivovar Benesov Sedm kuli, Bernard Jantar.', ''),
 (109, 'D', 'Czech Dark Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '18', '38', '14', '35', 'Lager', 'A rich, dark, malty Czech lager with a roast character that can vary from almost absent to quite prominent. Malty with an interesting and complex flavor profile, with variable levels of hopping providing a range of possible interpretations. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, central-europe, traditional-style, dark-lager-family, balanced', 'Kout na Sumav Tmavy 14Â°, Pivovar Breznice Herold, U Fleku, Budvar Tmavy Lezak, Bohemian Brewery Cherny Bock 4, Devils Backbone Moran, Notch Cerne Pivo.', ''),
 (110, 'A', 'Munich Helles', 'Pale Malty European Lager', '1.044', '1.048', '1.006', '1.012', '4.7', '5.4', '16', '22', '3', '5', 'Lager', 'A clean, malty, gold-colored German lager with a smooth grainy-sweet malty flavor and a soft, dry finish. Subtle spicy, floral, or herbal hops and restrained bitterness help keep the balance malty but not sweet, which helps make this beer a refreshing, everyday drink.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, malty', 'Weihenstephaner Original, Hacker-Pschorr Munchner Gold, Burgerbrau Wolznacher Hell Naturtrub, Paulaner Premium Lager, Spaten Premium Lager, Lowenbrau Original.', ''),
@@ -1141,14 +1124,13 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 -- Table structure for table `baseline_style_types`
 --
 
-DROP TABLE IF EXISTS `baseline_style_types`;
 CREATE TABLE IF NOT EXISTS `baseline_style_types` (
   `id` int(11) NOT NULL,
   `styleTypeName` varchar(255) DEFAULT NULL,
   `styleTypeOwn` varchar(255) DEFAULT NULL,
   `styleTypeBOS` char(1) DEFAULT NULL,
   `styleTypeBOSMethod` int(11) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_style_types`
@@ -1165,21 +1147,20 @@ INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styl
 -- Table structure for table `baseline_system`
 --
 
-DROP TABLE IF EXISTS `baseline_system`;
 CREATE TABLE IF NOT EXISTS `baseline_system` (
   `id` int(11) NOT NULL,
   `version` varchar(12) DEFAULT NULL,
   `version_date` date DEFAULT NULL,
-  `data_check` varchar(255) DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
+  `data_check` varchar(255) DEFAULT NULL,
   `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.'
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_system`
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.1.5.0', '2016-07-31', '2016-07-31 11:00:01', 1);
+(1, '2.1.5.0', '2016-08-31', '2016-08-31 00:00:01', 1);
 
 -- --------------------------------------------------------
 
@@ -1187,7 +1168,6 @@ INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `s
 -- Table structure for table `baseline_users`
 --
 
-DROP TABLE IF EXISTS `baseline_users`;
 CREATE TABLE IF NOT EXISTS `baseline_users` (
   `id` int(8) NOT NULL,
   `user_name` varchar(255) DEFAULT NULL,
@@ -1196,158 +1176,11 @@ CREATE TABLE IF NOT EXISTS `baseline_users` (
   `userQuestion` varchar(255) DEFAULT NULL,
   `userQuestionAnswer` varchar(255) DEFAULT NULL,
   `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.'
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_users`
 --
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-05-01 07:00:01');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `baseline_archive`
---
-ALTER TABLE `baseline_archive`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_brewer`
---
-ALTER TABLE `baseline_brewer`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_brewing`
---
-ALTER TABLE `baseline_brewing`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_contacts`
---
-ALTER TABLE `baseline_contacts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_contest_info`
---
-ALTER TABLE `baseline_contest_info`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_drop_off`
---
-ALTER TABLE `baseline_drop_off`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_assignments`
---
-ALTER TABLE `baseline_judging_assignments`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_flights`
---
-ALTER TABLE `baseline_judging_flights`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_locations`
---
-ALTER TABLE `baseline_judging_locations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_preferences`
---
-ALTER TABLE `baseline_judging_preferences`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_scores`
---
-ALTER TABLE `baseline_judging_scores`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_scores_bos`
---
-ALTER TABLE `baseline_judging_scores_bos`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_judging_tables`
---
-ALTER TABLE `baseline_judging_tables`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_mods`
---
-ALTER TABLE `baseline_mods`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_preferences`
---
-ALTER TABLE `baseline_preferences`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_special_best_data`
---
-ALTER TABLE `baseline_special_best_data`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_special_best_info`
---
-ALTER TABLE `baseline_special_best_info`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_sponsors`
---
-ALTER TABLE `baseline_sponsors`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_staff`
---
-ALTER TABLE `baseline_staff`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_styles`
---
-ALTER TABLE `baseline_styles`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_style_types`
---
-ALTER TABLE `baseline_style_types`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_system`
---
-ALTER TABLE `baseline_system`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `baseline_users`
---
-ALTER TABLE `baseline_users`
-  ADD PRIMARY KEY (`id`);
-  
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-08-31 13:00:01');
