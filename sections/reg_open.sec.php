@@ -61,30 +61,28 @@ $header1_8 = "";
 $page_info8 = "";
 
 
+
 if (($registration_open == 1) && (!isset($_SESSION['loginUsername']))) { 
-	$header1_1 .= "<h2>Judge and Steward Registration is <span class='text-success'>Open</span></h2>"; 
-	$page_info1 .= "<p>If you <em>have not</em> registered and are willing to be a judge or steward, <a href='".build_public_url("register","judge","default","default",$sef,$base_url)."'>please register</a>.</p>";
-	$page_info1 .= sprintf("<p>If you <em>have</em> registered, <a href=\"%s\">log in</a> and then choose <em>Edit Account</em> from the My Account menu indicated by the <span class=\"fa fa-lg fa-user\"></span> icon on the top menu.</p>",build_public_url("login","default","default","default",$sef,$base_url));
+	$header1_1 .= sprintf("<h2>%s <span class='text-success'>%s</span></h2>",$reg_open_text_000,$reg_open_text_001) ;
+	$page_info1 .= sprintf("<p>%s <a href='".build_public_url("register","judge","default","default",$sef,$base_url)."'>%s</a>.</p>",$reg_open_text_002,$reg_open_text_003);
+	$page_info1 .= sprintf("<p>%s <span class=\"fa fa-lg fa-user\"></span> %s</p>",$reg_open_text_004,$reg_open_text_005);
 }
 
-if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) { 
-	$page_info1 .= "<p>Since you have already registered, you can <a href='".build_public_url("list","default","default","default",$sef,$base_url)."'>check your account info</a> to see whether you have indicated that you are willing to judge and/or steward.</p>";
-	$page_info1 .= "";
-}
+if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) $page_info1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s</p>",$reg_open_text_006,build_public_url("list","default","default","default",$sef,$base_url),$reg_open_text_008);
 
-if ($registration_open != 1) $page_info1 .= sprintf("<p>If you are willing to judge or steward, please return to register on or after %s.</p>",$judge_open);
+if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_text_009,$judge_open);
 
 
 if ($entry_window_open == 1) {
-	$header1_2 .= "<h2>Entry Registration is <span class='text-success'>Open</a></h2>"; 
+	$header1_2 .= sprintf("<h2>%s <span class='text-success'>%s</a></h2>",$reg_open_text_010,$reg_open_text_001); 
 	$page_info2 .= "<p>";
-	$page_info2 .= "To add your entries into the system, ";
-	if (!isset($_SESSION['loginUsername'])) $page_info2 .= "please proceed through the <a href='".build_public_url("register","default","default","default",$sef,$base_url)."'>registration process</a> or <a href='".build_public_url("login","default","default","default",$sef,$base_url)."'>log in</a> if you already have an account.";
-	else $page_info2 .= "use the <a href='".build_public_url("brew","entry","add","default",$sef,$base_url)."'>add an entry form</a>.";
+	$page_info2 .= sprintf("%s, ",$reg_open_text_011);
+	if (!isset($_SESSION['loginUsername'])) $page_info2 .= sprintf("<a href=\"%s\">%s</a> or <a href=\"%s\">%s</a> %s",build_public_url("register","default","default","default",$sef,$base_url),$reg_open_text_012,build_public_url("login","default","default","default",$sef,$base_url),strtolower($label_log_in),$reg_open_text_013);
+	else $page_info2 .= sprintf("<a href=\"%s\">%s</a>.",build_public_url("brew","entry","add","default",$sef,$base_url),$reg_open_text_014);
 	$page_info2 .= "</p>";
 }
 
-$header1_3 .= "<a name='rules'></a><h2>Rules</h2>";
+$header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);
 $page_info3 .= $row_contest_rules['contestRules'];
 
 

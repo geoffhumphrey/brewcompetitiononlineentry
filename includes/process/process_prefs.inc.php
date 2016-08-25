@@ -65,6 +65,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsAutoPurge,
 		prefsEntryLimitPaid,
 		prefsEmailRegConfirm,
+		prefsSpecific,
+		
 		id
 		
 		) VALUES (
@@ -76,7 +78,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s)",
+		%s, %s, %s, %s, %s,
+		%s)",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
 							   GetSQLValueString($_POST['prefsWeight1'], "text"),
 							   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -128,6 +131,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
+							   GetSQLValueString($_POST['prefsSpecific'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -194,7 +198,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsAutoPurge=%s,
 		prefsEntryLimitPaid=%s,
 		prefsEmailRegConfirm=%s,
-		prefsSponsorLogos=%s
+		prefsSponsorLogos=%s,
+		prefsSpecific=%s
 		
 		WHERE id=%s",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -243,6 +248,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
+							   GetSQLValueString($_POST['prefsSpecific'], "int"),
 							   
 							   GetSQLValueString($id, "int"));
 							   

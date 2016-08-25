@@ -40,6 +40,30 @@ if ($section != "setup")  {
 	
 }
 
+if ($section == "setup") {
+	
+	$timezone_raw = "0";
+	$timezone_prefs = get_timezone("0");
+	
+	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
+	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
+	$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
+	$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+	
+	if ($totalRows_prefs_tz > 0) {
+		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
+		$timezone_prefs = get_timezone($row_prefs_tz['prefsTimeZone']);
+	}
+
+	date_default_timezone_set($timezone_prefs);
+	$tz = date_default_timezone_get();
+	
+	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
+	else $timezone_offset = number_format($timezone_raw,0);
+	
+}
+
 if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) { 
 
 	require(LIB.'process.lib.php');

@@ -46,6 +46,7 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 
+
 if ($row_scored_entries['count'] > 0) {
 
 	$a = styles_active(0);
@@ -54,7 +55,7 @@ if ($row_scored_entries['count'] > 0) {
 		include(DB.'winners_category.db.php');
 		
 		// Display all winners 
-		if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
+		if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
 		if ($row_score_count['count'] > "0")   {
 			
 			$primary_page_info = "";
@@ -68,19 +69,16 @@ if ($row_scored_entries['count'] > 0) {
 			
 			
 			// Build headers		
-			$header1_1 .= "<h3>";
-			$header1_1 .= "Category ".ltrim($style,"0").": ".style_convert($style,"1")." (".$row_entry_count['count']." ".$entries.")";
-			$header1_1 .= "</h3>";
-			
+			$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
 			
 			// Build table headers
 			$table_head1 .= "<tr>";
-			$table_head1 .= "<th nowrap>Place</th>";
-			$table_head1 .= "<th>Brewer(s)</th>";
-			$table_head1 .= "<th><span class=\"hidden-xs hidden-sm hidden-md\">Entry </span>Name</th>";
-			$table_head1 .= "<th>Style</th>";
-			$table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\">Club</th>";
-			if ($filter == "scores") $table_head1 .= "<th class=\"hidden-xs hidden-sm hidden-md\" nowrap>Score</th>";
+			$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
+			$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
+			$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+			$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
+			$table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+			if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
 			$table_head1 .= "</tr>";
 			
 			// Build table body
@@ -175,6 +173,8 @@ if ($row_scored_entries['count'] > 0) {
 <?php 	} // end if > 0
 	} // end foreach
 } // end if score count > 0
+
+else echo sprintf("<p>%s</p>",$winners_text_001);
 ?>
 
 <!-- Public Page Rebuild completed 08.26.15 --> 

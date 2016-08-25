@@ -231,6 +231,8 @@ if ($section != "step5") {
 		$output_datatables_head .= "</tr>";
 		
 		if ($totalRows_brewer > 0) {
+			
+			$copy_paste_emails = ""; 
 		
 			do {
 				
@@ -272,10 +274,10 @@ if ($section != "step5") {
 				
 				$assignment_checked = str_replace(", ",",",$brewer_assignment);
 				
-				if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) $checked = "CHECKED";
-				elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) $checked = "CHECKED";
-				elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) $checked = "CHECKED";
-				elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) $checked = "CHECKED";
+				if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
 				else $checked = "";	
 				
 				if ($filter == "bos") { 
@@ -490,6 +492,58 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             </select>
         </div>
     </div><!-- ./button group -->
+    <?php } ?>
+    
+    <?php if ($filter == "judges") { ?>
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
+              Assigned Judge Email Addresses
+            </button>
+    </div><!-- ./button group -->
+    <!-- Modal -->
+    <div class="modal fade" id="judgeEmailModal" tabindex="-1" role="dialog" aria-labelledby="judgeEmailModalLabel">
+      	<div class="modal-dialog" role="document">
+        	<div class="modal-content">
+          		<div class="modal-header bcoem-admin-modal">
+            		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            		<h4 class="modal-title" id="judgeEmailModalLabel">Assigned Judge Email Addresses</h4>
+          		</div>
+                <div class="modal-body">
+                	<p>Copy and paste the list below into your favorite email program to contact all assigned judges.</p>
+                    <textarea cols="75" rows="5"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
+                </div>
+                <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        	</div>
+      	</div>
+    </div><!-- ./modal -->
+    <?php } ?>
+    
+    <?php if ($filter == "stewards") { ?>
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
+              Assigned Steward Email Addresses
+            </button>
+    </div><!-- ./button group -->
+    <!-- Modal -->
+    <div class="modal fade" id="judgeEmailModal" tabindex="-1" role="dialog" aria-labelledby="judgeEmailModalLabel">
+      	<div class="modal-dialog" role="document">
+        	<div class="modal-content">
+          		<div class="modal-header bcoem-admin-modal">
+            		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            		<h4 class="modal-title" id="judgeEmailModalLabel">Assigned Steward Email Addresses</h4>
+          		</div>
+                <div class="modal-body">
+                	<p>Copy and paste the list below into your favorite email program to contact all assigned stewards.</p>
+                    <textarea cols="75" rows="5"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
+                </div>
+                <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        	</div>
+      	</div>
+    </div><!-- ./modal -->
     <?php } ?>
 	
 	<?php if ($filter != "default") { ?>

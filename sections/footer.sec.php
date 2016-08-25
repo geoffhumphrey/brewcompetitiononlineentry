@@ -6,10 +6,10 @@
  */
 $footer = "";
 if(!empty($_SESSION['contestName'])) $footer .= $_SESSION['contestName']." &ndash; ";
-$footer .= "<a href='http://www.brewcompetition.com' target='_blank'>BCOE&amp;M</a> ";
-if (HOSTED) $footer .= $current_version_display." Hosted Edition";
+$footer .= "<a href=\"http://www.brewcompetition.com\" target=\"_blank\">BCOE&amp;M</a> ";
+if (HOSTED) $footer .= $current_version_display." ".$label_hosted;
 else $footer .= $current_version_display;
-$footer .= " &copy;2009-".date('Y');
+$footer .= " <span class=\"fa fa-copyright\"></span>2009-".date('Y');
 if (TESTING) {
 		$mtime = microtime(); 
 		$mtime = explode(" ",$mtime); 

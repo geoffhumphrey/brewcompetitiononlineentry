@@ -45,6 +45,7 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 
+
 require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
@@ -63,36 +64,28 @@ require(DB.'winners.db.php');
 				$table_body1 = "";
 				
 				// Build headers
-				$header1_1 .= "<h2>Best of Show &ndash; ".$row_style_type['styleTypeName']."</h2>";
+				$header1_1 .= sprintf("<h2>%s &ndash; %s</h2>",$label_bos,$row_style_type['styleTypeName']);
 				
 				// Build table headers
 				$table_head1 .= "<tr>";
-				$table_head1 .= "<th width='5%' nowrap>Place</th>";
-				$table_head1 .= "<th width='25%'>Brewer(s)</th>";
-				$table_head1 .= "<th width='25%'>Entry Name</th>";
-				$table_head1 .= "<th width='25%'>Style</th>";
-				$table_head1 .= "<th>Club</th>";
+				$table_head1 .= sprintf("<th width=\"5%%\" nowrap>%s</th>",$label_place);
+				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_brewer);
+				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_entry_name);
+				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_style);
+				$table_head1 .= sprintf("<th>%s</th>",$label_club);
+				$table_head1 .= "</tr>";
 				
 				do {
 					
 					$table_body1 .= "<tr>";
 				
-					if ($action == "print") { 
-						$table_body1 .= "<td nowrap>";
-						$table_body1 .= display_place($row_bos['scorePlace'],1);
-						$table_body1 .= "</td>";
-					}
+					$table_body1 .= "<td nowrap>";
+					$table_body1 .= display_place($row_bos['scorePlace'],2);
+					$table_body1 .= "</td>";
 					
-					else {
-						$table_body1 .= "<td nowrap>";
-						$table_body1 .= display_place($row_bos['scorePlace'],2);
-						$table_body1 .= "</td>";
-					}
-					
-					if ($action == "print") $table_body1 .= "<td>";
-					else $table_body1 .= "<td>";
+					$table_body1 .= "<td>";
 					$table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
-					if ($row_bos['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_bos['brewCoBrewer'];
+					if ($row_bos['brewCoBrewer'] != "") $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
 					$table_body1 .= "</td>";
 					
 					if ($action == "print") $table_body1 .= "<td>";
@@ -164,7 +157,7 @@ if ($totalRows_sbi > 0) {
 				$table_body2 = "";
 				
 				// Build page headers
-				$header2_1 .= "<h3>Best of Show &ndash; ".$row_sbi['sbi_name']."</h3>";
+				$header2_1 .= sprintf("<h3>%s &ndash; %s</h3>",$label_bos, $row_sbi['sbi_name']);
 				if ($row_sbi['sbi_description'] != "") $header2_1 .= "<p>".$row_sbi['sbi_description']."</p>";
 				
 				// Build table headers

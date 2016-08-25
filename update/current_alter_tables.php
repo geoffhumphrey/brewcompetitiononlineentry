@@ -1,7 +1,7 @@
 <?php
 // -----------------------------------------------------------
 // Alter Tables
-// Version 2.1.0.0
+// Version 2.1.5.0
 // -----------------------------------------------------------
 
 /*
@@ -13,7 +13,14 @@
 
 if (!check_update("sponsorEnable", $prefix."sponsors")) {
 	
-	$updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `XXX` TINYINT(1) NULL;",$prefix."XXX");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
+	$output .=  "<li>XXX.</li>";
+	
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `XXX` VARCHAR(255) NULL CHARACTER SET utf8 COLLATE utf8_general_ci;",$prefix."XXX");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -21,170 +28,307 @@ if (!check_update("sponsorEnable", $prefix."sponsors")) {
 	$output .=  "<li>XXX.</li>";
 }
 
+ALTER TABLE %s CONVERT TO CHARACTER SET utf8;
+ALTER DATABASE `brewcomp_bcoetest2` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+SELECT concat('alter table ', table_name, ' CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;') FROM information_schema.t‌​ables WHERE table_schema='<your_‌​database_name>' and table_collation != 'utf8_general_ci' GROUP BY table_name;
+*/
+
 
 // -----------------------------------------------------------
 // Alter Table: preferences
-// Change selected preferences rows to boolean.
+// Future proofing for translations
 // -----------------------------------------------------------
 
-// Custom function...
-function convert_yes_no($input) {
-	if ($input == "Y") $return = "1";
-	elseif ($input == "N") $return = "0";
-	else $return = "0";
-	return $return;
-}
-
-
-// First, change the values currently in the table to 1 for Y and 0 for N
-
-$query_preferences = sprintf("SELECT * FROM %s WHERE id=1",$prefix."preferences");
-$preferences = mysqli_query($connection,$query_preferences) or die (mysqli_error($connection));
-$row_preferences = mysqli_fetch_assoc($preferences);
-$totalRows_preferences = mysqli_num_rows($user_preferences);
-
-$updateSQL = sprintf("UPDATE %s SET 
-`prefsCash`='%s', 
-`prefsCheck`='%s', 
-`prefsTransFee`='%s', 
-`prefsCash`='%s', 
-`prefsSponsors`='%s', 
-`prefsSponsorLogos`='%s', 
-`prefsDisplayWinners`='%s', 
-`prefsDisplaySpecial`='%s', 
-`prefsContact`='%s', 
-`prefsPayToPrint`='%s', 
-`prefsHideRecipe`='%s', 
-`prefsUseMods`='%s', 
-`prefsSEF`='%s'
-WHERE `id`=1", 
-$prefix."preferences",
-convert_yes_no($row_preferences['prefsCash']), 
-convert_yes_no($row_preferences['prefsCheck']), 
-convert_yes_no($row_preferences['prefsTransFee']), 
-convert_yes_no($row_preferences['prefsCash']), 
-convert_yes_no($row_preferences['prefsSponsors']), 
-convert_yes_no($row_preferences['prefsSponsorLogos']), 
-convert_yes_no($row_preferences['prefsDisplayWinners']), 
-convert_yes_no($row_preferences['prefsDisplaySpecial']),
-convert_yes_no($row_preferences['prefsContact']), 
-convert_yes_no($row_preferences['prefsPayToPrint']), 
-convert_yes_no($row_preferences['prefsHideRecipe']), 
-convert_yes_no($row_preferences['prefsUseMods']), 
-convert_yes_no($row_preferences['prefsSEF'])
-);
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-// Then alter the table rows to be TINYINT(1)
-$updateSQL = sprintf("
-ALTER TABLE `%s` 
-CHANGE `prefsPaypal` `prefsPaypal` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsCash` `prefsCash` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsCheck` `prefsCheck` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsTransFee` `prefsTransFee` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsSponsors` `prefsSponsors` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsSponsorLogos` `prefsSponsorLogos` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsDisplayWinners` `prefsDisplayWinners` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsDisplaySpecial` `prefsDisplaySpecial` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsContact` `prefsContact` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsPayToPrint` `prefsPayToPrint` TINYINT(1) NULL DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?', 
-CHANGE `prefsHideRecipe` `prefsHideRecipe` TINYINT(1) NULL DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?', 
-CHANGE `prefsUseMods` `prefsUseMods` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)', 
-CHANGE `prefsSEF` `prefsSEF` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.'", 
-$prefix."preferences"
-);
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$output .=  "<li>Preferences table updated to boolean values.</li>";
-
-// -----------------------------------------------------------
-// Alter Table: judging_preferences
-// Change selected judging_preferences rows to boolean.
-// -----------------------------------------------------------
-
-// First, change the values currently in the table to 1 for Y and 0 for N
-$query_judging_preferences = sprintf("SELECT jprefsQueued FROM %s WHERE id=1",$prefix."judging_preferences");
-$judging_preferences = mysqli_query($connection,$query_judging_preferences) or die (mysqli_error($connection));
-$row_judging_preferences = mysqli_fetch_assoc($judging_preferences);
-$totalRows_judging_preferences = mysqli_num_rows($user_judging_preferences);
-
-$updateSQL = sprintf("UPDATE %s SET `jprefsQueued`='%s' WHERE `id`=1", $prefix."judging_preferences", convert_yes_no($row_judging_preferences['jprefsQueued']));
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-// Then alter the table rows to be TINYINT(1)
-$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jprefsQueued` `jprefsQueued` TINYINT(1) NULL DEFAULT NULL;", $prefix."preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$output .=  "<li>Judging preferences table updated to boolean values.</li>";
-
-*/
-
-// -----------------------------------------------------------
-// Alter Table: Brewer
-// Electronically signed waiver
-// -----------------------------------------------------------
-
-$updateSQL = sprintf("ALTER TABLE `%s` CHANGE  `brewerAssignmentStaff`  `brewerJudgeWaiver` CHAR(1) NULL DEFAULT NULL;", $prefix."brewer");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$output .=  "<li>Brewer table updated.</li>"; 
-
-
-// -----------------------------------------------------------
-// Alter Table: Preferences
-// -----------------------------------------------------------
-
-$updateSQL = sprintf("
-ALTER TABLE `%s` 
-ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL,  
-ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;
-",
-$prefix."preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$output .=  "<li>Preferences table updated.</li>";
-
-// -----------------------------------------------------------
-// Alter Table: Judging Preferences
-// -----------------------------------------------------------
-
-$updateSQL = sprintf("
-ALTER TABLE `%s` 
-ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL,  
-ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL,  
-ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;
-",
-$prefix."judging_preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `jPrefsQueued` `jPrefsQueued` CHAR(1) NULL DEFAULT NULL COMMENT 'Whether to use the Queued Judging technique from AHA'",$prefix."judging_preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$output .=  "<li>Judging preferences table updated.</li>";
-
-
-if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;",$prefix."contest_info");
+if (!check_update("prefsLanguage", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	$output .=  "<li>Contest info table updated.</li>";
 }
 
+if (!check_update("prefsSpecific", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsSpecific` TINYINT(1) NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+// Sanity Check - see if 2.1.0 column names are present - if not, add
+if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+// -----------------------------------------------------------
+// Alter Table: judging_preferences
+// -----------------------------------------------------------
+
+if (!check_update("jPrefsCapJudges", $prefix."judging_preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+if (!check_update("jPrefsCapStewards", $prefix."judging_preferences")) {
+	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;",	$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
+	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+// -----------------------------------------------------------
+// Alter Table: contest_info
+// Sanity Check - see if 2.1.0 column names are present - if not, add
+// -----------------------------------------------------------
+
+if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+// -----------------------------------------------------------
+// Alter Table: styles
+// Sanity Check - see if 2.1.0 column names are present - if not, add
+// -----------------------------------------------------------
+
+if (!check_update("brewStyleEntry", $prefix."styles")) {
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+if (!check_update("brewStyleComEx", $prefix."styles")) {
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+
+// -----------------------------------------------------------
+// Alter Tables: ALL
+// Function to convert all tables and text fields to UTF8
+// For future internationalization and translations effort
+// -----------------------------------------------------------
+
+$target_charset = "utf8";
+$target_collate = "utf8_general_ci";
+
+function MysqlError($connection) {
+	if (mysqli_errno($connection)) {
+		return "<li>MySQL Error: " . mysqli_error() . "</li>";
+	}
+}
+
+$count = array();
+$tabs = array();
+$res = mysqli_query($connection,"SHOW TABLES");
+
+$output .= MysqlError($connection);
+
+while (($row = mysqli_fetch_row($res)) != null) {
+	if (!empty($prefix)) { 
+		if (strpos($row[0], $prefix) !== false) $tabs[] = $row[0];
+	} else $tabs[] = $row[0];
+}
+
+if (!empty($tabs)) {
+
+	// Convert tables
+	
+	foreach ($tabs as $tab) {
+		$res = mysqli_query($connection,"show index from {$tab}");
+		$output .= MysqlError($connection);
+		$indicies = array();
+	
+		while (($row = mysqli_fetch_array($res)) != null) {
+			
+			if ($row[2] != "PRIMARY") {
+				
+				$indicies[] = array("name" => $row[2], "unique" => !($row[1] == "1"), "col" => $row[4]);
+				mysqli_query($connection,"ALTER TABLE {$tab} DROP INDEX {$row[2]}");
+				$output .= MysqlError($connection);
+				$output .= "<li>Dropped index {$row[2]}. Unique: {$row[1]}</li>";
+				$count[] = 1;
+				
+			}
+			
+			else $count[] = 0;
+			
+		}
+	
+		
+		$res = mysqli_query($connection,"DESCRIBE {$tab}");
+		$output .= MysqlError($connection);
+		
+		while (($row = mysqli_fetch_array($res)) != null) {
+			
+			$name = $row[0];
+			$type = $row[1];
+			$set = false;
+			
+			if (preg_match("/^varchar\((\d+)\)$/i", $type, $mat)) {
+				
+				$size = $mat[1];
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} VARBINARY({$size})");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} VARCHAR({$size}) CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+			
+			elseif (preg_match("/^char\((\d+)\)$/i", $type, $mat)) {
+				
+				$size = $mat[1];
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} CHAR({$size}) CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+							
+			elseif (!strcasecmp($type, "CHAR")) {
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} BINARY(1)");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} VARCHAR(1) CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} CHAR(1) CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+			
+			elseif (!strcasecmp($type, "TINYTEXT"))	{
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} TINYBLOB");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} TINYTEXT CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+			
+			elseif (!strcasecmp($type, "MEDIUMTEXT")) {
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} MEDIUMBLOB");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} MEDIUMTEXT CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+			
+			elseif (!strcasecmp($type, "LONGTEXT")) {
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} LONGBLOB");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} LONGTEXT CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+			}
+			
+			else if (!strcasecmp($type, "TEXT")) {
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} BLOB");
+				$output .= MysqlError($connection);
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} TEXT CHARACTER SET {$target_charset}");
+				$output .= MysqlError($connection);
+				
+				$set = TRUE;
+				$output .= "<li>Altered field {$name} on {$tab} to type {$type} {$target_collate}.</li>";
+				$count[] = 1;
+				
+			}
+			
+			else $count[] = 0;
+	
+			if ($set) {
+				
+				mysqli_query($connection,"ALTER TABLE {$tab} MODIFY {$name} COLLATE {$target_collate}");
+				$count[] = 1;
+				
+			}
+			
+			else $count[] = 0;
+		}
+	
+		// Re-build indicies...
+		foreach ($indicies as $index) {
+			
+			if ($index["unique"]) {
+				
+				mysqli_query($connection,"CREATE UNIQUE INDEX {$index["name"]} ON {$tab} ({$index["col"]})");
+				$output .= MysqlError($connection);
+				$count[] = 1;
+				
+			}
+			
+			else {
+				
+				mysqli_query($connection,"CREATE INDEX {$index["name"]} ON {$tab} ({$index["col"]})");
+				$output .= MysqlError($connection);
+				$count[] = 1;
+				
+			}
+					
+			$output .= "<li>Created index {$index["name"]} on {$tab}. Unique: {$index["unique"]}</li>";
+			$count[] = 1;
+		}
+	
+		// set default collate
+		mysqli_query($connection,"ALTER TABLE {$tab}  DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
+		$count[] = 1;
+	}
+	
+	// set database charset
+	mysqli_query($connection,"ALTER DATABASE {$db} DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
+	$count[] = 1;
+
+}
 ?>

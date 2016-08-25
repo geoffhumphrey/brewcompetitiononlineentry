@@ -68,8 +68,10 @@ Declare all variables empty at the top of the script. Add on later...
 	$return_entries = "";
 	$entries = "";
 	
+
+	
 	if ($disable_pay) {
-		$primary_page_info .= sprintf("<p class=\"lead\">%s, the payment window has passed. <small><a href=\"%s\">Contact</a> a competition official if you have any questions.</small></p>",$_SESSION['brewerFirstName'],$link_contacts);
+		$primary_page_info .= sprintf("<p class=\"lead\">%s, %s <small><a href=\"%s\">%s</a></small></p>",$_SESSION['brewerFirstName'],$pay_text_000,$link_contacts,$pay_text_001);
 		echo $primary_page_info;
 	}
 	
@@ -78,25 +80,25 @@ Declare all variables empty at the top of the script. Add on later...
 	else {
 	
 		// Build top of page info: total entry fees, list of unpaid entries, etc.
-		$primary_page_info .= sprintf("<p class=\"lead\">%s, the following are your options for paying your entry fees.</p>",$_SESSION['brewerFirstName']);
+		$primary_page_info .= sprintf("<p class=\"lead\">%s, %s</p>",$_SESSION['brewerFirstName'],$pay_text_002);
 		$primary_page_info .= "<p class=\"lead\"><small>";
-		$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-money text-success\"></span> Fees are <strong class=\"text-success\">%s</strong> per entry.",$currency_symbol.number_format($_SESSION['contestEntryFee'],2));
+		$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-money text-success\"></span> %s <strong class=\"text-success\">%s</strong> %s.",$pay_text_003,$currency_symbol.number_format($_SESSION['contestEntryFee'],2),$pay_text_004);
 		
-		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s per entry after the %s entry. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2),addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum'])); 
-		if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s for unlimited entries. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2));
+		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s %s %s %s. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2), $pay_text_005,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']), strtolower($label_entry)); 
+		if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s %s. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2),$pay_text_006);
 		$primary_page_info .= "</small></p>";
 		if ($row_brewer['brewerDiscount'] == "Y") {
-			$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> Your fees have been discounted to <strong class=\"text-success\">%s</strong> per entry.</small></p>",$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2));
+			$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> %s <strong class=\"text-success\">%s</strong> %s.</small></p>",$pay_text_007,$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2),$pay_text_004);
 		}
-		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>  Your total entry fees are <strong class=\"text-success\">%s</strong>. You need to pay <strong class=\"text-danger\">%s</strong>.</small></p>",$currency_symbol.number_format($total_entry_fees,2),$currency_symbol.number_format($total_to_pay,2));
+		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>. %s <strong class=\"text-danger\">%s</strong>.</small></p>",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2),$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
 		
-		if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-thumbs-o-up text-danger\"></span> %s</p>","Your fees have been paid. Thank you!</small></p>");
+		if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-thumbs-o-up text-danger\"></span> %s</p></small></p>",$pay_text_010);
 		
 		
 		else {
 			$primary_page_info .= "<p class=\"lead\"><small>";
-			$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>  You currently have <strong class=\"text-danger\">%s unpaid confirmed ",readable_number($total_not_paid));
-			if ($total_not_paid == "1") $primary_page_info .= "entry</strong>:"; else $primary_page_info .= "entries</strong>:";
+			$primary_page_info .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>  %s <strong class=\"text-danger\">%s %s ",$pay_text_011,$total_not_paid,$pay_text_012);
+			if ($total_not_paid == "1") $primary_page_info .= sprintf("%s</strong>:",strtolower($label_entry)); else $primary_page_info .= sprintf("%s</strong>:",strtolower($label_entries));
 			$primary_page_info .= "</small></p>";
 			$primary_page_info .= "<ol>";
 				do { 
@@ -113,21 +115,25 @@ Declare all variables empty at the top of the script. Add on later...
 		$return = $base_url."index.php?section=pay&msg=10&view=".$return_entries;
 		
 		
+		
+		
+		
+		
 		if (($total_to_pay > 0) && ($view == "default")) {
 			
 			// Cash Payment
 			if ($_SESSION['prefsCash'] == "Y") { 
-				$header1_1 .= "<h2>Cash</h2>";
-				$page_info1 .= "<p>Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.</p>";
-				$page_info1 .= "<p>Your returned score sheets will serve as your entry receipt.</p>";
+				$header1_1 .= sprintf("<h2>%s</h2>",$label_cash);
+				$page_info1 .= sprintf("<p>%s</p>",$pay_text_015);
+				$page_info1 .= sprintf("<p>%s</p>",$pay_text_016);
 			}
 		
 			
 			if ($_SESSION['prefsCheck'] == "Y") {
 				// Check Payment
-				$header1_2 .= "<h2>Checks</h2>";
-				$page_info2 .= sprintf("<p>Attach a check for the entire entry amount to one of your bottles. Checks should be made out to <em>%s</em>.</p>",$_SESSION['prefsCheckPayee']);
-				$page_info2 .= "<p>Your check carbon or cashed check is your entry receipt.</p>";
+				$header1_2 .= sprintf("<h2>%s</h2>",$label_check);
+				$page_info2 .= sprintf("<p>%s <em>%s</em>.</p>",$pay_text_013,$_SESSION['prefsCheckPayee']);
+				$page_info2 .= sprintf("<p>%s</p>",$pay_text_014);
 			}
 		
 			if ($_SESSION['prefsPaypal'] == "Y")  { 
@@ -137,13 +143,13 @@ Declare all variables empty at the top of the script. Add on later...
 				else $payment_amount = number_format($total_to_pay, 2);
 			
 				// Online
-				$header1_3 .= "<h2>Pay Online</h2>";
-				$page_info3 .= "<p>Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.</p>";
+				$header1_3 .= sprintf("<h2>%s</h2>",$label_pay_online);
+				$page_info3 .= sprintf("<p>%s</p>", $pay_text_017);
 			
 				// PayPal
 				$header2_4 .= "<h3>PayPal <span class=\"fa fa-lg fa-cc-paypal\"></span> <span class=\"fa fa-lg fa-cc-visa\"></span> <span class=\"fa fa-lg fa-cc-mastercard\"></span> <span class=\"fa fa-lg fa-cc-discover\"></span> <span class=\"fa fa-lg fa-cc-amex\"></span></h3>";
-				$page_info4 .= "<p>Click the &ldquo;Pay with PayPal&rdquo; button below to pay online.";
-				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
+				$page_info4 .= sprintf("<p>%s",$pay_text_018);
+				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" %s %s %s</p>",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
 				//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
 				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
 				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
@@ -169,13 +175,13 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info4 .= "<div class=\"modal-content\">";
 				$page_info4 .= "<div class=\"modal-header\">";
 				$page_info4 .= "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
-				$page_info4 .= "<h4 class=\"modal-title\">Make Sure to Click &ldquo;Return To...&rdquo; After Paying Your Fees</h4>";
+				$page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
 				$page_info4 .= "</div>";
-				$page_info4 .= "<div class=\"modal-body\"><p>To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to click the &ldquo;Return to...&rdquo; link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment.</p><p>Also, make sure to print your payment receipt and attach it to one of your entry bottles.</p>";
+				$page_info4 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_021);
 				$page_info4 .= "</div>";
 				$page_info4 .= "<div class=\"modal-footer\">";
-				$page_info4 .= "<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Cancel</button>";
-				$page_info4 .= "<a href=\"#\" id=\"submit\" class=\"btn btn-success\">I Understand</a>";
+				$page_info4 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">%s</button>",$label_cancel);
+				$page_info4 .= sprintf("<a href=\"#\" id=\"submit\" class=\"btn btn-success\">%s</a>",$label_understand);
 				$page_info4 .= "</div>";
 				$page_info4 .= "</div>";
 				$page_info4 .= "</div>";
@@ -206,25 +212,28 @@ Declare all variables empty at the top of the script. Add on later...
 			
 		}
 		
+		
+		
+		
 		if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) {
-			$header1_7 .= "<h2>Discounted Entry Fee</h2>";
-			$page_info7 .= "<p>Enter the code supplied by the competition organizers for a discounted entry fee.</p>";
+			$header1_7 .= sprintf("<h2>%s</h2>",$label_fee_discount);
+			$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 			$page_info7 .= "<form class=\"form-inline\" action=\"".$base_url."includes/process.inc.php?action=check_discount&amp;dbTable=".$brewer_db_table."&amp;id=".$row_brewer['uid']."\" method=\"POST\" name=\"form1\" id=\"form1\">";
-			$page_info7 .= "
+			$page_info7 .= sprintf("
 			<div class=\"form-group\"><!-- Form Group NOT REQUIRED Text Input -->
-					<label for=\"brewerDiscount\" class=\"sr-only\">Discount Code</label>
+					<label for=\"brewerDiscount\" class=\"sr-only\">%s</label>
 						<!-- Input Here -->
-						<input class=\"form-control\" name=\"brewerDiscount\" type=\"text\" value=\"\" placeholder=\"Enter Discount Code\" autofocus>
+						<input class=\"form-control\" name=\"brewerDiscount\" type=\"text\" value=\"\" placeholder=\"\" autofocus>
 				</div><!-- ./Form Group -->
-			";
-			$page_info7 .= sprintf("<input type=\"submit\" class=\"btn btn-primary\" value=\"%s\">","Verify");
+			",$label_discount_code);
+			$page_info7 .= sprintf("<input type=\"submit\" class=\"btn btn-primary\" value=\"%s\">",$label_verify);
 			$page_info7 .= "</form>";
 		}
 		
-		if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= "<span class=\"fa fa-lg fa-thumbs-o-up\"></span> Your fees have been paid. Thank you!</p>";
-		if ($total_entry_fees == 0) $page_info6 .= "<p>You have not logged any entries yet.</p>";
+		if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= sprintf("<span class=\"fa fa-lg fa-thumbs-o-up\"></span> %s</p>",$pay_text_024);
+		if ($total_entry_fees == 0) $page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
 		
-		if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>You cannot pay for your entries because one or more of your entries is unconfirmed.</strong> Click &ldquo;My Account&rdquo; above to review your unconfirmed entries.</div>"; 
+		if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div>",$pay_text_026,$pay_text_027); 
 		
 			
 		// --------------------------------------------------------------
@@ -235,7 +244,7 @@ Declare all variables empty at the top of the script. Add on later...
 		
 		if ($total_entry_fees > 0) { 
 			
-			if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.</strong> Please go to <a class=\"alert-link\" href=\"".build_public_url("list","default","default","default",$sef,$base_url)."#entries\">your entry list</a> to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.</div>";
+			if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>%s</strong> %s</div>",$pay_text_028,$pay_text_029);
 			
 			echo $warning1;
 			echo $warning2;

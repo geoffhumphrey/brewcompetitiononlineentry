@@ -55,25 +55,25 @@ $header1_2 = "";
 $page_info2 = "";
 $page_info3 = "";
 
+
 // Header
-$header1_1 .= sprintf("<h2>Thanks and Good Luck To All Who Entered the %s!</h2>",$_SESSION['contestName']);
-if (NHC) $page_info1 .= sprintf("<p>There are <strong>%s</strong> registered participants, judges, and stewards.</p>",get_participant_count('default'));
+$header1_1 .= sprintf("<h2>%s %s!</h2>",$reg_closed_text_000,$_SESSION['contestName']);
+if (NHC) $page_info1 .= sprintf("<p>%s <strong>%s</strong> %s</p>",$reg_closed_text_001,get_participant_count('default'),$reg_closed_text_002);
 else {
-	$page_info1 .= sprintf("<p>There are <strong class=\"text-success\">%s</strong> registered entries and <strong class=\"text-success\">%s</strong> registered participants, judges, and stewards.</p>",get_entry_count('none'),get_participant_count('default'));
-	$page_info1 .= sprintf("<p>As of %s, there are <strong class=\"text-success\">%s</strong> received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).</p>",$current_time, get_entry_count('received'));
+	$page_info1 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong> %s</p>",$reg_closed_text_001,get_entry_count('none'),$reg_closed_text_003,get_participant_count('default'),$reg_closed_text_004);
+	$page_info1 .= sprintf("<p>%s %s, %s <strong class=\"text-success\">%s</strong> %s</p>",$reg_closed_text_005, $current_time, strtolower($reg_closed_text_001), get_entry_count('received'), $reg_closed_text_006);
 }
 
-$header1_3 .= "<a name='rules'></a><h2>Rules</h2>";
+$header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);
 $page_info3 .= $row_contest_rules['contestRules'];
 
-if ($totalRows_judging > 1) $header1_2 .= "<h2>Judging Locations/Dates</h2>";
-else $header1_2 .= "<h2>Judging Location/Date</h2>";
-if ($totalRows_judging == 0) $page_info2 .= "<p>Competition judging dates are yet to be determined. Please check back later.</p>";
+$header1_2 .= sprintf("<h2>%s</h2>",$label_admin_judging_loc);
+if ($totalRows_judging == 0) $page_info2 .= sprintf("<p>%s</p>",$reg_closed_text_007);
 else {
 	do {
 		$page_info2 .= "<p>";
 		if ($row_judging['judgingLocName'] != "") $page_info2 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-		if ($row_judging['judgingLocation'] != "") $page_info2 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
+		if ($row_judging['judgingLocation'] != "") $page_info2 .= sprintf("<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$reg_closed_text_008);
 		else $page_info2 .= $row_judging['judgingLocName'];
 		if ($row_judging['judgingDate'] != "") $page_info2 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 		$page_info2 .= "</p>";

@@ -25,83 +25,7 @@ function version_check($version,$current_version) {
 	if ($version != $current_version) {
 				
 		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
-		// Check if new 2.1.0 column names are present - if not, add
-		if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
-			$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
-			$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("jPrefsCapJudges", $prefix."judging_preferences")) {
-			$updateSQL = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("jPrefsCapStewards", $prefix."judging_preferences")) {
-			$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;",	$prefix."judging_preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
-			$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
-			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL DEFAULT NULL;",$prefix."contest_info");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("brewStyleEntry", $prefix."styles")) {
-			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."contest_info");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (check_update("brewStyleEntry", $prefix."styles")) {
-			$updateSQL= sprintf("ALTER TABLE  `%s` CHANGE `brewStyleEntry` `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."contest_info");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (!check_update("brewStyleComEx", $prefix."styles")) {
-			$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."styles");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		
-		if (check_update("brewStyleComEx", $prefix."styles")) {
-			$updateSQL= sprintf("ALTER TABLE  `%s` CHANGE `brewStyleComEx` `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL;",$prefix."styles");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			
-		}
-		
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.5.0","2017-07-31","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.5.0","2016-08-31","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -1376,6 +1300,7 @@ function total_nopay_received($go, $id, $comp_id) {
 
 function style_convert($number,$type,$base_url="") {
 	require(CONFIG.'config.php');
+	require(LANG.'language.lang.php');
 	$styles_db_table = $prefix."styles";
 	
 	mysqli_select_db($connection,$database);
@@ -1675,11 +1600,11 @@ function style_convert($number,$type,$base_url="") {
 			$info .= "
 			<table class=\"table table-bordered table-striped\">
 			<tr>
-				<th class=\"dataLabel data bdr1B\">OG Range</th>
-				<th class=\"dataLabel data bdr1B\">FG Range</th>
-				<th class=\"dataLabel data bdr1B\">ABV Range</th>
-				<th class=\"dataLabel data bdr1B\">Bitterness Range</th>
-				<th class=\"dataLabel data bdr1B\">Color Range</th>
+				<th class=\"dataLabel data bdr1B\">OG</th>
+				<th class=\"dataLabel data bdr1B\">FG</th>
+				<th class=\"dataLabel data bdr1B\">ABV</th>
+				<th class=\"dataLabel data bdr1B\">".$label_bitterness."</th>
+				<th class=\"dataLabel data bdr1B\">".$label_color."</th>
 			</tr>
 			<tr>
 				<td nowrap>".$styleOG."</td>
@@ -1698,12 +1623,12 @@ function style_convert($number,$type,$base_url="") {
 				  <div class=\"modal-dialog modal-lg\" role=\"document\">
 					<div class=\"modal-content\">
 					  <div class=\"modal-header\">
-						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
 						<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
 					  </div>
 					  <div class=\"modal-body\">".$info."</div>
 					  <div class=\"modal-footer\">
-						<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>
+						<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
 					  </div>
 					</div>
 				  </div>
@@ -1747,7 +1672,7 @@ function style_convert($number,$type,$base_url="") {
 			else $style_name = $row_style['brewStyle'];
 			
 			if ($row_style['brewStyleOwn'] == "bcoe") $style_convert .= "<li class=\"list-group-item\">".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
-			else $style_convert .= "<li class=\"list-group-item\">Custom Style: ".$row_style['brewStyle']."</li>";
+			else $style_convert .= "<li class=\"list-group-item\">".$label_custom_style.": ".$row_style['brewStyle']."</li>";
 		}
 		$style_convert .= "</ul>";
 		
@@ -1784,6 +1709,7 @@ function style_convert($number,$type,$base_url="") {
 
 function get_table_info($input,$method,$id,$dbTable,$param) {	
 	require(CONFIG.'config.php');
+	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 	
 	if ($dbTable == "default") {
@@ -1872,7 +1798,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 		$table_info = mysqli_query($connection,$query_table_info) or die (mysqli_error($connection));
 		$row_table_info = mysqli_fetch_assoc($table_info);
 		$totalRows_table_info = mysqli_num_rows($table_info);
-		if ($totalRows_table_info > 0) $d = "<br><em>Assigned to Table ".$row_table_info['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table_info['id']."'>".$row_table_info['tableName']."</a></em>";
+		if ($totalRows_table_info > 0) $d = "<br><em>".$label_assigned_to_table." ".$row_table_info['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_table_info['id']."'>".$row_table_info['tableName']."</a></em>";
 		
 		return $d;
 		
@@ -2457,9 +2383,10 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	return $r;
 }
 
-function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default"){
+function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default") {
 	
 	require(CONFIG.'config.php');
+	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 	
 	if ($archive != "default") $staff_db_table = $prefix."staff_".$archive;
@@ -2474,8 +2401,8 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 		$row_staff_check = mysqli_fetch_assoc($staff_check);
 		$totalRows_staff_check = mysqli_num_rows($staff_check);
 		
-		if ($row_staff_check['staff_judge'] == "1") $assignment = "judges";
-		elseif ($row_staff_check['staff_steward'] == "1") $assignment = "stewards";
+		if ($row_staff_check['staff_judge'] == "1") $assignment = strtolower($label_judges);
+		elseif ($row_staff_check['staff_steward'] == "1") $assignment = strtolower($label_stewards);
 		else $assignment = "";
 	
 	}
@@ -2484,17 +2411,17 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 		$r[] = "";
 			switch($method) {
 				case "1": // 
-					if ($row_staff_check['staff_organizer'] == "1") $r[] .= "Organizer";
+					if ($row_staff_check['staff_organizer'] == "1") $r[] .= strtolower($label_organizer);
 					if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
 					if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
-						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Judge</a>";
-						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">Steward</a>";
+						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">".$label_judge."</a>";
+						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">".$label_steward."</a>";
 					}
 					else {
-						if ($row_staff_check['staff_judge'] == "1") $r[] .= "Judge";
-						if ($row_staff_check['staff_steward'] == "1") $r[] .= "Steward";
+						if ($row_staff_check['staff_judge'] == "1") $r[] .= $label_judge;
+						if ($row_staff_check['staff_steward'] == "1") $r[] .= $label_steward;
 					}
-					if ($row_staff_check['staff_staff'] == "1") $r[] .= "Staff";
+					if ($row_staff_check['staff_staff'] == "1") $r[] .= $label_staff;
 				break;
 				case "staff_judge": // for $filter URL variable
 					if ($row_staff_check['staff_judge'] == "1") $r = "CHECKED";  
@@ -2511,10 +2438,10 @@ function brewer_assignment($uid,$method,$id,$dbTable,$filter,$archive="default")
 	else $r = "";
 	
 	if ($method == "3") {
-		if ($uid == "judges") $r = "Judges"; 
-		elseif ($uid == "stewards") $r = "Stewards"; 
-		elseif ($uid == "staff") $r = "Staff";
-		elseif ($uid == "bos") $r = "BOS Judges";
+		if ($uid == "judges") $r = $label_judges; 
+		elseif ($uid == "stewards") $r = $label_stewards; 
+		elseif ($uid == "staff") $r = $label_staff;
+		elseif ($uid == "bos") $r = "BOS ".$label_judges;
 		else $r = "";
 	}
 
@@ -2762,26 +2689,28 @@ function readable_number($a){
 
 function winner_method($type,$output_type) {
 	
+	require(LANG.'language.lang.php');
+	
 	$output = "";
 	
 	if ($output_type == 1) {
 		switch ($type) {
-			case 0: $output = "By Table";
+			case 0: $output = $label_by_table;
 			break;
-			case 1: $output = "By Category";
+			case 1: $output = $label_by_category;
 			break;
-			case 3: $output = "By Sub-Category";
+			case 3: $output = $label_by_subcategory;
 			break;
 		}
 	}
 	
 	if ($output_type == 2) {
 		switch ($type) {
-			case 0: $output = "<p>Your chosen award structure is to award places <strong>by table</strong>. Select the award places for the table as a whole below.</p>";
+			case 0: $output = sprintf("<p>%s</p>",$winners_text_002);
 			break;
-			case 1: $output = "<p>Your chosen award structure is to award places <strong>by category</strong>. Select the award places for each overall category below (there may be more than one at this table).</p>";
+			case 1: $output = sprintf("<p>%s</p>",$winners_text_003);
 			break;
-			case 3: $output = "<p>Your chosen award structure is to award places <strong>by sub-category</strong>. Select the award places for each sub-category below (there may be more than one at this table).</p>";
+			case 3: $output = sprintf("<p>%s</p>",$winners_text_004);
 			break;
 		}
 	}
@@ -2906,18 +2835,22 @@ function readable_judging_number($style,$number) {
 
 function dropoff_location($input) {
 	require(CONFIG.'config.php');
+	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 	$query_dropoff = sprintf("SELECT dropLocationName FROM %s WHERE id='%s'",$prefix."drop_off",$input);
 	$dropoff = mysqli_query($connection,$query_dropoff) or die (mysqli_error($connection));
 	$row_dropoff = mysqli_fetch_assoc($dropoff);
 	if ($input > 0)	return $row_dropoff['dropLocationName'];
-	else return "Shipping Entries";
+	else return $label_shipping_entries;
 }
 
 
 function judge_steward_availability($input,$method,$prefix) {
+	
+	require(LANG.'language.lang.php');
+	
 	if (($input == "Y-") || ($input == "")) {
-		if ($method == "1") $return = "No availability defined.";
+		if ($method == "1") $return = strtolower(ucfirst($label_no_availability));
 		else $return = "";
 	}
 	else {
@@ -3229,22 +3162,23 @@ function judging_location_info($id) {
 }
 
 function yes_no($input,$base_url,$method=0) {
+	require(LANG.'language.lang.php');
 	$output = "";
 	if ($method != 3) {
 		if (($input == "Y") || ($input == 1)) { 
-			$output = "<span class='fa fa-lg fa-check text-success'></span> ";
-			if ($method == 0) $output = "Yes";
+			$output = "<span class=\"fa fa-lg fa-check text-success\"></span> ";
+			if ($method == 0) $output = $label_yes;
 			
 		}
 		else {
-			$output .= "<span class='fa fa-lg fa-times text-danger'></span> ";
-			if ($method == 0) $output = "No";
+			$output .= "<span class=\"fa fa-lg fa-times text-danger\"></span> ";
+			if ($method == 0) $output = $label_no;
 			
 		}
 	}
 	if ($method == 3) {
-		if (($input == "Y") || ($input == 1)) $output = "Yes";
-		else $output = "No";
+		if (($input == "Y") || ($input == 1)) $output = $label_yes;
+		else $output = $label_no;
 		
 	}
 	return $output;

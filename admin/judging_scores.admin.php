@@ -53,11 +53,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
     <?php } ?>
-    
-    
-    <?php if  ($dbTable == "default") { ?>
-    
-    
+    <?php if  ($dbTable == "default") { ?>    
     <?php if ($action != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
@@ -229,6 +225,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php } // end if ($totalRows_scores > 0) 
 else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Add or Update Scores for...&rdquo; menu above to add scores.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
+
 
 <?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { 
 if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";

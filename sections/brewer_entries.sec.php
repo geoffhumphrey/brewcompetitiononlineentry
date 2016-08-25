@@ -66,14 +66,10 @@ $add_entry_link = "";
 $beer_xml_link = "";
 $print_list_link = "";
 $pay_fees_message = "";
-$firefox_warning = "";
-
 
 
 // Build Headers
-$header1_1 .= "<a name=\"entries\"></a><h2>Entries</h2>";
- 
-$firefox_warning .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>There is a known issue with printing from the Firefox browser.</strong> To print all pages properly from Firefox, RIGHT CLICK on any print link and choose \"Open Link in New Tab.\" Then, use Firefox&rsquo;s native printing function (Edit > Print) to print your documents. Be aware that you should use the browser&rsquo;s File > Page Setup... function to specify portrait or landscape, margins, etc.</div>";
+$header1_1 .= sprintf("<a name=\"entries\"></a><h2>%s</h2>",$label_entries);
 
 // Build Warnings
 $warnings = "";
@@ -84,17 +80,15 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= "<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>You have unconfirmed entries.</strong> For each  entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning."; 
-			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= " You CANNOT pay for your entries until all entries are confirmed."; 
+			$warnings .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s",$brewer_entries_text_001); 
+			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= sprintf(" %s",$brewer_entries_text_003); 
 			$warnings .= "</div>"; 
 		}
 		
 	if (entries_no_special($_SESSION['user_id'])) {
-		$warnings .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.</strong> For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.</div>";
+		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 }
-
-
 
 // Build user's entry information
 
@@ -117,28 +111,57 @@ do {
 	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= sprintf("%04s",$row_log['id']);
 	$entry_output .= "</td>";
-	
-	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+
+//	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";	
 	$scoresheet = FALSE;
 	if ($show_scores) {
-	// See if scanned scoresheet file exists, if so, provide link.
-		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-		if (file_exists($filename)) $scoresheet = TRUE;		
+
 		$entry_output .= "<td class=\"hidden-xs\">";
 		$entry_output .= $row_log['brewJudgingNumber']; 
 		$entry_output .= "</td>";
+
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$judgingnumber = $row_log['brewJudgingNumber'];
+		$scoresheetfilename = $judgingnumber.".pdf";
+		$scoresheetfile = USER_DOCS.$scoresheetfilename;
+//		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
+//		if (file_exists($filename)) $scoresheet = TRUE;		
+		if (file_exists($scoresheetfile)) {
+			$scoresheet = TRUE;
+			
+			// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 
+			$random_num_str = str_pad(mt_rand(1,9999999999),10,'0',STR_PAD_LEFT);
+			$randomfilename = $random_num_str.".pdf";
+			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
+			$scoresheetrandomfile = USER_TEMP.$randomfilename;
+			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
+		
+			$scoresheet_link = "";			
+			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link .= "scoresheetfilename=".$scoresheetfilename;
+			$scoresheet_link .= "&amp;randomfilename=".$randomfilename."&amp;download=true";
+			$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
+			$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+		}		
+
+		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+		foreach ($tempfiles as $file) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judgingnumber) !== FALSE))) {
+				unlink(USER_TEMP.$file);
+			}
+		}
 	}
 	
 	$entry_output .= "<td>";
 	$entry_output .= $row_log['brewName']; 
-	if ($row_log['brewCoBrewer'] != "") $entry_output .= "<br><em>Co-Brewer: ".$row_log['brewCoBrewer']."</em>";
+	if ($row_log['brewCoBrewer'] != "") $entry_output .= sprintf("<br><em>%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 	$entry_output .= "</td>";
 	
-	$entry_output .= "<td class=\"hidden-xs\">";
+	$entry_output .= "<td>";
 	if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
-	elseif (empty($row_log['brewCategorySort'])) $entry_output .= "<strong class=\"text-danger\">Style NOT Entered</strong>";
+	elseif (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
 	else $entry_output .= $entry_style;
-	//$entry_output .= "<span class=\"required\">Style entered NOT accepted.</span>";
 	$entry_output .= "</td>";
 	
 	
@@ -176,7 +199,7 @@ do {
 		$entry_output .= "<td class=\"hidden-xs\">";
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
 			if ($action != "print") $entry_output .= "<span class =\"fa fa-lg fa-check text-success\"></span>"; 
-			else $entry_output .= "Yes"; 
+			else $entry_output .= $label_yes; 
 			}
 		else $entry_output .= "&nbsp;";
 		$entry_output .= "</td>";
@@ -207,8 +230,8 @@ do {
 	// Print Forms
 	$alt_title = "";
 	$alt_title .= "Print ";
-	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= "Entry Form and ";
-	$alt_title .= "Bottle Labels ";
+	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= sprintf("%s ",$brewer_entries_text_008);
+	$alt_title .= sprintf("%s ",$brewer_entries_text_009);
 	$alt_title .= "for ".$row_log['brewName'];
 	$print_forms_link = "";	
 	$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
@@ -218,42 +241,34 @@ do {
 	$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></a>&nbsp;&nbsp;";
 	
 	// Print Recipe
-	$print_recipe_link = "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"Print Recipe Form for ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;";
+	$print_recipe_link = sprintf("<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
 	
-	if ($comp_entry_limit) $warning_append = "\nAlso, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it."; else $warning_append = "";
+	if ($comp_entry_limit) $warning_append = sprintf("\n%s",$brewer_entries_text_011); else $warning_append = "";
 	
 	
-	$delete_alt_title = "Delete ".$row_log['brewName'];
-	$delete_warning = "Delete ".$row_log['brewName']."? This cannont be undone.";
-	$delete_link = "<a data-toggle=\"tooltip\" title=\"".$delete_alt_title."\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-confirm=\"Are you sure you want to delete the entry called ".$row_log['brewName']."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
-	//$delete_link = build_action_link("bin_closed",$base_url,$section,$go,"delete",$filter,$row_log['id'],$brewing_db_table,"Delete ".$row_log['brewName']."? This cannot be undone. ".$warning_append,1,"Delete");
+	
+	
+	$delete_alt_title = sprintf("%s %s",$label_delete, $row_log['brewName']);
+	$delete_warning = sprintf("%s %s - %s.",$label_delete,$row_log['brewName'],strtolower($label_undone));
+	$delete_link = sprintf("<a data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s %s - %s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$brewer_entries_text_012,$row_log['brewName'],strtolower($label_undone));
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
 	if ($scoresheet) { 
-		$entry_output .= "<a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
+		$entry_output .= $scoresheet_link;
 	}
 	
 	if ((judging_date_return() > 0) && ($action != "print")) {
-		
-		
 		if (($registration_open == 1) || ($entry_window_open == 1)) $entry_output .= $edit_link;
 		if (pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) $entry_output .= $print_forms_link;
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-		else $entry_output .= "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_log['brewName']." has been marked as paid - it cannot be deleted.\" href=\"#\"></span>";
-		
-		
+		else $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s %s.\" href=\"#\"></span>",$row_log['brewName'],$brewer_entries_text_012);
 	}
 	
 	// Display the edit link for NHC final round after judging has taken place
 	// Necessary to gather recipe data for first place winners in the final round
-	if ((judging_date_return() == 0) && ($action != "print")) {
-		
-		
-		if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) $entry_output .= $edit_link;
-		
-	}
+	if ((judging_date_return() == 0) && ($action != "print")) if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) $entry_output .= $edit_link;
 	$entry_output .= "</td>";
 	$entry_output .= "</tr>";	
 	
@@ -277,7 +292,7 @@ if (($action != "print") && ($entry_window_open > 0)) {
 	echo $page_info1;
 	echo $page_info2;
 }
-if (($totalRows_log == 0) && ($entry_window_open >= 1)) echo "<p>You have not added any entries to the system.</p>";
+if (($totalRows_log == 0) && ($entry_window_open >= 1)) echo sprintf("<p>%s</p>",$brewer_entries_text_014);
 if (($totalRows_log > 0) && ($entry_window_open >= 1)) { 
 ?>
 <script type="text/javascript" language="javascript">
@@ -316,23 +331,23 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
-  	<th class="hidden-xs"><?php if ($show_scores) echo "Entry" ?>#</th>
+  	<th class="hidden-xs"><?php if ($show_scores) echo $label_entry ?>#</th>
     <?php if ($show_scores) { ?>
-    <th class="hidden-xs">Judging#</th>
+    <th class="hidden-xs"><?php echo $label_judging; ?>#</th>
     <?php } ?>
   	<th>Name</th>
-  	<th class="hidden-xs">Style</th>
+  	<th><?php echo $label_style; ?></th>
     <?php if (!$show_scores) { ?>
-  	<th class="hidden-xs hidden-sm">Confirmed</th> 
-  	<th class="hidden-xs hidden-sm">Paid</th> 
-    <th class="hidden-xs hidden-sm">Updated</th>
+  	<th class="hidden-xs hidden-sm"><?php echo $label_confirmed; ?></th> 
+  	<th class="hidden-xs hidden-sm"><?php echo $label_paid; ?></th> 
+    <th class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
     <?php } ?>
   	<?php if ($show_scores) { ?>
-  	<th>Score</th>
-    <th class="hidden-xs" nowrap>Mini-BOS</th>
-  	<th>Winner?</th>
+  	<th><?php echo $label_score; ?></th>
+    <th class="hidden-xs" nowrap><?php echo $label_mini_bos; ?></th>
+  	<th><?php echo $label_winner; ?></th>
   	<?php } ?>
-    <th class="hidden-print">Actions</th>
+    <th class="hidden-print"><?php echo $label_actions; ?></th>
  </tr>
 </thead>
 <tbody>
@@ -340,7 +355,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 </tbody>
 </table>
 <?php }
-if ($entry_window_open == 0) echo sprintf("<p>You will be able to add entries on or after %s.</p>",$entry_open); 
+if ($entry_window_open == 0) echo sprintf("<p>%s %s.</p>",$brewer_entries_text_013,$entry_open); 
 ?>
 
 <!-- Page Rebuild completed 08.27.15 --> 

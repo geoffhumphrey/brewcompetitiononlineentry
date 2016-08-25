@@ -16,10 +16,11 @@ $totalRows_log = mysqli_num_rows($log);
 
 // if "system" db table is present, get installed version from it
 if (check_setup($prefix."system",$database)) { 
-	$query_version = sprintf("SELECT version FROM %s",$system_db_table);
+	$query_version = sprintf("SELECT version,version_date FROM %s",$system_db_table);
 	$version = mysqli_query($connection,$query_version) or die (mysqli_error($connection));
 	$row_version = mysqli_fetch_assoc($version);	
 	$version = $row_version['version'];
+	$version_date = strtotime($row_version['version_date']); 
 }
 
 // if user session present, get info from db

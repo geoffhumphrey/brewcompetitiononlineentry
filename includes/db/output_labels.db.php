@@ -73,7 +73,7 @@ if ($go == "participants") {
 	
 	if (($action == "judging_labels") && ($id == "default")) {
 		
-		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerEmail,a.brewerJudgeRank,b.uid,b.staff_judge FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND b.staff_judge='1' ORDER BY a.brewerLastName ASC";
+		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerEmail,a.brewerJudgeRank,b.uid,b.staff_judge FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND b.staff_judge='1' AND a.brewerJudge = 'Y' ORDER BY a.brewerLastName ASC";
 	
 	}
 	

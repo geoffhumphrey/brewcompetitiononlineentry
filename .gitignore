@@ -37,4 +37,6 @@ sections/nav_admin.php
 
 libraries/*
 
-config_for_release.php
+sso/*
+
+config_for_test.php

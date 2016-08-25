@@ -102,6 +102,7 @@ if ($setup_success) {
 		require(DB.'brewer.db.php');
 		require(DB.'entries.db.php');
 		require(INCLUDES.'constants.inc.php');
+		require(LANG.'language.lang.php');
 		require(INCLUDES.'headers.inc.php');
 		require(INCLUDES.'scrubber.inc.php');
 	
