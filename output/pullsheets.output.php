@@ -87,7 +87,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
-			
+			$flight_round = check_flight_number($row_entries['id'],$i);
 			if (check_flight_round($flight_round,$round)) {
 	?>
     <tr>

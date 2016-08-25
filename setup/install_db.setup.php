@@ -8,7 +8,7 @@ if ($setup_free_access == TRUE) {
 	
 		$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be installed.</strong> These tables hold all of your competition data.</div>";
 		$output .= "<p>Click the &ldquo;Install DB Tables and Data&rdquo; button below to install the database schema";
-		if (!HOSTED) $output .= "into the following database:";
+		if (!HOSTED) $output .= " into the following database:";
 		else $output .= ".";
 		$output .= "</p>";
 		if (!HOSTED) {
