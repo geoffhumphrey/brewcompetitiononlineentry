@@ -1,4 +1,5 @@
 <?php 
+
 if ($setup_free_access == TRUE) {
 
 	$output = "";

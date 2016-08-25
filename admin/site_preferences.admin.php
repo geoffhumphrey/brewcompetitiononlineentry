@@ -368,6 +368,7 @@ $(document).ready(function(){
 		</span>
     </div>
 </div><!-- ./Form Group -->
+
 <!-- Modal -->
 <div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
     <div class="modal-dialog" role="document">
@@ -385,13 +386,57 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsSpecific" value="Y" id="prefsSpecific_0"  <?php if ($_SESSION['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsSpecific" value="N" id="prefsSpecific_1" <?php if ($_SESSION['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+			<div class="btn-group" role="group" aria-label="prefsSpecificModal">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsSpecificModal">
+				   Hide Brewer&rsquo;s Specifics Field Info
+				</button>
+			</div>
+			</div>
+		</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<!-- Modal -->
+<div class="modal fade" id="prefsSpecificModal" tabindex="-1" role="dialog" aria-labelledby="prefsSpecificModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsSpecificModalLabel">Hide Brewer&rsquo;s Specifics Field</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate if the Brewer&rsquo;s Specifics field on the Add Entry or Edit Entry screens will be displayed to users. The field is sometimes confused with the requried &ldquo;Special Ingredients&rdquo; field. If enabled, the field will display the following message as a placeholder:</p>
+                <small>***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).</small>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Special Ingredients</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit" data-size="10">
 		<?php for ($i=25; $i <= 255; $i+=5) { ?>
-    	<option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "50")) echo "SELECTED"; elseif ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    	<option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "150")) echo "SELECTED"; elseif ($row_limits['prefsSpecialCharLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
 	</select>
 	<span id="helpBlock" class="help-block">

@@ -65,11 +65,11 @@ h2, h2, h3, h4, h5, h6 {
 
 .box {
 	border: 1px solid #000;
-	min-height: 50px;
+	min-height: 35px;
 	vertical-align: text-top;
 	margin: 0;
-	max-width: 75px;
-	width: 50px;
+	max-width: 50px;
+	width: 35px;
 }
 
 .box_small {

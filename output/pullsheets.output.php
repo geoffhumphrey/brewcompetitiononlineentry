@@ -16,6 +16,8 @@ if ($_SESSION['jPrefsQueued'] == "N") {
 if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id == "default"))
 do { 
 
+
+
 $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
@@ -33,9 +35,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <?php } ?>
     <?php 
 	for($i=1; $i<$flights+1; $i++) { 
-	$random =  random_generator(5,2)
+	$random =  random_generator(5,2);
+	
+	$query_round_check = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $row_tables['id'],$i);
+	$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
+	$row_round_check = mysqli_fetch_assoc($round_check);
+	
 	?>
-    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i; ?></h4>
+    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i.", Round ".$row_round_check['flightRound']; ?></h4>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -61,14 +68,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="table table-striped table-bordered" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th nowrap>Pull Order</th>
-        <th>#</th>
+    	<th width="1%">Pull-Order</th>
+        <th width="1%">#</th>
         <th>Style</th>
         <th>Info</th>
-        <th>Loc/Box</th>
-        <th>Round</th>
-        <th>Score</th>
-        <th>Place</th>
+        <th width="1%">Loc/Box</th>
+        <th width="1%">Mini-BOS?</th>
+        <th width="1%">Score</th>
+        <th width="1%">Place</th>
     </tr>
     </thead>
     <tbody>
@@ -80,7 +87,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
-			$flight_round = check_flight_number($row_entries['id'],$i);
+			
 			if (check_flight_round($flight_round,$round)) {
 	?>
     <tr>
@@ -107,7 +114,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><?php echo $flight_round; ?></td>
+        <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
@@ -143,8 +150,13 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <?php 
 	for($i=1; $i<$flights+1; $i++) { 
 	$random = random_generator(5,1);
+	
+	$query_round_check = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $row_tables['id'],$i);
+	$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
+	$row_round_check = mysqli_fetch_assoc($round_check);
+	
 	?>
-    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i; ?></h4>
+    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i.", Round ".$row_round_check['flightRound']; ?></h4>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -175,7 +187,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
         <th>Style</th>
         <th>Info</th>
         <th>Loc/Box</th>
-        <th>Round</th>
+        <th>Mini-BOS?</th>
         <th>Score</th>
         <th>Place</th>
     </tr>
@@ -216,7 +228,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><?php echo $flight_round; ?></td>
+        <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
@@ -273,6 +285,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -286,6 +299,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
         <th>Style</th>
         <th>Info</th>
         <th>Loc/Box</th>
+        <th>Mini-BOS?</th>
         <th>Score</th>
         <th>Place</th>
     </tr>
@@ -323,6 +337,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
@@ -363,6 +378,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -376,6 +392,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
         <th>Style</th>
         <th>Info</th>
         <th>Loc/Box</th>
+        <th>Mini-BOS?</th>
         <th>Score</th>
         <th>Place</th>
     </tr>
@@ -414,6 +431,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		?>
         </td>
         <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
@@ -470,6 +488,7 @@ if ($style_type_info[0] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -483,6 +502,7 @@ if ($style_type_info[0] == "Y") {
         <th>Style</th>
         <th>Info</th>
         <th>Loc/Box</th>
+        <th>Mini-BOS?</th>
         <th>Score</th>
         <th>Place</th>
     </tr>
@@ -521,6 +541,7 @@ if ($style_type_info[0] == "Y") {
 		?>
         </td>
         <td nowrap><?php echo $row_entries_1['brewBoxNum']; ?></td>
+        <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>

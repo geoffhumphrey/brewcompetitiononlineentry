@@ -193,7 +193,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		
 					
 		if (NHC) $brewJudgingNumber = "";
-		else $brewJudgingNumber = generate_judging_num($styleTrim);
+		else $brewJudgingNumber = generate_judging_num(1,$styleTrim);
 					
 		// Get style name from broken parts
 		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'],$styleFix,$style[1]);

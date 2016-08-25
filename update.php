@@ -41,11 +41,11 @@ if (file_exists($filename)) {
                 
 				$update_body .= "<p class=\"lead\">";
 				$update_body .= "This script will update your BCOE&amp;M database from its current version, ";
-				$update_body .= rtrim($version,".0");
-				if ($version_date < $current_version_date) $update_body .= " (Build ".$row_version['version_date'].")";
+				$update_body .= $version;
+				if (($version == $current_version) && ($version_date < $current_version_date)) $update_body .= " (Build ".$row_version['version_date'].")";
 				$update_body .= ", to the latest version, ";
-				$update_body .= $current_version_display;
-				if ($version_date < $current_version_date) $update_body .= " (Build ".$current_version_date_display.")";
+				$update_body .= $current_version;
+				if (($version == $current_version) && ($version_date < $current_version_date)) $update_body .= " (Build ".$current_version_date_display.")";
 				$update_body .= ".</p>";
 				
 				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
@@ -161,7 +161,7 @@ if (file_exists($filename)) {
 						}
 						
 						// If current version is 2.1.0.0 or later, only perform the current (2.1.5) update
-						if (($version > "2100") && ($version < "2160"))  {
+						if (($version > "2100") && ($version < "2151"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

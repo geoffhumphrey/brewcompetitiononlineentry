@@ -33,7 +33,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 	jPrefsCapJudges=%s
 	WHERE id=%s",
 					   GetSQLValueString($_POST['jPrefsQueued'], "text"),
-					   GetSQLValueString($flight_ent, "int"),
+					   GetSQLValueString($_POST['jPrefsFlightEntries'], "int"),
 					   GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
 					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
 					   GetSQLValueString($jPrefsBottleNum, "int"),

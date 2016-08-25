@@ -314,10 +314,12 @@ body {
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
     
         <div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
-    
+    	<p class="lead"><small><?php echo sprintf("<strong class=\"text-danger\">%s</strong> %s",$qr_text_017,$qr_text_018); ?></small></p>
+        <p class="lead"><small><?php echo sprintf("%s",$qr_text_016); ?></small></p>
+        <p class="lead container-signin-heading"><small><?php echo $qr_text_008; ?></small></p>
+        
     <!-- Password Form if Not Signed In -->
 	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
-        <p class="lead container-signin-heading"><?php echo $qr_text_008; ?></p>
         <div class="form-group">
             <label for="inputPassword" class="sr-only"><?php $label_password; ?></label>
             <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" autofocus required>
@@ -325,7 +327,6 @@ body {
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>
    	</form>
-	
     <?php } ?>
     
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>    

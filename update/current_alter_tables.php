@@ -46,8 +46,8 @@ if (!check_update("prefsLanguage", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
-if (!check_update("prefsSpecifics", $prefix."preferences")) {
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsSpecifics` TINYINT(1) NULL;",$prefix."preferences");
+if (!check_update("prefsSpecific", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsSpecific` TINYINT(1) NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -298,7 +298,7 @@ if (!empty($tabs)) {
 			else $count[] = 0;
 		}
 	
-		// Re-build indicies..
+		// Re-build indicies...
 		foreach ($indicies as $index) {
 			
 			if ($index["unique"]) {

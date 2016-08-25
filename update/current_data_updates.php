@@ -23,7 +23,7 @@ $output .= "<li>XXX.</li>";
 // Data Update: preferences
 // -----------------------------------------------------------
 
-$updateSQL = sprintf("UPDATE %s SET prefsSpecifics = '1';",$prefix."preferences");
+$updateSQL = sprintf("UPDATE %s SET prefsSpecific = '1';",$prefix."preferences");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

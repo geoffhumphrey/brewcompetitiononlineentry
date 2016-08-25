@@ -184,6 +184,7 @@ $label_security_answer = "Security Question Answer";
 $label_security_question = "Security Question";
 $label_judging = "Judging";
 $label_judge = "Judge";
+$label_steward = "Steward";
 $label_account_info = "Account Info";
 $label_street_address = "Street Address";
 $label_city = "City";
@@ -572,7 +573,7 @@ if ($section == "brew") {
 
 // -------------------- Brewer (Account) --------------------
 
-if (($section == "brewer") || ($section == "register") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
+if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
 	$brewer_text_000 = "Please enter only <em>one</em> person's name. You will be able to identify a co-brewer when adding your entries.";
 	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
 	$brewer_text_002 = "You can also <a href=\"".$edit_user_password_link."\">change your password now</a> if you wish.";
@@ -814,7 +815,7 @@ if ($section == "qr") {
 	$qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_018);
 	$qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_019,$qr_text_020);
 	$qr_text_007 = "QR Code Entry Check-In";
-	$qr_text_008 = "To check in entries via QR code, please provide the correct password.";
+	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 	$qr_text_009 = "Assign a judging number and/or box number to entry";
 	$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
 	$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
@@ -823,6 +824,8 @@ if ($section == "qr") {
 	$qr_text_014 = "Waiting for scanned QR code input.";
 	$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
 	$qr_text_016 = "Need a QR Code scanning app? Search <a href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
+	$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
+	$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 	
 }
 
