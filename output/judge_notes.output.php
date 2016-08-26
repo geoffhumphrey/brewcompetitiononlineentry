@@ -3,10 +3,10 @@ include(DB.'brewer.db.php');
 include(LIB.'output.lib.php');
 ?>
 <div class="page-header">
-	<h1><?php echo $_SESSION['contestName']; ?> Judge/Steward Notes to Organizers</h1>
+	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$label_org_notes); ?></h1>
 </div>
 <?php if ($totalRows_brewer > 0) { ?>
-<p class="lead">The following are the notes to organizers entered by judges.</p>
+<p class="lead"><?php echo $output_text_014; ?></p>
 <!-- All Notes -->
 <script type="text/javascript" language="javascript">
  $(document).ready(function() {
@@ -28,8 +28,8 @@ include(LIB.'output.lib.php');
 <table class="table table-bordered table-striped" id="sortable">
 <thead>
 <tr>
-	<th>Judge Name</th>
-	<th>Note</th>
+	<th><?php echo $label_name; ?></th>
+	<th><?php echo $label_org_notes; ?></th>
 </tr>
 </thead>
 <tbody>
@@ -43,5 +43,5 @@ include(LIB.'output.lib.php');
 </table>
 <?php } 
 else { ?>
-<p class="lead">No participants provided notes to organizers.</p>
+<p class="lead"><?php echo $output_text_013; ?></p>
 <?php } ?>

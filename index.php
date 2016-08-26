@@ -202,10 +202,10 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
 				
 				if ($logged_in) {
 					if ($section == "list") 		include (SECTIONS.'list.sec.php');
-					if ($section == "brew") 			include (SECTIONS.'brew.sec.php');
+					if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
 					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 					if ($section == "user") 		include (SECTIONS.'user.sec.php');
-					if ($section == "beerxml") 		include (SECTIONS.'beerxml.sec.php');
+					if ($section == "beerxml") 	include (SECTIONS.'beerxml.sec.php');
 				}
 			?>
             </div><!-- ./left column -->

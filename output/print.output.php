@@ -7,6 +7,7 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
+require (LANG.'language.lang.php');
 if (isset($_SESSION['loginUsername'])) {
 ?>
 <!DOCTYPE html>
@@ -46,7 +47,6 @@ if (isset($_SESSION['loginUsername'])) {
             
     	<?php
 		
-			
 		if ($_SESSION['userLevel'] <= 1) {
 			if ($section == "assignments") 	include (OUTPUT.'assignments.output.php');
 			if ($section == "bos-mat") 		include (OUTPUT.'bos_mat.output.php');

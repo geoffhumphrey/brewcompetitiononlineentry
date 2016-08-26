@@ -32,20 +32,20 @@ if (NHC) $base_url = "../";
 	} );
 </script>
     <div class="page-header">	
-		<h1><?php echo $_SESSION['contestName']; ?> Post-Judging Entry Inventory</h1>
+		<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_016); ?></h1>
 	</div><!-- end header -->
     <!-- BEGIN content -->
     <!-- DataTables Table Format -->
     <table class="table table-striped table-bordered" id="sortable">
     <thead>
     	<tr>
-        	<th width="5%" nowrap>Entry</th>
-            <th width="5%" nowrap>Judging</th>
-            <th>Entry Name</th>
-            <th width="25%">Category</th>
-            <th width="40%">Required Info</th>
+        	<th width="5%" nowrap><?php echo $label_entry; ?></th>
+            <th width="5%" nowrap><?php echo $label_judging; ?></th>
+            <th><?php echo $label_name; ?></th>
+            <th width="25%"><?php echo $label_category; ?></th>
+            <th width="40%"><?php echo $label_required_info; ?></th>
             <?php if ($go == "scores") { ?> 
-            <th width="5%" nowrap>Score</th>
+            <th width="5%" nowrap><?php echo $label_score; ?></th>
             <?php } ?>
         </tr>
     </thead>
@@ -53,8 +53,6 @@ if (NHC) $base_url = "../";
     <?php do { 
 
 		include(DB.'output_post_judge.db.php');
-	
-		// Query scores table for each entry. If no score and not placing, or if score is not entered at all, put on the list
 		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
 		
 	?>

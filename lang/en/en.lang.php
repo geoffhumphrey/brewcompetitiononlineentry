@@ -1,6 +1,6 @@
 <?php
 /**
- * Module:      english.lang.php 
+ * Module:      en.lang.php 
  * Description: This module houses all display text in the English language.
  * 
  */
@@ -70,10 +70,9 @@ $label_log_in = "Log In";
 $label_logged_in = "Logged In";
 $label_log_out = "Log Out";
 $label_logged_out = "Logged Out";
-$label_info = "Info";
 $label_sponsors = "Sponsors";
 $label_rules = "Rules";
-$label_volunteer_info = "Informações Voluntário";
+$label_volunteer_info = "Volunteer Info";
 $label_reg = $label_register;
 $label_judge_steward_reg = "Judge/Steward Registration";
 $label_past_winners = "Past Winners";
@@ -187,6 +186,7 @@ $label_judge = "Judge";
 $label_steward = "Steward";
 $label_account_info = "Account Info";
 $label_street_address = "Street Address";
+$label_address = "Address";
 $label_city = "City";
 $label_state_province = "State/Province";
 $label_zip = "Zip/Postal Code";
@@ -280,8 +280,44 @@ $label_organizer = "Organizer";
 $label_by_table = "By Table";
 $label_by_category = "By Category";
 $label_by_subcategory = "By Sub-Category";
+$label_by_last_name = "By Last Name";
+$label_by_table = "By Table";
+$label_by_location = "By Location";
 $label_shipping_entries = "Shipping Entries";
 $label_no_availability = "No Availability Defined";
+$label_error = "Error";
+$label_round = "Round";
+$label_flight = "Flight";
+$label_rounds = "Rounds";
+$label_flights = "Flights";
+$label_sign_in = "Sign In";
+$label_signature = "Signature";
+$label_assignment = "Assignment";
+$label_assignments = "Assignments";
+$label_letter = "Letter";
+$label_re_enter = "Re-Enter";
+$label_website = "Website";
+$label_place = "Place";
+$label_cheers = "Cheers";
+$label_count = "Count";
+$label_total = "Total";
+$label_participant = "Participant";
+$label_entrant = "Entrant";
+$label_received = "Received";
+$label_please_note = "Please Note";
+$label_pull_order = "Pull Order";
+$label_box = "Box";
+$label_sorted = "Sorted";
+$label_subcategory = "Sub-Category";
+$label_affixed = "Label Affixed?";
+$label_points = "Points";
+$label_comp_id = "BJCP Competition ID";
+$label_days = "Days";
+$label_sessions = "Sessions";
+$label_number = "Number";
+$label_more_info = "More Info";
+$label_entry_instructions = "Entry Instructions";
+$label_commercial_examples = "Commercial Examples";
 
 // Admin
 
@@ -303,7 +339,7 @@ $label_admin_judging_loc = $label_judging_loc;
 $label_admin_contacts = "Contacts";
 $label_admin_tables = "Tables";
 $label_admin_scores = "Scores";
-$label_admin_bos = "Best of Show";
+$label_admin_bos = $label_bos;
 $label_admin_style_types = "Style Types";
 $label_admin_custom_cat = "Custom Categories";
 $label_admin_custom_cat_data = "Custom Category Entries";
@@ -318,11 +354,6 @@ $label_admin_upload_img = "Upload Images";
 $label_admin_upload_doc = "Upload Scoresheets and Other Documents";
 $label_admin_password = "Change User Password";
 $label_admin_edit_account = "Edit User Account";
-$label_assignment = "Assignment";
-$label_letter = "Letter";
-$label_re_enter = "Re-Enter";
-$label_website = "Website";
-$label_place = "Place";
 
 // Sidebar Labels
 $label_account_summary = "My Account Summary";
@@ -438,6 +469,7 @@ $header_text_100 = "Log in now to access the Admin Dashboard";
 $header_text_101 = "Your installation has been updated successfully!";
 $header_text_102 = "The email addresses do not match.";
 $header_text_103 = "Please log in to access your account.";
+$header_text_104 = "You do not have sufficient access priveliges to view this page.";
 
 // -------------------- Navigation --------------------
 
@@ -904,6 +936,57 @@ $sidebar_text_021 = "in this competition";
 // -------------------- Sponsors --------------------
 // NONE
 
+
+// -------------------- Styles ---------------------
+
+$styles_entry_text_07C = "The entrant must specify whether the entry is a Munich Kellerbier (pale, based on Helles) or a Franconian Kellerbier (amber, based on Marzen). The entrant may specify another type of Kellerbier based on other base styles such as Pils, Bock, Schwarzbier, but should supply a style description for judges.";
+$styles_entry_text_09A = "The entrant must specify whether the entry is a pale or a dark variant.";
+$styles_entry_text_10C = "The entrant must specify whether the entry is a pale or a dark variant.";
+$styles_entry_text_21B = "Entrant must specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. Entrant must specify specific type of Specialty IPA from the library of known types listed in the Style Guidelines, or as amended by the BJCP web site; or the entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). Currently Defined Types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA.";
+$styles_entry_text_23F = "The type of fruit used must be specified. The brewer must declare a carbonation level (low, medium, high) and a sweetness level (low/none, medium, high).";
+$styles_entry_text_24C = "Entrant must specify blond, amber, or brown biere de garde. If no color is specified, the judge should attempt to judge based on initial observation, expecting a malt flavor and balance that matches the color.";
+$styles_entry_text_25B = "The entrant must specify the strength (table, standard, super) and the color (pale, dark).";
+$styles_entry_text_27A = "The entrant must either specify a style with a BJCP-supplied description, or provide a similar description for the judges of a different style. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it. Currently defined examples: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale.";
+$styles_entry_text_28A = "The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.";
+$styles_entry_text_28B = "The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer.";
+$styles_entry_text_28C = "Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items.";
+$styles_entry_text_29A = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren't lambics should be entered in the American Wild Ale category.";
+$styles_entry_text_29B = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit and spices, herbs, or vegetables (SHV) used; individual SHV ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).";
+$styles_entry_text_29C = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. The entrant must specify the type of additional fermentable sugar or special process employed.";
+$styles_entry_text_30A = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).";
+$styles_entry_text_30B = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., pumpkin pie spice). The beer must contain spices, and may contain vegetables and/or sugars.";
+$styles_entry_text_30C = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, sugars, fruits, or additional fermentables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., mulling spice).";
+$styles_entry_text_31A = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of alternative grain used.";
+$styles_entry_text_31B = "The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of sugar used.";
+$styles_entry_text_32A = "The entrant must specify a Classic Style base beer. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable.";
+$styles_entry_text_32B = "The entrant must specify a base beer style; the base beer does not have to be a Classic Style. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable. The entrant must specify the additional ingredients or processes that make this a specialty smoked beer.";
+$styles_entry_text_33A = "The entrant must specify the type of wood used and the char level (if charred). The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood has been used, the entrant must supply a brief description of the sensory aspects the wood adds to beer.";
+$styles_entry_text_33B = "The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer.";
+$styles_entry_text_34A = "The entrant must specify the name of the commercial beer being cloned, specifications (vital statistics) for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges who are unfamiliar with the beer will have no basis for comparison.";
+$styles_entry_text_34B = "The entrant must specify the styles being mixed. The entrant may provide an additional description of the sensory profile of the beer or the vital statistics of the resulting beer.";
+$styles_entry_text_34C = " The entrant must specify the special nature of the experimental beer, including the special ingredients or processes that make it not fit elsewhere in the guidelines. The entrant must provide vital statistics for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges will have no basis for comparison.";
+$styles_entry_text_M1A = "Entry Instructions: Entrants must specify carbonation level and strength. Sweetness is assumed to be DRY in this category. Entrants may specify honey varieties.";
+$styles_entry_text_M1B = "Entrants must specify carbonation level and strength. Sweetness is assumed to be SEMI-SWEET in this category. Entrants MAY specify honey varieties.";
+$styles_entry_text_M1C = "Entrants MUST specify carbonation level and strength. Sweetness is assumed to be SWEET in this category. Entrants MAY specify honey varieties.";
+$styles_entry_text_M2A = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of apple used; if specified, a varietal character will be expected. Products with a relatively low proportion of honey are better entered as a Specialty Cider. A spiced cyser should be entered as a Fruit and Spice Mead. A cyser with other fruit should be entered as a Melomel. A cyser with additional ingredients should be entered as an Experimental mead.";
+$styles_entry_text_M2B = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of grape used; if specified, a varietal character will be expected. A spiced pyment (hippocras) should be entered as a Fruit and Spice Mead. A pyment made with other fruit should be entered as a Melomel. A pyment with other ingredients should be entered as an Experimental Mead.";
+$styles_entry_text_M2C = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A mead made with both berries and non-berry fruit (including apples and grapes) should be entered as a Melomel. A berry mead that is spiced should be entered as a Fruit and Spice Mead. A berry mead containing other ingredients should be entered as an Experimental Mead.";
+$styles_entry_text_M2D = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A stone fruit mead that is spiced should be entered as a Fruit and Spice Mead. A stone fruit mead that contains non-stone fruit should be entered as a Melomel. A stone fruit mead that contains other ingredients should be entered as an Experimental Mead.";
+$styles_entry_text_M2E = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A melomel that is spiced should be entered as a Fruit and Spice Mead. A melomel containing other ingredients should be entered as an Experimental Mead. Melomels made with either apples or grapes as the only fruit source should be entered as Cysers and Pyments, respectively. Melomels with apples or grapes, plus other fruit should be entered in this category, not Experimental.";
+$styles_entry_text_M3A = "Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.";
+$styles_entry_text_M3B = "Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used (although well-known spice blends may be referred to by common name, such as apple pie spices).";
+$styles_entry_text_M4A = "Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MAY specify the base style or beer or types of malt used. Products with a relatively low proportion of honey should be entered in the Spiced Beer category as a Honey Beer.";
+$styles_entry_text_M4B = "Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, providing a description of the mead for judges if no such description is available from the BJCP.";
+$styles_entry_text_M4C = "Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared.";
+$styles_entry_text_C1E = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST state variety of pear(s) used.";
+$styles_entry_text_C2A = "Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).";
+$styles_entry_text_C2B = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all fruit(s) and/or fruit juice(s) added.";
+$styles_entry_text_C2C = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).";
+$styles_entry_text_C2D = "Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level (3 levels).";
+$styles_entry_text_C2E = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.";
+$styles_entry_text_C2F = "Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).";
+
+
 // -------------------- User (Edit Email) --------------------
 
 $user_text_000 = "A new email address is required and must be in valid form.";
@@ -937,6 +1020,44 @@ $winners_text_001 = "Winning entries have not been posted yet. Please check back
 $winners_text_002 = "Your chosen award structure is to award places by table. Select the award places for the table as a whole below.";
 $winners_text_003 = "Your chosen award structure is to award places by category. Select the award places for each overall category below (there may be more than one at this table).";
 $winners_text_004 = "Your chosen award structure is to award places by sub-category. Select the award places for each sub-category below (there may be more than one at this table).";
+
+
+// ----------------------------------------------------------------------------------
+// Output
+// ----------------------------------------------------------------------------------
+
+$output_text_000 = "Thank you for entering our competition";
+$output_text_001 = "A summary of your entries, scores, and places is below.";
+$output_text_002 = "Summary for";
+$output_text_003 = "entries were judged";
+$output_text_004 = "Your scoresheets could not be properly generated. Please contact the organizers of the competition.";
+$output_text_005 = "No judge/steward assignments have been defined";
+$output_text_006 = "for this location";
+$output_text_007 = "If you would like to print blank table cards, close this window and choose <em>Print Table Cards: All Tables</em> from the <em>Reporting</em> menu.";
+$output_text_008 = "Please be sure to check if your BJCP Judge ID is correct. If it is not, or if you have one and it is not listed, please enter it on the form.";
+$output_text_009 = "If your name is not on the list below, sign in on the attached sheet(s).";
+$output_text_010 = "To receive judging credit, please be sure to enter your BJCP Judge ID correctly and legibly.";
+$output_text_011 = "No assignments have been made.";
+$output_text_012 = "Total entries at this location";
+$output_text_013 = "No participants provided notes to organizers.";
+$output_text_014 = "The following are the notes to organizers entered by judges.";
+$output_text_015 = "No participants provided notes to organizers.";
+$output_text_016 = "Post-Judging Entry Inventory";
+$output_text_017 = "If there are no entries showing below, flights at this table have not been assigned to rounds.";
+$output_text_018 = "If entries are missing, all entries have not been assigned to a flight or round OR they have been assigned to a different round.";
+$output_text_019 = "If there are no entries below, this table has not been assigned to a round.";
+$output_text_020 = "No entries are eligible.";
+$output_text_021 = "Entry Number / Judging Number Cheat Sheet";
+$output_text_022 = "The points in this report are derived from the official BJCP Sanctioned Competition Requirements, available at";
+$output_text_023 = "includes Best of Show";
+$output_text_024 = "BJCP Points Report";
+$output_text_025 = "Total Staff Points Available";
+$output_text_026 = "Styles in this category are not accepted in this competition.";
+$output_text_027 = "link to Beer Judge Certification Program Style Guidelines";
+$output_text_028 = "";
+$output_text_029 = "";
+$output_text_030 = "";
+
 
 
 // ----------------------------------------------------------------------------------

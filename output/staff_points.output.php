@@ -167,18 +167,18 @@ if ($view == "default") {
 
 ?>
 	<div class="page-header">
-        	<h1><?php echo $_SESSION['contestName']; ?> BJCP Points Report</h1>
+        	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_024); ?> </h1>
     </div>
-    <p class="lead">The points in this report are derived from the official BJCP Sanctioned Competition Requirements, available at <a href="http://www.bjcp.org/rules.php" target="_blank">http://www.bjcp.org/rules.php</a>.</p>
+    <p class="lead"><?php echo sprintf("%s <a href=\"%s\">%s</a>.",$output_text_022,"http://www.bjcp.org/rules.php"); ?></p>
     <ul class="list-unstyled">
-        <li><strong>BJCP Competition ID:</strong> <?php echo $_SESSION['contestID']; ?></li>
-        <li><strong>Total Entries:</strong> <?php echo $total_entries; ?></li>
-        <li><strong>Total Days:</strong> <?php echo total_days(); ?></li>
-        <li><strong>Total Sessions:</strong> <?php echo total_sessions(); ?></li>
-        <li><strong>Total Flights:</strong> <?php echo total_flights(); ?> (includes Best of Show)</li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_comp_id,$_SESSION['contestID']); ?></li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_entries,$total_entries); ?></li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_days,total_days()); ?></li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_sessions,total_sessions()); ?></li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s (%s)",$label_flights,total_flights(),$output_text_023); ?></li>
     </ul>
     <?php if (!empty($output_organizer)) { ?>
-    <h2>Organizer</h2>
+    <h2><?php echo $label_organizer; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable0').dataTable( {
@@ -199,9 +199,9 @@ if ($view == "default") {
     <table class="dataTable table table-striped table-bordered" id="sortable0">
     <thead>
     <tr>
-    	<th width="35%">Name</th>
-        <th width="10%">BJCP ID</th>
-        <th>Points</th>
+    	<th width="35%"><?php echo $label_name; ?></th>
+        <th width="10%"><?php echo $label_bjcp_id; ?></th>
+        <th><?php echo $label_points; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -210,7 +210,7 @@ if ($view == "default") {
     </table>
     <?php }	?>
     <?php if (!empty($output_judges)) { ?>
-    <h2>Judges</h2>
+    <h2><?php echo $label_judges; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable1').dataTable( {
@@ -232,10 +232,10 @@ if ($view == "default") {
     <table class="dataTable table table-striped table-bordered" id="sortable1">
     <thead>
     <tr>
-    	<th width="35%">Name</th>
-        <th width="10%">BJCP ID</th>
-        <th width="10%">Points</th>
-        <th>BOS?</th>
+    	<th width="35%"><?php echo $label_name; ?></th>
+        <th width="10%"><?php echo $label_bjcp_id; ?></th>
+        <th width="10%"><?php echo $label_points; ?></th>
+        <th><?php echo $label_bos; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -244,7 +244,7 @@ if ($view == "default") {
     </table>
     <?php } ?>
 	<?php if (!empty($output_stewards)) { ?>
-    <h2>Stewards</h2>
+    <h2><?php echo $label_stewards; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable2').dataTable( {
@@ -265,9 +265,9 @@ if ($view == "default") {
     <table class="dataTable table table-striped table-bordered" id="sortable2">
     <thead>
     <tr>
-    	<th width="35%">Name</th>
-        <th width="10%">BJCP ID</th>
-        <th>Points</th>
+    	<th width="35%"><?php echo $label_name; ?></th>
+        <th width="10%"><?php echo $label_bjcp_id; ?></th>
+        <th><?php echo $label_points; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -276,8 +276,8 @@ if ($view == "default") {
     </table>
     <?php } ?>
     <?php if (!empty($output_staff)) { ?>
-    <h2>Staff</h2>
-    <p>Total Staff Points Available: <?php echo $staff_points_total; ?></p>
+    <h2><?php echo $label_staff; ?></h2>
+    <p><?php echo sprintf("%s: %s",$output_text_025,$staff_points_total); ?></p>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable99').dataTable( {
@@ -298,9 +298,9 @@ if ($view == "default") {
     <table class="dataTable table table-striped table-bordered" id="sortable99">
     <thead>
     <tr>
-    	<th width="35%">Name</th>
-        <th width="10%">BJCP ID</th>
-        <th>Points</th>
+    	<th width="35%"><?php echo $label_name; ?></th>
+        <th width="10%"><?php echo $label_bjcp_id; ?></th>
+        <th><?php echo $label_points; ?></th>
     </tr>
     </thead>
     <tbody>

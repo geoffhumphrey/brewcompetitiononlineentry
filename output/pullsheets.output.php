@@ -4,7 +4,6 @@ include(LIB.'output.lib.php');
 include(DB.'output_pullsheets.db.php');
 include(INCLUDES.'scrubber.inc.php');
 
-
 if (($go == "judging_tables") && ($totalRows_tables == 0)) { 
 //echo "<p>".$query_tables;
 echo "<h1>No tables have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h1>"; 
@@ -22,15 +21,15 @@ $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
 		<div class="page-header">
-        	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
         </div>
 	<?php if ($row_tables['tableLocation'] != "") { ?>
-    <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-    <p class="lead"><small><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></small></p>
-    <p>** Please Note:</p>
+    <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h2>
+    <p class="lead"><small><?php echo sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights); ?></small></p>
+    <p><?php echo $label_please_note; ?></p>
     <ul>
-        <li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
-        <li>If entries are missing, all entries have not been assigned to a flight or round<?php if ($round != "default") echo " OR they have been assigned to a different round"; ?>.</li>
+        <li><?php echo $output_text_017; ?></li>
+        <li><?php echo $output_text_018; ?></li>
     </ul>
     <?php } ?>
     <?php 
@@ -42,7 +41,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$row_round_check = mysqli_fetch_assoc($round_check);
 	
 	?>
-    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i.", Round ".$row_round_check['flightRound']; ?></h4>
+    <h4><?php echo sprintf("%s %s, %s %s, %s %s",$label_table,$row_tables['tableNumber'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -68,14 +67,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="table table-striped table-bordered" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th width="1%">Pull-Order</th>
-        <th width="1%">#</th>
-        <th>Style</th>
-        <th>Info</th>
-        <th width="1%">Loc/Box</th>
-        <th width="1%">Mini-BOS?</th>
-        <th width="1%">Score</th>
-        <th width="1%">Place</th>
+    	<th width="5%" nowrap><?php echo $label_pull_order; ?></th>
+        <th width="5%">#</th>
+        <th width="35%"><?php echo $label_style; ?></th>
+        <th width="35%"><?php echo $label_info; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
+        <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
+        <th width="5%"><?php echo $label_score; ?></th>
+        <th width="5%"><?php echo $label_place; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -92,7 +91,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
-        <td nowrap>
+        <td>
 		<?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
 		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
@@ -113,7 +112,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		echo "</p>";
 		?>
         </td>
-        <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
@@ -136,17 +135,17 @@ $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
 		<div class="page-header">
-        	<h1><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
         </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
-            <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h2>
-            <p class="lead"><small><?php echo "Entries: ". get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default")."<br>Flights: ".$flights; ?></small></p>
-            <?php } ?>
-            <p>** Please Note:</p>
-            <ul>
-            	<li>If there are no entries showing below, flights at this table have not been assigned to rounds.</li>
-               	<li>If entries are missing, all entries have not been assigned to a flight or round.</li>
-            </ul>
+    <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h2>
+    <p class="lead"><small><?php echo sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights); ?></small></p>
+    <?php } ?>
+    <p><?php echo $label_please_note; ?></p>
+    <ul>
+        <li><?php echo $output_text_017; ?></li>
+        <li><?php echo $output_text_018; ?></li>
+    </ul>
     <?php 
 	for($i=1; $i<$flights+1; $i++) { 
 	$random = random_generator(5,1);
@@ -182,14 +181,14 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
     <table class="table table-striped table-bordered" id="sortable<?php echo $random; ?>">
     <thead>
     <tr>
-    	<th nowrap>Pull Order</th>
-        <th>#</th>
-        <th>Style</th>
-        <th>Info</th>
-        <th>Loc/Box</th>
-        <th>Mini-BOS?</th>
-        <th>Score</th>
-        <th>Place</th>
+        <th width="5%" nowrap><?php echo $label_pull_order; ?></th>
+        <th width="5%">#</th>
+        <th width="35%"><?php echo $label_style; ?></th>
+        <th width="35%"><?php echo $label_info; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
+        <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
+        <th width="5%"><?php echo $label_score; ?></th>
+        <th width="5%"><?php echo $label_place; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -206,7 +205,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
-        <td nowrap>
+        <td>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
 		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
@@ -227,7 +226,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		echo "</p>";
 		?>
         </td>
-        <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
@@ -238,7 +237,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	} // end foreach ?>
     </tbody>
     </table>
-
+	<?php if ($flights > 0) { ?><div style="page-break-after:always;"></div><?php } ?>
     <?php } ?>
 <div style="page-break-after:always;"></div>
 <?php 	
@@ -261,12 +260,12 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 ?>
 	
     <div class="page-header">
-        <h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
     </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
-    <h3><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h3>
-    <p class="lead"><?php echo "Entries: ". $entry_count; ?></p>
-    <p>** Note: if there are no entries below, this table has not been assigned to a round.</p>
+    <h3><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h3>
+    <p class="lead"><?php echo sprintf("%s: %s",$label_entries,$entry_count); ?></p>
+    <p><?php echo sprintf("%s: %s",$label_please_note,$output_text_019); ?></p>
     <?php } ?>
     <?php if ($entry_count > 0) { ?>
      <script type="text/javascript" language="javascript">
@@ -294,14 +293,14 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
     <table class="table table-striped table-bordered" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
-    	<th nowrap>Pull Order</th>
-        <th>#</th>
-        <th>Style</th>
-        <th>Info</th>
-        <th>Loc/Box</th>
-        <th>Mini-BOS?</th>
-        <th>Score</th>
-        <th>Place</th>
+    	<th width="5%" nowrap><?php echo $label_pull_order; ?></th>
+        <th width="5%">#</th>
+        <th width="35%"><?php echo $label_style; ?></th>
+        <th width="35%"><?php echo $label_info; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
+        <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
+        <th width="5%"><?php echo $label_score; ?></th>
+        <th width="5%"><?php echo $label_place; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -315,7 +314,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
-        <td nowrap>
+        <td>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
 		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
@@ -336,7 +335,7 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		echo "</p>";
 		?>
         </td>
-        <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
@@ -355,11 +354,11 @@ if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "defa
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
     <div class="page-header">
-        <h1>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']; ?></h1>
+        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
     </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
     <h3><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h3>
-    <p class="lead"><?php echo "Entries: ". $entry_count; ?></p>
+    <p class="lead"><?php echo sprintf("%s: %s",$label_entries,$entry_count); ?></p>
     <?php } ?>
     <?php if ($entry_count > 0) { ?>
     <script type="text/javascript" language="javascript">
@@ -387,14 +386,14 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <table class="table table-striped table-bordered" id="sortable<?php echo $row_tables['id']; ?>">
     <thead>
     <tr>
-    	<th nowrap>Pull Order</th>
-        <th>#</th>
-        <th>Style</th>
-        <th>Info</th>
-        <th>Loc/Box</th>
-        <th>Mini-BOS?</th>
-        <th>Score</th>
-        <th>Place</th>
+    	<th width="5%" nowrap><?php echo $label_pull_order; ?></th>
+        <th width="5%">#</th>
+        <th width="35%"><?php echo $label_style; ?></th>
+        <th width="35%"><?php echo $label_info; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
+        <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
+        <th width="5%"><?php echo $label_score; ?></th>
+        <th width="5%"><?php echo $label_place; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -409,7 +408,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
-        <td nowrap>
+        <td>
         <?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries['id']); 
 		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries['brewJudgingNumber']);
@@ -430,7 +429,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		echo "</p>";
 		?>
         </td>
-        <td nowrap><?php echo $row_entries['brewBoxNum']; ?></td>
+        <td><?php echo $row_entries['brewBoxNum']; ?></td>
         <td><p class="box_small">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
@@ -469,7 +468,7 @@ if ($style_type_info[0] == "Y") {
 
 ?>
 		<div class="page-header">
-        	<h1>BOS Entries - <?php echo $style_type_info[2]; ?></h1>
+        	<h1><?php echo sprintf("%s: %s",$label_bos,$style_type_info[2]); ?></h1>
         </div>
 <?php if ($totalRows_bos > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -487,8 +486,6 @@ if ($style_type_info[0] == "Y") {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -497,14 +494,12 @@ if ($style_type_info[0] == "Y") {
 <table class="table table-striped table-bordered" id="sortable<?php echo $type; ?>">
 <thead>
     <tr>
-    	<th nowrap>Pull Order</th>
-        <th>#</th>
-        <th>Style</th>
-        <th>Info</th>
-        <th>Loc/Box</th>
-        <th>Mini-BOS?</th>
-        <th>Score</th>
-        <th>Place</th>
+    	<th width="5%" nowrap><?php echo $label_pull_order; ?></th>
+        <th width="5%">#</th>
+        <th width="35%"><?php echo $label_style; ?></th>
+        <th width="35%"><?php echo $label_info; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
+        <th width="5%"><?php echo $label_place; ?></th>
     </tr>
     </thead>
 <tbody>
@@ -518,7 +513,7 @@ if ($style_type_info[0] == "Y") {
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
-        <td nowrap>
+        <td>
 		<?php 
 		if ($view == "entry") echo sprintf("%04s",$row_entries_1['id']); 
 		elseif (((NHC) && ($view != "entry")) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$row_entries_1['brewJudgingNumber']);
@@ -540,19 +535,17 @@ if ($style_type_info[0] == "Y") {
 		if (isset($row_entries_1['brewMead3'])) echo "<strong>Strength:</strong> ".$row_entries_1['brewMead3'];
 		?>
         </td>
-        <td nowrap><?php echo $row_entries_1['brewBoxNum']; ?></td>
-        <td><p class="box_small">&nbsp;</p></td>
-        <td><p class="box">&nbsp;</p></td>
+        <td><?php echo $row_entries_1['brewBoxNum']; ?></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
     <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
-<?php } else echo "<p class=\"lead\">No entries are eligible.</p>"; 
+<?php } else echo sprintf("<p class=\"lead\">%s</p>",$output_text_020); 
 } 
 ?>
-<?php } ?>
 <div style="page-break-after:always;"></div>
+<?php } ?>
 <?php } // end if (($go == "judging_scores_bos") && ($id != "default")) 
 }
 ?>

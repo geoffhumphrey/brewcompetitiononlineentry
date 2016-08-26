@@ -7,11 +7,13 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
+require (LANG.'language.lang.php');
+
 if (isset($_SESSION['loginUsername'])) {
 
 	if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
-	  	echo "<html><head><title>Error</title></head><body>";
-  		echo "<p>You do not have sufficient access priveliges to view this page.</p>";
+	  	echo sprintf("<html><head><title>%s</title></head><body>",$label_error);
+  		echo sprintf("<p>%s</p>",$header_text_104);
 	  	echo "</body></html>";
   		exit();
 	}
@@ -40,8 +42,8 @@ if (isset($_SESSION['loginUsername'])) {
 		
 	}
 	else {
-  		echo "<html><head><title>Error</title></head><body>";
-	  	echo "<p>The pdf of your scoresheets could not be properly generated for your viewing. Please, contact the organizers of the competition.</p>";
+  		echo sprintf("<html><head><title>%s</title></head><body>",$label_error);
+	  	echo sprintf("<p>%s</p>",$output_text_004);
   		echo "</body></html>";
 	  	exit();
 	}

@@ -11,13 +11,13 @@ include(DB.'styles.db.php');
     </div>
 <?php if ($totalRows_styles > 0) { ?>
 <?php do { 
-$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide');
-if ($go == "default") $replacement2 = array('<p><strong class="text-danger">Entry Instructions:</strong>','<p><strong class="text-info">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
-else $replacement2 = array('<p><strong class="text-danger">Entry Instructions:</strong>','<p><strong class="text-info">Commercial Examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
+$replacement1 = array('$label_entry_instructions:','$label_commerical_examples:','must specify','may specify','MUST specify','MAY specify','must provide');
+if ($go == "default") $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
+else $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
 $info = str_replace($replacement1,$replacement2,$row_styles['brewStyleInfo']);
 
-$comEx = "<strong class=\"text-info\">Commercial Examples:</strong> ".$row_styles['brewStyleComEx'];
-$entryReq = "<strong class=\"text-danger\">Entry Instructions:</strong> ".$row_styles['brewStyleEntry'];
+$comEx = sprintf("<strong class=\"text-info\">%s:</strong> %s",$label_commercial_examples,$row_styles['brewStyleComEx']);
+$entryReq = sprintf("<strong class=\"text-danger\">%s:</strong> %s",$label_entry_instructions, $row_styles['brewStyleEntry']);
 
     if (($sort == "brewStyleSRM") 	&& (($row_styles['brewStyleSRM'] == "") || ($row_styles['brewStyleSRM'] == "N/A"))) echo ""; 
 elseif (($sort == "brewStyleIBU") 	&& (($row_styles['brewStyleIBU'] == "") || ($row_styles['brewStyleIBU'] == "N/A"))) echo "";
@@ -30,11 +30,11 @@ else {
 <a name="<?php if ($row_styles['brewStyleGroup'] < 10) echo ltrim($row_styles['brewStyleGroup'],"0"); else echo $row_styles['brewStyleGroup']; echo $row_styles['brewStyleNum']; ?>"></a>
 <h2><?php echo $row_styles['brewStyle']; ?></h2>
 <ul class="list-inline">
-    <li><strong>Category:</strong></li>
+    <li><?php echo sprintf("<strong>%s:</strong>",$label_category); ?></li>
     <li><?php echo style_convert($row_styles['brewStyleGroup'],1);?></li>
 </ul>
 <ul class="list-inline">
-	<li><strong>Number:</strong></li>
+	<li><?php echo sprintf("<strong>%s:</strong>",$label_number); ?></li>
     <li><?php echo $row_styles['brewStyleGroup']; ?><?php echo $row_styles['brewStyleNum']; ?></li>
 </ul>
 <?php 
@@ -45,11 +45,11 @@ if (!empty($row_styles['brewStyleEntry'])) echo "<p>".$entryReq."</p>";
 <?php //echo "<p>".$row_styles['brewStyleInfo']."</p>"; ?>
 <table class="table table-bordered table-striped">
     <tr>
-        <th class="dataLabel data bdr1B">OG Range</th>
-        <th class="dataLabel data bdr1B">FG Range</th>
-        <th class="dataLabel data bdr1B">ABV Range</th>
-        <th class="dataLabel data bdr1B">Bitterness Range</th>
-        <th class="dataLabel data bdr1B">Color Range</th>
+        <th class="dataLabel data bdr1B">OG</th>
+        <th class="dataLabel data bdr1B">FG</th>
+        <th class="dataLabel data bdr1B">ABV</th>
+        <th class="dataLabel data bdr1B"><?php echo $label_bitterness; ?></th>
+        <th class="dataLabel data bdr1B"><?php echo $label_color; ?></th>
     </tr>
     <tr>
         <td nowrap>
@@ -103,10 +103,9 @@ if (!empty($row_styles['brewStyleEntry'])) echo "<p>".$entryReq."</p>";
         </td>
     </tr>
 </table>
-<p class="hidden-print"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank">More Info</a> (link to Beer Judge Certification Program Style Guidelines)<?php } else echo "&nbsp;"; ?></p>
+<p class="hidden-print"><?php if ($row_styles['brewStyleLink'] != "") { ?><a href="<?php echo $row_styles['brewStyleLink']; ?>" target="_blank"><?php echo $label_more_info; ?></a><?php echo " - ".$output_text_027; } else echo "&nbsp;"; ?></p>
 <?php if (($go == "default") && ($view == "default")) { ?>
-<p class="hidden-print"><a href="#top">Top of Page</a></p>
 <?php }
 	} 
  } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
-<?php } else echo "<p>Styles in this category are not accepted in this competition.</p>"; ?>
+<?php } else echo spritf("<p>%s</p>",$output_text_026); ?>

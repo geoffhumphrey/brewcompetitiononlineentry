@@ -11,7 +11,7 @@ if ($totalRows_entries > 0) {
 	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
 ?>
     <div class="page-header">
-       <h2><?php echo "Category ".ltrim($style,"0").": ".style_convert($style,1); echo "<br><small><em class=\"text-muted\">".$total_entries."</em></small>"; ?></h2>
+       <h2><?php echo sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>",$label_category,ltrim($style,"0"),style_convert($style,1),$total_entries); ?></h2>
 	</div>
     <?php if ($go == "default") { ?>
      <script type="text/javascript" language="javascript">
@@ -48,18 +48,18 @@ if ($totalRows_entries > 0) {
     <table class="table table-bordered table-striped" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-    	<th width="5%" nowrap>Entry</th>
+    	<th width="5%" nowrap><?php echo $label_entry; ?></th>
     	<?php if ($view == "default") { ?>
-        <th width="5%" nowrap>Judging</th>
+        <th width="5%" nowrap><?php echo $label_judging; ?></th>
 		<?php } ?>
-        <th width="20%">Brewer</th>
-        <th>Entry Name</th>
-        <th width="20%">Style</th>
-        <th width="5%">Sub</th>
-        <th width="5%">Contact</th>
-        <th width="5%">Paid?</th>
-        <th width="5%">Sorted?</th>
-        <th width="5%">Location/Box</th>
+        <th width="20%"><?php echo $label_brewer; ?></th>
+        <th><?php echo $label_name; ?></th>
+        <th width="20%"><?php echo $label_style; ?></th>
+        <th width="5%"><?php echo $label_subcategory; ?></th>
+        <th width="5%"><?php echo $label_contact; ?></th>
+        <th width="5%"><?php echo $label_paid; ?></th>
+        <th width="5%"><?php echo $label_sorted; ?></th>
+        <th width="5%"><?php echo $label_box; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -90,7 +90,7 @@ if ($totalRows_entries > 0) {
 	<?php } // end if ($go == "default") ?>
 
 	<?php if ($go == "cheat") { ?>
-    <h4>Entry Number / Judging Number Cheat Sheet</h4>
+    <h4><?php echo $output_text_021; ?></h4>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $style; ?>').dataTable( {
@@ -112,10 +112,10 @@ if ($totalRows_entries > 0) {
     <table class="table table-striped table-bordered" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-		<th width="5%" nowrap>Sub</th>
-    	<th width="20%" nowrap>Entry</th>
-        <th width="20%" nowrap>Judging</th>
-        <th>Label Affixed?</th>
+		<th width="5%" nowrap><?php echo $label_subcategory; ?></th>
+    	<th width="20%" nowrap><?php echo $label_entry; ?></th>
+        <th width="20%" nowrap><?php echo $label_judging; ?></th>
+        <th><?php echo $label_affixed; ?></th>
     </tr>
     </thead>
     <tbody>

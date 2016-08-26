@@ -41,21 +41,31 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 		} );
 	</script>    
     <div class="page-header">
-        <h1><?php if ($filter == "S") echo "Steward "; else echo "Judge "; ?>Assignments <?php if ($view == "default") echo "By Last Name"; elseif ($view == "table") echo "By Table"; elseif ($view == "location") echo "By Location"; else echo ""; ?></h1>
+        <h1>
+		<?php 
+		if ($filter == "S") echo sprintf("%s ",$label_steward); 
+		else echo sprintf("%s ",$label_judge); 
+		echo $label_assignments; 
+		if ($view == "default") echo sprintf(" %s",$label_by_last_name); 
+		elseif ($view == "table") echo sprintf(" %s",$label_by_table); 
+		elseif ($view == "location") echo sprintf(" %s",$label_by_location); 
+		else echo ""; 
+		?>
+        </h1>
     </div>
     
     <?php if ($totalRows_assignments > 0) { ?>
     <table class="table table-striped table-bordered" id="sortable">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="15%">Name</th>
-        <th class="dataHeading bdr1B" width="10%">Rank</th>
-        <th class="dataHeading bdr1B">Location</th>
-        <th class="dataHeading bdr1B" width="5%">Table</th>
-        <th class="dataHeading bdr1B" width="20%">Table Name</th>
-        <th class="dataHeading bdr1B" width="5%">Round</th>
+    	<th class="dataHeading bdr1B" width="15%"><?php echo $label_name; ?></th>
+        <th class="dataHeading bdr1B" width="10%"><?php echo $label_rank; ?></th>
+        <th class="dataHeading bdr1B"><?php echo $label_location; ?></th>
+        <th class="dataHeading bdr1B" width="5%"><?php echo $label_table; ?></th>
+        <th class="dataHeading bdr1B" width="20%"><?php echo $label_name; ?></th>
+        <th class="dataHeading bdr1B" width="5%"><?php echo $label_round; ?></th>
         <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-        <th class="dataHeading bdr1B" width="5%">Flight #</th>
+        <th class="dataHeading bdr1B" width="5%"><?php echo $label_flight; ?></th>
         <?php } ?>
     </tr>
     </thead>
@@ -80,7 +90,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
     <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
-    <?php } else { echo "<p class=\"lead\">No "; if ($filter == "S") echo "steward "; else echo "judge "; echo "assignments have been made.</p>"; } ?>   
+    <?php } else { echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); } ?>   
 <?php } // end if ($view != "sign-in") 
 else { 
 if ($totalRows_brewer > 0) { ?>
@@ -106,18 +116,18 @@ if ($totalRows_brewer > 0) { ?>
 	</script>
 <?php } ?>
     <div class="page-header">
-        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo " Steward "; else echo " Judge "; ?>Sign In</h2>
+        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo sprintf(" %s ",$label_steward); else echo sprintf(" %s ",$label_judge); echo $label_sign_in; ?></h1>
     </div>
-    <p>Please be sure to check if your BJCP Judge ID is correct. If it is not, or if you have one and it is not listed, please enter it on the form.</p>
-    <p>If your name is not on the list below, sign in on the attached sheet(s).</p>
+    <p><?php echo $output_text_008; ?></p>
+    <p><?php echo $output_text_009; ?></p>
     <table class="table table-striped table-bordered" id="sortable">
     <thead>
     <tr>
-    	<th width="30%">Name</th>
+    	<th width="30%"><?php echo $label_name; ?></th>
         <?php if ($filter == "J") { ?>
-        <th width="20%">Judge ID</th>
+        <th width="20%"><?php echo $label_bjcp_id; ?></th>
         <?php } ?>
-        <th width="10%">Signed Waiver?</th>
+        <th width="10%"><?php echo $label_waiver; ?></th>
         <th>Signature</th>
     </tr>
     </thead>
@@ -128,7 +138,7 @@ if ($totalRows_brewer > 0) { ?>
         <?php if ($filter == "J") { ?>
     	<td><?php echo strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace)); ?></td>
         <?php } ?>
-        <td><?php if ($row_brewer['brewerJudgeWaiver'] == "Y") echo "Yes"; else echo "No"; ?></td>
+        <td><?php if ($row_brewer['brewerJudgeWaiver'] == "Y") echo $label_yes; else echo $label_no; ?></td>
         <td>&nbsp;</td>
     </tr>
     <?php } while ($row_brewer = mysqli_fetch_assoc($brewer));	?>
@@ -136,10 +146,10 @@ if ($totalRows_brewer > 0) { ?>
     </table>
     <div style="page-break-after:always;"></div>
     <div class="page-header">
-        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo " Steward "; else echo " Judge "; ?>Sign In</h2>
+        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo sprintf(" %s ",$label_steward); else echo sprintf(" %s ",$label_judge); echo $label_sign_in; ?></h1>
     </div>
      <?php if ($filter == "J") { ?>
-    <p>To receive judging credit, please be sure to enter your BJCP Judge ID correctly and legibly.</p>
+    <p><?php echo $output_text_010; ?></p>
     <?php } ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -165,12 +175,12 @@ if ($totalRows_brewer > 0) { ?>
     <table class="table table-striped table-bordered" id="sortable2">
     <thead>
     <tr>
-    	<th class="dataHeading bdr1B" width="30%">Name</th>
+    	<th class="dataHeading bdr1B" width="30%"><?php echo $label_name; ?></th>
         <?php if ($filter == "J") { ?>
-        <th class="dataHeading bdr1B" width="20%">Judge ID</th>
+        <th class="dataHeading bdr1B" width="20%"><?php echo $label_bjcp_id; ?></th>
         <?php } ?>
-        <th class="dataHeading bdr1B" width="10%">Signed Waiver?</th>
-        <th class="dataHeading bdr1B">Signature</th>
+        <th class="dataHeading bdr1B" width="10%"><?php echo $label_waiver; ?></th>
+        <th class="dataHeading bdr1B"><?php echo $label_signature; ?></th>
     </tr>
     </thead>
     <tbody>
@@ -180,7 +190,7 @@ if ($totalRows_brewer > 0) { ?>
         <?php if ($filter == "J") { ?>
     	<td width="20%">&nbsp;</td>
         <?php } ?>
-        <td width="10%">Yes / No</td>
+        <td width="10%"><?php echo sprintf("%s / %s",$label_yes,$label_no); ?></td>
         <td>&nbsp;</td>
     </tr>
 	<?php } ?>

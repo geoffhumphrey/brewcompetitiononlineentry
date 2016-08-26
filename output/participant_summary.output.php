@@ -26,14 +26,15 @@ do {
 	
 	include(DB.'output_participant_summary.db.php');
 	
+
 	
 	
 	if ($totalRows_log > 0) { ?>
 		<div class="page-header">
-            <h1><?php echo $_SESSION['contestName']; ?> Summary for <?php echo $row_brewer['brewerFirstName']. " ".$row_brewer['brewerLastName']; ?></h1>
+            <h1><?php echo sprintf("%s %s %s %s",$_SESSION['contestName'],$output_text_002,$row_brewer['brewerFirstName'],$row_brewer['brewerLastName']); ?></h1>
         </div>
-		<p class="lead">Thank you for entering our competition, <?php echo $row_brewer['brewerFirstName']; ?>. A summary of your entries and their associated scores and places is below.</p>
-		<p class="lead"><small>In all, there were <?php echo $total_entries_judged; ?> entries.</small></p>
+		<p class="lead"><?php echo sprintf("%s, %s. %s",$output_text_000,$row_brewer['brewerFirstName'],$output_text_001); ?> </p>
+		<p class="lead"><small><?php echo sprintf("%s %s.",$total_entries_judged,$output_text_003); ?></small></p>
 		<!-- Brewer's Entries -->
 		<script type="text/javascript" language="javascript">
 		 $(document).ready(function() {
@@ -58,12 +59,12 @@ do {
     <table class="table table-bordered table-striped" id="sortable_entries<?php echo $row_brewer['id']; ?>">
     <thead>
 		<tr>
-			<th width="5%" nowrap>Entry</th>
-			<th width="5%" nowrap>Judging</th>
-			<th width="25%">Entry Name</th>
-			<th>Style</th>
-			<th width="5%" nowrap>Score</th>
-			<th width="20%">Place</th>
+			<th width="5%" nowrap><?php echo $label_entry; ?></th>
+			<th width="5%" nowrap><?php echo $label_judging; ?></th>
+			<th width="25%"><?php echo $label_name; ?></th>
+			<th><?php echo $label_style; ?></th>
+			<th width="5%" nowrap><?php echo $label_score; ?></th>
+			<th width="20%"><?php echo $label_place; ?></th>
 		</tr>
     </thead>
     <tbody>
@@ -80,8 +81,8 @@ do {
     </tbody>
     </table>
     <?php if ($totalRows_organizer > 0) { ?>
-    <p>Regards,</p>
-    <p><?php echo $row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName']; ?><br />Organizer, <?php echo $_SESSION['contestName']; ?></p>
+    <p><?php echo sprintf("%s,",$label_cheers); ?></p>
+    <p><?php echo sprintf("%s %s",$row_organizer['brewerFirstName'],$row_organizer['brewerLastName']); ?><br /><?php echo sprintf("%s, %s",$label_organizer,$_SESSION['contestName']); ?></p>
     <?php } ?>
     <div style="page-break-after:always;"></div>
     <?php } // END entries section ?>

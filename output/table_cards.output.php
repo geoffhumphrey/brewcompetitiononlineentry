@@ -3,8 +3,11 @@ $section = "table_cards";
 include(DB.'admin_common.db.php');
 
 if ($totalRows_tables == 0) { 
-echo "<h2>No judge/steward assignments have been defined"; if ($go == "judging_locations") echo " for this location"; echo ".</h2>";
-echo "<p class=\"lead\">If you would like to print blank table cards, close this window and choose &ldquo;Print Table Cards: All Tables&rdquo; from the <em>Reporting</em> menu.</p>";
+	echo "<h2>"; 
+	echo sprintf("%s",$output_text_005);
+	if ($go == "judging_locations") echo sprintf(" %s",$output_text_006); 
+	echo ".</h2>";
+	echo sprintf("<p class=\"lead\">%s</p>",$output_text_007);
 }
  
 else {
@@ -17,7 +20,7 @@ if ($id == "default") { ?>
           include(DB.'output_table_cards.db.php');
         ?>
 <div class="table_card">
-    <h1>Table <?php echo $row_tables['tableNumber']; ?></h1>
+    <h1><?php echo sprintf("%s %s",$label_table, $row_tables['tableNumber']); ?></h1>
     <h2><?php echo $row_tables['tableName']; ?></h2>
     <h4><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>
@@ -73,7 +76,7 @@ if ($id != "default") {
 	include(DB.'output_table_cards.db.php');
 ?>
 <div class="table_card">
-    <h1>Table <?php echo $row_tables_edit['tableNumber']; ?></h1>
+    <h1><?php echo sprintf("%s %s",$label_table, $row_tables_edit['tableNumber']); ?></h1>
     <h2><?php echo $row_tables_edit['tableName']; ?></h2>
     <h4><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></h4>
     <?php if ($totalRows_assignments > 0) { ?>

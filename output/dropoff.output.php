@@ -10,7 +10,7 @@ include (DB.'dropoff.db.php');
 
 if ($go == "default") {  ?>
 	<div class="page-header">
-        <h1>Entry Totals by Drop-Off Location</h1>
+        <h1><?php echo $label_by_location; ?></h1>
     </div>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -33,9 +33,9 @@ if ($go == "default") {  ?>
     <table class="table table-bordered table-striped" id="sortable">
     <thead>
     	<tr>
-        	<th>Location Name</th>
-            <th>Location Address</th>
-            <th>Count</th>
+        	<th><?php echo $label_name; ?></th>
+            <th><?php echo $label_address; ?></th>
+            <th><?php echo $label_count; ?></th>
         </tr>
     </thead>
     <tbody>
@@ -68,7 +68,7 @@ if ($go == "default") {  ?>
     </tbody>
     <tfoot>
     	<tr>	
-        	<th colspan="2"><span class="pull-right">Total</span></th>
+        	<th colspan="2"><span class="pull-right"><?php echo $label_total; ?></span></th>
             <th><?php echo array_sum($all_location_count); ?></th>
         </tr>
     </tfoot>
@@ -77,7 +77,7 @@ if ($go == "default") {  ?>
 
 <?php if ($go == "check") { ?>
 	<div class="page-header">
-        <h1>Entries By Drop-Off Location</h1>
+        <h1><?php echo $label_drop_offs; ?></h1>
     </div>
     <?php do { 
 	$random = random_generator(5,2);
@@ -87,7 +87,7 @@ if ($go == "default") {  ?>
 	?>
     <h3>Location: <?php echo $row_dropoff['dropLocationName']; ?></h3>
     <p class="lead"><?php echo $row_dropoff['dropLocation']; ?></p>
-    <p class="lead"><small>Total Entries at this Location: <?php echo $location_count; ?></small></p>
+    <p class="lead"><small><?php echo sprintf("%s: %s",$output_text_012,$location_count); ?></small></p>
     <script type="text/javascript" language="javascript">
         $(document).ready(function() {
             $('#sortable<?php echo $random; ?>').dataTable( {
@@ -108,10 +108,10 @@ if ($go == "default") {  ?>
     <table class="table table-bordered table-striped" id="sortable<?php echo $random; ?>">
     <thead>
     	<tr>
-        	<th width="5%" nowrap="nowrap">Entry#</th>
-            <th width="45%" nowrap="nowrap">Entry Name</th>
-            <th width="45%" nowrap="nowrap">Participant Name</th>
-            <th width="5%" nowrap="nowrap">Picked Up?</th>
+        	<th width="5%" nowrap="nowrap"><?php echo $label_entry; ?></th>
+            <th width="45%" nowrap="nowrap"><?php echo $label_name; ?></th>
+            <th width="45%" nowrap="nowrap"><?php echo $label_entrant; ?></th>
+            <th width="5%" nowrap="nowrap"><?php echo $label_received; ?></th>
         </tr>
     </thead>
     <tbody>
