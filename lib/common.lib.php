@@ -2064,6 +2064,75 @@ function score_count($table_id,$method) {
 	
 }
 
+function best_brewer_points($bid, $places, $entry_scores) {
+
+	// Main points
+
+	$pts_first = $_SESSION['prefsFirstPlacePts']*$places[0]; // points for each first place position
+	$pts_second = $_SESSION['prefsSecondPlacePts']*$places[1]; // points for each secon place position
+	$pts_third = $_SESSION['prefsThirdPlacePts']*$places[2]; // points for each third place position
+	$pts_fourth = $_SESSION['prefsFourthPlacePts']*$places[3]; // points for each fourth place position
+	$pts_hm = $_SESSION['prefsHMPts']*$places[4]; // points for each honorable mention
+
+	// Tie breakers
+	
+	$pts_tb_num_places = 0;
+	$pts_tb_first_places = 0;
+	$pts_tb_num_entries = 0;
+	$pts_tb_min_score = 0;
+	$pts_tb_max_score = 0;
+	$pts_tb_avg_score = 0;
+	$pts_tb_bos = 0;
+
+	$tiebreaker= array($_SESSION['prefsTieBreakRule1'],$_SESSION['prefsTieBreakRule2'],$_SESSION['prefsTieBreakRule3'],$_SESSION['prefsTieBreakRule4'],$_SESSION['prefsTieBreakRule5'],$_SESSION['prefsTieBreakRule6']);
+	
+	$power = 0;
+	
+	$imax = count($tiebreaker) - 1;
+	
+	$number_of_entries = total_paid_received("",$bid);
+	
+	for ($i = 0; $i<= $imax; $i++) {
+		switch ($tiebreaker[$i]) {
+			case "TBTotalPlaces" : 	
+				$power  += 2;
+				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power); // points for the number of 1st, 2nd, and 3rd places
+				break;
+			case "TBTotalExtendedPlaces" : 	
+				$power  += 2;
+				$pts_tb_num_places = array_sum($places)/pow(10,$power); // points for the number of 1st, 2nd, 3rd, 4th, HM places
+				break;
+			case "TBFirstPlaces" : 	
+				$power  += 2;
+				$pts_tb_first_places = $places[0]/pow(10,$power); // points for number of first places
+				break;
+			case "TBNumEntries" : 	
+				$power  += 4;
+				$pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power); // points for the number of competing entries (the smallest the better, of course)
+				break;
+			case "TBMinScore" : 	
+				$power  += 4;
+				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power); // points for the minimum score
+				break;
+			case "TBMaxScore" : 	
+				$power  += 4;
+				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power); // points for the maximum score
+				break;		
+			case "TBAvgScore" : 	
+				$power  += 4;
+				$pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power); // points for the average score
+			case "TBRandom" :
+				// need to implement points for a pseudo-random tiebreak
+				break;								
+		}
+	}
+	
+	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score + $pts_tb_random;
+	return $points;
+	break;
+	
+}
+
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
 		switch($rank) {
@@ -2229,6 +2298,7 @@ function get_participant_count($type) {
 	if ($type == 'default') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewer");
 	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
+	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
 	$row_participant_count = mysqli_fetch_assoc($participant_count);
 	

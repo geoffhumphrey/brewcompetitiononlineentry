@@ -938,6 +938,11 @@ $winners_text_002 = "Your chosen award structure is to award places by table. Se
 $winners_text_003 = "Your chosen award structure is to award places by category. Select the award places for each overall category below (there may be more than one at this table).";
 $winners_text_004 = "Your chosen award structure is to award places by sub-category. Select the award places for each sub-category below (there may be more than one at this table).";
 
+// -------------------- Best Brewer --------------------
+
+$best_brewer_text_000 = "brewers";
+$best_brewer_text_001 = "HM";
+$best_brewer_text_002 = "The tie break criteria have been applied according to the rules of the competition.";
 
 // ----------------------------------------------------------------------------------
 // Admin Pages - Admin pages will be included in a future release

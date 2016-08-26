@@ -48,7 +48,6 @@ $page_info = "";
 $page_info10 = "";
 $page_info20 = "";
 $page_info30 = "";
-$header1_1 = "";
 $header1_10 = "";
 $header1_20 = "";
 $header1_30 = "";
@@ -142,8 +141,9 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 		
 		if (judging_winner_display($delay)) {
 			
+			if ($_SESSION['prefsShowBestBrewer'] != 0) include (SECTIONS.'bestbrewer.sec.php');
+
 			if (((NHC) && ($prefix == "final_")) || (!NHC)) { 
-				echo $header1_1;
 				include (SECTIONS.'bos.sec.php');  
 				} 
 				
