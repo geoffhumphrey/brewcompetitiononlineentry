@@ -59,7 +59,7 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
     <thead>
     <tr>
     	<th class="dataHeading bdr1B" width="15%"><?php echo $label_name; ?></th>
-        <th class="dataHeading bdr1B" width="10%"><?php echo $label_rank; ?></th>
+        <th class="dataHeading bdr1B" width="10%"><?php echo $label_bjcp_rank; ?></th>
         <th class="dataHeading bdr1B"><?php echo $label_location; ?></th>
         <th class="dataHeading bdr1B" width="5%"><?php echo $label_table; ?></th>
         <th class="dataHeading bdr1B" width="20%"><?php echo $label_name; ?></th>

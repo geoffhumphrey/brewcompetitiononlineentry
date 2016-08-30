@@ -678,20 +678,24 @@
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">Entry Numbers (Mini-BOS)</a></li>
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">Judging Numbers (Mini-BOS)</a></li>
 								</ul>
 								<div class="dropdown bcoem-admin-dashboard-select">
 									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
 										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","output/print.output.php","thickbox"); ?>
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
 									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?></li>
+										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"output/print.output.php","thickbox"); ?>
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
@@ -703,7 +707,8 @@
 											for ($round=1; $round <= $row_judging['judgingRounds']; $round++) { 
 										 $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
-										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></small>
+										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                                        <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
 										} 
 										while ($row_judging = mysqli_fetch_assoc($judging)); 
@@ -720,6 +725,7 @@
 												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
 										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
+                                        <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
 										} while ($row_judging1 = mysqli_fetch_assoc($judging1)); 
 										?>
@@ -821,17 +827,22 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-unstyled">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets">All Style Types</a></li>
+									
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
 								</ul>
-								<ul class="list-inline">
+								
 									<?php do { 
 										if ($row_style_type['styleTypeBOS'] == "Y") { 
 										?>
-										<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet"><?php echo $row_style_type['styleTypeName']; ?></a></li>
+                                        <ul class="list-inline">
+										<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Entry Numbers</a></li>
+                                        <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Judging Numbers</a></li>
+                                        </ul>
 										<?php } 
 										} while ($row_style_type = mysqli_fetch_assoc($style_type)); 
 									?>
-								</ul>
+								
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
@@ -840,8 +851,8 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with judging numbers only">Judging Numbers</a></li>
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with entry numbers only">Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with judging numbers only">Judging Numbers</a></li>
 								</ul>
 							</div>
 						</div><!-- ./row -->

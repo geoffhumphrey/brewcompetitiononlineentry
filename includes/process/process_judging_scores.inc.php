@@ -35,9 +35,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				}
 				
 				
-				if ((!empty($_POST['scoreEntry'.$score_id])) || (!empty($_POST['scorePlace'.$score_id]))) {
+				if ((!empty($_POST['scoreEntry'.$score_id])) || (!empty($_POST['scoreMiniBOS'.$score_id])) || (!empty($_POST['scorePlace'.$score_id]))) {
 					
-					if (isset($_POST['scoreMiniBOS'.$score_id])) $score_mini_bos = $_POST['scoreMiniBOS'.$score_id];
+					if (!empty($_POST['scoreMiniBOS'.$score_id])) $score_mini_bos = $_POST['scoreMiniBOS'.$score_id];
 					else $score_mini_bos = 0;
 					
 					$insertSQL = sprintf("INSERT INTO $judging_scores_db_table (

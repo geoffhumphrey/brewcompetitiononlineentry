@@ -21,7 +21,7 @@ $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
 		<div class="page-header">
-        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
+        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); if ($filter == "mini_bos") echo sprintf(" - %s",$label_mini_bos); ?></h1>
         </div>
 	<?php if ($row_tables['tableLocation'] != "") { ?>
     <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h2>
@@ -41,7 +41,9 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$row_round_check = mysqli_fetch_assoc($round_check);
 	
 	?>
+    <?php if ($filter != "mini_bos") { ?>
     <h4><?php echo sprintf("%s %s, %s %s, %s %s",$label_table,$row_tables['tableNumber'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
+    <?php } ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -113,7 +115,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		?>
         </td>
         <td><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><p class="box_small">&nbsp;</p></td>
+         <td><p class="box_small"><?php if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) echo "<span class=\"fa fa-check\"></span>"; else echo "&nbsp;"; ?></p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
@@ -135,7 +137,7 @@ $flights = number_of_flights($row_tables['id']);
 if ($flights > 0) $flights = $flights; else $flights = "0";
 ?>
 		<div class="page-header">
-        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
+        	<h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); if ($filter == "mini_bos") echo sprintf(" - %s",$label_mini_bos); ?></h1>
         </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
     <p class="lead"><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h2>
@@ -155,7 +157,9 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$row_round_check = mysqli_fetch_assoc($round_check);
 	
 	?>
-    <h4><?php echo "Table ".$row_tables['tableNumber'].", Flight ".$i.", Round ".$row_round_check['flightRound']; ?></h4>
+    <?php if ($filter != "mini_bos") { ?>
+    <h4><?php echo sprintf("%s %s, %s %s, %s %s",$label_table,$row_tables['tableNumber'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
+    <?php } ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable<?php echo $random; ?>').dataTable( {
@@ -200,6 +204,8 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
+			
+			if (!empty($row_entries['brewCategorySort'])) {
 			$flight_round = check_flight_number($row_entries['id'],$i);
 			if ($flight_round != "") {
 	?>
@@ -227,14 +233,16 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 		?>
         </td>
         <td><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><p class="box_small">&nbsp;</p></td>
+        <td><p class="box_small"><?php if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) echo "<span class=\"fa fa-check\"></span>"; else echo "&nbsp;"; ?></p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php 
-				}	
+    <?php 		
+				}
+			}	
 		} while ($row_entries = mysqli_fetch_assoc($entries));
-	} // end foreach ?>
+	} // end foreach 
+	?>
     </tbody>
     </table>
 	<?php if ($flights > 0) { ?><div style="page-break-after:always;"></div><?php } ?>
@@ -260,13 +268,14 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 ?>
 	
     <div class="page-header">
-        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
+        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); if ($filter == "mini_bos") echo sprintf(" - %s",$label_mini_bos); ?></h1>
     </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
+    <?php if ($filter != "mini_bos") { ?>
     <h3><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") if ($round != "default") echo sprintf("<br>%s %s",$label_round,$round); ?></h3>
     <p class="lead"><?php echo sprintf("%s: %s",$label_entries,$entry_count); ?></p>
     <p><?php echo sprintf("%s: %s",$label_please_note,$output_text_019); ?></p>
-    <?php } ?>
+    <?php } } ?>
     <?php if ($entry_count > 0) { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -311,6 +320,8 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
+			
+			if (!empty($row_entries['brewCategorySort'])) {
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
@@ -336,11 +347,12 @@ if (($row_table_round['count'] >= 1) || ($round == "default")) {
 		?>
         </td>
         <td><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><p class="box_small">&nbsp;</p></td>
+        <td><p class="box_small"><?php if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) echo "<span class=\"fa fa-check\"></span>"; else echo "&nbsp;"; ?></p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysqli_fetch_assoc($entries));
+    <?php }
+	} while ($row_entries = mysqli_fetch_assoc($entries));
 	
 	} // end foreach ?>
     </tbody>
@@ -354,12 +366,13 @@ if ((($go == "judging_tables") || ($go == "judging_locations")) && ($id != "defa
 $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 ?>
     <div class="page-header">
-        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); ?></h1>
+        <h1><?php echo sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']); if ($filter == "mini_bos") echo sprintf(" - %s",$label_mini_bos); ?></h1>
     </div>
     <?php if ($row_tables['tableLocation'] != "") { ?>
+    <?php if ($filter != "mini_bos") { ?>
     <h3><?php echo table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); if ($round != "default") echo "<br>Round ".$round; ?></h3>
     <p class="lead"><?php echo sprintf("%s: %s",$label_entries,$entry_count); ?></p>
-    <?php } ?>
+    <?php } } ?>
     <?php if ($entry_count > 0) { ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -405,6 +418,8 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 		$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 		do {
+			
+			if (!empty($row_entries['brewCategorySort'])) {
 	?>
     <tr>
     	<td><p class="box">&nbsp;</p></td>
@@ -430,13 +445,13 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 		?>
         </td>
         <td><?php echo $row_entries['brewBoxNum']; ?></td>
-        <td><p class="box_small">&nbsp;</p></td>
+        <td><p class="box_small"><?php if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) echo "<span class=\"fa fa-check\"></span>"; else echo "&nbsp;"; ?></p></td>
         <td><p class="box">&nbsp;</p></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysqli_fetch_assoc($entries));
-	
-	
+    <?php 
+			}
+		} while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>
     </tbody>
     </table>
@@ -507,6 +522,9 @@ if ($style_type_info[0] == "Y") {
 	include(DB.'output_pullsheets_bos_entries.db.php');
 	
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
+	
+	
+	if (!empty($row_entries_1['brewCategorySort'])) {
 	//echo $query_entries_1."<br>";
 	//echo $style."<br><br>";
 	
@@ -538,7 +556,9 @@ if ($style_type_info[0] == "Y") {
         <td><?php echo $row_entries_1['brewBoxNum']; ?></td>
         <td><p class="box">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
+    <?php
+		}
+	 } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
 <?php } else echo sprintf("<p class=\"lead\">%s</p>",$output_text_020); 

@@ -233,7 +233,8 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$totalRows_tables = mysqli_num_rows($tables);
 		
 		do {
-			$table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
+			if ($filter == "mini_bos") $table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
+			else $table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
 		} while ($row_tables = mysqli_fetch_assoc($tables));
 		
 	}
