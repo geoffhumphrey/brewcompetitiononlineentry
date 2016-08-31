@@ -111,7 +111,7 @@ $label_dry = "Dry";
 $label_med_dry = "Medium Dry";
 $label_med_sweet = "Medium Sweet";
 $label_sweet = "Sweet";
-$label_brewer_specfics = "Brewer&rsquo;s Specifics";
+$label_brewer_specifics = "Brewer's Specifics";
 $label_general = "General";
 $label_amount_brewed = "Amount Brewed";
 $label_specific_gravity = "Specific Gravity";
@@ -320,7 +320,6 @@ $label_entry_instructions = "Entry Instructions";
 $label_commercial_examples = "Commercial Examples";
 
 // Admin
-
 $label_admin = "Administration";
 $label_admin_short = "Admin";
 $label_admin_dashboard = "Dashboard";

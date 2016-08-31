@@ -528,7 +528,7 @@ $(document).ready(function()
     <?php if ($_SESSION['prefsSpecific'] == 0) { ?>
     <!-- Enter Brewer's Specifics -->
     <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-        <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_brewers_specifics; ?></label>
+        <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_brewer_specifics; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <textarea rows="6" class="form-control" name="brewComments" id="brewComments" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="<?php echo $brew_text_012; ?>"><?php if ($action == "edit") echo $row_log['brewComments']; ?></textarea>
