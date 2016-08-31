@@ -24,4 +24,8 @@ There are times when the online setup encounters issues that prevent the install
 ## Issue Reporting and Bug Fixes
 Many bugs and issues reported to this repository are corrected before an official release is available. Before reporting a bug, be sure to check the [Issues] (https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues) list to see if it has been addressed already. If it has, chances are the latest commit package contains code to fix the issue. Keep an eye out for the [*fixed in latest master commit*] (https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues?q=is%3Aissue+is%3Aopen+label%3A%22fixed+in+latest+master+commit%22) tag. Needless to say, however, the master and other branch commits housed here in the repository are **NOT FOR PRODUCTION**! Bugs may be present. 
 
+## Disable CDN and Load Libraries Locally
+Refer to [these instructions] (http://brewcompetition.com/local-load) to if you do wish to use local libraries in favor of CDN.
+
+## Wanna Help?
 Fork and help out with the development!
