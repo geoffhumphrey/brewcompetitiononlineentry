@@ -525,8 +525,7 @@ $(document).ready(function()
             </div>
         </div><!-- ./Form Group -->
     </div>
-    
-   
+    <?php if ($_SESSION['prefsSpecific'] == 0) { ?>
     <!-- Enter Brewer's Specifics -->
     <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
         <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_brewers_specifics; ?></label>
@@ -540,6 +539,7 @@ $(document).ready(function()
             </span>
         </div>
     </div><!-- ./Form Group -->
+    <?php } ?>
 <?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>
 <div class="bcoem-form-accordion">
     <div class="panel-group" id="accordion">

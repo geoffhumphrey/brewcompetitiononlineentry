@@ -122,6 +122,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
 	$_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
 	$_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
+	$_SESSION['prefsSpecific'] = $row_prefs['prefsSpecific'];
 
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");

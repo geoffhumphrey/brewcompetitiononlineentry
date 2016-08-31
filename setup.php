@@ -153,6 +153,10 @@ else {
 				
 				if (table_exists($prefix."system")) {
 					
+					$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
+					$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
+					$row_system = mysqli_fetch_assoc($system);
+					
 					if (($row_system['setup'] == 0) && ($section != "step0")) {
 						if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
 						if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');

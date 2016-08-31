@@ -70,7 +70,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
         <span id="helpBlock" class="help-block">Date and time to display winners on the home page of the site.</span>
     </div>
 </div>
@@ -393,10 +393,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSpecific" value="Y" id="prefsSpecific_0"  <?php if ($_SESSION['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSpecific" value="1" id="prefsSpecific_0"  <?php if ($_SESSION['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSpecific" value="N" id="prefsSpecific_1" <?php if ($_SESSION['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsSpecific" value="0" id="prefsSpecific_1" <?php if ($_SESSION['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">

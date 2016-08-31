@@ -647,7 +647,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php echo $current_date; ?>" required>
+			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date; ?>" required>
 			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>

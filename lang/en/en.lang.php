@@ -87,7 +87,7 @@ $label_brewer = "Brewer";
 $label_cobrewer = "Co-Brewer";
 $label_entry_name = "Entry Name";
 $label_required_info = "Required Info";
-$label_character_limit = $_SESSION['prefsSpecialCharLimit']." character limit - use keywords and abbreviations if space is limited. Characters remaining: "; 
+if (strpos($section, "step") === FALSE) $label_character_limit = $_SESSION['prefsSpecialCharLimit']." character limit - use keywords and abbreviations if space is limited. Characters remaining: "; 
 $label_carbonation = "Carbonation";
 $label_sweetness = "Sweetness";
 $label_strength = "Strength";
@@ -365,7 +365,7 @@ $label_entry_drop_off = "Entry Drop-Off";
 
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
-if (strpos($section, 'step') === FALSE) {
+if (strpos($section, "step") === FALSE) {
 	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 }
 $header_text_000 = "Setup was successful.";
@@ -399,7 +399,7 @@ $header_text_027 = "Please make sure to print the receipt and attach it to one o
 $header_text_028 = "Your online payment has been cancelled.";
 $header_text_029 = "The code has been verified.";
 $header_text_030 = "Sorry, the code you entered was incorrect.";
-$header_text_031 = "You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.";
+if (strpos($section, "step") === FALSE) $header_text_031 = "You must log in and have admin privileges to access the ".$_SESSION['contestName']." administration functions.";
 $header_text_032 = "Sorry, there was a problem with your last login attempt.";
 $header_text_033 = "Please make sure your email address and password are correct.";
 $header_text_034 = "Your password has been randomly generated and reset to ".$go;
@@ -475,10 +475,11 @@ $header_text_104 = "You do not have sufficient access priveliges to view this pa
 
 
 // -------------------- Alerts --------------------
-
-if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
-elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
-else $j_s_text = "Judge or steward"; // missing punctuation intentional
+if (strpos($section, "step") === FALSE) {
+	if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
+	elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
+	else $j_s_text = "Judge or steward"; // missing punctuation intentional
+}
 $alert_text_000 = "Grant users top-level admin and admin access with caution.";
 $alert_text_001 = "Data clean-up completed.";
 $alert_text_002 = "The &#36;setup_free_access variable in config.php is currently set to TRUE.";
@@ -504,34 +505,34 @@ $alert_text_028 = "Entry registration has closed.";
 $alert_text_029 = "Adding entries is not available.";
 $alert_text_030 = "The competition entry limit has been reached.";
 $alert_text_031 = "Your personal entry limit has been reached.";
-$alert_text_032 = "You will be able to add entries on or after ".$entry_open.".";
-$alert_text_033 = "Account registration will open ".$reg_open.".";
+if (strpos($section, "step") === FALSE) $alert_text_032 = "You will be able to add entries on or after ".$entry_open.".";
+if (strpos($section, "step") === FALSE) $alert_text_033 = "Account registration will open ".$reg_open.".";
 $alert_text_034 = "Please return then to register your account.";
-$alert_text_036 = "Entry registration will open ".$entry_open.".";
+if (strpos($section, "step") === FALSE) $alert_text_036 = "Entry registration will open ".$entry_open.".";
 $alert_text_037 = "Please return then to add your entries to the system.";
-$alert_text_039 = "Judge and steward registration will open ".$judge_open.".";
+if (strpos($section, "step") === FALSE) $alert_text_039 = "Judge and steward registration will open ".$judge_open.".";
 $alert_text_040 = "Please return then to register as a judge or steward.";
 $alert_text_042 = "Entry registration is open!";
-$alert_text_043 = "A total of ".$total_entries." entries have been added to the system as of ".$current_time.".";
+if (strpos($section, "step") === FALSE) $alert_text_043 = "A total of ".$total_entries." entries have been added to the system as of ".$current_time.".";
 $alert_text_044 = "Registration will close ".$entry_closed.".";
 $alert_text_046 = "The entry limit nearly reached!";
-$alert_text_047 = $total_entries." of ".$row_limits['prefsEntryLimit']." maximum entries have been added into the system as of ".$current_time.".";
+if (strpos($section, "step") === FALSE) $alert_text_047 = $total_entries." of ".$row_limits['prefsEntryLimit']." maximum entries have been added into the system as of ".$current_time.".";
 $alert_text_049 = "The entry limit has been reached.";
-$alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted.";
+if (strpos($section, "step") === FALSE) $alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted.";
 $alert_text_052 = "The paid entry limit has been reached.";
-$alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted.";
+if (strpos($section, "step") === FALSE) $alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted.";
 $alert_text_055 = "Account registration is closed.";
 $alert_text_056 = "If you already registered an account,";
 $alert_text_057 = "log in here"; // lower-case and missing punctuation intentional
 $alert_text_059 = "Entry registration is closed.";
-$alert_text_060 = "A total of ".$total_entries." entries were added into the system.";
+if (strpos($section, "step") === FALSE) $alert_text_060 = "A total of ".$total_entries." entries were added into the system.";
 $alert_text_062 = "Entry drop-off is closed.";
 $alert_text_063 = "Entry bottles are no longer accepted at drop-off locations.";
 $alert_text_065 = "Entry shipping is closed.";
 $alert_text_066 = "Entry bottles are no longer accepted at the shipping location.";
-$alert_text_068 = $j_s_text." account registration open.";
+if (strpos($section, "step") === FALSE) $alert_text_068 = $j_s_text." account registration open.";
 $alert_text_069 = "Register here"; // missing punctuation intentional
-$alert_text_070 = $j_s_text." registration will close ".$judge_closed.".";
+if (strpos($section, "step") === FALSE) $alert_text_070 = $j_s_text." registration will close ".$judge_closed.".";
 $alert_text_072 = "The limit of registered judges has been reached.";
 $alert_text_073 = "No further judge registrations will be accepted.";
 $alert_text_074 = "Registering as a steward is still available.";
@@ -560,7 +561,7 @@ $beerxml_text_003 = "The file size is over 2MB.  Please adjust the size and try 
 $beerxml_text_004 = "Invalid file specified.";
 $beerxml_text_005 = "However, it has not been confirmed. To confirm your entry, access your entries list for further instructions. Or, you can add upload another BeerXML entry below.";
 $beerxml_text_006 = "Your server's version of PHP does not support the BeerXML import feature.";
-$beerxml_text_007 = "PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version.".";
+if (strpos($section, "step") === FALSE) $beerxml_text_007 = "PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version.".";
 $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
 $beerxml_text_009 = "Choose BeerXML File";
 $beerxml_text_010 = "No file chosen...";
@@ -608,7 +609,7 @@ if ($section == "brew") {
 if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
 	$brewer_text_000 = "Please enter only <em>one</em> person's name. You will be able to identify a co-brewer when adding your entries.";
 	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
-	$brewer_text_002 = "You can also <a href=\"".$edit_user_password_link."\">change your password now</a> if you wish.";
+	if (strpos($section, "step") === FALSE) $brewer_text_002 = "You can also <a href=\"".$edit_user_password_link."\">change your password now</a> if you wish.";
 	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
 	$brewer_text_004 = "Provide any information that you believe the competition organizer should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
 	$brewer_text_005 = "I'm Shipping My Entries";
@@ -789,7 +790,7 @@ if ($section == "list") {
 // -------------------- Login --------------------
 
 // -------------------- Past Winners --------------------
-if ($seciton == "past_winners") {
+if ($section == "past_winners") {
 	$past_winners_text_000 = "View past winners:";
 }
 

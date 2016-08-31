@@ -24,7 +24,7 @@ $alert_text_058 = sprintf("<strong>%s</strong> %s <a class=\"alert-link\ href=\"
 $alert_text_061 = sprintf("<strong>%s</strong> %s",$alert_text_059,$alert_text_060);
 $alert_text_064 = sprintf("<strong>%s</strong> %s",$alert_text_062,$alert_text_063);
 $alert_text_067 = sprintf("<strong>%s</strong> %s",$alert_text_065,$alert_text_066);
-$alert_text_071 = sprintf("<strong>%s</strong> <a class=\"alert-link\" href=\"".build_public_url("register","judge","default","default",$sef,$base_url)."\">%s</a>. %s",$alert_text_068,$alert_text_069);
+$alert_text_071 = sprintf("<strong>%s</strong> <a class=\"alert-link\" href=\"".build_public_url("register","judge","default","default",$sef,$base_url)."\">%s</a>. %s",$alert_text_068,$alert_text_069,$alert_text_070);
 $alert_text_075 = sprintf("<strong>%s</strong> %s ",$alert_text_072,$alert_text_073);
 if (!$steward_limit) $alert_text_075 .= $alert_text_074;
 $alert_text_079 = sprintf("<strong>%s</strong> %s ",$alert_text_076,$alert_text_077);

@@ -40,3 +40,5 @@ libraries/*
 sso/*
 
 config_for_test.php
+
+.DS_Store
