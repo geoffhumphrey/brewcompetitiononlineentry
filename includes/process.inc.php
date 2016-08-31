@@ -25,44 +25,43 @@ include(LIB.'common.lib.php');
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
-date_default_timezone_set("America/Denver");
+// Set timezone as Europe/London just in case
+$timezone_raw = "0";
 
-if ($section != "setup")  {
-	
-	// Set timezone globals for the site
-	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
-	date_default_timezone_set($timezone_prefs);
-	$tz = date_default_timezone_get();
-	
-	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
-	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
-	
-}
-
+// Check if setup is running, if so, check whether prefs have been established
+// If so, get time zone setup by admin
 if ($section == "setup") {
 	
-	$timezone_raw = "0";
-	$timezone_prefs = get_timezone("0");
+	include (LIB.'update.lib.php');
 	
-	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
-	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
-	$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
-	$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
-	
-	if ($totalRows_prefs_tz > 0) {
-		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
-		$timezone_prefs = get_timezone($row_prefs_tz['prefsTimeZone']);
+	if (check_setup($prefix."preferences",$database)) {
+		
+		$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
+		$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
+		$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
+		$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+		
+		if ($totalRows_prefs_tz > 0) {
+			$timezone_raw = $row_prefs_tz['prefsTimeZone'];
+		}
+		
 	}
-
-	date_default_timezone_set($timezone_prefs);
-	$tz = date_default_timezone_get();
-	
-	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
-	else $timezone_offset = number_format($timezone_raw,0);
 	
 }
+
+// If running normally, get time zone from cookie
+// Set timezone globals for the site
+else  $timezone_raw = $_SESSION['prefsTimeZone'];
+
+// Establish time zone for all date-related functions
+$timezone_prefs = get_timezone($timezone_raw);
+date_default_timezone_set($timezone_prefs);
+$tz = date_default_timezone_get();
+
+// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+$bool = date("I");
+if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
+else $timezone_offset = number_format($timezone_raw,0);
 
 if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) { 
 
@@ -94,17 +93,7 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	$users_db_table = $prefix."users";
 	
 	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
-		require(DB.'common.db.php');
-		
-		// Set timezone globals for the site
-		$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);
-		date_default_timezone_set($timezone_prefs);
-		$tz = date_default_timezone_get();
-		
-		// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-		$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0); 
-		else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
-		
+		require(DB.'common.db.php');		
 	}
 	
 	

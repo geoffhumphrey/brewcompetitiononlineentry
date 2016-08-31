@@ -16,7 +16,35 @@ if (HOSTED) check_hosted_gh();
 
 // Define vars
 $section = "update";
-date_default_timezone_set('America/Denver');
+
+// Set timezone globals for the site
+$timezone_raw = "0";
+
+// Check whether prefs have been established
+// If so, get time zone set by admin
+if (check_setup($prefix."preferences",$database)) {
+		
+	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
+	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
+	$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
+	$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+	
+	if ($totalRows_prefs_tz > 0) {
+		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
+	}
+
+}
+
+// Establish time zone for all date-related functions
+$timezone_prefs = get_timezone($timezone_raw);
+date_default_timezone_set($timezone_prefs);
+$tz = date_default_timezone_get();
+
+// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+$bool = date("I");
+if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
+else $timezone_offset = number_format($timezone_raw,0);
+
 $sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
 $filename = $_SERVER['DOCUMENT_ROOT'].$sub_folder."/includes/version.inc.php";
 $update_alerts = "";

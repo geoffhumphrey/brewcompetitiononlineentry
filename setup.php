@@ -4,21 +4,16 @@ require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LANG.'language.lang.php');
 require(LIB.'common.lib.php');
+require(LIB.'update.lib.php');
 require(DB.'setup.db.php');
 require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'headers.inc.php');
 if (($section == "step2") || ($section == "step3")) require(INCLUDES.'constants.inc.php');
 
 // Set default timezone for setup steps before configuration of installation default timezone
-$date_default_section = array("step0","step1","step2","step3");
-if (in_array($section,$date_default_section)) {
-	date_default_timezone_set('America/Denver');
-}
+$timezone_raw = "0";
 
-if (!in_array($section,$date_default_section)) {
-	
-	$timezone_raw = "0";
-	$timezone_prefs = get_timezone("0");
+if (check_setup($prefix."preferences",$database)) {	
 	
 	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
 	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
@@ -27,21 +22,21 @@ if (!in_array($section,$date_default_section)) {
 	
 	if ($totalRows_prefs_tz > 0) {
 		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
-		$timezone_prefs = get_timezone($row_prefs_tz['prefsTimeZone']);
 	}
-
-	date_default_timezone_set($timezone_prefs);
-	$tz = date_default_timezone_get();
-	
-	// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
-	$bool = date("I"); if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
-	else $timezone_offset = number_format($timezone_raw,0);
 	
 }
 
+$timezone_prefs = get_timezone($timezone_raw);
+date_default_timezone_set($timezone_prefs);
+$tz = date_default_timezone_get();
+
+// Check for Daylight Savings Time (DST) - if true, add one hour to the offset
+$bool = date("I");
+if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
+else $timezone_offset = number_format($timezone_raw,0);
+
 $setup_alerts = "";
 $setup_body = "";
-
 
 if ($setup_free_access == FALSE) {
 	
