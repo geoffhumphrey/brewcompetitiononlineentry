@@ -95,6 +95,111 @@ $(document).ready(function(){
 	</div>
 </div><!-- ./Form Group -->
 
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsShowBestBrewer" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Display? Up to which Position?</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsShowBestBrewer" id="prefsShowBestBrewer" data-size="10" data-width="auto">
+		<?php for ($i=-1; $i <= 50; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == -1) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="prefsBestBrewerTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Title</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<!-- Input Here -->
+        	<input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $_SESSION['prefsBestBrewerTitle']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g. Ninkasi Award).</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
+		<?php for ($i=0; $i <= 25; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Enter the number of points awarded for each First Place that an entrant gets.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
+		<?php for ($i=0; $i <= 25; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Enter the number of points awarded for each Second Place that an entrant gets.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
+		<?php for ($i=0; $i <= 25; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Enter the number of points awarded for each Third Place that an entrant gets.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
+		<?php for ($i=0; $i <= 25; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Enter the number of points awarded for each Fourth Place that an entrant gets.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
+		<?php for ($i=0; $i <= 25; $i++) { ?>
+    	<option value="<?php echo $i; ?>" <?php if ($_SESSION['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+		<?php } ?>
+	</select>
+	<span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant obtains.</span>
+	</div>
+</div><!-- ./Form Group -->
+
+
+<?php for ($i=1; $i<=6; $i++) { ?>
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+	<label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>
+	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
+	<!-- Input Here -->
+	<select class="selectpicker" name="<?php echo 'prefsTieBreakRule'.$i;?>" id="<?php echo 'prefsTieBreakRule'.$i;?>" data-width="auto">
+		<?php foreach ($tie_break_rules as $rule) { 
+			$rule_info = explode("|",$rule);
+		?>
+    	<option value="<?php echo $rule_info['0']; ?>" <?php if ($_SESSION['prefsTieBreakRule'.$i] ==  $rule_info['0']) echo "SELECTED"; elseif (($rule_info['0'] == "") && ($section == "step3")) echo " SELECTED"; ?> /><?php echo  $rule_info['1']; ?></option>
+    	<?php } ?>
+	</select>
+	</div>
+</div><!-- ./Form Group -->
+<?php } ?>
+
+
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
