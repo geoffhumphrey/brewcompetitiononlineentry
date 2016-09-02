@@ -67,6 +67,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsEmailRegConfirm,
 		prefsSpecific,
 		
+		prefsDropOff,
+		prefsShipping,
 		id
 		
 		) VALUES (
@@ -79,7 +81,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s)",
+		%s, %s, %s)",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
 							   GetSQLValueString($_POST['prefsWeight1'], "text"),
 							   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -132,6 +134,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   GetSQLValueString($_POST['prefsSpecific'], "int"),
+							   GetSQLValueString($_POST['prefsDropOff'], "int"),
+							   GetSQLValueString($_POST['prefsShipping'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -199,7 +203,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		prefsEntryLimitPaid=%s,
 		prefsEmailRegConfirm=%s,
 		prefsSponsorLogos=%s,
-		prefsSpecific=%s
+		prefsSpecific=%s,
+		
+		prefsDropOff=%s,
+		prefsShipping=%s
 		
 		WHERE id=%s",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -250,12 +257,13 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
 							   GetSQLValueString($_POST['prefsSpecific'], "int"),
 							   
+							   GetSQLValueString($_POST['prefsDropOff'], "int"),
+							   GetSQLValueString($_POST['prefsShipping'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
 			
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 

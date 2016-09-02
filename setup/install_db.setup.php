@@ -569,7 +569,7 @@ if ($setup_free_access == TRUE) {
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
-		// Drop Off Table
+		// Drop-Off Table
 		// -------------------
 		
 		$sql = "
@@ -589,7 +589,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Drop Off Locations</strong> table was installed successfully.</li>";
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Drop-Off Locations</strong> table was installed successfully.</li>";
 		
 		// ------------------- 
 		// Judging Assignments Table
@@ -846,6 +846,8 @@ if ($setup_free_access == TRUE) {
 			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
 			`prefsLanguage` tinyint(1) DEFAULT NULL,
 			`prefsSpecific` tinyint(1) DEFAULT NULL,
+			`prefsDropOff` tinyint(1) DEFAULT NULL,
+			`prefsShipping` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -1402,7 +1404,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.5.0', '2016-08-31', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.6.0', '2016-09-10', NOW( ),'0');";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

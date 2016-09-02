@@ -60,10 +60,10 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.5.0, check if "prefsLanguage" column is in the prefs table since it was added in the 2.1.5.0 release
+	// For 2.1.6.0, check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
 	// If not, run the update
 	
-	if (!check_update("prefsLanguage", $prefix."preferences")) {
+	if (!check_update("prefsShipping", $prefix."preferences")) {
 		
 		$update_required = TRUE;
 		$setup_success = FALSE;
@@ -84,7 +84,7 @@ if (check_setup($prefix."system",$database)) {
 		
 		else {
 			
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-08-31");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-09-10");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

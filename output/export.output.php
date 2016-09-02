@@ -370,7 +370,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		} 
 		
 		if ($totalRows_dropoff > 0)  {
-			$output .= "<h3>Drop Off Locations</h3>\n";
+			$output .= "<h3>Drop-Off Locations</h3>\n";
 			do {
 				$output .= "<p><strong>".$row_dropoff['dropLocationName']."</strong><br />".$row_dropoff['dropLocation']."<br />".$row_dropoff['dropLocationPhone']."</p>\n";
 			} while($row_dropoff = mysqli_fetch_assoc($dropoff));

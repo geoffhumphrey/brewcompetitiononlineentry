@@ -223,9 +223,9 @@ if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) 
 
 
 // Shipping Locations
-if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) {
+if (((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) && ($_SESSION['prefsShipping'] == 1)) {
 	$header1_10 .= sprintf("<a name=\"shipping\"></a><h2>%s</h2>",$label_shipping_info);
-	$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$entry_info_text_001,$shipping_open,$shipping_closed);
+	$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
 	$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
 	$page_info10 .= "<p>";
 	$page_info10 .= $_SESSION['contestShippingName'];
@@ -240,19 +240,19 @@ if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2))
     $page_info10 .= sprintf("<p>%s</p>",$entry_info_text_042);
 }
 
-// Drop Off
-if (($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) {
-	if ($totalRows_dropoff == 1) $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Location</h2>";
-	else $header1_11 .= "<a name=\"drop\"></a><h2>Drop Off Locations</h2>";
-	$page_info11 .= sprintf("<p>Entry bottles accepted at our drop-off locations from <strong class=\"text-success\">%s</strong> through <strong class=\"text-success\">%s</strong>.</p>",$dropoff_open,$dropoff_closed);
+// Drop-Off
+if ((($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) && ($_SESSION['prefsDropOff'] == 1)) {
+	if ($totalRows_dropoff == 1) $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_off);
+	else $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_offs);
+	$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 	
 	do {
 		
 		$page_info11 .= "<p>";
-		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Go to the ".$row_dropoff['dropLocationName']." website\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$row_dropoff['dropLocationName']);
+		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 		else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 		$page_info11 .= "<br />";
-		$page_info11 .= "<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
+		$page_info11 .= sprintf("<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$entry_info_text_044);
 		$page_info11 .= "<br />";
 		$page_info11 .= $row_dropoff['dropLocationPhone'];
 		$page_info11 .= "<br />";
@@ -326,7 +326,7 @@ echo $page_info6;
 echo $header1_9;
 echo $page_info9;
 
-// Display Drop Off Locations and Acceptance Dates
+// Display Drop-Off Locations and Acceptance Dates
 echo $header1_11;
 echo $page_info11;
 

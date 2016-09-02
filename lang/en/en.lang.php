@@ -496,7 +496,7 @@ $alert_text_017 = "To retain functionality, the conversion must be performed <em
 $alert_text_019 = "All unconfirmed entries have been deleted from the database.";
 $alert_text_020 = "Unconfirmed entries are highlighted and denoted with a <span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> icon below.";
 $alert_text_021 = "Owners of these entries should be contacted. These entries are not included in fee calculations.";
-$alert_text_023 = "Add a Drop Off Location?";
+$alert_text_023 = "Add a Drop-Off Location?";
 $alert_text_024 = $label_yes;
 $alert_text_025 = $label_no;
 $alert_text_027 = "Entry registration has not opened yet.";
@@ -744,6 +744,9 @@ if ($section == "entry") {
 	$entry_info_text_040 = "Enclose <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically which entry has broken if there is damage during shipment.";
 	$entry_info_text_041 = "Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.";
 	$entry_info_text_042 = "If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs officials at their discretion. It is solely your responsibility to follow all applicable laws and regulations.";
+	$entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
+	$entry_info_text_044 = "Map to";
+	$entry_info_text_045 = "";
 	
 }
 

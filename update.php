@@ -1,6 +1,6 @@
 <?php 
 // -----------------------------------------------------------
-// Version 2.1.5
+// Version 2.1.6
 // -----------------------------------------------------------
 require('paths.php');
 require(INCLUDES.'authentication_nav.inc.php');  
@@ -188,8 +188,8 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						// If current version is 2.1.0.0 or later, only perform the current (2.1.5) update
-						if (($version > "2100") && ($version < "2151"))  {
+						// If current version is 2.1.0.0 or later, only perform the current (2.1.6) update
+						if (($version > "2100") && ($version < "2160"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

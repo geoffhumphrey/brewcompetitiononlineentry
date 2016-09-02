@@ -1,6 +1,6 @@
 <?php 
 // -----------------------------------------------------------
-// If version is below 2.1.5.0, the following will run.
+// If version is below 2.1.6.0, the following will run.
 // 2.1.0.0 was the last version with updates.
 // -----------------------------------------------------------
 
@@ -13,7 +13,7 @@ $output .= "<ul>";
 // Create Needed Tables
 // -----------------------------------------------------------
 
-// Not needed for 2.1.5.0
+// Not needed for 2.1.6.0
 // include ('current_create_tables.php'); 
 
 // -----------------------------------------------------------

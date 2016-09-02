@@ -463,7 +463,7 @@ $(document).ready(function()
                 <div class="input-group">
                     <!-- Input Here -->
                     <label class="radio-inline">
-                        <input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> <?php echo $label_hydromel; ?>)
+                        <input type="radio" name="brewMead3" value="Hydromel" id="brewMead3_0"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Hydromel")) echo "CHECKED";  ?> /> <?php echo $label_hydromel; ?>
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="brewMead3" value="Standard" id="brewMead3_1"  <?php if (($action == "edit") && ($row_log['brewMead3'] == "Standard")) echo "CHECKED";  ?> /> <?php echo $label_standard; ?>

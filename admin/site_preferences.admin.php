@@ -275,6 +275,38 @@ $(document).ready(function(){
 <input type="hidden" name="prefsUseMods" value="N" />
 <?php } ?>
 
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-off Location Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if ($_SESSION['prefsDropOff'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enabled
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if ($_SESSION['prefsDropOff'] == "0") echo "CHECKED";?>/> Disabled
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Shipping Location Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if ($_SESSION['prefsShipping'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enabled
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if ($_SESSION['prefsShipping'] == "0") echo "CHECKED"; ?>/> Disabled
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
+    </div>
+</div><!-- ./Form Group -->
+
 <h3>Entries</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
@@ -386,7 +418,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -410,7 +441,6 @@ $(document).ready(function(){
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
 <!-- Modal -->
 <div class="modal fade" id="prefsSpecificModal" tabindex="-1" role="dialog" aria-labelledby="prefsSpecificModalLabel">
     <div class="modal-dialog" role="document">
@@ -429,7 +459,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Special Ingredients</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
