@@ -7,6 +7,9 @@
  
 $fields = 15;
 $entry_list = "";
+$flag_jnum = "";
+$flag_enum = "";
+$jnum_info = "";
 
 if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
@@ -26,7 +29,8 @@ function moveOnCheck(field,nextFieldID){
 }
 document.form1.first.focus();
 var p = false;
-
+</script>
+<script type="text/javascript">
 $(function() {
  
     $("form").bind("keypress", function(e) {
@@ -36,21 +40,31 @@ $(function() {
 });
 </script>
 <p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
-<?php if ($entry_list != "") { ?>
-<div class="well"><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".rtrim($entry_list,", ")." have been checked in with the assigned judging numbers."; ?></div>
+<?php 
+if (!empty($entry_list)) { 
+$entry_list = rtrim($entry_list,", ");
+$entry_list = ltrim($entry_list, ", ");
+?>
+<div class="well">
+	<p><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".$entry_list." have been checked in with the assigned judging numbers."; ?></p>
+</div>
 <?php } 
 if (!empty($flag_jnum)) { 
-// Build list of already used numbers and the entry number that it was associated with at scan
-$jnum_info = "";
-foreach ($flag_jnum as $num) {
-	if ($num != "") {
-	$num = explode("*",$num);
-	if ((NHC) && ($prefix == "final_")) $jnum_info .= "- ".$num[0]." (attempted to assign to entry ".number_pad($num[1],6).")<br>";
-	else $jnum_info .= "- ".$num[0]." (attempted to assign to entry ".number_pad($num[1],4).")<br>";
+	// Build list of already used numbers and the entry number that it was associated with at scan
+	foreach ($flag_jnum as $num) {
+		if (!empty($num)) {
+		$num = explode("*",$num);
+		if ((NHC) && ($prefix == "final_")) $jnum_info .= "<li>".$num[0]."  - attempted to assign to entry ".number_pad($num[1],6)."</li>";
+		else $jnum_info .= "<li>".$num[0]." - attempted to assign to entry ".number_pad($num[1],4)."</li>";
+		}
 	}
-}
 ?>
-<div class="well"><span class="fa fa-info-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.<br /><?php echo rtrim($jnum_info,"<br>"); ?></div>
+<div class="well">
+	<p><span class="fa fa-info-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.</p>
+	<ul class="small">
+	<?php echo $jnum_info; ?>
+    </ul>
+</div>
 <?php }  
 if (!empty($flag_enum)) { 
 // Build list of already used numbers and the entry number that it was associated with at scan
@@ -63,7 +77,11 @@ foreach ($flag_enum as $num) {
 	}
 }
 ?>
-<div class="well"><span class="fa fa-info-circle"></span> These entries already have 6 digit judging numbers assigned to them - the current 6 digit judging number has been kept for each of the following: <ul style="font-size: .9em; font-weight:normal; "><?php echo $enum_info; ?></ul>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</div>
+<div class="well">
+    <p><span class="fa fa-info-circle"></span> These entries already have 6 digit judging numbers assigned to them - the current 6 digit judging number has been kept for each of the following:</p>
+    <ul class="small"><?php echo $enum_info; ?></ul>
+    <p>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</p>
+</div>
 <?php } ?>
 <div class="bcoem-admin-element">
     <p>Use the form below to check in entries and assign their judging number in the system using a barcode reader/scanner.</p>
@@ -99,9 +117,7 @@ foreach ($flag_enum as $num) {
     </div>
 </div><!-- ./modal -->
 </div>
-
-<form method="post" action="index.php?section=admin&amp;go=checkin&amp;action=add" id="form1">
-
+<form method="post" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;action=add" id="form1" onsubmit = "return(p)">
 <div class="form-inline">
 	<?php for ($i=1; $i <= $fields; $i++) { 
 	
@@ -131,6 +147,3 @@ foreach ($flag_enum as $num) {
 </div>
 <p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
- 
- 
- 

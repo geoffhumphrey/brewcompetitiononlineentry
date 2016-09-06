@@ -1,6 +1,5 @@
 <?php
 	
-$entry_list = "";
 $entries_updated[] = "";
 
 foreach ($_POST['id'] as $id) {
@@ -14,13 +13,15 @@ foreach ($_POST['id'] as $id) {
 		$jnum = mysqli_query($connection,$query_jnum) or die (mysqli_error($connection));
 		$row_jnum = mysqli_fetch_assoc($jnum);
 		
+		// Check to see if the entry number exists
 		$query_enum = sprintf("SELECT brewJudgingNumber,brewPaid FROM %s WHERE id='%s'",$prefix."brewing",$_POST['eid'.$id]);
 		$enum = mysqli_query($connection,$query_enum) or die (mysqli_error($connection));
 		$row_enum = mysqli_fetch_assoc($enum);
+		$totalRows_enum = mysqli_num_rows($enum);
 		
 		if ($row_jnum['count'] > 0) $flag_jnum[] = $judging_number."*".$_POST['eid'.$id];
 		
-		else {
+		if ($totalRows_enum > 0) {
 			
 			if ($prefix == "final_") {
 				if ($_POST['eid'.$id] < 9) $eid = ltrim($_POST['eid'.$id],"00000");
@@ -50,6 +51,6 @@ foreach ($_POST['id'] as $id) {
 	}
 }
 	
-	$entry_list .= display_array_content($entries_updated,2);
+$entry_list .= display_array_content($entries_updated,2);
 
 ?>
