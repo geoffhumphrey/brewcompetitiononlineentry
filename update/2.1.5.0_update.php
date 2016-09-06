@@ -4,6 +4,9 @@
 // Version 2.1.5.0
 // -----------------------------------------------------------
 
+$output .= "<h4>Version 2.1.5</h4>";
+$output .= "<ul>";
+
 // -----------------------------------------------------------
 // Alter Table: preferences
 // Future proofing for translations
@@ -334,4 +337,6 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .= "<li>Version updated in system table.</li>";
+
+$output .= "</ul>";
 ?>

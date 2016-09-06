@@ -85,6 +85,7 @@ if (file_exists($filename)) {
 				
 						// Perform updates to the db based upon the current version
 						$version = str_replace(".","",$version);
+						
 						if ($version == "200") $version = "2000";
 						if ($version < "113") {
 							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
@@ -101,6 +102,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -114,6 +116,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -126,6 +129,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -137,6 +141,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -147,6 +152,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -157,6 +163,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -165,6 +172,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -172,6 +180,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'1.3.2.0_update.php');
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
@@ -179,17 +188,24 @@ if (file_exists($filename)) {
 						if (($version >= "1320") && ($version < "2000"))  {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						
 						if (($version >= "2000") && ($version < "2100"))  {
 							include (UPDATE.'2.1.0.0_update.php');
+							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+						
+						if (($version >= "2100") && ($version < "2150"))  {
+							include (UPDATE.'2.1.5.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 						
 						// If current version is 2.1.0.0 or later, only perform the current (2.1.6) update
-						if (($version > "2100") && ($version < "2160"))  {
+						if (($version >= "2150") && ($version < "2160"))  {
 							include (UPDATE.'current_update.php');
 						}
 				

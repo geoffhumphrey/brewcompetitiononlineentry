@@ -53,4 +53,6 @@ if (!check_update("prefsDropOff", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
+$output .=  "<li>Preferences table updated.</li>";
+
 ?>
