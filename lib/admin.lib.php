@@ -1152,18 +1152,24 @@ function not_assigned($method) {
 		}
 		
 		// Return the modal body text
-		$return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";
-		$return .= "<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$method."\">";
-		$return .= "<thead>";
-		$return .= "<tr>";
-		$return .= "<th>Name</th>";
-		$return .= "<th>Rank</th>";
-		$return .= "</tr>";
-		$return .= "</thead>";
-		$return .= "<tbody>";
-		$return .= $assignment;
-		$return .= "</tbody>";
-		$return .= "</table>";
+		
+		
+		if (!empty($assignment)) {
+			$return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";
+			$return .= "<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$method."\">";
+			$return .= "<thead>";
+			$return .= "<tr>";
+			$return .= "<th>Name</th>";
+			$return .= "<th>Rank</th>";
+			$return .= "</tr>";
+			$return .= "</thead>";
+			$return .= "<tbody>";
+			$return .= $assignment;
+			$return .= "</tbody>";
+			$return .= "</table>";
+		}
+		
+		else $return .= "<p>All available ".$human_readable."s have been assigned to tables.</p>";
 	
 	}
 	

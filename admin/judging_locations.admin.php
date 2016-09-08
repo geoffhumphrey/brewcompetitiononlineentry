@@ -510,7 +510,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
           		</div>
                 <div class="modal-body">
                 	<p>Copy and paste the list below into your favorite email program to contact all assigned judges.</p>
-                    <textarea cols="75" rows="5"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
+                    <textarea class="form-control" rows="8"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
                 </div>
                 <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -536,7 +536,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
           		</div>
                 <div class="modal-body">
                 	<p>Copy and paste the list below into your favorite email program to contact all assigned stewards.</p>
-                    <textarea cols="75" rows="5"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
+                    <textarea class="form-control" rows="8"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
                 </div>
                 <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -1,5 +1,4 @@
 <?php 
-
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
@@ -8,7 +7,10 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 
 ?>
 
-<?php if ($view != "sign-in") { ?>
+<?php 
+if ($view != "sign-in") { 
+include (LIB.'admin.lib.php');
+?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -53,7 +55,6 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 		?>
         </h1>
     </div>
-    
     <?php if ($totalRows_assignments > 0) { ?>
     <table class="table table-striped table-bordered" id="sortable">
     <thead>
@@ -90,6 +91,8 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
     <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
+    <h1>Bull Pen</h1>
+    <?php echo not_assigned($filter); ?>    
     <?php } else { echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); } ?>   
 <?php } // end if ($view != "sign-in") 
 else { 
