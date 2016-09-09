@@ -935,6 +935,10 @@ $sidebar_text_018 = "left before you reach the limit of";
 $sidebar_text_019 = "per participant";
 $sidebar_text_020 = "You have reached the limit of";
 $sidebar_text_021 = "in this competition";
+$sidebar_text_022 = "Entry bottles accepted at";
+$sidebar_text_023 = "the shipping location";
+$sidebar_text_024 = "Competition judging dates are yet to be determined. Please check back later.";
+	
 
 // -------------------- Sponsors --------------------
 // NONE

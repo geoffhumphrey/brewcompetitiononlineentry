@@ -39,6 +39,8 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
  
+include(DB.'judging_locations.db.php'); 
+ 
 if ($section != "admin") {
 
 	$competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
@@ -230,57 +232,42 @@ if ($section != "admin") {
 	}
 	
 	
-	$sidebar_text_022 = "Entry bottles accepted at";
-	$sidebar_text_023 = "the shipping location";
-	$sidebar_text_024 = "Competition judging dates are yet to be determined. Please check back later.";
-	$sidebar_text_025 = "";
-	$sidebar_text_026 = "";
-	$sidebar_text_027 = "";
-	$sidebar_text_028 = "";
-	$sidebar_text_029 = "";
-	$sidebar_text_030 = "";
-	$sidebar_text_031 = "";
-	$sidebar_text_032 = "";
-	$sidebar_text_033 = "";
-	$sidebar_text_034 = "";
-	$sidebar_text_035 = "";
-	$sidebar_text_036 = "";
-	$sidebar_text_037 = "";
-	$sidebar_text_038 = "";
-	$sidebar_text_039 = "";
-	$sidebar_text_040 = "";
+	
 	
 	
 	// Drop-off Dates and Location
-	$header1_300 .= sprintf("<div class=\"panel %s\">",$dropoff_panel_display);
-	$header1_300 .= "<div class=\"panel-heading\">";
-	$header1_300 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_drop_off);
-	if ($dropoff_window_open == 1) $header1_300 .= sprintf(" %s",$label_open);
-	else $header1_300 .= sprintf(" %s",$label_closed);
-	$header1_300 .= "</h4>";
-	$header1_300 .= "</div>";
-	$page_info300 .= "<div class=\"panel-body\">";
-	$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#drop",strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
-	$page_info300 .= "</p>";
-	$page_info300 .= "</div>";
-	$page_info300 .= "</div>";
+	if ($_SESSION['prefsDropOff'] == 1) {
+		$header1_300 .= sprintf("<div class=\"panel %s\">",$dropoff_panel_display);
+		$header1_300 .= "<div class=\"panel-heading\">";
+		$header1_300 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_drop_off);
+		if ($dropoff_window_open == 1) $header1_300 .= sprintf(" %s",$label_open);
+		else $header1_300 .= sprintf(" %s",$label_closed);
+		$header1_300 .= "</h4>";
+		$header1_300 .= "</div>";
+		$page_info300 .= "<div class=\"panel-body\">";
+		$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#drop",strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+		$page_info300 .= "</p>";
+		$page_info300 .= "</div>";
+		$page_info300 .= "</div>";
+	}
 	
-	// Drop-off Dates and Location
-	$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
-	$header1_500 .= "<div class=\"panel-heading\">";
-	$header1_500 .= "<h4 class=\"panel-title\">Entry Shipping is";
-	if ($shipping_window_open == 1) $header1_500 .= " Open";
-	else $header1_500 .= " Closed";
-	$header1_500 .= "</h4>";
-	$header1_500 .= "</div>";
-	$page_info500 .= "<div class=\"panel-body\">";
-	$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url)."#shipping", $sidebar_text_023, $sidebar_text_004,$shipping_open_sidebar, $shipping_closed_sidebar);
-	$page_info500 .= "</p>";
-	$page_info500 .= "</div>";
-	$page_info500 .= "</div>";
+	// Shipping Date and Location
+	if ($_SESSION['prefsShipping'] == 1) {
+		$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
+		$header1_500 .= "<div class=\"panel-heading\">";
+		$header1_500 .= "<h4 class=\"panel-title\">Entry Shipping is";
+		if ($shipping_window_open == 1) $header1_500 .= " Open";
+		else $header1_500 .= " Closed";
+		$header1_500 .= "</h4>";
+		$header1_500 .= "</div>";
+		$page_info500 .= "<div class=\"panel-body\">";
+		$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url)."#shipping", $sidebar_text_023, $sidebar_text_004,$shipping_open_sidebar, $shipping_closed_sidebar);
+		$page_info500 .= "</p>";
+		$page_info500 .= "</div>";
+		$page_info500 .= "</div>";
+	}
 
 	// Judging Location(s)
-	include(DB.'judging_locations.db.php'); 
 	$header1_400 .= "<div class=\"panel panel-info\">";
 	$header1_400 .= "<div class=\"panel-heading\">";
 	$header1_400 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_judging_loc);
@@ -306,6 +293,9 @@ if ($section != "admin") {
 	if ((($_SESSION['contestLogo'] != "") && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) echo $competition_logo;
 	echo $page_info;
 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_top.inc.php');
+	
+	echo $header1_400;
+	echo $page_info400;
 	echo $header1_100;
 	echo $page_info100;
 	echo $header1_200;
@@ -314,8 +304,6 @@ if ($section != "admin") {
 	echo $page_info300;
 	echo $header1_500;
 	echo $page_info500;
-	echo $header1_400;
-	echo $page_info400;
 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_bottom.inc.php');
 }
 
