@@ -521,7 +521,7 @@ if ($go != "admin") echo $info_msg;
 				<!-- Input Here -->
                 <p><?php echo $brewer_text_016; ?></p>
 				<label>
-					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked required /><?php echo $brewer_text_017; ?>
+					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked required /><?php echo $brewer_text_018; ?>
 				</label>
 			</div>
             <div class="help-block with-errors"></div>

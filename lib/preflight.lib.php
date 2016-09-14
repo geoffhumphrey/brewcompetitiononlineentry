@@ -60,7 +60,7 @@ if (check_setup($prefix."system",$database)) {
 	$version_check = mysqli_query($connection,$query_version_check) or die (mysqli_error($connection));
 	$row_version_check = mysqli_fetch_assoc($version_check);
 	
-	// For 2.1.6.0, check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
+	// For current version, check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
 	// If not, run the update
 	
 	if (!check_update("prefsShipping", $prefix."preferences")) {

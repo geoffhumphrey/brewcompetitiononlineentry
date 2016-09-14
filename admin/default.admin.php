@@ -881,7 +881,21 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
-						<div class="row">
+                        
+                        <div class="row">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<strong>BOS Results</strong>
+							</div>
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<ul class="list-inline">
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>	
+								</ul>
+								
+							</div>
+						</div><!-- ./row -->
+                        <div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>BJCP Points</strong>
 							</div>

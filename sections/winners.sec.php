@@ -44,6 +44,15 @@ Declare all variables empty at the top of the script. Add on later...
 	etc., etc., etc.
 
  * ---------------- END Rebuild Info --------------------- */
+ 
+$primary_page_info = "";
+$header1_1 = "";
+$page_info1 = "";
+$header1_2 = "";
+$page_info2 = "";
+
+$table_head1 = "";
+$table_body1 = "";
 
 if ($row_scored_entries['count'] > 0) {
 	

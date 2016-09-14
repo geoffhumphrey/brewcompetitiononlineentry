@@ -74,7 +74,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	if ($section == "past_winners") $header1_20 .= ": ".$trimmed;
 	$header1_20 .= "</h2>";
 
-	$page_info .= sprintf("<h2>%s</h2><p>% %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], ($row_check['judgingDate']+$delay), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
+	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], ($row_check['judgingDate']+$delay), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 	
 } // end if ((judging_date_return() == 0) && ($registration_open == "2"))
 

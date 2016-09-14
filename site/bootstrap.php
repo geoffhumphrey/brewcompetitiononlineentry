@@ -114,18 +114,26 @@ if ($setup_success) {
 	// ---------------------------- Data Integrity Checks ---------------------------- 
 	
 	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
-	if ((isset($_SESSION['dataCheck'.$prefix_session])) && ((isset($_SESSION['prefsAutoPurge'])) && ($_SESSION['prefsAutoPurge'] == 1))) {
-		if ((!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
+	if ((isset($_SESSION['dataCheck'.$prefix_session])) && (isset($_SESSION['prefsAutoPurge']))) {
+		if (($_SESSION['prefsAutoPurge'] == 1) && (!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
 	}
 	
-	// check to see if all judging numbers have been generated. If not, generate
-	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
+	
+	/*
+	This was reported to cause a "redirect loop failure" - commenting out in lieu of another solution
+	See https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/674
+	May not be necessary as there is now a judging number check upon adding and editing entries
+	
+	// Check to see if all judging numbers have been generated. If not, generate.
+	// if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 	
 	// Check if judging flights are up-to-date
-	//if (!check_judging_flights()) $check_judging_flights = TRUE;
-	//else $check_judging_flights = FALSE;
-	
+	if (!check_judging_flights()) $check_judging_flights = TRUE;
+	else $check_judging_flights = FALSE;
 	$check_judging_flights = FALSE;
+	*/
+	
+	
 	
 	//  ---------------------------- Time Related Globals ---------------------------- 
 	

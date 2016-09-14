@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.6.0, change version in system table if not
+// Current version is 2.1.7.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -25,7 +25,7 @@ function version_check($version,$current_version) {
 	if ($version != $current_version) {
 				
 		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.6.0","2016-09-10","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.7.0","2016-09-14","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -325,10 +325,13 @@ function relocate($referer,$page,$msg,$id,$keep_id="default") {
 function check_judging_numbers() {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+	
 	$query_check = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewJudgingNumber IS NULL", $prefix."brewing");
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
-	if ($row_check['count'] == 0) return true; else return false;
+	
+	if ($row_check['count'] == 0) return TRUE; 
+	else return FALSE;
 }
 
 
@@ -2585,7 +2588,6 @@ function data_integrity_check() {
 		} while ($row_blank = mysqli_fetch_assoc($blank));	
 	}
 	
-	
 	// Check if there are "blanks" in the brewer table. If so, delete.
 	$query_blank1 = sprintf("SELECT id FROM %s WHERE (brewerFirstName IS NULL OR brewerFirstName = '') AND (brewerLastName IS NULL OR brewerLastName = '')",$prefix."brewer");
 	$blank1 = mysqli_query($connection,$query_blank1) or die (mysqli_error($connection));
@@ -2599,8 +2601,7 @@ function data_integrity_check() {
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));	
 		} while ($row_blank1 = mysqli_fetch_assoc($blank1));	
 	}
-	
-	
+		
 	// Look for duplicate entries in the judging_scores table
 	$query_judging_duplicates = sprintf("SELECT eid FROM %s",$prefix."judging_scores");
 	$judging_duplicates = mysqli_query($connection,$query_judging_duplicates) or die (mysqli_error($connection));
