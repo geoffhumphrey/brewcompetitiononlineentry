@@ -226,9 +226,9 @@ if (($section == "admin") && (($filter == "default") && ($bid == "default") && (
     
     <!-- Footer -->
     <footer class="footer hidden-xs hidden-sm hidden-md">
-    	<div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom bcoem-footer">
+    	<div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom">
             <div class="<?php echo $container_main; ?> text-center">
-                <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small"><?php include (SECTIONS.'footer.sec.php'); ?></p>
+                <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small bcoem-footer"><?php include (SECTIONS.'footer.sec.php'); ?></p>
             </div>
     	</div>
     </footer><!-- ./footer --> 

@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------
 Customized Bootstrap Classes for Claussenii Theme
 ----------------------------------------------------------------------
-Brux    color class overrides use green hues with a forest green base
+Claus   color class overrides use Green hues with a forest green base
 Primary color class overrides use Blue hues
 Info    color class overrides use Light Blue hues
 Warning color class overrides use Orange hues
@@ -14,12 +14,11 @@ Success color class overrides use Green hues
 Danger  color class overrides use Red hues
 
 Color scheme:
-From		To  
-#394a59  	#005A31 (dark green)
-#acc0c7  	#A8CD1B (medium-light green)
-#bec8d8		#CBE32D (light green)
-#DFE4EC 	#EBF4B3 (ultra-light green)
-			#F3FAB6	(cream-color base)
+#005A31 (dark green)
+#A8CD1B (medium-light green)
+#CBE32D (light green)
+#EBF4B3 (ultra-light green)
+#F3FAB6	(cream-color base)
 
 Default
 

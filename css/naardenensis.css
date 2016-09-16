@@ -1,36 +1,39 @@
 @charset "UTF-8";
 /* CSS Document */
-/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800|Droid+Sans:400,100,300,700); */
-@import url(http://fonts.googleapis.com/css?family=Raleway:300,500,800|Source+Sans+Pro:300,400,600,700);
+@import url(https://fonts.googleapis.com/css?family=Didact+Gothic|Francois+One);
 
 /** 
 ----------------------------------------------------------------------
-Customized Bootstrap Classes for Default Theme
+Customized Bootstrap Classes for Naardenensis Theme
 This theme is based upon Google Materials color palettes
 ----------------------------------------------------------------------
-Default color class overrides use Blue Grey hues
+Naard   color class overrides use Teal hues
 Primary color class overrides use Blue hues
 Info    color class overrides use Light Blue hues
 Warning color class overrides use Orange hues
 Success color class overrides use Green hues
 Danger  color class overrides use Red hues
 
-Default
+Color scheme:  
+#004D40 (dark teal)
+#009688 (medium-light blue)
+#80CBC4 (light blue)
+#E0F2F1 (ultra-light teal)
 
 BS Orig | This Theme
 -------------------
-#fff    | #ECEFF1 50  value
-#f8f8f8 | #ECEFF1 50  value
-#e7e7e7 | #CFD8DC 100 value
-#e6e6e6 | #CFD8DC 100 value
-#d4d4d4 | #B0BEC5 200 value
-#ccc    | #B0BEC5 200 value
-#adadad | #607D8B 500 value
-#8c8c8c | #546E7A 600 value
-#777    | #455A64 700 value
-#5e5e5e | #37474F 800 value
-#555    | #263137 900 value
-#333    | #263238 900 value
+#fff    | #E0F2F1 50  value
+#f8f8f8 | #E0F2F1 50  value
+#e7e7e7 | #B2DFDB 100 value
+#e6e6e6 | #B2DFDB 100 value
+#d4d4d4 | #80CBC4 200 value
+#ccc    | #80CBC4 200 value
+#adadad | #009688 500 value
+#8c8c8c | #00897B 600 value
+#777    | #00796B 700 value
+#5e5e5e | #00695C 800 value
+#555    | #004D40 900 value
+#333    | #004D40 900 value
 
 Info (Light Blue)
 
@@ -111,9 +114,9 @@ html {
 		
 body {
   	 
-	font-family: "Source Sans Pro", Arial, sans-serif;
+	font-family: "Didact Gothic", Arial, sans-serif;
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 17px;
 	position: relative;
 	margin-top: 50px;
 	min-height: 100%;
@@ -142,20 +145,19 @@ body {
 
 a,
 a:visited {
-  color: #2196f3;
+  color: #EF7126;
   text-decoration: none;
 }
 a:hover,
 a:focus,
 a:active {
-  color: #f37e21;
+  color: #009688;
   text-decoration: none;
 }
 
 
 h1, h2, h3, h4, h5, h6 {
-	
-	font-family: "Raleway", Arial, sans-serif;
+	font-family: "Francois One", Arial, sans-serif;
 	font-weight: 800;
 	margin: 0;
 }
@@ -170,7 +172,6 @@ h2, h2, h3, h4, h5, h6 {
 
 @media print {
 	h1, h2, h3, h4, h5, h6 {
-		 
 		font-family: Arial, sans-serif;
 		font-weight: 800;
 		margin: 0;
@@ -205,30 +206,30 @@ h2, h2, h3, h4, h5, h6 {
 /**  Button Colors **/
 
 .btn-default {
-  color: #263238 !important;
-  background-color: #ECEFF1;
-  border-color: #B0BEC5;
+  color: #004D40 !important;
+  background-color: #E0F2F1;
+  border-color: #80CBC4;
 }
 
 .btn-default:focus,
 .btn-default.focus {
-  color: #263238;
-  background-color: #CFD8DC;
-  border-color: #455A64;
+  color: #004D40;
+  background-color: #B2DFDB;
+  border-color: #00796B;
 }
 
 .btn-default:hover {
-  color: #263238;
-  background-color: #CFD8DC;
-  border-color: #607D8B;
+  color: #004D40;
+  background-color: #B2DFDB;
+  border-color: #009688;
 }
 
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-  color: #263238;
-  background-color: #CFD8DC;
-  border-color: #607D8B;
+  color: #004D40;
+  background-color: #B2DFDB;
+  border-color: #009688;
 }
 
 .btn-default:active:hover,
@@ -240,9 +241,9 @@ h2, h2, h3, h4, h5, h6 {
 .btn-default:active.focus,
 .btn-default.active.focus,
 .open > .dropdown-toggle.btn-default.focus {
-  color: #263238;
-  background-color: #B0BEC5;
-  border-color: #455A64;
+  color: #004D40;
+  background-color: #80CBC4;
+  border-color: #00796B;
 }
 
 .btn-default:active,
@@ -269,15 +270,15 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-	color: #263238;
-  background-color: #ECEFF1;
-  border-color: #B0BEC5;
+	color: #004D40;
+  background-color: #E0F2F1;
+  border-color: #80CBC4;
 }
 
 
 .btn-default .badge {
   color: #fff;
-  background-color: #263238;
+  background-color: #004D40;
 }
 
 .btn-primary {
@@ -747,12 +748,12 @@ fieldset[disabled] .btn-danger.active {
 /**  Form Label Color **/
 
 .label-default {
-  background-color: #455A64;
+  background-color: #00796B;
 }
 
 .label-default[href]:hover,
 .label-default[href]:focus {
-  background-color: #37474F;
+  background-color: #00695C;
 }
 
 .label-primary {
@@ -953,31 +954,48 @@ a.text-danger:focus {
 
 /** Panels **/
 
-.panel > .panel-heading > .panel-title > a {
+
+.panel-title > a,
+.panel-title > small,
+.panel-title > .small,
+.panel-title > small > a,
+.panel-title > .small > a {
+  color: inherit;
+}
+
+.panel > .panel-heading > .panel-title > a,
+.panel > .panel-heading > .panel-title > a:visited {
   text-decoration: none;
 }
 
+
 .panel-default {
-  border-color: #CFD8DC;
+  border-color: #B2DFDB;
 }
 
 .panel-default > .panel-heading {
-  color: #263238;
-  background-color: #ECEFF1;
-  border-color: #CFD8DC;
+  color: #004D40;
+  background-color: #E0F2F1;
+  border-color: #B2DFDB;
+}
+
+.panel-default > .panel-title > a:hover,
+.panel-default > .panel-title > a:focus {
+  color: #B2DFDB;
+  text-decoration: none;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #CFD8DC;
+  border-top-color: #B2DFDB;
 }
 
 .panel-default > .panel-heading .badge {
-  color: #ECEFF1;
-  background-color: #263238;
+  color: #E0F2F1;
+  background-color: #004D40;
 }
 
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #CFD8DC;
+  border-bottom-color: #B2DFDB;
 }
 
 .panel-primary {
@@ -1101,125 +1119,138 @@ a.text-danger:focus {
 }
 
 .navbar-default {
-  border-color: #78909c;
-  background: #eceff1; /* Old browsers */
-  background: -moz-linear-gradient(top,  #eceff1 0%, #cfd8dc 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #eceff1 0%,#cfd8dc 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #eceff1 0%,#cfd8dc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eceff1', endColorstr='#cfd8dc',GradientType=0 ); /* IE6-9 */
+  border-color: #004D40;
+  background: #004D40; /* Old browsers */
+  background: -moz-linear-gradient(top,  #004D40 0%, #009688 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #004D40 0%, #009688 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #004D40 0%, #009688 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004D40', endColorstr='#009688',GradientType=0 ); /* IE6-9 */
   -webkit-box-shadow: 0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   -moz-box-shadow:    0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   box-shadow:         0px 3px 3px 0px rgba(230, 230, 230, 0.75);
 }
 
-.navbar-default.bcoem-footer {
-  background: #cfd8dc; /* Old browsers */
-  background: -moz-linear-gradient(top,  #cfd8dc 0%, #eceff1 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #cfd8dc 0%,#eceff1 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #cfd8dc 0%,#eceff1 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfd8dc', endColorstr='#eceff1',GradientType=0 ); /* IE6-9 */
-}
-
 .navbar-default .navbar-brand {
-  color: #455A64;
+  color: #E0F2F1;
 }
 
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: #37474F;
+  color: #4DB6AC;
   background-color: transparent;
 }
 .navbar-default .navbar-text {
-  color: #455A64;
+  color: #E0F2F1;
 }
 .navbar-default .navbar-nav > li > a {
-  color: #455A64;
+  color: #B2DFDB;
 }
+
+.bcoem-footer a,
+.bcome-footer a:visited {
+  color: #B2DFDB;
+}
+
+.bcoem-footer a:hover,
+.bcome-footer a:focus {
+  color: #4DB6AC;
+}
+
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #263238;
+  color: #4DB6AC;
   background-color: transparent;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #263238;
-  background-color: #CFD8DC;
+  color: #004D40;
+  background-color: #B2DFDB;
 }
 .navbar-default .navbar-nav > .disabled > a,
 .navbar-default .navbar-nav > .disabled > a:hover,
 .navbar-default .navbar-nav > .disabled > a:focus {
-  color: #B0BEC5;
+  color: #80CBC4;
   background-color: transparent;
 }
 .navbar-default .navbar-toggle {
-  border-color: #ddd;
+  border-color: #E0F2F1;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-  background-color: #ddd;
+  background-color: #E0F2F1;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #888;
+  background-color: #26A69A;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-  border-color: #CFD8DC;
+  border-color: #B2DFDB;
 }
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  color: #263238;
-  background-color: #CFD8DC;
+  color: #004D40;
+  background-color: #B2DFDB;
 }
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #455A64;
+    color: #00796B;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #263238;
+    color: #004D40;
     background-color: transparent;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #263238;
-    background-color: #CFD8DC;
+    color: #004D40;
+    background-color: #B2DFDB;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-    color: #B0BEC5;
+    color: #80CBC4;
     background-color: transparent;
   }
 }
 .navbar-default .navbar-link {
-  color: #455A64;
+  color: #00796B;
 }
 .navbar-default .navbar-link:hover {
-  color: #263238;
+  color: #004D40;
 }
 .navbar-default .btn-link {
-  color: #455A64;
+  color: #00796B;
 }
 .navbar-default .btn-link:hover,
 .navbar-default .btn-link:focus {
-  color: #263238;
+  color: #004D40;
 }
 .navbar-default .btn-link[disabled]:hover,
 fieldset[disabled] .navbar-default .btn-link:hover,
 .navbar-default .btn-link[disabled]:focus,
 fieldset[disabled] .navbar-default .btn-link:focus {
-  color: #B0BEC5;
+  color: #80CBC4;
 }
+
+
+.navbar-default .bcoem-footer .navbar-text a {
+	color: #000;
+	
+}
+
+
+
+
 .navbar-inverse {
-  border-color: #263238;
-  background: #263238; /* Old browsers */
-  background: -moz-linear-gradient(top,  #263238 0%, #37474F 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #263238 0%,#37474F 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #263238 0%,#37474F 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263238', endColorstr='#37474F',GradientType=0 ); /* IE6-9 */
+  border-color: #004D40;
+  background: #004D40; /* Old browsers */
+  background: -moz-linear-gradient(top,  #004D40 0%, #00695C 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #004D40 0%,#00695C 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #004D40 0%,#00695C 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004D40', endColorstr='#00695C',GradientType=0 ); /* IE6-9 */
   -webkit-box-shadow: 0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   -moz-box-shadow:    0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   box-shadow:         0px 3px 3px 0px rgba(230, 230, 230, 0.75);
@@ -1229,31 +1260,32 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-  color: #ECEFF1;
+  color: #E0F2F1;
   background-color: transparent;
 }
 .navbar-inverse .navbar-text {
-  color: #CFD8DC;
+  color: #B2DFDB;
 }
+
 .navbar-inverse .navbar-nav > li > a {
-  color: #CFD8DC;
+  color: #B2DFDB;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  color: #ECEFF1;
+  color: #E0F2F1;
   background-color: transparent;
 }
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  color:#ECEFF1;
-  background-color: #263238;
+  color:#E0F2F1;
+  background-color: #004D40;
 }
 .navbar-inverse .navbar-nav > .disabled > a,
 .navbar-inverse .navbar-nav > .disabled > a:hover,
 .navbar-inverse .navbar-nav > .disabled > a:focus {
-  color: #B0BEC5;
+  color: #80CBC4;
   background-color: transparent;
 }
 .navbar-inverse .navbar-toggle {
@@ -1261,30 +1293,63 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 .navbar-inverse .navbar-toggle:hover,
 .navbar-inverse .navbar-toggle:focus {
-  background-color: #263238;
+  background-color: #004D40;
 }
 .navbar-inverse .navbar-toggle .icon-bar {
-  background-color: #ECEFF1;
+  background-color: #E0F2F1;
 }
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
-  border-color: #263238;
+  border-color: #004D40;
 }
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  color: #ECEFF1;
-  background-color: #263238;
+  color: #E0F2F1;
+  background-color: #004D40;
 }
 
 /**  Admin Off-Canvas Nav **/
 
 .bcoem-admin-menu-disabled {
-	color: #B0BEC5; !important
+	color: #80CBC4; !important
 }
 
 .navmenu { 
 	font-size: .9em;
+	color: #E0F2F1; !important
+}
+
+.navmenu-nav {
+	color: #E0F2F1;  !important
+}
+
+.navmenu .navmenu-nav > li > a {
+  color: #B2DFDB;
+}
+
+.navmenu .navmenu-nav > li > a:hover,
+.navmenu .navmenu-nav > li > a:focus {
+  color: #E0F2F1;
+  background-color: transparent;
+}
+
+.navmenu .navmenu-nav > .active > a,
+.navmenu .navmenu-nav > .active > a:hover,
+.navmenu .navmenu-nav > .active > a:focus {
+  color:#E0F2F1;
+  background-color: #004D40;
+}
+
+.navmenu .navmenu-nav > .disabled > a,
+.navmenu .navmenu-nav > .disabled > a:hover,
+.navmenu .navmenu-nav > .disabled > a:focus {
+  color: #80CBC4;
+  background-color: transparent;
+}
+
+.navmenu .dropdown-menu {
+	background-color: #004D40;
 }
 
 .dropdown-backdrop { 
@@ -1295,16 +1360,20 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 	position:relative;
 }
 
+.navmenu-brand .disabled .off-canvas-header {
+	color: #E0F2F1;
+}
+
 /**  Footer **/
 
 .footer .navbar-inverse  a {
-  color: #CFD8DC;
+  color: #B2DFDB;
   text-decoration: none;
 }
 
 .footer .navbar-inverse  a:hover,
 .footer .navbar-inverse  a:focus {
-  color: #ECEFF1;
+  color: #E0F2F1;
   background-color: transparent;
   text-decoration: none;
 }
@@ -1428,13 +1497,13 @@ footer .navbar {
 .bcoem-admin-dashboard-accordion h5 {
 	font-weight: bold;
 	font-size: 1.1em;
-	color: #546E7A;
+	color: #00897B;
 	padding: 20px 0;
 }
 
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a ,
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:visited {
-  color: #546E7A;
+  color: #00897B;
   text-decoration: none;
 }
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:hover,
@@ -1669,33 +1738,33 @@ a.text-amber:focus, a.text-amber:hover {
 
 /** DataTables Overrides **/
 table.dataTable thead th.sorting:after {
-	color: #263238;
+	color: #004D40;
 }
 
 .dataTables_paginate,
 .dataTables_filter {
-	color: #263238 !important;
+	color: #004D40 !important;
 	font-size: 14px !important;
 }
 
 .paging_full_numbers a.paginate_button {
-    color: #263238 !important;
+    color: #004D40 !important;
 }
 
 .paging_full_numbers a.paginate_active {
-    color: #263238 !important;
+    color: #004D40 !important;
 }
 
 .dataTables_paginate .paginate_button .active {
   
-  background-color: #ECEFF1;
-  border-color: #B0BEC5;
+  background-color: #E0F2F1;
+  border-color: #80CBC4;
 }
 
 /** Dropzone Overrides **/
 .dropzone {
 	border-radius: 5px;
-	background-color: #ECEFF1;
-	border: 1px solid #B0BEC5;
+	background-color: #E0F2F1;
+	border: 1px solid #80CBC4;
 	margin: 0 0 15px 0;
 }

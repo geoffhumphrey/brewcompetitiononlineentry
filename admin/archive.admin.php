@@ -1,92 +1,93 @@
-<?php require(DB.'archive.db.php'); 
+<?php
+require(DB.'archive.db.php'); 
 
-$table_header1 = "Users";
-$table_header2 = "Participants";
-$table_header3 = "Entries";
-$table_header4 = "Tables";
-$table_header5 = "Scores";
-$table_header6 = "BOS";
-$table_header7 = "Actions";
+$table_header1 = $label_users;
+$table_header2 = $label_participants;
+$table_header3 = $label_entries;
+$table_header4 = $label_admin_tables;
+$table_header5 = $label_admin_scores;
+$table_header6 = $label_admin_bos_acr;
+$table_header7 = $label_actions;
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']; ?> Archives</p>
+<p class="lead"><?php echo $_SESSION['contestName']." ".$label_admin_archives; ?></p>
 <?php if (HOSTED) { ?>
-<p>Due to server storage limitations, archiving of hosted BCOE&amp;M account data is not available. To utilize the software for a new competition or simply to clear the database of data, use the buttons below.</p>
-<p>Custom category, custom style type, drop-off location, judging location, and sponsor data <strong class="text-success">will not be purged</strong>. Admins will need to update these for future competition instances.</p>
-<h3>Option 1</h3>
+<p><?php echo $archive_text_000; ?></p>
+<p><?php echo $archive_text_001; ?></p>
+<h3><?php echo $archive_text_002; ?></h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear All Participant, Entry, Judging, and Scoring Data</a>
+        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive" data-confirm="<?php echo $archive_text_003; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_004; ?></a>
     </div><!-- ./button group -->
-    <span id="helpBlock" class="help-block">This option clears all participant, entry, judging, and scoring data. Provides a clean slate.</span>
+    <span id="helpBlock" class="help-block"><?php echo $archive_text_005; ?></span>
 </div>
-<h3>Option 2</h3>
+<h3><?php echo $archive_text_006; ?></h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive&amp;filter=participant" data-confirm="Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone."><span class="fa fa-exclamation-circle"></span> Clear Entry, Judging, and Scoring Data Only</a>
+        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive&amp;filter=participant" data-confirm="<?php echo $archive_text_007; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_008; ?></a>
     </div><!-- ./button group -->
-    <span id="helpBlock" class="help-block">This option clears all entry, judging, and scoring data, but retains the participant data. Useful if you want don't want to have participants create new account profiles.</span>
+    <span id="helpBlock" class="help-block"><?php echo $archive_text_009; ?></span>
 </div>
 <?php } else { ?>
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
 <input type="hidden" name="action" value="add_form" /> 
-<p>To archive data currently stored in the database, provide a name of the archive.</p>
+<p><?php echo $archive_text_010; ?></p>
 <!-- Form Group REQUIRED Text Input -->
 <div class="form-group">
-	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_name; ?></label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="2015 or Q12016, etc." pattern="^[a-zA-Z0-9]+$" autofocus required>
+			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="2015 or Q12016" pattern="^[a-zA-Z0-9]+$" autofocus required>
 			<span class="input-group-addon" id="mod_name-addon2"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
-        <span id="helpBlock" class="help-block">Alpha numeric characters only - all others will be omitted.</span>
+        <span id="helpBlock" class="help-block"><?php $archive_text_011; ?></span>
 	</div>
 </div><!-- ./Form Group -->
-<p>Then, choose what data you would like to retain.</p>
+<p><?php echo $archive_text_014; ?></p>
 <div class="form-group"><!-- Form Group Checkbox STACKED -->
-    <label for="retain" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Data to Retain</label>
+    <label for="retain" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_data_retain; ?></label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
 			<div class="checkbox">
                 <label>
-                    <input type="checkbox" name="none" id="retain_7" value=""> None
+                    <input type="checkbox" name="none" id="retain_7" value=""> <?php echo $label_none; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepSpecialBest" id="retain_5" value="Y"> Custom Categories
+                    <input type="checkbox" name="keepSpecialBest" id="retain_5" value="Y"> <?php echo $label_admin_custom_cat; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepStyleTypes" id="retain_4" value="Y"> Custom Style Types
+                    <input type="checkbox" name="keepStyleTypes" id="retain_4" value="Y"> <?php echo $label_custom_style_types; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepDropoff" id="retain_0" value="Y"> Drop-Off Locations
+                    <input type="checkbox" name="keepDropoff" id="retain_0" value="Y"> <?php echo $label_drop_offs; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepLocations" id="retain_1" value="Y"> Judging Locations
+                    <input type="checkbox" name="keepLocations" id="retain_1" value="Y"> <?php echo $label_judging_loc; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepParticipants" id="retain_2" value="Y"> Participants
+                    <input type="checkbox" name="keepParticipants" id="retain_2" value="Y"> <?php echo $label_participants; ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> Sponsors
+                    <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
                 </label>
             </div>
         </div>
-        <span id="helpBlock" class="help-block">Check the information you would like to retain for use in future competition instances.</span>
+        <span id="helpBlock" class="help-block"><?php echo $archive_text_012; ?></span>
     </div>
 </div><!-- ./Form Group -->
 <div class="bcoem-admin-element hidden-print">
@@ -110,14 +111,14 @@ $table_header7 = "Actions";
         <div class="modal-content">
             <div class="modal-header">
             	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Please Confirm</h4>
+                <h4 class="modal-title"><?php echo $label_please_confirm; ?></h4>
             </div>
             <div class="modal-body">
-                Are you sure you want to archive current data with the name <span id="archiveName"></span>? This cannot be undone.
+                <?php echo $archive_text_013; ?>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <a href="#" id="submit" class="btn btn-success success">Yes</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_cancel; ?></button>
+                <a href="#" id="submit" class="btn btn-success success"><?php $label_yes; ?></a>
             </div>
         </div>
     </div>
@@ -149,7 +150,7 @@ $table_header7 = "Actions";
 	</script>
 
 
-<h3>Archives</h3>
+<h3><?php echo $label_admin_archives; ?></h3>
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
     <th><?php echo $table_header2; ?></th>
@@ -211,7 +212,7 @@ $table_header7 = "Actions";
     <?php } 
 	} else echo $row_archive['archiveSuffix']. " - Not Archived"; 
 	?>
-    <td><a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_archive['archiveSuffix']; ?> Archive?" data-confirm="Are you sure you want to delete the archive called <?php echo $row_archive['archiveSuffix']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a></td>
+    <td><a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix']; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
   </tr>
   <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
 </tbody>

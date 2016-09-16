@@ -156,7 +156,7 @@ $primary_page_info .= sprintf("<p class=\"lead\">%s %s, %s. <small>%s %s.</small
 
 if ($totalRows_log > 0) { 
 	$primary_page_info .= sprintf("<p class=\"lead hidden-print\"><small>%s",$brewer_info_002); 
-	if (!$disable_pay) $primary_page_info .= " ".$brewer_info_003;
+	if (!$disable_pay) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>";
 	$primary_page_info .= ".</small></p>";	
 }
 

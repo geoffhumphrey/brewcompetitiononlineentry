@@ -15,6 +15,6 @@ To convert for translation:
 // Future releases will use a function to load language files for translations other than English
 // For now, it's just English
 // A future version will have full conversions for Admin, Update, and Setup
-include (LANG.'en/en.lang.php');
+include (LANG.'en/en-US.lang.php');
 
 ?>

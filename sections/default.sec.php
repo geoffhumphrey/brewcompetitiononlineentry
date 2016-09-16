@@ -59,7 +59,7 @@ $message2 = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg f
 
 if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 	
-	include ('judge_closed.sec.php'); 
+	include (SECTIONS.'judge_closed.sec.php'); 
 	include (DB.'winners.db.php');
 	
 	$style_types_active = styles_active(1);
