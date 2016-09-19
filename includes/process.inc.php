@@ -239,10 +239,10 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 		
 	}
 	
-	elseif ($action == "email") {
+	elseif (($action == "email") && ($dbTable == "default")) {
 		
 		include_once (PROCESS.'process_email.inc.php');
-		
+				
 	}
 	
 	else {
