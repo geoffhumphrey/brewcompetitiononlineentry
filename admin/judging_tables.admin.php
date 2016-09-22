@@ -369,6 +369,7 @@ $output_at_table_modals = "";
                         </ul>
                     </div>
                     <div class="modal-footer">
+                        <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences" class="btn btn-primary">Update Preferences</a> 
                     	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -391,6 +392,7 @@ $output_at_table_modals = "";
                     </ul>
                     </div>
                     <div class="modal-footer">
+                        <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types" class="btn btn-primary">Update BOS Settings</a>
                     	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -594,7 +596,15 @@ $(document).ready(function() {
 <?php } 
 else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
 } // end if ($action == "default") ?>
-<?php if ($action == "add") { ?>
+<?php if ($action == "add") { 
+$table_numbers = "";
+
+do {
+	$table_numbers[] = $row_table_number['tableNumber'];
+} while($row_table_number = mysqli_fetch_assoc($table_number)); 
+
+
+?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -634,7 +644,7 @@ else echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\
         <!-- Input Here -->
         <select class="selectpicker" name="tableNumber" id="tableNumber" data-size="10" data-width="auto">
             <?php for($i=1; $i<50+1; $i++) { ?>
-    		<option value="<?php echo $i; ?>" <?php if ((isset($a)) && (in_array($i,$a))) echo "DISABLED";  if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+    		<option value="<?php echo $i; ?>" <?php if ((isset($table_numbers)) && (in_array($i,$table_numbers))) echo "DISABLED";  if (($row_table_number_last['tableNumber'] + 1) == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         	<?php } ?>
         </select>
         </div>

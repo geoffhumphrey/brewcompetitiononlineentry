@@ -649,6 +649,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					
 					include(DB.'output_results_download_sbd.db.php');
 					
+					if ($totalRows_sbd > 0) {
+					
 					$html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
 					$html .= '<br>'.strtr($row_sbi['sbi_description'],$html_remove).'<br>';
 					$html .= '<table border="1">';
@@ -684,6 +686,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					} while ($row_sbd = mysqli_fetch_assoc($sbd));
 					
 					$html .= '</table>';
+					
+					}
 					
 				} while ($row_sbi = mysqli_fetch_assoc($sbi));
 				

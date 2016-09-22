@@ -66,12 +66,14 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	
 	if ($style_types_active > 0) {
 		$header1_10 .= "<h2>".$default_page_text_009;
-		if ($section == "past_winners") $header1_10 .= ": ".$trimmed; 
+		if ($section == "past_winners") $header1_10 .= ": ".$trimmed;
+		$header1_10 .= sprintf(" <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
 		$header1_10 .= "</h2>";
 	}
 	
 	$header1_20 .= "<h2>".$default_page_text_010;
 	if ($section == "past_winners") $header1_20 .= ": ".$trimmed;
+	$header1_20 .= sprintf(" <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021);
 	$header1_20 .= "</h2>";
 
 	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], ($row_check['judgingDate']+$delay), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
@@ -80,7 +82,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 else {
 	
-	if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href='%s' data-toggle='tooltip' title='%s'>%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
+	if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
 	$primary_page_info .= "<p class='lead'>";
 	$primary_page_info .= sprintf("Thank you for your interest in the %s organized by ",$_SESSION['contestName']);
 	if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
@@ -143,7 +145,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 		if (judging_winner_display($delay)) {
 			
 			if (((NHC) && ($prefix == "final_")) || (!NHC)) { 
-				echo $header1_1;
+				echo $header1_10;
 				include (SECTIONS.'bos.sec.php');  
 				} 
 				

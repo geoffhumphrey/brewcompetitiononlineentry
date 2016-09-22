@@ -694,6 +694,10 @@ if ($section == "default") {
 	$default_page_text_015 = "You can send an email to any of the following individuals via ";
 	$default_page_text_016 = "is proud to have the following";
 	$default_page_text_017 = "for the";
+	$default_page_text_018 = "Download the Best of Show winners in PDF format.";
+	$default_page_text_019 = "Download the Best of Show winners in HTML format.";
+	$default_page_text_020 = "Download the winning entries in PDF format.";
+	$default_page_text_021 = "Download the winning entries in HTML format.";
 	
 	$reg_open_text_000 = "Judge and Steward Registration is";
 	$reg_open_text_001 = "Open";

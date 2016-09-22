@@ -233,6 +233,23 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0")) {
 			
 		}
 		
+		if (($go == "availability") || ($go == "purge-all")) {
+			
+			// Purge all data from special best info table
+			$updateSQL = sprintf("UPDATE %s SET brewerJudge='N'",$brewer_db_table);
+			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$updateSQL = sprintf("UPDATE %s SET brewerSteward='N'",$brewer_db_table);
+			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			header(sprintf("Location: %s", $base_url."index.php?section=admin&msg=26"));
+			
+		}
+		
 		
 		
 	}
