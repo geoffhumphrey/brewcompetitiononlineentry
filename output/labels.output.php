@@ -103,17 +103,18 @@ if (isset($_SESSION['loginUsername'])) {
 				$special = strtr($special,$html_remove);
 						
 				if (in_array($style,$special_ingredients)) {
-					$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
-					if (in_array($style,$mead)) {
+					$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);			
+				}
+				
+				if (in_array($style,$mead)) {
 						$text .= "\n";
 						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
 						if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
 						if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
-						
-					}
-					$text = iconv('UTF-8', 'windows-1252', $text);
-					$pdf->Add_Label($text);
 				}
+					
+				$text = iconv('UTF-8', 'windows-1252', $text);
+				$pdf->Add_Label($text);
 				
 				}
 				
@@ -155,20 +156,16 @@ if (isset($_SESSION['loginUsername'])) {
 					
 						
 					if (in_array($style,$special_ingredients)) {
-						
 						$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
 						$special = strtr($special,$html_remove);
-						
 						$text .= sprintf("\nReq Info: %s", $special);
-						
-						if (in_array($style,$mead)) {
+					}	
+
+					if (in_array($style,$mead)) {
 							$text .= "\n";
 							if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
 							if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
 							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
-							
-						}
-						
 					}					
 					
 					$text = iconv('UTF-8', 'windows-1252', $text);
@@ -347,29 +344,29 @@ if (isset($_SESSION['loginUsername'])) {
 			do {
 				
 				for($i=0; $i<$sort; $i++) {
-				if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $entry_no = $row_log['brewJudgingNumber'];
-				else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
-				
-				
-				$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
-				$style_name = truncate($row_log['brewStyle'],22);
-				
-				$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
-				$special = strtr($special,$html_remove);
-						
-				if (in_array($style,$special_ingredients)) {
-					$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
-					if (in_array($style,$mead)) {
-						$text .= "\n";
-						if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
-						if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
-						if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
-						
+					if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $entry_no = $row_log['brewJudgingNumber'];
+					else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
+					
+					
+					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
+					$style_name = truncate($row_log['brewStyle'],22);
+					
+					$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
+					$special = strtr($special,$html_remove);
+							
+					if (in_array($style,$special_ingredients)) {
+						$text = sprintf("\n%s  %s  #%s\nReq Info: %s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no, $special);
 					}
+					
+					if (in_array($style,$mead)) {
+							$text .= "\n";
+							if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']);	
+					}
+					
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
-				}
-				
 				}
 				
 			} while ($row_log = mysqli_fetch_assoc($log));
@@ -400,29 +397,23 @@ if (isset($_SESSION['loginUsername'])) {
 					
 					if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $entry_no = $row_log['brewJudgingNumber'];
 					else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
-					
-					
+
 					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 					$style_name = truncate($row_log['brewStyle'],22);
 							
 					$text = sprintf("\n%s  %s  #%s", $row_log['brewCategory'].$row_log['brewSubCategory'], $style_name, $entry_no);
-					
 						
 					if (in_array($style,$special_ingredients)) {
-						
 						$special = str_replace("\n"," ",truncate($row_log['brewInfo'],50));
 						$special = strtr($special,$html_remove);
-						
 						$text .= sprintf("\nReq Info: %s", $special);
-						
-						if (in_array($style,$mead)) {
+					}
+					
+					if (in_array($style,$mead)) {
 							$text .= "\n";
 							if (!empty($row_log['brewMead1'])) $text .= sprintf("%s",$row_log['brewMead1']);
 							if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
 							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
-							
-						}
-						
 					}
 					
 					$text = iconv('UTF-8', 'windows-1252', $text);

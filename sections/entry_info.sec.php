@@ -96,7 +96,7 @@ else $page_info2 .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data
 
 // Entry Window
 $header1_3 .= sprintf("<a name=\"entry_window\"></a><h2>%s</h2>",$label_entry_registration);
-if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_info_text_001,$entry_open,$entry_info_text_001,$entry_closed);
+if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_open,$entry_info_text_001,$entry_closed);
 elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_015,$entry_closed);
 else $page_info3 .= sprintf("<p>%s</p>",$entry_info_text_016);
 

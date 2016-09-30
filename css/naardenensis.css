@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* CSS Document */
-@import url(https://fonts.googleapis.com/css?family=Didact+Gothic|Francois+One);
+@import url(https://fonts.googleapis.com/css?family=Didact+Gothic|Roboto:900);
 
 /** 
 ----------------------------------------------------------------------
@@ -157,8 +157,8 @@ a:active {
 
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: "Francois One", Arial, sans-serif;
-	font-weight: 800;
+	font-family: "Roboto", Arial, sans-serif;
+	font-weight: 900;
 	margin: 0;
 }
 

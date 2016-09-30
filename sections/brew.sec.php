@@ -12,6 +12,7 @@ include(DB.'entries.db.php');
 $add_entry_disable = FALSE;
 $edit_entry_disable = FALSE;
 $special_required = FALSE;
+$expanded_on_load = FALSE;
 $selected_disabled = "";
 $darkLightPale = "";
 $darkLightAmber = "";

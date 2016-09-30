@@ -642,7 +642,7 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	if (strpos($section, "step") === FALSE) $brewer_text_002 = "You can also <a href=\"".$edit_user_password_link."\">change your password now</a> if you wish.";
 	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
 	$brewer_text_004 = "Provide any information that you believe the competition organizer should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
-	$brewer_text_005 = "I'm Shipping My Entries";
+	$brewer_text_005 = "Not Applicable / Shipping Entries";
 	$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
 	$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
 	$brewer_text_008 = "* The <em>Novice</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";

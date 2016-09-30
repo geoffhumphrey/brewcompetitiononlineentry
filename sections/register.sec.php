@@ -509,7 +509,7 @@ if ($go == "default") {  ?>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 has-warning">
 			<!-- Input Here -->
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="auto">
-				<option value="0">I'm Shipping My Entries</option> 
+				<option value="0"><?php echo $brewer_text_005; ?></option> 
 				<option disabled="disabled">-------------</option>
 				<?php echo $dropoff_select; ?>
 			</select>
@@ -606,7 +606,7 @@ if ($go == "default") {  ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<p><?php echo $brewer_text_006; ?></p>
+			<p><?php echo $brewer_text_015; ?></p>
 			<div class="input-group">
 				<!-- Input Here -->
 				<label class="radio-inline">
