@@ -91,7 +91,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		
 		case "short": // Short Format
 			if ($date_format == "1") $date = date('m/d/Y', $timestamp);
-			elseif ($date_format = "2") $date = date('d/m/Y',$timestamp);
+			elseif ($date_format == "2") $date = date('d/m/Y',$timestamp);
 			else $date = date('Y/m/d', $timestamp);
 		break;
 		
