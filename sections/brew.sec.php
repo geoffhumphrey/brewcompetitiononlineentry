@@ -120,6 +120,7 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 		$list = FALSE;
 		if (strstr($referrer,"list")) $list = TRUE;
 		if (strstr($referrer,"entries")) $list = FALSE;
+		if (strstr($referrer,"0-A")) $list = FALSE;
 		if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
 		elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
 		else $output = "list";

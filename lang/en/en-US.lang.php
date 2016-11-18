@@ -280,7 +280,7 @@ $label_cancel = "Cancel";
 $label_understand = "I Understand";
 $label_fee_discount = "Discounted Entry Fee";
 $label_discount_code = "Discount Code";
-$label_register_judge = "Are You Registering as a Judge or Steward?";
+$label_register_judge = "Are You Registering as a Entrant, Judge or Steward?";
 $label_register_judge_standard = "Register a Judge or Steward (Standard)";
 $label_register_judge_quick = "Register a Judge or Steward (Quick)";
 $label_all_participants = "All Participants";
@@ -503,7 +503,7 @@ $header_text_104 = "You do not have sufficient access priveliges to view this pa
 $header_text_105 = "More information is required for your entry to be accepted and confirmed.";
 $header_text_106 = "See the area(s) highlighted in RED below.";
 $header_text_107 = "Please choose a style.";
-$header_text_108 = "Your entry cannot be accepted or confirmed until a style has been chosen. Unconfirmed entries may be deleted from the system without warning.";
+$header_text_108 = "This entry cannot be accepted or confirmed until a style has been chosen. Unconfirmed entries may be deleted from the system without warning.";
 
 // -------------------- Navigation --------------------
 
@@ -927,7 +927,7 @@ if (($section == "register") || ($action == "register")) {
 	$register_text_011 = "To register for the competition, create your online account by filling out the form below.";
 	$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
 	$register_text_013 = "Entry into this competition is conducted completely online.";
-	$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward, you will need to create an account on our system.";
+	$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
 	$register_text_015 = "Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct.";
 	$register_text_016 = "Once you have registered, you can proceed through the entry process.";
 	$register_text_017 = "Each entry you add will automatically be assigned a number by the system.";
@@ -1050,7 +1050,7 @@ if ($section == "volunteers") {
 	$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
 	$volunteers_text_002 = "icon on the top menu";
 	$volunteers_text_003 = "and";
-	$volunteers_text_004 = "If you have not registered and are willing to be a judge or steward, please";
+	$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register:";
 	$volunteers_text_005 = "Since you have already registered,";
 	$volunteers_text_006 = "access your account";
 	$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";

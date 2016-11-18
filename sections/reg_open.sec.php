@@ -60,11 +60,9 @@ $page_info7 = "";
 $header1_8 = ""; 
 $page_info8 = "";
 
-
-
 if (($registration_open == 1) && (!isset($_SESSION['loginUsername']))) { 
 	$header1_1 .= sprintf("<h2>%s <span class='text-success'>%s</span></h2>",$reg_open_text_000,$reg_open_text_001) ;
-	$page_info1 .= sprintf("<p>%s <a href='".build_public_url("register","judge","default","default",$sef,$base_url)."'>%s</a>.</p>",$reg_open_text_002,$reg_open_text_003);
+	$page_info1 .= sprintf("<p>%s %s: <a href='".build_public_url("register","judge","default","default",$sef,$base_url)."'>%s</a> | <a href='".build_public_url("register","steward","default","default",$sef,$base_url)."'>%s</a>.</p>",$reg_open_text_002,$reg_open_text_003,strtolower($label_judge),strtolower($label_steward));
 	$page_info1 .= sprintf("<p>%s <span class=\"fa fa-lg fa-user\"></span> %s</p>",$reg_open_text_004,$reg_open_text_005);
 }
 

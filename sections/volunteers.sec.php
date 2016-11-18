@@ -54,7 +54,7 @@ $page_info_vol_3 = "";
 $header_vol_1_1 .= sprintf("<h2>%s %s %s</h2>",$label_judges, $volunteers_text_003, $label_stewards);
 if (($judge_window_open > 0) && (!$logged_in)) { 
 	$page_info_vol_1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s <span class=\"fa fa-user\"></span> %s.</p>",$volunteers_text_000, build_public_url("login","default","default","default",$sef,$base_url), strtolower($label_log_in), $volunteers_text_001, $volunteers_text_002);
-	if ($registration_open < 2) $page_info_vol_1 .= sprintf("<p>%s <a href=\"%s\">%s</a>.</p>",$volunteers_text_004, build_public_url("register","judge","default","default",$sef,$base_url), strtolower($label_register));
+	if ($registration_open < 2) $page_info_vol_1 .= sprintf("<p>%s <a href=\"%s\">%s</a> | <a href=\"%s\">%s</a>.</p>",$volunteers_text_004, build_public_url("register","judge","default","default",$sef,$base_url), strtolower($label_judge), build_public_url("register","steward","default","default",$sef,$base_url), strtolower($label_steward));
 }
 
 elseif (($judge_window_open > 0) && ($logged_in)) {

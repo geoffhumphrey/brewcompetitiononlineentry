@@ -193,13 +193,15 @@ echo $page_info1;
 if ($go == "default") {  ?>
 <form class="form-horizontal" name="judgeChoice" id="judgeChoice">
 	<div class="form-group">
-		<label for="judge_steward" class="col-lg-5 col-md-6 col-sm-6 col-xs-12 control-label"><?php echo $label_register_judge; ?></label>
-		<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12">
+		<label for="judge_steward" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 control-label"><?php echo $label_register_judge; ?></label>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 			<div class="input-group">
 				<select class="selectpicker" name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)" data-width="auto">
 					<option value=""></option>
-					<option value="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_yes; ?></option>
-					<option value="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_no; ?></option>
+                    <option value="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></option>
+					<option value="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></option>
+					<option value="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></option>
+					
 				</select>
 			</div>
 		</div>
@@ -563,7 +565,9 @@ if ($go == "default") {  ?>
 	
 	<?php if ($go != "entrant") { ?>
 	<?php if (!$judge_limit) { ?>
-    
+    <?php if ($go == "steward") { ?>
+    <div class="hidden">
+    <?php } ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -574,7 +578,7 @@ if ($go == "default") {  ?>
 					<input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
+					<input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
 				</label>
 			</div>
 		</div>
@@ -600,8 +604,15 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
     
+    <?php if ($go == "steward") { ?>
+    </div>
+    <?php } ?>
+    
 	<?php } // end if (!$judge_limit) ?>
 	<?php } // end if ($go != "entrant") ?>
+    <?php if ($go == "judge") { ?>
+    <div class="hidden">
+    <?php } ?>
 	<?php if (!$steward_limit) { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
@@ -613,7 +624,7 @@ if ($go == "default") {  ?>
 					<input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
+					<input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "judge") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
 				</label>
 			</div>
 		</div>
@@ -637,6 +648,11 @@ if ($go == "default") {  ?>
 		<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 		</div>
 	</div><!-- ./Form Group -->
+    
+    <?php if ($go == "judge") { ?>
+    </div>
+    <?php } ?>
+    
 	<?php } // end if ($totalRows_judging > 1) 
 		else { ?>
         <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />

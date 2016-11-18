@@ -686,6 +686,15 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		else $updateGoTo = $base_url."index.php?section=list&msg=2";
 		
+		if (($_POST['brewStyle'] == "0-A")) {
+			
+			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$updateGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&filter=".$filter."&view=0-A&msg=4";
+			
+		}
 		
 		// Check if entry requires special ingredients or a classic style, if so, override the $updateGoTo variable with another and redirect
 		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
@@ -770,6 +779,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 		}
+		
+		
 		
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
